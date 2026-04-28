@@ -384,10 +384,11 @@
       appId: "aa301c68-ffd1-4d93-8295-a88d1acdeb15",
       safari_web_id: "web.onesignal.auto.68a9d4a9-72e3-41ba-a788-4f8badeb71ae",
       notifyButton: {
-        enable: false,
+        enable: true,
       },
     });
-    OneSignal.showSlidedownPrompt();
+    // This v16 code forces the slidedown prompt to show
+    OneSignal.Slidedown.promptPush();
   });
 </script>
 </head>
