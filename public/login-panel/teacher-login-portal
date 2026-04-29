@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Premium Portal - SRMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  /* === Global Premium Styles === */
+  :root {
+    --primary: #005f40;
+    --primary-dark: #003d29;
+    --accent: #bf953f;
+    --danger: #e11d48;
+    --danger-dark: #be123c;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+  }
+  body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; transition: 0.3s; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  
+  /* Animations */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } 60% { transform: translateY(-4px); } }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .animate-up { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+  /* === Premium Navbar === */
+  #main-navbar { display: none; background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--accent); }
+  .nav-top-container { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; }
+  .nav-brand { font-weight: 800; color: var(--primary); font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .nav-link { font-weight: 700; font-size: 13px; color: var(--danger); background: #fff1f2; padding: 10px 20px; border-radius: 8px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+  .nav-link:hover { color: #fff; background: var(--danger); box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3); }
+
+  /* === Premium Banner === */
+  #main-banner { display: none; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 40px 5%; display: flex; align-items: center; justify-content: center; gap: 25px; text-align: left; position: relative; overflow: hidden; }
+  .custom-banner::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); z-index: 0; }
+  .banner-logo { width: 90px; height: 90px; background: #fff; border-radius: 50%; padding: 8px; border: 3px solid rgba(255,255,255,0.2); object-fit: contain; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1; }
+  .banner-text { z-index: 1; }
+  .banner-text h1 { margin: 0; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+  .school-codes { background: rgba(255, 255, 255, 0.1); display: inline-block; padding: 6px 15px; border-radius: 20px; margin-top: 10px; font-size: 13px; font-weight: 500; color: #fcf6ba; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); }
+
+  /* === Login Section === */
+  #login-sec { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; position: relative; overflow: hidden; }
+  #login-sec::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at top right, rgba(0,95,64,0.05) 0%, transparent 50%); z-index: -1; }
+  .login-card { background: var(--card-bg); padding: 50px 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(0,0,0,0.05); box-sizing: border-box; }
+  .login-logo { width: 85px; margin-bottom: 20px; }
+  .login-title { color: var(--primary); font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
+  .login-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; font-weight: 500; }
+
+  /* === General Form Styles === */
+  input, select, textarea { width: 100%; padding: 15px 18px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 15px; transition: 0.3s; box-sizing: border-box; background: #f8fafc; color: var(--text-main); font-weight: 500; }
+  input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(0,95,64,0.1); }
+  .btn-p { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 15px; margin-top: 15px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; }
+  .btn-p:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(0,95,64,0.3); }
+  .btn-p:active { transform: translateY(-1px); }
+  .btn-p:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-success { background: #059669; } .btn-success:hover { background: #047857; }
+  
+  .forgot-link { display: inline-block; margin-top: 20px; color: var(--accent); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.3s; border-bottom: 2px solid transparent; }
+  .forgot-link:hover { border-color: var(--accent); color: var(--primary); }
+  
+  .loader-spinner { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
+
+  /* === Dashboard Section === */
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 5%; display: none; }
+  
+  /* 🚀 Scroll Cue Animation - TOP POSITION */
+  .scroll-cue-container { width: 100%; margin-bottom: 30px; text-align: center; }
+  .scroll-cue { display: inline-block; color: var(--danger); font-size: 15px; font-weight: 700; padding: 10px 25px; background: #fff1f2; border-radius: 20px; border: 1px solid #fecdd3; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.1); }
+
+  .welcome-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 35px 30px; border-radius: 20px; margin-bottom: 35px; border-left: 8px solid var(--accent); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 35px rgba(0,95,64,0.2); flex-wrap: wrap; gap: 20px; }
+  .welcome-card h2 { margin: 0; font-size: 26px; font-weight: 800; }
+  .welcome-card p { margin: 5px 0 0 0; opacity: 0.9; font-weight: 500; }
+  .btn-gold { background: var(--accent); padding: 12px 25px; border: none; color: white; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 15px; box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3); }
+  .btn-gold:hover { background: #a67c2e; transform: translateY(-2px); }
+
+  .section-title { font-weight: 800; color: var(--text-main); margin: 40px 0 15px; font-size: 18px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+  .card { background: var(--card-bg); border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
+
+  .action-btn-large { width: 100%; padding: 20px; font-size: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+  /* Board Items */
+  .notice-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 6px solid var(--accent); transition: 0.3s; }
+  .notice-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); transform: translateX(5px); }
+  .item-box { background: #fff; border: 1px solid #e2e8f0; padding: 25px; border-radius: 16px; margin-bottom: 15px; position: relative; border-left: 6px solid var(--primary); transition: 0.3s; }
+  .item-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+  .del-btn { position: absolute; right: 20px; top: 20px; color: var(--danger); cursor: pointer; font-size: 12px; border: 2px solid #fecdd3; padding: 8px 16px; border-radius: 10px; font-weight: 700; background: #fff1f2; transition: 0.3s; }
+  .del-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
+  .tag { background: #f1f5f9; color: #475569; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 10px; }
+
+  /* Modals */
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
+  .modal-box { background: var(--card-bg); padding: 40px; border-radius: 28px; text-align: center; width: 100%; max-width: 480px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); animation: fadeInUp 0.4s ease; border-top: 8px solid var(--accent); position: relative; }
+  .modal-box.danger-modal { border-top-color: var(--danger); }
+  .close-modal-btn { background: #f1f5f9; color: #333; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s; margin-top: 10px; font-size: 15px; }
+  .close-modal-btn:hover { background: #e2e8f0; }
+  .at-input { width: 90px !important; padding: 10px !important; text-align: center; border: 2px solid var(--primary) !important; font-weight: 800; border-radius: 10px !important; font-size: 16px; }
+  .premium-footer { display: none; background: #0f172a; color: #f8fafc; padding: 50px 5% 30px; margin-top: 60px; text-align: center; border-top: 5px solid var(--primary); }
+
+  @media (max-width: 768px) {
+    .nav-brand { font-size: 16px; }
+    .custom-banner { flex-direction: column; text-align: center; padding: 30px 20px; }
+    .banner-text h1 { font-size: 22px; }
+    .login-card { padding: 40px 25px; border-radius: 20px; }
+    .container { padding: 30px 20px; }
+    .welcome-card { flex-direction: column; text-align: center; padding: 30px 20px; }
+    .welcome-card h2 { font-size: 22px; }
+    .btn-gold { width: 100%; margin-top: 10px; }
+    .card { padding: 25px 20px; }
+    .del-btn { position: relative; right: auto; top: auto; display: inline-block; margin-top: 15px; width: 100%; text-align: center; box-sizing: border-box; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar" id="main-navbar">
+  <div class="nav-top-container">
+    <div class="nav-brand">SRMS Portal</div>
+    <a onclick="logout()" class="nav-link"><i class="fas fa-lock"></i> Logout</a>
+  </div>
+</nav>
+
+<div class="custom-banner animate-up" id="main-banner">
+  <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" class="banner-logo" alt="Logo">
+  <div class="banner-text">
+    <h1>Saidpur Residential Model School</h1>
+    <div class="school-codes">Smart Teacher Dashboard</div>
+  </div>
+</div>
+
+<div id="login-sec" class="animate-up">
+    <div class="login-card">
+        <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Logo" class="login-logo">
+        <h2 class="login-title">Teacher Login</h2>
+        <div class="login-subtitle">Access your academic dashboard</div>
+        <input type="tel" id="lPh" placeholder="Mobile Number (e.g. 017...)">
+        <input type="password" id="lPs" placeholder="Password">
+        <button class="btn-p" id="lBtn" onclick="login()">Secure Login ➔</button>
+        <div class="forgot-link" onclick="openForgotModal()">Forgot Password?</div>
+        <p id="err" style="color:var(--danger); font-size:13px; margin-top:15px; font-weight:700;"></p>
+    </div>
+</div>
+
+<div id="dash-sec" class="container animate-up">
+    <div class="scroll-cue-container">
+        <div class="scroll-cue">⬇️ Scroll down for more options ⬇️</div>
+    </div>
+
+    <div class="welcome-card">
+      <div>
+        <h2 id="tGreet" style="margin:0;">Assalamu Alaikum</h2>
+        <p>Academic Management Portal</p>
+      </div>
+      <button class="btn-gold" onclick="togglePass()">Change Key 🔑</button>
+    </div>
+
+    <div id="passBox" class="card" style="display:none; border-top-color:var(--accent);">
+      <h3 style="margin-top:0; color:var(--text-main);">🔐 Update Security Key</h3>
+      <input type="password" id="newPass" placeholder="Enter New Password (Min. 6 chars)">
+      <button id="passBtn" class="btn-p" style="background:var(--accent);" onclick="changePass()">Save Password</button>
+    </div>
+
+    <div class="section-title">🎥 Live Class Hub</div>
+    <div class="card" style="padding: 20px;">
+        <a href="https://www.saidpurresidentialmodelschool.com/live-classmeeting-panel" target="_blank" style="text-decoration:none;">
+            <button class="btn-p action-btn-large"><i class="fas fa-video"></i> Start Live Class / Meeting</button>
+        </a>
+    </div>
+
+    <div class="section-title">📢 Official Notice Board</div>
+    <div class="card" id="notice-board"><p style="text-align:center; color:var(--text-muted); font-weight:600;">⌛ Syncing notices...</p></div>
+    
+    <div class="section-title">⚠️ Disciplinary Warning System</div>
+    <div class="card">
+        <select id="wCls" onchange="loadStudentsForWarn()">
+            <option value="">Select Class...</option>
+            <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
+            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
+            <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
+            <option value="9">9</option><option value="10">10</option>
+        </select>
+        <div id="wStuBox" style="margin-top:10px;"></div>
+        <textarea id="wMsg" rows="3" placeholder="Write warning/notice message here..."></textarea>
+        <button class="btn-p" style="background:var(--danger);" id="wBtn" onclick="sendWarning()"><i class="fas fa-exclamation-triangle"></i> Send Warning Directly</button>
+    </div>
+
+    <div class="section-title">📤 Academic Content Publishing</div>
+    <div class="card">
+      <select id="uCls">
+          <option value="">Select Target Audience...</option>
+          <option value="TeacherDashboard">Teacher Dashboard (Internal Notice)</option>
+          <option value="ClassPlay">Class Play</option><option value="ClassNursery">Class Nursery</option>
+          <option value="ClassKG">Class KG</option><option value="Class1">Class 1</option>
+          <option value="Class2">Class 2</option><option value="Class3">Class 3</option>
+          <option value="Class4">Class 4</option><option value="Class5">Class 5</option>
+          <option value="Class6">Class 6</option><option value="Class7">Class 7</option>
+          <option value="Class8">Class 8</option><option value="Class9">Class 9</option>
+          <option value="Class10">Class 10</option>
+      </select>
+      <input type="text" id="uTtl" placeholder="Post Title / Subject Name">
+      <textarea id="uDsc" rows="3" placeholder="Description / Instructions"></textarea>
+      <input type="url" id="uUrl" placeholder="Enter Document or Drive Link (Optional)">
+      <button class="btn-p" id="uBtn" onclick="upload()"><i class="fas fa-cloud-upload-alt"></i> Publish Content</button>
+    </div>
+
+    <div class="section-title">📊 My Attendance Record</div>
+    <div class="card" style="padding: 30px;">
+        <p style="color:var(--text-muted); font-size:15px; font-weight:500; margin-bottom:20px; line-height:1.6;">সম্মানিত শিক্ষক, আপনার প্রতিদিনের উপস্থিতির বিস্তারিত তথ্য দেখতে নিচের বাটনে ক্লিক করুন।</p>
+        <button class="btn-p" style="background:var(--primary);" onclick="openTeacherAttendanceModal()"><i class="fas fa-calendar-check"></i> View My Detailed Attendance</button>
+    </div>
+    
+    <div class="section-title">📈 Result Processing</div>
+    <div class="card" style="padding: 20px;">
+      <form action="https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec" method="POST" target="_blank" style="margin:0;">
+          <button type="submit" class="btn-p action-btn-large" style="background:#0288D1;">
+              <i class="fas fa-poll-h"></i> Open Result Manager
+          </button>
+      </form>
+    </div>
+
+    <div class="section-title">🛠️ Manage My Content</div>
+    <div id="manageBox"></div>
+</div>
+
+<div id="forgotModal" class="modal-overlay">
+  <div class="modal-box">
+    <h3 style="margin-top:0; color:var(--primary); font-size:24px;">Reset Password</h3>
+    <p style="color:var(--text-muted); font-size:14px; margin-bottom:25px;">Verify your identity to reset security key</p>
+    <div id="fpStep1">
+      <input type="tel" id="fpPhone" placeholder="Registered Mobile Number">
+      <div style="display:flex; gap:15px; margin-top:15px;">
+        <button class="btn-p" style="background:var(--accent); margin:0;" onclick="requestOTP('sms')"><i class="fas fa-sms"></i> SMS OTP</button>
+        <button class="btn-p" style="background:var(--primary); margin:0;" onclick="requestOTP('email')"><i class="fas fa-envelope"></i> Email OTP</button>
+      </div>
+    </div>
+    <div id="fpStep2" style="display:none;">
+      <input type="text" id="fpOTP" placeholder="Enter 6-digit OTP Code">
+      <button class="btn-p btn-success" onclick="verifyOTP()">Verify Code</button>
+    </div>
+    <div id="fpStep3" style="display:none;">
+      <input type="password" id="fpNewPass" placeholder="New Password (Min. 6 chars)">
+      <button class="btn-p" onclick="saveNewPassword()">Save Password</button>
+    </div>
+    <p id="fpMsg" style="font-size:14px; font-weight:700; margin-top:15px;"></p>
+    <button class="close-modal-btn" onclick="closeForgotModal()">Cancel</button>
+  </div>
+</div>
+
+<div id="delModal" class="modal-overlay">
+  <div class="modal-box danger-modal">
+    <h3 style="color:var(--danger); margin-top:0; font-size:22px;"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
+    <p style="font-size:15px; color:#475569; font-weight:500;">Are you sure? This will permanently remove the post and any linked files from the server.</p>
+    <button id="modalLink" class="btn-p" style="background:var(--danger); margin-top:20px;">Yes, Delete Permanently</button>
+    <button class="close-modal-btn" onclick="closeDeleteModal()">Cancel</button>
+  </div>
+</div>
+
+<div id="attendanceModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 600px; padding: 30px;">
+        <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px; text-align:left;">📅 My Attendance Logs</h3>
+        
+        <div style="margin-bottom: 15px;">
+            <select id="attMonthFilter" onchange="renderTeacherAttendanceTable()" style="width:100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
+                <option value=''>Loading Months...</option>
+            </select>
+        </div>
+        
+        <div id="attLoader" style="text-align:center; color:var(--primary); font-weight:bold; display:none; padding:20px 0;">
+            <span class="loader-spinner"></span> Synchronizing Data...
+        </div>
+
+        <div id="modalYearlySummary" style="margin-bottom:15px; font-weight:700; color:#fff; padding:15px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius:12px; text-align:center; box-shadow: 0 5px 15px rgba(0,95,64,0.2); display: none;">
+            </div>
+        
+        <div style="max-height: 350px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; text-align:left;">
+            <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+                <thead style="background: #e2e8f0; position: sticky; top: 0; z-index: 10;">
+                    <tr>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Date (Y-M-D)</th>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">IN Time</th>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">OUT Time</th>
+                    </tr>
+                </thead>
+                <tbody id="modalAttTableBody" style="background: white;">
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;">
+            </div>
+        <button class="close-modal-btn" onclick="closeModal('attendanceModal')" style="margin-top:20px;">Close Logs</button>
+    </div>
+</div>
+
+<footer class="premium-footer" id="main-footer">
+  <h3 style="margin:0 0 5px 0; color:#fff; font-size:18px;">SRMS</h3>
+  <p style="margin:0; opacity:0.7; font-size:14px;">Saidpur Residential Model School<br>Saidpur, Nilphamari.</p>
+  <p style="margin:20px 0 0 0; font-size:12px; color:#64748b; border-top:1px solid #1e293b; padding-top:15px;">© 2026 SRMS. Secure Academic Portal.</p>
+</footer>
+
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+
+<script>
+  // =====================================================================
+  // CONFIGURATION: FIREBASE & APPS SCRIPT
+  // =====================================================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+    authDomain: "srms-website-management.firebaseapp.com",
+    projectId: "srms-website-management",
+    storageBucket: "srms-website-management.firebasestorage.app",
+    messagingSenderId: "960037316778",
+    appId: "1:960037316778:web:d6f9b1f434572d9374c8d3"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
+  
+  const OTP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec"; 
+  const MANAGER_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec"; 
+  
+  let tPhone = "";
+  let exactDbPhone = "";
+  let generatedOTP = null;
+  let resetPhone = null;
+  let allAttendanceData = {};
+
+  function sanitizeHTML(str) {
+      if (typeof str !== 'string') return str;
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
+  }
+
+  function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+  window.onload = function() {
+    const savedPhone = localStorage.getItem("srms_phone");
+    const savedName = localStorage.getItem("srms_name");
+    const savedExact = localStorage.getItem("srms_exact_phone");
+    
+    if(savedPhone && savedName) {
+      tPhone = savedPhone;
+      exactDbPhone = savedExact || savedPhone;
+      showDashboard(savedName);
+    }
+  };
+
+  function logout() {
+    try { if(auth) auth.signOut(); } catch(e) {}
+    localStorage.removeItem("srms_phone");
+    localStorage.removeItem("srms_name");
+    localStorage.removeItem("srms_teacher_id");
+    localStorage.removeItem("srms_exact_phone");
+    
+    document.getElementById('dash-sec').style.display = 'none';
+    document.getElementById('main-navbar').style.display = 'none';
+    document.getElementById('main-banner').style.display = 'none';
+    document.getElementById('main-footer').style.display = 'none';
+    
+    document.getElementById('lPh').value = '';
+    document.getElementById('lPs').value = '';
+    document.getElementById('err').innerText = '';
+    document.getElementById('login-sec').style.display = 'flex';
+  }
+
+  async function login() {
+    let p = sanitizeHTML(document.getElementById('lPh').value.trim());
+    let s = document.getElementById('lPs').value.trim();
+    const b = document.getElementById('lBtn');
+    const err = document.getElementById('err');
+    
+    err.innerText = "";
+    if(!p || !s) { err.innerText = "Please fill in all fields!"; return; }
+    
+    if (s.length > 0 && s.length < 6) s = s.padEnd(6, '0');
+    
+    b.innerHTML = '<span class="loader-spinner"></span> Authenticating...'; b.disabled = true;
+    
+    let ph = p;
+    if (ph.startsWith('0')) ph = ph.substring(1); 
+
+    try {
+      let emailToTry = `0${ph}@srms.edu.bd`;
+      try {
+          await auth.signInWithEmailAndPassword(emailToTry, s);
+      } catch(e1) {
+          emailToTry = `${ph}@srms.edu.bd`;
+          await auth.signInWithEmailAndPassword(emailToTry, s);
+      }
+
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`${FIREBASE_DB_BASE}/Teachers?pageSize=1000`, {
+          headers: { "Authorization": "Bearer " + token }
+      });
+      const data = await res.json();
+      
+      let foundName = "Teacher", teacherDocId = null, dbPhoneToSave = ph;
+
+      if(data.documents) {
+        for(let d of data.documents) {
+            let f = d.fields || {};
+            let dbPhone = f.phone ? f.phone.stringValue : "";
+            if(dbPhone === ph || dbPhone === "0"+ph || dbPhone === "+880"+ph) {
+                foundName = f.name ? f.name.stringValue : "Teacher";
+                teacherDocId = d.name.split('/').pop(); 
+                dbPhoneToSave = dbPhone; 
+                break;
+            }
+        }
+      }
+          
+      tPhone = ph;
+      exactDbPhone = dbPhoneToSave;
+      localStorage.setItem("srms_phone", ph);
+      localStorage.setItem("srms_exact_phone", dbPhoneToSave);
+      localStorage.setItem("srms_name", foundName);
+      if(teacherDocId) localStorage.setItem("srms_teacher_id", teacherDocId); 
+      
+      document.getElementById('lPs').value = '';
+      showDashboard(foundName);
+      
+    } catch(e) { 
+        err.innerText = "Teacher account not found or invalid password!"; 
+        b.innerHTML = "Secure Login ➔"; b.disabled = false; 
+    }
+  }
+
+  function showDashboard(name) {
+    document.getElementById('tGreet').innerText = `Assalamu Alaikum, ${name} Sir`;
+    document.getElementById('login-sec').style.display = 'none';
+    document.getElementById('main-navbar').style.display = 'flex';
+    document.getElementById('main-banner').style.display = 'flex';
+    document.getElementById('dash-sec').style.display = 'block';
+    document.getElementById('main-footer').style.display = 'block';
+    document.getElementById('lBtn').innerHTML = "Secure Login ➔"; document.getElementById('lBtn').disabled = false;
+    loadBoard();
+  }
+
+  function openForgotModal() {
+    document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
+    document.getElementById('fpPhone').value = ''; document.getElementById('fpOTP').value = ''; document.getElementById('fpNewPass').value = ''; document.getElementById('fpMsg').innerText = '';
+    document.getElementById('forgotModal').style.display = 'flex';
+  }
+  function closeForgotModal() { document.getElementById('forgotModal').style.display = 'none'; }
+
+  async function requestOTP(method) {
+    let p = document.getElementById('fpPhone').value.trim();
+    if(!p) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Please enter mobile number.</span>"; return; }
+    resetPhone = p.startsWith('0') ? p.substring(1) : p; 
+    document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Sending Request...";
+    
+    try {
+      const response = await fetch(OTP_SCRIPT_URL, { 
+          method: "POST", 
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "sendOTP", phone: resetPhone, method: method }) 
+      });
+      
+      const textData = await response.text(); 
+      let data;
+      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error! Check Browser Console.</span>`; return; }
+      
+      if(data.status === "success") {
+        generatedOTP = data.otp; 
+        document.getElementById('fpStep1').style.display = 'none'; 
+        document.getElementById('fpStep2').style.display = 'block';
+        let sMsg = data.msg ? data.msg : (data.message ? data.message : "OTP Sent Successfully!");
+        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">${sMsg}</span>`;
+      } else { 
+        let eMsg = data.message ? data.message : (data.msg ? data.msg : "Error sending OTP.");
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${eMsg}</span>`; 
+      }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error! Check connection.</span>"; }
+  }
+
+  function verifyOTP() {
+    const input = document.getElementById('fpOTP').value.trim();
+    if(!input) return;
+    if(input === generatedOTP) {
+        document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'block';
+        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">OTP Verified! Enter a new password.</span>`;
+    } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Invalid OTP Code!</span>`; }
+  }
+
+  async function saveNewPassword() {
+    const np = document.getElementById('fpNewPass').value.trim();
+    if(np.length < 6) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Password must be at least 6 characters.</span>"; return; }
+    document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Saving to Server...";
+    
+    try {
+      const response = await fetch(OTP_SCRIPT_URL, { 
+          method: "POST", 
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: "resetPass", phone: resetPhone, newPass: np }) 
+      });
+      
+      const textData = await response.text(); 
+      let data;
+      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error! Check Browser Console.</span>`; return; }
+      
+      if(data.status === "success") {
+          document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful!</div>`;
+          document.getElementById('fpMsg').innerText = "";
+      } else { 
+          let eMsg = data.message ? data.message : "Account sync error!";
+          document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${eMsg}</span>`; 
+      }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; }
+  }
+
+  function togglePass() { const b = document.getElementById('passBox'); b.style.display = b.style.display === 'none' ? 'block' : 'none'; }
+  
+  async function changePass() {
+    let p = document.getElementById('newPass').value.trim(); const btn = document.getElementById('passBtn');
+    if(!p || p.length < 6) return alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
+    const docId = localStorage.getItem("srms_teacher_id");
+    if(!docId) return alert("Session expired, please login again.");
+
+    btn.innerHTML = '<span class="loader-spinner"></span> Updating...'; btn.disabled = true;
+    try {
+      const user = auth.currentUser;
+      const token = await user.getIdToken();
+      if(user) await user.updatePassword(p);
+      await fetch(`${FIREBASE_DB_BASE}/Teachers/${docId}?updateMask.fieldPaths=pass`, { 
+          method: "PATCH", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+          body: JSON.stringify({ fields: { pass: { stringValue: p } } }) 
+      });
+      alert("✅ Security Key Updated Successfully!"); document.getElementById('newPass').value = ""; document.getElementById('passBox').style.display = 'none';
+    } catch(e) { alert("Error! Please logout, login and try again."); }
+    btn.innerHTML = "Save Password"; btn.disabled = false;
+  }
+
+  async function loadBoard() {
+    const nBox = document.getElementById('notice-board'), mBox = document.getElementById('manageBox');
+    mBox.innerHTML = "<p style='text-align:center; color:#64748b; font-weight:600;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Fetching secure data...</p>";
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const headers = { "Authorization": "Bearer " + token };
+      const [pRes, wRes] = await Promise.all([ 
+          fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=1000`, { headers }).catch(()=>({json:()=>({documents:[]})})), 
+          fetch(`${FIREBASE_DB_BASE}/Warnings?pageSize=1000`, { headers }).catch(()=>({json:()=>({documents:[]})})) 
+      ]);
+      const postsData = await pRes.json(), warnsData = await wRes.json();
+      
+      let posts = (postsData.documents || []).map(d => { let f=d.fields||{}; return { rowId: d.name.split('/').pop(), target: f.targetPage?f.targetPage.stringValue:"", title: f.title?f.title.stringValue:"", date: f.date?f.date.stringValue:"", uploader: f.uploader?f.uploader.stringValue:"" }; });
+      let warns = (warnsData.documents || []).map(d => { let f=d.fields||{}; return { id: d.name.split('/').pop(), name: f.name?f.name.stringValue:"" }; });
+
+      let nH = "", mH = "";
+      posts.forEach(p => { if(p.target === "TeacherDashboard") { nH += `<div class="notice-item"><b style="color:var(--primary); font-size:12px;">${sanitizeHTML(p.date)}</b><p style="margin:5px 0 0 0; font-size:14px; font-weight:500;">${sanitizeHTML(p.title)}</p></div>`; } });
+      nBox.innerHTML = nH || "<p style='text-align:center; color:#64748b;'>No current notices.</p>";
+      
+      warns.forEach(w => { mH += `<div class="item-box" style="border-left-color:var(--danger);"><span class="del-btn" onclick="openDeleteModal('${w.id}', 'warn')"><i class="fas fa-trash"></i> DELETE</span><span class="tag" style="background:#fff1f2; color:var(--danger);">WARNING</span><br><p style="margin:5px 0 0 0; font-weight:600; font-size:14px;">Assigned to: ${sanitizeHTML(w.name)}</p></div>`; });
+      
+      posts.forEach(p => { 
+        if(p.rowId) {
+          let isOwner = (p.uploader && String(p.uploader) == String(tPhone)) ? true : false;
+          let btnHtml = isOwner ? `<span class="del-btn" onclick="openDeleteModal('${p.rowId}', 'post')"><i class="fas fa-trash"></i> DELETE</span>` : `<span style="position:absolute; right:20px; top:25px; font-size:11px; color:#94a3b8; font-weight:800;">READ ONLY</span>`;
+          mH += `<div class="item-box">${btnHtml}<span class="tag">${sanitizeHTML(p.target)}</span><br><p style="margin:5px 0 0 0; font-weight:600; font-size:15px;">${sanitizeHTML(p.title)}</p></div>`; 
+        }
+      });
+      mBox.innerHTML = mH || "<p style='text-align:center; color:#64748b;'>No items found on your server board.</p>";
+    } catch(e) { mBox.innerHTML = "<p style='text-align:center; color:var(--danger);'>Network link failed.</p>"; }
+  }
+
+  function openDeleteModal(id, type) {
+    const modal = document.getElementById('delModal'), link = document.getElementById('modalLink');
+    link.onclick = async function() {
+        link.innerHTML = '<span class="loader-spinner"></span> Processing...'; link.disabled = true;
+        try {
+            const token = await auth.currentUser.getIdToken();
+            const headers = { "Authorization": "Bearer " + token };
+            if(type === 'warn') {
+                await fetch(`${FIREBASE_DB_BASE}/Warnings/${id}`, { method: "DELETE", headers });
+            } else {
+                fetch(MANAGER_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "deletePost", id: id }) }).catch(e=>{});
+                await fetch(`${FIREBASE_DB_BASE}/WebsitePosts/${id}`, { method: "DELETE", headers });
+            }
+            alert("✅ Successfully Removed!"); 
+            closeDeleteModal();
+            loadBoard();
+        } catch(e) { alert("Deletion failed due to network."); }
+        link.innerHTML = "Yes, Delete Permanently"; link.disabled = false;
+    };
+    modal.style.display = 'flex';
+  }
+  function closeDeleteModal() { document.getElementById('delModal').style.display = 'none'; }
+
+  async function loadStudentsForWarn() {
+      const cls = document.getElementById('wCls').value; if(!cls) return;
+      document.getElementById('wStuBox').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading Data...";
+      try {
+          const token = await auth.currentUser.getIdToken();
+          const res = await fetch(`${FIREBASE_DB_BASE}/Students?pageSize=1000`, { headers: { "Authorization": "Bearer " + token } }); 
+          const data = await res.json();
+          let students = [];
+          if(data.documents) {
+             data.documents.forEach(d => {
+                let f = d.fields || {};
+                if(f.class && f.class.stringValue === cls) { students.push({ id: f.studentID ? f.studentID.stringValue : d.name.split('/').pop(), roll: f.roll ? f.roll.stringValue : "0", name: f.name ? f.name.stringValue : "Unknown" }); }
+             });
+          }
+          students.sort((a,b) => parseInt(a.roll) - parseInt(b.roll));
+          let html = `<select id="wStuId" style="border-color:var(--danger);"><option value="">Select Student...</option>`;
+          students.forEach(s => html += `<option value="${s.id}" data-name="${s.name}">Roll ${s.roll} - ${s.name}</option>`);
+          document.getElementById('wStuBox').innerHTML = html + `</select>`;
+      } catch(e) { document.getElementById('wStuBox').innerHTML = "<span style='color:var(--danger);'>Sync error.</span>"; }
+  }
+
+  async function sendWarning() {
+      const selectBox = document.getElementById('wStuId');
+      const sid = selectBox ? selectBox.value : null; 
+      const sName = selectBox && selectBox.selectedIndex > 0 ? selectBox.options[selectBox.selectedIndex].getAttribute('data-name') : "Student";
+      const msg = document.getElementById('wMsg').value; const btn = document.getElementById('wBtn');
+      
+      if(!sid || !msg) return alert("Select student and write a message.");
+      btn.innerHTML = '<span class="loader-spinner"></span> Transmitting...'; btn.disabled = true;
+      
+      const payload = { fields: { studentID: { stringValue: sid }, name: { stringValue: sName }, message: { stringValue: msg }, teacherPhone: { stringValue: tPhone }, timestamp: { stringValue: Date.now().toString() } } };
+      try {
+          const token = await auth.currentUser.getIdToken();
+          await fetch(`${FIREBASE_DB_BASE}/Warnings`, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, body: JSON.stringify(payload) });
+          alert("✅ Warning dispatched to student portal!"); 
+          document.getElementById('wMsg').value = ""; 
+          loadBoard(); 
+      } catch(e) { alert("Transmission failed."); }
+      btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Warning Directly'; btn.disabled = false;
+  }
+
+  async function upload() {
+    const btn = document.getElementById('uBtn');
+    const cls = document.getElementById('uCls').value;
+    const ttl = document.getElementById('uTtl').value.trim();
+    const dsc = document.getElementById('uDsc').value.trim();
+    const url = document.getElementById('uUrl').value.trim();
+
+    if(!cls || !ttl) return alert("Target Class and Title are mandatory.");
+    btn.disabled = true; btn.innerHTML = '<span class="loader-spinner"></span> Publishing...';
+    
+    const fileType = url !== "" ? "Link" : "None";
+    const d = new Date();
+    const dateStr = String(d.getDate()).padStart(2, '0') + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + d.getFullYear();
+
+    try {
+        const token = await auth.currentUser.getIdToken();
+        const firestorePayload = {
+            fields: {
+                date: { stringValue: dateStr },
+                targetPage: { stringValue: cls },
+                title: { stringValue: ttl },
+                desc: { stringValue: dsc },
+                fileType: { stringValue: fileType },
+                fileUrl: { stringValue: url },
+                timestamp: { integerValue: d.getTime().toString() },
+                uploader: { stringValue: tPhone }
+            }
+        }
+        await fetch(`${FIREBASE_DB_BASE}/WebsitePosts`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+            body: JSON.stringify(firestorePayload)
+        });
+
+        const scriptPayload = {
+            action: "uploadData",
+            data: { targetPage: cls, title: ttl, desc: dsc, externalUrl: url },
+            uploader: tPhone
+        };
+        fetch(MANAGER_SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify(scriptPayload)
+        }).catch(e => {});
+
+        alert("✅ Data Successfully Published!"); 
+        document.getElementById('uCls').value = ""; document.getElementById('uTtl').value = ""; document.getElementById('uDsc').value = ""; document.getElementById('uUrl').value = ""; 
+        loadBoard(); 
+    } catch(e) { alert("Transmission failed due to network."); }
+    
+    btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Publish Content';
+  }
+
+  function openTeacherAttendanceModal() {
+      document.getElementById('attendanceModal').style.display = 'flex';
+      fetchTeacherDetailedAttendance();
+  }
+
+  async function fetchTeacherDetailedAttendance() {
+      document.getElementById('attLoader').style.display = 'block';
+      document.getElementById('modalAttTableBody').innerHTML = '';
+      
+      try {
+          const token = await auth.currentUser.getIdToken();
+          const queryUrl = `${FIREBASE_DB_BASE}:runQuery`;
+          
+          const reqBody = { 
+              structuredQuery: { 
+                  from: [{ collectionId: "AttendanceHistory" }], 
+                  where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: exactDbPhone } } },
+                  limit: 1000
+              } 
+          };
+          
+          const res = await fetch(queryUrl, { 
+              method: "POST", 
+              headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
+              body: JSON.stringify(reqBody) 
+          });
+          const data = await res.json();
+          
+          allAttendanceData = {}; 
+          
+          if (data && data.length > 0 && data[0].document) {
+              data.forEach(item => {
+                  if(item.document && item.document.fields) {
+                      let f = item.document.fields;
+                      let pDate = sanitizeHTML(f.pureDate?.stringValue || "");
+                      let timeStr = sanitizeHTML(f.time?.stringValue || "");
+                      let type = sanitizeHTML(f.type?.stringValue || "");
+                      
+                      if(pDate) {
+                          let monthYear = pDate.substring(0, 7); 
+                          
+                          if(!allAttendanceData[monthYear]) {
+                              allAttendanceData[monthYear] = { dates: {} };
+                          }
+                          if(!allAttendanceData[monthYear].dates[pDate]) {
+                              allAttendanceData[monthYear].dates[pDate] = { in: "<span style='color:#94a3b8;'>--</span>", out: "<span style='color:#94a3b8;'>--</span>" };
+                          }
+                          
+                          if(type === "IN") allAttendanceData[monthYear].dates[pDate].in = timeStr;
+                          if(type === "OUT") allAttendanceData[monthYear].dates[pDate].out = timeStr;
+                      }
+                  }
+              });
+          }
+          populateTeacherAttendanceMonths();
+      } catch(e) {
+          console.error(e);
+          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to load attendance history.</td></tr>';
+      }
+      document.getElementById('attLoader').style.display = 'none';
+  }
+
+  function populateTeacherAttendanceMonths() {
+      let select = document.getElementById('attMonthFilter');
+      select.innerHTML = "";
+      
+      let months = Object.keys(allAttendanceData).sort().reverse();
+      
+      if(months.length === 0) {
+          select.innerHTML = "<option value=''>No Attendance Data Found</option>";
+          renderTeacherAttendanceTable("");
+          return;
+      }
+      
+      months.forEach(m => {
+          let dateObj = new Date(m + "-01");
+          let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+          select.innerHTML += `<option value='${sanitizeHTML(m)}'>${sanitizeHTML(monthName)}</option>`;
+      });
+      
+      renderTeacherAttendanceTable(months[0]);
+  }
+
+  function renderTeacherAttendanceTable(selectedMonth = null) {
+      if(!selectedMonth) selectedMonth = sanitizeHTML(document.getElementById('attMonthFilter').value);
+      let tbody = document.getElementById('modalAttTableBody');
+      let summaryBox = document.getElementById('modalAttSummary');
+      let yearlySummaryBox = document.getElementById('modalYearlySummary');
+      
+      // 🚀 Bangladesh Time Logic for Current Real Year
+      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+      const bdDate = new Date(bdTime);
+      const currentBdYear = bdDate.getFullYear();
+      const currentBdMonth = bdDate.getMonth() + 1; // 1-12
+      
+      let dateParts = selectedMonth ? selectedMonth.split('-') : [currentBdYear.toString(), "01"];
+      let selectedYear = parseInt(dateParts[0]);
+      let selectedMonthNum = parseInt(dateParts[1]);
+      
+      let isYearFinished = (selectedYear < currentBdYear);
+
+      // 🚀 ১. Yearly Calculation (Hidden until year finishes)
+      if (!isYearFinished) {
+          yearlySummaryBox.style.display = 'none';
+          yearlySummaryBox.innerHTML = '';
+      } else {
+          let yearlyPresentCount = 0;
+          let yearlyAbsentCount = 0;
+
+          if(allAttendanceData) {
+              for(let m = 1; m <= 12; m++) {
+                  let mStr = selectedYear + "-" + String(m).padStart(2, '0');
+                  let mPresent = 0;
+                  if(allAttendanceData[mStr]) {
+                      mPresent = Object.keys(allAttendanceData[mStr].dates).length;
+                  }
+                  yearlyPresentCount += mPresent;
+
+                  let daysInM = new Date(selectedYear, m, 0).getDate();
+                  let workingDaysInM = Math.max(mPresent, daysInM - 4);
+                  yearlyAbsentCount += (workingDaysInM - mPresent);
+              }
+          }
+
+          yearlySummaryBox.style.display = 'block';
+          yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${selectedYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
+      }
+
+      // যদি কোনো ডাটা না থাকে
+      if(!selectedMonth || !allAttendanceData[selectedMonth]) {
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#64748b; font-weight:600;">No attendance records available for this month.</td></tr>';
+          summaryBox.style.display = 'none';
+          return;
+      }
+      
+      // ২. Table Render
+      let monthData = allAttendanceData[selectedMonth].dates;
+      let dates = Object.keys(monthData).sort().reverse();
+      let presentCount = dates.length;
+      
+      tbody.innerHTML = "";
+      dates.forEach(d => {
+          let record = monthData[d];
+          tbody.innerHTML += `
+              <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s;">
+                  <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:14px;">${sanitizeHTML(d)}</td>
+                  <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:13px;">${record.in}</td>
+                  <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:13px;">${record.out}</td>
+              </tr>
+          `;
+      });
+      
+      // 🚀 ৩. Month End Logic for Monthly Totals
+      let isMonthFinished = false;
+      if (selectedYear < currentBdYear) {
+          isMonthFinished = true;
+      } else if (selectedYear === currentBdYear && selectedMonthNum < currentBdMonth) {
+          isMonthFinished = true;
+      }
+      
+      if (!isMonthFinished) {
+          // মাস শেষ হয়নি, তাই হিসাব হাইড থাকবে
+          summaryBox.style.display = 'none';
+          summaryBox.innerHTML = '';
+      } else {
+          // মাস শেষ হয়েছে, হিসাব দেখাবে
+          summaryBox.style.display = 'flex';
+          let daysInMonth = new Date(selectedYear, selectedMonthNum, 0).getDate();
+          let workingDays = Math.max(presentCount, daysInMonth - 4); 
+          let absentCount = workingDays - presentCount;
+          
+          summaryBox.innerHTML = `
+              <span style="display:flex; flex-direction:column; align-items:center;">
+                  <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Total Present</small>
+                  <span style="font-size:20px;">${presentCount} Days</span>
+              </span>
+              <span style="display:flex; flex-direction:column; align-items:center;">
+                  <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Total Absent</small>
+                  <span style="font-size:20px; color:var(--danger);">~${absentCount} Days</span>
+              </span>
+          `;
+      }
+  }
+</script>
+</body>
+</html>
