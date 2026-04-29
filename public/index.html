@@ -185,26 +185,6 @@
   .copy-text { font-size: 13px; color: #8892b0; margin: 0; letter-spacing: 0.5px; }
   .dev-text { font-size: 12px; color: #666; text-transform: uppercase; margin-top: 10px; font-weight: 700; }
 
-  /* =========================================
-     🚀 PREMIUM PUSH NOTIFICATION POPUP CSS (No Email)
-  ========================================= */
-  .push-popup-overlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); z-index: 3000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(3px);
-  }
-  .push-popup-box {
-    background: linear-gradient(145deg, #ffffff, #f9fbfc); padding: 35px 30px 30px; border-radius: 16px; width: 90%; max-width: 420px; text-align: center; position: relative; box-shadow: 0 25px 60px rgba(0,0,0,0.4); border-top: 6px solid #005f40; animation: popInBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  @keyframes popInBounce { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-  .popup-icon { font-size: 50px; margin-bottom: 12px; animation: floatIcon 3s ease-in-out infinite; display: inline-block; }
-  @keyframes floatIcon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-  .push-popup-box h3 { margin: 0 0 10px; color: #003d29; font-size: 22px; font-weight: 800; }
-  .push-popup-box p { font-size: 15px; color: #555; margin-bottom: 25px; line-height: 1.6; }
-  .popup-btn-group { display: flex; gap: 12px; }
-  .btn-consent { background: linear-gradient(135deg, #005f40, #003d29); color: #fff; border: none; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; flex: 1; transition: 0.3s; box-shadow: 0 4px 15px rgba(0, 95, 64, 0.3); font-family: 'Poppins', sans-serif; }
-  .btn-consent:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 95, 64, 0.5); }
-  .btn-skip { background: #fee2e2; color: #d32f2f; border: 1px solid #fca5a5; padding: 14px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; flex: 1; transition: 0.3s; font-family: 'Poppins', sans-serif; }
-  .btn-skip:hover { background: #fecaca; color: #b91c1c; transform: translateY(-2px); }
-
   /* Modals */
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; }
   .modal-content { background: #fff; padding: 25px; border-radius: 10px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; animation: fadeInUp 0.3s ease; }
@@ -243,18 +223,6 @@
 </script>
 </head>
 <body>
-
-<div id="pushPopupOverlay" class="push-popup-overlay">
-  <div class="push-popup-box">
-    <div class="popup-icon">🔔</div>
-    <h3>Important Updates</h3>
-    <p>To get all important updates, news, and notices from SRMS directly on your device, please click <b>Allow</b>.</p>
-    <div class="popup-btn-group">
-      <button class="btn-consent" onclick="triggerPushPermission()">Allow</button>
-      <button class="btn-skip" onclick="closePushPopup()">Later</button>
-    </div>
-  </div>
-</div>
 
 <nav class="navbar">
   <div class="nav-top-container">
@@ -487,29 +455,6 @@
   // ফায়ারবেস কনফিগারেশন
   const FIREBASE_PROJECT_ID = "srms-website-management";
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
-
-  // =========================================
-  // 🚀 Premium Push Popup Logic (No Email)
-  // =========================================
-  window.addEventListener('DOMContentLoaded', () => {
-      if (!localStorage.getItem('srmsPushDismissed')) {
-          setTimeout(() => {
-              document.getElementById('pushPopupOverlay').style.display = 'flex';
-          }, 2000); 
-      }
-  });
-
-  function closePushPopup() {
-      document.getElementById('pushPopupOverlay').style.display = 'none';
-      localStorage.setItem('srmsPushDismissed', 'true'); 
-  }
-
-  function triggerPushPermission() {
-      closePushPopup(); 
-      OneSignalDeferred.push(function(OneSignal) {
-          OneSignal.Slidedown.promptPush(); 
-      });
-  }
 
   // =========================================
   // Clock and Menu 
