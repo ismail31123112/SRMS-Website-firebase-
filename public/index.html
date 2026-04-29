@@ -221,123 +221,6 @@
   }
   @keyframes live-blink { 50% { opacity: 0; } }
 
-  /* =========================================
-     Premium Floating Email Popup 
-  ========================================= */
-  .email-popup-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.4); 
-    z-index: 3000;
-    display: none; 
-    align-items: center;
-    justify-content: center;
-  }
-  .email-popup-box {
-    background: linear-gradient(145deg, #ffffff, #f9fbfc);
-    padding: 35px 30px 30px;
-    border-radius: 16px;
-    width: 90%;
-    max-width: 420px;
-    text-align: center;
-    position: relative;
-    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.8);
-    border-top: 6px solid #005f40;
-    animation: popInBounce 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
-  @keyframes popInBounce {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .popup-icon {
-    font-size: 45px;
-    margin-bottom: 12px;
-    animation: floatIcon 3s ease-in-out infinite;
-    display: inline-block;
-  }
-  @keyframes floatIcon {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-  }
-  .email-popup-box h3 {
-    margin: 0 0 10px;
-    color: #003d29;
-    font-size: 22px;
-    font-weight: 800;
-  }
-  .email-popup-box p {
-    font-size: 14.5px;
-    color: #555;
-    margin-bottom: 20px;
-    line-height: 1.6;
-  }
-  .email-popup-box input {
-    width: 100%;
-    padding: 14px;
-    border: 2px solid #e0e5eb;
-    border-radius: 8px;
-    outline: none;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
-    box-sizing: border-box;
-    margin-bottom: 15px;
-    transition: 0.3s;
-  }
-  .email-popup-box input:focus {
-    border-color: #005f40;
-    box-shadow: 0 0 8px rgba(0, 95, 64, 0.2);
-  }
-  .popup-btn-group {
-    display: flex;
-    gap: 12px;
-    margin-top: 5px;
-  }
-  .btn-consent {
-    background: linear-gradient(135deg, #005f40, #003d29);
-    color: #fff;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 14.5px;
-    cursor: pointer;
-    flex: 1;
-    transition: 0.3s;
-    box-shadow: 0 4px 15px rgba(0, 95, 64, 0.3);
-    font-family: 'Poppins', sans-serif;
-  }
-  .btn-consent:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 95, 64, 0.5);
-  }
-  .btn-skip {
-    background: #fee2e2; 
-    color: #d32f2f; 
-    border: 1px solid #fca5a5; 
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: bold;
-    font-size: 14.5px;
-    cursor: pointer;
-    flex: 1;
-    transition: 0.3s;
-    font-family: 'Poppins', sans-serif;
-  }
-  .btn-skip:hover {
-    background: #fecaca; 
-    color: #b91c1c;
-    border-color: #f87171;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(211, 47, 47, 0.2);
-  }
-
-  #popupMessage {
-    margin-top: 15px;
-    font-size: 13px;
-    font-weight: 600;
-  }
-
   /* Modals overall */
   .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; }
   .modal-content { background: #fff; padding: 25px; border-radius: 10px; width: 90%; max-width: 400px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center; animation: fadeInUp 0.3s ease; }
@@ -365,35 +248,6 @@
     .banner-text { text-align: center; }
   }
 </style>
-
-<script>
-  // =========================================
-  // Google Sites Optimized Anti-Flicker Script
-  // =========================================
-  function checkPopupStatus() {
-      let hasCookie = null;
-      try { 
-          let match = document.cookie.match(new RegExp('(^| )emailSubmitted=([^;]+)'));
-          hasCookie = match ? match[2] : null;
-      } catch(e){}
-      
-      let hasLocal = false;
-      try { hasLocal = localStorage.getItem("emailSubmitted"); } catch(e){}
-      
-      let isDismissed = false;
-      try { isDismissed = sessionStorage.getItem("emailPopupDismissed"); } catch(e){}
-      
-      if (hasCookie || hasLocal || isDismissed) {
-          let style = document.createElement('style');
-          style.innerHTML = '.email-popup-overlay { display: none !important; opacity: 0 !important; z-index: -999 !important; visibility: hidden !important; }';
-          document.head.appendChild(style);
-          return true;
-      }
-      return false;
-  }
-  
-  let isHidden = checkPopupStatus();
-</script>
 
 <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
@@ -431,23 +285,6 @@
 </head>
 <body>
 
-<div id="emailPopupOverlay" class="email-popup-overlay">
-  <div class="email-popup-box">
-    <div class="popup-icon">🔔</div>
-    <h3>আপডেট নোটিফিকেশন</h3>
-    <p>ওয়েবসাইটের সকল গুরুত্বপূর্ণ আপডেটের নোটিফিকেশন পেতে নিচে আপনার একটি সচল ইমেইল দিয়ে সম্মতি প্রদান করুন.</p>
-    
-    <input type="email" id="subscriberEmail" placeholder="আপনার ইমেইল দিন" required>
-    
-    <div class="popup-btn-group">
-      <button id="subBtn" class="btn-consent" onclick="submitEmail()">সম্মতি দিলাম</button>
-      <button class="btn-skip" onclick="closeEmailPopup()">আগেই দিয়েছি</button>
-    </div>
-    
-    <div id="popupMessage"></div>
-  </div>
-</div>
-
 <nav class="navbar">
   <div class="nav-top-container">
     <div class="nav-brand">SRMS</div>
@@ -456,7 +293,7 @@
       <span class="menu-text">MENU</span>
     </div>
     <ul class="nav-menu" id="navMenu">
-      <li class="nav-item"><a href="https://www.saidpurresidentialmodelschool.com/home" class="nav-link">Home</a></li>
+      <li class="nav-item"><a href="https://www.saidpurresidentialmodelschool.com/" class="nav-link">Home</a></li>
       <li class="nav-item">
         <a class="nav-link" onclick="handleDropdown(this)">Institute ▾</a>
         <div class="dropdown-content">
@@ -687,47 +524,9 @@
 </div>
 
 <script>
-  // ফায়ারবেস কনফিগারেশন
+  // ফায়ারবেস কনফিগারেশন (অন্যান্য ফাংশনগুলোর জন্য এটি প্রয়োজন, তাই রেখে দেওয়া হলো)
   const FIREBASE_PROJECT_ID = "srms-website-management";
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
-
-  function submitEmail() {
-    const emailInput = document.getElementById("subscriberEmail");
-    const email = emailInput.value.trim();
-    const btn = document.getElementById("subBtn");
-    const msg = document.getElementById("popupMessage");
-
-    if(email && email.includes("@") && email.includes(".")) {
-      setSafeCookie();
-      btn.innerText = "অপেক্ষা করুন...";
-      btn.disabled = true;
-      msg.innerHTML = "";
-      
-      const payload = {
-        fields: {
-          email: { stringValue: email },
-          date: { stringValue: new Date().toLocaleDateString('en-GB') },
-          timestamp: { stringValue: new Date().getTime().toString() }
-        }
-      };
-
-      fetch(`${FIREBASE_DB_BASE}/Subscribers`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      })
-      .then(response => {
-        msg.innerHTML = "<span style='color:#005f40; font-weight:bold;'>ধন্যবাদ! আপনার সম্মতি গ্রহণ করা হয়েছে।</span>";
-        setTimeout(() => { document.getElementById("emailPopupOverlay").style.display = "none"; }, 2000); 
-      })
-      .catch(error => {
-        msg.innerHTML = "<span style='color:#005f40; font-weight:bold;'>ধন্যবাদ!</span>";
-        setTimeout(() => { document.getElementById("emailPopupOverlay").style.display = "none"; }, 2000);
-      });
-    } else {
-      msg.innerHTML = "<span style='color:red;'>অনুগ্রহ করে একটি সঠিক ইমেইল ঠিকানা দিন।</span>";
-    }
-  }
 
   // =========================================
   // Clock and Menu 
