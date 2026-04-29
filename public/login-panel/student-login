@@ -134,8 +134,6 @@
   .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
 
   /* === Mobile Specific Styles === */
-  .mobile-action-bar { display: none; }
-  
   @media (max-width: 768px) {
     .nav-brand { font-size: 13px; line-height: 1.4; word-wrap: break-word; }
     .nav-link.logout-btn { padding: 8px 12px; font-size: 11px; white-space: nowrap; }
@@ -155,18 +153,6 @@
     .l-btn { padding: 15px 5px; gap: 8px; }
     .l-btn span:first-child { font-size: 22px; }
     .l-btn span:last-child { font-size: 10px; }
-
-    .mobile-action-bar {
-      position: fixed; bottom: 0; left: 0; width: 100%; background: var(--card-bg); box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
-      z-index: 1000; padding: 10px 15px; box-sizing: border-box; gap: 15px; border-top: 2px solid #e2e8f0; display: flex;
-      animation: fadeInUp 0.5s ease;
-    }
-    .mob-btn {
-      flex: 1; padding: 12px 5px; border-radius: 12px; text-align: center; font-weight: 700; font-size: 13px; display: flex;
-      justify-content: center; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); cursor: pointer;
-    }
-    .mob-live-btn { background: var(--danger); color: white !important; border: none; }
-    .mob-fee-btn { background: #f8fafc; color: var(--primary); border: 2px solid var(--primary); }
   }
 </style>
 </head>
@@ -246,11 +232,6 @@
             <a href="https://www.saidpurresidentialmodelschool.com/menu/contact-us" target="_blank" class="l-btn"><span>📞</span><span>Support</span></a>
         </div>
     </div>
-</div>
-
-<div class="mobile-action-bar" id="mobileActionBar">
-    <a onclick="openLiveClassModal();" class="mob-btn mob-live-btn" id="mobLiveBtn"><span style="font-size:16px;">🔴</span> LIVE CLASS</a>
-    <a onclick="openFeesModal();" class="mob-btn mob-fee-btn"><span style="font-size:16px;">💳</span> PAY FEES</a>
 </div>
 
 <div id="forgotPassModal" class="modal-overlay">
@@ -374,7 +355,6 @@
   }
 
   window.onload = function() {
-    document.getElementById('mobileActionBar').style.display = "none";
     const savedUser = sessionStorage.getItem('srms_student_session');
     if(savedUser) {
         std = JSON.parse(savedUser);
@@ -452,11 +432,6 @@
     document.getElementById('main-navbar').style.display = "flex";
     document.getElementById('main-banner').style.display = "flex";
     document.getElementById('dashboard-section').style.display = "block";
-    
-    if(window.innerWidth <= 768) {
-        document.getElementById('mobileActionBar').style.display = "flex";
-        document.getElementById('dashboard-section').style.paddingBottom = "90px";
-    }
   }
 
   function logout() {
@@ -472,7 +447,6 @@
     document.getElementById('main-navbar').style.display = "none";
     document.getElementById('main-banner').style.display = "none";
     document.getElementById('dashboard-section').style.display = "none";
-    document.getElementById('mobileActionBar').style.display = "none";
     document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
     
     document.getElementById('login-container').style.display = "flex";
@@ -928,8 +902,6 @@
             if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
                 document.getElementById('liveClassMainBtn').classList.add('live-active-btn');
                 document.getElementById('liveClassMainBtn').innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE NOW</span>";
-                let mobBtn = document.getElementById('mobLiveBtn');
-                if(mobBtn) mobBtn.classList.add('live-active-btn');
             }
         }
     } catch (e) {}
