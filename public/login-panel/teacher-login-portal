@@ -334,7 +334,7 @@
   
   let tPhone = "";
   let exactDbPhone = "";
-  let generatedOTP = null;
+  // 🚀 Security Fix: Removed local generatedOTP variable
   let resetPhone = null;
   let allAttendanceData = {};
 
@@ -448,6 +448,9 @@
     loadBoard();
   }
 
+  // ==========================================
+  // FORGOT PASSWORD LOGIC (SECURE BACKEND CACHE)
+  // ==========================================
   function openForgotModal() {
     document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
     document.getElementById('fpPhone').value = ''; document.getElementById('fpOTP').value = ''; document.getElementById('fpNewPass').value = ''; document.getElementById('fpMsg').innerText = '';
@@ -473,25 +476,49 @@
       try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error! Check Browser Console.</span>`; return; }
       
       if(data.status === "success") {
-        generatedOTP = data.otp; 
+        // 🚀 SECURE FIX: OTP is not stored locally anymore. Backend validates it.
         document.getElementById('fpStep1').style.display = 'none'; 
         document.getElementById('fpStep2').style.display = 'block';
         let sMsg = data.msg ? data.msg : (data.message ? data.message : "OTP Sent Successfully!");
-        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">${sMsg}</span>`;
+        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">${sanitizeHTML(sMsg)}</span>`;
       } else { 
         let eMsg = data.message ? data.message : (data.msg ? data.msg : "Error sending OTP.");
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${eMsg}</span>`; 
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`; 
       }
     } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error! Check connection.</span>"; }
   }
 
-  function verifyOTP() {
+  // 🚀 SECURE FIX: Verify OTP directly with the Backend Cache
+  async function verifyOTP() {
     const input = document.getElementById('fpOTP').value.trim();
     if(!input) return;
-    if(input === generatedOTP) {
-        document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'block';
-        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">OTP Verified! Enter a new password.</span>`;
-    } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Invalid OTP Code!</span>`; }
+
+    const btns = document.getElementById('fpStep2').getElementsByTagName('button');
+    const verifyBtn = btns[0];
+    verifyBtn.innerHTML = '<span class="loader-spinner"></span> Verifying...';
+    verifyBtn.disabled = true;
+
+    try {
+        const response = await fetch(OTP_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "verifyOTP", phone: resetPhone, otp: input })
+        });
+        const data = await response.json();
+
+        if(data.status === "success") {
+            document.getElementById('fpStep2').style.display = 'none'; 
+            document.getElementById('fpStep3').style.display = 'block';
+            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ OTP Verified! Enter a new password.</span>`;
+        } else {
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`;
+        }
+    } catch (e) {
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Verification Failed.</span>`;
+    }
+    
+    verifyBtn.innerHTML = "Verify Code";
+    verifyBtn.disabled = false;
   }
 
   async function saveNewPassword() {
@@ -515,7 +542,7 @@
           document.getElementById('fpMsg').innerText = "";
       } else { 
           let eMsg = data.message ? data.message : "Account sync error!";
-          document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${eMsg}</span>`; 
+          document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`; 
       }
     } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; }
   }
@@ -780,7 +807,7 @@
       let summaryBox = document.getElementById('modalAttSummary');
       let yearlySummaryBox = document.getElementById('modalYearlySummary');
       
-      // 🚀 Bangladesh Time Logic for Current Real Year
+      // 🚀 Bangladesh Time Logic
       const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
       const bdDate = new Date(bdTime);
       const currentBdYear = bdDate.getFullYear();
@@ -792,7 +819,6 @@
       
       let isYearFinished = (selectedYear < currentBdYear);
 
-      // 🚀 ১. Yearly Calculation (Hidden until year finishes)
       if (!isYearFinished) {
           yearlySummaryBox.style.display = 'none';
           yearlySummaryBox.innerHTML = '';
@@ -819,14 +845,12 @@
           yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${selectedYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
       }
 
-      // যদি কোনো ডাটা না থাকে
       if(!selectedMonth || !allAttendanceData[selectedMonth]) {
           tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#64748b; font-weight:600;">No attendance records available for this month.</td></tr>';
           summaryBox.style.display = 'none';
           return;
       }
       
-      // ২. Table Render
       let monthData = allAttendanceData[selectedMonth].dates;
       let dates = Object.keys(monthData).sort().reverse();
       let presentCount = dates.length;
@@ -843,7 +867,6 @@
           `;
       });
       
-      // 🚀 ৩. Month End Logic for Monthly Totals
       let isMonthFinished = false;
       if (selectedYear < currentBdYear) {
           isMonthFinished = true;
@@ -852,11 +875,9 @@
       }
       
       if (!isMonthFinished) {
-          // মাস শেষ হয়নি, তাই হিসাব হাইড থাকবে
           summaryBox.style.display = 'none';
           summaryBox.innerHTML = '';
       } else {
-          // মাস শেষ হয়েছে, হিসাব দেখাবে
           summaryBox.style.display = 'flex';
           let daysInMonth = new Date(selectedYear, selectedMonthNum, 0).getDate();
           let workingDays = Math.max(presentCount, daysInMonth - 4); 
