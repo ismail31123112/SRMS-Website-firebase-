@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TC Generator - SRMS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f7f6; }
+        .container { max-width: 800px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h2 { text-align: center; color: #333; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; color: #555; }
+        input, select { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; }
+        button { width: 100%; padding: 12px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 18px; font-weight: bold; }
+        button:hover { background-color: #218838; }
+        hr { border: 0; height: 1px; background: #ddd; margin: 20px 0; }
+        
+        /* প্রিভিউ এরিয়া ডিজাইন */
+        #printArea { display: none; padding: 20px; text-align: center; background: white; margin-top: 20px; border: 1px solid #ddd; border-radius: 8px; }
+        #tcContent { padding: 40px; background-color: white; color: black; }
+        .tc-header h2 { margin: 0; font-size: 26px; color: #000; }
+        .tc-header p { margin: 5px 0; font-size: 18px; }
+        .tc-title { text-decoration: underline; margin-top: 40px; font-size: 22px; font-weight: bold; }
+        .tc-body { text-align: justify; line-height: 1.8; font-size: 20px; margin-top: 30px; }
+        .signature { text-align: right; margin-top: 80px; font-weight: bold; font-size: 20px; }
+        
+        .action-buttons { display: flex; gap: 10px; margin-top: 30px; justify-content: center; }
+        .btn-print { background-color: #007BFF; }
+        .btn-print:hover { background-color: #0056b3; }
+        .btn-new { background-color: #6c757d; }
+        .btn-new:hover { background-color: #5a6268; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContainer">
+    <h2 id="formTitle">ছাড়পত্র (TC) জেনারেটর</h2>
+
+    <div id="inputForm">
+        <div class="form-group">
+            <label style="color: #007BFF;">টেমপ্লেট নির্বাচন করুন:</label>
+            <select id="templateSelect" onchange="changeTemplate()">
+                <option value="srms">আমাদের স্কুল (সৈয়দপুর রেসিডেন্সিয়াল মডেল স্কুল)</option>
+                <option value="other">অন্য স্কুল (ভাটিপাড়া মডেল)</option>
+            </select>
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label>স্কুলের নাম:</label>
+            <input type="text" id="schoolName" value="সৈয়দপুর রেসিডেন্সিয়াল মডেল স্কুল">
+        </div>
+        <div class="form-group">
+            <label>স্থাপিত সাল (থাকলে দিন, নাহলে ফাঁকা রাখুন):</label>
+            <input type="text" id="established" value="">
+        </div>
+        <div class="form-group">
+            <label>ঠিকানা:</label>
+            <input type="text" id="address" value="সুলতান নগর, সৈয়দপুর, নীলফামারী">
+        </div>
+        <div class="form-group">
+            <label>স্কুল কোড / EIIN:</label>
+            <input type="text" id="eiin" value="School Code: 481931 | EMIS Code: 00704061312">
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            <label>শিক্ষার্থীর নাম:</label>
+            <input type="text" id="studentName" placeholder="যেমন: আব্দুর রহমান">
+        </div>
+        <div class="form-group">
+            <label>পিতার নাম:</label>
+            <input type="text" id="fatherName" placeholder="যেমন: মোঃ শফিকুল ইসলাম">
+        </div>
+        <div class="form-group">
+            <label>মাতার নাম:</label>
+            <input type="text" id="motherName" placeholder="যেমন: মোছাঃ ফাতেমা বেগম">
+        </div>
+        <div class="form-group">
+            <label>শ্রেণি:</label>
+            <select id="classSelect" onchange="checkClass()">
+                <option value="প্লে">প্লে</option>
+                <option value="নার্সারি">নার্সারি</option>
+                <option value="১ম">১ম</option>
+                <option value="২য়">২য়</option>
+                <option value="৩য়">৩য়</option>
+                <option value="৪র্থ">৪র্থ</option>
+                <option value="৫ম">৫ম</option>
+                <option value="৬ষ্ঠ">৬ষ্ঠ</option>
+                <option value="৭ম">৭ম</option>
+                <option value="৮ম">৮ম</option>
+                <option value="৯ম">৯ম</option>
+                <option value="১০ম">১০ম</option>
+            </select>
+        </div>
+        
+        <div class="form-group" id="deptGroup" style="display: none;">
+            <label>বিভাগ:</label>
+            <select id="department">
+                <option value="বিজ্ঞান">বিজ্ঞান</option>
+                <option value="মানবিক">মানবিক</option>
+                <option value="ব্যবসায় শিক্ষা">ব্যবসায় শিক্ষা</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>শিক্ষাবর্ষ:</label>
+            <input type="text" id="academicYear" placeholder="যেমন: ২০২৫">
+        </div>
+        <div class="form-group">
+            <label>জন্ম তারিখ:</label>
+            <input type="text" id="dob" placeholder="যেমন: ১৫/০১/২০১১ ইং">
+        </div>
+
+        <button onclick="generateTC()">TC তৈরি করুন</button>
+    </div>
+</div>
+
+<div id="printArea">
+    <div id="tcContent">
+        <div class="tc-header">
+            <h2 id="outSchoolName"></h2>
+            <p id="outEstRow" style="display: none;">স্থাপিতঃ <span id="outEst"></span></p>
+            <p><span id="outAddress"></span></p>
+            <p><span id="outEiin"></span></p>
+        </div>
+        
+        <div class="tc-title">ছাড়পত্র</div>
+        
+        <div class="tc-body">
+            এই মর্মে প্রত্যয়ন করিতেছি যে, <strong><span id="outStudentName"></span></strong>। 
+            পিতাঃ <strong><span id="outFatherName"></span></strong>। 
+            মাতা- <strong><span id="outMotherName"></span></strong>। 
+            সে অত্র বিদ্যালয়ে <strong><span id="outClass"></span></strong> শ্রেণিতে <span id="outDeptText"></span> <strong><span id="outYear"></span></strong> শিক্ষাবর্ষে অধ্যয়ন করিয়াছে এবং বার্ষিক পরীক্ষার সাফল্যের সাথে উত্তীর্ণ হইয়াছে। 
+            ভর্তি বহি মোতাবেক তাহার জন্ম তারিখ- <strong><span id="outDob"></span></strong>। আমার জানা মতে তাহার স্বভাব চরিত্র ভাল। <br><br>
+            আমি তাহার উজ্জ্বল ভবিষ্যৎ ও সফলতা কামনা করছি।
+        </div>
+
+        <div class="signature">
+            প্রধান শিক্ষক<br>
+            <span id="outSignSchool"></span>
+        </div>
+    </div>
+    
+    <div class="action-buttons">
+        <button class="btn-print" onclick="customPrint()">🖨️ সরাসরি প্রিন্ট করুন</button>
+        <button class="btn-new" onclick="location.reload()">🔄 নতুন টিসি</button>
+    </div>
+</div>
+
+<script>
+    function changeTemplate() {
+        var template = document.getElementById("templateSelect").value;
+        if (template === "srms") {
+            document.getElementById("schoolName").value = "সৈয়দপুর রেসিডেন্সিয়াল মডেল স্কুল";
+            document.getElementById("established").value = "";
+            document.getElementById("address").value = "সুলতান নগর, সৈয়দপুর, নীলফামারী";
+            document.getElementById("eiin").value = "School Code: 481931 | EMIS Code: 00704061312";
+        } else {
+            document.getElementById("schoolName").value = "ভাটিপাড়া মডেল উচ্চ বিদ্যালয়";
+            document.getElementById("established").value = "১৯৯৩ ইং";
+            document.getElementById("address").value = "ডাকঘরঃ বেলাইচন্ডী, উপজেলাঃ পার্বতীপুর, জেলাঃ দিনাজপুর।";
+            document.getElementById("eiin").value = "EIIN-120993";
+        }
+    }
+
+    function checkClass() {
+        var classSelect = document.getElementById("classSelect").value;
+        var deptGroup = document.getElementById("deptGroup");
+        if (classSelect === "৯ম" || classSelect === "১০ম") {
+            deptGroup.style.display = "block";
+        } else {
+            deptGroup.style.display = "none";
+        }
+    }
+
+    function generateTC() {
+        var schoolName = document.getElementById("schoolName").value;
+        document.getElementById("outSchoolName").innerText = schoolName;
+        document.getElementById("outSignSchool").innerText = schoolName;
+        
+        var estValue = document.getElementById("established").value;
+        if(estValue.trim() !== "") {
+            document.getElementById("outEst").innerText = estValue;
+            document.getElementById("outEstRow").style.display = "block";
+        } else {
+            document.getElementById("outEstRow").style.display = "none";
+        }
+
+        document.getElementById("outAddress").innerText = document.getElementById("address").value;
+        document.getElementById("outEiin").innerText = document.getElementById("eiin").value;
+        
+        document.getElementById("outStudentName").innerText = document.getElementById("studentName").value;
+        document.getElementById("outFatherName").innerText = document.getElementById("fatherName").value;
+        document.getElementById("outMotherName").innerText = document.getElementById("motherName").value;
+        
+        var selectedClass = document.getElementById("classSelect").value;
+        document.getElementById("outClass").innerText = selectedClass;
+        
+        var deptText = "";
+        if (selectedClass === "৯ম" || selectedClass === "১০ম") {
+            deptText = "<strong>" + document.getElementById("department").value + "</strong> বিভাগে";
+        }
+        document.getElementById("outDeptText").innerHTML = deptText;
+        
+        document.getElementById("outYear").innerText = document.getElementById("academicYear").value;
+        document.getElementById("outDob").innerText = document.getElementById("dob").value;
+
+        document.getElementById("mainContainer").style.display = "none";
+        document.getElementById("printArea").style.display = "block";
+    }
+
+    // গুগল সাইটস ও মোবাইলের স্পুলার সমস্যা সমাধানের জন্য নতুন প্রিন্ট ফাংশন
+    function customPrint() {
+        // শুধু টিসির ভেতরের ডিজাইনটুকু নেওয়া হলো
+        var printContents = document.getElementById('tcContent').innerHTML;
+
+        // প্রিন্টের জন্য সম্পূর্ণ নতুন একটি HTML পেজ তৈরি করা হলো
+        var htmlTemplate = `
+        <!DOCTYPE html>
+        <html lang="bn">
+        <head>
+            <meta charset="UTF-8">
+            <title>Print TC</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 40px; margin: 0; color: #000; }
+                .tc-header { text-align: center; }
+                .tc-header h2 { margin: 0; font-size: 28px; }
+                .tc-header p { margin: 5px 0; font-size: 18px; }
+                .tc-title { text-align: center; text-decoration: underline; margin-top: 40px; font-size: 24px; font-weight: bold; }
+                .tc-body { text-align: justify; line-height: 1.8; font-size: 20px; margin-top: 30px; }
+                .signature { text-align: right; margin-top: 80px; font-weight: bold; font-size: 20px; }
+                
+                /* প্রিন্টের সময় মার্জিন ঠিক রাখার জন্য */
+                @media print {
+                    @page { margin: 15mm; }
+                }
+            </style>
+        </head>
+        <body onload="setTimeout(function(){ window.print(); }, 800);">
+            ${printContents}
+        </body>
+        </html>
+        `;
+
+        // মোবাইলের স্পুলারকে ফাঁকি দিয়ে আসল পেজ বোঝানোর জন্য Blob URL ব্যবহার
+        var blob = new Blob([htmlTemplate], { type: 'text/html' });
+        var url = URL.createObjectURL(blob);
+        
+        // নতুন ট্যাবে পেজটি খুলে সরাসরি প্রিন্ট কমান্ড নেবে
+        window.open(url, '_blank');
+    }
+</script>
+</body>
+</html>
