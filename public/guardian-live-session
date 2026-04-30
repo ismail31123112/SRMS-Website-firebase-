@@ -237,7 +237,7 @@
         
         <div id="fpStep2" style="display:none;">
             <input type="text" id="fpOTP" placeholder="Enter 6-digit OTP">
-            <button class="login-btn" onclick="verifyOTP()">VERIFY OTP</button>
+            <button id="btnVerifyOTP" class="login-btn" onclick="verifyOTP()">VERIFY OTP</button>
         </div>
         
         <div id="fpStep3" style="display:none;">
@@ -313,7 +313,7 @@
         <h3 style="margin:0 0 15px 0; font-size:20px; color:var(--text-main); border-bottom:2px solid #f1f5f9; padding-bottom:15px;">🔐 Update Security Key</h3>
         <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Protect your child's account by changing your password regularly.</p>
         <input type="password" id="newPass" placeholder="Enter New Password (Min. 6 chars)">
-        <button class="login-btn" style="padding:14px; font-size:14px;" onclick="updatePassword()">SAVE NEW PASSWORD</button>
+        <button id="btnUpdateSecurity" class="login-btn" style="padding:14px; font-size:14px;" onclick="updatePassword()">SAVE NEW PASSWORD</button>
         <p id="passMsg" style="font-size:13px; margin-top:10px; font-weight:700; text-align:center;"></p>
     </div>
 </div>
@@ -348,8 +348,8 @@
   let std = null;
   let markSheetHTML = "";
   
-  // Forgot Password Variables
-  let currentGeneratedOTP = null;
+  // Updated Forgot Password Variables for new backend
+  let resettingDocId = null; 
   let resettingStudentID = null;
 
   // Detailed Attendance Global Variable
@@ -470,7 +470,7 @@
   }
 
   // =====================================================================
-  // FORGOT PASSWORD FUNCTIONS
+  // UPDATED BACKEND SYNCED FORGOT PASSWORD FUNCTIONS
   // =====================================================================
   function openForgotPassModal() {
     document.getElementById('fpStep1').style.display = 'block';
@@ -501,8 +501,9 @@
         const data = JSON.parse(textResponse);
         
         if(data.status === "success") {
-            currentGeneratedOTP = data.otp;
+            // New Secure Logic: Save docId, OTP is verified only on backend
             resettingStudentID = id;
+            resettingDocId = data.docId; 
             document.getElementById('fpStep1').style.display = 'none';
             document.getElementById('fpStep2').style.display = 'block';
             let sMsg = data.msg || data.message || (data.email ? `OTP sent to ${data.email}` : "OTP Sent Successfully!");
@@ -515,16 +516,33 @@
     btn.innerHTML = "SEND OTP TO EMAIL"; btn.disabled = false;
   }
 
-  function verifyOTP() {
+  async function verifyOTP() {
     const entered = sanitizeHTML(document.getElementById('fpOTP').value.trim());
     if(!entered) return;
-    if(entered === currentGeneratedOTP) {
-        document.getElementById('fpStep2').style.display = 'none';
-        document.getElementById('fpStep3').style.display = 'block';
-        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">OTP Verified! You can now set a new password.</span>`;
-    } else {
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Invalid OTP Code! Check your email carefully.</span>`;
+    
+    const btn = document.getElementById('btnVerifyOTP');
+    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> VERIFYING..."; btn.disabled = true;
+
+    try {
+        // Backend Verification Added
+        const res = await fetch(SCRIPT_URL, { 
+            method: "POST", 
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "verifyOTP", id: resettingStudentID, otp: entered }) 
+        });
+        const data = await res.json();
+
+        if(data.status === "success") {
+            document.getElementById('fpStep2').style.display = 'none';
+            document.getElementById('fpStep3').style.display = 'block';
+            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">OTP Verified! You can now set a new password.</span>`;
+        } else {
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message || "Invalid OTP Code! Check your email carefully.")}</span>`;
+        }
+    } catch (e) {
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`;
     }
+    btn.innerHTML = "VERIFY OTP"; btn.disabled = false;
   }
 
   async function saveResetPassword() {
@@ -535,24 +553,22 @@
     btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SAVING..."; btn.disabled = true;
 
     try {
-        const res = await fetch(`${FIREBASE_DB_BASE}/Students?pageSize=1000`);
+        // Now fully synced with Backend and Firebase Auth via API
+        const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass })
+        });
         const data = await res.json();
-        const doc = data.documents.find(d => d.fields && d.fields.studentID && d.fields.studentID.stringValue === resettingStudentID);
         
-        if(doc) {
-            let docId = doc.name.split('/').pop();
-            await fetch(`${FIREBASE_DB_BASE}/Students/${docId}?updateMask.fieldPaths=pass`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ fields: { pass: { stringValue: newPass } } })
-            });
-            document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful! Note: System Admin must sync this.</div><button class="login-btn" onclick="closeModal('forgotPassModal')">LOGIN NOW</button>`;
+        if(data.status === "success") {
+            document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ ${sanitizeHTML(data.message || "Password Reset Successful!")}</div><button class="login-btn" onclick="closeModal('forgotPassModal')">LOGIN NOW</button>`;
             document.getElementById('fpMsg').innerText = '';
         } else {
-            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Student not found!</span>`;
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message || "Failed to update password")}</span>`;
             btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false;
         }
-    } catch(e) { document.getElementById('fpMsg').innerText = "Network Error!"; btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error!</span>`; btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; }
   }
 
   // =====================================================================
@@ -1045,6 +1061,7 @@
   async function updatePassword() {
     const p = document.getElementById('newPass').value; 
     const msgBox = document.getElementById('passMsg');
+    const btn = document.getElementById('btnUpdateSecurity');
     
     if(!p || p.length < 6) { 
         msgBox.style.color = "var(--danger)"; 
@@ -1057,29 +1074,30 @@
 
     msgBox.style.color = "var(--primary)";
     msgBox.innerText = "Updating...";
+    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SAVING..."; btn.disabled = true;
     
     try { 
-        const user = auth.currentUser;
-        if(user) {
-            const token = await user.getIdToken();
-            await user.updatePassword(p);
-            
-            await fetch(`${FIREBASE_DB_BASE}/Students/${docId}?updateMask.fieldPaths=pass`, { 
-                method: "PATCH", 
-                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
-                body: JSON.stringify({ fields: { pass: { stringValue: p } } }) 
-            });
-            
+        // Using the newly implemented secure backend approach
+        const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "updatePassword", docId: docId, newPass: p })
+        });
+        const data = await res.json();
+        
+        if(data.status === "success") {
             msgBox.style.color = "#059669"; 
-            msgBox.innerText = "✅ Password Changed Successfully!"; 
+            msgBox.innerText = `✅ ${sanitizeHTML(data.message || "Password Changed Successfully!")}`; 
             document.getElementById('newPass').value = "";
         } else {
-            throw new Error("Not authenticated");
+            msgBox.style.color = "var(--danger)"; 
+            msgBox.innerText = sanitizeHTML(data.message || "Error updating password.");
         }
     } catch(e) { 
         msgBox.style.color = "var(--danger)"; 
-        msgBox.innerText = "Error! Please logout and try again."; 
+        msgBox.innerText = "Error! Please check your network and try again."; 
     }
+    btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false;
   }
 </script>
 
