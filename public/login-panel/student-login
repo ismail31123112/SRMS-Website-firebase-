@@ -344,7 +344,9 @@
   
   let std = null;
   let markSheetHTML = "";
-  let currentGeneratedOTP = null;
+  
+  // Variables for Secure Forgot Password Flow
+  let resettingDocId = null; 
   let resettingStudentID = null;
   let allAttendanceData = {}; 
 
@@ -366,7 +368,7 @@
   function loader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 🚀 Updated Login Flow (Firebase Auth Token First)
+  // 🚀 Login Flow
   async function handleLogin() {
     const id = sanitizeHTML(document.getElementById('stuID').value.trim());
     let pass = document.getElementById('stuPass').value.trim();
@@ -452,6 +454,9 @@
     document.getElementById('login-container').style.display = "flex";
   }
 
+  // ==========================================
+  // FORGOT PASSWORD LOGIC (Secure Cache Sync)
+  // ==========================================
   function openForgotPassModal() {
     document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
     document.getElementById('fpID').value = ''; document.getElementById('fpOTP').value = ''; document.getElementById('fpNewPass').value = ''; document.getElementById('fpMsg').innerText = '';
@@ -470,57 +475,84 @@
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({ action: "sendOTP", id: id }) 
         });
-        const textResponse = await res.text();
-        const data = JSON.parse(textResponse);
+        const data = await res.json();
         
         if(data.status === "success") {
-            currentGeneratedOTP = data.otp;
-            resettingStudentID = id;
+            resettingStudentID = id; // Save locally for verification step
+            resettingDocId = data.docId; // Document ID for update step
             document.getElementById('fpStep1').style.display = 'none';
             document.getElementById('fpStep2').style.display = 'block';
             let msg = data.email ? `OTP sent to ${sanitizeHTML(data.email)}` : "OTP Sent Successfully!";
             document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;"><b>${msg}</b></span>`;
         } else {
-            let eMsg = data.message || data.msg || "Error finding student.";
+            let eMsg = data.message || "Error finding student.";
             document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`;
         }
-    } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; }
+    } catch(e) { 
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; 
+    }
     btn.innerHTML = "SEND OTP TO EMAIL"; btn.disabled = false;
   }
 
-  function verifyOTP() {
+  async function verifyOTP() {
     const entered = sanitizeHTML(document.getElementById('fpOTP').value.trim());
     if(!entered) return;
-    if(entered === currentGeneratedOTP) {
-        document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'block';
-        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">OTP Verified! You can now set a new password.</span>`;
-    } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Invalid OTP Code!</span>`; }
+
+    const btns = document.getElementById('fpStep2').getElementsByTagName('button');
+    const verifyBtn = btns[0];
+    verifyBtn.innerHTML = "VERIFYING..."; 
+    verifyBtn.disabled = true;
+
+    try {
+        const res = await fetch(SCRIPT_URL, { 
+            method: "POST", 
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "verifyOTP", id: resettingStudentID, otp: entered }) 
+        });
+        const data = await res.json();
+        
+        if(data.status === "success") {
+            document.getElementById('fpStep2').style.display = 'none'; 
+            document.getElementById('fpStep3').style.display = 'block';
+            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ OTP Verified! You can now set a new password.</span>`;
+        } else { 
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`; 
+        }
+    } catch(e) {
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Verification Failed. Network Error!</span>`;
+    }
+    
+    verifyBtn.innerHTML = "VERIFY OTP"; 
+    verifyBtn.disabled = false;
   }
 
+  // Call backend to perform SignInWithPassword -> update Auth -> patch Firestore
   async function saveResetPassword() {
     const newPass = document.getElementById('fpNewPass').value.trim();
     if(newPass.length < 6) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।</span>`; return; }
+    
     const btn = document.getElementById('btnSaveReset');
     btn.innerHTML = "SAVING..."; btn.disabled = true;
 
     try {
-        const res = await fetch(`${FIREBASE_DB_BASE}/Students?pageSize=1000`);
+        const res = await fetch(SCRIPT_URL, { 
+            method: "POST", 
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass }) 
+        });
         const data = await res.json();
-        const doc = data.documents.find(d => d.fields && d.fields.studentID && d.fields.studentID.stringValue === resettingStudentID);
         
-        if(doc) {
-            let docId = doc.name.split('/').pop();
-            await fetch(`${FIREBASE_DB_BASE}/Students/${docId}?updateMask.fieldPaths=pass`, {
-                method: "PATCH", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ fields: { pass: { stringValue: newPass } } })
-            });
-            document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful! Note: System Admin must sync this.</div><button class="login-btn" onclick="closeModal('forgotPassModal')">CLOSE</button>`;
+        if(data.status === "success") {
+            document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful!</div><button class="login-btn" onclick="closeModal('forgotPassModal')">CLOSE</button>`;
             document.getElementById('fpMsg').innerText = '';
         } else {
-            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Student not found!</span>`;
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`;
             btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false;
         }
-    } catch(e) { document.getElementById('fpMsg').innerText = "Network Error!"; btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; }
+    } catch(e) { 
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; 
+        btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; 
+    }
   }
 
   // =====================================================================
@@ -566,7 +598,7 @@
     }
   }
 
-  // 🚀 FETCH CLASS MATERIALS DIRECTLY FROM FIREBASE
+  // FETCH CLASS MATERIALS
   async function fetchMat(headers) {
       const box = document.getElementById('matList');
       box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading resources...</div>";
@@ -768,11 +800,10 @@
       let summaryBox = document.getElementById('modalAttSummary');
       let yearlySummaryBox = document.getElementById('modalYearlySummary');
       
-      // 🚀 Bangladesh Time Logic for Current Real Year
       const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
       const bdDate = new Date(bdTime);
       const currentBdYear = bdDate.getFullYear();
-      const currentBdMonth = bdDate.getMonth() + 1; // 1-12
+      const currentBdMonth = bdDate.getMonth() + 1;
       
       let dateParts = selectedMonth ? selectedMonth.split('-') : [currentBdYear.toString(), "01"];
       let selectedYear = parseInt(dateParts[0]);
@@ -780,7 +811,6 @@
       
       let isYearFinished = (selectedYear < currentBdYear);
 
-      // 🚀 ১. Yearly Calculation (Hidden until year finishes)
       if (!isYearFinished) {
           yearlySummaryBox.style.display = 'none';
           yearlySummaryBox.innerHTML = '';
@@ -829,7 +859,6 @@
           `;
       });
       
-      // 🚀 ৩. Month End Logic for Monthly Totals
       let isMonthFinished = false;
       if (selectedYear < currentBdYear) {
           isMonthFinished = true;
@@ -838,11 +867,9 @@
       }
       
       if (!isMonthFinished) {
-          // মাস শেষ হয়নি, তাই হিসাব হাইড থাকবে
           summaryBox.style.display = 'none';
           summaryBox.innerHTML = '';
       } else {
-          // মাস শেষ হয়েছে, হিসাব দেখাবে
           summaryBox.style.display = 'flex';
           let daysInMonth = new Date(selectedYear, selectedMonthNum, 0).getDate();
           let workingDays = Math.max(presentCount, daysInMonth - 4); 
@@ -869,6 +896,7 @@
     document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
   }
 
+  // 🚀 UPDATE PASSWORD WHILE LOGGED IN
   async function updatePassword() {
     const p = document.getElementById('newPass').value; 
     const msgBox = document.getElementById('passMsg');
@@ -883,13 +911,14 @@
         const user = auth.currentUser;
         const token = await user.getIdToken();
         if(user) await user.updatePassword(p);
+        
         await fetch(`${FIREBASE_DB_BASE}/Students/${docId}?updateMask.fieldPaths=pass`, { 
             method: "PATCH", 
             headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
             body: JSON.stringify({ fields: { pass: { stringValue: p } } }) 
         });
         msgBox.style.color = "#059669"; msgBox.innerText = "✅ Password Changed Successfully!"; document.getElementById('newPass').value = "";
-    } catch(e) { msgBox.style.color="var(--danger)"; msgBox.innerText = "Error! Please logout and try again."; }
+    } catch(e) { msgBox.style.color="var(--danger)"; msgBox.innerText = "Error! Please logout and login again to update."; }
   }
 
   async function checkLiveClassForButton(headers) {
