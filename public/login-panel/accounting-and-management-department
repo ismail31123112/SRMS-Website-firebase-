@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRMS Premium Admin Panel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-color: #005f40; 
+            --secondary-color: #004d33;
+            --success-color: #1cc88a;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --bg-gradient: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+            --panel-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg-gradient); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: #333;
+            padding: 20px 0;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { 
+            background: var(--panel-bg); 
+            padding: 35px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            width: 90%; 
+            max-width: 450px; 
+            text-align: center; 
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-top: 5px solid var(--primary-color);
+            animation: fadeInUp 0.5s ease-out; 
+            transition: all 0.3s ease;
+            margin: auto;
+        }
+
+        .srms-logo { width: 70px; margin-bottom: 10px; }
+        h2 { color: #444; margin-bottom: 20px; font-weight: 600; font-size: 22px; }
+
+        .password-container { position: relative; margin-bottom: 15px; }
+
+        input, select.input-field, textarea.input-field { 
+            width: 100%; padding: 12px 15px; margin-bottom: 12px;
+            border: 2px solid #eaeaea; border-radius: 10px; 
+            box-sizing: border-box; font-size: 14px; outline: none; 
+            font-family: 'Poppins', sans-serif; transition: 0.2s;
+        }
+        
+        input#password, input#new-password { padding-right: 45px; margin-bottom: 0; }
+        input:focus, select.input-field:focus, textarea.input-field:focus { 
+            border-color: var(--primary-color); box-shadow: 0 0 8px rgba(0, 95, 64, 0.2); 
+        }
+
+        .toggle-password {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            cursor: pointer; color: #aaa; transition: 0.2s; z-index: 10;
+        }
+        .toggle-password:hover { color: var(--primary-color); }
+
+        .btn { 
+            background: var(--primary-color); color: white; border: none; 
+            padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; 
+            font-size: 15px; font-weight: 600; transition: 0.3s; 
+            box-shadow: 0 4px 6px rgba(0, 95, 64, 0.2); margin-top: 8px;
+        }
+        .btn:hover { background: var(--secondary-color); transform: translateY(-2px); }
+        .btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        .btn-warning { background: var(--warning-color); color: #333; }
+        .btn-warning:hover { background: #f4b619; }
+        .btn-danger { background: var(--danger-color); }
+        .btn-danger:hover { background: #be2e21; }
+
+        .btn-link, .post-form-btn button { 
+            background: white; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; margin: 10px 0; color: var(--primary-color); 
+            padding: 12px; border-radius: 10px; font-weight: 500; 
+            transition: 0.3s; border: 2px solid #eaeaea; font-size: 14px;
+            cursor: pointer; width: 100%; font-family: 'Poppins', sans-serif; box-sizing: border-box;
+        }
+        .btn-link i, .post-form-btn button i { margin-right: 10px; font-size: 16px; }
+        .btn-link:hover, .post-form-btn button:hover { background: #f8f9fc; border-color: var(--primary-color); transform: scale(1.02); }
+        
+        .post-form-btn { margin: 0; padding: 0; width: 100%; }
+
+        .hidden { display: none !important; }
+        .show-section { display: block; animation: fadeInUp 0.4s ease-out forwards; }
+
+        .spinner { display: none; margin-right: 8px; animation: spin 1s infinite linear; }
+        hr { border: 0; border-top: 1px dashed #ddd; margin: 15px 0; }
+        p.msg-text { margin-top: 10px; font-size: 13px; font-weight: 600; min-height: 1em; line-height: 1.5; }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .smart-attendance-btn:hover {
+            background: #1e293b !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="login-section">
+        <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="SRMS Logo" class="srms-logo">
+        <h2>Admin Login</h2>
+        <div class="password-container">
+            <input type="password" id="password" placeholder="Enter Admin Password">
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('password', this)"></i>
+        </div>
+        <button class="btn" onclick="login()" id="loginBtn">
+            <i class="fas fa-spinner spinner" id="loginSpinner"></i><span id="loginText">Secure Login</span>
+        </button>
+        <p id="msg" class="msg-text" style="color: var(--danger-color);"></p>
+        <hr>
+        <a href="https://www.saidpurresidentialmodelschool.com" class="btn-link" style="color: #666; border-color: #ddd;">
+            <i class="fas fa-home"></i> Back to Main Website
+        </a>
+    </div>
+
+    <div class="container hidden" id="dashboard-section"></div>
+
+    <div class="container hidden" id="messaging-section"></div>
+
+    <div class="container hidden" id="change-pass-section">
+        <h2>Change Password</h2>
+        <div class="password-container">
+            <input type="password" id="new-password" placeholder="Enter New Password (Min. 6 chars)">
+            <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('new-password', this)"></i>
+        </div>
+        <button class="btn btn-warning" onclick="updatePassword()" id="updateBtn">
+            <i class="fas fa-spinner spinner" id="updateSpinner"></i><span id="updateText">Update Password</span>
+        </button>
+        <button class="btn btn-danger" onclick="showSection('dashboard-section')">Cancel</button>
+        <p id="success-msg" class="msg-text"></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+
+    <script>
+        // 🚀 Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+            authDomain: "srms-website-management.firebaseapp.com",
+            projectId: "srms-website-management",
+            storageBucket: "srms-website-management.firebasestorage.app",
+            messagingSenderId: "960037316778",
+            appId: "1:960037316778:web:d6f9b1f434572d9374c8d3"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // ⚠️ তোমার নতুন GAS Web App URL এখানে বসাও
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
+        const FIREBASE_DB_BASE = 'https://firestore.googleapis.com/v1/projects/srms-website-management/databases/(default)/documents';
+
+        let cachedTeachers = [];
+        let cachedStudents = [];
+        let fallbackPasswordUsed = "";
+
+        window.onload = function() {
+            auth.onAuthStateChanged((user) => {
+                if(user && user.email === "admin@srms.edu.bd") {
+                    document.getElementById('password').value = ""; // Auto-login needs no pass text
+                    login(true); // Attempt auto-login flow
+                }
+            });
+        };
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.container').forEach(c => { c.classList.add('hidden'); c.classList.remove('show-section'); });
+            const target = document.getElementById(sectionId);
+            if(target) { target.classList.remove('hidden'); target.classList.add('show-section'); }
+        }
+
+        function togglePasswordVisibility(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") { input.type = "text"; icon.classList.replace('fa-eye', 'fa-eye-slash'); } 
+            else { input.type = "password"; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
+        }
+
+        // --- 🚀 SECURE LOGIN FLOW (Gets Dashboard from Backend) ---
+        async function login(isAuto = false) {
+            let pass = document.getElementById('password').value.trim();
+            const msg = document.getElementById('msg');
+            const spinner = document.getElementById('loginSpinner');
+            const btn = document.getElementById('loginBtn');
+            
+            if(!isAuto && !pass) { msg.innerText = "⚠️ Please enter password!"; return; }
+            
+            btn.disabled = true;
+            spinner.style.display = "inline-block"; document.getElementById('loginText').innerText = "Authenticating...";
+            msg.innerText = "";
+
+            try {
+                const adminEmail = "admin@srms.edu.bd"; 
+                let reqPayload = { action: 'getDashboard' };
+                
+                // ১. Try Firebase Auth
+                try {
+                    if (!auth.currentUser) await auth.signInWithEmailAndPassword(adminEmail, pass);
+                    reqPayload.token = await auth.currentUser.getIdToken();
+                } catch(authError) {
+                    // ২. Firebase Auth Fails -> Use Emergency Password
+                    reqPayload.pwd = pass;
+                    fallbackPasswordUsed = pass; // Store for broadcast fallback
+                    
+                    if(authError.code === 'auth/user-not-found' || authError.code === 'auth/invalid-credential') {
+                        // Attempt account creation quietly if backend allows
+                        try { await auth.createUserWithEmailAndPassword(adminEmail, pass); } catch(e){}
+                    }
+                }
+                
+                // ৩. Fetch Dashboard HTML securely from GAS Backend
+                const res = await fetch(scriptURL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(reqPayload)
+                });
+                
+                const data = await res.json();
+                
+                if (data.status === "success") {
+                    // Inject secure code
+                    document.getElementById('dashboard-section').innerHTML = data.dashboardHtml;
+                    document.getElementById('messaging-section').innerHTML = data.messagingHtml;
+                    
+                    document.getElementById('password').value = '';
+                    showSection('dashboard-section');
+                    prefetchData(); 
+                } else {
+                    throw new Error(data.message);
+                }
+
+            } catch(e) {
+                msg.innerText = "❌ Login Failed: " + (e.message || "Incorrect Password!");
+                auth.signOut();
+            }
+            btn.disabled = false;
+            spinner.style.display = "none"; document.getElementById('loginText').innerText = "Secure Login";
+        }
+        
+        function logout() { 
+            auth.signOut(); 
+            fallbackPasswordUsed = "";
+            cachedTeachers = []; cachedStudents = []; 
+            document.getElementById('dashboard-section').innerHTML = ""; // Wipe secure data
+            document.getElementById('messaging-section').innerHTML = "";
+            showSection('login-section'); 
+        }
+        
+        function showChangePassword() { showSection('change-pass-section'); document.getElementById('success-msg').innerText = ""; }
+        
+        // --- Password Update ---
+        async function updatePassword() {
+            const newPass = document.getElementById('new-password').value.trim();
+            const msg = document.getElementById('success-msg');
+            const btn = document.getElementById('updateBtn');
+            
+            if(!newPass || newPass.length < 6) { msg.style.color = "var(--danger-color)"; msg.innerText = "⚠️ Minimum 6 characters required!"; return; }
+            
+            btn.disabled = true;
+            document.getElementById('updateSpinner').style.display = "inline-block";
+            document.getElementById('updateText').innerText = "Updating...";
+            
+            try {
+                const user = auth.currentUser;
+                if(!user) throw new Error("Not authenticated");
+
+                await user.updatePassword(newPass);
+                const token = await user.getIdToken();
+
+                const payload = { fields: { password: { stringValue: newPass } } };
+                const res = await fetch(`${FIREBASE_DB_BASE}/Admin/Settings?updateMask.fieldPaths=password`, {
+                    method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(payload)
+                });
+                
+                if(res.ok || res.status === 404) {
+                    if (res.status === 404) {
+                         await fetch(`${FIREBASE_DB_BASE}/Admin?documentId=Settings`, {
+                            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(payload)
+                        });
+                    }
+                    msg.style.color = "var(--success-color)"; 
+                    msg.innerText = "✅ Changed successfully!"; 
+                    setTimeout(() => { showSection('dashboard-section'); document.getElementById('new-password').value = ''; }, 1500);
+                } else { throw new Error("Database Update failed"); }
+            } catch(e) {
+                msg.style.color = "var(--danger-color)"; 
+                msg.innerText = "❌ Error! Try re-logging in.";
+            }
+            btn.disabled = false;
+            document.getElementById('updateSpinner').style.display = "none"; 
+            document.getElementById('updateText').innerText = "Update Password";
+        }
+
+        // --- Background Pre-fetching ---
+        async function prefetchData() {
+            try {
+                // If token fails, user can't read DB directly without token, but we are keeping the logic structure as requested
+                const token = auth.currentUser ? await auth.currentUser.getIdToken() : null;
+                const headers = token ? { "Authorization": "Bearer " + token } : {};
+
+                const [tRes, sRes] = await Promise.all([
+                    fetch(`${FIREBASE_DB_BASE}/Teachers?pageSize=1000`, { headers }),
+                    fetch(`${FIREBASE_DB_BASE}/Students?pageSize=1000`, { headers })
+                ]);
+                const tData = await tRes.json();
+                const sData = await sRes.json();
+                
+                if(tData.documents) {
+                    cachedTeachers = tData.documents.map(d => {
+                        let f = d.fields || {};
+                        return { name: f.name ? f.name.stringValue : "Teacher", phone: f.phone ? f.phone.stringValue : "" };
+                    });
+                }
+                if(sData.documents) {
+                    cachedStudents = sData.documents.map(d => {
+                        let f = d.fields || {};
+                        return { 
+                            id: f.studentID ? f.studentID.stringValue : "", 
+                            name: f.name ? f.name.stringValue : "Unknown", 
+                            roll: f.roll ? parseInt(f.roll.stringValue, 10) : 9999,
+                            cls: f.class ? f.class.stringValue : "" 
+                        };
+                    });
+                    cachedStudents.sort((a,b) => a.roll - b.roll);
+                }
+            } catch(e) { console.log("Prefetch error (rules might restrict):", e); }
+        }
+
+        // --- Dynamic Dropdown (Used by injected HTML) ---
+        window.handleAudienceChange = function() {
+            const aud = document.getElementById('audienceType').value;
+            if(aud === "Teachers") {
+                document.getElementById('recipientClass').style.display = 'none';
+            } else {
+                document.getElementById('recipientClass').style.display = 'block';
+            }
+            loadSpecificUsers();
+        };
+
+        window.loadSpecificUsers = function() {
+             const aud = document.getElementById('audienceType').value;
+             const cls = document.getElementById('recipientClass').value;
+             const select = document.getElementById('specificUser');
+             
+             if (aud === "Teachers") {
+                 let opts = `<option value="All">All Teachers</option>`;
+                 cachedTeachers.forEach(t => {
+                     if(t.phone) opts += `<option value="${t.phone}">${t.name} (${t.phone})</option>`;
+                 });
+                 select.innerHTML = opts;
+             } else {
+                 if (cls === "All") {
+                     select.innerHTML = `<option value="All">All Students (Entire School)</option>`;
+                     return;
+                 }
+                 let opts = `<option value="All">All Students of Class ${cls}</option>`;
+                 cachedStudents.filter(s => s.cls === cls).forEach(s => {
+                     opts += `<option value="${s.id}">Roll ${s.roll} - ${s.name} (${s.id})</option>`;
+                 });
+                 select.innerHTML = opts;
+             }
+        };
+
+        // --- 🚀 SECURE BROADCAST (Sending Token/Fallback Pwd) ---
+        window.sendBroadcast = async function() {
+            const audienceType = document.getElementById('audienceType').value;
+            const targetClass = document.getElementById('recipientClass').value;
+            const specificUser = document.getElementById('specificUser').value;
+            const msgType = document.getElementById('msgType').value;
+            const msgBody = document.getElementById('msgBody').value;
+            const msgStatus = document.getElementById('send-msg');
+            const btn = document.getElementById('sendBtn');
+            
+            if (!msgBody) { msgStatus.style.color = "var(--danger-color)"; msgStatus.innerText = "⚠️ Message body is empty!"; return; }
+
+            btn.disabled = true;
+            document.getElementById('sendSpinner').style.display = "inline-block";
+            document.getElementById('sendText').innerText = "Transmitting...";
+            msgStatus.style.color = "#333"; msgStatus.innerText = "Connecting to Broadcast Server...";
+
+            let payload = {
+                action: 'sendMessage',
+                audienceType: audienceType,
+                targetClass: targetClass,
+                specificUser: specificUser,
+                msgType: msgType,
+                msgBody: msgBody
+            };
+            
+            // Add Token OR Emergency Pwd to payload
+            if (auth.currentUser) {
+                payload.token = await auth.currentUser.getIdToken();
+            } else {
+                payload.pwd = fallbackPasswordUsed; // Using the emergency password stored during login
+            }
+
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('sendSpinner').style.display = "none"; 
+                document.getElementById('sendText').innerText = "Start Broadcast";
+                btn.disabled = false;
+                
+                if(data.status === "error") {
+                    msgStatus.style.color = "var(--danger-color)"; 
+                    msgStatus.innerText = "❌ " + data.message;
+                } else {
+                    msgStatus.style.color = "var(--success-color)"; 
+                    msgStatus.innerText = data.message;
+                    document.getElementById('msgBody').value = ''; 
+                }
+            })
+            .catch(error => {
+                msgStatus.style.color = "var(--danger-color)"; 
+                msgStatus.innerText = "🌐 Connection Error! Message may not be sent."; 
+                document.getElementById('sendSpinner').style.display = "none"; 
+                document.getElementById('sendText').innerText = "Start Broadcast";
+                btn.disabled = false;
+            });
+        };
+    </script>
+</body>
+</html>
