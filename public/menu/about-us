@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>About Us - Saidpur Residential Model School (SRMS)</title>
+<meta name="description" content="Learn more about Saidpur Residential Model School (SRMS) in Saidpur, Nilphamari. Discover our mission, vision, core values, and educational facilities.">
+<meta name="keywords" content="About SRMS, Saidpur Residential Model School, SRMS Mission, SRMS Vision, Best School in Saidpur, Nilphamari Educational Institution">
+<meta name="author" content="Saidpur Residential Model School">
+<link rel="canonical" href="https://www.saidpurresidentialmodelschool.com/menu/about-us" />
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.saidpurresidentialmodelschool.com/menu/about-us">
+<meta property="og:title" content="About Us - Saidpur Residential Model School (SRMS)">
+<meta property="og:description" content="Saidpur Residential Model School (SRMS) is a premier educational institution in Saidpur, Nilphamari providing quality, disciplined, and value-based education.">
+<meta property="og:image" content="https://i.postimg.cc/y63CF76m/20260130_120956.png">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:url" content="https://www.saidpurresidentialmodelschool.com/menu/about-us">
+<meta name="twitter:title" content="About Us - Saidpur Residential Model School (SRMS)">
+<meta name="twitter:description" content="Saidpur Residential Model School (SRMS) is a premier educational institution in Saidpur, Nilphamari providing quality, disciplined, and value-based education.">
+<meta name="twitter:image" content="https://i.postimg.cc/y63CF76m/20260130_120956.png">
+
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+
+<div style="display:none;" aria-hidden="true">
+  <h1>About Saidpur Residential Model School (SRMS)</h1>
+  <p>Saidpur Residential Model School (SRMS) is a premier educational institution in Saidpur, Nilphamari. We provide quality, disciplined, and value-based education. Our services include Residential, Non-Residential, Day-Care, and Night-Care facilities. Learn more about our mission, vision, and core values.</p>
+  <img src="https://i.postimg.cc/y63CF76m/20260130_120956.png" alt="SRMS Official About Logo">
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  "mainEntity": {
+    "@type": "EducationalOrganization",
+    "name": "Saidpur Residential Model School (SRMS)",
+    "description": "A well-established educational institution providing disciplined and quality education with modern facilities.",
+    "logo": "https://i.postimg.cc/y63CF76m/20260130_120956.png",
+    "url": "https://www.saidpurresidentialmodelschool.com/menu/about-us"
+  }
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+
+<style>
+  /* === আপনার আগের সমস্ত CSS স্টাইল এখানে হুবহু আছে (অপরিবর্তিত) === */
+  body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: #f4f6f9; color: #333; overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; transition: 0.3s; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .animate-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+
+  .navbar { 
+    background: #ffffff; 
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05); 
+    position: sticky; top: 0; z-index: 1000; 
+    display: flex; flex-direction: column; 
+    border-bottom: 4px solid;
+    border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f) 1;
+  }
+  .nav-top-container {
+    height: 70px; display: flex; align-items: center; justify-content: space-between; 
+    padding: 0 20px; width: 100%; box-sizing: border-box;
+  }
+  .nav-brand { font-weight: 800; color: #005f40; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; }
+  .nav-menu { display: flex; gap: 5px; align-items: center; }
+  .nav-item { position: relative; }
+  .nav-link { 
+    font-weight: 600; font-size: 13px; color: #444; 
+    padding: 10px 18px; transition: 0.3s; display: block; border-radius: 5px; 
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .nav-link:hover { color: #fff; background: #005f40; }
+  
+  .dropdown-content { 
+    display: none; position: absolute; top: 100%; left: 0; 
+    background: #fff; box-shadow: 0 15px 40px rgba(0,0,0,0.15); 
+    min-width: 220px; border-radius: 0 0 8px 8px; overflow: hidden; 
+    border-top: 3px solid #005f40; 
+    animation: fadeInUp 0.3s ease;
+    z-index: 1100;
+  }
+  
+  @media (min-width: 951px) {
+    .nav-item:hover .dropdown-content { display: block; }
+  }
+
+  .dropdown-content a { display: block; padding: 12px 20px; font-size: 13px; color: #555; border-bottom: 1px solid #f9f9f9; transition: 0.2s; }
+  .dropdown-content a:hover { background: #f0fdf4; color: #005f40; padding-left: 25px; }
+
+  .menu-toggle { 
+    display: none; align-items: center; gap: 8px; cursor: pointer; 
+    background: linear-gradient(135deg, #005f40, #003d29);
+    color: white; padding: 8px 20px; border-radius: 50px; 
+    border: 2px solid #ddd; box-shadow: 0 4px 15px rgba(0, 95, 64, 0.4);
+    transition: 0.3s;
+  }
+  .menu-toggle:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0, 95, 64, 0.6); background: #003d29; }
+  .menu-text { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .custom-banner { 
+    background: linear-gradient(to right, #005f40, #004d33); color: white; padding: 40px 20px; 
+    display: flex; align-items: center; justify-content: center; gap: 25px;
+    border-bottom: 4px solid #e0e0e0; position: relative; overflow: hidden;
+  }
+  .banner-logo { 
+    width: 100px; height: 100px; background: #fff; border-radius: 50%; padding: 5px; 
+    border: 4px solid #ffffff; 
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3); object-fit: contain;
+  }
+  .banner-text { text-align: left; }
+  .banner-text h1 { margin: 0; font-size: 32px; font-weight: 800; text-transform: uppercase; line-height: 1.1; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+  
+  .school-codes {
+    background: rgba(255, 255, 255, 0.15);
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 4px;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fcf6ba;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  .school-name { margin: 8px 0 0; font-size: 16px; font-weight: 500; color: #e0f2f1; opacity: 0.9; }
+
+  .about-container { max-width: 900px; margin: 40px auto; padding: 0 20px 60px 20px; }
+  .hero-card {
+    background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 30px; border-top: 5px solid #005f40; transition: 0.3s;
+  }
+  .hero-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+  .hero-title { color: #005f40; font-size: 22px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; display: flex; align-items: center; }
+  .hero-title::before { content: ''; display: inline-block; width: 6px; height: 24px; background: #bf953f; margin-right: 12px; border-radius: 2px; }
+  .hero-text { font-size: 15px; line-height: 1.8; color: #444; text-align: justify; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 30px; }
+  .feature-box { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 5px solid #005f40; transition: 0.3s; }
+  .feature-box:hover { transform: translateY(-5px); border-left-color: #bf953f; }
+  .mission-box { background: linear-gradient(135deg, #005f40, #004d33); color: white; padding: 40px; border-radius: 8px; text-align: center; margin-bottom: 30px; }
+  .mission-box h3 { color: #fff; font-size: 20px; text-transform: uppercase; border-bottom: 2px solid rgba(255,255,255,0.2); padding-bottom: 12px; display: inline-block; margin-bottom: 20px; }
+  .why-card { background: white; padding: 35px; border-radius: 8px; border-left: 5px solid #bf953f; margin-bottom: 30px; }
+
+  .premium-footer { background: #0a192f; color: #e6f1ff; padding: 60px 20px 0; border-top: 4px solid #e0e0e0; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+  .f-col h4 { color: #ffffff; font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; position: relative; padding-bottom: 10px; letter-spacing: 1px; }
+  .f-col h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: #005f40; }
+  .f-links li { margin-bottom: 15px; }
+  .f-links a { font-size: 14.5px; color: #ccd6f6; opacity: 0.9; text-decoration: underline; text-underline-offset: 4px; transition: 0.3s; display: inline-block; }
+  .f-links a:hover { color: #ffffff; text-decoration-color: #005f40; transform: translateX(5px); }
+  .f-contact-text { font-size: 14px; line-height: 1.8; color: #a8b2d1; margin-bottom: 20px; }
+  .f-map-box { width: 100%; height: 180px; border-radius: 12px; overflow: hidden; border: 2px solid #233554; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .footer-copyright-bar { margin-top: 50px; background: #020c1b; padding: 30px 20px; text-align: center; border-top: 1px solid #233554; }
+  .copy-text { font-size: 13px; color: #8892b0; margin: 0; letter-spacing: 0.5px; }
+  .dev-text { font-size: 12px; color: #666; text-transform: uppercase; margin-top: 10px; font-weight: 700; }
+
+  @media (max-width: 950px) {
+    .menu-toggle { display: flex; }
+    .nav-menu { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #fff; padding: 15px 0; border-top: 1px solid #f0f0f0; max-height: 80vh; overflow-y: auto; }
+    .nav-menu.active { display: flex; }
+    .nav-item { width: 100%; }
+    .nav-link { padding: 15px 30px; border-bottom: 1px solid #f9f9f9; border-radius: 0; }
+    .dropdown-content { position: static; box-shadow: none; background: #fafafa; padding-left: 20px; border: none; border-left: 4px solid #005f40; margin: 0 20px; display: none; }
+    .nav-item.active > .dropdown-content { display: block; }
+    .custom-banner { flex-direction: column; text-align: center; }
+    .banner-text { text-align: center; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="nav-top-container">
+    <div class="nav-brand">SRMS</div>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span class="menu-icon">☰</span>
+      <span class="menu-text">MENU</span>
+    </div>
+    <ul class="nav-menu" id="navMenu">
+      <li class="nav-item"><a href="https://www.saidpurresidentialmodelschool.com/home" class="nav-link">Home</a></li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="handleDropdown(this)">Institute ▾</a>
+        <div class="dropdown-content">
+          <a href="#">About Us</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/administration/message-from-headmaster">Headmaster's Message</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/administration/teacher-panel">Teacher & Staff</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/gallery">Photo Gallery</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="handleDropdown(this)">Academic ▾</a>
+        <div class="dropdown-content">
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/class-routine">Class Routine</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/exam-routine">Exam Routine</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/syllabus">Syllabus</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/exam-results">Exam Results</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="handleDropdown(this)">Admission ▾</a>
+        <div class="dropdown-content">
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/admission">Admission Info</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/school-fees">School Fees</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color:#d32f2f;" onclick="handleDropdown(this)">Login Zone ▾</a>
+        <div class="dropdown-content">
+          <a href="https://www.saidpurresidentialmodelschool.com/login-panel/student-login">Student Login</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/login-panel/teacher-login-portal">Teacher Login</a>
+          <a href="https://saidpurresidentialmodelschool.com/login-panel/guardian-portal">Guardian Login</a>
+          <a href="https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department">Account & Admin</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="handleDropdown(this)">Contact ▾</a>
+        <div class="dropdown-content">
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/contact-us">Contact Us</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/menu/complain-box">Complain Box</a>
+          <a href="https://www.saidpurresidentialmodelschool.com/notice-board">Notice Board</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="custom-banner animate-up">
+  <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" class="banner-logo" alt="SRMS Logo">
+  <div class="banner-text">
+    <h1>Saidpur Residential Model School</h1>
+    <div class="school-codes">
+      School Code: 481931   |   EMIS Code: 00704061312
+    </div>
+    <div class="school-name">Learning with Discipline, Growing with Values</div>
+  </div>
+</div>
+
+<div class="about-container animate-up">
+  <div class="hero-card">
+    <div class="hero-title">Who We Are</div>
+    <div class="hero-text">
+      Saidpur Residential Model School (SRMS) is a well-established educational institution dedicated to providing quality, disciplined, and value-based education for students of all levels. Since its founding, the school has been committed to creating a safe, nurturing, and academically enriched environment where learners can excel intellectually, emotionally, and socially.
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="feature-box">
+      <span style="font-size:28px; margin-bottom:15px; display:block;">🏫</span>
+      <b style="color:#1a1a1a; display:block; margin-bottom:10px; font-size:17px;">Our Services</b>
+      <div style="font-size:14px; color:#555; line-height:1.6;">
+        SRMS offers a wide range of facilities including <b>Residential, Non-Residential, Day-Care, and Night-Care</b> services—designed to support students from diverse backgrounds.
+      </div>
+    </div>
+    <div class="feature-box">
+      <span style="font-size:28px; margin-bottom:15px; display:block;">👨‍🏫</span>
+      <b style="color:#1a1a1a; display:block; margin-bottom:10px; font-size:17px;">Expert Teaching</b>
+      <div style="font-size:14px; color:#555; line-height:1.6;">
+        Our experienced and skilled teachers implement modern teaching techniques, interactive learning methods, and personalized student monitoring.
+      </div>
+    </div>
+  </div>
+
+  <div class="mission-box">
+    <h3>Our Core Values</h3>
+    <p style="color:#e8f5e9; font-size:16px; line-height:1.7;">
+      Beyond academic achievement, SRMS places special emphasis on <b>discipline, moral development, character building, and English communication skills</b>. Our goal is to shape responsible, confident, and future-ready individuals who can contribute positively to society.
+    </p>
+  </div>
+
+  <div class="why-card">
+    <div style="color:#bf953f; font-size:20px; font-weight:700; margin-bottom:15px; text-transform:uppercase;">Why Choose SRMS</div>
+    <div style="font-size:15px; line-height:1.7; color: #444; text-align: justify;">
+      With well-equipped classrooms, strong administrative management, and a commitment to continuous improvement, SRMS stands as a trusted institution for parents seeking a balanced and high-quality education for their children.
+    </div>
+  </div>
+</div>
+
+<footer class="premium-footer">
+  <div class="footer-inner">
+    <div class="f-col">
+      <h4>Important Links</h4>
+      <ul class="f-links">
+        <li><a href="https://dinajpureducationboard.gov.bd/" target="_blank">Dinajpur Education Board</a></li>
+        <li><a href="http://www.moedu.gov.bd/" target="_blank">Ministry of Education</a></li>
+        <li><a href="http://www.dpe.gov.bd/" target="_blank">Primary Education Directorate</a></li>
+        <li><a href="https://www.bksbd.org/" target="_blank">Kindergarten Society (BKS)</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Contact Information</h4>
+      <div class="f-contact-text">
+        Saidpur Residential Model School<br>
+        Saidpur, Nilphamari, Bangladesh.
+      </div>
+      <ul class="f-links">
+        <li><a href="https://www.saidpurresidentialmodelschool.com/menu/contact-us">Contact Us Details ➔</a></li>
+      </ul>
+    </div>
+    <div class="f-col">
+      <h4>Find Us on Map</h4>
+      <div class="f-map-box">
+        <div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=Syedpur Residential Model School&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe><a href="https://embed-googlemap.com">embed google map</a></div><style>.mapouter{position:relative;text-align:right;width:100%;height:100%;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:100%;}.gmap_iframe {width:100%!important;height:100%!important;}</style></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright-bar">
+    <p class="copy-text">© 2026 Saidpur Residential Model School (SRMS). All Rights Reserved.</p>
+    <div class="dev-text">Developed By Student Of Saidpur Residential Model School (SRMS)</div>
+  </div>
+</footer>
+
+<script>
+  // আপনার আগের সমস্ত জাভাস্ক্রিপ্ট লজিক এখানে হুবহু আছে
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
+  function handleDropdown(el) {
+    if (window.innerWidth <= 950) {
+      const parent = el.parentElement;
+      const isActive = parent.classList.contains('active');
+      document.querySelectorAll('.nav-item').forEach(item => { item.classList.remove('active'); });
+      if (!isActive) { parent.classList.add('active'); }
+    }
+  }
+  window.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-item')) {
+      document.querySelectorAll('.nav-item').forEach(item => { item.classList.remove('active'); });
+    }
+  });
+</script>
+</body>
+</html>
