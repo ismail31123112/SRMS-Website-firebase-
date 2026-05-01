@@ -173,7 +173,7 @@
       <span class="menu-text">MENU</span>
     </div>
     <ul class="nav-menu" id="navMenu">
-      <li class="nav-item"><a href="https://www.saidpurresidentialmodelschool.com/home" class="nav-link">Home</a></li>
+      <li class="nav-item"><a href="https://www.saidpurresidentialmodelschool.com/" class="nav-link">Home</a></li>
       <li class="nav-item">
         <a class="nav-link" onclick="handleDropdown(this)">Institute ▾</a>
         <div class="dropdown-content">
