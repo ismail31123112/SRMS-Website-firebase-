@@ -211,6 +211,8 @@
     <div class="resource-section animate-up delay-3">
         <h3 style="margin:0; color:var(--text-main); font-size:22px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">📚 Dashboard Quick Links</h3>
         <div class="link-grid">
+            <a onclick="viewResultModal();" class="l-btn"><span>🎓</span><span>Results</span></a>
+            <a onclick="openAttendanceModal();" class="l-btn"><span>📊</span><span>Attendance</span></a>
             <a onclick="openFeesModal();" class="l-btn"><span>💳</span><span>Pay Fees</span></a>
             <a id="guardianLiveBtn" onclick="openGuardianMeetModal();" class="l-btn" style="border: 2px solid var(--primary);"><span>🎥</span><span>Guardian Meet</span></a>
             <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/syllabus" target="_blank" class="l-btn"><span>📖</span><span>Syllabus</span></a>
@@ -749,6 +751,13 @@
                 <div class="dt-warning-text">⚠️ THIS IS A DIGITAL PREVIEW • FOR GUARDIAN REFERENCE</div>
             </div>`;
       }
+  }
+
+  // 🚀 FIXED: Added Missing viewResultModal Function
+  function viewResultModal() {
+    if(!markSheetHTML) return alert("Result data is not available yet.");
+    document.getElementById('resultModal').style.display = 'flex';
+    document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
   }
 
   // =====================================================================
