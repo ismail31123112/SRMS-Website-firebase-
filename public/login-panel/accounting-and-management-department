@@ -35,6 +35,18 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* 🚀 Premium Error Shake Animation */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+
+        .error-shake {
+            animation: shake 0.4s ease-in-out !important;
+            border-color: var(--danger-color) !important;
+        }
+
         .container { 
             background: var(--panel-bg); 
             padding: 35px; 
@@ -105,7 +117,7 @@
 
         .spinner { display: none; margin-right: 8px; animation: spin 1s infinite linear; }
         hr { border: 0; border-top: 1px dashed #ddd; margin: 15px 0; }
-        p.msg-text { margin-top: 10px; font-size: 13px; font-weight: 600; min-height: 1em; line-height: 1.5; }
+        p.msg-text { margin-top: 10px; font-size: 13px; font-weight: 600; min-height: 1em; line-height: 1.5; transition: 0.3s; }
         
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -205,8 +217,14 @@
             const msg = document.getElementById('msg');
             const spinner = document.getElementById('loginSpinner');
             const btn = document.getElementById('loginBtn');
+            const loginContainer = document.getElementById('login-section');
             
-            if(!pass) { msg.innerText = "⚠️ Please enter password!"; return; }
+            if(!pass) { 
+                msg.innerText = "⚠️ Please enter a password!"; 
+                loginContainer.classList.add('error-shake');
+                setTimeout(() => loginContainer.classList.remove('error-shake'), 400);
+                return; 
+            }
             
             btn.disabled = true;
             spinner.style.display = "inline-block"; document.getElementById('loginText').innerText = "Authenticating...";
@@ -225,7 +243,7 @@
                     reqPayload.pwd = pass;
                     fallbackPasswordUsed = pass; // Store for broadcast fallback
                     
-                    if(authError.code === 'auth/user-not-found' || authError.code === 'auth/invalid-credential') {
+                    if(authError.code === 'auth/user-not-found') {
                         // Attempt account creation quietly if backend allows
                         try { await auth.createUserWithEmailAndPassword(adminEmail, pass); } catch(e){}
                     }
@@ -249,11 +267,24 @@
                     showSection('dashboard-section');
                     prefetchData(); 
                 } else {
-                    throw new Error(data.message);
+                    throw new Error(data.message); // Will be caught below
                 }
 
             } catch(e) {
-                msg.innerText = "❌ Login Failed: " + (e.message || "Incorrect Password!");
+                // 🛑 প্রফেশনাল এবং ইউজার-ফ্রেন্ডলি এরর হ্যান্ডেলিং
+                let errorMessage = e.message || "";
+                let displayError = "Incorrect password! Please try again.";
+
+                if (errorMessage.toLowerCase().includes('network') || errorMessage.toLowerCase().includes('fetch')) {
+                    displayError = "Network error! Please check your connection.";
+                }
+
+                msg.innerText = "❌ " + displayError;
+                
+                // প্রিমিয়াম শেক অ্যানিমেশন যোগ করা
+                loginContainer.classList.add('error-shake');
+                setTimeout(() => loginContainer.classList.remove('error-shake'), 400);
+
                 auth.signOut();
             }
             btn.disabled = false;
@@ -280,8 +311,15 @@
             const newPass = document.getElementById('new-password').value.trim();
             const msg = document.getElementById('success-msg');
             const btn = document.getElementById('updateBtn');
+            const passContainer = document.getElementById('change-pass-section');
             
-            if(!newPass || newPass.length < 6) { msg.style.color = "var(--danger-color)"; msg.innerText = "⚠️ Minimum 6 characters required!"; return; }
+            if(!newPass || newPass.length < 6) { 
+                msg.style.color = "var(--danger-color)"; 
+                msg.innerText = "⚠️ Minimum 6 characters required!"; 
+                passContainer.classList.add('error-shake');
+                setTimeout(() => passContainer.classList.remove('error-shake'), 400);
+                return; 
+            }
             
             btn.disabled = true;
             document.getElementById('updateSpinner').style.display = "inline-block";
@@ -312,6 +350,8 @@
             } catch(e) {
                 msg.style.color = "var(--danger-color)"; 
                 msg.innerText = "❌ Error! Try re-logging in.";
+                passContainer.classList.add('error-shake');
+                setTimeout(() => passContainer.classList.remove('error-shake'), 400);
             }
             btn.disabled = false;
             document.getElementById('updateSpinner').style.display = "none"; 
