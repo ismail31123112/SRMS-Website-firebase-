@@ -315,7 +315,6 @@
         // --- Background Pre-fetching ---
         async function prefetchData() {
             try {
-                // If token fails, user can't read DB directly without token, but we are keeping the logic structure as requested
                 const token = auth.currentUser ? await auth.currentUser.getIdToken() : null;
                 const headers = token ? { "Authorization": "Bearer " + token } : {};
 
