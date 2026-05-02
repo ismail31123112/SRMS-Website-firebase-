@@ -168,6 +168,12 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
+        // 🔒 Security Update: সেশন পারসিস্টেন্স
+        // ব্রাউজার বা ট্যাব কেটে দিলে সেশন আউট হয়ে যাবে, অটো-লগইন হবে না।
+        auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch((error) => {
+            console.error("Auth persistence error:", error);
+        });
+
         // ⚠️ তোমার নতুন GAS Web App URL এখানে বসাও
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
         const FIREBASE_DB_BASE = 'https://firestore.googleapis.com/v1/projects/srms-website-management/databases/(default)/documents';
@@ -176,13 +182,9 @@
         let cachedStudents = [];
         let fallbackPasswordUsed = "";
 
+        // ❌ অটো-লগইন সম্পূর্ণ ব্লক করা হয়েছে।
         window.onload = function() {
-            auth.onAuthStateChanged((user) => {
-                if(user && user.email === "admin@srms.edu.bd") {
-                    document.getElementById('password').value = ""; // Auto-login needs no pass text
-                    login(true); // Attempt auto-login flow
-                }
-            });
+            // Nothing here. User MUST enter password manually every time the page loads.
         };
 
         function showSection(sectionId) {
@@ -198,13 +200,13 @@
         }
 
         // --- 🚀 SECURE LOGIN FLOW (Gets Dashboard from Backend) ---
-        async function login(isAuto = false) {
+        async function login() {
             let pass = document.getElementById('password').value.trim();
             const msg = document.getElementById('msg');
             const spinner = document.getElementById('loginSpinner');
             const btn = document.getElementById('loginBtn');
             
-            if(!isAuto && !pass) { msg.innerText = "⚠️ Please enter password!"; return; }
+            if(!pass) { msg.innerText = "⚠️ Please enter password!"; return; }
             
             btn.disabled = true;
             spinner.style.display = "inline-block"; document.getElementById('loginText').innerText = "Authenticating...";
