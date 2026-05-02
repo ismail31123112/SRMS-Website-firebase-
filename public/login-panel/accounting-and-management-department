@@ -122,7 +122,7 @@
         <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="SRMS Logo" class="srms-logo">
         <h2>Admin Login</h2>
         <div class="password-container">
-            <input type="password" id="password" placeholder="Enter Admin Password">
+            <input type="password" id="password" placeholder="Enter Admin Password" onkeypress="if(event.key === 'Enter') login()">
             <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('password', this)"></i>
         </div>
         <button class="btn" onclick="login()" id="loginBtn">
@@ -136,7 +136,6 @@
     </div>
 
     <div class="container hidden" id="dashboard-section"></div>
-
     <div class="container hidden" id="messaging-section"></div>
 
     <div class="container hidden" id="change-pass-section">
@@ -168,7 +167,6 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
-        // ⚠️ তোমার নতুন GAS Web App URL এখানে বসাও
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
         const FIREBASE_DB_BASE = 'https://firestore.googleapis.com/v1/projects/srms-website-management/databases/(default)/documents';
 
@@ -176,11 +174,42 @@
         let cachedStudents = [];
         let fallbackPasswordUsed = "";
 
+        // --- 🚀 SECURE AUTO-LOGIN (Separated from manual login) ---
         window.onload = function() {
-            auth.onAuthStateChanged((user) => {
+            auth.onAuthStateChanged(async (user) => {
                 if(user && user.email === "admin@srms.edu.bd") {
-                    document.getElementById('password').value = ""; // Auto-login needs no pass text
-                    login(true); // Attempt auto-login flow
+                    // Check if dashboard is already shown to prevent looping
+                    if(!document.getElementById('dashboard-section').classList.contains('hidden')) return;
+                    
+                    const btn = document.getElementById('loginBtn');
+                    const spinner = document.getElementById('loginSpinner');
+                    btn.disabled = true;
+                    spinner.style.display = "inline-block"; 
+                    document.getElementById('loginText').innerText = "Resuming Session...";
+                    
+                    try {
+                        const token = await user.getIdToken();
+                        const res = await fetch(scriptURL, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify({ action: 'getDashboard', token: token })
+                        });
+                        const data = await res.json();
+                        
+                        if (data.status === "success") {
+                            document.getElementById('dashboard-section').innerHTML = data.dashboardHtml;
+                            document.getElementById('messaging-section').innerHTML = data.messagingHtml;
+                            showSection('dashboard-section');
+                            prefetchData();
+                        } else {
+                            auth.signOut();
+                        }
+                    } catch(e) {
+                        auth.signOut();
+                    }
+                    btn.disabled = false;
+                    spinner.style.display = "none"; 
+                    document.getElementById('loginText').innerText = "Secure Login";
                 }
             });
         };
@@ -197,36 +226,32 @@
             else { input.type = "password"; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
         }
 
-        // --- 🚀 SECURE LOGIN FLOW (Gets Dashboard from Backend) ---
-        async function login(isAuto = false) {
+        // --- 🚀 SECURE MANUAL LOGIN FLOW (Frontend Primary, Backend Emergency) ---
+        async function login() {
             let pass = document.getElementById('password').value.trim();
             const msg = document.getElementById('msg');
             const spinner = document.getElementById('loginSpinner');
             const btn = document.getElementById('loginBtn');
             
-            if(!isAuto && !pass) { msg.innerText = "⚠️ Please enter password!"; return; }
+            if(!pass) { msg.innerText = "⚠️ Please enter password!"; return; }
             
             btn.disabled = true;
-            spinner.style.display = "inline-block"; document.getElementById('loginText').innerText = "Authenticating...";
+            spinner.style.display = "inline-block"; 
+            document.getElementById('loginText').innerText = "Authenticating...";
             msg.innerText = "";
 
             try {
                 const adminEmail = "admin@srms.edu.bd"; 
                 let reqPayload = { action: 'getDashboard' };
                 
-                // ১. Try Firebase Auth
                 try {
-                    if (!auth.currentUser) await auth.signInWithEmailAndPassword(adminEmail, pass);
-                    reqPayload.token = await auth.currentUser.getIdToken();
+                    // ১. Try Normal Frontend Firebase Auth First
+                    const userCredential = await auth.signInWithEmailAndPassword(adminEmail, pass);
+                    reqPayload.token = await userCredential.user.getIdToken();
                 } catch(authError) {
-                    // ২. Firebase Auth Fails -> Use Emergency Password
+                    // ২. If Firebase fails, safely fallback to Emergency Backend Verify
                     reqPayload.pwd = pass;
-                    fallbackPasswordUsed = pass; // Store for broadcast fallback
-                    
-                    if(authError.code === 'auth/user-not-found' || authError.code === 'auth/invalid-credential') {
-                        // Attempt account creation quietly if backend allows
-                        try { await auth.createUserWithEmailAndPassword(adminEmail, pass); } catch(e){}
-                    }
+                    fallbackPasswordUsed = pass; 
                 }
                 
                 // ৩. Fetch Dashboard HTML securely from GAS Backend
@@ -239,32 +264,43 @@
                 const data = await res.json();
                 
                 if (data.status === "success") {
-                    // Inject secure code
                     document.getElementById('dashboard-section').innerHTML = data.dashboardHtml;
                     document.getElementById('messaging-section').innerHTML = data.messagingHtml;
-                    
-                    document.getElementById('password').value = '';
+                    document.getElementById('password').value = ''; // Clean input
                     showSection('dashboard-section');
                     prefetchData(); 
                 } else {
-                    throw new Error(data.message);
+                    throw new Error(data.message || "Incorrect Password!");
                 }
 
             } catch(e) {
-                msg.innerText = "❌ Login Failed: " + (e.message || "Incorrect Password!");
+                msg.innerText = "❌ Login Failed: " + e.message;
                 auth.signOut();
             }
             btn.disabled = false;
-            spinner.style.display = "none"; document.getElementById('loginText').innerText = "Secure Login";
+            spinner.style.display = "none"; 
+            document.getElementById('loginText').innerText = "Secure Login";
         }
         
+        // --- 🚀 FULLY SECURE LOGOUT & REDIRECT ---
         function logout() { 
-            auth.signOut(); 
-            fallbackPasswordUsed = "";
-            cachedTeachers = []; cachedStudents = []; 
-            document.getElementById('dashboard-section').innerHTML = ""; // Wipe secure data
-            document.getElementById('messaging-section').innerHTML = "";
-            showSection('login-section'); 
+            auth.signOut().then(() => {
+                fallbackPasswordUsed = "";
+                cachedTeachers = []; 
+                cachedStudents = []; 
+                
+                // Wipe DOM data completely
+                document.getElementById('dashboard-section').innerHTML = ""; 
+                document.getElementById('messaging-section').innerHTML = "";
+                document.getElementById('password').value = "";
+                
+                // Replace location so 'Back' button doesn't work
+                window.location.replace("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department");
+            }).catch((error) => {
+                console.error("Logout error:", error);
+                // Force redirect anyway
+                window.location.replace("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department");
+            });
         }
         
         function showChangePassword() { showSection('change-pass-section'); document.getElementById('success-msg').innerText = ""; }
@@ -346,7 +382,7 @@
             } catch(e) { console.log("Prefetch error (rules might restrict):", e); }
         }
 
-        // --- Dynamic Dropdown (Used by injected HTML) ---
+        // --- Dynamic Dropdown ---
         window.handleAudienceChange = function() {
             const aud = document.getElementById('audienceType').value;
             if(aud === "Teachers") {
@@ -381,7 +417,7 @@
              }
         };
 
-        // --- 🚀 SECURE BROADCAST (Sending Token/Fallback Pwd) ---
+        // --- 🚀 SECURE BROADCAST ---
         window.sendBroadcast = async function() {
             const audienceType = document.getElementById('audienceType').value;
             const targetClass = document.getElementById('recipientClass').value;
@@ -407,11 +443,10 @@
                 msgBody: msgBody
             };
             
-            // Add Token OR Emergency Pwd to payload
             if (auth.currentUser) {
                 payload.token = await auth.currentUser.getIdToken();
             } else {
-                payload.pwd = fallbackPasswordUsed; // Using the emergency password stored during login
+                payload.pwd = fallbackPasswordUsed; 
             }
 
             fetch(scriptURL, {
@@ -445,4 +480,3 @@
     </script>
 </body>
 </html>
-
