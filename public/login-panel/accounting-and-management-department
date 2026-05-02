@@ -261,6 +261,7 @@
         }
         
         function logout() { 
+            // ফায়ারবেস থেকে লগআউট এবং সব ডেটা মুছে ফেলা হচ্ছে
             auth.signOut(); 
             fallbackPasswordUsed = "";
             cachedTeachers = []; 
@@ -268,8 +269,8 @@
             document.getElementById('dashboard-section').innerHTML = ""; // Wipe secure data
             document.getElementById('messaging-section').innerHTML = "";
             
-            // Redirect to the new login panel URL immediately upon logout
-            window.location.href = "https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department"; 
+            // লগইন ইন্টারফেস আর ওপেন হবে না, সরাসরি নতুন ট্যাবে লিংকটি ওপেন হবে
+            window.open("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department", "_blank");
         }
         
         function showChangePassword() { showSection('change-pass-section'); document.getElementById('success-msg').innerText = ""; }
