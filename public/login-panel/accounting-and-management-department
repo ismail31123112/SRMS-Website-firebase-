@@ -264,7 +264,7 @@
             cachedTeachers = []; cachedStudents = []; 
             document.getElementById('dashboard-section').innerHTML = ""; // Wipe secure data
             document.getElementById('messaging-section').innerHTML = "";
-            showSection('login-section'); 
+            window.location.href = "https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department"; 
         }
         
         function showChangePassword() { showSection('change-pass-section'); document.getElementById('success-msg').innerText = ""; }
