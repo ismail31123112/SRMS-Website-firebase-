@@ -262,9 +262,12 @@
             auth.signOut(); 
             fallbackPasswordUsed = "";
             cachedTeachers = []; cachedStudents = []; 
-            document.getElementById('dashboard-section').innerHTML = ""; // Wipe secure data
-            document.getElementById('messaging-section').innerHTML = "";
-            window.location.href = "https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department"; 
+            
+            // সিকিউরিটির জন্য সম্পূর্ণ পেজের কন্টেন্ট মুছে দিয়ে রিডাইরেক্ট করা হচ্ছে
+            document.body.innerHTML = "<div style='display:flex; justify-content:center; align-items:center; height:100vh; font-family:Poppins,sans-serif; color:#005f40;'><h2>Logging out...</h2></div>";
+            
+            // replace ব্যবহার করা হয়েছে যেন ব্রাউজারের ব্যাক বাটনে ক্লিক করলেও আগের পেজে না যায়
+            window.location.replace("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department"); 
         }
         
         function showChangePassword() { showSection('change-pass-section'); document.getElementById('success-msg').innerText = ""; }
