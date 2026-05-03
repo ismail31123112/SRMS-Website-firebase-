@@ -129,7 +129,7 @@
 
   /* === Modals === */
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
-  .modal-content { background: var(--card-bg); width: 100%; max-width: 480px; border-radius: 28px; padding: 40px; position: relative; animation: fadeInUp 0.4s ease; overflow-y: auto; max-height: 85vh; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+  .modal-content { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 28px; padding: 40px; position: relative; animation: fadeInUp 0.4s ease; overflow-y: auto; max-height: 85vh; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
   .close-btn { position: absolute; top: 20px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; line-height: 1; transition: 0.3s; }
   .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
 
@@ -220,7 +220,7 @@
         
         <div class="link-grid">
             <a onclick="viewResultModal();" class="l-btn"><span>🎓</span><span>Results</span></a>
-            <a onclick="openAttendanceModal();" class="l-btn"><span>📊</span><span>Attendance</span></a>
+            <a onclick="openAttendanceModal();" class="l-btn"><span>📅</span><span>Attendance</span></a>
             <a id="liveClassMainBtn" onclick="openLiveClassModal();" class="l-btn"><span>🎥</span><span>Live Class</span></a>
             <a onclick="openFeesModal();" class="l-btn"><span>💳</span><span>Pay Fees</span></a>
             <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/syllabus" target="_blank" class="l-btn"><span>📖</span><span>Syllabus</span></a>
@@ -269,9 +269,9 @@
 </div>
 
 <div id="attendanceModal" class="modal-overlay">
-    <div class="modal-content" style="max-width: 600px;">
+    <div class="modal-content" style="max-width: 650px;">
         <span class="close-btn" onclick="closeModal('attendanceModal')">×</span>
-        <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">📅 Detailed Attendance</h3>
+        <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">📅 My Attendance Record</h3>
         
         <div style="margin-bottom: 15px;">
             <select id="attMonthFilter" onchange="renderAttendanceTable()" style="width:100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
@@ -280,17 +280,15 @@
         </div>
         
         <div id="attLoader" style="text-align:center; color:var(--primary); font-weight:bold; display:none; padding:20px 0;">
-            <span class="loader-spinner"></span> Synchronizing Data...
+            <span class="loader-spinner"></span> Synchronizing Database...
         </div>
-
-        <div id="modalYearlySummary" style="margin-bottom:15px; font-weight:700; color:#fff; padding:15px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius:12px; text-align:center; box-shadow: 0 5px 15px rgba(0,95,64,0.2); display: none;">
-            </div>
         
-        <div style="max-height: 350px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+        <div style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
             <table style="width:100%; border-collapse: collapse; font-size: 13px; text-align: left;">
                 <thead style="background: #e2e8f0; position: sticky; top: 0; z-index: 10;">
                     <tr>
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Date (Y-M-D)</th>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Status</th>
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">IN Time</th>
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">OUT Time</th>
                     </tr>
@@ -301,7 +299,7 @@
         </div>
         
         <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;">
-            </div>
+        </div>
     </div>
 </div>
 
@@ -345,12 +343,12 @@
   let std = null;
   let markSheetHTML = "";
   
-  // Variables for Secure Forgot Password Flow
+  // Variables for Security and Attendance
   let resettingDocId = null; 
   let resettingStudentID = null;
-  let allAttendanceData = {}; 
+  let allStudentAttendance = {}; 
+  let allHolidays = {};
 
-  // XSS Protection
   function sanitizeHTML(str) {
       if (typeof str !== 'string') return str;
       return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
@@ -441,7 +439,8 @@
     sessionStorage.removeItem('srms_student_session');
     sessionStorage.removeItem('srms_student_docId');
     std = null;
-    allAttendanceData = {}; 
+    allStudentAttendance = {}; 
+    allHolidays = {};
     document.getElementById('stuID').value = '';
     document.getElementById('stuPass').value = '';
     document.getElementById('err').innerText = '';
@@ -455,7 +454,7 @@
   }
 
   // ==========================================
-  // FORGOT PASSWORD LOGIC (Secure Cache Sync)
+  // FORGOT PASSWORD LOGIC 
   // ==========================================
   function openForgotPassModal() {
     document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
@@ -470,27 +469,19 @@
     btn.innerHTML = "SENDING..."; btn.disabled = true;
     
     try {
-        const res = await fetch(SCRIPT_URL, { 
-            method: "POST", 
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "sendOTP", id: id }) 
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "sendOTP", id: id }) });
         const data = await res.json();
         
         if(data.status === "success") {
-            resettingStudentID = id; // Save locally for verification step
-            resettingDocId = data.docId; // Document ID for update step
-            document.getElementById('fpStep1').style.display = 'none';
-            document.getElementById('fpStep2').style.display = 'block';
+            resettingStudentID = id; resettingDocId = data.docId; 
+            document.getElementById('fpStep1').style.display = 'none'; document.getElementById('fpStep2').style.display = 'block';
             let msg = data.email ? `OTP sent to ${sanitizeHTML(data.email)}` : "OTP Sent Successfully!";
             document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;"><b>${msg}</b></span>`;
         } else {
             let eMsg = data.message || "Error finding student.";
             document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`;
         }
-    } catch(e) { 
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; 
-    }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; }
     btn.innerHTML = "SEND OTP TO EMAIL"; btn.disabled = false;
   }
 
@@ -500,46 +491,29 @@
 
     const btns = document.getElementById('fpStep2').getElementsByTagName('button');
     const verifyBtn = btns[0];
-    verifyBtn.innerHTML = "VERIFYING..."; 
-    verifyBtn.disabled = true;
+    verifyBtn.innerHTML = "VERIFYING..."; verifyBtn.disabled = true;
 
     try {
-        const res = await fetch(SCRIPT_URL, { 
-            method: "POST", 
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "verifyOTP", id: resettingStudentID, otp: entered }) 
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "verifyOTP", id: resettingStudentID, otp: entered }) });
         const data = await res.json();
         
         if(data.status === "success") {
-            document.getElementById('fpStep2').style.display = 'none'; 
-            document.getElementById('fpStep3').style.display = 'block';
+            document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'block';
             document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ OTP Verified! You can now set a new password.</span>`;
-        } else { 
-            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`; 
-        }
-    } catch(e) {
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Verification Failed. Network Error!</span>`;
-    }
+        } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`; }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Verification Failed. Network Error!</span>`; }
     
-    verifyBtn.innerHTML = "VERIFY OTP"; 
-    verifyBtn.disabled = false;
+    verifyBtn.innerHTML = "VERIFY OTP"; verifyBtn.disabled = false;
   }
 
-  // Call backend to perform SignInWithPassword -> update Auth -> patch Firestore
   async function saveResetPassword() {
     const newPass = document.getElementById('fpNewPass').value.trim();
     if(newPass.length < 6) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।</span>`; return; }
     
-    const btn = document.getElementById('btnSaveReset');
-    btn.innerHTML = "SAVING..."; btn.disabled = true;
+    const btn = document.getElementById('btnSaveReset'); btn.innerHTML = "SAVING..."; btn.disabled = true;
 
     try {
-        const res = await fetch(SCRIPT_URL, { 
-            method: "POST", 
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass }) 
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass }) });
         const data = await res.json();
         
         if(data.status === "success") {
@@ -566,7 +540,6 @@
         const token = await auth.currentUser.getIdToken();
         const headers = { "Authorization": "Bearer " + token };
 
-        // Notifications
         fetch(`${FIREBASE_DB_BASE}/Warnings?pageSize=1000`, { headers }).then(r=>r.json()).then(data=>{
             if(data.documents) {
                 let warn = data.documents.find(d => d.fields && d.fields.studentID && d.fields.studentID.stringValue === std.id);
@@ -577,7 +550,6 @@
             }
         }).catch(e=>{});
 
-        // Results
         if(std.resultMarks) {
             let headerClsName = "Class " + std.class;
             if(std.group) headerClsName += " " + std.group;
@@ -593,12 +565,9 @@
 
         fetchMat(headers);
         checkLiveClassForButton(headers);
-    } catch(err) {
-        console.log("Token Sync Error on Dashboard");
-    }
+    } catch(err) { console.log("Token Sync Error on Dashboard"); }
   }
 
-  // FETCH CLASS MATERIALS
   async function fetchMat(headers) {
       const box = document.getElementById('matList');
       box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading resources...</div>";
@@ -606,8 +575,7 @@
       try {
           const res = await fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=1000`, { headers });
           const data = await res.json();
-          box.innerHTML = "";
-          let count = 0;
+          box.innerHTML = ""; let count = 0;
           
           if(data.documents) {
               let posts = data.documents.map(d => d.fields).sort((a,b) => {
@@ -630,30 +598,23 @@
                                             <div style="font-weight:700; color:#1e293b; font-size:14px;">${title}</div>
                                             <div style="font-size:11px; color:#64748b; margin-top:3px;">📅 ${date}</div>
                                           </div>
-                                          <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--primary); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap; text-decoration:none;">VIEW</a>
+                                          <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--primary); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap;">VIEW</a>
                                         </div>`;
                   }
               });
           }
           if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'>No class materials available.</div>";
-      } catch(e) { 
-          box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; 
-      }
+      } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
   function renderResults(h, d) {
       let firstEmpty = h.indexOf("");
       if (firstEmpty !== -1) {
-          let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00");
-          let grade = sanitizeHTML(d[firstEmpty+3] || "F");
-          let pos = sanitizeHTML(d[firstEmpty+4] || "-");
-          let year = sanitizeHTML(d[firstEmpty+5] || "2026");
-          
-          let subHtml = "";
-          let i = 3;
+          let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00"); let grade = sanitizeHTML(d[firstEmpty+3] || "F");
+          let pos = sanitizeHTML(d[firstEmpty+4] || "-"); let year = sanitizeHTML(d[firstEmpty+5] || "2026");
+          let subHtml = ""; let i = 3;
           while (i < firstEmpty) {
-            let hNameTest = h[i] ? h[i].toString() : "Test";
-            let hNameMain = h[i+1] ? h[i+1].toString() : "Main";
+            let hNameTest = h[i] ? h[i].toString() : "Test"; let hNameMain = h[i+1] ? h[i+1].toString() : "Main";
             let isOpt = hNameTest.toLowerCase().includes("opt") && hNameTest.toLowerCase().includes("name");
 
             if (isOpt) {
@@ -709,7 +670,7 @@
   }
 
   // =====================================================================
-  // DETAILED ATTENDANCE LOGIC
+  // DETAILED ATTENDANCE LOGIC (HOLIDAYS + ABSENT TRACKING)
   // =====================================================================
   function openAttendanceModal() { 
       document.getElementById('attendanceModal').style.display = 'flex'; 
@@ -722,27 +683,27 @@
       
       try {
           const token = await auth.currentUser.getIdToken();
-          const queryUrl = `${FIREBASE_DB_BASE}:runQuery`;
+          const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
           
-          const reqBody = { 
+          const attReq = { 
               structuredQuery: { 
                   from: [{ collectionId: "AttendanceHistory" }], 
                   where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: std.id } } },
-                  limit: 1000
+                  limit: 2000
               } 
           };
           
-          const res = await fetch(queryUrl, { 
-              method: "POST", 
-              headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
-              body: JSON.stringify(reqBody) 
-          });
-          const data = await res.json();
+          const [attRes, holRes] = await Promise.all([
+              fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(attReq) }),
+              fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`, { headers })
+          ]);
           
-          allAttendanceData = {}; 
+          const attData = await attRes.json();
+          const holData = await holRes.json();
           
-          if (data && data.length > 0 && data[0].document) {
-              data.forEach(item => {
+          allStudentAttendance = {}; 
+          if (attData && attData.length > 0 && attData[0].document) {
+              attData.forEach(item => {
                   if(item.document && item.document.fields) {
                       let f = item.document.fields;
                       let pDate = sanitizeHTML(f.pureDate?.stringValue || ""); 
@@ -750,25 +711,27 @@
                       let type = sanitizeHTML(f.type?.stringValue || ""); 
                       
                       if(pDate) {
-                          let monthYear = pDate.substring(0, 7); 
-                          
-                          if(!allAttendanceData[monthYear]) {
-                              allAttendanceData[monthYear] = { dates: {} };
-                          }
-                          if(!allAttendanceData[monthYear].dates[pDate]) {
-                              allAttendanceData[monthYear].dates[pDate] = { in: "<span style='color:#94a3b8;'>Not Scanned</span>", out: "<span style='color:#94a3b8;'>Not Scanned</span>" };
-                          }
-                          
-                          if(type === "IN") allAttendanceData[monthYear].dates[pDate].in = timeStr;
-                          if(type === "OUT") allAttendanceData[monthYear].dates[pDate].out = timeStr;
+                          if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; }
+                          if(type === "IN") allStudentAttendance[pDate].in = timeStr;
+                          if(type === "OUT") allStudentAttendance[pDate].out = timeStr;
                       }
                   }
               });
           }
+
+          allHolidays = {};
+          if(holData && holData.documents) {
+              holData.documents.forEach(doc => {
+                  let f = doc.fields;
+                  let pDate = f.date?.stringValue;
+                  let reason = f.reason?.stringValue || "Holiday";
+                  if(pDate) allHolidays[pDate] = reason;
+              });
+          }
+
           populateAttendanceMonths();
       } catch(e) {
-          console.error(e);
-          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
+          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
       }
       document.getElementById('attLoader').style.display = 'none';
   }
@@ -777,114 +740,103 @@
       let select = document.getElementById('attMonthFilter');
       select.innerHTML = "";
       
-      let months = Object.keys(allAttendanceData).sort().reverse();
+      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+      const now = new Date(bdTime);
       
-      if(months.length === 0) {
-          select.innerHTML = "<option value=''>No Attendance Data Found</option>";
-          renderAttendanceTable("");
-          return;
+      let months = [];
+      for(let i=0; i<12; i++) {
+          let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          let mStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0');
+          months.push(mStr);
       }
       
       months.forEach(m => {
           let dateObj = new Date(m + "-01");
           let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
-          select.innerHTML += `<option value='${sanitizeHTML(m)}'>${sanitizeHTML(monthName)}</option>`;
+          select.innerHTML += `<option value='${m}'>${monthName}</option>`;
       });
       
       renderAttendanceTable(months[0]);
   }
 
   function renderAttendanceTable(selectedMonth = null) {
-      if(!selectedMonth) selectedMonth = sanitizeHTML(document.getElementById('attMonthFilter').value);
+      if(!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
       let tbody = document.getElementById('modalAttTableBody');
       let summaryBox = document.getElementById('modalAttSummary');
-      let yearlySummaryBox = document.getElementById('modalYearlySummary');
       
       const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-      const bdDate = new Date(bdTime);
-      const currentBdYear = bdDate.getFullYear();
-      const currentBdMonth = bdDate.getMonth() + 1;
+      const today = new Date(bdTime);
       
-      let dateParts = selectedMonth ? selectedMonth.split('-') : [currentBdYear.toString(), "01"];
-      let selectedYear = parseInt(dateParts[0]);
-      let selectedMonthNum = parseInt(dateParts[1]);
+      let dateParts = selectedMonth.split('-');
+      let sYear = parseInt(dateParts[0]);
+      let sMonth = parseInt(dateParts[1]);
       
-      let isYearFinished = (selectedYear < currentBdYear);
+      let daysInMonth = new Date(sYear, sMonth, 0).getDate();
+      let daysToLoop = daysInMonth;
+      
+      if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
+           summaryBox.style.display = 'none';
+           return;
+      }
+      
+      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) {
+           daysToLoop = today.getDate();
+      }
 
-      if (!isYearFinished) {
-          yearlySummaryBox.style.display = 'none';
-          yearlySummaryBox.innerHTML = '';
+      let presentCount = 0; let absentCount = 0; let holidayCount = 0;
+      let html = "";
+      
+      for(let d = daysToLoop; d >= 1; d--) {
+           let dStr = String(d).padStart(2, '0');
+           let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
+           
+           let statusHtml = ""; let inTime = "-"; let outTime = "-"; let bgRow = "";
+           
+           if(allHolidays[fullDate]) {
+               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`;
+               holidayCount++;
+               bgRow = "background: #fffbeb;";
+           } else if (allStudentAttendance[fullDate]) {
+               let rec = allStudentAttendance[fullDate];
+               inTime = rec.in; outTime = rec.out;
+               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`;
+               presentCount++;
+           } else {
+               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`;
+               absentCount++;
+               bgRow = "background: #fff1f2;";
+           }
+           
+           html += `
+            <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s; ${bgRow}">
+                <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td>
+                <td style="padding: 12px 15px;">${statusHtml}</td>
+                <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td>
+                <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td>
+            </tr>`;
+      }
+      
+      if(html === "") {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>';
+           summaryBox.style.display = 'none';
       } else {
-          let yearlyPresentCount = 0;
-          let yearlyAbsentCount = 0;
-
-          if(allAttendanceData) {
-              for(let m = 1; m <= 12; m++) {
-                  let mStr = selectedYear + "-" + String(m).padStart(2, '0');
-                  let mPresent = 0;
-                  if(allAttendanceData[mStr]) {
-                      mPresent = Object.keys(allAttendanceData[mStr].dates).length;
-                  }
-                  yearlyPresentCount += mPresent;
-
-                  let daysInM = new Date(selectedYear, m, 0).getDate();
-                  let workingDaysInM = Math.max(mPresent, daysInM - 4);
-                  yearlyAbsentCount += (workingDaysInM - mPresent);
-              }
-          }
-
-          yearlySummaryBox.style.display = 'block';
-          yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${selectedYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
-      }
-
-      if(!selectedMonth || !allAttendanceData[selectedMonth]) {
-          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#64748b; font-weight:600;">No attendance records available for this month.</td></tr>';
-          summaryBox.style.display = 'none';
-          return;
-      }
-      
-      let monthData = allAttendanceData[selectedMonth].dates;
-      let dates = Object.keys(monthData).sort().reverse();
-      let presentCount = dates.length;
-      
-      tbody.innerHTML = "";
-      dates.forEach(d => {
-          let record = monthData[d];
-          tbody.innerHTML += `
-              <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s;">
-                  <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:14px;">${sanitizeHTML(d)}</td>
-                  <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:13px;">${record.in}</td>
-                  <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:13px;">${record.out}</td>
-              </tr>
-          `;
-      });
-      
-      let isMonthFinished = false;
-      if (selectedYear < currentBdYear) {
-          isMonthFinished = true;
-      } else if (selectedYear === currentBdYear && selectedMonthNum < currentBdMonth) {
-          isMonthFinished = true;
-      }
-      
-      if (!isMonthFinished) {
-          summaryBox.style.display = 'none';
-          summaryBox.innerHTML = '';
-      } else {
-          summaryBox.style.display = 'flex';
-          let daysInMonth = new Date(selectedYear, selectedMonthNum, 0).getDate();
-          let workingDays = Math.max(presentCount, daysInMonth - 4); 
-          let absentCount = workingDays - presentCount;
-          
-          summaryBox.innerHTML = `
-              <span style="display:flex; flex-direction:column; align-items:center;">
-                  <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Total Present</small>
-                  <span style="font-size:20px;">${presentCount} Days</span>
-              </span>
-              <span style="display:flex; flex-direction:column; align-items:center;">
-                  <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Total Absent</small>
-                  <span style="font-size:20px; color:var(--danger);">~${absentCount} Days</span>
-              </span>
-          `;
+           tbody.innerHTML = html;
+           summaryBox.style.display = 'flex';
+           summaryBox.innerHTML = `
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small>
+                <span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span>
+            </span>
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small>
+                <span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span>
+            </span>
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small>
+                <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
+            </span>
+        `;
       }
   }
 
@@ -905,16 +857,14 @@
     let docId = sessionStorage.getItem('srms_student_docId');
     if(!docId) return;
 
-    msgBox.style.color = "var(--primary)";
-    msgBox.innerText = "Updating...";
+    msgBox.style.color = "var(--primary)"; msgBox.innerText = "Updating...";
     try { 
         const user = auth.currentUser;
         const token = await user.getIdToken();
         if(user) await user.updatePassword(p);
         
         await fetch(`${FIREBASE_DB_BASE}/Students/${docId}?updateMask.fieldPaths=pass`, { 
-            method: "PATCH", 
-            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
+            method: "PATCH", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
             body: JSON.stringify({ fields: { pass: { stringValue: p } } }) 
         });
         msgBox.style.color = "#059669"; msgBox.innerText = "✅ Password Changed Successfully!"; document.getElementById('newPass').value = "";
@@ -1015,6 +965,5 @@
     }).catch(e => { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; });
   }
 </script>
-
 </body>
 </html>
