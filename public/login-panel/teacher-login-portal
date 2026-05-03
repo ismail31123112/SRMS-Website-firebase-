@@ -14,6 +14,8 @@
     --accent: #bf953f;
     --danger: #e11d48;
     --danger-dark: #be123c;
+    --warning: #f59e0b;
+    --success: #10b981;
     --bg-color: #f4f7f6;
     --card-bg: #ffffff;
     --text-main: #1e293b;
@@ -101,7 +103,7 @@
 
   /* Modals */
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
-  .modal-box { background: var(--card-bg); padding: 40px; border-radius: 28px; text-align: center; width: 100%; max-width: 480px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); animation: fadeInUp 0.4s ease; border-top: 8px solid var(--accent); position: relative; }
+  .modal-box { background: var(--card-bg); padding: 40px; border-radius: 28px; text-align: center; width: 100%; max-width: 480px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); animation: fadeInUp 0.4s ease; border-top: 8px solid var(--accent); position: relative; max-height: 90vh; overflow-y: auto;}
   .modal-box.danger-modal { border-top-color: var(--danger); }
   .close-modal-btn { background: #f1f5f9; color: #333; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s; margin-top: 10px; font-size: 15px; }
   .close-modal-btn:hover { background: #e2e8f0; }
@@ -267,7 +269,7 @@
 </div>
 
 <div id="attendanceModal" class="modal-overlay">
-    <div class="modal-box" style="max-width: 600px; padding: 30px;">
+    <div class="modal-box" style="max-width: 650px; padding: 30px;">
         <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px; text-align:left;">📅 My Attendance Logs</h3>
         
         <div style="margin-bottom: 15px;">
@@ -277,17 +279,18 @@
         </div>
         
         <div id="attLoader" style="text-align:center; color:var(--primary); font-weight:bold; display:none; padding:20px 0;">
-            <span class="loader-spinner"></span> Synchronizing Data...
+            <span class="loader-spinner" style="border-top-color:var(--primary);"></span> Synchronizing Database...
         </div>
 
         <div id="modalYearlySummary" style="margin-bottom:15px; font-weight:700; color:#fff; padding:15px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius:12px; text-align:center; box-shadow: 0 5px 15px rgba(0,95,64,0.2); display: none;">
-            </div>
+        </div>
         
         <div style="max-height: 350px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; text-align:left;">
             <table style="width:100%; border-collapse: collapse; font-size: 13px;">
                 <thead style="background: #e2e8f0; position: sticky; top: 0; z-index: 10;">
                     <tr>
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Date (Y-M-D)</th>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Status</th>
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">IN Time</th>
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">OUT Time</th>
                     </tr>
@@ -298,7 +301,7 @@
         </div>
         
         <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;">
-            </div>
+        </div>
         <button class="close-modal-btn" onclick="closeModal('attendanceModal')" style="margin-top:20px;">Close Logs</button>
     </div>
 </div>
@@ -334,9 +337,11 @@
   
   let tPhone = "";
   let exactDbPhone = "";
-  // 🚀 Security Fix: Removed local generatedOTP variable
   let resetPhone = null;
-  let allAttendanceData = {};
+  
+  // Variables for Attendance & Holiday Sync
+  let allTeacherAttendance = {};
+  let allHolidays = {};
 
   function sanitizeHTML(str) {
       if (typeof str !== 'string') return str;
@@ -449,7 +454,7 @@
   }
 
   // ==========================================
-  // FORGOT PASSWORD LOGIC (SECURE BACKEND CACHE)
+  // FORGOT PASSWORD LOGIC 
   // ==========================================
   function openForgotModal() {
     document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
@@ -476,7 +481,6 @@
       try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error! Check Browser Console.</span>`; return; }
       
       if(data.status === "success") {
-        // 🚀 SECURE FIX: OTP is not stored locally anymore. Backend validates it.
         document.getElementById('fpStep1').style.display = 'none'; 
         document.getElementById('fpStep2').style.display = 'block';
         let sMsg = data.msg ? data.msg : (data.message ? data.message : "OTP Sent Successfully!");
@@ -488,7 +492,6 @@
     } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error! Check connection.</span>"; }
   }
 
-  // 🚀 SECURE FIX: Verify OTP directly with the Backend Cache
   async function verifyOTP() {
     const input = document.getElementById('fpOTP').value.trim();
     if(!input) return;
@@ -718,6 +721,9 @@
     btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Publish Content';
   }
 
+  // =====================================================================
+  // 🔴 TEACHER DETAILED ATTENDANCE LOGIC (HOLIDAYS + ABSENT TRACKING API)
+  // =====================================================================
   function openTeacherAttendanceModal() {
       document.getElementById('attendanceModal').style.display = 'flex';
       fetchTeacherDetailedAttendance();
@@ -729,53 +735,56 @@
       
       try {
           const token = await auth.currentUser.getIdToken();
-          const queryUrl = `${FIREBASE_DB_BASE}:runQuery`;
+          const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
           
-          const reqBody = { 
+          const attReq = { 
               structuredQuery: { 
                   from: [{ collectionId: "AttendanceHistory" }], 
                   where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: exactDbPhone } } },
-                  limit: 1000
+                  limit: 2000
               } 
           };
           
-          const res = await fetch(queryUrl, { 
-              method: "POST", 
-              headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
-              body: JSON.stringify(reqBody) 
-          });
-          const data = await res.json();
+          const [attRes, holRes] = await Promise.all([
+              fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(attReq) }),
+              fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`, { headers })
+          ]);
           
-          allAttendanceData = {}; 
+          const attData = await attRes.json();
+          const holData = await holRes.json();
           
-          if (data && data.length > 0 && data[0].document) {
-              data.forEach(item => {
+          allTeacherAttendance = {}; 
+          if (attData && attData.length > 0 && attData[0].document) {
+              attData.forEach(item => {
                   if(item.document && item.document.fields) {
                       let f = item.document.fields;
-                      let pDate = sanitizeHTML(f.pureDate?.stringValue || "");
+                      let pDate = sanitizeHTML(f.pureDate?.stringValue || ""); 
                       let timeStr = sanitizeHTML(f.time?.stringValue || "");
-                      let type = sanitizeHTML(f.type?.stringValue || "");
+                      let type = sanitizeHTML(f.type?.stringValue || ""); 
                       
                       if(pDate) {
-                          let monthYear = pDate.substring(0, 7); 
-                          
-                          if(!allAttendanceData[monthYear]) {
-                              allAttendanceData[monthYear] = { dates: {} };
-                          }
-                          if(!allAttendanceData[monthYear].dates[pDate]) {
-                              allAttendanceData[monthYear].dates[pDate] = { in: "<span style='color:#94a3b8;'>--</span>", out: "<span style='color:#94a3b8;'>--</span>" };
-                          }
-                          
-                          if(type === "IN") allAttendanceData[monthYear].dates[pDate].in = timeStr;
-                          if(type === "OUT") allAttendanceData[monthYear].dates[pDate].out = timeStr;
+                          if(!allTeacherAttendance[pDate]) { allTeacherAttendance[pDate] = { in: "-", out: "-" }; }
+                          if(type === "IN") allTeacherAttendance[pDate].in = timeStr;
+                          if(type === "OUT") allTeacherAttendance[pDate].out = timeStr;
                       }
                   }
               });
           }
+
+          allHolidays = {};
+          if(holData && holData.documents) {
+              holData.documents.forEach(doc => {
+                  let f = doc.fields;
+                  let pDate = f.date?.stringValue;
+                  let reason = f.reason?.stringValue || "Holiday";
+                  if(pDate) allHolidays[pDate] = reason;
+              });
+          }
+
           populateTeacherAttendanceMonths();
       } catch(e) {
           console.error(e);
-          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="3" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to load attendance history.</td></tr>';
+          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
       }
       document.getElementById('attLoader').style.display = 'none';
   }
@@ -784,41 +793,55 @@
       let select = document.getElementById('attMonthFilter');
       select.innerHTML = "";
       
-      let months = Object.keys(allAttendanceData).sort().reverse();
+      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+      const now = new Date(bdTime);
       
-      if(months.length === 0) {
-          select.innerHTML = "<option value=''>No Attendance Data Found</option>";
-          renderTeacherAttendanceTable("");
-          return;
+      let months = [];
+      for(let i=0; i<12; i++) {
+          let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          let mStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0');
+          months.push(mStr);
       }
       
       months.forEach(m => {
           let dateObj = new Date(m + "-01");
           let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
-          select.innerHTML += `<option value='${sanitizeHTML(m)}'>${sanitizeHTML(monthName)}</option>`;
+          select.innerHTML += `<option value='${m}'>${monthName}</option>`;
       });
       
       renderTeacherAttendanceTable(months[0]);
   }
 
   function renderTeacherAttendanceTable(selectedMonth = null) {
-      if(!selectedMonth) selectedMonth = sanitizeHTML(document.getElementById('attMonthFilter').value);
+      if(!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
       let tbody = document.getElementById('modalAttTableBody');
       let summaryBox = document.getElementById('modalAttSummary');
       let yearlySummaryBox = document.getElementById('modalYearlySummary');
       
-      // 🚀 Bangladesh Time Logic
+      // Bangladesh Time Logic
       const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-      const bdDate = new Date(bdTime);
-      const currentBdYear = bdDate.getFullYear();
-      const currentBdMonth = bdDate.getMonth() + 1; // 1-12
+      const today = new Date(bdTime);
       
-      let dateParts = selectedMonth ? selectedMonth.split('-') : [currentBdYear.toString(), "01"];
-      let selectedYear = parseInt(dateParts[0]);
-      let selectedMonthNum = parseInt(dateParts[1]);
+      let dateParts = selectedMonth.split('-');
+      let sYear = parseInt(dateParts[0]);
+      let sMonth = parseInt(dateParts[1]);
       
-      let isYearFinished = (selectedYear < currentBdYear);
+      let daysInMonth = new Date(sYear, sMonth, 0).getDate();
+      let daysToLoop = daysInMonth;
+      
+      if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
+           summaryBox.style.display = 'none';
+           yearlySummaryBox.style.display = 'none';
+           return;
+      }
+      
+      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) {
+           daysToLoop = today.getDate();
+      }
 
+      // Yearly Calculation 
+      let isYearFinished = (sYear < today.getFullYear());
       if (!isYearFinished) {
           yearlySummaryBox.style.display = 'none';
           yearlySummaryBox.innerHTML = '';
@@ -826,73 +849,82 @@
           let yearlyPresentCount = 0;
           let yearlyAbsentCount = 0;
 
-          if(allAttendanceData) {
-              for(let m = 1; m <= 12; m++) {
-                  let mStr = selectedYear + "-" + String(m).padStart(2, '0');
-                  let mPresent = 0;
-                  if(allAttendanceData[mStr]) {
-                      mPresent = Object.keys(allAttendanceData[mStr].dates).length;
-                  }
-                  yearlyPresentCount += mPresent;
+          for(let m = 1; m <= 12; m++) {
+              let mStr = sYear + "-" + String(m).padStart(2, '0');
+              let mPresent = 0;
+              let mHoliday = 0;
+              let daysInM = new Date(sYear, m, 0).getDate();
 
-                  let daysInM = new Date(selectedYear, m, 0).getDate();
-                  let workingDaysInM = Math.max(mPresent, daysInM - 4);
-                  yearlyAbsentCount += (workingDaysInM - mPresent);
+              for(let d=1; d<=daysInM; d++) {
+                  let dStr = String(d).padStart(2, '0');
+                  let fDate = `${mStr}-${dStr}`;
+                  if(allTeacherAttendance[fDate]) mPresent++;
+                  else if(allHolidays[fDate]) mHoliday++;
               }
+
+              yearlyPresentCount += mPresent;
+              let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4); // General estimation
+              let mAbsent = Math.max(0, workingDaysInM - mPresent);
+              yearlyAbsentCount += mAbsent;
           }
 
           yearlySummaryBox.style.display = 'block';
-          yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${selectedYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
+          yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${sYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
       }
 
-      if(!selectedMonth || !allAttendanceData[selectedMonth]) {
-          tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding:20px; color:#64748b; font-weight:600;">No attendance records available for this month.</td></tr>';
-          summaryBox.style.display = 'none';
-          return;
+      let presentCount = 0; let absentCount = 0; let holidayCount = 0;
+      let html = "";
+      
+      for(let d = daysToLoop; d >= 1; d--) {
+           let dStr = String(d).padStart(2, '0');
+           let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
+           
+           let statusHtml = ""; let inTime = "-"; let outTime = "-"; let bgRow = "";
+           
+           if(allHolidays[fullDate]) {
+               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`;
+               holidayCount++;
+               bgRow = "background: #fffbeb;";
+           } else if (allTeacherAttendance[fullDate]) {
+               let rec = allTeacherAttendance[fullDate];
+               inTime = rec.in; outTime = rec.out;
+               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`;
+               presentCount++;
+           } else {
+               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`;
+               absentCount++;
+               bgRow = "background: #fff1f2;";
+           }
+           
+           html += `
+            <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s; ${bgRow}">
+                <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td>
+                <td style="padding: 12px 15px;">${statusHtml}</td>
+                <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td>
+                <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td>
+            </tr>`;
       }
       
-      let monthData = allAttendanceData[selectedMonth].dates;
-      let dates = Object.keys(monthData).sort().reverse();
-      let presentCount = dates.length;
-      
-      tbody.innerHTML = "";
-      dates.forEach(d => {
-          let record = monthData[d];
-          tbody.innerHTML += `
-              <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s;">
-                  <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:14px;">${sanitizeHTML(d)}</td>
-                  <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:13px;">${record.in}</td>
-                  <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:13px;">${record.out}</td>
-              </tr>
-          `;
-      });
-      
-      let isMonthFinished = false;
-      if (selectedYear < currentBdYear) {
-          isMonthFinished = true;
-      } else if (selectedYear === currentBdYear && selectedMonthNum < currentBdMonth) {
-          isMonthFinished = true;
-      }
-      
-      if (!isMonthFinished) {
-          summaryBox.style.display = 'none';
-          summaryBox.innerHTML = '';
+      if(html === "") {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>';
+           summaryBox.style.display = 'none';
       } else {
-          summaryBox.style.display = 'flex';
-          let daysInMonth = new Date(selectedYear, selectedMonthNum, 0).getDate();
-          let workingDays = Math.max(presentCount, daysInMonth - 4); 
-          let absentCount = workingDays - presentCount;
-          
-          summaryBox.innerHTML = `
-              <span style="display:flex; flex-direction:column; align-items:center;">
-                  <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Total Present</small>
-                  <span style="font-size:20px;">${presentCount} Days</span>
-              </span>
-              <span style="display:flex; flex-direction:column; align-items:center;">
-                  <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Total Absent</small>
-                  <span style="font-size:20px; color:var(--danger);">~${absentCount} Days</span>
-              </span>
-          `;
+           tbody.innerHTML = html;
+           summaryBox.style.display = 'flex';
+           summaryBox.innerHTML = `
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small>
+                <span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span>
+            </span>
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small>
+                <span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span>
+            </span>
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small>
+                <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
+            </span>
+        `;
       }
   }
 </script>
