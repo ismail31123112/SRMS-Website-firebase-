@@ -330,6 +330,12 @@
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
+  
+  // 🔒 NEW: Force Firebase Session Persistence (Tab close = Logout)
+  auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch((error) => {
+      console.error("Session persistence error:", error);
+  });
+  
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
   
   const OTP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec"; 
@@ -350,24 +356,27 @@
 
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
+  // 🔒 NEW: sessionStorage check for Auto-login
   window.onload = function() {
-    const savedPhone = localStorage.getItem("srms_phone");
-    const savedName = localStorage.getItem("srms_name");
-    const savedExact = localStorage.getItem("srms_exact_phone");
+    const savedPhone = sessionStorage.getItem("srms_phone");
+    const savedName = sessionStorage.getItem("srms_name");
+    const savedExact = sessionStorage.getItem("srms_exact_phone");
     
     if(savedPhone && savedName) {
       tPhone = savedPhone;
       exactDbPhone = savedExact || savedPhone;
       showDashboard(savedName);
+    } else {
+       // Ensure ui is on login page if not authenticated
+       document.getElementById('dash-sec').style.display = 'none';
+       document.getElementById('login-sec').style.display = 'flex';
     }
   };
 
+  // 🔒 NEW: Secure Logout clearing sessionStorage
   function logout() {
     try { if(auth) auth.signOut(); } catch(e) {}
-    localStorage.removeItem("srms_phone");
-    localStorage.removeItem("srms_name");
-    localStorage.removeItem("srms_teacher_id");
-    localStorage.removeItem("srms_exact_phone");
+    sessionStorage.clear();
     
     document.getElementById('dash-sec').style.display = 'none';
     document.getElementById('main-navbar').style.display = 'none';
@@ -428,10 +437,17 @@
           
       tPhone = ph;
       exactDbPhone = dbPhoneToSave;
-      localStorage.setItem("srms_phone", ph);
-      localStorage.setItem("srms_exact_phone", dbPhoneToSave);
-      localStorage.setItem("srms_name", foundName);
-      if(teacherDocId) localStorage.setItem("srms_teacher_id", teacherDocId); 
+      
+      // 🔒 NEW: Store details in sessionStorage
+      sessionStorage.setItem("srms_phone", ph);
+      sessionStorage.setItem("srms_exact_phone", dbPhoneToSave);
+      sessionStorage.setItem("srms_name", foundName);
+      if(teacherDocId) sessionStorage.setItem("srms_teacher_id", teacherDocId); 
+      
+      // 🔒 NEW: Assign Teacher Powers (Roles) in sessionStorage
+      const teacherRoles = ["teacher_dashboard", "special_page_access"];
+      sessionStorage.setItem("srms_user_roles", JSON.stringify(teacherRoles));
+      sessionStorage.setItem("srms_active_session", "true");
       
       document.getElementById('lPs').value = '';
       showDashboard(foundName);
@@ -555,7 +571,7 @@
   async function changePass() {
     let p = document.getElementById('newPass').value.trim(); const btn = document.getElementById('passBtn');
     if(!p || p.length < 6) return alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
-    const docId = localStorage.getItem("srms_teacher_id");
+    const docId = sessionStorage.getItem("srms_teacher_id"); // Updated to sessionStorage
     if(!docId) return alert("Session expired, please login again.");
 
     btn.innerHTML = '<span class="loader-spinner"></span> Updating...'; btn.disabled = true;
