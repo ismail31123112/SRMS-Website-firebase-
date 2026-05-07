@@ -167,6 +167,11 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
 
+        // 🔒 NEW: Force Firebase Session Persistence (Tab close = Logout)
+        auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch((error) => {
+            console.error("Session persistence error:", error);
+        });
+
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
         const FIREBASE_DB_BASE = 'https://firestore.googleapis.com/v1/projects/srms-website-management/databases/(default)/documents';
 
@@ -178,6 +183,12 @@
         window.onload = function() {
             auth.onAuthStateChanged(async (user) => {
                 if(user && user.email === "admin@srms.edu.bd") {
+                    
+                    // 🔒 NEW: Assign Admin Powers (Roles) in sessionStorage
+                    const adminRoles = ["admin_dashboard", "special_page_access"];
+                    sessionStorage.setItem("srms_user_roles", JSON.stringify(adminRoles));
+                    sessionStorage.setItem("srms_active_session", "true");
+
                     // Check if dashboard is already shown to prevent looping
                     if(!document.getElementById('dashboard-section').classList.contains('hidden')) return;
                     
@@ -202,14 +213,17 @@
                             showSection('dashboard-section');
                             prefetchData();
                         } else {
-                            auth.signOut();
+                            logout(); // Use secure logout function
                         }
                     } catch(e) {
-                        auth.signOut();
+                        logout();
                     }
                     btn.disabled = false;
                     spinner.style.display = "none"; 
                     document.getElementById('loginText').innerText = "Secure Login";
+                } else {
+                    // Ensure ui is on login page if not authenticated
+                    showSection('login-section');
                 }
             });
         };
@@ -264,6 +278,11 @@
                 const data = await res.json();
                 
                 if (data.status === "success") {
+                    // 🔒 NEW: Assign Admin Powers (Roles) in sessionStorage on Manual Login
+                    const adminRoles = ["admin_dashboard", "special_page_access"];
+                    sessionStorage.setItem("srms_user_roles", JSON.stringify(adminRoles));
+                    sessionStorage.setItem("srms_active_session", "true");
+
                     document.getElementById('dashboard-section').innerHTML = data.dashboardHtml;
                     document.getElementById('messaging-section').innerHTML = data.messagingHtml;
                     document.getElementById('password').value = ''; // Clean input
@@ -275,7 +294,7 @@
 
             } catch(e) {
                 msg.innerText = "❌ Login Failed: " + e.message;
-                auth.signOut();
+                logout(); // Changed auth.signOut() to our secure logout function
             }
             btn.disabled = false;
             spinner.style.display = "none"; 
@@ -289,6 +308,9 @@
                 cachedTeachers = []; 
                 cachedStudents = []; 
                 
+                // 🔒 NEW: Wipe Session Storage completely
+                sessionStorage.clear();
+                
                 // Wipe DOM data completely
                 document.getElementById('dashboard-section').innerHTML = ""; 
                 document.getElementById('messaging-section').innerHTML = "";
@@ -298,7 +320,7 @@
                 window.location.replace("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department");
             }).catch((error) => {
                 console.error("Logout error:", error);
-                // Force redirect anyway
+                sessionStorage.clear();
                 window.location.replace("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department");
             });
         }
