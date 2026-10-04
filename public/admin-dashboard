@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRMS Dashboard - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 🔒 DYNAMIC MODULE LAUNCHER -->
+    <script>
+    window.openAppModule = function(path) {
+        let token = sessionStorage.getItem('portal_token');
+        let baseUrl = window.location.origin || (window.location.protocol + "//" + window.location.host);
+        
+        let targetUrl = baseUrl + "/" + path;
+        
+        if(token) {
+            targetUrl += "?token=" + encodeURIComponent(token);
+        }
+        
+        try {
+            let newWindow = window.open(targetUrl, '_blank');
+            if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                window.location.href = targetUrl; // Bypass Pop-up blocker
+            }
+        } catch(e) {
+            window.location.href = targetUrl;
+        }
+    };
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        
+        :root {
+            --primary-color: #005f40; 
+            --secondary-color: #004d33;
+            --success-color: #1cc88a;
+            --warning-color: #f6c23e;
+            --danger-color: #e74a3b;
+            --bg-gradient: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
+            --panel-bg: rgba(255, 255, 255, 0.95);
+        }
+
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: var(--bg-gradient); 
+            display: flex; 
+            justify-content: center; 
+            align-items: flex-start; 
+            min-height: 100vh; 
+            margin: 0; 
+            color: #333;
+            padding: 40px 0;
+            overflow-y: auto;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container { 
+            background: var(--panel-bg); 
+            padding: 35px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            width: 90%; 
+            max-width: 480px; 
+            text-align: center; 
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-top: 5px solid var(--primary-color);
+            margin: 0 auto 25px auto;
+        }
+
+        .srms-logo { width: 70px; margin-bottom: 10px; }
+        h2 { color: #444; margin-bottom: 20px; font-weight: 600; font-size: 22px; }
+
+        .password-container { position: relative; margin-bottom: 15px; }
+
+        input, select.input-field, textarea.input-field { 
+            width: 100%; padding: 12px 15px; margin-bottom: 12px;
+            border: 2px solid #eaeaea; border-radius: 10px; 
+            box-sizing: border-box; font-size: 14px; outline: none; 
+            font-family: 'Poppins', sans-serif; transition: 0.2s;
+        }
+        
+        input:focus, select.input-field:focus, textarea.input-field:focus { 
+            border-color: var(--primary-color); box-shadow: 0 0 8px rgba(0, 95, 64, 0.2); 
+        }
+
+        .toggle-password {
+            position: absolute; right: 15px; top: 50%; transform: translateY(-50%);
+            cursor: pointer; color: #aaa; transition: 0.2s; z-index: 10;
+        }
+        .toggle-password:hover { color: var(--primary-color); }
+
+        .btn { 
+            background: var(--primary-color); color: white; border: none; 
+            padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; 
+            font-size: 15px; font-weight: 600; transition: 0.3s; 
+            box-shadow: 0 4px 6px rgba(0, 95, 64, 0.2); margin-top: 8px;
+        }
+        .btn:hover { background: var(--secondary-color); transform: translateY(-2px); }
+        .btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+        
+        .btn-warning { background: var(--warning-color); color: #333; }
+        .btn-warning:hover { background: #f4b619; }
+        .btn-danger { background: var(--danger-color); }
+        .btn-danger:hover { background: #be2e21; }
+
+        .btn-link { 
+            background: white; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; margin: 10px 0; color: var(--primary-color); 
+            padding: 12px; border-radius: 10px; font-weight: 500; 
+            transition: 0.3s; border: 2px solid #eaeaea; font-size: 14px;
+            cursor: pointer; width: 100%; font-family: 'Poppins', sans-serif; box-sizing: border-box;
+        }
+        .btn-link i { margin-right: 10px; font-size: 16px; }
+        .btn-link:hover { background: #f8f9fc; border-color: var(--primary-color); transform: scale(1.02); }
+        
+        .hidden { display: none !important; }
+        .show-section { display: block; animation: fadeInUp 0.4s ease-out forwards; }
+
+        .spinner { display: none; margin-right: 8px; animation: spin 1s infinite linear; }
+        hr { border: 0; border-top: 1px dashed #ddd; margin: 15px 0; }
+        p.msg-text { margin-top: 10px; font-size: 13px; font-weight: 600; min-height: 1em; line-height: 1.5; }
+        
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 🛑 SECURITY SHIELD LOADER */
+        #loader { display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
+        .loader-spinner { width:55px; height:55px; border:4px solid #e2e8f0; border-top:4px solid var(--primary-color); border-radius:50%; animation:spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; }
+    </style>
+</head>
+<body>
+
+    <!-- 🛑 Security Gate Loader -->
+    <div id="loader">
+        <div class="loader-spinner"></div>
+        <p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--primary-color); letter-spacing: 1px; text-align: center;">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p>
+    </div>
+
+    <div id="appBody" style="display: none; width: 100%; flex-direction: column; align-items: center;">
+        
+        <!-- 🎛️ Dashboard Section -->
+        <div class="container show-section" id="dashboard-section">
+            <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="SRMS Logo" class="srms-logo" style="width: 50px;">
+            <h2>Admin Dashboard</h2>
+
+            <button onclick="openAppModule('student-management')" class="btn-link"><i class="fas fa-user-graduate"></i> Students Management</button>
+            <button onclick="openAppModule('accounts-portal')" class="btn-link"><i class="fas fa-file-invoice-dollar"></i> Accounts Portal</button>
+            <button onclick="openAppModule('website-management')" class="btn-link"><i class="fas fa-globe"></i> Website Management</button>
+            <button onclick="openAppModule('result-management')" class="btn-link"><i class="fas fa-poll-h"></i> Result Management</button>
+
+            <button onclick="openAppModule('attendance-management')" class="btn-link" style="background: #0f172a; color: white; border: none; margin: 10px 0;">
+            <i class="fas fa-school"></i> Smart Attendance Dashboard
+            </button>
+
+            <button onclick="openAppModule('live-classmeeting-panel')" class="btn-link" style="background: #fff5f5; border-color: var(--danger-color); color: var(--danger-color);">
+            <i class="fas fa-video"></i> Live Class / Meeting Panel
+            </button>
+
+            <button onclick="showSection('messaging-section'); loadSpecificUsers(); return false;" class="btn-link" style="background: #e8f5e9; border-color: var(--primary-color);">
+            <i class="fas fa-paper-plane"></i> Email / SMS Broadcast
+            </button>
+
+            <hr>
+            <button onclick="window.location.href = window.location.origin;" class="btn-link" style="color: #666; border-color: #ddd;">
+            <i class="fas fa-home"></i> Back to Main Website
+            </button>
+
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+            <button class="btn btn-warning" onclick="showChangePassword()"><i class="fas fa-key"></i> Pass</button>
+            <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <!-- 📩 Messaging Section -->
+        <div class="container hidden" id="messaging-section">
+            <h2>Broadcast Message</h2>
+            <select id="audienceType" class="input-field" onchange="handleAudienceChange()" style="font-weight: 600; color: var(--primary-color);">
+            <option value="Students">Send to Students</option>
+            <option value="Teachers">Send to Teachers</option>
+            </select>
+
+            <select id="recipientClass" class="input-field" onchange="loadSpecificUsers()" style="font-weight: 600;">
+            <option value="All">All Students (Entire School)</option>
+            <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
+            <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
+            <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
+            <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option>
+            <option value="10">Class 10</option>
+            </select>
+
+            <select id="specificUser" class="input-field" style="border-color: #cbd5e1; background: #f8fafc;">
+            <option value="All">Loading list...</option>
+            </select>
+            <select id="msgType" class="input-field">
+            <option value="Both">Send Both (Email & SMS)</option>
+            <option value="SMS">Send SMS Only</option>
+            <option value="Email">Send Email Only</option>
+            </select>
+            <textarea id="msgBody" class="input-field" placeholder="Type your formal notice/message here..." rows="4"></textarea>
+            <button class="btn" onclick="sendBroadcast()" id="sendBtn" style="margin-top: 15px;">
+            <i class="fas fa-spinner spinner" id="sendSpinner"></i><span id="sendText">Start Broadcast</span>
+            </button>
+
+            <button class="btn btn-danger" onclick="showSection('dashboard-section')" style="background: #aaa; margin-top: 10px;">Back to Dashboard</button>
+            <p id="send-msg" class="msg-text"></p>
+        </div>
+
+        <!-- 🔑 Change Password Section -->
+        <div class="container hidden" id="change-pass-section">
+            <h2>Change Password</h2>
+            <div class="password-container">
+                <input type="password" id="new-password" placeholder="Enter New Password (Min. 6 chars)">
+                <i class="fas fa-eye toggle-password" onclick="togglePasswordVisibility('new-password', this)"></i>
+            </div>
+            <button class="btn btn-warning" onclick="updatePassword()" id="updateBtn">
+                <i class="fas fa-spinner spinner" id="updateSpinner"></i><span id="updateText">Update Password</span>
+            </button>
+            <button class="btn btn-danger" onclick="showSection('dashboard-section')">Cancel</button>
+            <p id="success-msg" class="msg-text"></p>
+        </div>
+
+    </div> <!-- End App Body -->
+
+    <!-- 🌐 Firebase Client SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // 🚀 Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+            authDomain: "srms-website-management.firebaseapp.com",
+            projectId: "srms-website-management",
+            storageBucket: "srms-website-management.firebasestorage.app",
+            messagingSenderId: "960037316778",
+            appId: "1:960037316778:web:d6f9b1f434572d9374c8d3"
+        };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // 🔒 Force Firebase Session Persistence
+        auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
+            console.error("Session persistence error:", error);
+        });
+
+        // 🛑 🛑 🛑 IMPORTANT: Replace this with your Google Apps Script Backend URL!
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
+        
+        let cachedTeachers = [];
+        let cachedStudents = [];
+
+        // --- 🚀 SECURITY GATE: AUTO VERIFY OR KICK OUT ---
+        window.onload = function() {
+            auth.onAuthStateChanged((user) => {
+                if(user && user.email === "admin@srms.edu.bd") {
+                    // Admin verified! Unveil the Dashboard
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('appBody').style.display = 'flex';
+                    
+                    // Store safe tokens
+                    user.getIdToken().then(token => sessionStorage.setItem('portal_token', token));
+                    
+                    // Background data fetch
+                    prefetchDataDirectly(); 
+                } else {
+                    // 🚫 UNAUTHORIZED! Kick back to Login Page
+                    document.getElementById('loaderText').innerHTML = "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>";
+                    let baseUrl = window.location.origin || (window.location.protocol + "//" + window.location.host);
+                    window.location.replace(baseUrl + "/login-panel/accounting-and-management-department");
+                }
+            });
+        };
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.container').forEach(c => { c.classList.add('hidden'); c.classList.remove('show-section'); });
+            const target = document.getElementById(sectionId);
+            if(target) { target.classList.remove('hidden'); target.classList.add('show-section'); }
+        }
+
+        function togglePasswordVisibility(inputId, icon) {
+            const input = document.getElementById(inputId);
+            if (input.type === "password") { input.type = "text"; icon.classList.replace('fa-eye', 'fa-eye-slash'); } 
+            else { input.type = "password"; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
+        }
+        
+        // --- 🚀 FULLY SECURE LOGOUT ---
+        function logout() { 
+            auth.signOut().then(() => {
+                sessionStorage.clear();
+                let baseUrl = window.location.origin || (window.location.protocol + "//" + window.location.host);
+                window.location.replace(baseUrl + "/login-panel/accounting-and-management-department");
+            }).catch((error) => {
+                sessionStorage.clear();
+                let baseUrl = window.location.origin || (window.location.protocol + "//" + window.location.host);
+                window.location.replace(baseUrl + "/login-panel/accounting-and-management-department");
+            });
+        }
+        
+        function showChangePassword() { showSection('change-pass-section'); document.getElementById('success-msg').innerText = ""; }
+        
+        // --- Password Update ---
+        async function updatePassword() {
+            const newPass = document.getElementById('new-password').value.trim();
+            const msg = document.getElementById('success-msg');
+            const btn = document.getElementById('updateBtn');
+            
+            if(!newPass || newPass.length < 6) { msg.style.color = "var(--danger-color)"; msg.innerText = "⚠ Minimum 6 characters required!"; return; }
+            
+            btn.disabled = true;
+            document.getElementById('updateSpinner').style.display = "inline-block";
+            document.getElementById('updateText').innerText = "Updating...";
+            
+            try {
+                const user = auth.currentUser;
+                if(!user) throw new Error("Not authenticated");
+
+                // Update Auth
+                await user.updatePassword(newPass);
+                
+                // Update Firestore DB directly
+                await db.collection('Admin').doc('Settings').set({ password: newPass }, { merge: true });
+                
+                msg.style.color = "var(--success-color)"; 
+                msg.innerText = "✅ Changed successfully!"; 
+                setTimeout(() => { showSection('dashboard-section'); document.getElementById('new-password').value = ''; }, 1500);
+            } catch(e) {
+                msg.style.color = "var(--danger-color)"; 
+                msg.innerText = "❌ Error! Try re-logging in.";
+            }
+            btn.disabled = false;
+            document.getElementById('updateSpinner').style.display = "none"; 
+            document.getElementById('updateText').innerText = "Update Password";
+        }
+
+        // --- 🚀 Direct Firebase Pre-fetching ---
+        async function prefetchDataDirectly() {
+            try {
+                const [tSnap, sSnap] = await Promise.all([
+                    db.collection('Teachers').get(),
+                    db.collection('Students').get()
+                ]);
+                
+                cachedTeachers = [];
+                tSnap.forEach(doc => {
+                    let d = doc.data();
+                    cachedTeachers.push({ name: d.name || "Teacher", phone: d.phone || "" });
+                });
+
+                cachedStudents = [];
+                sSnap.forEach(doc => {
+                    let d = doc.data();
+                    cachedStudents.push({ 
+                        id: d.studentID || "", name: d.name || "Unknown", roll: d.roll ? parseInt(d.roll, 10) : 9999, cls: d.class || "" 
+                    });
+                });
+                cachedStudents.sort((a,b) => a.roll - b.roll);
+                
+            } catch(e) { console.log("Prefetch error (Rules blocking?):", e); }
+        }
+
+        // --- Dynamic Dropdown ---
+        window.handleAudienceChange = function() {
+            const aud = document.getElementById('audienceType').value;
+            if(aud === "Teachers") {
+                document.getElementById('recipientClass').style.display = 'none';
+            } else {
+                document.getElementById('recipientClass').style.display = 'block';
+            }
+            loadSpecificUsers();
+        };
+
+        window.loadSpecificUsers = function() {
+             const aud = document.getElementById('audienceType').value;
+             const cls = document.getElementById('recipientClass').value;
+             const select = document.getElementById('specificUser');
+             
+             if (aud === "Teachers") {
+                 let opts = `<option value="All">All Teachers</option>`;
+                 cachedTeachers.forEach(t => {
+                     if(t.phone) opts += `<option value="${t.phone}">${t.name} (${t.phone})</option>`;
+                 });
+                 select.innerHTML = opts;
+             } else {
+                 if (cls === "All") {
+                     select.innerHTML = `<option value="All">All Students (Entire School)</option>`;
+                     return;
+                 }
+                 let opts = `<option value="All">All Students of Class ${cls}</option>`;
+                 cachedStudents.filter(s => s.cls === cls).forEach(s => {
+                     opts += `<option value="${s.id}">Roll ${s.roll} - ${s.name} (${s.id})</option>`;
+                 });
+                 select.innerHTML = opts;
+             }
+        };
+
+        // --- 🚀 SECURE BROADCAST (Via Backend) ---
+        window.sendBroadcast = async function() {
+            const audienceType = document.getElementById('audienceType').value;
+            const targetClass = document.getElementById('recipientClass').value;
+            const specificUser = document.getElementById('specificUser').value;
+            const msgType = document.getElementById('msgType').value;
+            const msgBody = document.getElementById('msgBody').value;
+            const msgStatus = document.getElementById('send-msg');
+            const btn = document.getElementById('sendBtn');
+            
+            if (!msgBody) { msgStatus.style.color = "var(--danger-color)"; msgStatus.innerText = "⚠️ Message body is empty!"; return; }
+
+            btn.disabled = true;
+            document.getElementById('sendSpinner').style.display = "inline-block";
+            document.getElementById('sendText').innerText = "Transmitting...";
+            msgStatus.style.color = "#333"; msgStatus.innerText = "Connecting to Broadcast Server...";
+
+            let payload = {
+                action: 'sendMessage',
+                audienceType: audienceType, targetClass: targetClass, specificUser: specificUser, msgType: msgType, msgBody: msgBody,
+                token: sessionStorage.getItem('portal_token')
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('sendSpinner').style.display = "none"; 
+                document.getElementById('sendText').innerText = "Start Broadcast";
+                btn.disabled = false;
+                
+                if(data.status === "error") {
+                    msgStatus.style.color = "var(--danger-color)"; 
+                    msgStatus.innerText = "❌ " + data.message;
+                } else {
+                    msgStatus.style.color = "var(--success-color)"; 
+                    msgStatus.innerText = data.message;
+                    document.getElementById('msgBody').value = ''; 
+                }
+            })
+            .catch(error => {
+                msgStatus.style.color = "var(--danger-color)"; 
+                msgStatus.innerText = "🌐 Connection Error! Message may not be sent."; 
+                document.getElementById('sendSpinner').style.display = "none"; 
+                document.getElementById('sendText').innerText = "Start Broadcast";
+                btn.disabled = false;
+            });
+        };
+    </script>
+</body>
+</html>
