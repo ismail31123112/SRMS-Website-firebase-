@@ -68,6 +68,14 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .badge-army { background: #fff8e1; color: #b45309; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #fcd34d; }
 .badge-civil { background: #eff6ff; color: #005f40; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #a7f3d0; }
 
+/* Toggle & Checklist UI */
+.switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 24px; }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--main); }
+input:checked + .slider:before { transform: translateX(20px); }
+
 /* Bottom Nav */
 .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; box-shadow: 0 -5px 25px rgba(0, 95, 64, 0.08); z-index: 100; border-radius: 20px 20px 0 0; border-top: 1px solid #e2e8f0; padding: 5px 0;}
 .nav-item { flex: 1; text-align: center; color: #94a3b8; border: none; background: none; font-size: 11px; padding: 12px; cursor: pointer; font-weight: 700; transition: 0.3s;}
@@ -92,7 +100,8 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 /* Config Cards */
 .config-box { background: #fffbeb; border: 2px dashed #f59e0b; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
 .config-box h4 { margin: 0 0 10px 0; color: #b45309; }
-.sys-fee-row { display: flex; gap: 10px; margin-bottom: 8px; }
+.sys-fee-row { display: flex; gap: 10px; margin-bottom: 8px; align-items:center; }
+.sys-fee-row input[type="checkbox"] { width:20px; height:20px; margin:0; }
 
 /* 🖨️ Pro Print Formatting for A4 Landscape */
 @media print {
@@ -165,96 +174,127 @@ body * { visibility: hidden; }
 <div class="fee-grid" id="feeGrid"></div>
 
 <div id="paymentSummary" style="background:linear-gradient(135deg, #0f172a, #1e293b); color:white; padding:25px; border-radius:20px; margin-top:25px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 10px 30px rgba(15,23,42,0.3); border: 1px solid #334155;">
-<div>
-<span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Due Amount</span><br>
-<b style="font-size:28px; color:#fb7185;">৳ <span id="sumDueAmt">0.00</span></b>
-</div>
-<div style="text-align:right;">
-<span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Paying Now</span><br>
-<b style="font-size:32px; color:#4ade80;">৳ <span id="sumPayingAmt">0.00</span></b>
-</div>
+<div><span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Due Amount</span><br><b style="font-size:28px; color:#fb7185;">৳ <span id="sumDueAmt">0.00</span></b></div>
+<div style="text-align:right;"><span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Paying Now</span><br><b style="font-size:32px; color:#4ade80;">৳ <span id="sumPayingAmt">0.00</span></b></div>
 </div>
 
 <div style="margin-top:25px; background:#eff6ff; padding:15px 20px; border-radius:12px; border:2px dashed #bfdbfe; display:flex; align-items:center; gap:12px; justify-content:center;">
-<input type="checkbox" id="sendSmsChk" checked style="width:24px; height:24px; margin:0; cursor:pointer; accent-color: var(--main);">
-<label for="sendSmsChk" style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS Notification for Parent</label>
+<label class="switch"><input type="checkbox" id="sendSmsChk" checked><span class="slider"></span></label>
+<label style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS Notification for Parent</label>
 </div>
 
 <div id="success-msg"><i class="fas fa-check-circle"></i> PAYMENT RECORDED SUCCESSFULLY</div>
-
-<button onclick="payNow()" id="btnPay" class="btn btn-main" style="background:linear-gradient(135deg, #059669, #166534); margin-top:25px; box-shadow: 0 8px 25px rgba(5,150,105,0.3);"><i class="fas fa-check-double"></i> Confirm Transaction</button>
+<button onclick="payNow()" id="btnPay" class="btn btn-main" style="background:linear-gradient(135deg, #059669, #166534); margin-top:25px;"><i class="fas fa-check-double"></i> Confirm Transaction</button>
 <button onclick="printReceipt()" id="btnPrint" class="btn btn-print-big"><i class="fas fa-print"></i> PRINT OFFICIAL RECEIPT</button>
 </div>
 </div>
 </div>
 
-<!-- ================= SETUP TAB ================= -->
+<!-- ================= 🚀 SETUP TAB ================= -->
 <div id="setupTab" class="container">
 
-<!-- 🚀 NEW: GLOBAL SYSTEM FEES (ADMISSION & PROMOTION) -->
+<!-- 🚀 Global Automation Rules (Admission, Fines, Payroll) -->
 <div class="card" style="border-top-color: #ec4899; background: #fdf2f8;">
-<h3 style="color:#be185d; font-weight:900; margin-top:0;"><i class="fas fa-cogs"></i> Global Admission & Promotion Fees Setup</h3>
-<p style="font-size:12px; color:#9d174d; font-weight:600; margin-bottom:15px;">এখান থেকে সেট করা ফি-গুলো "Student Management" সফটওয়্যারে ভর্তি বা ক্লাস আপডেটের সময় অটোমেটিক শো করবে এবং কালেক্ট হবে।</p>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-<select id="sysFeeClass" style="border-color:#f9a8d4;">
-<option value="All">All Classes (Common Fee)</option>
-<option>Play</option><option>Nursery</option><option>KG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option>
-</select>
-<select id="sysFeeType" style="border-color:#f9a8d4;">
-<option value="admission">Admission Fee (নতুন ভর্তি)</option>
-<option value="promotion">Session/Promotion Fee (ক্লাস আপডেট)</option>
-</select>
+<h3 style="color:#be185d; font-weight:900; margin-top:0;"><i class="fas fa-cogs"></i> Global Automation Rules (Admission, Fines & Payroll)</h3>
+<p style="font-size:12px; color:#9d174d; font-weight:600; margin-bottom:15px;">এখান থেকে সেট করা ফি এবং রুলসগুলো Student Management ও Attendance সফটওয়্যারে অটোমেটিক কাজ করবে।</p>
+
+<!-- Admission & Promotion -->
+<div class="config-box">
+    <h4><i class="fas fa-user-plus"></i> Admission & Promotion Fees</h4>
+    <div id="cfgAdmission"></div>
+    <div style="margin-top:10px; padding:10px; background:#fef3c7; border-radius:8px; border:1px solid #fde68a;">
+        <p style="margin:0 0 10px 0; font-size:12px; font-weight:bold; color:#b45309;">Add New Rule:</p>
+        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="Play"> Play</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="Nursery"> Nursery</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="KG"> KG</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="1"> 1</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="2"> 2</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="3"> 3</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="4"> 4</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="5"> 5</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="6"> 6</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="7"> 7</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="8"> 8</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="9"> 9</label>
+            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="10"> 10</label>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:10px;">
+            <select id="gFeeType" style="margin:0; flex:1;"><option value="admission">Admission Fee (ভর্তি ফি)</option><option value="promotion">Session Fee (প্রমোশন ফি)</option></select>
+            <input type="text" id="gFeeName" placeholder="Fee Name (e.g. Admission + Jan Fee)" style="margin:0; flex:2;">
+            <input type="number" id="gFeeAmt" placeholder="Amount (৳)" style="margin:0; flex:1; font-weight:bold;">
+            <button onclick="addGlobalFeeRule()" class="btn" style="background:#d97706; color:white; width:auto; padding:10px; margin:0;"><i class="fas fa-plus"></i> Add Rule</button>
+        </div>
+        <p style="font-size:11px; color:#d97706; margin:5px 0 0 0;">*ভর্তি ফি এর সাথে ১ মাসের বেতন নিতে চাইলে মোট এমাউন্ট একসাথে দিন (যেমন: ভর্তি ১০০০ + বেতন ৫০০ = ১৫০০)।</p>
+    </div>
 </div>
-<div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px;">
-<input type="text" id="sysFeeName" placeholder="Fee Label (e.g. Admission Fee 2026)" style="border-color:#f9a8d4;">
-<input type="number" id="sysFeeAmt" placeholder="Amount (TK)" style="border-color:#f9a8d4; font-weight:bold;">
+
+<!-- Fines & Penalties -->
+<div class="config-box" style="background: #eff6ff; border-color: #3b82f6;">
+    <h4 style="color: #1d4ed8;"><i class="fas fa-exclamation-triangle"></i> Penalties & Fines Configuration</h4>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+        <div>
+            <label style="color:#1e40af;">Monthly Late Fee Amount (৳)</label>
+            <input type="number" id="sysLateFine" placeholder="e.g. 50" style="border-color:#bfdbfe;">
+        </div>
+        <div>
+            <label style="color:#1e40af;">Student Absent Fine per day (৳)</label>
+            <input type="number" id="sysAbsentFine" placeholder="e.g. 10" style="border-color:#bfdbfe;">
+        </div>
+    </div>
+    <div style="margin-top:15px; padding:15px; background:#dbeafe; border-radius:8px; display:flex; align-items:center; gap:10px;">
+        <label class="switch"><input type="checkbox" id="sysTeacherCut"><span class="slider"></span></label>
+        <div style="font-weight:700; color:#1e3a8a;">Deduct 1-day average salary for teacher's absence? (Auto Payroll Cut)</div>
+    </div>
 </div>
-<input type="password" id="sysFeePwd" placeholder="Admin Password" style="border-color:#be185d; text-align:center; max-width: 300px; margin: 10px auto; display:block;">
-<button onclick="saveSystemFee()" class="btn" style="background:#be185d; color:white; margin-top:10px;"><i class="fas fa-save"></i> Save Global Fee Rule</button>
-<div id="sysFeeDisplay" style="margin-top:20px; font-size:12px; background:#fff; padding:10px; border-radius:8px; border:1px solid #fbcfe8;"></div>
+
+<div style="display:flex; gap:10px; margin-top:15px; align-items:center;">
+    <input type="password" id="sysCfgPwd" placeholder="Admin Password Required to Save" style="border: 2px solid #be185d; text-align:center; flex:1; margin:0;">
+    <button onclick="saveGlobalSystemSettings()" class="btn" style="background:#be185d; color:white; margin:0; flex:1;"><i class="fas fa-save"></i> Save All Global Rules</button>
+</div>
 </div>
 
 <div class="card" style="border-top-color: #8b5cf6;">
-<h3 style="color:#8b5cf6; font-weight:900; margin:0;"><i class="fas fa-layer-group"></i> General Fees Setup & Management</h3>
-<div style="margin-bottom: 20px; background:#faf5ff; padding:18px; border-radius:14px; border-left:6px solid #8b5cf6;">
+<h3 style="color:#8b5cf6; font-weight:900; margin:0;"><i class="fas fa-layer-group"></i> General Fees Setup & Management (Bulk Assigner)</h3>
+<div style="margin-bottom: 20px; background:#faf5ff; padding:18px; border-radius:14px; border-left:6px solid #8b5cf6; margin-top:15px;">
 <label style="font-weight:800; color:#4c1d95; margin-bottom:8px; display:block; font-size:14px;">Select Action Type:</label>
 <select id="feeAction" onchange="toggleActionUI()" style="border-color:#d8b4fe; font-weight:bold; color:#7e22ce;">
-<option value="Add">1. Create / Add New Fees (General / Custom)</option>
+<option value="Add">1. Create / Assign New Fees</option>
 <option value="Edit">2. Edit / Override Existing Fees</option>
-<option value="Reset">3. Factory Reset (Clear Current Dues)</option>
+<option value="Reset">3. Factory Reset (Clear All Dues)</option>
 </select>
 </div>
 <div id="setupZone">
 <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
 <div style="display:flex; flex-direction:column;">
 <div style="height: 120px; overflow-y: auto; border: 2px solid var(--main); border-radius: 12px; padding: 10px; background: #fff;" id="bClsContainer">
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer; font-weight:bold; color:var(--main);"><input type="checkbox" value="All" id="bClsAll" onchange="toggleClassCheckboxes(this)" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> All Classes</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer; font-weight:bold; color:var(--main);"><input type="checkbox" value="All" id="bClsAll" onchange="toggleClassCheckboxesBulk(this)" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> All Classes</label>
 <hr style="margin:5px 0; border:0; border-top:1px solid #e2e8f0;">
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="Play" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Play</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="Nursery" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Nursery</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="KG" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> KG</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="1" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 1</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="2" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 2</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="3" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 3</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="4" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 4</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="5" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 5</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="6" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 6</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="7" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 7</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="8" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 8</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="9" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 9</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="10" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 10</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="Play" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Play</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="Nursery" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Nursery</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="KG" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> KG</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="1" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 1</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="2" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 2</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="3" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 3</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="4" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 4</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="5" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 5</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="6" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 6</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="7" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 7</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="8" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 8</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="9" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 9</label>
+<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="10" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 10</label>
 </div>
-<p style="font-size:11px; color:#005f40; font-weight:700; margin:2px 0 0 0;">*Select multiple classes</p>
+<p style="font-size:11px; color:#005f40; font-weight:700; margin:2px 0 0 0;">*Select multiple classes to assign fees</p>
 </div>
 <select id="bCat" style="border-color:var(--gold); font-weight:bold; height: 50px;"><option value="All">All Category</option><option value="Civil">Civil</option><option value="Army">Army</option></select>
-<select id="bType" onchange="toggleCustomUI()" style="height: 50px;"><option value="General">School Fees</option><option value="Hostel">Hostel Fees</option><option value="Custom">Custom Fees / Dues</option></select>
+<select id="bType" onchange="toggleCustomUI()" style="height: 50px;"><option value="General">School Fees</option><option value="Hostel">Hostel Fees</option><option value="Custom">Custom Fees</option></select>
 </div>
 
 <div id="customUI" style="display:none; margin-top:15px; padding:20px; background:#faf5ff; border-radius:14px; border:2px dashed #c084fc;">
-<label style="font-weight:800; color:#7e22ce; display:block; margin-bottom:12px;">Setup Custom Fees (Fine, Exam, etc.):</label>
+<label style="font-weight:800; color:#7e22ce; display:block; margin-bottom:12px;">Setup Custom Fees (Exam, Library, etc.):</label>
 <div id="customFeeList">
 <div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
-<input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Late Fine)">
+<input type="text" class="c-fee-name" placeholder="Fee Name">
 <input type="number" class="c-fee-amt" placeholder="Amount">
 </div>
 </div>
@@ -274,7 +314,7 @@ body * { visibility: hidden; }
 <label style="font-weight:800; color:#ea580c; font-size:14px;">Admin Password Required to Edit Fees</label>
 <input type="password" id="setupPwd" placeholder="Enter Password" style="border: 2px solid #ea580c; margin-top:8px; max-width:300px; text-align:center;">
 </div>
-<button onclick="runBulk()" id="btnRunBulk" class="btn btn-main" style="margin-top:20px;"><i class="fas fa-check-circle"></i> Setup/Create Fees</button>
+<button onclick="runBulk()" id="btnRunBulk" class="btn btn-main" style="margin-top:20px;"><i class="fas fa-check-circle"></i> Setup/Assign Fees</button>
 </div>
 </div>
 
@@ -294,7 +334,7 @@ body * { visibility: hidden; }
 
 <div class="vault-stats">
 <div class="v-stat-box v-income">
-<div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; opacity:0.8;">Total Income & Fine</div>
+<div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; opacity:0.8;">Total Income & Fines</div>
 <div style="font-size:24px; font-weight:900; margin-top:5px;">৳ <span id="vTotalInc">0.00</span></div>
 </div>
 <div class="v-stat-box v-expense">
@@ -310,7 +350,7 @@ body * { visibility: hidden; }
 <div style="background:#eff6ff; padding:20px; border-radius:14px; border:2px dashed #93c5fd;">
 <h4 style="margin:0 0 15px 0; color:#1d4ed8;"><i class="fas fa-plus-circle"></i> Add New Record</h4>
 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-<select id="vType" style="border-color:#3b82f6; font-weight:bold;">
+<select id="vType" style="border-color:#3b82f6; font-weight:bold; margin:0;">
 <option value="Income">Add Income / Penalty Collected</option>
 <option value="Expense">Add Expense / Pay Salary</option>
 </select>
@@ -324,11 +364,11 @@ body * { visibility: hidden; }
 </select>
 </div>
 <div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px; margin-top:10px;">
-<input type="text" id="vPayee" placeholder="Source / Payee Name (e.g. Teacher's Name)">
-<input type="number" id="vAmount" placeholder="Amount (TK)" style="font-weight:bold;">
+<input type="text" id="vPayee" placeholder="Source / Payee Name (e.g. Teacher's Name)" style="margin:0;">
+<input type="number" id="vAmount" placeholder="Amount (TK)" style="font-weight:bold; margin:0;">
 </div>
-<textarea id="vNotes" placeholder="Additional Details or Deductions (if any)..." rows="2"></textarea>
-<button onclick="addVault()" class="btn" style="background:#2563eb; color:white;"><i class="fas fa-save"></i> Save to Ledger</button>
+<textarea id="vNotes" placeholder="Additional Details or Deductions (if any)..." rows="2" style="margin-top:10px;"></textarea>
+<button onclick="addVault()" class="btn" style="background:#2563eb; color:white; margin-top:10px;"><i class="fas fa-save"></i> Save to Ledger</button>
 </div>
 
 <div style="margin-top:25px;">
@@ -409,12 +449,25 @@ Total Records: <span id="tStuCount" style="font-size:18px; color:#1e293b; font-w
 <button class="nav-item" onclick="switchTab('historyTab', this)"><i class="fas fa-history"></i>Ledger</button>
 </div>
 
+<!-- ================= FIREBASE & BACKEND LOGIC ================= -->
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec";
 
+const firebaseConfig = { 
+    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", 
+    authDomain: "srms-website-management.firebaseapp.com",
+    projectId: "srms-website-management" 
+};
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const auth = firebase.auth();
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.log(err));
+
 let lastR = null; let historyData = []; let reportsData = []; let vaultData = []; var isAuthReady = false; 
-let systemFeesConfig = { admission: [], promotion: [], fines: [] };
+let systemFeesConfig = { admission: [], promotion: [], penalties: { lateFine: 0, studentAbsentFine: 0, teacherSalaryCut: false } };
 
 function getToken() { return sessionStorage.getItem('portal_token') || ""; }
 
@@ -437,7 +490,7 @@ window.onload = function() {
         if (getToken()) {
             isAuthReady = true; 
             document.getElementById('loader').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block'; // 🟢 সমাধান: এই লাইনটি যোগ করা হয়েছে
+            document.getElementById('appContainer').style.display = 'block'; 
             loadSectionsData(); loadVaultData(true); loadSystemConfig();
         } else {
             showLoaderText("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
@@ -470,55 +523,93 @@ document.getElementById('rSec').innerHTML = opts; document.getElementById('hSec'
 }).catch(e=>{});
 }
 
-// 🚀 GLOBAL SYSTEM FEES LOGIC
+// 🚀 GLOBAL SYSTEM FEES LOGIC (Admissions & Penalties)
 function loadSystemConfig() {
     apiCall('getSystemFees').then(res => {
         systemFeesConfig = res;
+        if(!systemFeesConfig.penalties) systemFeesConfig.penalties = { lateFine: 0, studentAbsentFine: 0, teacherSalaryCut: false };
         renderSystemFees();
+        
+        // Populate Penalty fields
+        document.getElementById('sysLateFine').value = systemFeesConfig.penalties.lateFine || "";
+        document.getElementById('sysAbsentFine').value = systemFeesConfig.penalties.studentAbsentFine || "";
+        document.getElementById('sysTeacherCut').checked = systemFeesConfig.penalties.teacherSalaryCut || false;
     }).catch(e=>{});
 }
 
-function saveSystemFee() {
-    let cls = document.getElementById('sysFeeClass').value;
-    let type = document.getElementById('sysFeeType').value;
-    let name = document.getElementById('sysFeeName').value.trim();
-    let amt = document.getElementById('sysFeeAmt').value;
-    let pwd = document.getElementById('sysFeePwd').value;
+function addGlobalFeeRule() {
+    let type = document.getElementById('gFeeType').value;
+    let name = document.getElementById('gFeeName').value.trim();
+    let amt = document.getElementById('gFeeAmt').value;
+    
+    let classes = [];
+    document.querySelectorAll('.g-cls-chk:checked').forEach(c => classes.push(c.value));
+    
+    if(!name || !amt || amt <= 0) return alert("Please enter valid Fee Name and Amount!");
+    if(classes.length === 0) return alert("Please select at least one class!");
 
-    if(!name || !amt || amt<=0) return alert("Please enter Fee Name and valid Amount!");
-    if(!pwd) return alert("Admin Password is required to update global fees!");
-
-    // Filter out old fee for same class to replace it
     if(!systemFeesConfig[type]) systemFeesConfig[type] = [];
-    systemFeesConfig[type] = systemFeesConfig[type].filter(f => f.class !== cls);
-    systemFeesConfig[type].push({class: cls, name: name, amount: parseFloat(amt)});
+    
+    // For each selected class, add or replace the rule
+    classes.forEach(c => {
+        systemFeesConfig[type] = systemFeesConfig[type].filter(f => f.class !== c);
+        systemFeesConfig[type].push({class: c, name: name, amount: parseFloat(amt)});
+    });
+    
+    document.getElementById('gFeeName').value = "";
+    document.getElementById('gFeeAmt').value = "";
+    renderSystemFees();
+}
+
+function saveGlobalSystemSettings() {
+    let pwd = document.getElementById('sysCfgPwd').value;
+    if(!pwd) return alert("Admin Password is required to update global settings!");
+
+    // Gather Penalty Data
+    systemFeesConfig.penalties = {
+        lateFine: parseFloat(document.getElementById('sysLateFine').value) || 0,
+        studentAbsentFine: parseFloat(document.getElementById('sysAbsentFine').value) || 0,
+        teacherSalaryCut: document.getElementById('sysTeacherCut').checked
+    };
 
     showLoading();
     apiCall('processBulkUpdate', {
-        idsStr: "", feeType: "Custom", amount: 0, month: "", year: "", 
+        idsStr: "", feeType: "System", amount: 0, month: "", year: "", 
         customFeesJSON: JSON.stringify(systemFeesConfig), actionType: "SystemSet", pwd: pwd
     }).then(res => {
         hideLoading();
-        if(res.status === "success") { alert("Global Fee Setup Saved Successfully!"); document.getElementById('sysFeePwd').value = ""; renderSystemFees(); } 
+        if(res.status === "success") { alert("Global Setup Saved Successfully!"); document.getElementById('sysCfgPwd').value = ""; renderSystemFees(); } 
         else alert(res.message);
-    }).catch(e=>{hideLoading(); alert("Error");});
+    }).catch(e=>{hideLoading(); alert("Error saving config");});
 }
 
 function renderSystemFees() {
-    let h = "<strong>Current Setup:</strong><ul>";
-    ['admission', 'promotion'].forEach(type => {
+    let renderList = (type, cId) => {
+        let h = "";
         if(systemFeesConfig[type]) {
-            systemFeesConfig[type].forEach(f => {
-                h += `<li>${type.toUpperCase()} | Class: ${f.class} - <b>${f.name}</b>: ৳${f.amount}</li>`;
+            systemFeesConfig[type].forEach((f, idx) => {
+                h += `<div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; margin-bottom:5px; border-radius:6px; border:1px solid #fbcfe8;">
+                    <div><b style="color:#9d174d;">Class: ${f.class}</b> | ${f.name}</div>
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <b style="color:#10b981;">৳ ${f.amount}</b>
+                        <button onclick="removeGlobalFee('${type}', ${idx})" style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>`;
             });
         }
-    });
-    h += "</ul>";
-    document.getElementById('sysFeeDisplay').innerHTML = h;
+        document.getElementById(cId).innerHTML = h || `<span style="font-size:12px; color:#94a3b8;">No rules set yet.</span>`;
+    };
+    renderList('admission', 'cfgAdmission');
+    renderList('promotion', 'cfgPromotion');
+}
+
+function removeGlobalFee(type, idx) {
+    systemFeesConfig[type].splice(idx, 1);
+    renderSystemFees();
 }
 
 // 🚀 BULK FEES LOGIC
-function toggleClassCheckboxes(source) { document.querySelectorAll('.bCls-chk').forEach(c => c.checked = source.checked); }
+function toggleClassCheckboxesBulk(source) { document.querySelectorAll('.bCls-chk-bulk').forEach(c => c.checked = source.checked); }
 function toggleCustomUI() { 
 let type = document.getElementById('bType').value;
 if(type === "Custom") { document.getElementById('customUI').style.display = "block"; document.getElementById('bAmt').style.display = "none"; } 
@@ -590,7 +681,7 @@ let items = d.itemsList.map(i => { let payable = parseFloat(i.original) || 0; le
 
 let h = `<html><head><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');@page { size: A4 portrait; margin: 0; } body { font-family: 'Inter', sans-serif; padding: 6mm; margin: 0; background: #fff; color: #0f172a; -webkit-print-color-adjust: exact; box-sizing: border-box; height: 297mm; overflow: hidden; } .box { height: 138mm; border: 2px solid #cbd5e1; padding: 20px; border-radius: 16px; position: relative; box-sizing: border-box; margin-bottom: 3mm; box-shadow: 0 4px 15px rgba(0,0,0,0.02); } .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 12px; margin-bottom: 15px; } .header-left { display: flex; align-items: center; gap: 15px; }.header-text h2 { margin: 0; font-size: 19px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } .header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }.receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }.info-grid div { line-height: 1.6; }.info-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 800; display: inline-block; width: 75px; }table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; } th { background: #f1f5f9; color: #334155; font-weight: 800; text-transform: uppercase; font-size: 11px; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; border-radius: 6px 6px 0 0; }td { border-bottom: 1px solid #e2e8f0; padding: 8px 10px; }.summary-container { display: flex; justify-content: flex-end; margin-top: 15px; }.summary-box { width: 260px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: white; }.summary-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; }.summary-row:last-child { border-bottom: none; }.total-payable { font-weight: 700; color: #475569; }.total-paid { font-weight: 800; color: #005f40; background: #ecfdf5; border-bottom: 1px solid #a7f3d0;}.total-due { font-weight: 800; color: #b91c1c; background: #fef2f2; }.watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 80px; opacity: 0.03; color: #005f40; font-weight: 900; z-index: -1; pointer-events: none; letter-spacing: 12px; }.signatures { position: absolute; bottom: 20px; left: 25px; right: 25px; display: flex; justify-content: space-between; font-weight: 800; font-size: 12px; color: #475569; }.sig-line { border-top: 2px dashed #94a3b8; width: 160px; text-align: center; padding-top: 8px; }.cut-line { text-align: center; margin: 6px 0; font-size: 12px; color: #94a3b8; font-weight: 700; letter-spacing: 3px; }</style></head><body>
 ${["STUDENT COPY", "OFFICE COPY"].map((c, idx) => `
-<div class="box"><div class="watermark">SCBHS</div><div class="header"><div class="header-left"><img src="https://i.postimg.cc/FsbnRNTR/1788353517969.png" width="55" style="border-radius: 8px;"><div class="header-text"><h2>SAIDPUR CANTONMENT BOARD HIGH SCHOOL</h2><p>Saidpur Cantonment, Nilphamari | Official Payment Receipt</p></div></div><div class="receipt-tag">${c}</div></div>
+<div class="box"><div class="watermark">SRMS</div><div class="header"><div class="header-left"><img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" width="55" style="border-radius: 8px;"><div class="header-text"><h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2><p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p></div></div><div class="receipt-tag">${c}</div></div>
 <div class="info-grid"><div><div><span class="info-label">Receipt No:</span> <b style="color:#005f40;">${d.rNo}</b></div><div><span class="info-label">Student ID:</span> <b>${d.id}</b></div><div><span class="info-label">Name:</span> <b style="color:#0f172a; font-size:13px; text-transform:uppercase;">${d.name}</b></div></div><div style="text-align: right;"><div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div><div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div><div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month}${d.year}</b></div></div></div>
 <table><thead><tr><th>Fee Particulars</th><th style="text-align:right; width: 95px;">Payable (TK)</th><th style="text-align:right; width: 100px;">Paid Now (TK)</th><th style="text-align:right; width: 95px;">Due (TK)</th></tr></thead><tbody>${items}</tbody></table>
 <div class="summary-container"><div class="summary-box"><div class="summary-row total-payable"><span>Total Payable:</span> <span>৳ ${d.totalBill}.00</span></div><div class="summary-row total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid}.00</span></div><div class="summary-row total-due"><span>Remaining Due:</span> <span>৳ ${d.remaining}.00</span></div></div></div>
@@ -602,7 +693,7 @@ let w = window.open('','','width=900,height=950'); w.document.write(h); w.docume
 
 function loadBulk() { 
 let clsValues = [];
-if(document.getElementById('bClsAll').checked) clsValues.push("All"); else document.querySelectorAll('.bCls-chk:checked').forEach(c => clsValues.push(c.value));
+if(document.getElementById('bClsAll').checked) clsValues.push("All"); else document.querySelectorAll('.bCls-chk-bulk:checked').forEach(c => clsValues.push(c.value));
 if(clsValues.length === 0) return alert("Please select at least one class."); 
 showLoading(); 
 apiCall('getStudentsFiltered', {clsString: clsValues.join(','), feeType: document.getElementById('bType').value, categoryFilter: document.getElementById('bCat').value}).then(res => { 
@@ -675,7 +766,7 @@ function printRep() {
 let t = document.getElementById('rTable').outerHTML; 
 let subtitleText = `Class: ${document.getElementById('rClass').value} | Status: ${document.getElementById('rStatus').value}`;
 let w = window.open('','','width=1200,height=800'); 
-w.document.write(`<html><head><title>Financial Report</title><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: 'Times New Roman', serif; font-size: 12px; } .print-header { text-align: center; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th, td { border: 1px solid #000; padding: 8px 6px; } th { background-color: #e2e8f0; font-weight: bold; } .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; } </style></head><body><div class="print-header"><h2>SCBHS - Financial Report</h2><div>${subtitleText}</div></div>${t}<div class="totals">Total Collected: ৳ ${document.getElementById('tPaidVal').innerText}<br>Total Due: ৳ ${document.getElementById('tDueVal').innerText}</div></body></html>`); 
+w.document.write(`<html><head><title>Financial Report</title><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: 'Times New Roman', serif; font-size: 12px; } .print-header { text-align: center; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th, td { border: 1px solid #000; padding: 8px 6px; } th { background-color: #e2e8f0; font-weight: bold; } .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; } </style></head><body><div class="print-header"><h2>SRMS - Financial Report</h2><div>${subtitleText}</div></div>${t}<div class="totals">Total Collected: ৳ ${document.getElementById('tPaidVal').innerText}<br>Total Due: ৳ ${document.getElementById('tDueVal').innerText}</div></body></html>`); 
 w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
@@ -709,7 +800,7 @@ renderHistory(filtered);
 function printHistory() {
 let t = document.getElementById('hTable').outerHTML; 
 let w = window.open('','','width=1200,height=800'); 
-w.document.write(`<html><head><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: sans-serif; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #000; padding: 5px; } </style></head><body><h2>SCBHS - Payment Ledger</h2>${t}</body></html>`); 
+w.document.write(`<html><head><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: sans-serif; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #000; padding: 5px; } </style></head><body><h2>SRMS - Payment Ledger</h2>${t}</body></html>`); 
 w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
