@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- 🔒 URL Security Script -->
+<!-- 🔒 URL Security Script: URL থেকে টোকেন গায়েব করে দেবে -->
 <script>
 if (window.history.replaceState) {
 var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -88,6 +88,11 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .v-income { background: linear-gradient(135deg, #10b981, #047857); }
 .v-expense { background: linear-gradient(135deg, #ef4444, #b91c1c); }
 .v-net { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+
+/* Config Cards */
+.config-box { background: #fffbeb; border: 2px dashed #f59e0b; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
+.config-box h4 { margin: 0 0 10px 0; color: #b45309; }
+.sys-fee-row { display: flex; gap: 10px; margin-bottom: 8px; }
 
 /* 🖨️ Pro Print Formatting for A4 Landscape */
 @media print {
@@ -430,7 +435,9 @@ window.onload = function() {
     document.getElementById('loader').style.display = 'flex';
     setTimeout(() => {
         if (getToken()) {
-            isAuthReady = true; document.getElementById('loader').style.display = 'none';
+            isAuthReady = true; 
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block'; // 🟢 সমাধান: এই লাইনটি যোগ করা হয়েছে
             loadSectionsData(); loadVaultData(true); loadSystemConfig();
         } else {
             showLoaderText("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
