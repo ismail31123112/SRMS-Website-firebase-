@@ -5,6 +5,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SRMS Premium Admin Panel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 🔒 DYNAMIC REDIRECT, ILLEGAL ACCESS BLOCKER & LINK ROUTER -->
+    <script>
+    function enforceSecurity() {
+        let token = sessionStorage.getItem('portal_token');
+        let isActiveSession = sessionStorage.getItem('srms_active_session');
+        
+        // টোকেন যদি URL এর মাধ্যমে আসে, তবে সেটি সেভ করে URL ক্লিন করে ফেলবে
+        const urlParams = new URLSearchParams(window.location.search);
+        const tokenFromUrl = urlParams.get('token');
+        
+        if(tokenFromUrl) {
+            sessionStorage.setItem('portal_token', tokenFromUrl);
+            sessionStorage.setItem('srms_active_session', 'true');
+            if (window.history.replaceState) {
+                var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+            }
+            return; 
+        }
+    }
+    enforceSecurity();
+
+    // 🌐 DYNAMIC MODULE LAUNCHER (POP-UP BLOCKER BYPASS & RELATIVE PATHS)
+    window.openAppModule = function(path) {
+        let token = sessionStorage.getItem('portal_token');
+        
+        // রিলেটিভ রুট পাথ (ডোমেইন যাই হোক না কেন, স্লাশ থেকে শুরু হবে)
+        let targetUrl = "/" + path;
+        
+        if(token) {
+            targetUrl += "?token=" + encodeURIComponent(token);
+        }
+        
+        // পপ-আপ ব্লকার এড়ানোর জন্য <a> ট্যাগ তৈরি করে ক্লিক করানো হচ্ছে
+        let link = document.createElement('a');
+        link.href = targetUrl;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+    </script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
         
@@ -130,9 +174,9 @@
         </button>
         <p id="msg" class="msg-text" style="color: var(--danger-color);"></p>
         <hr>
-        <a href="https://www.saidpurresidentialmodelschool.com" class="btn-link" style="color: #666; border-color: #ddd;">
+        <button onclick="window.location.href = window.location.protocol + '//' + window.location.host;" class="btn-link" style="color: #666; border-color: #ddd;">
             <i class="fas fa-home"></i> Back to Main Website
-        </a>
+        </button>
     </div>
 
     <div class="container hidden" id="dashboard-section"></div>
@@ -151,8 +195,10 @@
         <p id="success-msg" class="msg-text"></p>
     </div>
 
+    <!-- 🌐 Firebase Client SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
     <script>
         // 🚀 Firebase Configuration
@@ -166,30 +212,30 @@
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
+        const db = firebase.firestore();
 
-        // 🔒 NEW: Force Firebase Session Persistence (Tab close = Logout)
+        // 🔒 Force Firebase Session Persistence
         auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch((error) => {
             console.error("Session persistence error:", error);
         });
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
-        const FIREBASE_DB_BASE = 'https://firestore.googleapis.com/v1/projects/srms-website-management/databases/(default)/documents';
-
+        // 🛑 🛑 🛑 IMPORTANT: Replace this with your newly deployed Backend API (REST) URL!
+        const scriptURL = 'YOUR_NEW_BACKEND_API_URL_HERE'; 
+        
         let cachedTeachers = [];
         let cachedStudents = [];
         let fallbackPasswordUsed = "";
 
-        // --- 🚀 SECURE AUTO-LOGIN (Separated from manual login) ---
+        // --- 🚀 SECURE AUTO-LOGIN ---
         window.onload = function() {
             auth.onAuthStateChanged(async (user) => {
+                // Check if user is logged in AND is the Admin
                 if(user && user.email === "admin@srms.edu.bd") {
                     
-                    // 🔒 NEW: Assign Admin Powers (Roles) in sessionStorage
                     const adminRoles = ["admin_dashboard", "special_page_access"];
                     sessionStorage.setItem("srms_user_roles", JSON.stringify(adminRoles));
                     sessionStorage.setItem("srms_active_session", "true");
 
-                    // Check if dashboard is already shown to prevent looping
                     if(!document.getElementById('dashboard-section').classList.contains('hidden')) return;
                     
                     const btn = document.getElementById('loginBtn');
@@ -200,6 +246,7 @@
                     
                     try {
                         const token = await user.getIdToken();
+                        // Get Dashboard HTML from Backend
                         const res = await fetch(scriptURL, {
                             method: 'POST',
                             headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -211,9 +258,9 @@
                             document.getElementById('dashboard-section').innerHTML = data.dashboardHtml;
                             document.getElementById('messaging-section').innerHTML = data.messagingHtml;
                             showSection('dashboard-section');
-                            prefetchData();
+                            prefetchDataDirectly(); // Load data directly via Firebase
                         } else {
-                            logout(); // Use secure logout function
+                            logout(); 
                         }
                     } catch(e) {
                         logout();
@@ -222,7 +269,6 @@
                     spinner.style.display = "none"; 
                     document.getElementById('loginText').innerText = "Secure Login";
                 } else {
-                    // Ensure ui is on login page if not authenticated
                     showSection('login-section');
                 }
             });
@@ -240,7 +286,7 @@
             else { input.type = "password"; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
         }
 
-        // --- 🚀 SECURE MANUAL LOGIN FLOW (Frontend Primary, Backend Emergency) ---
+        // --- 🚀 SECURE MANUAL LOGIN FLOW ---
         async function login() {
             let pass = document.getElementById('password').value.trim();
             const msg = document.getElementById('msg');
@@ -257,71 +303,67 @@
             try {
                 const adminEmail = "admin@srms.edu.bd"; 
                 let reqPayload = { action: 'getDashboard' };
+                let tokenFetched = false;
                 
                 try {
-                    // ১. Try Normal Frontend Firebase Auth First
                     const userCredential = await auth.signInWithEmailAndPassword(adminEmail, pass);
-                    reqPayload.token = await userCredential.user.getIdToken();
+                    reqPayload.token = await userCredential.user.getIdToken(true); 
+                    tokenFetched = true;
+                    // Also store token in session storage for the links
+                    sessionStorage.setItem('portal_token', reqPayload.token);
                 } catch(authError) {
-                    // ২. If Firebase fails, safely fallback to Emergency Backend Verify
-                    reqPayload.pwd = pass;
-                    fallbackPasswordUsed = pass; 
+                    throw new Error("Invalid Password! Please check your credentials.");
                 }
                 
-                // ৩. Fetch Dashboard HTML securely from GAS Backend
-                const res = await fetch(scriptURL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(reqPayload)
-                });
-                
-                const data = await res.json();
-                
-                if (data.status === "success") {
-                    // 🔒 NEW: Assign Admin Powers (Roles) in sessionStorage on Manual Login
-                    const adminRoles = ["admin_dashboard", "special_page_access"];
-                    sessionStorage.setItem("srms_user_roles", JSON.stringify(adminRoles));
-                    sessionStorage.setItem("srms_active_session", "true");
+                if(tokenFetched) {
+                    const res = await fetch(scriptURL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                        body: JSON.stringify(reqPayload)
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (data.status === "success") {
+                        const adminRoles = ["admin_dashboard", "special_page_access"];
+                        sessionStorage.setItem("srms_user_roles", JSON.stringify(adminRoles));
+                        sessionStorage.setItem("srms_active_session", "true");
 
-                    document.getElementById('dashboard-section').innerHTML = data.dashboardHtml;
-                    document.getElementById('messaging-section').innerHTML = data.messagingHtml;
-                    document.getElementById('password').value = ''; // Clean input
-                    showSection('dashboard-section');
-                    prefetchData(); 
-                } else {
-                    throw new Error(data.message || "Incorrect Password!");
+                        document.getElementById('dashboard-section').innerHTML = data.dashboardHtml;
+                        document.getElementById('messaging-section').innerHTML = data.messagingHtml;
+                        document.getElementById('password').value = ''; 
+                        showSection('dashboard-section');
+                        prefetchDataDirectly(); 
+                    } else {
+                        throw new Error(data.message || "Server Error: Access Denied!");
+                    }
                 }
 
             } catch(e) {
                 msg.innerText = "❌ Login Failed: " + e.message;
-                logout(); // Changed auth.signOut() to our secure logout function
+                logout(); 
             }
             btn.disabled = false;
             spinner.style.display = "none"; 
             document.getElementById('loginText').innerText = "Secure Login";
         }
         
-        // --- 🚀 FULLY SECURE LOGOUT & REDIRECT ---
+        // --- 🚀 FULLY SECURE LOGOUT ---
         function logout() { 
             auth.signOut().then(() => {
                 fallbackPasswordUsed = "";
-                cachedTeachers = []; 
-                cachedStudents = []; 
-                
-                // 🔒 NEW: Wipe Session Storage completely
+                cachedTeachers = []; cachedStudents = []; 
                 sessionStorage.clear();
-                
-                // Wipe DOM data completely
                 document.getElementById('dashboard-section').innerHTML = ""; 
                 document.getElementById('messaging-section').innerHTML = "";
                 document.getElementById('password').value = "";
                 
-                // Replace location so 'Back' button doesn't work
-                window.location.replace("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department");
+                var currentDomain = window.location.protocol + "//" + window.location.host;
+                window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
             }).catch((error) => {
-                console.error("Logout error:", error);
                 sessionStorage.clear();
-                window.location.replace("https://saidpurresidentialmodelschool.com/login-panel/accounting-and-management-department");
+                var currentDomain = window.location.protocol + "//" + window.location.host;
+                window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
             });
         }
         
@@ -333,7 +375,7 @@
             const msg = document.getElementById('success-msg');
             const btn = document.getElementById('updateBtn');
             
-            if(!newPass || newPass.length < 6) { msg.style.color = "var(--danger-color)"; msg.innerText = "⚠️ Minimum 6 characters required!"; return; }
+            if(!newPass || newPass.length < 6) { msg.style.color = "var(--danger-color)"; msg.innerText = "⚠ Minimum 6 characters required!"; return; }
             
             btn.disabled = true;
             document.getElementById('updateSpinner').style.display = "inline-block";
@@ -343,24 +385,15 @@
                 const user = auth.currentUser;
                 if(!user) throw new Error("Not authenticated");
 
+                // Update Auth
                 await user.updatePassword(newPass);
-                const token = await user.getIdToken();
-
-                const payload = { fields: { password: { stringValue: newPass } } };
-                const res = await fetch(`${FIREBASE_DB_BASE}/Admin/Settings?updateMask.fieldPaths=password`, {
-                    method: 'PATCH', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(payload)
-                });
                 
-                if(res.ok || res.status === 404) {
-                    if (res.status === 404) {
-                         await fetch(`${FIREBASE_DB_BASE}/Admin?documentId=Settings`, {
-                            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token }, body: JSON.stringify(payload)
-                        });
-                    }
-                    msg.style.color = "var(--success-color)"; 
-                    msg.innerText = "✅ Changed successfully!"; 
-                    setTimeout(() => { showSection('dashboard-section'); document.getElementById('new-password').value = ''; }, 1500);
-                } else { throw new Error("Database Update failed"); }
+                // Update Firestore DB directly
+                await db.collection('Admin').doc('Settings').set({ password: newPass }, { merge: true });
+                
+                msg.style.color = "var(--success-color)"; 
+                msg.innerText = "✅ Changed successfully!"; 
+                setTimeout(() => { showSection('dashboard-section'); document.getElementById('new-password').value = ''; }, 1500);
             } catch(e) {
                 msg.style.color = "var(--danger-color)"; 
                 msg.innerText = "❌ Error! Try re-logging in.";
@@ -370,38 +403,30 @@
             document.getElementById('updateText').innerText = "Update Password";
         }
 
-        // --- Background Pre-fetching ---
-        async function prefetchData() {
+        // --- 🚀 Direct Firebase Pre-fetching ---
+        async function prefetchDataDirectly() {
             try {
-                const token = auth.currentUser ? await auth.currentUser.getIdToken() : null;
-                const headers = token ? { "Authorization": "Bearer " + token } : {};
-
-                const [tRes, sRes] = await Promise.all([
-                    fetch(`${FIREBASE_DB_BASE}/Teachers?pageSize=1000`, { headers }),
-                    fetch(`${FIREBASE_DB_BASE}/Students?pageSize=1000`, { headers })
+                const [tSnap, sSnap] = await Promise.all([
+                    db.collection('Teachers').get(),
+                    db.collection('Students').get()
                 ]);
-                const tData = await tRes.json();
-                const sData = await sRes.json();
                 
-                if(tData.documents) {
-                    cachedTeachers = tData.documents.map(d => {
-                        let f = d.fields || {};
-                        return { name: f.name ? f.name.stringValue : "Teacher", phone: f.phone ? f.phone.stringValue : "" };
+                cachedTeachers = [];
+                tSnap.forEach(doc => {
+                    let d = doc.data();
+                    cachedTeachers.push({ name: d.name || "Teacher", phone: d.phone || "" });
+                });
+
+                cachedStudents = [];
+                sSnap.forEach(doc => {
+                    let d = doc.data();
+                    cachedStudents.push({ 
+                        id: d.studentID || "", name: d.name || "Unknown", roll: d.roll ? parseInt(d.roll, 10) : 9999, cls: d.class || "" 
                     });
-                }
-                if(sData.documents) {
-                    cachedStudents = sData.documents.map(d => {
-                        let f = d.fields || {};
-                        return { 
-                            id: f.studentID ? f.studentID.stringValue : "", 
-                            name: f.name ? f.name.stringValue : "Unknown", 
-                            roll: f.roll ? parseInt(f.roll.stringValue, 10) : 9999,
-                            cls: f.class ? f.class.stringValue : "" 
-                        };
-                    });
-                    cachedStudents.sort((a,b) => a.roll - b.roll);
-                }
-            } catch(e) { console.log("Prefetch error (rules might restrict):", e); }
+                });
+                cachedStudents.sort((a,b) => a.roll - b.roll);
+                
+            } catch(e) { console.log("Prefetch error (Rules blocking?):", e); }
         }
 
         // --- Dynamic Dropdown ---
@@ -439,7 +464,7 @@
              }
         };
 
-        // --- 🚀 SECURE BROADCAST ---
+        // --- 🚀 SECURE BROADCAST (Via Backend) ---
         window.sendBroadcast = async function() {
             const audienceType = document.getElementById('audienceType').value;
             const targetClass = document.getElementById('recipientClass').value;
@@ -458,11 +483,7 @@
 
             let payload = {
                 action: 'sendMessage',
-                audienceType: audienceType,
-                targetClass: targetClass,
-                specificUser: specificUser,
-                msgType: msgType,
-                msgBody: msgBody
+                audienceType: audienceType, targetClass: targetClass, specificUser: specificUser, msgType: msgType, msgBody: msgBody
             };
             
             if (auth.currentUser) {
