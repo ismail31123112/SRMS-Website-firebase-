@@ -1,12 +1,14 @@
+
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>SRMS Accounts Portal</title>
+<title>SRMS Accounts Portal V4</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- 🔒 URL Security Script: URL থেকে টোকেন গায়েব করে দেবে -->
+<!-- 🔒 URL Security Script -->
 <script>
 if (window.history.replaceState) {
 var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -19,8 +21,9 @@ window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 :root { --main: #005f40; --main-dark: #003d29; --accent: #d32f2f; --gold: #f59e0b; --bg: #f8fafc; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; color: #334155; padding-bottom: 90px;}
 
-#loader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); display: none; justify-content: center; align-items: center; z-index: 9999; backdrop-filter: blur(5px);}
-.spinner { width: 50px; height: 50px; border: 5px solid #e2e8f0; border-top: 5px solid var(--main); border-radius: 50%; animation: spin 1s infinite cubic-bezier(0.55, 0.15, 0.45, 0.85); }
+/* 🛑 SECURITY SHIELD LOADER */
+#loader { display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
+.spinner { width:55px; height:55px; border:4px solid #e2e8f0; border-top:4px solid var(--main); border-radius:50%; animation:spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
 /* Premium Header */
@@ -37,8 +40,8 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; col
 .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 95, 64, 0.06); margin-bottom: 30px; border-top: 6px solid var(--main); border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;}
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-input, select, textarea { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-family: inherit; transition: 0.3s; background: #f8fafc;}
-input:focus, select:focus, textarea:focus { border-color: var(--main); background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
+input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-family: inherit; transition: 0.3s; background: #f8fafc;}
+input:focus, select:focus { border-color: var(--main); background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
 
 .btn { padding: 15px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-family: inherit;}
 .btn-main { background: linear-gradient(135deg, var(--main), var(--main-dark)); color: white; box-shadow: 0 6px 20px rgba(0, 95, 64, 0.25);}
@@ -64,17 +67,9 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .custom-fee-item input { border: 2px solid #8b5cf6 !important; }
 .fee-card.custom { border-top: 6px solid #8b5cf6; }
 
-/* 🆕 Badges */
+/* Badges */
 .badge-army { background: #fff8e1; color: #b45309; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #fcd34d; }
 .badge-civil { background: #eff6ff; color: #005f40; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #a7f3d0; }
-
-/* Toggle & Checklist UI */
-.switch { position: relative; display: inline-block; width: 44px; height: 24px; }
-.switch input { opacity: 0; width: 0; height: 0; }
-.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .4s; border-radius: 24px; }
-.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
-input:checked + .slider { background-color: var(--main); }
-input:checked + .slider:before { transform: translateX(20px); }
 
 /* Bottom Nav */
 .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; box-shadow: 0 -5px 25px rgba(0, 95, 64, 0.08); z-index: 100; border-radius: 20px 20px 0 0; border-top: 1px solid #e2e8f0; padding: 5px 0;}
@@ -90,19 +85,6 @@ input:checked + .slider:before { transform: translateX(20px); }
 .calc-btn { padding: 15px; border: none; border-radius: 8px; background: #333; color: white; font-weight: bold; cursor: pointer; transition: 0.2s;}
 .calc-btn:hover { background: #555; transform: scale(1.05); }
 
-/* Vault Stats */
-.vault-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
-.v-stat-box { padding: 20px; border-radius: 16px; color: white; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
-.v-income { background: linear-gradient(135deg, #10b981, #047857); }
-.v-expense { background: linear-gradient(135deg, #ef4444, #b91c1c); }
-.v-net { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
-
-/* Config Cards */
-.config-box { background: #fffbeb; border: 2px dashed #f59e0b; padding: 15px; border-radius: 12px; margin-bottom: 15px; }
-.config-box h4 { margin: 0 0 10px 0; color: #b45309; }
-.sys-fee-row { display: flex; gap: 10px; margin-bottom: 8px; align-items:center; }
-.sys-fee-row input[type="checkbox"] { width:20px; height:20px; margin:0; }
-
 /* 🖨️ Pro Print Formatting for A4 Landscape */
 @media print {
 body * { visibility: hidden; }
@@ -113,743 +95,1042 @@ body * { visibility: hidden; }
 </head>
 <body>
 
+<!-- 🛑 Security Gate UI -->
 <div id="loader">
     <div class="spinner"></div>
     <p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--main); letter-spacing: 1px; text-align: center;">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p>
 </div>
 
-<div id="appContainer" style="display: none;">
-<div class="navbar">
-<div class="nav-title">SRMS ACCOUNTS PORTAL</div>
-<div class="nav-right">
-<div id="clock" style="font-weight: 600; font-size: 14px;"></div>
-<button class="btn-back" onclick="window.close();" title="Back to Admin Dashboard">
-<i class="fas fa-sign-out-alt"></i> Dashboard
-</button>
-</div>
-</div>
-
-<!-- ================= COLLECT TAB ================= -->
-<div id="collectTab" class="container active">
-<div class="card" style="border-top-color: #333;">
-<h3><i class="fas fa-calculator"></i> Accountant Calculator</h3>
-<div class="calc-box">
-<input type="text" id="cScr" class="calc-scr" readonly value="0">
-<div class="calc-grid">
-<button class="calc-btn" style="background:#e74c3c" onclick="cClr()">C</button>
-<button class="calc-btn" onclick="cPush('/')">/</button>
-<button class="calc-btn" onclick="cPush('*')">×</button>
-<button class="calc-btn" onclick="cBack()">←</button>
-<button class="calc-btn" onclick="cPush('7')">7</button>
-<button class="calc-btn" onclick="cPush('8')">8</button>
-<button class="calc-btn" onclick="cPush('9')">9</button>
-<button class="calc-btn" style="background:var(--main)" onclick="cPush('-')">-</button>
-<button class="calc-btn" onclick="cPush('4')">4</button>
-<button class="calc-btn" onclick="cPush('5')">5</button>
-<button class="calc-btn" onclick="cPush('6')">6</button>
-<button class="calc-btn" style="background:var(--main)" onclick="cPush('+')">+</button>
-<button class="calc-btn" onclick="cPush('1')">1</button>
-<button class="calc-btn" onclick="cPush('2')">2</button>
-<button class="calc-btn" onclick="cPush('3')">3</button>
-<button class="calc-btn" style="grid-column:span 2; background:var(--gold)" onclick="cSolve()">=</button>
-<button class="calc-btn" onclick="cPush('0')">0</button>
-<button class="calc-btn" onclick="cPush('.')">.</button>
-</div>
-</div>
-</div>
-
-<div class="card">
-<h3 style="color:var(--main); font-weight:900; margin-top:0;"><i class="fas fa-hand-holding-dollar"></i> Cash/Money/Fees Collection</h3>
-<div style="display:flex; gap:15px; align-items:center;">
-<input type="text" id="sid" placeholder="Scan or Enter Student ID..." style="margin:0; flex:1;">
-<button onclick="searchStu()" id="btnSearch" class="btn btn-main" style="width:160px; margin:0;"><i class="fas fa-search"></i> Search</button>
-</div>
-
-<div id="payZone" style="display:none; margin-top:25px;">
-<div style="background:linear-gradient(145deg, #f8fafc, #f1f5f9); padding:25px; border-radius:16px; border:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-<div><h2 id="dName" style="margin:0; color:var(--main); font-size:26px; font-weight:900;"></h2><p id="dInfo" style="font-weight:600; color:#64748b; margin:5px 0 0 0; font-size:14px;"></p></div>
-<div style="text-align:right; background: white; padding: 10px 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;"><p style="margin:0; color:#94a3b8; font-size:11px; font-weight:800; letter-spacing:1px;">BILLING PERIOD</p><b id="dMonth" style="font-size:18px; color:var(--main);"></b></div>
-</div>
-
-<div class="fee-grid" id="feeGrid"></div>
-
-<div id="paymentSummary" style="background:linear-gradient(135deg, #0f172a, #1e293b); color:white; padding:25px; border-radius:20px; margin-top:25px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 10px 30px rgba(15,23,42,0.3); border: 1px solid #334155;">
-<div><span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Due Amount</span><br><b style="font-size:28px; color:#fb7185;">৳ <span id="sumDueAmt">0.00</span></b></div>
-<div style="text-align:right;"><span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Paying Now</span><br><b style="font-size:32px; color:#4ade80;">৳ <span id="sumPayingAmt">0.00</span></b></div>
-</div>
-
-<div style="margin-top:25px; background:#eff6ff; padding:15px 20px; border-radius:12px; border:2px dashed #bfdbfe; display:flex; align-items:center; gap:12px; justify-content:center;">
-<label class="switch"><input type="checkbox" id="sendSmsChk" checked><span class="slider"></span></label>
-<label style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS Notification for Parent</label>
-</div>
-
-<div id="success-msg"><i class="fas fa-check-circle"></i> PAYMENT RECORDED SUCCESSFULLY</div>
-<button onclick="payNow()" id="btnPay" class="btn btn-main" style="background:linear-gradient(135deg, #059669, #166534); margin-top:25px;"><i class="fas fa-check-double"></i> Confirm Transaction</button>
-<button onclick="printReceipt()" id="btnPrint" class="btn btn-print-big"><i class="fas fa-print"></i> PRINT OFFICIAL RECEIPT</button>
-</div>
-</div>
-</div>
-
-<!-- ================= 🚀 SETUP TAB ================= -->
-<div id="setupTab" class="container">
-
-<!-- 🚀 Global Automation Rules (Admission, Fines, Payroll) -->
-<div class="card" style="border-top-color: #ec4899; background: #fdf2f8;">
-<h3 style="color:#be185d; font-weight:900; margin-top:0;"><i class="fas fa-cogs"></i> Global Automation Rules (Admission, Fines & Payroll)</h3>
-<p style="font-size:12px; color:#9d174d; font-weight:600; margin-bottom:15px;">এখান থেকে সেট করা ফি এবং রুলসগুলো Student Management ও Attendance সফটওয়্যারে অটোমেটিক কাজ করবে।</p>
-
-<!-- Admission & Promotion -->
-<div class="config-box">
-    <h4><i class="fas fa-user-plus"></i> Admission & Promotion Fees</h4>
-    <div id="cfgAdmission"></div>
-    <div style="margin-top:10px; padding:10px; background:#fef3c7; border-radius:8px; border:1px solid #fde68a;">
-        <p style="margin:0 0 10px 0; font-size:12px; font-weight:bold; color:#b45309;">Add New Rule:</p>
-        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="Play"> Play</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="Nursery"> Nursery</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="KG"> KG</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="1"> 1</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="2"> 2</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="3"> 3</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="4"> 4</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="5"> 5</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="6"> 6</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="7"> 7</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="8"> 8</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="9"> 9</label>
-            <label style="margin:0;"><input type="checkbox" class="g-cls-chk" value="10"> 10</label>
-        </div>
-        <div style="display:flex; gap:10px; margin-top:10px;">
-            <select id="gFeeType" style="margin:0; flex:1;"><option value="admission">Admission Fee (ভর্তি ফি)</option><option value="promotion">Session Fee (প্রমোশন ফি)</option></select>
-            <input type="text" id="gFeeName" placeholder="Fee Name (e.g. Admission + Jan Fee)" style="margin:0; flex:2;">
-            <input type="number" id="gFeeAmt" placeholder="Amount (৳)" style="margin:0; flex:1; font-weight:bold;">
-            <button onclick="addGlobalFeeRule()" class="btn" style="background:#d97706; color:white; width:auto; padding:10px; margin:0;"><i class="fas fa-plus"></i> Add Rule</button>
-        </div>
-        <p style="font-size:11px; color:#d97706; margin:5px 0 0 0;">*ভর্তি ফি এর সাথে ১ মাসের বেতন নিতে চাইলে মোট এমাউন্ট একসাথে দিন (যেমন: ভর্তি ১০০০ + বেতন ৫০০ = ১৫০০)।</p>
+<!-- Main App -->
+<div id="appContainer" style="display:none;">
+    <div class="navbar">
+    <div class="nav-title">SRMS ACCOUNTS PORTAL</div>
+    <div class="nav-right">
+    <div id="clock" style="font-weight: 600; font-size: 14px;"></div>
+    <button class="btn-back" onclick="window.close();" title="Back to Admin Dashboard">
+    <i class="fas fa-sign-out-alt"></i> Dashboard
+    </button>
     </div>
-</div>
-
-<!-- Fines & Penalties -->
-<div class="config-box" style="background: #eff6ff; border-color: #3b82f6;">
-    <h4 style="color: #1d4ed8;"><i class="fas fa-exclamation-triangle"></i> Penalties & Fines Configuration</h4>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-        <div>
-            <label style="color:#1e40af;">Monthly Late Fee Amount (৳)</label>
-            <input type="number" id="sysLateFine" placeholder="e.g. 50" style="border-color:#bfdbfe;">
-        </div>
-        <div>
-            <label style="color:#1e40af;">Student Absent Fine per day (৳)</label>
-            <input type="number" id="sysAbsentFine" placeholder="e.g. 10" style="border-color:#bfdbfe;">
-        </div>
     </div>
-    <div style="margin-top:15px; padding:15px; background:#dbeafe; border-radius:8px; display:flex; align-items:center; gap:10px;">
-        <label class="switch"><input type="checkbox" id="sysTeacherCut"><span class="slider"></span></label>
-        <div style="font-weight:700; color:#1e3a8a;">Deduct 1-day average salary for teacher's absence? (Auto Payroll Cut)</div>
+
+    <!-- ================= COLLECT TAB ================= -->
+    <div id="collectTab" class="container active">
+    <!-- Calculator Card -->
+    <div class="card" style="border-top-color: #333;">
+    <h3><i class="fas fa-calculator"></i> Accountant Calculator</h3>
+    <div class="calc-box">
+    <input type="text" id="cScr" class="calc-scr" readonly value="0">
+    <div class="calc-grid">
+    <button class="calc-btn" style="background:#e74c3c" onclick="cClr()">C</button>
+    <button class="calc-btn" onclick="cPush('/')">/</button>
+    <button class="calc-btn" onclick="cPush('*')">×</button>
+    <button class="calc-btn" onclick="cBack()">←</button>
+    <button class="calc-btn" onclick="cPush('7')">7</button>
+    <button class="calc-btn" onclick="cPush('8')">8</button>
+    <button class="calc-btn" onclick="cPush('9')">9</button>
+    <button class="calc-btn" style="background:var(--main)" onclick="cPush('-')">-</button>
+    <button class="calc-btn" onclick="cPush('4')">4</button>
+    <button class="calc-btn" onclick="cPush('5')">5</button>
+    <button class="calc-btn" onclick="cPush('6')">6</button>
+    <button class="calc-btn" style="background:var(--main)" onclick="cPush('+')">+</button>
+    <button class="calc-btn" onclick="cPush('1')">1</button>
+    <button class="calc-btn" onclick="cPush('2')">2</button>
+    <button class="calc-btn" onclick="cPush('3')">3</button>
+    <button class="calc-btn" style="grid-column:span 2; background:var(--gold)" onclick="cSolve()">=</button>
+    <button class="calc-btn" onclick="cPush('0')">0</button>
+    <button class="calc-btn" onclick="cPush('.')">.</button>
     </div>
-</div>
+    </div>
+    </div>
 
-<div style="display:flex; gap:10px; margin-top:15px; align-items:center;">
-    <input type="password" id="sysCfgPwd" placeholder="Admin Password Required to Save" style="border: 2px solid #be185d; text-align:center; flex:1; margin:0;">
-    <button onclick="saveGlobalSystemSettings()" class="btn" style="background:#be185d; color:white; margin:0; flex:1;"><i class="fas fa-save"></i> Save All Global Rules</button>
-</div>
-</div>
+    <div class="card">
+    <h3 style="color:var(--main); font-weight:900; margin-top:0;"><i class="fas fa-hand-holding-dollar"></i> Cash/Money/Fees Collection</h3>
+    <div style="display:flex; gap:15px; align-items:center;">
+    <input type="text" id="sid" placeholder="Scan or Enter Student ID..." style="margin:0; flex:1;">
+    <button onclick="searchStu()" id="btnSearch" class="btn btn-main" style="width:160px; margin:0;"><i class="fas fa-search"></i> Search</button>
+    </div>
 
-<div class="card" style="border-top-color: #8b5cf6;">
-<h3 style="color:#8b5cf6; font-weight:900; margin:0;"><i class="fas fa-layer-group"></i> General Fees Setup & Management (Bulk Assigner)</h3>
-<div style="margin-bottom: 20px; background:#faf5ff; padding:18px; border-radius:14px; border-left:6px solid #8b5cf6; margin-top:15px;">
-<label style="font-weight:800; color:#4c1d95; margin-bottom:8px; display:block; font-size:14px;">Select Action Type:</label>
-<select id="feeAction" onchange="toggleActionUI()" style="border-color:#d8b4fe; font-weight:bold; color:#7e22ce;">
-<option value="Add">1. Create / Assign New Fees</option>
-<option value="Edit">2. Edit / Override Existing Fees</option>
-<option value="Reset">3. Factory Reset (Clear All Dues)</option>
-</select>
-</div>
-<div id="setupZone">
-<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
-<div style="display:flex; flex-direction:column;">
-<div style="height: 120px; overflow-y: auto; border: 2px solid var(--main); border-radius: 12px; padding: 10px; background: #fff;" id="bClsContainer">
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer; font-weight:bold; color:var(--main);"><input type="checkbox" value="All" id="bClsAll" onchange="toggleClassCheckboxesBulk(this)" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> All Classes</label>
-<hr style="margin:5px 0; border:0; border-top:1px solid #e2e8f0;">
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="Play" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Play</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="Nursery" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Nursery</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="KG" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> KG</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="1" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 1</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="2" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 2</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="3" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 3</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="4" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 4</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="5" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 5</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="6" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 6</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="7" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 7</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="8" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 8</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="9" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 9</label>
-<label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk-bulk" value="10" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 10</label>
-</div>
-<p style="font-size:11px; color:#005f40; font-weight:700; margin:2px 0 0 0;">*Select multiple classes to assign fees</p>
-</div>
-<select id="bCat" style="border-color:var(--gold); font-weight:bold; height: 50px;"><option value="All">All Category</option><option value="Civil">Civil</option><option value="Army">Army</option></select>
-<select id="bType" onchange="toggleCustomUI()" style="height: 50px;"><option value="General">School Fees</option><option value="Hostel">Hostel Fees</option><option value="Custom">Custom Fees</option></select>
-</div>
+    <div id="payZone" style="display:none; margin-top:25px;">
+    <div style="background:linear-gradient(145deg, #f8fafc, #f1f5f9); padding:25px; border-radius:16px; border:1px solid #e2e8f0; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+    <div><h2 id="dName" style="margin:0; color:var(--main); font-size:26px; font-weight:900;"></h2><p id="dInfo" style="font-weight:600; color:#64748b; margin:5px 0 0 0; font-size:14px;"></p></div>
+    <div style="text-align:right; background: white; padding: 10px 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;"><p style="margin:0; color:#94a3b8; font-size:11px; font-weight:800; letter-spacing:1px;">BILLING PERIOD</p><b id="dMonth" style="font-size:18px; color:var(--main);"></b></div>
+    </div>
 
-<div id="customUI" style="display:none; margin-top:15px; padding:20px; background:#faf5ff; border-radius:14px; border:2px dashed #c084fc;">
-<label style="font-weight:800; color:#7e22ce; display:block; margin-bottom:12px;">Setup Custom Fees (Exam, Library, etc.):</label>
-<div id="customFeeList">
-<div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
-<input type="text" class="c-fee-name" placeholder="Fee Name">
-<input type="number" class="c-fee-amt" placeholder="Amount">
-</div>
-</div>
-<button onclick="addCustomFeeRow()" style="background:#8b5cf6; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:10px; box-shadow: 0 4px 10px rgba(139,92,246,0.3);">+ Add More</button>
-</div>
+    <div class="fee-grid" id="feeGrid"></div>
 
-<button onclick="loadBulk()" id="btnBulkLoad" class="btn" style="background:linear-gradient(135deg, #8b5cf6, #6d28d9); color:white; margin-top:15px; box-shadow: 0 6px 20px rgba(139,92,246,0.25);"><i class="fas fa-list-check"></i> Load Student List</button>
+    <div id="paymentSummary" style="background:linear-gradient(135deg, #0f172a, #1e293b); color:white; padding:25px; border-radius:20px; margin-top:25px; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 10px 30px rgba(15,23,42,0.3); border: 1px solid #334155;">
+    <div>
+    <span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Due Amount</span><br>
+    <b style="font-size:28px; color:#fb7185;">৳ <span id="sumDueAmt">0.00</span></b>
+    </div>
+    <div style="text-align:right;">
+    <span style="font-size:12px; color:#94a3b8; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Total Paying Now</span><br>
+    <b style="font-size:32px; color:#4ade80;">৳ <span id="sumPayingAmt">0.00</span></b>
+    </div>
+    </div>
 
-<div id="bulkControls" style="display:none; margin-top:20px;">
-<div id="bulkList" style="max-height:350px; overflow-y:auto; border:2px solid #e2e8f0; border-radius:14px; margin-bottom:20px;"></div>
-<div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
-<input type="number" id="bAmt" placeholder="Total Amount (Fee)"> 
-<select id="bMon"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
-<select id="bYear"></select>
-</div>
-<div id="pwdZoneSetup" style="display:none; margin-top:20px; text-align:center;">
-<label style="font-weight:800; color:#ea580c; font-size:14px;">Admin Password Required to Edit Fees</label>
-<input type="password" id="setupPwd" placeholder="Enter Password" style="border: 2px solid #ea580c; margin-top:8px; max-width:300px; text-align:center;">
-</div>
-<button onclick="runBulk()" id="btnRunBulk" class="btn btn-main" style="margin-top:20px;"><i class="fas fa-check-circle"></i> Setup/Assign Fees</button>
-</div>
-</div>
+    <div style="margin-top:25px; background:#eff6ff; padding:15px 20px; border-radius:12px; border:2px dashed #bfdbfe; display:flex; align-items:center; gap:12px; justify-content:center;">
+    <input type="checkbox" id="sendSmsChk" checked style="width:24px; height:24px; margin:0; cursor:pointer; accent-color: var(--main);">
+    <label for="sendSmsChk" style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS Notification for Parent</label>
+    </div>
 
-<div id="resetZone" style="display:none; background:#fef2f2; border:2px dashed #ef4444; padding:25px; border-radius:16px; text-align:center; margin-top:15px;">
-<h3 style="color:#ef4444; margin-top:0; font-weight:900;"><i class="fas fa-exclamation-triangle"></i> Factory Reset Warning</h3>
-<p style="font-size:14px; color:#475569; font-weight:600; line-height:1.6;">This will clear and reset ALL CURRENT FEES to zero (0). Transaction history is safe.</p>
-<input type="password" id="resetPwd" placeholder="Enter Admin Password" style="max-width:300px; border:2px solid #ef4444; text-align:center; margin-top:15px;">
-<button onclick="executeFactoryReset()" class="btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c); color:white; max-width:300px; margin:20px auto 0; font-size:15px; box-shadow: 0 6px 20px rgba(239,68,68,0.3);"><i class="fas fa-radiation"></i> PERFORM FACTORY RESET</button>
-</div>
-</div>
-</div>
+    <div id="success-msg"><i class="fas fa-check-circle"></i> PAYMENT RECORDED SUCCESSFULLY</div>
 
-<!-- ================= 🚀 VAULT & PAYROLL TAB ================= -->
-<div id="vaultTab" class="container">
-<div class="card" style="border-top-color: #3b82f6;">
-<h3 style="color:#3b82f6; font-weight:900; margin-top:0;"><i class="fas fa-vault"></i> Income, Expense & Payroll Vault</h3>
+    <button onclick="payNow()" id="btnPay" class="btn btn-main" style="background:linear-gradient(135deg, #059669, #166534); margin-top:25px; box-shadow: 0 8px 25px rgba(5,150,105,0.3);"><i class="fas fa-check-double"></i> Confirm Transaction</button>
+    <button onclick="printReceipt()" id="btnPrint" class="btn btn-print-big"><i class="fas fa-print"></i> PRINT OFFICIAL RECEIPT</button>
+    </div>
+    </div>
+    </div>
 
-<div class="vault-stats">
-<div class="v-stat-box v-income">
-<div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; opacity:0.8;">Total Income & Fines</div>
-<div style="font-size:24px; font-weight:900; margin-top:5px;">৳ <span id="vTotalInc">0.00</span></div>
-</div>
-<div class="v-stat-box v-expense">
-<div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; opacity:0.8;">Salaries & Expenses</div>
-<div style="font-size:24px; font-weight:900; margin-top:5px;">৳ <span id="vTotalExp">0.00</span></div>
-</div>
-<div class="v-stat-box v-net">
-<div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; opacity:0.8;">Net Current Balance</div>
-<div style="font-size:24px; font-weight:900; margin-top:5px;">৳ <span id="vNetBal">0.00</span></div>
-</div>
-</div>
+    <!-- ================= SETUP TAB ================= -->
+    <div id="setupTab" class="container">
+    <div class="card" style="border-top-color: #8b5cf6;">
+    <h3 style="color:#8b5cf6; font-weight:900; margin:0;"><i class="fas fa-layer-group"></i> Fees Setup & Management</h3>
+    <div style="margin-bottom: 20px; background:#faf5ff; padding:18px; border-radius:14px; border-left:6px solid #8b5cf6;">
+    <label style="font-weight:800; color:#4c1d95; margin-bottom:8px; display:block; font-size:14px;">Select Action Type:</label>
+    <select id="feeAction" onchange="toggleActionUI()" style="border-color:#d8b4fe; font-weight:bold; color:#7e22ce;">
+    <option value="Add">1. Create / Add New Fees</option>
+    <option value="Edit">2. Edit / Override Existing Fees</option>
+    <option value="Reset">3. Factory Reset (Clear Current Dues)</option>
+    </select>
+    </div>
+    <div id="setupZone">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+    <div style="display:flex; flex-direction:column;">
+    <div style="height: 120px; overflow-y: auto; border: 2px solid var(--main); border-radius: 12px; padding: 10px; background: #fff;" id="bClsContainer">
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer; font-weight:bold; color:var(--main);"><input type="checkbox" value="All" id="bClsAll" onchange="toggleClassCheckboxes(this)" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> All Classes</label>
+    <hr style="margin:5px 0; border:0; border-top:1px solid #e2e8f0;">
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="Play" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Play</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="Nursery" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Nursery</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="KG" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> KG</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="1" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 1</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="2" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 2</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="3" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 3</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="4" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 4</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="5" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 5</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="6" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 6</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="7" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 7</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="8" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 8</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="9" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 9</label>
+    <label style="display:flex; align-items:center; gap:8px; margin-bottom:5px; cursor:pointer;"><input type="checkbox" class="bCls-chk" value="10" checked style="width:16px; height:16px; margin:0; accent-color:var(--main);"> Class 10</label>
+    </div>
+    <p style="font-size:11px; color:#005f40; font-weight:700; margin:2px 0 0 0;">*Select multiple classes to apply fees</p>
+    </div>
+    <select id="bCat" style="border-color:var(--gold); font-weight:bold; height: 50px;">
+    <option value="All">All Category</option>
+    <option value="Civil">Civil</option>
+    <option value="Army">Army</option>
+    </select>
+    <select id="bType" onchange="toggleCustomUI()" style="height: 50px;">
+    <option value="General">School Fees</option>
+    <option value="Hostel">Hostel Fees</option>
+    <option value="Custom">Custom Fees</option>
+    </select>
+    </div>
 
-<div style="background:#eff6ff; padding:20px; border-radius:14px; border:2px dashed #93c5fd;">
-<h4 style="margin:0 0 15px 0; color:#1d4ed8;"><i class="fas fa-plus-circle"></i> Add New Record</h4>
-<div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-<select id="vType" style="border-color:#3b82f6; font-weight:bold; margin:0;">
-<option value="Income">Add Income / Penalty Collected</option>
-<option value="Expense">Add Expense / Pay Salary</option>
-</select>
-<select id="vCategory" style="border-color:#3b82f6;">
-    <option value="Salary Paid">Salary Paid (বেতন প্রদান)</option>
-    <option value="Salary Penalty / Fine">Salary Penalty / Fine (বেতন জরিমানা)</option>
-    <option value="Utility / Bills">Utility / Bills</option>
-    <option value="School Event">School Event</option>
-    <option value="Other Income">Other Income</option>
-    <option value="Other Expense">Other Expense</option>
-</select>
-</div>
-<div style="display:grid; grid-template-columns: 2fr 1fr; gap:10px; margin-top:10px;">
-<input type="text" id="vPayee" placeholder="Source / Payee Name (e.g. Teacher's Name)" style="margin:0;">
-<input type="number" id="vAmount" placeholder="Amount (TK)" style="font-weight:bold; margin:0;">
-</div>
-<textarea id="vNotes" placeholder="Additional Details or Deductions (if any)..." rows="2" style="margin-top:10px;"></textarea>
-<button onclick="addVault()" class="btn" style="background:#2563eb; color:white; margin-top:10px;"><i class="fas fa-save"></i> Save to Ledger</button>
-</div>
+    <div id="customUI" style="display:none; margin-top:15px; padding:20px; background:#faf5ff; border-radius:14px; border:2px dashed #c084fc;">
+    <label style="font-weight:800; color:#7e22ce; display:block; margin-bottom:12px;">Setup Multiple Custom Fees:</label>
+    <div id="customFeeList">
+    <div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
+    <input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Picnic)">
+    <input type="number" class="c-fee-amt" placeholder="Amount">
+    </div>
+    </div>
+    <button onclick="addCustomFeeRow()" style="background:#8b5cf6; color:white; border:none; padding:10px 18px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:10px; box-shadow: 0 4px 10px rgba(139,92,246,0.3);">+ Add More Custom Fee</button>
+    </div>
 
-<div style="margin-top:25px;">
-<h4 style="color:#334155; margin-bottom:10px;"><i class="fas fa-list-alt"></i> Vault Ledger (Recent)</h4>
-<div style="max-height:400px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:12px;">
-<table id="vTable">
-<thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Source / Payee</th><th>Notes</th><th>Amount</th><th>Action</th></tr></thead>
-<tbody></tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
+    <button onclick="loadBulk()" id="btnBulkLoad" class="btn" style="background:linear-gradient(135deg, #8b5cf6, #6d28d9); color:white; margin-top:15px; box-shadow: 0 6px 20px rgba(139,92,246,0.25);"><i class="fas fa-list-check"></i> Load List</button>
 
-<!-- ================= REPORTS TAB ================= -->
-<div id="reportsTab" class="container">
-<div class="card" style="border-top-color: var(--gold);">
-<div style="display:flex; justify-content:space-between; align-items:center;">
-<h3 style="color:var(--gold); font-weight:900; margin:0;"><i class="fas fa-file-invoice-dollar"></i> Current Dues Reports</h3>
-<button onclick="printRep()" class="btn" style="width:auto; background:#1e293b; color:white; margin:0; padding:12px 20px;"><i class="fas fa-print"></i> Print List</button>
-</div>
-<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:20px;">
-<input type="text" id="rSearch" placeholder="Search ID/Name..." onkeyup="filterReports()" style="margin:0; border-color: var(--gold);">
-<select id="rSec" style="margin:0;" onchange="filterReports()"><option value="">All Sections</option></select>
-<select id="rClass" style="margin:0;"><option value="All">All Classes</option><option>Play</option><option>Nursery</option><option>KG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
-<select id="rCat" style="margin:0; color:var(--main); font-weight:bold;"><option value="All">All Category</option><option value="Civil">Civil</option><option value="Army">Army</option></select>
-<select id="rType" style="margin:0;"><option value="All">All Fees</option><option value="General">School Fee</option><option value="Hostel">Hostel Fee</option><option value="Custom">Custom Fees</option></select>
-<select id="rStatus" style="margin:0;"><option value="All">All Status</option><option value="Paid">Paid</option><option value="Due">Due</option></select>
-</div>
-<button onclick="loadRep()" id="btnRep" class="btn" style="background:linear-gradient(135deg, var(--gold), #b45309); color:white; margin-top:20px;"><i class="fas fa-sync"></i> Generate Report</button>
+    <div id="bulkControls" style="display:none; margin-top:20px;">
+    <div id="bulkList" style="max-height:350px; overflow-y:auto; border:2px solid #e2e8f0; border-radius:14px; margin-bottom:20px;"></div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
+    <input type="number" id="bAmt" placeholder="Total Amount (Fee)"> 
+    <select id="bMon"><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
+    <select id="bYear"></select>
+    </div>
+    <div id="pwdZoneSetup" style="display:none; margin-top:20px; text-align:center;">
+    <label style="font-weight:800; color:#ea580c; font-size:14px;">Admin Password Required to Edit Fees</label>
+    <input type="password" id="setupPwd" placeholder="Enter Password" style="border: 2px solid #ea580c; margin-top:8px; max-width:300px; text-align:center;">
+    </div>
+    <button onclick="runBulk()" id="btnRunBulk" class="btn btn-main" style="margin-top:20px;"><i class="fas fa-check-circle"></i> Setup/Create Fees</button>
+    </div>
+    </div>
 
-<div style="max-height:500px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:16px; margin-top:20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
-<table id="rTable"><thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Category</th><th>Fee Name</th><th>Period</th><th>Amount</th><th>Status</th></tr></thead><tbody></tbody></table>
-</div>
+    <div id="resetZone" style="display:none; background:#fef2f2; border:2px dashed #ef4444; padding:25px; border-radius:16px; text-align:center; margin-top:15px;">
+    <h3 style="color:#ef4444; margin-top:0; font-weight:900;"><i class="fas fa-exclamation-triangle"></i> Factory Reset Warning</h3>
+    <p style="font-size:14px; color:#475569; font-weight:600; line-height:1.6;">This will clear and reset ALL CURRENT FEES to zero (0). Transaction history is safe.</p>
+    <input type="password" id="resetPwd" placeholder="Enter Admin Password" style="max-width:300px; border:2px solid #ef4444; text-align:center; margin-top:15px;">
+    <button onclick="executeFactoryReset()" class="btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c); color:white; max-width:300px; margin:20px auto 0; font-size:15px; box-shadow: 0 6px 20px rgba(239,68,68,0.3);"><i class="fas fa-radiation"></i> PERFORM FACTORY RESET</button>
+    </div>
+    </div>
+    </div>
 
-<div style="margin-top:25px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0;">
-<div style="font-weight:700; font-size:14px; color:#475569;">
-Total Records: <span id="tStuCount" style="font-size:18px; color:#1e293b; font-weight:900;">0</span> | Paid: <span id="tPaidCount" style="color:#16a34a; font-size:18px; font-weight:900;">0</span> | Due: <span id="tDueCount" style="color:#ef4444; font-size:18px; font-weight:900;">0</span>
-</div>
-<div style="text-align:right; font-weight:900; font-size:18px;">
-<span style="color:#16a34a; background:#dcfce7; padding:8px 15px; border-radius:10px; display:inline-block; margin-bottom:5px;">TOTAL PAID: ৳ <span id="tPaidVal">0</span></span> <br>
-<span style="color:#ef4444; background:#fee2e2; padding:8px 15px; border-radius:10px; display:inline-block;">TOTAL DUE: ৳ <span id="tDueVal">0</span></span>
-</div>
-</div>
-</div>
-</div>
+    <!-- ================= REPORTS TAB ================= -->
+    <div id="reportsTab" class="container">
+    <div class="card" style="border-top-color: var(--gold);">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h3 style="color:var(--gold); font-weight:900; margin:0;"><i class="fas fa-file-invoice-dollar"></i> Current Dues Reports</h3>
+    <button onclick="printRep()" class="btn" style="width:auto; background:#1e293b; color:white; margin:0; padding:12px 20px;"><i class="fas fa-print"></i> Print List</button>
+    </div>
 
-<!-- ================= HISTORY TAB ================= -->
-<div id="historyTab" class="container">
-<div class="card" style="border-top-color: #0ea5e9;">
-<div style="display:flex; justify-content:space-between; align-items:center;">
-<h3 style="color:#0ea5e9; font-weight:900; margin:0;"><i class="fas fa-history"></i> Payment Ledger (All Time)</h3>
-<button onclick="printHistory()" class="btn" style="width:auto; background:#1e293b; color:white; margin:0; padding:12px 20px;"><i class="fas fa-print"></i> Print Ledger</button>
-</div>
-<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:20px;">
-<input type="text" id="hSearch" placeholder="Search ID/Name..." onkeyup="filterHistory()" style="margin:0; border-color: #0ea5e9;">
-<select id="hSec" onchange="filterHistory()" style="margin:0;"><option value="">All Sections</option></select>
-<select id="hClass" onchange="filterHistory()" style="margin:0;"><option value="All">All Classes</option><option>Play</option><option>Nursery</option><option>KG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
-<select id="hCat" onchange="filterHistory()" style="margin:0;"><option value="All">All Category</option><option value="Civil">Civil</option><option value="Army">Army</option></select>
-<select id="hMonth" onchange="filterHistory()" style="margin:0;"><option value="All">All Months</option><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
-<select id="hYear" onchange="filterHistory()" style="margin:0;"><option value="All">All Years</option></select>
-</div>
-<button onclick="loadHistory()" class="btn" style="background:linear-gradient(135deg, #0284c7, #0369a1); color:white; margin-top:20px;"><i class="fas fa-cloud-download-alt"></i> Load Full History</button>
-<div style="max-height:500px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:16px; margin-top:20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
-<table id="hTable"><thead><tr><th>Date</th><th>Receipt No</th><th>Student ID</th><th>Name</th><th>Class (Roll)</th><th>Section</th><th>Category</th><th>Session</th><th>Amount Paid</th></tr></thead><tbody></tbody></table>
-</div>
-<div style="margin-top:25px; text-align:right; background: #f0f9ff; padding: 20px; border-radius: 16px; border: 1px solid #bae6fd;">
-<span style="font-weight:700; font-size:14px; color:#0369a1; text-transform:uppercase; letter-spacing:1px;">Total Collected (Filtered)</span><br><span style="color:#0284c7; font-size:32px; font-weight:900;">৳ <span id="hTotalVal">0</span></span>
-</div>
-</div>
-</div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap:10px; margin-top:20px;">
+    <input type="text" id="rSearch" placeholder="Search ID/Name..." onkeyup="filterReports()" style="margin:0; border-color: var(--gold);">
+    <select id="rSec" style="margin:0;" onchange="filterReports()">
+    <option value="">All Sections</option>
+    </select>
+    <select id="rClass" style="margin:0;"><option value="All">All Classes</option><option>Play</option><option>Nursery</option><option>KG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+    <select id="rCat" style="margin:0; color:var(--main); font-weight:bold;"><option value="All">All Category</option><option value="Civil">Civil</option><option value="Army">Army</option></select>
+    <select id="rType" style="margin:0;">
+    <option value="All">All Fees</option>
+    <option value="General">School Fee</option>
+    <option value="Hostel">Hostel Fee</option>
+    <option value="Custom">Custom Fees</option>
+    </select>
+    <select id="rStatus" style="margin:0;"><option value="All">All Status</option><option value="Paid">Paid</option><option value="Due">Due</option></select>
+    </div>
+    <button onclick="loadRep()" id="btnRep" class="btn" style="background:linear-gradient(135deg, var(--gold), #b45309); color:white; margin-top:20px;"><i class="fas fa-sync"></i> Generate Report</button>
 
-<div class="bottom-nav">
-<button class="nav-item active" onclick="switchTab('collectTab', this)"><i class="fas fa-hand-holding-dollar"></i>Collect</button>
-<button class="nav-item" onclick="switchTab('setupTab', this)"><i class="fas fa-layer-group"></i>Setup</button>
-<button class="nav-item" onclick="switchTab('vaultTab', this)"><i class="fas fa-vault"></i>Vault</button>
-<button class="nav-item" onclick="switchTab('reportsTab', this)"><i class="fas fa-file-invoice-dollar"></i>Reports</button>
-<button class="nav-item" onclick="switchTab('historyTab', this)"><i class="fas fa-history"></i>Ledger</button>
+    <div style="max-height:500px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:16px; margin-top:20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
+    <table id="rTable">
+    <thead><tr><th>ID</th><th>Name</th><th>Class</th><th>Section</th><th>Roll</th><th>Category</th><th>Fee Name</th><th>Period</th><th>Amount</th><th>Status</th></tr></thead>
+    <tbody></tbody>
+    </table>
+    </div>
+
+    <div style="margin-top:25px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px; background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0;">
+    <div style="font-weight:700; font-size:14px; color:#475569;">
+    Total Records: <span id="tStuCount" style="font-size:18px; color:#1e293b; font-weight:900;">0</span> | 
+    Paid: <span id="tPaidCount" style="color:#16a34a; font-size:18px; font-weight:900;">0</span> | 
+    Due: <span id="tDueCount" style="color:#ef4444; font-size:18px; font-weight:900;">0</span>
+    </div>
+    <div style="text-align:right; font-weight:900; font-size:18px;">
+    <span style="color:#16a34a; background:#dcfce7; padding:8px 15px; border-radius:10px; display:inline-block; margin-bottom:5px;">TOTAL PAID: ৳ <span id="tPaidVal">0</span></span> <br>
+    <span style="color:#ef4444; background:#fee2e2; padding:8px 15px; border-radius:10px; display:inline-block;">TOTAL DUE: ৳ <span id="tDueVal">0</span></span>
+    </div>
+    </div>
+    </div>
+    </div>
+
+    <!-- ================= 🚀 HISTORY / LEDGER TAB ================= -->
+    <div id="historyTab" class="container">
+    <div class="card" style="border-top-color: #0ea5e9;">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+    <h3 style="color:#0ea5e9; font-weight:900; margin:0;"><i class="fas fa-history"></i> Payment Ledger (All Time)</h3>
+    <button onclick="printHistory()" class="btn" style="width:auto; background:#1e293b; color:white; margin:0; padding:12px 20px;"><i class="fas fa-print"></i> Print Ledger</button>
+    </div>
+
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:10px; margin-top:20px;">
+    <input type="text" id="hSearch" placeholder="Search ID/Name..." onkeyup="filterHistory()" style="margin:0; border-color: #0ea5e9;">
+    <select id="hSec" onchange="filterHistory()" style="margin:0;">
+    <option value="">All Sections</option>
+    </select>
+    <select id="hClass" onchange="filterHistory()" style="margin:0;"><option value="All">All Classes</option><option>Play</option><option>Nursery</option><option>KG</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select>
+    <select id="hCat" onchange="filterHistory()" style="margin:0;"><option value="All">All Category</option><option value="Civil">Civil</option><option value="Army">Army</option></select>
+    <select id="hMonth" onchange="filterHistory()" style="margin:0;"><option value="All">All Months</option><option>January</option><option>February</option><option>March</option><option>April</option><option>May</option><option>June</option><option>July</option><option>August</option><option>September</option><option>October</option><option>November</option><option>December</option></select>
+    <select id="hYear" onchange="filterHistory()" style="margin:0;"><option value="All">All Years</option></select>
+    </div>
+    <button onclick="loadHistory()" class="btn" style="background:linear-gradient(135deg, #0284c7, #0369a1); color:white; margin-top:20px;"><i class="fas fa-cloud-download-alt"></i> Load Full History</button>
+
+    <div style="max-height:500px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:16px; margin-top:20px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
+    <table id="hTable">
+    <thead><tr><th>Date</th><th>Receipt No</th><th>Student ID</th><th>Name</th><th>Class (Roll)</th><th>Section</th><th>Category</th><th>Session</th><th>Amount Paid</th></tr></thead>
+    <tbody></tbody>
+    </table>
+    </div>
+
+    <div style="margin-top:25px; text-align:right; background: #f0f9ff; padding: 20px; border-radius: 16px; border: 1px solid #bae6fd;">
+    <span style="font-weight:700; font-size:14px; color:#0369a1; text-transform:uppercase; letter-spacing:1px;">Total Collected (Filtered)</span><br>
+    <span style="color:#0284c7; font-size:32px; font-weight:900;">৳ <span id="hTotalVal">0</span></span>
+    </div>
+    </div>
+    </div>
+
+    <!-- Hidden Print Area -->
+    <div id="printArea" style="display:none;"></div>
+
+    <div class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('collectTab', this)"><i class="fas fa-hand-holding-dollar"></i>Collect</button>
+    <button class="nav-item" onclick="switchTab('setupTab', this)"><i class="fas fa-layer-group"></i>Setup</button>
+    <button class="nav-item" onclick="switchTab('reportsTab', this)"><i class="fas fa-file-invoice-dollar"></i>Reports</button>
+    <button class="nav-item" onclick="switchTab('historyTab', this)"><i class="fas fa-history"></i>Ledger</button>
+    </div>
+
 </div>
 
 <!-- ================= FIREBASE & BACKEND LOGIC ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec";
+const SCRIPT_URL = https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec";
 
-const firebaseConfig = { 
-    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", 
-    authDomain: "srms-website-management.firebaseapp.com",
-    projectId: "srms-website-management" 
+const firebaseConfig = {
+    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+    projectId: "srms-website-management"
 };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const db = firebase.firestore();
 const auth = firebase.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.log(err));
 
-let lastR = null; let historyData = []; let reportsData = []; let vaultData = []; var isAuthReady = false; 
-let systemFeesConfig = { admission: [], promotion: [], penalties: { lateFine: 0, studentAbsentFine: 0, teacherSalaryCut: false } };
+let lastR = null;
+let historyData = [];
+let reportsData = []; 
+let allStudentsData = []; // Cache
+var isAuthReady = false; 
+const LOGO_URL = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
 
-function getToken() { return sessionStorage.getItem('portal_token') || ""; }
-
-async function apiCall(actionName, payloadData = {}) {
-    let payload = { action: actionName, token: getToken(), ...payloadData };
-    try {
-        let res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
-        return await res.json();
-    } catch (error) { console.error("API Call Failed:", error); throw error; }
-}
-
-function showLoaderText(text) { document.getElementById('loader').innerHTML = `<div class="spinner"></div><p style="margin-top:15px; font-weight:800; color:var(--main); letter-spacing: 1px; text-align: center;">${text}</p>`; }
-function showLoading() { document.getElementById('loader').style.display = "flex"; showLoaderText("PROCESSING..."); }
-function hideLoading() { document.getElementById('loader').style.display = "none"; }
-
-window.onload = function() {
-    showLoaderText("SECURITY CHECK...<br><span style='font-size:11px; color:#64748b;'>Verifying Admin Session</span>");
-    document.getElementById('loader').style.display = 'flex';
-    setTimeout(() => {
-        if (getToken()) {
-            isAuthReady = true; 
-            document.getElementById('loader').style.display = 'none';
-            document.getElementById('appContainer').style.display = 'block'; 
-            loadSectionsData(); loadVaultData(true); loadSystemConfig();
-        } else {
-            showLoaderText("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
-            setTimeout(() => { window.location.replace(window.location.protocol + "//" + window.location.host + "/login-panel/accounting-and-management-department"); }, 1000);
-        }
-    }, 500);
-}
-
-const years = []; const currentY = new Date().getFullYear();
+const years = []; 
+const currentY = new Date().getFullYear();
 for(let i=2020; i<=2099; i++) years.push(i);
 document.getElementById('bYear').innerHTML = years.map(y => `<option ${y === currentY ? 'selected' : ''}>${y}</option>`).join('');
 document.getElementById('hYear').innerHTML += years.map(y => `<option>${y}</option>`).join('');
 
-function switchTab(id, btn) {
-if(!isAuthReady) return alert("Security checking in progress... Please wait.");
-document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-document.getElementById(id).classList.add('active');
-document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-btn.classList.add('active');
-if(id === 'vaultTab') loadVaultData();
-if(id === 'historyTab' && historyData.length === 0) loadHistory();
-if(id === 'setupTab') loadSystemConfig();
+function showLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
+function showLoading() { document.getElementById('loader').style.display = "flex"; }
+function hideLoading() { document.getElementById('loader').style.display = "none"; }
+
+// 🌐 BACKEND API CALLER (For Add/Delete/Update/Secure Writes)
+async function apiCall(actionName, payloadData = {}) {
+    let token = await auth.currentUser.getIdToken(true);
+    let payload = { action: actionName, token: token, ...payloadData };
+    try {
+        let res = await fetch(SCRIPT_URL, {
+            method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+        });
+        return await res.json();
+    } catch (error) {
+        console.error("API Call Failed:", error); throw error;
+    }
 }
 
-function loadSectionsData() {
-apiCall('getSectionsList').then(res => {
-let opts = '<option value="">All Sections</option>';
-res.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
-document.getElementById('rSec').innerHTML = opts; document.getElementById('hSec').innerHTML = opts;
-}).catch(e=>{});
-}
-
-// 🚀 GLOBAL SYSTEM FEES LOGIC (Admissions & Penalties)
-function loadSystemConfig() {
-    apiCall('getSystemFees').then(res => {
-        systemFeesConfig = res;
-        if(!systemFeesConfig.penalties) systemFeesConfig.penalties = { lateFine: 0, studentAbsentFine: 0, teacherSalaryCut: false };
-        renderSystemFees();
-        
-        // Populate Penalty fields
-        document.getElementById('sysLateFine').value = systemFeesConfig.penalties.lateFine || "";
-        document.getElementById('sysAbsentFine').value = systemFeesConfig.penalties.studentAbsentFine || "";
-        document.getElementById('sysTeacherCut').checked = systemFeesConfig.penalties.teacherSalaryCut || false;
-    }).catch(e=>{});
-}
-
-function addGlobalFeeRule() {
-    let type = document.getElementById('gFeeType').value;
-    let name = document.getElementById('gFeeName').value.trim();
-    let amt = document.getElementById('gFeeAmt').value;
-    
-    let classes = [];
-    document.querySelectorAll('.g-cls-chk:checked').forEach(c => classes.push(c.value));
-    
-    if(!name || !amt || amt <= 0) return alert("Please enter valid Fee Name and Amount!");
-    if(classes.length === 0) return alert("Please select at least one class!");
-
-    if(!systemFeesConfig[type]) systemFeesConfig[type] = [];
-    
-    // For each selected class, add or replace the rule
-    classes.forEach(c => {
-        systemFeesConfig[type] = systemFeesConfig[type].filter(f => f.class !== c);
-        systemFeesConfig[type].push({class: c, name: name, amount: parseFloat(amt)});
-    });
-    
-    document.getElementById('gFeeName').value = "";
-    document.getElementById('gFeeAmt').value = "";
-    renderSystemFees();
-}
-
-function saveGlobalSystemSettings() {
-    let pwd = document.getElementById('sysCfgPwd').value;
-    if(!pwd) return alert("Admin Password is required to update global settings!");
-
-    // Gather Penalty Data
-    systemFeesConfig.penalties = {
-        lateFine: parseFloat(document.getElementById('sysLateFine').value) || 0,
-        studentAbsentFine: parseFloat(document.getElementById('sysAbsentFine').value) || 0,
-        teacherSalaryCut: document.getElementById('sysTeacherCut').checked
-    };
-
-    showLoading();
-    apiCall('processBulkUpdate', {
-        idsStr: "", feeType: "System", amount: 0, month: "", year: "", 
-        customFeesJSON: JSON.stringify(systemFeesConfig), actionType: "SystemSet", pwd: pwd
-    }).then(res => {
-        hideLoading();
-        if(res.status === "success") { alert("Global Setup Saved Successfully!"); document.getElementById('sysCfgPwd').value = ""; renderSystemFees(); } 
-        else alert(res.message);
-    }).catch(e=>{hideLoading(); alert("Error saving config");});
-}
-
-function renderSystemFees() {
-    let renderList = (type, cId) => {
-        let h = "";
-        if(systemFeesConfig[type]) {
-            systemFeesConfig[type].forEach((f, idx) => {
-                h += `<div style="display:flex; justify-content:space-between; align-items:center; background:#fff; padding:8px 12px; margin-bottom:5px; border-radius:6px; border:1px solid #fbcfe8;">
-                    <div><b style="color:#9d174d;">Class: ${f.class}</b> | ${f.name}</div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <b style="color:#10b981;">৳ ${f.amount}</b>
-                        <button onclick="removeGlobalFee('${type}', ${idx})" style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>`;
-            });
+// 🛡️ Security Gate
+window.onload = function() {
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            isAuthReady = true;
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            loadSectionsData();
+        } else {
+            showLoaderText("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
+            setTimeout(() => {
+                var currentDomain = window.location.protocol + "//" + window.location.host;
+                window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
+            }, 1000);
         }
-        document.getElementById(cId).innerHTML = h || `<span style="font-size:12px; color:#94a3b8;">No rules set yet.</span>`;
-    };
-    renderList('admission', 'cfgAdmission');
-    renderList('promotion', 'cfgPromotion');
+    });
 }
 
-function removeGlobalFee(type, idx) {
-    systemFeesConfig[type].splice(idx, 1);
-    renderSystemFees();
+function switchTab(id, btn) {
+    if(!isAuthReady) return alert("Security checking in progress... Please wait.");
+    document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    btn.classList.add('active');
 }
 
-// 🚀 BULK FEES LOGIC
-function toggleClassCheckboxesBulk(source) { document.querySelectorAll('.bCls-chk-bulk').forEach(c => c.checked = source.checked); }
-function toggleCustomUI() { 
-let type = document.getElementById('bType').value;
-if(type === "Custom") { document.getElementById('customUI').style.display = "block"; document.getElementById('bAmt').style.display = "none"; } 
-else { document.getElementById('customUI').style.display = "none"; document.getElementById('bAmt').style.display = "block"; }
-}
-function addCustomFeeRow() {
-let html = `<div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;"><input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Picnic)"><input type="number" class="c-fee-amt" placeholder="Amount"><button class="btn" style="background:#ef4444; color:white; width:auto; padding:10px 18px;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button></div>`;
-document.getElementById('customFeeList').insertAdjacentHTML('beforeend', html);
-}
-function toggleActionUI() {
-let act = document.getElementById('feeAction').value;
-if(act === "Reset") { document.getElementById('setupZone').style.display = "none"; document.getElementById('resetZone').style.display = "block"; } 
-else {
-document.getElementById('setupZone').style.display = "block"; document.getElementById('resetZone').style.display = "none"; document.getElementById('bulkControls').style.display = "none"; 
-if(act === "Edit") { document.getElementById('btnRunBulk').innerHTML = "<i class='fas fa-edit'></i> Update & Edit Fees"; document.getElementById('btnRunBulk').style.background = "linear-gradient(135deg, #d97706, #b45309)"; } 
-else { document.getElementById('btnRunBulk').innerHTML = "<i class='fas fa-check-circle'></i> Setup / Create Fees"; document.getElementById('btnRunBulk').style.background = "linear-gradient(135deg, #059669, #166534)"; }
-}
-}
-function calcTotalPay() { let total = 0; document.querySelectorAll('.calc-pay').forEach(inp => { if (!inp.disabled) total += parseFloat(inp.value) || 0; }); document.getElementById('sumPayingAmt').innerText = total.toFixed(2); }
-
-function searchStu() {
-if(!isAuthReady) return;
-let id = document.getElementById('sid').value;
-if(!id) return;
-showLoading();
-apiCall('checkStudent', {id: id}).then(d => {
-hideLoading();
-if(d.found) {
-document.getElementById('payZone').style.display = "block"; document.getElementById('btnPrint').style.display = "none"; document.getElementById('success-msg').style.display = "none"; document.getElementById('btnPay').style.display = "flex"; document.getElementById('dName').innerText = d.name;
-let secStr = d.section ? ` (Sec: ${d.section})` : "";
-document.getElementById('dInfo').innerText = "Class: " + d.class + secStr + " | Roll: " + d.roll;
-document.getElementById('dMonth').innerText = d.month + " " + d.year;
-
-let totalDueAmount = 0; let genAmtNum = parseFloat(d.genAmt) || 0; totalDueAmount += genAmtNum;
-let fg = document.getElementById('feeGrid');
-let html = `<div class="fee-card gen"><h4 style="margin-top:0; color:var(--main);"><i class="fas fa-graduation-cap"></i> School Fee (${d.genStatus || 'Due'})</h4><div style="background:#f1f5f9; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #cbd5e1;"><span style="font-size:12px; color:#64748b; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br><b style="font-size:24px; color:var(--main);">${d.genAmt} TK</b></div><div style="text-align:left;"><label style="font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;">Amount Paying Now:</label><input type="number" id="pGen" class="pay-input calc-pay" placeholder="0.00" value="${d.genAmt}" oninput="calcTotalPay()" style="margin:0; width:100%; border-radius:10px;"></div></div>`;
-let hosAmtNum = d.isRes ? (parseFloat(d.hosAmt) || 0) : 0; if(d.isRes) totalDueAmount += hosAmtNum;
-html += `<div class="fee-card hos" id="hosBox" style="opacity:${d.isRes ? '1' : '0.5'}"><h4 style="margin-top:0; color:var(--accent);"><i class="fas fa-bed"></i> Hostel Fee (${d.hosStatus || 'Due'})</h4><div style="background:#fef2f2; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #fecaca;"><span style="font-size:12px; color:#ef4444; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br><b style="font-size:24px; color:var(--accent);">${d.isRes ? d.hosAmt : 0} TK</b></div><div style="text-align:left;"><label style="font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;">Amount Paying Now:</label><input type="number" id="pHos" class="pay-input calc-pay" placeholder="0.00" value="${d.isRes ? d.hosAmt : 0}" ${d.isRes ? '' : 'disabled'} oninput="calcTotalPay()" style="margin:0; width:100%; border-color:var(--accent) !important; color:var(--accent); border-radius:10px;"></div></div>`;
-
-if (d.customFees && d.customFees.length > 0) {
-d.customFees.forEach((cf) => {
-let cAmtNum = parseFloat(cf.amount) || 0; totalDueAmount += cAmtNum;
-html += `<div class="fee-card custom" style="background: #faf5ff;"><h4 style="margin-top:0; color:#8b5cf6;"><i class="fas fa-star"></i> ${cf.name} (<span style="color:#7e22ce;">${cf.status}</span>)</h4><div style="background:#f3e8ff; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #d8b4fe;"><span style="font-size:12px; color:#7e22ce; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br><b style="font-size:24px; color:#8b5cf6;">${cf.amount} TK</b></div><div style="text-align:left;"><label style="font-size:13px; font-weight:800; color:#8b5cf6; margin-bottom:8px; display:block;">Amount Paying Now:</label><input type="number" class="pay-input custom-pay calc-pay" data-col="${cf.colIdx}" data-name="${cf.name}" placeholder="0" value="${cf.amount}" style="border-color:#8b5cf6 !important; color:#8b5cf6; margin:0; width:100%; border-radius:10px;" oninput="calcTotalPay()"></div></div>`;
-});
-}
-fg.innerHTML = html; document.getElementById('sumDueAmt').innerText = totalDueAmount.toFixed(2); calcTotalPay(); 
-} else { alert("Student ID not found in database!"); }
-}).catch(e=>{hideLoading(); alert("Error connecting to server.");});
+// 🚀 DIRECT FIREBASE: Load Sections 
+async function loadSectionsData() {
+    try {
+        const doc = await db.collection('Admin').doc('Settings').get();
+        let opts = '<option value="">All Sections</option>';
+        if (doc.exists && doc.data().sections) {
+            doc.data().sections.split(',').filter(s=>s.trim()!=='').forEach(s => { opts += `<option value="${s}">${s}</option>`; });
+        }
+        document.getElementById('rSec').innerHTML = opts;
+        document.getElementById('hSec').innerHTML = opts;
+    } catch (e) { console.error(e); }
 }
 
-function payNow() {
-let gP = parseFloat(document.getElementById('pGen').value) || 0;
-let hP = parseFloat(document.getElementById('pHos').value) || 0;
-let customArr = [];
-document.querySelectorAll('.custom-pay').forEach(inp => { let p = parseFloat(inp.value) || 0; if(p > 0) customArr.push({ colIdx: parseInt(inp.getAttribute('data-col')), name: inp.getAttribute('data-name'), paid: p }); });
-
-let sendSms = document.getElementById('sendSmsChk') ? document.getElementById('sendSmsChk').checked : false;
-showLoading();
-apiCall('processPayment', {id: document.getElementById('sid').value, genPay: gP, hosPay: hP, customPayments: customArr, sendSms: sendSms}).then(res => {
-hideLoading();
-if(res.status === "success") { lastR = res; document.getElementById('btnPay').style.display = "none"; document.getElementById('success-msg').style.display = "block"; document.getElementById('btnPrint').style.display = "block"; loadVaultData(true); } 
-else { alert(res.message); }
-}).catch(e=>{hideLoading(); alert("Payment processing failed!");});
+// 🚀 DIRECT FIREBASE: Search Single Student
+async function searchStu() {
+    if(!isAuthReady) return;
+    let id = document.getElementById('sid').value.trim();
+    if(!id) return;
+    showLoading(); showLoaderText("SEARCHING...<br><span style='font-size:11px; color:#64748b;'>Querying Database securely</span>");
+    
+    try {
+        let snap = await db.collection('Students').where('studentID', '==', id).get();
+        hideLoading();
+        if(snap.empty) { alert("Student ID not found in database!"); return; }
+        
+        let fields = snap.docs[0].data();
+        let customFees = fields.customFees ? JSON.parse(fields.customFees) : [];
+        let activeCustomFees = customFees.filter(cf => cf.name && parseFloat(cf.amount) > 0 && cf.status.toLowerCase() !== "paid");
+        
+        let d = {
+            found: true,
+            name: fields.name || "", class: fields.class || "", section: fields.section || "", roll: fields.roll || "",
+            category: fields.category || "Civil", year: fields.feeYear || "", month: fields.feeMonth || "",
+            genAmt: parseFloat(fields.schoolFeeDue) || 0, genStatus: fields.schoolFeeStatus || "Paid",
+            hosAmt: parseFloat(fields.hostelFeeDue) || 0, hosStatus: fields.hostelFeeStatus || "Paid",
+            isRes: fields.resStatus === "Residential", email: fields.email || "", phone: fields.phone || "",
+            customFees: activeCustomFees
+        };
+        
+        renderPaymentZone(d);
+        
+    } catch(err) {
+        hideLoading(); console.error(err); alert("Error fetching student data!");
+    }
 }
 
-function printReceipt() {
-let d = lastR; let secStr = d.section ? ` (Sec: ${d.section})` : "";
-let items = d.itemsList.map(i => { let payable = parseFloat(i.original) || 0; let paid = parseFloat(i.paid) || parseFloat(i.amount) || payable; let dueAmt = payable - paid; return `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="color:#1e293b; font-weight:700;">${i.title}</td><td style="text-align:right; color:#64748b; font-weight:600;">${payable.toFixed(2)}</td><td style="text-align:right; color:#005f40; font-weight:800;">${paid.toFixed(2)}</td><td style="text-align:right; color:#ef4444; font-weight:700;">${dueAmt.toFixed(2)}</td></tr>`; }).join('');
+function renderPaymentZone(d) {
+    document.getElementById('payZone').style.display = "block";
+    document.getElementById('btnPrint').style.display = "none";
+    document.getElementById('success-msg').style.display = "none";
+    document.getElementById('btnPay').style.display = "flex";
+    document.getElementById('dName').innerText = d.name;
+    let secStr = d.section ? ` (Sec: ${d.section})` : "";
+    document.getElementById('dInfo').innerText = "Class: " + d.class + secStr + " | Roll: " + d.roll;
+    document.getElementById('dMonth').innerText = (d.month || "-") + " " + (d.year || "");
 
-let h = `<html><head><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');@page { size: A4 portrait; margin: 0; } body { font-family: 'Inter', sans-serif; padding: 6mm; margin: 0; background: #fff; color: #0f172a; -webkit-print-color-adjust: exact; box-sizing: border-box; height: 297mm; overflow: hidden; } .box { height: 138mm; border: 2px solid #cbd5e1; padding: 20px; border-radius: 16px; position: relative; box-sizing: border-box; margin-bottom: 3mm; box-shadow: 0 4px 15px rgba(0,0,0,0.02); } .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 12px; margin-bottom: 15px; } .header-left { display: flex; align-items: center; gap: 15px; }.header-text h2 { margin: 0; font-size: 19px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } .header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }.receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }.info-grid div { line-height: 1.6; }.info-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 800; display: inline-block; width: 75px; }table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; } th { background: #f1f5f9; color: #334155; font-weight: 800; text-transform: uppercase; font-size: 11px; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; border-radius: 6px 6px 0 0; }td { border-bottom: 1px solid #e2e8f0; padding: 8px 10px; }.summary-container { display: flex; justify-content: flex-end; margin-top: 15px; }.summary-box { width: 260px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: white; }.summary-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; }.summary-row:last-child { border-bottom: none; }.total-payable { font-weight: 700; color: #475569; }.total-paid { font-weight: 800; color: #005f40; background: #ecfdf5; border-bottom: 1px solid #a7f3d0;}.total-due { font-weight: 800; color: #b91c1c; background: #fef2f2; }.watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 80px; opacity: 0.03; color: #005f40; font-weight: 900; z-index: -1; pointer-events: none; letter-spacing: 12px; }.signatures { position: absolute; bottom: 20px; left: 25px; right: 25px; display: flex; justify-content: space-between; font-weight: 800; font-size: 12px; color: #475569; }.sig-line { border-top: 2px dashed #94a3b8; width: 160px; text-align: center; padding-top: 8px; }.cut-line { text-align: center; margin: 6px 0; font-size: 12px; color: #94a3b8; font-weight: 700; letter-spacing: 3px; }</style></head><body>
-${["STUDENT COPY", "OFFICE COPY"].map((c, idx) => `
-<div class="box"><div class="watermark">SRMS</div><div class="header"><div class="header-left"><img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" width="55" style="border-radius: 8px;"><div class="header-text"><h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2><p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p></div></div><div class="receipt-tag">${c}</div></div>
-<div class="info-grid"><div><div><span class="info-label">Receipt No:</span> <b style="color:#005f40;">${d.rNo}</b></div><div><span class="info-label">Student ID:</span> <b>${d.id}</b></div><div><span class="info-label">Name:</span> <b style="color:#0f172a; font-size:13px; text-transform:uppercase;">${d.name}</b></div></div><div style="text-align: right;"><div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div><div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div><div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month}${d.year}</b></div></div></div>
-<table><thead><tr><th>Fee Particulars</th><th style="text-align:right; width: 95px;">Payable (TK)</th><th style="text-align:right; width: 100px;">Paid Now (TK)</th><th style="text-align:right; width: 95px;">Due (TK)</th></tr></thead><tbody>${items}</tbody></table>
-<div class="summary-container"><div class="summary-box"><div class="summary-row total-payable"><span>Total Payable:</span> <span>৳ ${d.totalBill}.00</span></div><div class="summary-row total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid}.00</span></div><div class="summary-row total-due"><span>Remaining Due:</span> <span>৳ ${d.remaining}.00</span></div></div></div>
-<div class="signatures"><div class="sig-line">Accountant / Cashier</div><div class="sig-line">Student / Guardian</div></div></div>
-${idx === 0 ? '<div class="cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>' : ''}`).join('')}
-</body></html>`;
-let w = window.open('','','width=900,height=950'); w.document.write(h); w.document.close(); setTimeout(()=>w.print(), 1000);
+    let totalDueAmount = 0;
+    let genAmtNum = parseFloat(d.genAmt) || 0;
+    if(d.genStatus !== "Paid") totalDueAmount += genAmtNum;
+
+    let fg = document.getElementById('feeGrid');
+    let html = `
+    <div class="fee-card gen">
+    <h4 style="margin-top:0; color:var(--main);"><i class="fas fa-graduation-cap"></i> School Fee (${d.genStatus})</h4>
+    <div style="background:#f1f5f9; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #cbd5e1;">
+    <span style="font-size:12px; color:#64748b; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br>
+    <b style="font-size:24px; color:var(--main);">${d.genAmt} TK</b>
+    </div>
+    <div style="text-align:left;">
+    <label style="font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;">Amount Paying Now:</label>
+    <input type="number" id="pGen" class="pay-input calc-pay" placeholder="0.00" value="${d.genStatus!=='Paid'?d.genAmt:0}" oninput="calcTotalPay()" style="margin:0; width:100%; border-radius:10px;">
+    </div>
+    </div>`;
+
+    let hosAmtNum = d.isRes ? (parseFloat(d.hosAmt) || 0) : 0;
+    if(d.isRes && d.hosStatus !== "Paid") totalDueAmount += hosAmtNum;
+
+    html += `
+    <div class="fee-card hos" id="hosBox" style="opacity:${d.isRes ? '1' : '0.5'}">
+    <h4 style="margin-top:0; color:var(--accent);"><i class="fas fa-bed"></i> Hostel Fee (${d.isRes ? d.hosStatus : 'N/A'})</h4>
+    <div style="background:#fef2f2; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #fecaca;">
+    <span style="font-size:12px; color:#ef4444; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br>
+    <b style="font-size:24px; color:var(--accent);">${d.isRes ? d.hosAmt : 0} TK</b>
+    </div>
+    <div style="text-align:left;">
+    <label style="font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;">Amount Paying Now:</label>
+    <input type="number" id="pHos" class="pay-input calc-pay" placeholder="0.00" value="${(d.isRes && d.hosStatus!=='Paid') ? d.hosAmt : 0}" ${d.isRes ? '' : 'disabled'} oninput="calcTotalPay()" style="margin:0; width:100%; border-color:var(--accent) !important; color:var(--accent); border-radius:10px;">
+    </div>
+    </div>`;
+
+    if (d.customFees && d.customFees.length > 0) {
+        d.customFees.forEach((cf) => {
+            let cAmtNum = parseFloat(cf.amount) || 0;
+            totalDueAmount += cAmtNum;
+            html += `
+            <div class="fee-card custom" style="background: #faf5ff;">
+            <h4 style="margin-top:0; color:#8b5cf6;"><i class="fas fa-star"></i> ${cf.name} (<span style="color:#7e22ce;">${cf.status}</span>)</h4>
+            <div style="background:#f3e8ff; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #d8b4fe;">
+            <span style="font-size:12px; color:#7e22ce; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br>
+            <b style="font-size:24px; color:#8b5cf6;">${cf.amount} TK</b>
+            </div>
+            <div style="text-align:left;">
+            <label style="font-size:13px; font-weight:800; color:#8b5cf6; margin-bottom:8px; display:block;">Amount Paying Now:</label>
+            <input type="number" class="pay-input custom-pay calc-pay" data-col="${cf.colIdx}" data-name="${cf.name}" placeholder="0" value="${cf.amount}" style="border-color:#8b5cf6 !important; color:#8b5cf6; margin:0; width:100%; border-radius:10px;" oninput="calcTotalPay()">
+            </div>
+            </div>`;
+        });
+    }
+
+    fg.innerHTML = html;
+    document.getElementById('sumDueAmt').innerText = totalDueAmount.toFixed(2);
+    calcTotalPay(); 
 }
 
-function loadBulk() { 
-let clsValues = [];
-if(document.getElementById('bClsAll').checked) clsValues.push("All"); else document.querySelectorAll('.bCls-chk-bulk:checked').forEach(c => clsValues.push(c.value));
-if(clsValues.length === 0) return alert("Please select at least one class."); 
-showLoading(); 
-apiCall('getStudentsFiltered', {clsString: clsValues.join(','), feeType: document.getElementById('bType').value, categoryFilter: document.getElementById('bCat').value}).then(res => { 
-hideLoading(); 
-let h = "<table style='box-shadow:none; border:none;'><thead><tr><th style='border-radius:10px 0 0 0;'><input type='checkbox' checked onclick='toggleAll(this)' style='width:18px; height:18px; cursor:pointer;'></th><th>Student ID</th><th>Student Name</th><th style='border-radius:0 10px 0 0;'>Category</th></tr></thead><tbody>"; 
-res.forEach(s => { let badgeClass = s.category === 'Army' ? 'badge-army' : 'badge-civil'; h += `<tr><td><input type='checkbox' class='s-chk' value='${s.id}' checked style='width:18px; height:18px; cursor:pointer;'></td><td><b style='color:#005f40;'>${s.id}</b></td><td><b>${s.name}</b></td><td><span class="${badgeClass}">${s.category || 'Civil'}</span></td></tr>`; }); 
-document.getElementById('bulkList').innerHTML = h + "</tbody></table>"; document.getElementById('bulkControls').style.display = "block"; 
-if(document.getElementById('feeAction').value === "Edit") document.getElementById('pwdZoneSetup').style.display = "block"; else document.getElementById('pwdZoneSetup').style.display = "none";
-}).catch(e=>{hideLoading(); alert("Error");}); 
+function calcTotalPay() {
+    let total = 0;
+    document.querySelectorAll('.calc-pay').forEach(inp => {
+        if (!inp.disabled) { total += parseFloat(inp.value) || 0; }
+    });
+    document.getElementById('sumPayingAmt').innerText = total.toFixed(2);
+}
+
+// 🚀 BACKEND API: Pay Now
+async function payNow() {
+    if(!isAuthReady) return;
+    let gP = parseFloat(document.getElementById('pGen').value) || 0;
+    let hP = parseFloat(document.getElementById('pHos').value) || 0;
+    let customArr = [];
+    document.querySelectorAll('.custom-pay').forEach(inp => {
+        let p = parseFloat(inp.value) || 0;
+        if(p > 0) customArr.push({ colIdx: parseInt(inp.getAttribute('data-col')), name: inp.getAttribute('data-name'), paid: p });
+    });
+
+    let sendSms = document.getElementById('sendSmsChk') ? document.getElementById('sendSmsChk').checked : false;
+
+    showLoading(); showLoaderText("PROCESSING PAYMENT...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
+    
+    try {
+        let res = await apiCall('processPayment', {
+            id: document.getElementById('sid').value, genPay: gP, hosPay: hP, customPayments: customArr, sendSms: sendSms
+        });
+        hideLoading();
+        if(res.status === "error") { alert(res.message); return; }
+        
+        lastR = res;
+        document.getElementById('btnPay').style.display = "none";
+        document.getElementById('success-msg').style.display = "block";
+        document.getElementById('btnPrint').style.display = "block"; 
+    } catch(err) {
+        hideLoading(); console.error(err); alert("Payment Failed due to network error.");
+    }
+}
+
+// 🚀 BACKEND API: Process Bulk Update & Factory Reset
+async function runBulk() { 
+    if(!isAuthReady) return;
+    let ids = Array.from(document.querySelectorAll('.s-chk:checked')).map(c => c.value).join(","); 
+    let type = document.getElementById('bType').value;
+    let amt = document.getElementById('bAmt').value;
+    let actionType = document.getElementById('feeAction').value;
+    let pwd = document.getElementById('setupPwd').value;
+
+    if (actionType === "Edit" && !pwd) { alert("Please enter the Admin Password to edit fees!"); return; }
+
+    let customFeesArr = [];
+    if (type === "Custom") {
+        document.querySelectorAll('.custom-fee-item').forEach(item => {
+            let n = item.querySelector('.c-fee-name').value;
+            let a = item.querySelector('.c-fee-amt').value;
+            if(n.trim() && parseFloat(a) > 0) { customFeesArr.push({ name: n.trim(), amt: parseFloat(a) }); }
+        });
+        if(customFeesArr.length === 0) { alert("Please enter at least one Custom Fee Name and Amount!"); return; }
+    } else {
+        if(!amt || amt < 0) { alert("Please enter a valid amount!"); return; }
+    }
+
+    showLoading(); showLoaderText("UPDATING STUDENTS...<br><span style='font-size:11px; color:#64748b;'>Sending data to Server</span>");
+    
+    try {
+        let res = await apiCall('processBulkUpdate', {
+            ids: ids, feeType: type, amount: amt, month: document.getElementById('bMon').value, year: document.getElementById('bYear').value, customFeesJSON: JSON.stringify(customFeesArr), actionType: actionType, pwd: pwd
+        });
+        hideLoading();
+        if(res && res.status === "error") { alert(res.message); } 
+        else {
+            alert(actionType === "Edit" ? "Fees Setup Successfully Updated & Edited!" : "Fees Setup Completed Successfully!"); 
+            document.getElementById('bulkControls').style.display = "none";
+            document.getElementById('setupPwd').value = "";
+            document.getElementById('bAmt').value = "";
+            document.getElementById('customFeeList').innerHTML = `<div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
+            <input type="text" class="c-fee-name" placeholder="Fee Name">
+            <input type="number" class="c-fee-amt" placeholder="Amount">
+            </div>`;
+        }
+    } catch(err) { hideLoading(); alert("Error processing bulk update."); }
+}
+
+async function executeFactoryReset() {
+    if(!isAuthReady) return;
+    let pwd = document.getElementById('resetPwd').value;
+    if(!pwd) { alert("Please enter the Admin Password to perform a Factory Reset."); return; }
+    if(confirm("⚠️ Critical Warning!\nAre you 100% sure you want to CLEAR ALL FEES for ALL STUDENTS? This action cannot be undone.")) {
+        showLoading(); showLoaderText("FACTORY RESET...<br><span style='font-size:11px; color:#ef4444;'>Executing Critical Update</span>");
+        try {
+            let res = await apiCall('processFactoryReset', {pwd: pwd});
+            hideLoading();
+            if(res && res.status === "error") { alert(res.message); } 
+            else {
+                alert("Factory Reset Complete! All fees have been cleared successfully.");
+                document.getElementById('resetPwd').value = "";
+                document.getElementById('feeAction').value = "Add";
+                toggleActionUI();
+            }
+        } catch(err) { hideLoading(); alert("Error processing factory reset."); }
+    }
+}
+
+// 🚀 DIRECT FIREBASE: Load Bulk List
+async function loadBulk() { 
+    if(!isAuthReady) return;
+    let clsValues = [];
+    if(document.getElementById('bClsAll').checked) { clsValues.push("All"); } 
+    else { document.querySelectorAll('.bCls-chk:checked').forEach(c => clsValues.push(c.value)); }
+    
+    if(clsValues.length === 0) { alert("Please select at least one class."); return; }
+    
+    showLoading(); showLoaderText("LOADING LIST...<br><span style='font-size:11px; color:#64748b;'>Querying Database securely</span>");
+    
+    try {
+        let snap = await db.collection('Students').get();
+        let list = [];
+        snap.forEach(doc => {
+            let f = doc.data();
+            let sId = f.studentID || ""; if(!sId) return;
+            let sClass = f.class ? f.class.trim().toLowerCase() : "";
+            let isRes = f.resStatus === "Residential";
+            let sCat = f.category || "Civil";
+            
+            let targetClasses = clsValues.map(c => c.trim().toLowerCase());
+            let categoryFilter = document.getElementById('bCat').value;
+            let feeType = document.getElementById('bType').value;
+            
+            let matchCat = (categoryFilter === "All" || sCat === categoryFilter);
+            let matchClass = targetClasses.includes("all") || targetClasses.includes(sClass);
+            
+            if (matchClass && matchCat && (feeType === "General" || feeType === "Custom" || isRes)) {
+                list.push({ id: sId, name: f.name || "", category: sCat });
+            }
+        });
+        
+        hideLoading();
+        let h = "<table style='box-shadow:none; border:none;'><thead><tr><th style='border-radius:10px 0 0 0;'><input type='checkbox' checked onclick='toggleAll(this)' style='width:18px; height:18px; cursor:pointer;'></th><th>Student ID</th><th>Student Name</th><th style='border-radius:0 10px 0 0;'>Category</th></tr></thead><tbody>"; 
+        list.forEach(s => {
+            let badgeClass = s.category === 'Army' ? 'badge-army' : 'badge-civil';
+            h += `<tr><td><input type='checkbox' class='s-chk' value='${s.id}' checked style='width:18px; height:18px; cursor:pointer;'></td><td><b style='color:#005f40;'>${s.id}</b></td><td><b>${s.name}</b></td><td><span class="${badgeClass}">${s.category || 'Civil'}</span></td></tr>`;
+        }); 
+        document.getElementById('bulkList').innerHTML = h + "</tbody></table>"; 
+        document.getElementById('bulkControls').style.display = "block"; 
+
+        if(document.getElementById('feeAction').value === "Edit") {
+            document.getElementById('pwdZoneSetup').style.display = "block";
+        } else {
+            document.getElementById('pwdZoneSetup').style.display = "none";
+        }
+    } catch(err) { hideLoading(); alert("Error loading list."); }
 }
 
 function toggleAll(s) { document.querySelectorAll('.s-chk').forEach(c => c.checked = s.checked); }
+function toggleClassCheckboxes(source) { document.querySelectorAll('.bCls-chk').forEach(c => c.checked = source.checked); }
 
-function runBulk() { 
-let ids = Array.from(document.querySelectorAll('.s-chk:checked')).map(c => c.value).join(","); 
-let type = document.getElementById('bType').value; let amt = document.getElementById('bAmt').value; let actionType = document.getElementById('feeAction').value; let pwd = document.getElementById('setupPwd').value;
-if (actionType === "Edit" && !pwd) return alert("Please enter the Admin Password to edit fees!"); 
-let customFeesArr = [];
-if (type === "Custom") {
-document.querySelectorAll('.custom-fee-item').forEach(item => { let n = item.querySelector('.c-fee-name').value; let a = item.querySelector('.c-fee-amt').value; if(n.trim() && parseFloat(a) > 0) customFeesArr.push({ name: n.trim(), amt: parseFloat(a) }); });
-if(customFeesArr.length === 0) return alert("Please enter Custom Fee Name and Amount!"); 
-} else { if(!amt || amt < 0) return alert("Please enter a valid amount!"); }
-
-showLoading(); 
-apiCall('processBulkUpdate', { idsStr: ids, feeType: type, amount: amt, month: document.getElementById('bMon').value, year: document.getElementById('bYear').value, customFeesJSON: JSON.stringify(customFeesArr), actionType: actionType, pwd: pwd }).then(res => { 
-hideLoading(); 
-if(res && res.status === "error") alert(res.message);  
-else {
-alert(actionType === "Edit" ? "Fees Setup Successfully Updated & Edited!" : "Fees Setup Completed Successfully!"); 
-document.getElementById('bulkControls').style.display = "none"; document.getElementById('setupPwd').value = ""; document.getElementById('bAmt').value = ""; document.getElementById('customFeeList').innerHTML = `<div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;"><input type="text" class="c-fee-name" placeholder="Fee Name"><input type="number" class="c-fee-amt" placeholder="Amount"></div>`;
-}
-}).catch(e=>{hideLoading(); alert("Error");}); 
+function toggleCustomUI() { 
+    let type = document.getElementById('bType').value;
+    if(type === "Custom") {
+        document.getElementById('customUI').style.display = "block";
+        document.getElementById('bAmt').style.display = "none";
+    } else {
+        document.getElementById('customUI').style.display = "none";
+        document.getElementById('bAmt').style.display = "block";
+    }
 }
 
-function executeFactoryReset() {
-let pwd = document.getElementById('resetPwd').value; if(!pwd) return alert("Admin Password required."); 
-if(confirm("⚠️ Critical Warning!\nAre you 100% sure you want to CLEAR ALL FEES for ALL STUDENTS?")) {
-showLoading(); apiCall('processFactoryReset', {pwd: pwd}).then(res => {
-hideLoading(); if(res && res.status === "error") alert(res.message); else { alert("Factory Reset Complete!"); document.getElementById('resetPwd').value = ""; document.getElementById('feeAction').value = "Add"; toggleActionUI(); }
-}).catch(e=>{hideLoading(); alert("Error");}); }
+function addCustomFeeRow() {
+    let html = `
+    <div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
+    <input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Picnic)">
+    <input type="number" class="c-fee-amt" placeholder="Amount">
+    <button class="btn" style="background:#ef4444; color:white; width:auto; padding:10px 18px;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+    </div>`;
+    document.getElementById('customFeeList').insertAdjacentHTML('beforeend', html);
 }
 
-function loadRep() { 
-showLoading(); 
-apiCall('getReportData', {cls: document.getElementById('rClass').value, reportType: document.getElementById('rType').value, status: document.getElementById('rStatus').value, categoryFilter: document.getElementById('rCat').value}).then(res => { 
-hideLoading(); reportsData = res.list; renderReports(reportsData); 
-}).catch(e=>{hideLoading(); alert("Error");}); 
+function toggleActionUI() {
+    let act = document.getElementById('feeAction').value;
+    if(act === "Reset") {
+        document.getElementById('setupZone').style.display = "none";
+        document.getElementById('resetZone').style.display = "block";
+    } else {
+        document.getElementById('setupZone').style.display = "block";
+        document.getElementById('resetZone').style.display = "none";
+        document.getElementById('bulkControls').style.display = "none"; 
+        if(act === "Edit") {
+            document.getElementById('btnRunBulk').innerHTML = "<i class='fas fa-edit'></i> Update & Edit Fees";
+            document.getElementById('btnRunBulk').style.background = "linear-gradient(135deg, #d97706, #b45309)";
+            document.getElementById('btnRunBulk').style.boxShadow = "0 6px 20px rgba(217,119,6,0.25)";
+        } else {
+            document.getElementById('btnRunBulk').innerHTML = "<i class='fas fa-check-circle'></i> Setup / Create Fees";
+            document.getElementById('btnRunBulk').style.background = "linear-gradient(135deg, #059669, #166534)";
+            document.getElementById('btnRunBulk').style.boxShadow = "0 6px 20px rgba(5,150,105,0.25)";
+        }
+    }
+}
+
+
+// 🚀 DIRECT FIREBASE: Load Reports
+async function loadRep() { 
+    if(!isAuthReady) return;
+    showLoading(); showLoaderText("GENERATING REPORT...<br><span style='font-size:11px; color:#64748b;'>Querying Database securely</span>");
+    
+    let cls = document.getElementById('rClass').value;
+    let reportType = document.getElementById('rType').value;
+    let status = document.getElementById('rStatus').value;
+    let categoryFilter = document.getElementById('rCat').value;
+    
+    try {
+        let snap = await db.collection('Students').get();
+        let list = []; let tPaid = 0; let tDue = 0;
+        
+        snap.forEach(doc => {
+            let f = doc.data();
+            let sClass = f.class ? f.class.trim() : "";
+            if (cls !== "All" && sClass.toLowerCase() !== cls.toString().trim().toLowerCase()) return;
+
+            let sCat = f.category || "Civil";
+            if (categoryFilter !== "All" && sCat !== categoryFilter) return; 
+
+            let stdMonth = f.feeMonth || "-";
+            let stdYear = f.feeYear || "-";
+            let sId = f.studentID || "";
+            let sName = f.name || "";
+            let sRoll = f.roll || "";
+            let sSec = f.section || "";
+
+            let addRecord = (fName, amt, fStatus, fPeriod) => {
+                if(amt > 0) {
+                    let currentStatus = fStatus || "Due";
+                    if (status === "All" || currentStatus.toLowerCase() === status.toLowerCase()) {
+                        list.push({ id: sId, name: sName, class: sClass, section: sSec, roll: sRoll, category: sCat, feeName: fName, period: fPeriod, amount: amt, status: currentStatus });
+                    }
+                }
+            };
+
+            if (reportType === "All" || reportType === "General") { addRecord("School Fee", parseFloat(f.schoolFeeDue)||0, f.schoolFeeStatus||"", stdMonth + " " + stdYear); }
+            if ((reportType === "All" || reportType === "Hostel") && f.resStatus === "Residential") { addRecord("Hostel Fee", parseFloat(f.hostelFeeDue)||0, f.hostelFeeStatus||"", stdMonth + " " + stdYear); }
+            if (reportType === "All" || reportType === "Custom") {
+                let customFees = f.customFees ? JSON.parse(f.customFees) : [];
+                customFees.forEach(cf => { addRecord(cf.name, parseFloat(cf.amount)||0, cf.status, stdMonth + " " + stdYear); });
+            }
+        });
+        
+        hideLoading();
+        reportsData = list; 
+        renderReports(reportsData); 
+    } catch(err) { hideLoading(); alert("Error fetching report data."); }
 }
 
 function renderReports(list) {
-let h = ""; let pCount = 0; let dCount = 0; let tPaid = 0; let tDue = 0;
-list.forEach(x => {
-let sBadge = x.status.trim() === "Paid" ? `<span style="background:#dcfce7; color:#16a34a; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;">PAID</span>` : `<span style="background:#fee2e2; color:#ef4444; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;">DUE</span>`;
-let cBadge = x.category === 'Army' ? `<span style="color:#b45309; font-weight:900;">Army</span>` : `<span style="color:#005f40; font-weight:900;">Civil</span>`;
-h += `<tr><td><b>${x.id}</b></td><td>${x.name}</td><td>${x.class}</td><td>${x.section || '-'}</td><td>${x.roll}</td><td>${cBadge}</td><td><b>${x.feeName}</b></td><td>${x.period}</td><td><b style="color:var(--main);">${x.amount} TK</b></td><td>${sBadge}</td></tr>`;
-if (x.status && x.status.trim() === "Paid") { pCount++; tPaid += parseFloat(x.amount) || 0; } else if (x.status && x.status.trim() === "Due") { dCount++; tDue += parseFloat(x.amount) || 0; }
-}); 
-document.querySelector("#rTable tbody").innerHTML = h || `<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No records found.</td></tr>`; 
-document.getElementById('tPaidVal').innerText = tPaid; document.getElementById('tDueVal').innerText = tDue; document.getElementById('tStuCount').innerText = list.length; document.getElementById('tPaidCount').innerText = pCount; document.getElementById('tDueCount').innerText = dCount;
+    let h = ""; let pCount = 0; let dCount = 0; let tPaid = 0; let tDue = 0;
+    list.forEach(x => {
+        let sBadge = x.status.trim() === "Paid" ? `<span style="background:#dcfce7; color:#16a34a; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;">PAID</span>` : `<span style="background:#fee2e2; color:#ef4444; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;">DUE</span>`;
+        let cBadge = x.category === 'Army' ? `<span style="color:#b45309; font-weight:900;">Army</span>` : `<span style="color:#005f40; font-weight:900;">Civil</span>`;
+        h += `<tr><td><b>${x.id}</b></td><td>${x.name}</td><td>${x.class}</td><td>${x.section || '-'}</td><td>${x.roll}</td><td>${cBadge}</td><td><b>${x.feeName}</b></td><td>${x.period}</td><td><b style="color:var(--main);">${x.amount} TK</b></td><td>${sBadge}</td></tr>`;
+
+        if (x.status && x.status.trim() === "Paid") { pCount++; tPaid += parseFloat(x.amount) || 0; } 
+        else if (x.status && x.status.trim() === "Due") { dCount++; tDue += parseFloat(x.amount) || 0; }
+    }); 
+
+    document.querySelector("#rTable tbody").innerHTML = h || `<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No matching records found.</td></tr>`; 
+    document.getElementById('tPaidVal').innerText = tPaid; 
+    document.getElementById('tDueVal').innerText = tDue; 
+    document.getElementById('tStuCount').innerText = list.length;
+    document.getElementById('tPaidCount').innerText = pCount;
+    document.getElementById('tDueCount').innerText = dCount;
 }
 
 function filterReports() {
-let query = document.getElementById('rSearch').value.toLowerCase(); let secQ = document.getElementById('rSec').value;
-if (!reportsData || reportsData.length === 0) return;
-let filtered = reportsData.filter(x => { return (secQ === "" || x.section === secQ) && (x.name.toLowerCase().includes(query) || x.id.toLowerCase().includes(query) || x.roll.toString().includes(query) || x.feeName.toLowerCase().includes(query)); });
-renderReports(filtered);
+    let query = document.getElementById('rSearch').value.toLowerCase();
+    let secQ = document.getElementById('rSec').value;
+    if (!reportsData || reportsData.length === 0) return;
+
+    let filtered = reportsData.filter(x => {
+        let matchQ = x.name.toLowerCase().includes(query) || x.id.toLowerCase().includes(query) || x.roll.toString().includes(query) || x.feeName.toLowerCase().includes(query);
+        let matchS = secQ === "" || (x.section && x.section === secQ);
+        return matchQ && matchS;
+    });
+    renderReports(filtered);
 }
 
 function printRep() { 
-let t = document.getElementById('rTable').outerHTML; 
-let subtitleText = `Class: ${document.getElementById('rClass').value} | Status: ${document.getElementById('rStatus').value}`;
-let w = window.open('','','width=1200,height=800'); 
-w.document.write(`<html><head><title>Financial Report</title><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: 'Times New Roman', serif; font-size: 12px; } .print-header { text-align: center; } table { width: 100%; border-collapse: collapse; margin-top: 10px; } th, td { border: 1px solid #000; padding: 8px 6px; } th { background-color: #e2e8f0; font-weight: bold; } .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; } </style></head><body><div class="print-header"><h2>SRMS - Financial Report</h2><div>${subtitleText}</div></div>${t}<div class="totals">Total Collected: ৳ ${document.getElementById('tPaidVal').innerText}<br>Total Due: ৳ ${document.getElementById('tDueVal').innerText}</div></body></html>`); 
-w.document.close(); setTimeout(()=>w.print(), 1000); 
+    let t = document.getElementById('rTable').outerHTML; 
+    let sc = document.getElementById('tStuCount').innerText;
+    let pc = document.getElementById('tPaidCount').innerText;
+    let dc = document.getElementById('tDueCount').innerText;
+    let cls = document.getElementById('rClass').value;
+    let sec = document.getElementById('rSec').value;
+    let cat = document.getElementById('rCat').value;
+    let sts = document.getElementById('rStatus').value;
+
+    let subtitleText = `Class: ${cls === 'All' ? 'All Classes' : cls}`;
+    if(sec !== "") subtitleText += ` | Section: ${sec}`;
+    if(cat !== "All") subtitleText += ` | Category: ${cat}`;
+    if(sts !== "All") subtitleText += ` | Status: ${sts}`;
+
+    let w = window.open('','','width=1200,height=800'); 
+    w.document.write(`<html><head><title>Financial Report</title><style>
+    @page { size: A4 landscape; margin: 15mm; }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 12px; margin: 0; padding: 0; color: #000; background: #fff; line-height: 1.4; }
+    .print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
+    .print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px; }
+    .print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
+    .print-header .title { font-size: 16px; font-weight: bold; margin-top: 12px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 6px 20px; border: 1px solid #000; border-radius: 20px; -webkit-print-color-adjust: exact; color-adjust: exact; }
+    .print-header .filters { font-size: 12.5px; margin-top: 12px; color: #000; font-weight: bold; border-top: 1px dashed #ccc; padding-top: 8px; display: inline-block; }
+    .stats { text-align: center; font-size: 13px; margin-bottom: 15px; font-weight: bold; background: #f8fafc; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px; -webkit-print-color-adjust: exact; color-adjust: exact; }
+    table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 10px; }
+    th, td { border: 1px solid #000 !important; padding: 8px 6px; text-align: left; vertical-align: middle; }
+    th { background-color: #e2e8f0 !important; color: #000; text-transform: uppercase; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact; }
+    tr { page-break-inside: avoid; }
+    .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; border-top: 2px solid #000; padding-top: 15px; page-break-inside: avoid;}
+    .totals div { margin-bottom: 8px; }
+    .signatures { margin-top: 60px; display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: #000; page-break-inside: avoid; padding: 0 30px; }
+    .sig-line { border-top: 1px dashed #000; width: 220px; text-align: center; padding-top: 8px; }
+    </style></head><body>
+
+    <div class="print-header">
+    <img src="${LOGO_URL}">
+    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+    <div class="title">Comprehensive Financial Report</div><br>
+    <div class="filters">${subtitleText}</div>
+    </div>
+
+    <div class="stats">Total Records: ${sc} &nbsp;|&nbsp; Paid Records: ${pc} &nbsp;|&nbsp; Due Records: ${dc}</div>
+    ${t}
+    <div class="totals">
+    <div>Total Collected: ৳ ${document.getElementById('tPaidVal').innerText}</div>
+    <div style="color: #444;">Total Due Amount: ৳ ${document.getElementById('tDueVal').innerText}</div>
+    </div>
+
+    <div class="signatures">
+    <div class="sig-line">Prepared By</div>
+    <div class="sig-line">Principal / Authorized Signature</div>
+    </div>
+
+    </body></html>`); 
+    w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
-// 🚀 Ledger & Vault Logic 
-function loadHistory() {
-showLoading();
-apiCall('getTransactionHistory').then(res => {
-hideLoading(); historyData = res; renderHistory(res); loadVaultData(true);
-}).catch(e=>{hideLoading(); alert("Error");});
+// 🚀 DIRECT FIREBASE: Ledger / History
+async function loadHistory() {
+    if(!isAuthReady) return;
+    showLoading(); showLoaderText("FETCHING HISTORY...<br><span style='font-size:11px; color:#64748b;'>Querying Database securely</span>");
+    
+    try {
+        let snap = await db.collection('Transactions').get();
+        let list = [];
+        snap.forEach(doc => { list.push(doc.data()); });
+        list.sort((a,b) => parseInt(b.timestamp || 0) - parseInt(a.timestamp || 0)); // Sort newest first
+        hideLoading();
+        historyData = list;
+        renderHistory(list);
+    } catch(err) { hideLoading(); alert("Error fetching history."); }
 }
 
 function renderHistory(data) {
-let h = ""; let total = 0;
-data.forEach(x => {
-total += parseFloat(x.paidAmount) || 0;
-let cBadge = x.category === 'Army' ? `<span class="badge-army">Army</span>` : `<span class="badge-civil">Civil</span>`;
-let secStr = x.sectionVal ? ` (${x.sectionVal})` : "";
-h += `<tr><td>${x.date}</td><td><b>${x.receiptNo}</b></td><td><b style="color:var(--main);">${x.studentID}</b></td><td>${x.name}</td><td>${x.classVal}${secStr} (Roll: ${x.roll})</td><td>${cBadge}</td><td>${x.month} ${x.year}</td><td><b style="color:#0369a1;">${x.paidAmount} TK</b></td></tr>`;
-});
-document.querySelector("#hTable tbody").innerHTML = h || `<tr><td colspan="8" style="text-align:center; color:#94a3b8;">No transactions found.</td></tr>`;
-document.getElementById('hTotalVal').innerText = total.toFixed(2);
+    let h = ""; let total = 0;
+    data.forEach(x => {
+        total += parseFloat(x.paidAmount) || 0;
+        let cBadge = x.category === 'Army' ? `<span class="badge-army">Army</span>` : `<span class="badge-civil">Civil</span>`;
+        let secStr = x.section ? ` (${x.section})` : "";
+        h += `<tr>
+        <td>${x.date || "-"}</td>
+        <td><b>${x.receiptNo || "-"}</b></td>
+        <td><b style="color:var(--main);">${x.studentID || "-"}</b></td>
+        <td>${x.name || "-"}</td>
+        <td>${x.class || "-"}${secStr} (Roll: ${x.roll || "-"})</td>
+        <td>${cBadge}</td>
+        <td>${x.month || "-"} ${x.year || "-"}</td>
+        <td><b style="color:#0369a1;">${x.paidAmount || "0"} TK</b></td>
+        </tr>`;
+    });
+    document.querySelector("#hTable tbody").innerHTML = h || `<tr><td colspan="8" style="text-align:center; color:#94a3b8;">No transactions found.</td></tr>`;
+    document.getElementById('hTotalVal').innerText = total.toFixed(2);
 }
 
 function filterHistory() {
-let fSearch = document.getElementById('hSearch').value.toLowerCase(); let fSec = document.getElementById('hSec').value; let fClass = document.getElementById('hClass').value; let fCat = document.getElementById('hCat').value; let fMonth = document.getElementById('hMonth').value; let fYear = document.getElementById('hYear').value;
-if (!historyData || historyData.length === 0) return;
-let filtered = historyData.filter(x => { return (fClass === "All" || x.classVal === fClass) && (fMonth === "All" || x.month === fMonth) && (fYear === "All" || x.year === fYear) && (x.name.toLowerCase().includes(fSearch) || x.studentID.toLowerCase().includes(fSearch) || x.receiptNo.toLowerCase().includes(fSearch)); });
-renderHistory(filtered);
+    let fSearch = document.getElementById('hSearch').value.toLowerCase();
+    let fSec = document.getElementById('hSec').value;
+    let fClass = document.getElementById('hClass').value;
+    let fCat = document.getElementById('hCat').value;
+    let fMonth = document.getElementById('hMonth').value;
+    let fYear = document.getElementById('hYear').value;
+
+    if (!historyData || historyData.length === 0) return;
+
+    let filtered = historyData.filter(x => {
+        let name = x.name ? x.name.toLowerCase() : "";
+        let sid = x.studentID ? x.studentID.toLowerCase() : "";
+        let rno = x.receiptNo ? x.receiptNo.toLowerCase() : "";
+        let matchSearch = name.includes(fSearch) || sid.includes(fSearch) || rno.includes(fSearch);
+        
+        let matchSec = fSec === "" || (x.section && x.section === fSec);
+        let matchClass = fClass === "All" || x.class === fClass;
+        let matchCat = fCat === "All" || x.category === fCat;
+        let matchMonth = fMonth === "All" || x.month === fMonth;
+        let matchYear = fYear === "All" || x.year === fYear;
+        return matchSearch && matchSec && matchClass && matchCat && matchMonth && matchYear;
+    });
+    renderHistory(filtered);
 }
 
 function printHistory() {
-let t = document.getElementById('hTable').outerHTML; 
-let w = window.open('','','width=1200,height=800'); 
-w.document.write(`<html><head><style>@page { size: A4 landscape; margin: 15mm; } body { font-family: sans-serif; font-size: 12px; } table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #000; padding: 5px; } </style></head><body><h2>SRMS - Payment Ledger</h2>${t}</body></html>`); 
-w.document.close(); setTimeout(()=>w.print(), 1000); 
+    let t = document.getElementById('hTable').outerHTML; 
+    let total = document.getElementById('hTotalVal').innerText;
+    let c = document.getElementById('hClass').value;
+    let sec = document.getElementById('hSec').value;
+    let cat = document.getElementById('hCat').value;
+    let m = document.getElementById('hMonth').value;
+    let y = document.getElementById('hYear').value;
+
+    let subtitleText = `Class: ${c === 'All' ? 'All Classes' : c}`;
+    if(sec !== "") subtitleText += ` | Section: ${sec}`;
+    if(cat !== "All") subtitleText += ` | Category: ${cat}`;
+    subtitleText += ` | Period: ${m} ${y === 'All' ? 'All Years' : y}`;
+
+    let w = window.open('','','width=1200,height=800'); 
+    w.document.write(`<html><head><title>Payment Ledger</title><style>
+    @page { size: A4 landscape; margin: 15mm; }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 12px; margin: 0; padding: 0; color: #000; background: #fff; line-height: 1.4; }
+    .print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
+    .print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px;}
+    .print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
+    .print-header .title { font-size: 16px; font-weight: bold; margin-top: 12px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 6px 20px; border: 1px solid #000; border-radius: 20px; -webkit-print-color-adjust: exact; color-adjust: exact; }
+    .print-header .filters { font-size: 12.5px; margin-top: 12px; color: #000; font-weight: bold; border-top: 1px dashed #ccc; padding-top: 8px; display: inline-block; }
+    table { width: 100%; border-collapse: collapse; font-size: 11.5px; margin-top: 10px; }
+    th, td { border: 1px solid #000 !important; padding: 8px 6px; text-align: left; vertical-align: middle; }
+    th { background-color: #e2e8f0 !important; color: #000; text-transform: uppercase; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact; }
+    tr { page-break-inside: avoid; }
+    .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; border-top: 2px solid #000; padding-top: 15px; page-break-inside: avoid;}
+    .signatures { margin-top: 60px; display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: #000; page-break-inside: avoid; padding: 0 30px; }
+    .sig-line { border-top: 1px dashed #000; width: 220px; text-align: center; padding-top: 8px; }
+    </style></head><body>
+
+    <div class="print-header">
+    <img src="${LOGO_URL}">
+    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+    <div class="title">Payment Ledger / Transaction History</div><br>
+    <div class="filters">${subtitleText}</div>
+    </div>
+
+    ${t}
+    <div class="totals">Total Collected: ৳ ${total}</div>
+
+    <div class="signatures">
+    <div class="sig-line">Prepared By</div>
+    <div class="sig-line">Principal / Authorized Signature</div>
+    </div>
+
+    </body></html>`); 
+    w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
-function loadVaultData(skipFetchHistory = false) {
-    if(!isAuthReady) return;
-    showLoading();
-    let p1 = apiCall('getVaultRecords');
-    let p2 = skipFetchHistory ? Promise.resolve(historyData) : apiCall('getTransactionHistory');
-    
-    Promise.all([p1, p2]).then(results => {
-        hideLoading(); vaultData = results[0]; if(!skipFetchHistory) historyData = results[1];
-        
-        let tIncome = 0; let tExpense = 0;
-        historyData.forEach(tx => { tIncome += parseFloat(tx.paidAmount) || 0; });
+// 🖨️ Receipt Printing
+function printReceipt() {
+    if(!lastR) return;
+    let d = lastR;
+    let items = d.itemsList.map(i => {
+        let payable = parseFloat(i.original) || 0;
+        let paid = parseFloat(i.paid) || parseFloat(i.amount) || payable; 
+        let dueAmt = payable - paid;
+        return `
+        <tr style="border-bottom: 1px solid #e2e8f0;">
+        <td style="color:#1e293b; font-weight:700;">${i.title}</td>
+        <td style="text-align:right; color:#64748b; font-weight:600;">${payable.toFixed(2)}</td>
+        <td style="text-align:right; color:#005f40; font-weight:800;">${paid.toFixed(2)}</td>
+        <td style="text-align:right; color:#ef4444; font-weight:700;">${dueAmt.toFixed(2)}</td>
+        </tr>`;
+    }).join('');
 
-        let vHtml = "";
-        vaultData.forEach(v => {
-            let isInc = v.type === "Income";
-            if(isInc) tIncome += parseFloat(v.amount) || 0; else tExpense += parseFloat(v.amount) || 0;
-            let badge = isInc ? `<span style="color:#10b981; font-weight:900;"><i class="fas fa-arrow-down"></i> IN</span>` : `<span style="color:#ef4444; font-weight:900;"><i class="fas fa-arrow-up"></i> OUT</span>`;
-            vHtml += `<tr><td>${v.date}</td><td>${badge}</td><td><b>${v.category}</b></td><td>${v.payeeOrSource}</td><td><small style="color:#64748b;">${v.notes}</small></td><td><b>৳ ${v.amount}</b></td><td><button onclick="delVault('${v.id}')" style="background:#fef2f2; color:#ef4444; border:none; padding:6px 10px; border-radius:6px; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`;
-        });
-        document.querySelector("#vTable tbody").innerHTML = vHtml || `<tr><td colspan="7" style="text-align:center;">No records found.</td></tr>`;
-        document.getElementById('vTotalInc').innerText = tIncome.toFixed(2); document.getElementById('vTotalExp').innerText = tExpense.toFixed(2); document.getElementById('vNetBal').innerText = (tIncome - tExpense).toFixed(2);
-    }).catch(e => { hideLoading(); alert("Error loading Vault"); });
+    let secStr = d.section ? ` (Sec: ${d.section})` : "";
+    let h = `<html><head><style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+    @page { size: A4 portrait; margin: 0; } 
+    body { font-family: 'Inter', sans-serif; padding: 6mm; margin: 0; background: #fff; color: #0f172a; -webkit-print-color-adjust: exact; box-sizing: border-box; height: 297mm; overflow: hidden; } 
+    .box { height: 138mm; border: 2px solid #cbd5e1; padding: 20px; border-radius: 16px; position: relative; box-sizing: border-box; margin-bottom: 3mm; box-shadow: 0 4px 15px rgba(0,0,0,0.02); } 
+    .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 12px; margin-bottom: 15px; } 
+    .header-left { display: flex; align-items: center; gap: 15px; }
+    .header-text h2 { margin: 0; font-size: 19px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } 
+    .header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }
+    .receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
+    .info-grid div { line-height: 1.6; }
+    .info-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 800; display: inline-block; width: 75px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; } 
+    th { background: #f1f5f9; color: #334155; font-weight: 800; text-transform: uppercase; font-size: 11px; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; border-radius: 6px 6px 0 0; }
+    td { border-bottom: 1px solid #e2e8f0; padding: 8px 10px; }
+    .summary-container { display: flex; justify-content: flex-end; margin-top: 15px; }
+    .summary-box { width: 260px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: white; }
+    .summary-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; }
+    .summary-row:last-child { border-bottom: none; }
+    .total-payable { font-weight: 700; color: #475569; }
+    .total-paid { font-weight: 800; color: #005f40; background: #ecfdf5; border-bottom: 1px solid #a7f3d0;}
+    .total-due { font-weight: 800; color: #b91c1c; background: #fef2f2; }
+    .watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 80px; opacity: 0.03; color: #005f40; font-weight: 900; z-index: -1; pointer-events: none; letter-spacing: 12px; }
+    .signatures { position: absolute; bottom: 20px; left: 25px; right: 25px; display: flex; justify-content: space-between; font-weight: 800; font-size: 12px; color: #475569; }
+    .sig-line { border-top: 2px dashed #94a3b8; width: 160px; text-align: center; padding-top: 8px; }
+    .cut-line { text-align: center; margin: 6px 0; font-size: 12px; color: #94a3b8; font-weight: 700; letter-spacing: 3px; }
+    </style></head><body>
+
+    ${["STUDENT COPY", "OFFICE COPY"].map((c, idx) => `
+    <div class="box">
+    <div class="watermark">SRMS</div>
+    <div class="header">
+    <div class="header-left">
+    <img src="${LOGO_URL}" width="55" style="border-radius: 8px;">
+    <div class="header-text">
+    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+    <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
+    </div>
+    </div>
+    <div class="receipt-tag">${c}</div>
+    </div>
+    <div class="info-grid">
+    <div>
+    <div><span class="info-label">Receipt No:</span> <b style="color:#005f40;">${d.rNo}</b></div>
+    <div><span class="info-label">Student ID:</span> <b>${d.id}</b></div>
+    <div><span class="info-label">Name:</span> <b style="color:#0f172a; font-size:13px; text-transform:uppercase;">${d.name}</b></div>
+    </div>
+    <div style="text-align: right;">
+    <div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div>
+    <div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div>
+    <div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month} ${d.year}</b></div>
+    </div>
+    </div>
+    <table>
+    <thead>
+    <tr>
+    <th>Fee Particulars</th>
+    <th style="text-align:right; width: 95px;">Payable (TK)</th>
+    <th style="text-align:right; width: 100px;">Paid Now (TK)</th>
+    <th style="text-align:right; width: 95px;">Due (TK)</th>
+    </tr>
+    </thead>
+    <tbody>
+    ${items}
+    </tbody>
+    </table>
+    <div class="summary-container">
+    <div class="summary-box">
+    <div class="summary-row total-payable"><span>Total Payable:</span> <span>৳ ${d.totalBill}.00</span></div>
+    <div class="summary-row total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid}.00</span></div>
+    <div class="summary-row total-due"><span>Remaining Due:</span> <span>৳ ${d.remaining}.00</span></div>
+    </div>
+    </div>
+    <div class="signatures">
+    <div class="sig-line">Accountant / Cashier</div>
+    <div class="sig-line">Student / Guardian</div>
+    </div>
+    </div>
+    ${idx === 0 ? '<div class="cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>' : ''}
+    `).join('')}
+    </body></html>`;
+
+    let w = window.open('','','width=900,height=950'); 
+    w.document.write(h); 
+    w.document.close(); 
+    setTimeout(()=>w.print(), 1000);
 }
 
-function addVault() {
-    let type = document.getElementById('vType').value; let cat = document.getElementById('vCategory').value; let payee = document.getElementById('vPayee').value.trim(); let amt = document.getElementById('vAmount').value; let notes = document.getElementById('vNotes').value.trim();
-    if(!cat || !payee || !amt || amt <= 0) return alert("Fill all required fields!");
-    showLoading();
-    apiCall('addVaultRecord', {data: { type: type, category: cat, payeeOrSource: payee, amount: parseFloat(amt), date: new Date().toLocaleDateString('en-GB'), notes: notes }}).then(res => {
-        hideLoading();
-        if(res.status === "success") { alert("Saved!"); document.getElementById('vPayee').value = ""; document.getElementById('vAmount').value = ""; document.getElementById('vNotes').value = ""; loadVaultData(true); } 
-        else { alert("Failed"); }
-    }).catch(e=>{ hideLoading(); alert("Error"); });
-}
-
-function delVault(docId) {
-    let pwd = prompt("Enter Admin Password:"); if(!pwd) return;
-    showLoading();
-    apiCall('deleteVaultRecord', {docId: docId, pwd: pwd}).then(res => { hideLoading(); if(res.status === "success") { alert("Deleted!"); loadVaultData(true); } else alert(res.message); }).catch(e=>{ hideLoading(); alert("Error"); });
-}
-
+// 🚀 Calculator Logic 
 const cScr = document.getElementById('cScr');
 function cPush(v) { if(cScr.value === "0" || cScr.value === "Error") cScr.value = v; else cScr.value += v; }
-function cClr() { cScr.value = "0"; } function cBack() { cScr.value = cScr.value.slice(0,-1) || "0"; } function cSolve() { try { cScr.value = eval(cScr.value); } catch(e){ cScr.value = "Error"; } }
-window.addEventListener('keydown', (e) => { if(document.activeElement.tagName === 'INPUT' && document.activeElement.id !== 'cScr') return; if(e.key >= 0 && e.key <= 9) cPush(e.key); if(["+","-","*","/"].includes(e.key)) cPush(e.key); if(e.key === "Enter" || e.key === "=") cSolve(); if(e.key === "Backspace") cBack(); if(e.key === "Escape") cClr(); });
+function cClr() { cScr.value = "0"; }
+function cBack() { cScr.value = cScr.value.slice(0,-1) || "0"; }
+function cSolve() { try { cScr.value = eval(cScr.value); } catch(e){ cScr.value = "Error"; } }
+window.addEventListener('keydown', (e) => { 
+if(document.activeElement.tagName === 'INPUT' && document.activeElement.id !== 'cScr') return;
+if(e.key >= 0 && e.key <= 9) cPush(e.key); 
+if(["+","-","*","/"].includes(e.key)) cPush(e.key); 
+if(e.key === "Enter" || e.key === "=") cSolve(); 
+if(e.key === "Backspace") cBack(); 
+if(e.key === "Escape") cClr(); 
+});
+
 setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }); }, 1000);
 </script>
+
 </body>
 </html>
+
+
+
+
+
+
