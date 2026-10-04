@@ -6,7 +6,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<!-- 🔒 URL Security Script -->
+<!-- 🔒 URL Security Script: URL থেকে টোকেন গায়েব করে দেবে -->
 <script>
 if (window.history.replaceState) {
 var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -69,7 +69,8 @@ input[readonly] { background-color: #f1f5f9; color: var(--danger); font-weight: 
 .close { position: absolute; top: 20px; right: 25px; font-size: 26px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: 0.3s;}
 .close:hover { color: var(--danger); transform: rotate(90deg);}
 
-#loader { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.85); z-index:9999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
+/* 🛑 SECURITY SHIELD LOADER (Visible by default) */
+#loader { display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
 .spinner { width:55px; height:55px; border:4px solid #e2e8f0; border-top:4px solid var(--primary); border-radius:50%; animation:spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; }
 
 .badge-army { background: linear-gradient(135deg, var(--gold), #b45309); color: white; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; box-shadow: 0 2px 5px rgba(217, 119, 6, 0.3);}
@@ -89,282 +90,289 @@ body * { visibility: hidden; }
 </head>
 <body>
 
-<div id="loader"><div class="spinner"></div><p style="margin-top:15px; font-weight:800; color:var(--primary); letter-spacing: 1px;">SECURITY CHECK...</p></div>
-
-<div class="header">
-<div class="header-left">
-<h2>SRMS Student DB V4</h2>
-</div>
-<button class="btn-back" onclick="window.close();" title="Back to Admin Dashboard">
-<i class="fas fa-sign-out-alt"></i> Dashboard
-</button>
+<!-- 🛑 Security Gate UI -->
+<div id="loader">
+    <div class="spinner"></div>
+    <p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--primary); letter-spacing: 1px; text-align: center;">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p>
 </div>
 
-<!-- ================= ADMIT TAB ================= -->
-<div id="admitTab" class="container active">
-<div class="card">
-<h3 style="margin:0 0 20px 0; color:var(--primary); font-weight:900; text-transform: uppercase; font-size: 18px;"><i class="fas fa-user-plus"></i> New Admission</h3>
-<label>Full Name *</label><input type="text" id="sName" placeholder="Student's Full Name">
+<!-- 🛑 Main App Container (Hidden under loader initially) -->
+<div id="appContainer" style="display: none;">
+    <div class="header">
+    <div class="header-left">
+    <h2>SRMS Student DB V4</h2>
+    </div>
+    <button class="btn-back" onclick="window.close();" title="Back to Admin Dashboard">
+    <i class="fas fa-sign-out-alt"></i> Dashboard
+    </button>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Father's Name</label><input type="text" id="sFatherName" placeholder="Father's Name"></div>
-<div style="flex:1;"><label>Father's NID</label><input type="number" id="sFatherNid" placeholder="NID Number"></div>
-</div>
+    <!-- ================= ADMIT TAB ================= -->
+    <div id="admitTab" class="container active">
+    <div class="card">
+    <h3 style="margin:0 0 20px 0; color:var(--primary); font-weight:900; text-transform: uppercase; font-size: 18px;"><i class="fas fa-user-plus"></i> New Admission</h3>
+    <label>Full Name *</label><input type="text" id="sName" placeholder="Student's Full Name">
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Mother's Name</label><input type="text" id="sMotherName" placeholder="Mother's Name"></div>
-<div style="flex:1;"><label>Mother's NID</label><input type="number" id="sMotherNid" placeholder="NID Number"></div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Father's Name</label><input type="text" id="sFatherName" placeholder="Father's Name"></div>
+    <div style="flex:1;"><label>Father's NID</label><input type="number" id="sFatherNid" placeholder="NID Number"></div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Class *</label>
-<select id="sClass" onchange="toggleGroup('sClass', 'sGroupDiv')">
-<option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
-<option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
-<option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
-<option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
-</select>
-</div>
-<div style="flex:1;"><label>Roll *</label><input type="number" id="sRoll" placeholder="Roll No."></div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Mother's Name</label><input type="text" id="sMotherName" placeholder="Mother's Name"></div>
+    <div style="flex:1;"><label>Mother's NID</label><input type="number" id="sMotherNid" placeholder="NID Number"></div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Section / শাখা</label>
-<select id="sSection">
-<option value="">Select Section</option>
-</select>
-</div>
-<div id="sGroupDiv" style="flex:1; display:none;"><label>Group/বিভাগ *</label>
-<select id="sGroup">
-<option value="">Select</option>
-<option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option>
-</select>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Class *</label>
+    <select id="sClass" onchange="toggleGroup('sClass', 'sGroupDiv')">
+    <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
+    <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
+    <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
+    <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
+    </select>
+    </div>
+    <div style="flex:1;"><label>Roll *</label><input type="number" id="sRoll" placeholder="Roll No."></div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Status *</label>
-<select id="sRes">
-<option value="Non-Residential">Non-Residential</option>
-<option value="Residential">Residential</option>
-</select>
-</div>
-<div style="flex:1;"><label style="color:var(--primary-dark);"><i class="fas fa-shield-alt"></i> Category (Army/Civil) *</label>
-<select id="sCategory" style="border-color:var(--primary); font-weight:700;">
-<option value="Civil">Civil (অসামরিক)</option>
-<option value="Army">Army (সামরিক)</option>
-</select>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Section / শাখা</label>
+    <select id="sSection">
+    <option value="">Select Section</option>
+    </select>
+    </div>
+    <div id="sGroupDiv" style="flex:1; display:none;"><label>Group/বিভাগ *</label>
+    <select id="sGroup">
+    <option value="">Select</option>
+    <option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option>
+    </select>
+    </div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Machine ID</label><input type="text" id="sMachineId" placeholder="(Optional) Blank = Student ID"></div>
-<div style="flex:1;"><label style="color:var(--gold);"><i class="fas fa-id-card"></i> Card Number (RFID)</label><input type="text" id="sCardNumber" placeholder="Enter Card Number" style="border-color:var(--gold); background:var(--gold-light);"></div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Status *</label>
+    <select id="sRes">
+    <option value="Non-Residential">Non-Residential</option>
+    <option value="Residential">Residential</option>
+    </select>
+    </div>
+    <div style="flex:1;"><label style="color:var(--primary-dark);"><i class="fas fa-shield-alt"></i> Category (Army/Civil) *</label>
+    <select id="sCategory" style="border-color:var(--primary); font-weight:700;">
+    <option value="Civil">Civil (অসামরিক)</option>
+    <option value="Army">Army (সামরিক)</option>
+    </select>
+    </div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Blood Group</label>
-<select id="sBloodGroup">
-<option value="">Select</option>
-<option value="A+">A+</option><option value="A-">A-</option>
-<option value="B+">B+</option><option value="B-">B-</option>
-<option value="AB+">AB+</option><option value="AB-">AB-</option>
-<option value="O+">O+</option><option value="O-">O-</option>
-</select>
-</div>
-<div style="flex:1;"><label>Phone Number *</label><input type="tel" id="sPhone" placeholder="017XXXXXXXX"></div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Machine ID</label><input type="text" id="sMachineId" placeholder="(Optional) Blank = Student ID"></div>
+    <div style="flex:1;"><label style="color:var(--gold);"><i class="fas fa-id-card"></i> Card Number (RFID)</label><input type="text" id="sCardNumber" placeholder="Enter Card Number" style="border-color:var(--gold); background:var(--gold-light);"></div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Email (Optional)</label><input type="email" id="sEmail" placeholder="student@email.com"></div>
-<div style="flex:1;"><label>Birth Certificate No.</label><input type="text" id="sCert" placeholder="Birth Cert No."></div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Blood Group</label>
+    <select id="sBloodGroup">
+    <option value="">Select</option>
+    <option value="A+">A+</option><option value="A-">A-</option>
+    <option value="B+">B+</option><option value="B-">B-</option>
+    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+    <option value="O+">O+</option><option value="O-">O-</option>
+    </select>
+    </div>
+    <div style="flex:1;"><label>Phone Number *</label><input type="tel" id="sPhone" placeholder="017XXXXXXXX"></div>
+    </div>
 
-<label>Prev. Reg No.</label><input type="text" id="sPrev" placeholder="Registration No.">
-<label>Address</label><textarea id="sAddr" rows="2" placeholder="Present Address"></textarea>
-<label>Photo</label><input type="file" id="sPhoto" accept="image/*" style="padding: 10px;">
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Email (Optional)</label><input type="email" id="sEmail" placeholder="student@email.com"></div>
+    <div style="flex:1;"><label>Birth Certificate No.</label><input type="text" id="sCert" placeholder="Birth Cert No."></div>
+    </div>
 
-<button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Admit (Save Profile)</button>
-</div>
-</div>
+    <label>Prev. Reg No.</label><input type="text" id="sPrev" placeholder="Registration No.">
+    <label>Address</label><textarea id="sAddr" rows="2" placeholder="Present Address"></textarea>
+    <label>Photo</label><input type="file" id="sPhoto" accept="image/*" style="padding: 10px;">
 
-<!-- ================= VIEW TAB ================= -->
-<div id="viewTab" class="container">
-<div class="card">
-<div style="display:flex; flex-wrap: wrap; gap:10px; margin-bottom:15px;">
-<select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:90px;">
-<option value="">All Classes</option>
-<option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
-<option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
-<option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
-<option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
-</select>
+    <button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Admit (Save Profile)</button>
+    </div>
+    </div>
 
-<select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:90px;">
-<option value="">All Sections</option>
-</select>
+    <!-- ================= VIEW TAB ================= -->
+    <div id="viewTab" class="container">
+    <div class="card">
+    <div style="display:flex; flex-wrap: wrap; gap:10px; margin-bottom:15px;">
+    <select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:90px;">
+    <option value="">All Classes</option>
+    <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
+    <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
+    <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
+    <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
+    </select>
 
-<select id="filterGroup" onchange="filterStudents()" style="flex:1; min-width:90px;">
-<option value="">All Groups</option>
-<option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option>
-</select>
+    <select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:90px;">
+    <option value="">All Sections</option>
+    </select>
 
-<select id="filterRes" onchange="filterStudents()" style="flex:1; min-width:90px;">
-<option value="">All Status</option>
-<option value="Residential">Residential</option>
-<option value="Non-Residential">Non-Residential</option>
-</select>
+    <select id="filterGroup" onchange="filterStudents()" style="flex:1; min-width:90px;">
+    <option value="">All Groups</option>
+    <option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option>
+    </select>
 
-<select id="filterCategory" onchange="filterStudents()" style="flex:1; min-width:90px; color:var(--primary); font-weight:bold;">
-<option value="">All Category</option>
-<option value="Civil">Civil</option>
-<option value="Army">Army</option>
-</select>
+    <select id="filterRes" onchange="filterStudents()" style="flex:1; min-width:90px;">
+    <option value="">All Status</option>
+    <option value="Residential">Residential</option>
+    <option value="Non-Residential">Non-Residential</option>
+    </select>
 
-<button onclick="window.open('https://www.saidpurresidentialmodelschool.com/tc', '_blank')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:800; display:flex; align-items:center; gap:6px; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);">
-<i class="fas fa-file-signature"></i> Create TC
-</button>
+    <select id="filterCategory" onchange="filterStudents()" style="flex:1; min-width:90px; color:var(--primary); font-weight:bold;">
+    <option value="">All Category</option>
+    <option value="Civil">Civil</option>
+    <option value="Army">Army</option>
+    </select>
 
-<button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3);">
-<i class="fas fa-print"></i>
-</button>
-</div>
+    <button onclick="window.open('https://www.saidpurresidentialmodelschool.com/tc', '_blank')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; font-size:13px; font-weight:800; display:flex; align-items:center; gap:6px; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);">
+    <i class="fas fa-file-signature"></i> Create TC
+    </button>
 
-<div style="position: relative;">
-<i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
-<input type="text" id="stuSearch" placeholder="Search Name, ID, Phone or Roll..." onkeyup="filterStudents()" style="padding-left: 40px; border-radius: 30px;">
-</div>
-</div>
+    <button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3);">
+    <i class="fas fa-print"></i>
+    </button>
+    </div>
 
-<div class="card" style="background: linear-gradient(145deg, var(--primary), var(--primary-dark)); color:white; padding: 20px; border: none; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0, 95, 64, 0.3);">
-<div style="text-align: center; font-weight: 900; font-size: 18px; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">
-Total Students: <span id="totalStuCount" style="color:var(--gold); font-size:22px;">0</span>
-</div>
-<div id="classWiseStats" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 12px;"></div>
-</div>
+    <div style="position: relative;">
+    <i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i>
+    <input type="text" id="stuSearch" placeholder="Search Name, ID, Phone or Roll..." onkeyup="filterStudents()" style="padding-left: 40px; border-radius: 30px;">
+    </div>
+    </div>
 
-<div id="studentListDisplay"></div>
-</div>
+    <div class="card" style="background: linear-gradient(145deg, var(--primary), var(--primary-dark)); color:white; padding: 20px; border: none; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0, 95, 64, 0.3);">
+    <div style="text-align: center; font-weight: 900; font-size: 18px; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">
+    Total Students: <span id="totalStuCount" style="color:var(--gold); font-size:22px;">0</span>
+    </div>
+    <div id="classWiseStats" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 12px;"></div>
+    </div>
 
-<!-- ================= EDIT MODAL ================= -->
-<div id="editModal" class="modal">
-<div class="modal-content">
-<span class="close" onclick="closeModal('editModal')">&times;</span>
-<h3 style="color:var(--edit); margin-top:0; font-weight:900; text-transform: uppercase; font-size:20px;"><i class="fas fa-user-edit"></i> Edit Profile</h3>
+    <div id="studentListDisplay"></div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Student ID (Locked)</label><input type="text" id="eId" readonly></div>
-<div style="flex:1;"><label>Machine ID</label><input type="text" id="eMachineId"></div>
-</div>
-<input type="hidden" id="eRowId">
-<label>Name</label><input type="text" id="eName">
+    <!-- ================= EDIT MODAL ================= -->
+    <div id="editModal" class="modal">
+    <div class="modal-content">
+    <span class="close" onclick="closeModal('editModal')">&times;</span>
+    <h3 style="color:var(--edit); margin-top:0; font-weight:900; text-transform: uppercase; font-size:20px;"><i class="fas fa-user-edit"></i> Edit Profile</h3>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Father's Name</label><input type="text" id="eFatherName"></div>
-<div style="flex:1;"><label>Father's NID</label><input type="number" id="eFatherNid"></div>
-</div>
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Mother's Name</label><input type="text" id="eMotherName"></div>
-<div style="flex:1;"><label>Mother's NID</label><input type="number" id="eMotherNid"></div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Student ID (Locked)</label><input type="text" id="eId" readonly></div>
+    <div style="flex:1;"><label>Machine ID</label><input type="text" id="eMachineId"></div>
+    </div>
+    <input type="hidden" id="eRowId">
+    <label>Name</label><input type="text" id="eName">
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Class</label>
-<select id="eClass" onchange="toggleGroup('eClass', 'eGroupDivEdit')">
-<option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
-<option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
-<option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
-<option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
-</select>
-</div>
-<div style="flex:1;"><label>Section</label>
-<select id="eSection">
-<option value="">Select Section</option>
-</select>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Father's Name</label><input type="text" id="eFatherName"></div>
+    <div style="flex:1;"><label>Father's NID</label><input type="number" id="eFatherNid"></div>
+    </div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Mother's Name</label><input type="text" id="eMotherName"></div>
+    <div style="flex:1;"><label>Mother's NID</label><input type="number" id="eMotherNid"></div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Roll</label><input type="number" id="eRoll"></div>
-<div id="eGroupDivEdit" style="flex:1; display:none;"><label>Group</label>
-<select id="eGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Class</label>
+    <select id="eClass" onchange="toggleGroup('eClass', 'eGroupDivEdit')">
+    <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
+    <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
+    <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
+    <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
+    </select>
+    </div>
+    <div style="flex:1;"><label>Section</label>
+    <select id="eSection">
+    <option value="">Select Section</option>
+    </select>
+    </div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Status</label>
-<select id="eRes"><option value="Non-Residential">Non-Residential</option><option value="Residential">Residential</option></select>
-</div>
-<div style="flex:1;"><label style="color:var(--primary);"><i class="fas fa-shield-alt"></i> Category</label>
-<select id="eCategory" style="border-color:var(--primary); font-weight:700;">
-<option value="Civil">Civil (অসামরিক)</option>
-<option value="Army">Army (সামরিক)</option>
-</select>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Roll</label><input type="number" id="eRoll"></div>
+    <div id="eGroupDivEdit" style="flex:1; display:none;"><label>Group</label>
+    <select id="eGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select>
+    </div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Card Number (RFID)</label><input type="text" id="eCardNumber"></div>
-<div style="flex:1;"><label>Blood Group</label>
-<select id="eBloodGroup">
-<option value="">Select</option>
-<option value="A+">A+</option><option value="A-">A-</option>
-<option value="B+">B+</option><option value="B-">B-</option>
-<option value="AB+">AB+</option><option value="AB-">AB-</option>
-<option value="O+">O+</option><option value="O-">O-</option>
-</select>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Status</label>
+    <select id="eRes"><option value="Non-Residential">Non-Residential</option><option value="Residential">Residential</option></select>
+    </div>
+    <div style="flex:1;"><label style="color:var(--primary);"><i class="fas fa-shield-alt"></i> Category</label>
+    <select id="eCategory" style="border-color:var(--primary); font-weight:700;">
+    <option value="Civil">Civil (অসামরিক)</option>
+    <option value="Army">Army (সামরিক)</option>
+    </select>
+    </div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Phone Number</label><input type="tel" id="ePhone"></div>
-<div style="flex:1;"><label>Email</label><input type="email" id="eEmail"></div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Card Number (RFID)</label><input type="text" id="eCardNumber"></div>
+    <div style="flex:1;"><label>Blood Group</label>
+    <select id="eBloodGroup">
+    <option value="">Select</option>
+    <option value="A+">A+</option><option value="A-">A-</option>
+    <option value="B+">B+</option><option value="B-">B-</option>
+    <option value="AB+">AB+</option><option value="AB-">AB-</option>
+    <option value="O+">O+</option><option value="O-">O-</option>
+    </select>
+    </div>
+    </div>
 
-<div style="display:flex; gap:15px;">
-<div style="flex:1;"><label>Prev. Reg No.</label><input type="text" id="ePrev"></div>
-<div style="flex:1;"><label>Birth Certificate</label><input type="text" id="eCert"></div>
-</div>
-<label>Address</label><textarea id="eAddr" rows="2"></textarea>
-<button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);" onclick="updateStudent()">🔄 Update Profile</button>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Phone Number</label><input type="tel" id="ePhone"></div>
+    <div style="flex:1;"><label>Email</label><input type="email" id="eEmail"></div>
+    </div>
 
-<!-- ================= 🚀 SECTION MANAGER TAB ================= -->
-<div id="sectionTab" class="container">
-<div class="card" style="border-top-color: #005f40;">
-<h3 style="margin:0 0 15px 0; color:#005f40; font-weight:900;"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
-<p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">এখানে একবার কোনো সেকশন অ্যাড করলে তা অটোমেটিক অ্যাডমিট এবং এডিট ফর্মে সেভ হয়ে থাকবে।</p>
-<div style="display:flex; gap:10px;">
-<input type="text" id="newSecName" placeholder="Enter new section name (e.g. Padma, Lotus)" style="flex:1; border-color:#a7f3d0;">
-<button onclick="addSection()" class="btn-submit" style="width:130px; margin-top:0; padding:10px; background: linear-gradient(135deg, #005f40, #003d29); box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add</button>
-</div>
-<div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;">
-</div>
-</div>
-</div>
+    <div style="display:flex; gap:15px;">
+    <div style="flex:1;"><label>Prev. Reg No.</label><input type="text" id="ePrev"></div>
+    <div style="flex:1;"><label>Birth Certificate</label><input type="text" id="eCert"></div>
+    </div>
+    <label>Address</label><textarea id="eAddr" rows="2"></textarea>
+    <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);" onclick="updateStudent()">🔄 Update Profile</button>
+    </div>
+    </div>
 
-<!-- ================= PRINT AREA ================= -->
-<div id="printArea" style="display:none;">
-<div style="text-align:center; border-bottom:3px solid #005f40; margin-bottom:15px; padding-bottom: 10px;">
-<h2 style="margin:0; color:#005f40; font-family:'Times New Roman', serif; text-transform:uppercase; font-size: 20px; font-weight: 800;">Saidpur Residential Model School</h2>
-<p id="printTitle" style="margin:5px 0; font-weight:bold; font-size:13px; color:#475569; font-family:sans-serif; letter-spacing: 0.5px;"></p>
-</div>
-<table class="print-table">
-<thead>
-<tr>
-<th>ID</th><th>Name</th><th>Father</th><th>Mother</th><th>Class</th><th>Sec</th><th>Grp</th><th>Roll</th><th>Category</th><th>Phone</th>
-</tr>
-</thead>
-<tbody id="printTableBody"></tbody>
-</table>
-</div>
+    <!-- ================= 🚀 SECTION MANAGER TAB ================= -->
+    <div id="sectionTab" class="container">
+    <div class="card" style="border-top-color: #005f40;">
+    <h3 style="margin:0 0 15px 0; color:#005f40; font-weight:900;"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
+    <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">এখানে একবার কোনো সেকশন অ্যাড করলে তা অটোমেটিক অ্যাডমিট এবং এডিট ফর্মে সেভ হয়ে থাকবে।</p>
+    <div style="display:flex; gap:10px;">
+    <input type="text" id="newSecName" placeholder="Enter new section name (e.g. Padma, Lotus)" style="flex:1; border-color:#a7f3d0;">
+    <button onclick="addSection()" class="btn-submit" style="width:130px; margin-top:0; padding:10px; background: linear-gradient(135deg, #005f40, #003d29); box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add</button>
+    </div>
+    <div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;">
+    </div>
+    </div>
+    </div>
 
-<div class="bottom-nav">
-<button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
-<button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
-<button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-layer-group"></i>Sections</button>
-</div>
+    <!-- ================= PRINT AREA ================= -->
+    <div id="printArea" style="display:none;">
+    <div style="text-align:center; border-bottom:3px solid #005f40; margin-bottom:15px; padding-bottom: 10px;">
+    <h2 style="margin:0; color:#005f40; font-family:'Times New Roman', serif; text-transform:uppercase; font-size: 20px; font-weight: 800;">Saidpur Residential Model School</h2>
+    <p id="printTitle" style="margin:5px 0; font-weight:bold; font-size:13px; color:#475569; font-family:sans-serif; letter-spacing: 0.5px;"></p>
+    </div>
+    <table class="print-table">
+    <thead>
+    <tr>
+    <th>ID</th><th>Name</th><th>Father</th><th>Mother</th><th>Class</th><th>Sec</th><th>Grp</th><th>Roll</th><th>Category</th><th>Phone</th>
+    </tr>
+    </thead>
+    <tbody id="printTableBody"></tbody>
+    </table>
+    </div>
+
+    <div class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
+    <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
+    <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-layer-group"></i>Sections</button>
+    </div>
+</div> <!-- End App Container -->
 
 <!-- ================= FIREBASE & BACKEND LOGIC ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
@@ -373,7 +381,7 @@ Total Students: <span id="totalStuCount" style="color:var(--gold); font-size:22p
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "YOUR_APPS_SCRIPT_WEB_APP_URL_HERE";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4mCNGwS3UHSadoNF2exXw3D-aZtspe4kEew9BliSkCR2HbBQtaifmzoWZoFKdDL8g/exec";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
@@ -388,7 +396,7 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.l
 
 var allData = [];
 var globalSections = []; 
-var isAuthReady = false; // 🛡️ Security Gate
+var isAuthReady = false; 
 
 // 🔑 TOKEN MANAGEMENT
 function getToken() {
@@ -414,7 +422,9 @@ async function apiCall(actionName, payloadData = {}) {
     }
 }
 
-function showLoader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
+function showLoaderText(text) { 
+    document.getElementById('loaderText').innerHTML = text; 
+}
 
 function switchTab(id, btn) {
     if(!isAuthReady) return alert("Security checking in progress... Please wait.");
@@ -432,26 +442,37 @@ function toggleGroup(selId, divId) {
 }
 
 // ==========================================
-// 🚀 DIRECT FIREBASE: SECTIONS & STUDENTS (Secured by onAuthStateChanged)
+// 🚀 🛡️ SECURITY GATE & INITIALIZATION 🛡️ 🚀
 // ==========================================
 
 window.onload = function() {
-    showLoader(true);
     // 🛡️ Security Gate: ফায়ারবেস লগইন নিশ্চিত হওয়ার পরই ডাটা লোড হবে
     auth.onAuthStateChanged(function(user) {
         if (user) {
             isAuthReady = true;
-            showLoader(false);
+            // 🔓 Hide Loader & Show App
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'block';
+            
+            // Load Initial Data
             loadSectionsData();
             if(document.getElementById('viewTab').classList.contains('active')) {
                 loadStudents();
             }
         } else {
-            // টোকেন বা সেশন না থাকলে সোজা লগইন পেজে কিক আউট করবে
-            window.location.replace(window.location.origin + "/login-panel/accounting-and-management-department");
+            // 🚫 Unauthorized Access! Redirect to Login
+            showLoaderText("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
+            setTimeout(() => {
+                var currentDomain = window.location.protocol + "//" + window.location.host;
+                window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
+            }, 1000);
         }
     });
 }
+
+// ==========================================
+// 🚀 DIRECT FIREBASE: SECTIONS & STUDENTS
+// ==========================================
 
 async function loadSectionsData() {
     if(!isAuthReady) return;
@@ -493,24 +514,24 @@ async function addSection() {
     if(!isAuthReady) return;
     let name = document.getElementById('newSecName').value.trim();
     if(!name) return alert("Please enter section name.");
-    showLoader(true);
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("ADDING SECTION...");
     try {
         if (!globalSections.includes(name)) globalSections.push(name);
         await db.collection('Admin').doc('Settings').set({ sections: globalSections.join(',') }, { merge: true });
         document.getElementById('newSecName').value = "";
-        updateSectionDropdowns(); renderSectionList(); showLoader(false);
-    } catch(e) { showLoader(false); alert("Error adding section"); }
+        updateSectionDropdowns(); renderSectionList(); document.getElementById('loader').style.display = 'none';
+    } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error adding section"); }
 }
 
 async function deleteSection(name) {
     if(!isAuthReady) return;
     if(!confirm(`Delete section "${name}"?`)) return;
-    showLoader(true);
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING SECTION...");
     try {
         globalSections = globalSections.filter(s => s !== name);
         await db.collection('Admin').doc('Settings').set({ sections: globalSections.join(',') }, { merge: true });
-        updateSectionDropdowns(); renderSectionList(); showLoader(false);
-    } catch(e) { showLoader(false); alert("Error deleting section"); }
+        updateSectionDropdowns(); renderSectionList(); document.getElementById('loader').style.display = 'none';
+    } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error deleting section"); }
 }
 
 function saveStudent() {
@@ -528,9 +549,9 @@ function saveStudent() {
 
     if(!d.name || !d.roll || !d.phone) return alert("নাম, রোল এবং ফোন নম্বর অবশ্যই দিন!");
 
-    showLoader(true);
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("SAVING PROFILE...<br><span style='font-size:11px; color:#64748b;'>Generating ID & Syncing...</span>");
     var done = res => { 
-        showLoader(false); 
+        document.getElementById('loader').style.display = 'none'; 
         alert("সফল! স্টুডেন্ট আইডি: " + res.id + (res.machineStatus ? "\nমেশিন স্ট্যাটাস: " + res.machineStatus : "")); 
         document.getElementById('sName').value = ""; document.getElementById('sFatherName').value = ""; document.getElementById('sFatherNid').value = ""; document.getElementById('sMotherName').value = ""; document.getElementById('sMotherNid').value = ""; document.getElementById('sBloodGroup').value = ""; document.getElementById('sRoll').value = ""; document.getElementById('sPhone').value = ""; document.getElementById('sMachineId').value = ""; document.getElementById('sCardNumber').value = ""; document.getElementById('sCategory').value = "Civil"; document.getElementById('sSection').value = ""; document.getElementById('sPhoto').value = "";
     };
@@ -538,16 +559,16 @@ function saveStudent() {
     if(f) {
         var r = new FileReader(); r.onload = e => { 
             d.photoData = e.target.result.split(',')[1]; d.mimeType = f.type; 
-            apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {showLoader(false); alert("Error");}); 
+            apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {document.getElementById('loader').style.display = 'none'; alert("Error");}); 
         }; r.readAsDataURL(f);
     } else { 
-        apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {showLoader(false); alert("Error");}); 
+        apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {document.getElementById('loader').style.display = 'none'; alert("Error");}); 
     }
 }
 
 async function loadStudents() {
     if(!isAuthReady) return;
-    showLoader(true);
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("FETCHING DATA...<br><span style='font-size:11px; color:#64748b;'>Connecting securely to Database</span>");
     try {
         const snapshot = await db.collection('Students').get();
         let data = [];
@@ -560,12 +581,11 @@ async function loadStudents() {
         data.sort((a,b) => (parseInt(a.roll)||9999) - (parseInt(b.roll)||9999));
         allData = data.reverse();
         renderList(allData);
-        showLoader(false);
+        document.getElementById('loader').style.display = 'none';
     } catch(e) {
-        showLoader(false); 
+        document.getElementById('loader').style.display = 'none'; 
         console.error(e); 
-        // 🚨 Exact Database Error Alert
-        alert("Database Error: " + e.message + "\n\n⚠️️ ফায়ারবেস Security Rules আপডেট করা না থাকলে এই সমস্যা হবে। দয়া করে রুলস আপডেট করুন।");
+        alert("Database Error: " + e.message);
     }
 }
 
@@ -623,18 +643,18 @@ async function updateStudent() {
     if(!isAuthReady) return;
     var d = { rowId: document.getElementById('eRowId').value, name: document.getElementById('eName').value, fatherName: document.getElementById('eFatherName').value || "", fatherNid: document.getElementById('eFatherNid').value || "", motherName: document.getElementById('eMotherName').value || "", motherNid: document.getElementById('eMotherNid').value || "", bloodGroup: document.getElementById('eBloodGroup').value || "", machineId: document.getElementById('eMachineId').value, classVal: document.getElementById('eClass').value, sectionVal: document.getElementById('eSection').value || "", roll: document.getElementById('eRoll').value, resStatus: document.getElementById('eRes').value, category: document.getElementById('eCategory').value, group: document.getElementById('eGroup').value || "", cardNumber: document.getElementById('eCardNumber').value || "", phone: document.getElementById('ePhone').value || "", email: document.getElementById('eEmail').value || "", cert: document.getElementById('eCert').value || "", prev: document.getElementById('ePrev').value || "", addr: document.getElementById('eAddr').value || "" };
     
-    showLoader(true);
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("UPDATING PROFILE...");
     try {
         await db.collection('Students').doc(d.rowId).update({
             name: d.name, fatherName: d.fatherName, fatherNid: d.fatherNid, motherName: d.motherName, motherNid: d.motherNid, bloodGroup: d.bloodGroup, machineID: d.machineId, class: d.classVal, section: d.sectionVal, roll: d.roll, resStatus: d.resStatus, category: d.category, group: d.group, cardNumber: d.cardNumber, phone: d.phone, email: d.email, birthCert: d.cert, prevReg: d.prev, address: d.addr
         });
         if (d.phone) { apiCall('sendUpdateSMS', d); }
-        showLoader(false);
+        document.getElementById('loader').style.display = 'none';
         alert("Update Successful!");
         closeModal('editModal');
         loadStudents();
     } catch(e) {
-        showLoader(false); console.error(e); alert("Update Failed");
+        document.getElementById('loader').style.display = 'none'; console.error(e); alert("Update Failed");
     }
 }
 
@@ -655,11 +675,12 @@ function printReport() {
 function delStu(row) { 
     if(!isAuthReady) return;
     if(confirm("Confirm delete?")) {
-        showLoader(true); 
-        apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {showLoader(false); alert("Error");}); 
+        document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING...");
+        apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error");}); 
     } 
 }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
 </script>
 </body>
 </html>
