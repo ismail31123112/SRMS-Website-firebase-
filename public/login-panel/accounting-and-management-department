@@ -28,24 +28,28 @@
     }
     enforceSecurity();
 
-    // 🌐 DYNAMIC MODULE LAUNCHER (POP-UP BLOCKER BYPASS & RELATIVE PATHS)
+    // 🌐 DYNAMIC MODULE LAUNCHER (POP-UP BLOCKER BYPASS)
     window.openAppModule = function(path) {
         let token = sessionStorage.getItem('portal_token');
+        let baseUrl = window.location.origin || (window.location.protocol + "//" + window.location.host);
         
-        // রিলেটিভ রুট পাথ (ডোমেইন যাই হোক না কেন, স্লাশ থেকে শুরু হবে)
-        let targetUrl = "/" + path;
+        // রিলেটিভ রুট পাথ 
+        let targetUrl = baseUrl + "/" + path;
         
         if(token) {
             targetUrl += "?token=" + encodeURIComponent(token);
         }
         
-        // পপ-আপ ব্লকার এড়ানোর জন্য <a> ট্যাগ তৈরি করে ক্লিক করানো হচ্ছে
-        let link = document.createElement('a');
-        link.href = targetUrl;
-        link.target = '_blank';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            let newWindow = window.open(targetUrl, '_blank');
+            // যদি ব্রাউজারের পপ-আপ ব্লকার নতুন ট্যাব ওপেন হতে না দেয়
+            if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+                // ব্লকার থাকলে একই ট্যাবে (Same Tab) ওপেন হবে
+                window.location.href = targetUrl;
+            }
+        } catch(e) {
+            window.location.href = targetUrl;
+        }
     };
     </script>
 
@@ -174,7 +178,7 @@
         </button>
         <p id="msg" class="msg-text" style="color: var(--danger-color);"></p>
         <hr>
-        <button onclick="window.location.href = window.location.protocol + '//' + window.location.host;" class="btn-link" style="color: #666; border-color: #ddd;">
+        <button onclick="window.location.href = window.location.origin;" class="btn-link" style="color: #666; border-color: #ddd;">
             <i class="fas fa-home"></i> Back to Main Website
         </button>
     </div>
@@ -220,7 +224,7 @@
         });
 
         // 🛑 🛑 🛑 IMPORTANT: Replace this with your newly deployed Backend API (REST) URL!
-        const scriptURL = 'YOUR_NEW_BACKEND_API_URL_HERE'; 
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
         
         let cachedTeachers = [];
         let cachedStudents = [];
@@ -358,11 +362,11 @@
                 document.getElementById('messaging-section').innerHTML = "";
                 document.getElementById('password').value = "";
                 
-                var currentDomain = window.location.protocol + "//" + window.location.host;
+                var currentDomain = window.location.origin;
                 window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
             }).catch((error) => {
                 sessionStorage.clear();
-                var currentDomain = window.location.protocol + "//" + window.location.host;
+                var currentDomain = window.location.origin;
                 window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
             });
         }
