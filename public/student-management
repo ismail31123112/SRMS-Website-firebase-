@@ -6,35 +6,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<!-- 🔒 ILLEGAL ACCESS REDIRECT (DYNAMIC DOMAIN) -->
+<!-- 🔒 URL Security Script -->
 <script>
-function enforceSecurity() {
-    let token = sessionStorage.getItem('portal_token');
-    let isActiveSession = sessionStorage.getItem('srms_active_session');
-    
-    // Check if token exists OR if the token was passed via URL parameters
-    const urlParams = new URLSearchParams(window.location.search);
-    const tokenFromUrl = urlParams.get('token');
-    
-    if(tokenFromUrl) {
-        sessionStorage.setItem('portal_token', tokenFromUrl);
-        // Clean URL
-        if (window.history.replaceState) {
-            var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-            window.history.replaceState({path: cleanUrl}, '', cleanUrl);
-        }
-        return; 
-    }
-
-    if (!token && !isActiveSession) {
-        // Build dynamic login URL
-        var currentDomain = window.location.protocol + "//" + window.location.host;
-        var loginUrl = currentDomain + "/login-panel/accounting-and-management-department";
-        window.location.replace(loginUrl);
-    }
+if (window.history.replaceState) {
+var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 }
-// Run security check immediately
-enforceSecurity();
 </script>
 
 <style>
@@ -49,7 +26,7 @@ enforceSecurity();
 --gold: #f59e0b;
 --gold-light: #fef3c7;
 }
-body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 95px; color: #334155; display: none; /* Hidden by default until JS unhides it */ }
+body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 95px; color: #334155; }
 
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -110,9 +87,9 @@ body * { visibility: hidden; }
 .print-table th { background: #e2e8f0 !important; font-weight: bold; color: #000; text-transform: uppercase; -webkit-print-color-adjust: exact; }
 </style>
 </head>
-<body onload="document.body.style.display='block'; loadSectionsData();">
+<body>
 
-<div id="loader"><div class="spinner"></div><p style="margin-top:15px; font-weight:800; color:var(--primary); letter-spacing: 1px;">PROCESSING...</p></div>
+<div id="loader"><div class="spinner"></div><p style="margin-top:15px; font-weight:800; color:var(--primary); letter-spacing: 1px;">SECURITY CHECK...</p></div>
 
 <div class="header">
 <div class="header-left">
@@ -404,13 +381,24 @@ const firebaseConfig = {
 };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
+const auth = firebase.auth();
+
+// 🔒 LOCAL PERSISTENCE SET FOR SHARED TABS
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.log(err));
 
 var allData = [];
 var globalSections = []; 
+var isAuthReady = false; // 🛡️ Security Gate
 
 // 🔑 TOKEN MANAGEMENT
 function getToken() {
-    return sessionStorage.getItem('portal_token') || "";
+    let token = sessionStorage.getItem('portal_token');
+    if (!token) {
+        const urlParams = new URLSearchParams(window.location.search);
+        token = urlParams.get('token') || "";
+        if(token) sessionStorage.setItem('portal_token', token);
+    }
+    return token;
 }
 
 // 🌐 BACKEND API CALLER (For Add/Delete/SMS)
@@ -429,6 +417,8 @@ async function apiCall(actionName, payloadData = {}) {
 function showLoader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
 
 function switchTab(id, btn) {
+    if(!isAuthReady) return alert("Security checking in progress... Please wait.");
+    
     document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -442,9 +432,29 @@ function toggleGroup(selId, divId) {
 }
 
 // ==========================================
-// 🚀 DIRECT FIREBASE: SECTIONS & STUDENTS
+// 🚀 DIRECT FIREBASE: SECTIONS & STUDENTS (Secured by onAuthStateChanged)
 // ==========================================
+
+window.onload = function() {
+    showLoader(true);
+    // 🛡️ Security Gate: ফায়ারবেস লগইন নিশ্চিত হওয়ার পরই ডাটা লোড হবে
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            isAuthReady = true;
+            showLoader(false);
+            loadSectionsData();
+            if(document.getElementById('viewTab').classList.contains('active')) {
+                loadStudents();
+            }
+        } else {
+            // টোকেন বা সেশন না থাকলে সোজা লগইন পেজে কিক আউট করবে
+            window.location.replace(window.location.origin + "/login-panel/accounting-and-management-department");
+        }
+    });
+}
+
 async function loadSectionsData() {
+    if(!isAuthReady) return;
     try {
         const doc = await db.collection('Admin').doc('Settings').get();
         if (doc.exists && doc.data().sections) {
@@ -480,6 +490,7 @@ function renderSectionList() {
 }
 
 async function addSection() {
+    if(!isAuthReady) return;
     let name = document.getElementById('newSecName').value.trim();
     if(!name) return alert("Please enter section name.");
     showLoader(true);
@@ -492,6 +503,7 @@ async function addSection() {
 }
 
 async function deleteSection(name) {
+    if(!isAuthReady) return;
     if(!confirm(`Delete section "${name}"?`)) return;
     showLoader(true);
     try {
@@ -502,6 +514,8 @@ async function deleteSection(name) {
 }
 
 function saveStudent() {
+    if(!isAuthReady) return alert("Security checking in progress... Please wait.");
+    
     var cls = document.getElementById('sClass').value;
     var grp = document.getElementById('sGroup').value;
     var cardNumber = document.getElementById('sCardNumber').value;
@@ -532,6 +546,7 @@ function saveStudent() {
 }
 
 async function loadStudents() {
+    if(!isAuthReady) return;
     showLoader(true);
     try {
         const snapshot = await db.collection('Students').get();
@@ -547,7 +562,10 @@ async function loadStudents() {
         renderList(allData);
         showLoader(false);
     } catch(e) {
-        showLoader(false); console.error(e); alert("Failed to load students from database.");
+        showLoader(false); 
+        console.error(e); 
+        // 🚨 Exact Database Error Alert
+        alert("Database Error: " + e.message + "\n\n⚠️️ ফায়ারবেস Security Rules আপডেট করা না থাকলে এই সমস্যা হবে। দয়া করে রুলস আপডেট করুন।");
     }
 }
 
@@ -592,6 +610,7 @@ function filterStudents() {
 }
 
 function openEditByRow(rid) {
+    if(!isAuthReady) return;
     var s = allData.find(item => item.rowId == rid);
     if(!s) return;
     document.getElementById('eId').value = s.id; document.getElementById('eMachineId').value = s.machineId || ""; document.getElementById('eRowId').value = s.rowId; document.getElementById('eName').value = s.name; document.getElementById('eFatherName').value = s.fatherName || ""; document.getElementById('eFatherNid').value = s.fatherNid || ""; document.getElementById('eMotherName').value = s.motherName || ""; document.getElementById('eMotherNid').value = s.motherNid || ""; document.getElementById('eBloodGroup').value = s.bloodGroup || ""; document.getElementById('eClass').value = s.classVal; document.getElementById('eSection').value = s.sectionVal || ""; document.getElementById('eRoll').value = s.roll; document.getElementById('eRes').value = s.resStatus; document.getElementById('eCategory').value = s.category || "Civil"; 
@@ -601,6 +620,7 @@ function openEditByRow(rid) {
 }
 
 async function updateStudent() {
+    if(!isAuthReady) return;
     var d = { rowId: document.getElementById('eRowId').value, name: document.getElementById('eName').value, fatherName: document.getElementById('eFatherName').value || "", fatherNid: document.getElementById('eFatherNid').value || "", motherName: document.getElementById('eMotherName').value || "", motherNid: document.getElementById('eMotherNid').value || "", bloodGroup: document.getElementById('eBloodGroup').value || "", machineId: document.getElementById('eMachineId').value, classVal: document.getElementById('eClass').value, sectionVal: document.getElementById('eSection').value || "", roll: document.getElementById('eRoll').value, resStatus: document.getElementById('eRes').value, category: document.getElementById('eCategory').value, group: document.getElementById('eGroup').value || "", cardNumber: document.getElementById('eCardNumber').value || "", phone: document.getElementById('ePhone').value || "", email: document.getElementById('eEmail').value || "", cert: document.getElementById('eCert').value || "", prev: document.getElementById('ePrev').value || "", addr: document.getElementById('eAddr').value || "" };
     
     showLoader(true);
@@ -633,6 +653,7 @@ function printReport() {
 }
 
 function delStu(row) { 
+    if(!isAuthReady) return;
     if(confirm("Confirm delete?")) {
         showLoader(true); 
         apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {showLoader(false); alert("Error");}); 
