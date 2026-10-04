@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -364,16 +362,17 @@ body * { visibility: hidden; }
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec";
 
+// ✅ Firebase Configuration with authDomain
 const firebaseConfig = {
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+    authDomain: "srms-website-management.firebaseapp.com",
     projectId: "srms-website-management"
 };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
 const auth = firebase.auth();
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.log(err));
 
 let lastR = null;
 let historyData = [];
@@ -392,7 +391,7 @@ function showLoaderText(text) { document.getElementById('loaderText').innerHTML 
 function showLoading() { document.getElementById('loader').style.display = "flex"; }
 function hideLoading() { document.getElementById('loader').style.display = "none"; }
 
-// 🌐 BACKEND API CALLER (For Add/Delete/Update/Secure Writes)
+// 🌐 BACKEND API CALLER 
 async function apiCall(actionName, payloadData = {}) {
     let token = await auth.currentUser.getIdToken(true);
     let payload = { action: actionName, token: token, ...payloadData };
@@ -406,8 +405,9 @@ async function apiCall(actionName, payloadData = {}) {
     }
 }
 
-// 🛡️ Security Gate
-window.onload = function() {
+// 🛡️ Security Gate - Check Auth State
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+.then(() => {
     auth.onAuthStateChanged(function(user) {
         if (user) {
             isAuthReady = true;
@@ -422,7 +422,8 @@ window.onload = function() {
             }, 1000);
         }
     });
-}
+})
+.catch(err => { console.error("Auth Persistence Error:", err); });
 
 function switchTab(id, btn) {
     if(!isAuthReady) return alert("Security checking in progress... Please wait.");
@@ -744,7 +745,6 @@ function toggleActionUI() {
     }
 }
 
-
 // 🚀 DIRECT FIREBASE: Load Reports
 async function loadRep() { 
     if(!isAuthReady) return;
@@ -896,7 +896,7 @@ async function loadHistory() {
         let snap = await db.collection('Transactions').get();
         let list = [];
         snap.forEach(doc => { list.push(doc.data()); });
-        list.sort((a,b) => parseInt(b.timestamp || 0) - parseInt(a.timestamp || 0)); // Sort newest first
+        list.sort((a,b) => parseInt(b.timestamp || 0) - parseInt(a.timestamp || 0)); 
         hideLoading();
         historyData = list;
         renderHistory(list);
@@ -1070,7 +1070,7 @@ function printReceipt() {
     <div style="text-align: right;">
     <div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div>
     <div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div>
-    <div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month} ${d.year}</b></div>
+    <div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month}${d.year}</b></div>
     </div>
     </div>
     <table>
@@ -1128,9 +1128,3 @@ setInterval(() => { document.getElementById('clock').innerText = new Date().toLo
 
 </body>
 </html>
-
-
-
-
-
-
