@@ -189,9 +189,11 @@ body * { visibility: hidden; }
 
     <label>Prev. Reg No.</label><input type="text" id="sPrev" placeholder="Registration No.">
     <label>Address</label><textarea id="sAddr" rows="2" placeholder="Present Address"></textarea>
-    <label>Photo</label><input type="file" id="sPhoto" accept="image/*" style="padding: 10px;">
+    
+    <label style="color:var(--primary);"><i class="fas fa-camera"></i> Student Photo (Auto upload to Server)</label>
+    <input type="file" id="sPhoto" accept="image/*" style="padding: 10px; background: #e8f5e9; border: 2px dashed #005f40;">
 
-    <button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Admit (Save Profile)</button>
+    <button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Admit (Save Profile & Fees)</button>
     </div>
     </div>
 
@@ -333,6 +335,7 @@ body * { visibility: hidden; }
     <div style="flex:1;"><label>Birth Certificate</label><input type="text" id="eCert"></div>
     </div>
     <label>Address</label><textarea id="eAddr" rows="2"></textarea>
+    
     <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);" onclick="updateStudent()">🔄 Update Profile</button>
     </div>
     </div>
@@ -446,21 +449,16 @@ function toggleGroup(selId, divId) {
 // ==========================================
 
 window.onload = function() {
-    // 🛡️ Security Gate: ফায়ারবেস লগইন নিশ্চিত হওয়ার পরই ডাটা লোড হবে
     auth.onAuthStateChanged(function(user) {
         if (user) {
             isAuthReady = true;
-            // 🔓 Hide Loader & Show App
             document.getElementById('loader').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
-            
-            // Load Initial Data
             loadSectionsData();
             if(document.getElementById('viewTab').classList.contains('active')) {
                 loadStudents();
             }
         } else {
-            // 🚫 Unauthorized Access! Redirect to Login
             showLoaderText("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
             setTimeout(() => {
                 var currentDomain = window.location.protocol + "//" + window.location.host;
@@ -549,7 +547,9 @@ function saveStudent() {
 
     if(!d.name || !d.roll || !d.phone) return alert("নাম, রোল এবং ফোন নম্বর অবশ্যই দিন!");
 
-    document.getElementById('loader').style.display = 'flex'; showLoaderText("SAVING PROFILE...<br><span style='font-size:11px; color:#64748b;'>Generating ID & Syncing...</span>");
+    document.getElementById('loader').style.display = 'flex'; 
+    showLoaderText("SAVING PROFILE & ASSIGNING FEES...<br><span style='font-size:11px; color:#64748b;'>Generating ID & Syncing to Accounts...</span>");
+    
     var done = res => { 
         document.getElementById('loader').style.display = 'none'; 
         alert("সফল! স্টুডেন্ট আইডি: " + res.id + (res.machineStatus ? "\nমেশিন স্ট্যাটাস: " + res.machineStatus : "")); 
@@ -639,11 +639,12 @@ function openEditByRow(rid) {
     document.getElementById('editModal').style.display = 'flex';
 }
 
+// 🚀 DIRECT FIREBASE: Fast Update
 async function updateStudent() {
     if(!isAuthReady) return;
     var d = { rowId: document.getElementById('eRowId').value, name: document.getElementById('eName').value, fatherName: document.getElementById('eFatherName').value || "", fatherNid: document.getElementById('eFatherNid').value || "", motherName: document.getElementById('eMotherName').value || "", motherNid: document.getElementById('eMotherNid').value || "", bloodGroup: document.getElementById('eBloodGroup').value || "", machineId: document.getElementById('eMachineId').value, classVal: document.getElementById('eClass').value, sectionVal: document.getElementById('eSection').value || "", roll: document.getElementById('eRoll').value, resStatus: document.getElementById('eRes').value, category: document.getElementById('eCategory').value, group: document.getElementById('eGroup').value || "", cardNumber: document.getElementById('eCardNumber').value || "", phone: document.getElementById('ePhone').value || "", email: document.getElementById('eEmail').value || "", cert: document.getElementById('eCert').value || "", prev: document.getElementById('ePrev').value || "", addr: document.getElementById('eAddr').value || "" };
     
-    document.getElementById('loader').style.display = 'flex'; showLoaderText("UPDATING PROFILE...");
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("UPDATING PROFILE...<br><span style='font-size:11px; color:#64748b;'>Direct Write to Database</span>");
     try {
         await db.collection('Students').doc(d.rowId).update({
             name: d.name, fatherName: d.fatherName, fatherNid: d.fatherNid, motherName: d.motherName, motherNid: d.motherNid, bloodGroup: d.bloodGroup, machineID: d.machineId, class: d.classVal, section: d.sectionVal, roll: d.roll, resStatus: d.resStatus, category: d.category, group: d.group, cardNumber: d.cardNumber, phone: d.phone, email: d.email, birthCert: d.cert, prevReg: d.prev, address: d.addr
