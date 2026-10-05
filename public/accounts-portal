@@ -6,7 +6,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- 🔒 URL Security Script -->
 <script>
 if (window.history.replaceState) {
 var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -15,16 +14,13 @@ window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 </script>
 
 <style>
-/* 🎨 PREMIUM THEME: SRMS Green & Gold */
 :root { --main: #005f40; --main-dark: #003d29; --accent: #d32f2f; --gold: #f59e0b; --bg: #f8fafc; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; color: #334155; padding-bottom: 90px;}
 
-/* 🛑 SECURITY SHIELD LOADER */
 #loader { display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
 .spinner { width:55px; height:55px; border:4px solid #e2e8f0; border-top:4px solid var(--main); border-radius:50%; animation:spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* Premium Header */
 .navbar { background: linear-gradient(135deg, var(--main), var(--main-dark)); color: white; padding: 18px 30px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 20px rgba(0, 95, 64, 0.25); position: sticky; top: 0; z-index: 50; border-bottom: 4px solid var(--gold);}
 .nav-title { font-weight: 900; font-size: 22px; letter-spacing: 1px; text-shadow: 0 2px 5px rgba(0,0,0,0.2);}
 .nav-right { display: flex; align-items: center; gap: 15px; }
@@ -38,8 +34,8 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; col
 .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 95, 64, 0.06); margin-bottom: 30px; border-top: 6px solid var(--main); border-left: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;}
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-family: inherit; transition: 0.3s; background: #f8fafc;}
-input:focus, select:focus { border-color: var(--main); background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
+input, select, textarea { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; outline: none; font-family: inherit; transition: 0.3s; background: #f8fafc;}
+input:focus, select:focus, textarea:focus { border-color: var(--main); background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
 
 .btn { padding: 15px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; font-family: inherit;}
 .btn-main { background: linear-gradient(135deg, var(--main), var(--main-dark)); color: white; box-shadow: 0 6px 20px rgba(0, 95, 64, 0.25);}
@@ -65,25 +61,23 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .custom-fee-item input { border: 2px solid #8b5cf6 !important; }
 .fee-card.custom { border-top: 6px solid #8b5cf6; }
 
-/* Badges */
 .badge-army { background: #fff8e1; color: #b45309; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #fcd34d; }
 .badge-civil { background: #eff6ff; color: #005f40; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #a7f3d0; }
+.badge-income { background: #dcfce7; color: #16a34a; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #bbf7d0; }
+.badge-expense { background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; }
 
-/* Bottom Nav */
 .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; box-shadow: 0 -5px 25px rgba(0, 95, 64, 0.08); z-index: 100; border-radius: 20px 20px 0 0; border-top: 1px solid #e2e8f0; padding: 5px 0;}
-.nav-item { flex: 1; text-align: center; color: #94a3b8; border: none; background: none; font-size: 11px; padding: 12px; cursor: pointer; font-weight: 700; transition: 0.3s;}
+.nav-item { flex: 1; text-align: center; color: #94a3b8; border: none; background: none; font-size: 10px; padding: 12px 5px; cursor: pointer; font-weight: 700; transition: 0.3s;}
 .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; transition: 0.3s;}
 .nav-item.active { color: var(--main); font-weight: 900; }
 .nav-item.active i { transform: translateY(-4px) scale(1.1); color: var(--gold); }
 
-/* Accountant Calculator Box */
 .calc-box { background: #111; padding: 15px; border-radius: 20px; width: 280px; margin: 0 auto; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 .calc-scr { width: 100%; height: 50px; background: #000; color: #0f0; text-align: right; padding: 10px; font-size: 24px; border-radius: 10px; margin-bottom: 10px; font-family: monospace; border: none; font-weight: bold; }
 .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
 .calc-btn { padding: 15px; border: none; border-radius: 8px; background: #333; color: white; font-weight: bold; cursor: pointer; transition: 0.2s;}
 .calc-btn:hover { background: #555; transform: scale(1.05); }
 
-/* 🖨️ Pro Print Formatting for A4 Landscape */
 @media print {
 body * { visibility: hidden; }
 #printArea, #printArea * { visibility: visible; }
@@ -93,13 +87,11 @@ body * { visibility: hidden; }
 </head>
 <body>
 
-<!-- 🛑 Security Gate UI -->
 <div id="loader">
     <div class="spinner"></div>
     <p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--main); letter-spacing: 1px; text-align: center;">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p>
 </div>
 
-<!-- Main App -->
 <div id="appContainer" style="display:none;">
     <div class="navbar">
     <div class="nav-title">SRMS ACCOUNTS PORTAL</div>
@@ -113,7 +105,6 @@ body * { visibility: hidden; }
 
     <!-- ================= COLLECT TAB ================= -->
     <div id="collectTab" class="container active">
-    <!-- Calculator Card -->
     <div class="card" style="border-top-color: #333;">
     <h3><i class="fas fa-calculator"></i> Accountant Calculator</h3>
     <div class="calc-box">
@@ -183,15 +174,17 @@ body * { visibility: hidden; }
     <!-- ================= SETUP TAB ================= -->
     <div id="setupTab" class="container">
     <div class="card" style="border-top-color: #8b5cf6;">
-    <h3 style="color:#8b5cf6; font-weight:900; margin:0;"><i class="fas fa-layer-group"></i> Fees Setup & Management</h3>
+    <h3 style="color:#8b5cf6; font-weight:900; margin:0;"><i class="fas fa-layer-group"></i> Fees Setup &amp; Management</h3>
     <div style="margin-bottom: 20px; background:#faf5ff; padding:18px; border-radius:14px; border-left:6px solid #8b5cf6;">
     <label style="font-weight:800; color:#4c1d95; margin-bottom:8px; display:block; font-size:14px;">Select Action Type:</label>
     <select id="feeAction" onchange="toggleActionUI()" style="border-color:#d8b4fe; font-weight:bold; color:#7e22ce;">
-    <option value="Add">1. Create / Add New Fees</option>
+    <option value="Add">1. Create / Add New Fees (Bulk)</option>
     <option value="Edit">2. Edit / Override Existing Fees</option>
-    <option value="Reset">3. Factory Reset (Clear Current Dues)</option>
+    <option value="FineSetup">3. Setup Fines & Late Fees (Automated)</option>
+    <option value="Reset">4. Factory Reset (Clear Current Dues)</option>
     </select>
     </div>
+    
     <div id="setupZone">
     <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:15px;">
     <div style="display:flex; flex-direction:column;">
@@ -222,15 +215,15 @@ body * { visibility: hidden; }
     <select id="bType" onchange="toggleCustomUI()" style="height: 50px;">
     <option value="General">School Fees</option>
     <option value="Hostel">Hostel Fees</option>
-    <option value="Custom">Custom Fees</option>
+    <option value="Custom">Custom Fees / Promotion</option>
     </select>
     </div>
 
     <div id="customUI" style="display:none; margin-top:15px; padding:20px; background:#faf5ff; border-radius:14px; border:2px dashed #c084fc;">
-    <label style="font-weight:800; color:#7e22ce; display:block; margin-bottom:12px;">Setup Multiple Custom Fees:</label>
+    <label style="font-weight:800; color:#7e22ce; display:block; margin-bottom:12px;">Setup Multiple Custom Fees (e.g. Admission, Promotion):</label>
     <div id="customFeeList">
     <div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
-    <input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Picnic)">
+    <input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Admission Fee, Promotion Fee)">
     <input type="number" class="c-fee-amt" placeholder="Amount">
     </div>
     </div>
@@ -254,11 +247,84 @@ body * { visibility: hidden; }
     </div>
     </div>
 
+    <div id="fineSetupZone" style="display:none; margin-top:15px;">
+    <div style="background:#fff7ed; border:2px dashed #fb923c; padding:25px; border-radius:16px;">
+    <h3 style="color:#ea580c; margin-top:0; font-weight:900;"><i class="fas fa-gavel"></i> Late Fee & Absence Fine Settings</h3>
+    <p style="font-size:13px; color:#475569; margin-bottom:20px;">Set automated rules for late payments and student absences. These apply globally to all matching students.</p>
+    
+    <label style="font-weight:700; color:#9a3412;">Late Fee (বেতন বকেয়া জরিমানা) Amount (TK):</label>
+    <input type="number" id="fLateAmount" placeholder="e.g. 100">
+    
+    <label style="font-weight:700; color:#9a3412;">Last Payment Date (বেতন দেওয়ার শেষ তারিখ):</label>
+    <select id="fLateDay">
+      <option value="5">5th of every month</option>
+      <option value="10">10th of every month</option>
+      <option value="15">15th of every month</option>
+      <option value="20">20th of every month</option>
+    </select>
+
+    <label style="font-weight:700; color:#9a3412; margin-top:15px; display:block;">Absence Fine (অনুপস্থিতির জরিমানা) Amount Per Day (TK):</label>
+    <input type="number" id="fAbsenceAmount" placeholder="e.g. 50">
+    
+    <button onclick="saveFineSettings()" class="btn" style="background:linear-gradient(135deg, #f97316, #c2410c); color:white; margin-top:20px; box-shadow: 0 6px 20px rgba(249,115,22,0.3);"><i class="fas fa-save"></i> Save Fine Rules</button>
+    </div>
+    </div>
+
     <div id="resetZone" style="display:none; background:#fef2f2; border:2px dashed #ef4444; padding:25px; border-radius:16px; text-align:center; margin-top:15px;">
     <h3 style="color:#ef4444; margin-top:0; font-weight:900;"><i class="fas fa-exclamation-triangle"></i> Factory Reset Warning</h3>
     <p style="font-size:14px; color:#475569; font-weight:600; line-height:1.6;">This will clear and reset ALL CURRENT FEES to zero (0). Transaction history is safe.</p>
     <input type="password" id="resetPwd" placeholder="Enter Admin Password" style="max-width:300px; border:2px solid #ef4444; text-align:center; margin-top:15px;">
     <button onclick="executeFactoryReset()" class="btn" style="background:linear-gradient(135deg, #ef4444, #b91c1c); color:white; max-width:300px; margin:20px auto 0; font-size:15px; box-shadow: 0 6px 20px rgba(239,68,68,0.3);"><i class="fas fa-radiation"></i> PERFORM FACTORY RESET</button>
+    </div>
+    </div>
+    </div>
+
+    <!-- ================= CASHBOOK / INCOME & EXPENSE TAB ================= -->
+    <div id="cashbookTab" class="container">
+    <div class="card" style="border-top-color: #10b981;">
+    <h3 style="color:#10b981; font-weight:900; margin:0;"><i class="fas fa-book"></i> School Cashbook (আয়-ব্যয় হিসাব)</h3>
+    <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Manage daily income (other than student fees) and expenses.</p>
+    
+    <div style="background:#f0fdf4; padding:20px; border-radius:14px; border:1px solid #bbf7d0; display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+       <div>
+         <label style="font-weight:700; color:#166534;">Entry Type *</label>
+         <select id="cbType" style="border-color:#10b981; color:#065f46; font-weight:bold;">
+           <option value="Income">Income (আয়)</option>
+           <option value="Expense">Expense (ব্যয়)</option>
+         </select>
+       </div>
+       <div>
+         <label style="font-weight:700; color:#166534;">Amount (TK) *</label>
+         <input type="number" id="cbAmount" placeholder="e.g. 5000" style="border-color:#10b981;">
+       </div>
+       <div style="grid-column: span 2;">
+         <label style="font-weight:700; color:#166534;">Category / Title *</label>
+         <input type="text" id="cbTitle" placeholder="e.g. Electricity Bill, Govt Fund, Teacher Salary">
+       </div>
+       <div style="grid-column: span 2;">
+         <label style="font-weight:700; color:#166534;">Description / Note</label>
+         <textarea id="cbDesc" rows="2" placeholder="Write details here..."></textarea>
+       </div>
+       <div style="grid-column: span 2;">
+         <button onclick="addCashbookEntry()" class="btn" style="background:#10b981; color:white; box-shadow: 0 4px 15px rgba(16,185,129,0.3);"><i class="fas fa-plus-circle"></i> Add Entry to Cashbook</button>
+       </div>
+    </div>
+
+    <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:center;">
+       <h4 style="margin:0; color:#334155;">Cashbook Ledger</h4>
+       <button onclick="loadCashbook()" class="btn" style="width:auto; padding:10px 15px; background:#475569; color:white;"><i class="fas fa-sync"></i> Refresh</button>
+    </div>
+
+    <div style="max-height:400px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:16px; margin-top:15px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
+    <table id="cbTable">
+    <thead><tr><th>Date</th><th>Type</th><th>Category/Title</th><th>Description</th><th>Amount</th></tr></thead>
+    <tbody></tbody>
+    </table>
+    </div>
+    
+    <div style="margin-top:20px; display:flex; gap:20px; font-weight:800; font-size:16px;">
+        <div style="flex:1; background:#dcfce7; color:#166534; padding:15px; border-radius:12px; text-align:center; border:1px solid #bbf7d0;">Total Income: ৳ <span id="cbTotalIncome">0</span></div>
+        <div style="flex:1; background:#fee2e2; color:#991b1b; padding:15px; border-radius:12px; text-align:center; border:1px solid #fecaca;">Total Expense: ৳ <span id="cbTotalExpense">0</span></div>
     </div>
     </div>
     </div>
@@ -348,6 +414,7 @@ body * { visibility: hidden; }
 
     <div class="bottom-nav">
     <button class="nav-item active" onclick="switchTab('collectTab', this)"><i class="fas fa-hand-holding-dollar"></i>Collect</button>
+    <button class="nav-item" onclick="switchTab('cashbookTab', this)"><i class="fas fa-book"></i>Cashbook</button>
     <button class="nav-item" onclick="switchTab('setupTab', this)"><i class="fas fa-layer-group"></i>Setup</button>
     <button class="nav-item" onclick="switchTab('reportsTab', this)"><i class="fas fa-file-invoice-dollar"></i>Reports</button>
     <button class="nav-item" onclick="switchTab('historyTab', this)"><i class="fas fa-history"></i>Ledger</button>
@@ -355,16 +422,14 @@ body * { visibility: hidden; }
 
 </div>
 
-<!-- ================= FIREBASE & BACKEND LOGIC ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec"; 
 
-// ✅ Firebase Configuration with authDomain
 const firebaseConfig = {
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
     authDomain: "srms-website-management.firebaseapp.com",
@@ -377,7 +442,6 @@ const auth = firebase.auth();
 let lastR = null;
 let historyData = [];
 let reportsData = []; 
-let allStudentsData = []; // Cache
 var isAuthReady = false; 
 const LOGO_URL = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
 
@@ -391,7 +455,7 @@ function showLoaderText(text) { document.getElementById('loaderText').innerHTML 
 function showLoading() { document.getElementById('loader').style.display = "flex"; }
 function hideLoading() { document.getElementById('loader').style.display = "none"; }
 
-// 🌐 BACKEND API CALLER 
+// 🌐 BACKEND API CALLER (All writes now go through here)
 async function apiCall(actionName, payloadData = {}) {
     let token = await auth.currentUser.getIdToken(true);
     let payload = { action: actionName, token: token, ...payloadData };
@@ -405,15 +469,15 @@ async function apiCall(actionName, payloadData = {}) {
     }
 }
 
-// 🛡️ Security Gate - Check Auth State
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-.then(() => {
+// 🛡 Security Gate - Check Auth State
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
     auth.onAuthStateChanged(function(user) {
         if (user) {
             isAuthReady = true;
             document.getElementById('loader').style.display = 'none';
             document.getElementById('appContainer').style.display = 'block';
             loadSectionsData();
+            loadFineSettingsFromDB();
         } else {
             showLoaderText("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
             setTimeout(() => {
@@ -422,8 +486,7 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
             }, 1000);
         }
     });
-})
-.catch(err => { console.error("Auth Persistence Error:", err); });
+}).catch(err => { console.error("Auth Persistence Error:", err); });
 
 function switchTab(id, btn) {
     if(!isAuthReady) return alert("Security checking in progress... Please wait.");
@@ -431,9 +494,10 @@ function switchTab(id, btn) {
     document.getElementById(id).classList.add('active');
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     btn.classList.add('active');
+    
+    if(id === 'cashbookTab') loadCashbook();
 }
 
-// 🚀 DIRECT FIREBASE: Load Sections 
 async function loadSectionsData() {
     try {
         const doc = await db.collection('Admin').doc('Settings').get();
@@ -446,7 +510,33 @@ async function loadSectionsData() {
     } catch (e) { console.error(e); }
 }
 
-// 🚀 DIRECT FIREBASE: Search Single Student
+async function loadFineSettingsFromDB() {
+    try {
+        const doc = await db.collection('Admin').doc('FineSettings').get();
+        if(doc.exists) {
+            let data = doc.data();
+            if(data.lateFeeAmount) document.getElementById('fLateAmount').value = data.lateFeeAmount;
+            if(data.lateFeeDay) document.getElementById('fLateDay').value = data.lateFeeDay;
+            if(data.absenceFineAmount) document.getElementById('fAbsenceAmount').value = data.absenceFineAmount;
+        }
+    } catch (e) { console.error(e); }
+}
+
+// 🚀 SECURE WRITE: Save Fine Settings via Backend
+async function saveFineSettings() {
+    let lAmt = document.getElementById('fLateAmount').value;
+    let lDay = document.getElementById('fLateDay').value;
+    let aAmt = document.getElementById('fAbsenceAmount').value;
+    
+    showLoading(); showLoaderText("SAVING SETTINGS...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
+    try {
+        let res = await apiCall('saveFineSettings', { lateAmt: lAmt, lateDay: lDay, absAmt: aAmt });
+        hideLoading();
+        if(res.status === "error") { alert(res.message); }
+        else { alert("Fine settings saved successfully! Automated systems will now use these rules."); }
+    } catch(e) { hideLoading(); alert("Error saving fine settings."); }
+}
+
 async function searchStu() {
     if(!isAuthReady) return;
     let id = document.getElementById('sid').value.trim();
@@ -458,13 +548,15 @@ async function searchStu() {
         hideLoading();
         if(snap.empty) { alert("Student ID not found in database!"); return; }
         
-        let fields = snap.docs[0].data();
+        let doc = snap.docs[0];
+        let fields = doc.data();
+        
         let customFees = fields.customFees ? JSON.parse(fields.customFees) : [];
         let activeCustomFees = customFees.filter(cf => cf.name && parseFloat(cf.amount) > 0 && cf.status.toLowerCase() !== "paid");
         
         let d = {
             found: true,
-            name: fields.name || "", class: fields.class || "", section: fields.section || "", roll: fields.roll || "",
+            id: fields.studentID, name: fields.name || "", class: fields.class || "", section: fields.section || "", roll: fields.roll || "",
             category: fields.category || "Civil", year: fields.feeYear || "", month: fields.feeMonth || "",
             genAmt: parseFloat(fields.schoolFeeDue) || 0, genStatus: fields.schoolFeeStatus || "Paid",
             hosAmt: parseFloat(fields.hostelFeeDue) || 0, hosStatus: fields.hostelFeeStatus || "Paid",
@@ -555,9 +647,10 @@ function calcTotalPay() {
     document.getElementById('sumPayingAmt').innerText = total.toFixed(2);
 }
 
-// 🚀 BACKEND API: Pay Now
+// 🚀 SECURE WRITE: Process Payment via Backend
 async function payNow() {
     if(!isAuthReady) return;
+    
     let gP = parseFloat(document.getElementById('pGen').value) || 0;
     let hP = parseFloat(document.getElementById('pHos').value) || 0;
     let customArr = [];
@@ -565,7 +658,7 @@ async function payNow() {
         let p = parseFloat(inp.value) || 0;
         if(p > 0) customArr.push({ colIdx: parseInt(inp.getAttribute('data-col')), name: inp.getAttribute('data-name'), paid: p });
     });
-
+    
     let sendSms = document.getElementById('sendSmsChk') ? document.getElementById('sendSmsChk').checked : false;
 
     showLoading(); showLoaderText("PROCESSING PAYMENT...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
@@ -574,6 +667,7 @@ async function payNow() {
         let res = await apiCall('processPayment', {
             id: document.getElementById('sid').value, genPay: gP, hosPay: hP, customPayments: customArr, sendSms: sendSms
         });
+        
         hideLoading();
         if(res.status === "error") { alert(res.message); return; }
         
@@ -581,12 +675,56 @@ async function payNow() {
         document.getElementById('btnPay').style.display = "none";
         document.getElementById('success-msg').style.display = "block";
         document.getElementById('btnPrint').style.display = "block"; 
+        
     } catch(err) {
         hideLoading(); console.error(err); alert("Payment Failed due to network error.");
     }
 }
 
-// 🚀 BACKEND API: Process Bulk Update & Factory Reset
+// 🚀 SECURE WRITE: Cashbook Entry via Backend
+async function addCashbookEntry() {
+    let type = document.getElementById('cbType').value;
+    let amt = parseFloat(document.getElementById('cbAmount').value);
+    let title = document.getElementById('cbTitle').value.trim();
+    let desc = document.getElementById('cbDesc').value.trim();
+    
+    if(!amt || amt <= 0 || !title) return alert("Amount and Category Title are required!");
+    
+    showLoading(); showLoaderText("SAVING ENTRY...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
+    try {
+        let res = await apiCall('addCashbookEntry', { type: type, amount: amt, title: title, desc: desc });
+        hideLoading();
+        if(res.status === "error") { alert("Error saving cashbook entry."); }
+        else {
+            document.getElementById('cbAmount').value = "";
+            document.getElementById('cbTitle').value = "";
+            document.getElementById('cbDesc').value = "";
+            alert("Entry successfully added to Cashbook!");
+            loadCashbook(); 
+        }
+    } catch (e) { hideLoading(); alert("Error saving cashbook entry."); }
+}
+
+async function loadCashbook() {
+    showLoading(); showLoaderText("LOADING CASHBOOK...");
+    try {
+        let snap = await db.collection('Cashbook').orderBy('timestamp', 'desc').get();
+        let h = ""; let tInc = 0; let tExp = 0;
+        snap.forEach(doc => {
+            let data = doc.data();
+            let amount = parseFloat(data.amount) || 0;
+            if(data.type === 'Income') { tInc += amount; } else { tExp += amount; }
+            let badge = data.type === 'Income' ? `<span class="badge-income">Income</span>` : `<span class="badge-expense">Expense</span>`;
+            let color = data.type === 'Income' ? '#16a34a' : '#dc2626';
+            h += `<tr><td>${data.date}</td><td>${badge}</td><td><b>${data.title}</b></td><td>${data.description}</td><td><b style="color:${color};">৳ ${amount}</b></td></tr>`;
+        });
+        document.querySelector("#cbTable tbody").innerHTML = h || `<tr><td colspan="5" style="text-align:center;">No entries found.</td></tr>`;
+        document.getElementById('cbTotalIncome').innerText = tInc;
+        document.getElementById('cbTotalExpense').innerText = tExp;
+        hideLoading();
+    } catch (e) { hideLoading(); alert("Error loading cashbook."); }
+}
+
 async function runBulk() { 
     if(!isAuthReady) return;
     let ids = Array.from(document.querySelectorAll('.s-chk:checked')).map(c => c.value).join(","); 
@@ -609,7 +747,7 @@ async function runBulk() {
         if(!amt || amt < 0) { alert("Please enter a valid amount!"); return; }
     }
 
-    showLoading(); showLoaderText("UPDATING STUDENTS...<br><span style='font-size:11px; color:#64748b;'>Sending data to Server</span>");
+    showLoading(); showLoaderText("UPDATING STUDENTS...<br><span style='font-size:11px; color:#64748b;'>Executing Batch Operation in Backend</span>");
     
     try {
         let res = await apiCall('processBulkUpdate', {
@@ -650,7 +788,6 @@ async function executeFactoryReset() {
     }
 }
 
-// 🚀 DIRECT FIREBASE: Load Bulk List
 async function loadBulk() { 
     if(!isAuthReady) return;
     let clsValues = [];
@@ -717,7 +854,7 @@ function toggleCustomUI() {
 function addCustomFeeRow() {
     let html = `
     <div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
-    <input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Picnic)">
+    <input type="text" class="c-fee-name" placeholder="Fee Name (e.g. Admission Fee, Promotion Fee)">
     <input type="number" class="c-fee-amt" placeholder="Amount">
     <button class="btn" style="background:#ef4444; color:white; width:auto; padding:10px 18px;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
     </div>`;
@@ -726,13 +863,17 @@ function addCustomFeeRow() {
 
 function toggleActionUI() {
     let act = document.getElementById('feeAction').value;
+    document.getElementById('setupZone').style.display = "none";
+    document.getElementById('resetZone').style.display = "none";
+    document.getElementById('bulkControls').style.display = "none"; 
+    document.getElementById('fineSetupZone').style.display = "none"; 
+    
     if(act === "Reset") {
-        document.getElementById('setupZone').style.display = "none";
         document.getElementById('resetZone').style.display = "block";
+    } else if(act === "FineSetup") {
+        document.getElementById('fineSetupZone').style.display = "block";
     } else {
         document.getElementById('setupZone').style.display = "block";
-        document.getElementById('resetZone').style.display = "none";
-        document.getElementById('bulkControls').style.display = "none"; 
         if(act === "Edit") {
             document.getElementById('btnRunBulk').innerHTML = "<i class='fas fa-edit'></i> Update & Edit Fees";
             document.getElementById('btnRunBulk').style.background = "linear-gradient(135deg, #d97706, #b45309)";
@@ -745,7 +886,6 @@ function toggleActionUI() {
     }
 }
 
-// 🚀 DIRECT FIREBASE: Load Reports
 async function loadRep() { 
     if(!isAuthReady) return;
     showLoading(); showLoaderText("GENERATING REPORT...<br><span style='font-size:11px; color:#64748b;'>Querying Database securely</span>");
@@ -887,7 +1027,6 @@ function printRep() {
     w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
-// 🚀 DIRECT FIREBASE: Ledger / History
 async function loadHistory() {
     if(!isAuthReady) return;
     showLoading(); showLoaderText("FETCHING HISTORY...<br><span style='font-size:11px; color:#64748b;'>Querying Database securely</span>");
@@ -1001,114 +1140,6 @@ function printHistory() {
     w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
-// 🖨️ Receipt Printing
-function printReceipt() {
-    if(!lastR) return;
-    let d = lastR;
-    let items = d.itemsList.map(i => {
-        let payable = parseFloat(i.original) || 0;
-        let paid = parseFloat(i.paid) || parseFloat(i.amount) || payable; 
-        let dueAmt = payable - paid;
-        return `
-        <tr style="border-bottom: 1px solid #e2e8f0;">
-        <td style="color:#1e293b; font-weight:700;">${i.title}</td>
-        <td style="text-align:right; color:#64748b; font-weight:600;">${payable.toFixed(2)}</td>
-        <td style="text-align:right; color:#005f40; font-weight:800;">${paid.toFixed(2)}</td>
-        <td style="text-align:right; color:#ef4444; font-weight:700;">${dueAmt.toFixed(2)}</td>
-        </tr>`;
-    }).join('');
-
-    let secStr = d.section ? ` (Sec: ${d.section})` : "";
-    let h = `<html><head><style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-    @page { size: A4 portrait; margin: 0; } 
-    body { font-family: 'Inter', sans-serif; padding: 6mm; margin: 0; background: #fff; color: #0f172a; -webkit-print-color-adjust: exact; box-sizing: border-box; height: 297mm; overflow: hidden; } 
-    .box { height: 138mm; border: 2px solid #cbd5e1; padding: 20px; border-radius: 16px; position: relative; box-sizing: border-box; margin-bottom: 3mm; box-shadow: 0 4px 15px rgba(0,0,0,0.02); } 
-    .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 12px; margin-bottom: 15px; } 
-    .header-left { display: flex; align-items: center; gap: 15px; }
-    .header-text h2 { margin: 0; font-size: 19px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } 
-    .header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }
-    .receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
-    .info-grid div { line-height: 1.6; }
-    .info-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 800; display: inline-block; width: 75px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; } 
-    th { background: #f1f5f9; color: #334155; font-weight: 800; text-transform: uppercase; font-size: 11px; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; border-radius: 6px 6px 0 0; }
-    td { border-bottom: 1px solid #e2e8f0; padding: 8px 10px; }
-    .summary-container { display: flex; justify-content: flex-end; margin-top: 15px; }
-    .summary-box { width: 260px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: white; }
-    .summary-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; }
-    .summary-row:last-child { border-bottom: none; }
-    .total-payable { font-weight: 700; color: #475569; }
-    .total-paid { font-weight: 800; color: #005f40; background: #ecfdf5; border-bottom: 1px solid #a7f3d0;}
-    .total-due { font-weight: 800; color: #b91c1c; background: #fef2f2; }
-    .watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 80px; opacity: 0.03; color: #005f40; font-weight: 900; z-index: -1; pointer-events: none; letter-spacing: 12px; }
-    .signatures { position: absolute; bottom: 20px; left: 25px; right: 25px; display: flex; justify-content: space-between; font-weight: 800; font-size: 12px; color: #475569; }
-    .sig-line { border-top: 2px dashed #94a3b8; width: 160px; text-align: center; padding-top: 8px; }
-    .cut-line { text-align: center; margin: 6px 0; font-size: 12px; color: #94a3b8; font-weight: 700; letter-spacing: 3px; }
-    </style></head><body>
-
-    ${["STUDENT COPY", "OFFICE COPY"].map((c, idx) => `
-    <div class="box">
-    <div class="watermark">SRMS</div>
-    <div class="header">
-    <div class="header-left">
-    <img src="${LOGO_URL}" width="55" style="border-radius: 8px;">
-    <div class="header-text">
-    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
-    </div>
-    </div>
-    <div class="receipt-tag">${c}</div>
-    </div>
-    <div class="info-grid">
-    <div>
-    <div><span class="info-label">Receipt No:</span> <b style="color:#005f40;">${d.rNo}</b></div>
-    <div><span class="info-label">Student ID:</span> <b>${d.id}</b></div>
-    <div><span class="info-label">Name:</span> <b style="color:#0f172a; font-size:13px; text-transform:uppercase;">${d.name}</b></div>
-    </div>
-    <div style="text-align: right;">
-    <div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div>
-    <div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div>
-    <div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month}${d.year}</b></div>
-    </div>
-    </div>
-    <table>
-    <thead>
-    <tr>
-    <th>Fee Particulars</th>
-    <th style="text-align:right; width: 95px;">Payable (TK)</th>
-    <th style="text-align:right; width: 100px;">Paid Now (TK)</th>
-    <th style="text-align:right; width: 95px;">Due (TK)</th>
-    </tr>
-    </thead>
-    <tbody>
-    ${items}
-    </tbody>
-    </table>
-    <div class="summary-container">
-    <div class="summary-box">
-    <div class="summary-row total-payable"><span>Total Payable:</span> <span>৳ ${d.totalBill}.00</span></div>
-    <div class="summary-row total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid}.00</span></div>
-    <div class="summary-row total-due"><span>Remaining Due:</span> <span>৳ ${d.remaining}.00</span></div>
-    </div>
-    </div>
-    <div class="signatures">
-    <div class="sig-line">Accountant / Cashier</div>
-    <div class="sig-line">Student / Guardian</div>
-    </div>
-    </div>
-    ${idx === 0 ? '<div class="cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>' : ''}
-    `).join('')}
-    </body></html>`;
-
-    let w = window.open('','','width=900,height=950'); 
-    w.document.write(h); 
-    w.document.close(); 
-    setTimeout(()=>w.print(), 1000);
-}
-
-// 🚀 Calculator Logic 
 const cScr = document.getElementById('cScr');
 function cPush(v) { if(cScr.value === "0" || cScr.value === "Error") cScr.value = v; else cScr.value += v; }
 function cClr() { cScr.value = "0"; }
