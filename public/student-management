@@ -61,20 +61,17 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 
 .custom-fee-item input, .custom-fee-item select { border: 2px solid #8b5cf6 !important; }
 
-/* Badges */
 .badge-army { background: #fff8e1; color: #b45309; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #fcd34d; }
 .badge-civil { background: #eff6ff; color: #005f40; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #a7f3d0; }
 .badge-income { background: #dcfce7; color: #16a34a; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #bbf7d0; }
 .badge-expense { background: #fee2e2; color: #dc2626; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; border: 1px solid #fecaca; }
 
-/* Bottom Nav */
 .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); display: flex; box-shadow: 0 -5px 25px rgba(0, 95, 64, 0.08); z-index: 100; border-radius: 20px 20px 0 0; border-top: 1px solid #e2e8f0; padding: 5px 0;}
 .nav-item { flex: 1; text-align: center; color: #94a3b8; border: none; background: none; font-size: 10px; padding: 12px 5px; cursor: pointer; font-weight: 700; transition: 0.3s;}
 .nav-item i { display: block; font-size: 20px; margin-bottom: 5px; transition: 0.3s;}
 .nav-item.active { color: var(--main); font-weight: 900; }
 .nav-item.active i { transform: translateY(-4px) scale(1.1); color: var(--gold); }
 
-/* Accountant Calculator Box */
 .calc-box { background: #111; padding: 15px; border-radius: 20px; width: 280px; margin: 0 auto; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 .calc-scr { width: 100%; height: 50px; background: #000; color: #0f0; text-align: right; padding: 10px; font-size: 24px; border-radius: 10px; margin-bottom: 10px; font-family: monospace; border: none; font-weight: bold; }
 .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
@@ -501,21 +498,42 @@ function showLoaderText(text) { document.getElementById('loaderText').innerHTML 
 function showLoading() { document.getElementById('loader').style.display = "flex"; }
 function hideLoading() { document.getElementById('loader').style.display = "none"; }
 
-// 🌐 BACKEND API CALLER 
+// 🌐 BACKEND API CALLER - NOW WITH SMART ERROR TRACKING
 async function apiCall(actionName, payloadData = {}) {
     let token = await auth.currentUser.getIdToken(true);
     let payload = { action: actionName, token: token, ...payloadData };
+    
     try {
         let res = await fetch(SCRIPT_URL, {
             method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
-        return await res.json();
+        
+        let text = await res.text();
+        
+        // Check if Apps Script returned an HTML Login/Error Page instead of JSON
+        if (text.includes("<html") || text.includes("<body")) {
+            throw new Error("Deployment Access Error! Apps Script Web App is blocking access. Ensure 'Who has access' is set to 'Anyone' in your deployment settings.");
+        }
+        
+        let data;
+        try { 
+            data = JSON.parse(text); 
+        } catch(e) { 
+            throw new Error("Invalid Response from server: " + text.substring(0, 80)); 
+        }
+        
+        if (data.error) throw new Error(data.error);
+        if (data.status === "error") throw new Error(data.message);
+        
+        return data;
+        
     } catch (error) {
-        console.error("API Call Failed:", error); throw error;
+        console.error("API Call Failed:", error); 
+        throw error;
     }
 }
 
-// 🛡 Security Gate - Check Auth State
+// 🛡 Security Gate
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
     auth.onAuthStateChanged(function(user) {
         if (user) {
@@ -567,22 +585,22 @@ async function loadFineSettingsFromDB() {
     } catch (e) {}
 }
 
-// 🚀 SECURE WRITE: Save Fine Settings 
 async function saveFineSettings() {
     let lAmt = document.getElementById('fLateAmount').value;
-    let lDate = document.getElementById('fLateDay').value; // Now a Date Picker
+    let lDate = document.getElementById('fLateDay').value; 
     let aAmt = document.getElementById('fAbsenceAmount').value;
     
     showLoading(); showLoaderText("SAVING SETTINGS...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
     try {
-        let res = await apiCall('saveFineSettings', { lateAmt: lAmt, lateDate: lDate, absAmt: aAmt });
+        await apiCall('saveFineSettings', { lateAmt: lAmt, lateDate: lDate, absAmt: aAmt });
         hideLoading();
-        if(res.status === "error") { alert(res.message); }
-        else { alert("Fine settings saved successfully! Automated systems will now use these rules."); }
-    } catch(e) { hideLoading(); alert("Error saving fine settings."); }
+        alert("Fine settings saved successfully! Automated systems will now use these rules."); 
+    } catch(e) { 
+        hideLoading(); 
+        alert("Fine Setup Error: " + e.message); 
+    }
 }
 
-// 🚀 SECURE WRITE: Save Advance Admission Fees
 async function saveAdvanceFees() {
     let cls = document.getElementById('advClass').value;
     let sFee = document.getElementById('advSchoolFee').value || 0;
@@ -591,16 +609,16 @@ async function saveAdvanceFees() {
     
     showLoading(); showLoaderText("SAVING ADMISSION FEES...");
     try {
-        let res = await apiCall('saveAdvanceFees', { cls: cls, schoolFee: sFee, hostelFee: hFee, admissionFee: aFee });
+        await apiCall('saveAdvanceFees', { cls: cls, schoolFee: sFee, hostelFee: hFee, admissionFee: aFee });
         hideLoading();
-        if(res.status === "error") { alert(res.message); }
-        else { 
-            alert(`Advance fees for Class ${cls} saved! New admissions will automatically incur these charges.`); 
-            document.getElementById('advSchoolFee').value = '';
-            document.getElementById('advHostelFee').value = '';
-            document.getElementById('advAdmFee').value = '';
-        }
-    } catch(e) { hideLoading(); alert("Error saving admission fees."); }
+        alert(`Advance fees for Class ${cls} saved! New admissions will automatically incur these charges.`); 
+        document.getElementById('advSchoolFee').value = '';
+        document.getElementById('advHostelFee').value = '';
+        document.getElementById('advAdmFee').value = '';
+    } catch(e) { 
+        hideLoading(); 
+        alert("Admission Setup Error: " + e.message); 
+    }
 }
 
 async function searchStu() {
@@ -635,7 +653,10 @@ async function searchStu() {
         
         renderPaymentZone(d);
         
-    } catch(err) { hideLoading(); alert("Error fetching student data!"); }
+    } catch(err) { 
+        hideLoading(); 
+        alert("Search Error: " + err.message); 
+    }
 }
 
 function renderPaymentZone(d) {
@@ -714,7 +735,6 @@ function calcTotalPay() {
     document.getElementById('sumPayingAmt').innerText = total.toFixed(2);
 }
 
-// 🚀 FAST & DIRECT FIREBASE WRITER: Pay Now (Direct write, SMS via Backend)
 async function payNowDirect() {
     if(!isAuthReady || !currentStudentDocId) return;
     
@@ -795,14 +815,15 @@ async function payNowDirect() {
         document.getElementById('btnPrint').style.display = "block"; 
         hideLoading();
         
-        // Background SMS
         if(totalPaidNow > 0 && sendSms) {
             apiCall('sendPaymentNotification', { txData: txData, netDue: netDue, phone: f.phone, email: f.email });
         }
-    } catch(err) { hideLoading(); alert("Payment Failed due to network error."); }
+    } catch(err) { 
+        hideLoading(); 
+        alert("Payment Error: " + err.message); 
+    }
 }
 
-// 🚀 SECURE WRITE: Cashbook Entry 
 async function addCashbookEntryBackend() {
     let type = document.getElementById('cbType').value;
     let amt = parseFloat(document.getElementById('cbAmount').value);
@@ -813,15 +834,15 @@ async function addCashbookEntryBackend() {
     
     showLoading(); showLoaderText("SAVING ENTRY...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
     try {
-        let res = await apiCall('addCashbookEntry', { type: type, amount: amt, title: title, desc: desc });
+        await apiCall('addCashbookEntry', { type: type, amount: amt, title: title, desc: desc });
         hideLoading();
-        if(res.status === "error") { alert("Error saving cashbook entry."); }
-        else {
-            document.getElementById('cbAmount').value = ""; document.getElementById('cbTitle').value = ""; document.getElementById('cbDesc').value = "";
-            alert("Entry successfully added to Cashbook!");
-            loadCashbook(); 
-        }
-    } catch (e) { hideLoading(); alert("Error saving cashbook entry."); }
+        document.getElementById('cbAmount').value = ""; document.getElementById('cbTitle').value = ""; document.getElementById('cbDesc').value = "";
+        alert("Entry successfully added to Cashbook!");
+        loadCashbook(); 
+    } catch (e) { 
+        hideLoading(); 
+        alert("Cashbook Error: " + e.message); 
+    }
 }
 
 async function loadCashbook() {
@@ -830,7 +851,7 @@ async function loadCashbook() {
         let snap = await db.collection('Cashbook').get();
         let list = [];
         snap.forEach(doc => { list.push(doc.data()); });
-        list.sort((a,b) => b.timestamp - a.timestamp); // Sorted strictly in JS to bypass index errors
+        list.sort((a,b) => b.timestamp - a.timestamp); 
         
         let h = ""; let tInc = 0; let tExp = 0;
         list.forEach(data => {
@@ -844,7 +865,10 @@ async function loadCashbook() {
         document.getElementById('cbTotalIncome').innerText = tInc;
         document.getElementById('cbTotalExpense').innerText = tExp;
         hideLoading();
-    } catch (e) { hideLoading(); alert("Error loading cashbook."); }
+    } catch (e) { 
+        hideLoading(); 
+        alert("Cashbook Load Error: " + e.message); 
+    }
 }
 
 function checkCustomOption(selectElement) {
@@ -859,7 +883,6 @@ function checkCustomOption(selectElement) {
     }
 }
 
-// 🚀 BATCH API WRITE: Run Bulk Setup
 async function runBulkBackend() { 
     if(!isAuthReady) return;
     let ids = Array.from(document.querySelectorAll('.s-chk:checked')).map(c => c.value); 
@@ -888,17 +911,17 @@ async function runBulkBackend() {
     showLoading(); showLoaderText("UPDATING STUDENTS...<br><span style='font-size:11px; color:#64748b;'>Executing Batch Commit</span>");
     
     try {
-        let res = await apiCall('processBulkUpdateBatch', {
+        await apiCall('processBulkUpdateBatch', {
             ids: ids, feeType: type, amount: amt, month: document.getElementById('bMon').value, year: document.getElementById('bYear').value, customFeesJSON: JSON.stringify(customFeesArr), actionType: actionType, pwd: pwd
         });
         hideLoading();
-        if(res && res.status === "error") { alert(res.message); } 
-        else {
-            alert(actionType === "Edit" ? "Fees Setup Successfully Updated!" : "Fees Setup Completed Successfully!"); 
-            document.getElementById('bulkControls').style.display = "none";
-            document.getElementById('setupPwd').value = "";
-        }
-    } catch(err) { hideLoading(); alert("Error processing bulk update."); }
+        alert(actionType === "Edit" ? "Fees Setup Successfully Updated!" : "Fees Setup Completed Successfully!"); 
+        document.getElementById('bulkControls').style.display = "none";
+        document.getElementById('setupPwd').value = "";
+    } catch(err) { 
+        hideLoading(); 
+        alert("Bulk Update Error: " + err.message); 
+    }
 }
 
 async function executeFactoryResetBackend() {
@@ -908,16 +931,16 @@ async function executeFactoryResetBackend() {
     if(confirm("⚠️ Critical Warning!\nAre you 100% sure you want to CLEAR ALL FEES for ALL STUDENTS? This action cannot be undone.")) {
         showLoading(); showLoaderText("FACTORY RESET...<br><span style='font-size:11px; color:#ef4444;'>Executing Critical Update</span>");
         try {
-            let res = await apiCall('processFactoryReset', {pwd: pwd});
+            await apiCall('processFactoryReset', {pwd: pwd});
             hideLoading();
-            if(res && res.status === "error") { alert(res.message); } 
-            else {
-                alert("Factory Reset Complete! All fees have been cleared.");
-                document.getElementById('resetPwd').value = "";
-                document.getElementById('feeAction').value = "Add";
-                toggleActionUI();
-            }
-        } catch(err) { hideLoading(); alert("Error processing factory reset."); }
+            alert("Factory Reset Complete! All fees have been cleared.");
+            document.getElementById('resetPwd').value = "";
+            document.getElementById('feeAction').value = "Add";
+            toggleActionUI();
+        } catch(err) { 
+            hideLoading(); 
+            alert("Factory Reset Error: " + err.message); 
+        }
     }
 }
 
@@ -961,7 +984,10 @@ async function loadBulk() {
         document.getElementById('bulkList').innerHTML = h + "</tbody></table>"; 
         document.getElementById('bulkControls').style.display = "block"; 
         document.getElementById('pwdZoneSetup').style.display = document.getElementById('feeAction').value === "Edit" ? "block" : "none";
-    } catch(err) { hideLoading(); alert("Error loading list."); }
+    } catch(err) { 
+        hideLoading(); 
+        alert("Load List Error: " + err.message); 
+    }
 }
 
 function toggleAll(s) { document.querySelectorAll('.s-chk').forEach(c => c.checked = s.checked); }
@@ -1072,7 +1098,10 @@ async function loadRep() {
         hideLoading();
         reportsData = list; 
         renderReports(reportsData); 
-    } catch(err) { hideLoading(); alert("Error fetching report data."); }
+    } catch(err) { 
+        hideLoading(); 
+        alert("Report Error: " + err.message); 
+    }
 }
 
 function renderReports(list) {
@@ -1175,11 +1204,14 @@ async function loadHistory() {
         let snap = await db.collection('Transactions').get();
         let list = [];
         snap.forEach(doc => { list.push(doc.data()); });
-        list.sort((a,b) => parseInt(b.timestamp || 0) - parseInt(a.timestamp || 0)); // JS array sorting bypasses Firestore index requirement
+        list.sort((a,b) => parseInt(b.timestamp || 0) - parseInt(a.timestamp || 0)); 
         hideLoading();
         historyData = list;
         renderHistory(list);
-    } catch(err) { hideLoading(); alert("Error fetching history."); }
+    } catch(err) { 
+        hideLoading(); 
+        alert("Ledger Error: " + err.message); 
+    }
 }
 
 function renderHistory(data) {
@@ -1282,7 +1314,6 @@ function printHistory() {
     w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
-// 🖨️ Receipt Printing Fix
 function printReceiptDirect() {
     if(!lastR) return;
     let d = lastR;
@@ -1351,7 +1382,7 @@ function printReceiptDirect() {
     <div style="text-align: right;">
     <div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div>
     <div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div>
-    <div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month} ${d.year}</b></div>
+    <div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month}${d.year}</b></div>
     </div>
     </div>
     <table>
