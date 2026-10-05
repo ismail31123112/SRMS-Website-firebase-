@@ -472,7 +472,7 @@ body { background: white; padding: 0; margin: 0; }
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec"; 
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec"; 
 
 const firebaseConfig = {
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
