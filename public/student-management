@@ -14,7 +14,6 @@ window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 </script>
 
 <style>
-/* 🎨 PREMIUM DESIGN: SRMS Green & Gold Theme */
 :root { --primary: #005f40; --primary-dark: #003d29; --light: #e8f5e9; --bg: #f4f7f9; --danger: #ef4444; --edit: #3b82f6; --gold: #f59e0b; --gold-light: #fef3c7; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 95px; color: #334155; }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -62,14 +61,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .fee-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
 .pay-input { border-color: var(--primary) !important; color: var(--primary); font-weight: 900; font-size: 18px; text-align: center; }
 
-@media print { 
-    body * { visibility: hidden; } 
-    #printArea, #printArea * { visibility: visible; } 
-    #printArea { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0;} 
-}
-.print-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-family: 'Times New Roman', serif;}
-.print-table th, .print-table td { border: 1px solid #000; padding: 6px 8px; text-align: left; font-size: 11px; word-break: break-all; }
-.print-table th { background: #e2e8f0 !important; font-weight: bold; color: #000; text-transform: uppercase; -webkit-print-color-adjust: exact; }
+@media print { body * { visibility: hidden; } #printArea, #printArea * { visibility: visible; } #printArea { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0;} }
 </style>
 </head>
 <body>
