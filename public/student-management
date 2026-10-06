@@ -6,7 +6,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<!-- 🔒 URL Security Script: URL থেকে টোকেন গায়েব করে দেবে -->
 <script>
 if (window.history.replaceState) {
 var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -69,7 +68,6 @@ input[readonly] { background-color: #f1f5f9; color: var(--danger); font-weight: 
 .close { position: absolute; top: 20px; right: 25px; font-size: 26px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: 0.3s;}
 .close:hover { color: var(--danger); transform: rotate(90deg);}
 
-/* 🛑 SECURITY SHIELD LOADER (Visible by default) */
 #loader { display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
 .spinner { width:55px; height:55px; border:4px solid #e2e8f0; border-top:4px solid var(--primary); border-radius:50%; animation:spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; }
 
@@ -77,7 +75,10 @@ input[readonly] { background-color: #f1f5f9; color: var(--danger); font-weight: 
 .badge-civil { background: var(--light); color: var(--primary); padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; border: 1px solid #a7f3d0; letter-spacing: 0.5px; text-transform: uppercase;}
 .badge-section { background: #f1f5f9; color: #475569; padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 700; border: 1px solid #cbd5e1; margin-left: 5px;}
 
-/* 🖨️ Professional Academic Print CSS */
+/* Combo Fee Box Styling */
+.combo-fee-box { background: #faf5ff; border: 2px dashed #a855f7; padding: 20px; border-radius: 16px; margin-top: 20px;}
+.combo-fee-box h4 { margin: 0 0 15px 0; color: #7e22ce; font-weight: 900; }
+
 @media print {
 body * { visibility: hidden; }
 #printArea, #printArea * { visibility: visible; }
@@ -90,17 +91,15 @@ body * { visibility: hidden; }
 </head>
 <body>
 
-<!-- 🛑 Security Gate UI -->
 <div id="loader">
     <div class="spinner"></div>
     <p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--primary); letter-spacing: 1px; text-align: center;">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p>
 </div>
 
-<!-- 🛑 Main App Container (Hidden under loader initially) -->
 <div id="appContainer" style="display: none;">
     <div class="header">
     <div class="header-left">
-    <h2>SRMS Student DB V4</h2>
+    <h2>SRMS Student DB V5.5</h2>
     </div>
     <button class="btn-back" onclick="window.close();" title="Back to Admin Dashboard">
     <i class="fas fa-sign-out-alt"></i> Dashboard
@@ -193,7 +192,7 @@ body * { visibility: hidden; }
     <label style="color:var(--primary);"><i class="fas fa-camera"></i> Student Photo (Auto upload to Server)</label>
     <input type="file" id="sPhoto" accept="image/*" style="padding: 10px; background: #e8f5e9; border: 2px dashed #005f40;">
 
-    <button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Admit (Save Profile & Fees)</button>
+    <button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Admit (Save Profile &amp; Fees)</button>
     </div>
     </div>
 
@@ -258,7 +257,7 @@ body * { visibility: hidden; }
     <!-- ================= EDIT MODAL ================= -->
     <div id="editModal" class="modal">
     <div class="modal-content">
-    <span class="close" onclick="closeModal('editModal')">&times;</span>
+    <span class="close" onclick="closeModal('editModal')">×</span>
     <h3 style="color:var(--edit); margin-top:0; font-weight:900; text-transform: uppercase; font-size:20px;"><i class="fas fa-user-edit"></i> Edit Profile</h3>
 
     <div style="display:flex; gap:15px;">
@@ -336,7 +335,51 @@ body * { visibility: hidden; }
     </div>
     <label>Address</label><textarea id="eAddr" rows="2"></textarea>
     
-    <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);" onclick="updateStudent()">🔄 Update Profile</button>
+    <!-- 💡 COMBO PROMOTION FEES BOX -->
+    <div class="combo-fee-box">
+    <h4><i class="fas fa-level-up-alt"></i> Promotion / Setup New Fees</h4>
+    <label style="display:flex; align-items:center; gap:8px; font-weight:bold; color:#581c87; margin-bottom:15px;">
+        <input type="checkbox" id="eAssignFees" style="width:18px; height:18px; accent-color:#9333ea;" onchange="toggleComboFees()"> 
+        Assign New Dues for this Student
+    </label>
+    
+    <div id="eComboFeeInputs" style="display:none;">
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <div style="flex:1;">
+                <label>Month</label>
+                <select id="eComboMonth">
+                    <option value="January">January</option><option value="February">February</option><option value="March">March</option>
+                    <option value="April">April</option><option value="May">May</option><option value="June">June</option>
+                    <option value="July">July</option><option value="August">August</option><option value="September">September</option>
+                    <option value="October">October</option><option value="November">November</option><option value="December">December</option>
+                </select>
+            </div>
+            <div style="flex:1;">
+                <label>Year</label>
+                <select id="eComboYear"></select>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+            <div style="flex:1;">
+                <label>School Fee (TK)</label>
+                <input type="number" id="eComboSchool" placeholder="0">
+            </div>
+            <div style="flex:1;">
+                <label>Hostel Fee (TK)</label>
+                <input type="number" id="eComboHostel" placeholder="0">
+            </div>
+        </div>
+        
+        <label>Add Custom Fee (e.g. Promotion Fee)</label>
+        <div style="display:flex; gap:10px;">
+            <input type="text" id="eComboCustomName" placeholder="Fee Name (e.g. Session Charge)" style="flex:2;">
+            <input type="number" id="eComboCustomAmt" placeholder="Amount" style="flex:1;">
+        </div>
+    </div>
+    </div>
+
+    <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8); box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);" onclick="updateStudent()">🔄 Update Profile & Fees</button>
     </div>
     </div>
 
@@ -375,9 +418,8 @@ body * { visibility: hidden; }
     <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
     <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-layer-group"></i>Sections</button>
     </div>
-</div> <!-- End App Container -->
+</div>
 
-<!-- ================= FIREBASE & BACKEND LOGIC ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
@@ -394,14 +436,18 @@ if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// 🔒 LOCAL PERSISTENCE SET FOR SHARED TABS
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(err => console.log(err));
 
 var allData = [];
 var globalSections = []; 
 var isAuthReady = false; 
 
-// 🔑 TOKEN MANAGEMENT
+// Populate Year Dropdown for Combo
+let cYear = new Date().getFullYear();
+let yOpts = "";
+for(let y=cYear; y<=cYear+5; y++){ yOpts += `<option value="${y}">${y}</option>`; }
+document.getElementById('eComboYear').innerHTML = yOpts;
+
 function getToken() {
     let token = sessionStorage.getItem('portal_token');
     if (!token) {
@@ -412,26 +458,26 @@ function getToken() {
     return token;
 }
 
-// 🌐 BACKEND API CALLER (For Add/Delete/SMS)
 async function apiCall(actionName, payloadData = {}) {
     let payload = { action: actionName, token: getToken(), ...payloadData };
     try {
         let res = await fetch(SCRIPT_URL, {
             method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
-        return await res.json();
+        let text = await res.text();
+        if (text.includes("<html")) throw new Error("Deployment Access Error! Ensure Apps Script 'Who has access' is 'Anyone'.");
+        let data = JSON.parse(text);
+        if (data.status === "error") throw new Error(data.message);
+        return data;
     } catch (error) {
         console.error("API Call Failed:", error); throw error;
     }
 }
 
-function showLoaderText(text) { 
-    document.getElementById('loaderText').innerHTML = text; 
-}
+function showLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
 
 function switchTab(id, btn) {
     if(!isAuthReady) return alert("Security checking in progress... Please wait.");
-    
     document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById(id).classList.add('active');
@@ -444,9 +490,10 @@ function toggleGroup(selId, divId) {
     document.getElementById(divId).style.display = (cls == "9" || cls == "10") ? "block" : "none";
 }
 
-// ==========================================
-// 🚀 🛡️ SECURITY GATE & INITIALIZATION 🛡️ 🚀
-// ==========================================
+function toggleComboFees() {
+    let chk = document.getElementById('eAssignFees').checked;
+    document.getElementById('eComboFeeInputs').style.display = chk ? "block" : "none";
+}
 
 window.onload = function() {
     auth.onAuthStateChanged(function(user) {
@@ -468,10 +515,6 @@ window.onload = function() {
     });
 }
 
-// ==========================================
-// 🚀 DIRECT FIREBASE: SECTIONS & STUDENTS
-// ==========================================
-
 async function loadSectionsData() {
     if(!isAuthReady) return;
     try {
@@ -483,7 +526,7 @@ async function loadSectionsData() {
         }
         updateSectionDropdowns();
         renderSectionList();
-    } catch (e) { console.error("Init Error", e); }
+    } catch (e) {}
 }
 
 function updateSectionDropdowns() {
@@ -559,10 +602,10 @@ function saveStudent() {
     if(f) {
         var r = new FileReader(); r.onload = e => { 
             d.photoData = e.target.result.split(',')[1]; d.mimeType = f.type; 
-            apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {document.getElementById('loader').style.display = 'none'; alert("Error");}); 
+            apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {document.getElementById('loader').style.display = 'none'; alert("Error: "+err.message);}); 
         }; r.readAsDataURL(f);
     } else { 
-        apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {document.getElementById('loader').style.display = 'none'; alert("Error");}); 
+        apiCall('addNewStudentProfile', {data: d}).then(done).catch(err => {document.getElementById('loader').style.display = 'none'; alert("Error: "+err.message);}); 
     }
 }
 
@@ -584,7 +627,6 @@ async function loadStudents() {
         document.getElementById('loader').style.display = 'none';
     } catch(e) {
         document.getElementById('loader').style.display = 'none'; 
-        console.error(e); 
         alert("Database Error: " + e.message);
     }
 }
@@ -605,7 +647,7 @@ function renderList(data) {
         </small>
         </div>
         <div class="btn-group" style="display:flex; flex-direction:column; gap:8px;">
-        <button onclick="openEditByRow('${s.rowId}')" style="color:var(--edit)"><i class="fas fa-edit"></i> Edit</button>
+        <button onclick="openEditByRow('${s.rowId}')" style="color:var(--edit)"><i class="fas fa-edit"></i> Edit / Promote</button>
         <button onclick="delStu('${s.rowId}')" style="color:var(--danger)"><i class="fas fa-trash"></i> Del</button>
         </div>
         </div>`;
@@ -636,26 +678,80 @@ function openEditByRow(rid) {
     document.getElementById('eId').value = s.id; document.getElementById('eMachineId').value = s.machineId || ""; document.getElementById('eRowId').value = s.rowId; document.getElementById('eName').value = s.name; document.getElementById('eFatherName').value = s.fatherName || ""; document.getElementById('eFatherNid').value = s.fatherNid || ""; document.getElementById('eMotherName').value = s.motherName || ""; document.getElementById('eMotherNid').value = s.motherNid || ""; document.getElementById('eBloodGroup').value = s.bloodGroup || ""; document.getElementById('eClass').value = s.classVal; document.getElementById('eSection').value = s.sectionVal || ""; document.getElementById('eRoll').value = s.roll; document.getElementById('eRes').value = s.resStatus; document.getElementById('eCategory').value = s.category || "Civil"; 
     toggleGroup('eClass', 'eGroupDivEdit');
     document.getElementById('eGroup').value = s.group || ""; document.getElementById('eCardNumber').value = s.cardNumber || ""; document.getElementById('ePhone').value = s.phone || ""; document.getElementById('eEmail').value = s.email || ""; document.getElementById('eCert').value = s.birthCert || ""; document.getElementById('ePrev').value = s.prevReg || ""; document.getElementById('eAddr').value = s.address || "";
+    
+    // Reset Combo UI
+    document.getElementById('eAssignFees').checked = false;
+    document.getElementById('eComboFeeInputs').style.display = 'none';
+    document.getElementById('eComboSchool').value = '';
+    document.getElementById('eComboHostel').value = '';
+    document.getElementById('eComboCustomName').value = '';
+    document.getElementById('eComboCustomAmt').value = '';
+
     document.getElementById('editModal').style.display = 'flex';
 }
 
-// 🚀 DIRECT FIREBASE: Fast Update
+// 🚀 COMBO UPDATE API 
 async function updateStudent() {
     if(!isAuthReady) return;
-    var d = { rowId: document.getElementById('eRowId').value, name: document.getElementById('eName').value, fatherName: document.getElementById('eFatherName').value || "", fatherNid: document.getElementById('eFatherNid').value || "", motherName: document.getElementById('eMotherName').value || "", motherNid: document.getElementById('eMotherNid').value || "", bloodGroup: document.getElementById('eBloodGroup').value || "", machineId: document.getElementById('eMachineId').value, classVal: document.getElementById('eClass').value, sectionVal: document.getElementById('eSection').value || "", roll: document.getElementById('eRoll').value, resStatus: document.getElementById('eRes').value, category: document.getElementById('eCategory').value, group: document.getElementById('eGroup').value || "", cardNumber: document.getElementById('eCardNumber').value || "", phone: document.getElementById('ePhone').value || "", email: document.getElementById('eEmail').value || "", cert: document.getElementById('eCert').value || "", prev: document.getElementById('ePrev').value || "", addr: document.getElementById('eAddr').value || "" };
+
+    var d = { 
+        rowId: document.getElementById('eRowId').value, 
+        name: document.getElementById('eName').value, 
+        fatherName: document.getElementById('eFatherName').value, 
+        fatherNid: document.getElementById('eFatherNid').value, 
+        motherName: document.getElementById('eMotherName').value, 
+        motherNid: document.getElementById('eMotherNid').value, 
+        bloodGroup: document.getElementById('eBloodGroup').value, 
+        machineId: document.getElementById('eMachineId').value, 
+        classVal: document.getElementById('eClass').value, 
+        sectionVal: document.getElementById('eSection').value, 
+        roll: document.getElementById('eRoll').value, 
+        resStatus: document.getElementById('eRes').value, 
+        category: document.getElementById('eCategory').value, 
+        group: document.getElementById('eGroup').value, 
+        cardNumber: document.getElementById('eCardNumber').value, 
+        phone: document.getElementById('ePhone').value, 
+        email: document.getElementById('eEmail').value, 
+        cert: document.getElementById('eCert').value, 
+        prev: document.getElementById('ePrev').value, 
+        addr: document.getElementById('eAddr').value,
+        isComboFee: false
+    };
+
+    // 💡 Add Combo Fees to payload if checked
+    let assignFeeChk = document.getElementById('eAssignFees').checked;
+    if (assignFeeChk) {
+        d.isComboFee = true;
+        d.feeMonth = document.getElementById('eComboMonth').value;
+        d.feeYear = document.getElementById('eComboYear').value;
+
+        let scFee = document.getElementById('eComboSchool').value;
+        if(scFee !== "") d.schoolFeeDue = scFee;
+
+        let hsFee = document.getElementById('eComboHostel').value;
+        if(hsFee !== "") d.hostelFeeDue = hsFee;
+
+        let cusName = document.getElementById('eComboCustomName').value.trim();
+        let cusAmt = document.getElementById('eComboCustomAmt').value;
+        if(cusName && cusAmt !== "") {
+            let customArr = [{ name: cusName, amount: cusAmt.toString(), status: "Due", colIdx: new Date().getTime() }];
+            d.customFeesJSON = JSON.stringify(customArr);
+        }
+    }
     
-    document.getElementById('loader').style.display = 'flex'; showLoaderText("UPDATING PROFILE...<br><span style='font-size:11px; color:#64748b;'>Direct Write to Database</span>");
+    document.getElementById('loader').style.display = 'flex'; 
+    showLoaderText("UPDATING PROFILE & FEES...<br><span style='font-size:11px; color:#64748b;'>Backend Processing + Smart SMS Triggering</span>");
+    
     try {
-        await db.collection('Students').doc(d.rowId).update({
-            name: d.name, fatherName: d.fatherName, fatherNid: d.fatherNid, motherName: d.motherName, motherNid: d.motherNid, bloodGroup: d.bloodGroup, machineID: d.machineId, class: d.classVal, section: d.sectionVal, roll: d.roll, resStatus: d.resStatus, category: d.category, group: d.group, cardNumber: d.cardNumber, phone: d.phone, email: d.email, birthCert: d.cert, prevReg: d.prev, address: d.addr
-        });
-        if (d.phone) { apiCall('sendUpdateSMS', d); }
+        let res = await apiCall('updateStudentProfileDirect', { data: d });
         document.getElementById('loader').style.display = 'none';
-        alert("Update Successful!");
+        if(res.status === "error") throw new Error(res.message);
+        alert("Update Successful! Profile saved and SMS sent.");
         closeModal('editModal');
         loadStudents();
     } catch(e) {
-        document.getElementById('loader').style.display = 'none'; console.error(e); alert("Update Failed");
+        document.getElementById('loader').style.display = 'none'; 
+        alert("Update Failed: " + e.message);
     }
 }
 
@@ -677,11 +773,10 @@ function delStu(row) {
     if(!isAuthReady) return;
     if(confirm("Confirm delete?")) {
         document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING...");
-        apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error");}); 
+        apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error: "+e.message);}); 
     } 
 }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-
 </script>
 </body>
 </html>
