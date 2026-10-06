@@ -6,7 +6,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+<script>
+if (window.history.replaceState) {
+var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+}
+</script>
+
 <style>
+/* 🎨 PREMIUM DESIGN: SRMS Green & Gold Theme */
 :root { --primary: #005f40; --primary-dark: #003d29; --light: #e8f5e9; --bg: #f4f7f9; --danger: #ef4444; --edit: #3b82f6; --gold: #f59e0b; --gold-light: #fef3c7; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 95px; color: #334155; }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -54,7 +62,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .fee-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
 .pay-input { border-color: var(--primary) !important; color: var(--primary); font-weight: 900; font-size: 18px; text-align: center; }
 
-@media print { body * { visibility: hidden; } #printArea, #printArea * { visibility: visible; } #printArea { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0;} }
+@media print { 
+    body * { visibility: hidden; } 
+    #printArea, #printArea * { visibility: visible; } 
+    #printArea { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0;} 
+}
+.print-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-family: 'Times New Roman', serif;}
+.print-table th, .print-table td { border: 1px solid #000; padding: 6px 8px; text-align: left; font-size: 11px; word-break: break-all; }
+.print-table th { background: #e2e8f0 !important; font-weight: bold; color: #000; text-transform: uppercase; -webkit-print-color-adjust: exact; }
 </style>
 </head>
 <body>
@@ -122,6 +137,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:90px;"><option value="">All Classes</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option></select>
         <select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:90px;"><option value="">All Sections</option></select>
         <button onclick="window.open('https://www.saidpurresidentialmodelschool.com/tc', '_blank')" style="background:#f59e0b; color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; font-weight:800;"><i class="fas fa-file-signature"></i> Create TC</button>
+        <button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3);"><i class="fas fa-print"></i></button>
         </div>
         <div style="position: relative;"><i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i><input type="text" id="stuSearch" placeholder="Search Name, ID, Phone..." onkeyup="filterStudents()" style="padding-left: 40px; border-radius: 30px;"></div>
     </div>
@@ -129,6 +145,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         Total Students: <span id="totalStuCount" style="color:var(--gold); font-size:22px;">0</span>
     </div>
     <div id="studentListDisplay"></div>
+    </div>
+
+    <!-- ================= SECTION MANAGER TAB ================= -->
+    <div id="sectionTab" class="container">
+    <div class="card" style="border-top-color: #005f40;">
+    <h3 style="margin:0 0 15px 0; color:#005f40; font-weight:900;"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
+    <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">এখানে একবার কোনো সেকশন অ্যাড করলে তা অটোমেটিক অ্যাডমিট এবং এডিট ফর্মে সেভ হয়ে থাকবে।</p>
+    <div style="display:flex; gap:10px;">
+    <input type="text" id="newSecName" placeholder="Enter new section name (e.g. Padma, Lotus)" style="flex:1; border-color:#a7f3d0;">
+    <button onclick="addSection()" class="btn-submit" style="width:130px; margin-top:0; padding:10px; background: linear-gradient(135deg, #005f40, #003d29); box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add</button>
+    </div>
+    <div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;">
+    </div>
+    </div>
     </div>
 
     <!-- ================= EDIT MODAL (CLASS UPDATE) ================= -->
@@ -180,9 +210,24 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         </div>
     </div>
 
+    <!-- PRINT AREA FOR STUDENT LIST -->
+    <div id="printArea" style="display:none;">
+    <div style="text-align:center; border-bottom:3px solid #005f40; margin-bottom:15px; padding-bottom: 10px;">
+    <h2 style="margin:0; color:#005f40; font-family:'Times New Roman', serif; text-transform:uppercase; font-size: 20px; font-weight: 800;">Saidpur Residential Model School</h2>
+    <p id="printTitle" style="margin:5px 0; font-weight:bold; font-size:13px; color:#475569; font-family:sans-serif; letter-spacing: 0.5px;"></p>
+    </div>
+    <table class="print-table">
+    <thead>
+    <tr><th>ID</th><th>Name</th><th>Father</th><th>Mother</th><th>Class</th><th>Sec</th><th>Grp</th><th>Roll</th><th>Category</th><th>Phone</th></tr>
+    </thead>
+    <tbody id="printTableBody"></tbody>
+    </table>
+    </div>
+
     <div class="bottom-nav">
     <button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
     <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
+    <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-layer-group"></i>Sections</button>
     </div>
 </div> 
 
@@ -192,7 +237,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4mCNGwS3UHSadoNF2exXw3D-aZtspe4kEew9BliSkCR2HbBQtaifmzoWZoFKdDL8g/exec";
 
 const firebaseConfig = { apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", projectId: "srms-website-management" };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
@@ -200,6 +245,7 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 var allData = [];
+var globalSections = []; 
 var isAuthReady = false; 
 var originalEditClass = "";
 var currentReceiptData = null;
@@ -256,12 +302,66 @@ async function loadSectionsData() {
         const doc = await db.collection('Admin').doc('Settings').get();
         let opts = '<option value="">Select Section</option>';
         if (doc.exists && doc.data().sections) {
-            doc.data().sections.split(',').filter(s=>s.trim()!=='').forEach(s => { opts += `<option value="${s}">${s}</option>`; });
+            globalSections = doc.data().sections.split(',').filter(s => s.trim() !== '');
+            globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
+        } else {
+            globalSections = ["Section A", "Section B", "Section C", "Boys", "Girls"];
+            globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
         }
         document.getElementById('sSection').innerHTML = opts;
         document.getElementById('eSection').innerHTML = opts;
         document.getElementById('filterSection').innerHTML = '<option value="">All Sections</option>' + opts;
+        renderSectionList();
     } catch (e) {}
+}
+
+function renderSectionList() {
+    let h = "";
+    globalSections.forEach(s => {
+        h += `<div class="list-item" style="padding:12px 20px; box-shadow:none; border-color:#a7f3d0;">
+        <b style="color:#005f40; font-size:15px;">${s}</b>
+        <button onclick="deleteSection('${s}')" style="background:#fef2f2; color:#ef4444; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; transition:0.3s;"><i class="fas fa-trash"></i></button>
+        </div>`;
+    });
+    document.getElementById('sectionListDisplay').innerHTML = h || "<p style='text-align:center; color:#94a3b8; font-weight:600;'>No custom sections added yet.</p>";
+}
+
+async function addSection() {
+    if(!isAuthReady) return;
+    let name = document.getElementById('newSecName').value.trim();
+    if(!name) return alert("Please enter section name.");
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("ADDING SECTION...");
+    try {
+        if (!globalSections.includes(name)) globalSections.push(name);
+        await db.collection('Admin').doc('Settings').set({ sections: globalSections.join(',') }, { merge: true });
+        document.getElementById('newSecName').value = "";
+        
+        let opts = '<option value="">Select Section</option>';
+        globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
+        document.getElementById('sSection').innerHTML = opts;
+        document.getElementById('eSection').innerHTML = opts;
+        document.getElementById('filterSection').innerHTML = '<option value="">All Sections</option>' + opts;
+        
+        renderSectionList(); document.getElementById('loader').style.display = 'none';
+    } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error adding section"); }
+}
+
+async function deleteSection(name) {
+    if(!isAuthReady) return;
+    if(!confirm(`Delete section "${name}"?`)) return;
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING SECTION...");
+    try {
+        globalSections = globalSections.filter(s => s !== name);
+        await db.collection('Admin').doc('Settings').set({ sections: globalSections.join(',') }, { merge: true });
+        
+        let opts = '<option value="">Select Section</option>';
+        globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
+        document.getElementById('sSection').innerHTML = opts;
+        document.getElementById('eSection').innerHTML = opts;
+        document.getElementById('filterSection').innerHTML = '<option value="">All Sections</option>' + opts;
+
+        renderSectionList(); document.getElementById('loader').style.display = 'none';
+    } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error deleting section"); }
 }
 
 // 💡 AUTO FETCH FEES LOGIC
@@ -402,7 +502,29 @@ function renderList(data) {
     document.getElementById('totalStuCount').innerText = total;
 }
 
-function filterStudents() { /* Standard filter logic */ }
+function filterStudents() {
+    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fGrp = document.getElementById('filterGroup').value; var fRes = document.getElementById('filterRes').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
+    var filtered = allData.filter(s => {
+        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchGrp = fGrp === "" || String(s.group) === fGrp; var matchRes = fRes === "" || String(s.resStatus) === fRes; var matchCat = fCat === "" || String(s.category) === fCat;
+        var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt) || String(s.roll).includes(fTxt) || (s.machineID && String(s.machineID).toLowerCase().includes(fTxt)) || (s.phone && String(s.phone).includes(fTxt)); 
+        return matchCls && matchSec && matchGrp && matchRes && matchCat && matchTxt;
+    });
+    renderList(filtered);
+}
+
+function printReport() {
+    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
+    var data = allData.filter(s => {
+        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchCat = fCat === "" || String(s.category) === fCat; var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt);
+        return matchCls && matchSec && matchCat && matchTxt;
+    });
+
+    var rows = "";
+    data.forEach(s => { rows += `<tr><td>${s.studentID}</td><td>${s.name}</td><td>${s.fatherName || '-'}</td><td>${s.motherName || '-'}</td><td>${s.class}</td><td>${s.section || '-'}</td><td>${s.group || '-'}</td><td>${s.roll}</td><td><b>${s.category || 'Civil'}</b></td><td>${s.phone || ''}</td></tr>`; });
+    document.getElementById('printTitle').innerText = "Student General Information List: " + (fCls ? "Class "+fCls : "All Classes") + (fSec ? " | Sec: "+fSec : "") + (fCat ? " | Cat: "+fCat : "");
+    document.getElementById('printTableBody').innerHTML = rows;
+    setTimeout(() => { window.print(); }, 800);
+}
 
 function openEditByRow(rid) {
     if(!isAuthReady) return;
