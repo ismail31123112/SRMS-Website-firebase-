@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <style>
-/* 🎨 PREMIUM DESIGN: SRMS Green & Gold Theme */
 :root { --primary: #005f40; --primary-dark: #003d29; --light: #e8f5e9; --bg: #f4f7f9; --danger: #ef4444; --edit: #3b82f6; --gold: #f59e0b; --gold-light: #fef3c7; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 95px; color: #334155; }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -27,7 +26,6 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; pad
 label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-top: 15px; margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px;}
 input, select, textarea { width: 100%; padding: 14px 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; margin-top: 6px; font-family: inherit; font-size: 14px; transition: 0.3s; background: #f8fafc; font-weight: 500;}
 input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
-input[readonly] { background-color: #f1f5f9; color: var(--danger); font-weight: bold; border-color: #cbd5e1;}
 
 .btn-submit { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; margin-top: 25px; transition: 0.3s; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(0, 95, 64, 0.25);}
 .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0, 95, 64, 0.35); }
@@ -65,14 +63,14 @@ input[readonly] { background-color: #f1f5f9; color: var(--danger); font-weight: 
 
 <div id="appContainer" style="display: none;">
     <div class="header">
-        <div class="header-left"><h2>SRMS Student DB V6</h2></div>
+        <div class="header-left"><h2>SRMS Student DB V6.5</h2></div>
         <button class="btn-back" onclick="window.close();"><i class="fas fa-sign-out-alt"></i> Dashboard</button>
     </div>
 
     <!-- ================= ADMIT TAB ================= -->
     <div id="admitTab" class="container active">
     <div class="card">
-    <h3 style="margin:0 0 20px 0; color:var(--primary); font-weight:900; text-transform: uppercase;"><i class="fas fa-user-plus"></i> New Admission</h3>
+    <h3 style="margin:0 0 20px 0; color:var(--primary); font-weight:900; text-transform: uppercase; font-size: 18px;"><i class="fas fa-user-plus"></i> New Admission</h3>
     
     <label>Full Name *</label><input type="text" id="sName" placeholder="Student's Full Name">
     <div style="display:flex; gap:15px;">
@@ -194,7 +192,7 @@ input[readonly] { background-color: #f1f5f9; color: var(--danger); font-weight: 
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4mCNGwS3UHSadoNF2exXw3D-aZtspe4kEew9BliSkCR2HbBQtaifmzoWZoFKdDL8g/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec";
 
 const firebaseConfig = { apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", projectId: "srms-website-management" };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
@@ -231,7 +229,9 @@ window.onload = function() {
 async function apiCall(actionName, payloadData = {}) {
     let payload = { action: actionName, token: sessionStorage.getItem('portal_token'), ...payloadData };
     let res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
-    let data = await res.json();
+    let text = await res.text();
+    if (text.includes("<html")) throw new Error("Deployment Access Error! Ensure Apps Script 'Who has access' is 'Anyone'.");
+    let data = JSON.parse(text);
     if(data.status === "error") throw new Error(data.message);
     return data;
 }
@@ -462,7 +462,7 @@ async function updateStudent() {
 function delStu(row) { 
     if(confirm("Confirm delete?")) {
         document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING...");
-        apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error");}); 
+        apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error: "+e.message);}); 
     } 
 }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
