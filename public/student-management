@@ -3,15 +3,8 @@
 <head>
 <base target="_top">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-<script>
-if (window.history.replaceState) {
-var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-window.history.replaceState({path: cleanUrl}, '', cleanUrl);
-}
-</script>
 
 <style>
 :root { --primary: #005f40; --primary-dark: #003d29; --light: #e8f5e9; --bg: #f4f7f9; --danger: #ef4444; --edit: #3b82f6; --gold: #f59e0b; --gold-light: #fef3c7; }
@@ -33,6 +26,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; pad
 label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-top: 15px; margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px;}
 input, select, textarea { width: 100%; padding: 14px 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; margin-top: 6px; font-family: inherit; font-size: 14px; transition: 0.3s; background: #f8fafc; font-weight: 500;}
 input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
+input[readonly] { background-color: #f1f5f9; color: var(--danger); font-weight: bold; border-color: #cbd5e1;}
 
 .btn-submit { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; margin-top: 25px; transition: 0.3s; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(0, 95, 64, 0.25);}
 .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0, 95, 64, 0.35); }
@@ -47,7 +41,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .btn-group button { border: none; background: #f1f5f9; cursor: pointer; padding: 10px 14px; border-radius: 10px; margin-left: 8px; transition: 0.3s; font-weight: bold;}
 
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.65); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
-.modal-content { background: #fff; padding: 35px; border-radius: 24px; width: 95%; max-width: 550px; max-height: 85vh; overflow-y: auto; position: relative; border-top: 6px solid var(--primary); box-shadow: 0 25px 50px rgba(0,0,0,0.3);}
+.modal-content { background: #fff; padding: 35px; border-radius: 24px; width: 95%; max-width: 600px; max-height: 85vh; overflow-y: auto; position: relative; border-top: 6px solid var(--primary); box-shadow: 0 25px 50px rgba(0,0,0,0.3);}
 .close { position: absolute; top: 20px; right: 25px; font-size: 26px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: 0.3s;}
 .close:hover { color: var(--danger); transform: rotate(90deg);}
 
@@ -61,7 +55,15 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 .fee-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
 .pay-input { border-color: var(--primary) !important; color: var(--primary); font-weight: 900; font-size: 18px; text-align: center; }
 
-@media print { body * { visibility: hidden; } #printArea, #printArea * { visibility: visible; } #printArea { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0;} }
+.profile-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+.profile-table th { text-align: left; padding: 10px; background: #f1f5f9; color: #475569; width: 35%; border: 1px solid #e2e8f0; }
+.profile-table td { padding: 10px; border: 1px solid #e2e8f0; font-weight: 600; color: #0f172a; }
+
+@media print { 
+    body * { visibility: hidden; } 
+    #printArea, #printArea * { visibility: visible; } 
+    #printArea { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0; margin:0;} 
+}
 </style>
 </head>
 <body>
@@ -70,7 +72,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 
 <div id="appContainer" style="display: none;">
     <div class="header">
-        <div class="header-left"><h2>SRMS Student DB V6.5</h2></div>
+        <div class="header-left"><h2>SRMS Student DB V7</h2></div>
         <button class="btn-back" onclick="window.close();"><i class="fas fa-sign-out-alt"></i> Dashboard</button>
     </div>
 
@@ -103,6 +105,19 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     </div>
 
     <div style="display:flex; gap:15px;">
+        <div style="flex:1;"><label>Father NID</label><input type="number" id="sFatherNid" placeholder="Optional"></div>
+        <div style="flex:1;"><label>Mother NID</label><input type="number" id="sMotherNid" placeholder="Optional"></div>
+    </div>
+
+    <div style="display:flex; gap:15px;">
+        <div style="flex:1;"><label>Date of Birth</label><input type="date" id="sDob"></div>
+        <div style="flex:1;"><label>Gender</label>
+        <select id="sGender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+        <div style="flex:1;"><label>Religion</label>
+        <select id="sReligion"><option value="Islam">Islam</option><option value="Hindu">Hindu</option><option value="Christian">Christian</option><option value="Buddhist">Buddhist</option></select></div>
+    </div>
+
+    <div style="display:flex; gap:15px;">
         <div style="flex:1;"><label>Section</label><select id="sSection"><option value="">Select Section</option></select></div>
         <div id="sGroupDiv" style="flex:1; display:none;"><label>Group *</label><select id="sGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select></div>
     </div>
@@ -112,6 +127,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <div style="flex:1;"><label>Card Number (RFID)</label><input type="text" id="sCardNumber" placeholder="Enter Card Number"></div>
     </div>
 
+    <div style="display:flex; gap:15px;">
+        <div style="flex:1;"><label>Email</label><input type="email" id="sEmail" placeholder="student@email.com"></div>
+        <div style="flex:1;"><label>Blood Group</label><select id="sBloodGroup"><option value="">Select</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option></select></div>
+    </div>
+
+    <label>Present Address</label><textarea id="sAddr" rows="2" placeholder="Present Address"></textarea>
+    <label>Permanent Address</label><textarea id="sPermAddr" rows="2" placeholder="Permanent Address"></textarea>
+    
     <!-- 💡 AUTO FETCHED ADMISSION FEES ZONE -->
     <div id="admitFeeZone" class="fee-zone" style="display:none;">
         <h4 style="margin-top:0; color:#005f40; font-size:16px;"><i class="fas fa-file-invoice-dollar"></i> Auto-Fetched Admission Fees</h4>
@@ -128,29 +151,20 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <div style="display:flex; flex-wrap: wrap; gap:10px; margin-bottom:15px;">
         <select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:90px;"><option value="">All Classes</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option></select>
         <select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:90px;"><option value="">All Sections</option></select>
-        <button onclick="window.open('https://www.saidpurresidentialmodelschool.com/tc', '_blank')" style="background:#f59e0b; color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; font-weight:800;"><i class="fas fa-file-signature"></i> Create TC</button>
+        <button onclick="openTcForm()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; font-weight:800;"><i class="fas fa-file-signature"></i> Create TC</button>
         <button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3);"><i class="fas fa-print"></i></button>
         </div>
         <div style="position: relative;"><i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i><input type="text" id="stuSearch" placeholder="Search Name, ID, Phone..." onkeyup="filterStudents()" style="padding-left: 40px; border-radius: 30px;"></div>
     </div>
-    <div class="card" style="background: var(--primary); color:white; padding: 20px; border: none; text-align:center; font-weight: 900; font-size: 18px;">
-        Total Students: <span id="totalStuCount" style="color:var(--gold); font-size:22px;">0</span>
-    </div>
-    <div id="studentListDisplay"></div>
+    
+    <div class="card" style="background: linear-gradient(145deg, var(--primary), var(--primary-dark)); color:white; padding: 20px; border: none; margin-bottom: 25px;">
+        <div style="text-align: center; font-weight: 900; font-size: 18px; margin-bottom: 12px; letter-spacing: 1px; text-transform: uppercase;">
+        Total Displayed Students: <span id="totalStuCount" style="color:var(--gold); font-size:22px;">0</span>
+        </div>
+        <div id="classWiseStats" style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; font-size: 13px;"></div>
     </div>
 
-    <!-- ================= SECTION MANAGER TAB ================= -->
-    <div id="sectionTab" class="container">
-    <div class="card" style="border-top-color: #005f40;">
-    <h3 style="margin:0 0 15px 0; color:#005f40; font-weight:900;"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
-    <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">এখানে একবার কোনো সেকশন অ্যাড করলে তা অটোমেটিক অ্যাডমিট এবং এডিট ফর্মে সেভ হয়ে থাকবে।</p>
-    <div style="display:flex; gap:10px;">
-    <input type="text" id="newSecName" placeholder="Enter new section name (e.g. Padma, Lotus)" style="flex:1; border-color:#a7f3d0;">
-    <button onclick="addSection()" class="btn-submit" style="width:130px; margin-top:0; padding:10px; background: linear-gradient(135deg, #005f40, #003d29); box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add</button>
-    </div>
-    <div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;">
-    </div>
-    </div>
+    <div id="studentListDisplay"></div>
     </div>
 
     <!-- ================= EDIT MODAL (CLASS UPDATE) ================= -->
@@ -173,6 +187,11 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     <label>Name</label><input type="text" id="eName">
 
     <div style="display:flex; gap:15px;">
+        <div style="flex:1;"><label>Father's Name</label><input type="text" id="eFatherName"></div>
+        <div style="flex:1;"><label>Mother's Name</label><input type="text" id="eMotherName"></div>
+    </div>
+
+    <div style="display:flex; gap:15px;">
         <div style="flex:1;"><label>Roll</label><input type="number" id="eRoll"></div>
         <div style="flex:1;"><label>Status</label><select id="eRes" onchange="onEditClassChange()"><option value="Non-Residential">Non-Residential</option><option value="Residential">Residential</option></select></div>
     </div>
@@ -181,6 +200,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
         <div style="flex:1;"><label>Phone Number</label><input type="tel" id="ePhone"></div>
         <div style="flex:1;"><label>Section</label><select id="eSection"><option value="">Select</option></select></div>
     </div>
+    
+    <div style="display:flex; gap:15px;">
+        <div style="flex:1;"><label>Date of Birth</label><input type="date" id="eDob"></div>
+        <div style="flex:1;"><label>Gender</label><select id="eGender"><option value="Male">Male</option><option value="Female">Female</option></select></div>
+    </div>
+    
+    <label>Present Address</label><textarea id="eAddr" rows="2"></textarea>
+    <label>Permanent Address</label><textarea id="ePermAddr" rows="2"></textarea>
 
     <!-- 💡 AUTO FETCHED SESSION/PROMOTION FEES ZONE -->
     <div id="editFeeZone" class="fee-zone" style="display:none; border-color:#3b82f6;">
@@ -189,6 +216,37 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     </div>
 
     <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="updateStudent()"><i class="fas fa-sync"></i> Update Profile & Collect</button>
+    </div>
+    </div>
+
+    <!-- ================= VIEW PROFILE MODAL ================= -->
+    <div id="viewProfileModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('viewProfileModal')">×</span>
+        <h3 style="color:var(--primary); margin-top:0; font-weight:900; text-transform: uppercase;"><i class="fas fa-user-circle"></i> Student Profile</h3>
+        <table class="profile-table" id="viewProfileTable"></table>
+    </div>
+    </div>
+
+    <!-- ================= TC FORM MODAL ================= -->
+    <div id="tcModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('tcModal')">×</span>
+        <h3 style="color:#d97706; margin-top:0; font-weight:900; text-transform: uppercase;"><i class="fas fa-file-signature"></i> Issue Transfer Certificate</h3>
+        
+        <div style="display:flex; gap:10px; margin-bottom:15px;">
+            <input type="text" id="tcSearchId" placeholder="Enter Student ID to Auto-fill" style="margin:0;">
+            <button class="btn-submit" style="margin:0; width:120px; padding:10px; background:#475569;" onclick="autoFillTc()"><i class="fas fa-magic"></i> Auto-fill</button>
+        </div>
+
+        <div style="display:flex; gap:10px;"><div style="flex:1;"><label>Student Name</label><input type="text" id="tcName"></div><div style="flex:1;"><label>Date of Birth</label><input type="date" id="tcDob"></div></div>
+        <div style="display:flex; gap:10px;"><div style="flex:1;"><label>Father's Name</label><input type="text" id="tcFather"></div><div style="flex:1;"><label>Mother's Name</label><input type="text" id="tcMother"></div></div>
+        <div style="display:flex; gap:10px;"><div style="flex:1;"><label>Class Admitted In</label><input type="text" id="tcAdmClass"></div><div style="flex:1;"><label>Date of Admission</label><input type="text" id="tcAdmDate"></div></div>
+        <div style="display:flex; gap:10px;"><div style="flex:1;"><label>Current Class</label><input type="text" id="tcCurrClass"></div><div style="flex:1;"><label>Section</label><input type="text" id="tcSec"></div></div>
+        <div style="display:flex; gap:10px;"><div style="flex:1;"><label>Date of Leaving</label><input type="date" id="tcLeaveDate"></div><div style="flex:1;"><label>Character/Conduct</label><select id="tcConduct"><option>Good</option><option>Excellent</option><option>Satisfactory</option></select></div></div>
+        <label>Reason for Leaving</label><input type="text" id="tcReason" value="Transfer of Guardian / Parent Request">
+        
+        <button class="btn-submit" style="background:linear-gradient(135deg, #f59e0b, #d97706);" onclick="printTC()"><i class="fas fa-print"></i> Generate & Print TC</button>
     </div>
     </div>
 
@@ -210,7 +268,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     </div>
     <table class="print-table">
     <thead>
-    <tr><th>ID</th><th>Name</th><th>Father</th><th>Mother</th><th>Class</th><th>Sec</th><th>Grp</th><th>Roll</th><th>Category</th><th>Phone</th></tr>
+    <tr><th>ID</th><th>Name</th><th>Father</th><th>Mother</th><th>Class</th><th>Sec</th><th>Roll</th><th>Phone</th><th>Status</th></tr>
     </thead>
     <tbody id="printTableBody"></tbody>
     </table>
@@ -219,7 +277,6 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
     <div class="bottom-nav">
     <button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
     <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
-    <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-layer-group"></i>Sections</button>
     </div>
 </div> 
 
@@ -228,8 +285,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-// 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4mCNGwS3UHSadoNF2exXw3D-aZtspe4kEew9BliSkCR2HbBQtaifmzoWZoFKdDL8g/exec";
+const LOGO_URL = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
 
 const firebaseConfig = { apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", projectId: "srms-website-management" };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
@@ -237,10 +294,10 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 var allData = [];
-var globalSections = []; 
 var isAuthReady = false; 
 var originalEditClass = "";
 var currentReceiptData = null;
+var currentlyFilteredData = [];
 
 function showLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
 
@@ -268,7 +325,7 @@ async function apiCall(actionName, payloadData = {}) {
     let payload = { action: actionName, token: sessionStorage.getItem('portal_token'), ...payloadData };
     let res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
     let text = await res.text();
-    if (text.includes("<html")) throw new Error("Deployment Access Error! Ensure Apps Script 'Who has access' is 'Anyone'.");
+    if (text.includes("<html")) throw new Error("Deployment Access Error!");
     let data = JSON.parse(text);
     if(data.status === "error") throw new Error(data.message);
     return data;
@@ -294,69 +351,14 @@ async function loadSectionsData() {
         const doc = await db.collection('Admin').doc('Settings').get();
         let opts = '<option value="">Select Section</option>';
         if (doc.exists && doc.data().sections) {
-            globalSections = doc.data().sections.split(',').filter(s => s.trim() !== '');
-            globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
-        } else {
-            globalSections = ["Section A", "Section B", "Section C", "Boys", "Girls"];
-            globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
+            doc.data().sections.split(',').filter(s=>s.trim()!=='').forEach(s => { opts += `<option value="${s}">${s}</option>`; });
         }
         document.getElementById('sSection').innerHTML = opts;
         document.getElementById('eSection').innerHTML = opts;
         document.getElementById('filterSection').innerHTML = '<option value="">All Sections</option>' + opts;
-        renderSectionList();
     } catch (e) {}
 }
 
-function renderSectionList() {
-    let h = "";
-    globalSections.forEach(s => {
-        h += `<div class="list-item" style="padding:12px 20px; box-shadow:none; border-color:#a7f3d0;">
-        <b style="color:#005f40; font-size:15px;">${s}</b>
-        <button onclick="deleteSection('${s}')" style="background:#fef2f2; color:#ef4444; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; transition:0.3s;"><i class="fas fa-trash"></i></button>
-        </div>`;
-    });
-    document.getElementById('sectionListDisplay').innerHTML = h || "<p style='text-align:center; color:#94a3b8; font-weight:600;'>No custom sections added yet.</p>";
-}
-
-async function addSection() {
-    if(!isAuthReady) return;
-    let name = document.getElementById('newSecName').value.trim();
-    if(!name) return alert("Please enter section name.");
-    document.getElementById('loader').style.display = 'flex'; showLoaderText("ADDING SECTION...");
-    try {
-        if (!globalSections.includes(name)) globalSections.push(name);
-        await db.collection('Admin').doc('Settings').set({ sections: globalSections.join(',') }, { merge: true });
-        document.getElementById('newSecName').value = "";
-        
-        let opts = '<option value="">Select Section</option>';
-        globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
-        document.getElementById('sSection').innerHTML = opts;
-        document.getElementById('eSection').innerHTML = opts;
-        document.getElementById('filterSection').innerHTML = '<option value="">All Sections</option>' + opts;
-        
-        renderSectionList(); document.getElementById('loader').style.display = 'none';
-    } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error adding section"); }
-}
-
-async function deleteSection(name) {
-    if(!isAuthReady) return;
-    if(!confirm(`Delete section "${name}"?`)) return;
-    document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING SECTION...");
-    try {
-        globalSections = globalSections.filter(s => s !== name);
-        await db.collection('Admin').doc('Settings').set({ sections: globalSections.join(',') }, { merge: true });
-        
-        let opts = '<option value="">Select Section</option>';
-        globalSections.forEach(s => { opts += `<option value="${s}">${s}</option>`; });
-        document.getElementById('sSection').innerHTML = opts;
-        document.getElementById('eSection').innerHTML = opts;
-        document.getElementById('filterSection').innerHTML = '<option value="">All Sections</option>' + opts;
-
-        renderSectionList(); document.getElementById('loader').style.display = 'none';
-    } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Error deleting section"); }
-}
-
-// 💡 AUTO FETCH FEES LOGIC
 async function fetchFeesForClass(clsId, resId, gridId) {
     let cls = document.getElementById(clsId).value;
     let resStatus = document.getElementById(resId).value;
@@ -378,46 +380,25 @@ async function fetchFeesForClass(clsId, resId, gridId) {
         }
         
         let html = "";
-        if(sFee > 0) {
-            html += `<div class="fee-box">
-                <label style="margin-top:0; color:#005f40;">School Fee (${sFee} TK)</label>
-                <input type="hidden" class="${gridId}-total" data-name="School Fee" value="${sFee}">
-                <input type="number" class="${gridId}-paid pay-input" placeholder="Amount Paying" value="${sFee}">
-            </div>`;
-        }
-        if(hFee > 0 && resStatus === 'Residential') {
-            html += `<div class="fee-box" style="border-color:#ef4444;">
-                <label style="margin-top:0; color:#ef4444;">Hostel Fee (${hFee} TK)</label>
-                <input type="hidden" class="${gridId}-total" data-name="Hostel Fee" value="${hFee}">
-                <input type="number" class="${gridId}-paid pay-input" style="color:#ef4444;" placeholder="Amount Paying" value="${hFee}">
-            </div>`;
-        }
+        if(sFee > 0) html += `<div class="fee-box"><label style="margin-top:0; color:#005f40;">School Fee (${sFee} TK)</label><input type="hidden" class="${gridId}-total" data-name="School Fee" value="${sFee}"><input type="number" class="${gridId}-paid pay-input" placeholder="Amount Paying" value="${sFee}"></div>`;
+        if(hFee > 0 && resStatus === 'Residential') html += `<div class="fee-box" style="border-color:#ef4444;"><label style="margin-top:0; color:#ef4444;">Hostel Fee (${hFee} TK)</label><input type="hidden" class="${gridId}-total" data-name="Hostel Fee" value="${hFee}"><input type="number" class="${gridId}-paid pay-input" style="color:#ef4444;" placeholder="Amount Paying" value="${hFee}"></div>`;
         if(aFee > 0) {
-            let labelName = gridId === 'editFeeGrid' ? 'Session/Promotion Fee' : 'Admission Fee';
-            html += `<div class="fee-box" style="border-color:#8b5cf6;">
-                <label style="margin-top:0; color:#7e22ce;">${labelName} (${aFee} TK)</label>
-                <input type="hidden" class="${gridId}-total" data-name="${labelName}" value="${aFee}">
-                <input type="number" class="${gridId}-paid pay-input" style="color:#8b5cf6;" placeholder="Amount Paying" value="${aFee}">
-            </div>`;
+            let labelName = gridId === 'editFeeGrid' ? 'Session Fee' : 'Admission Fee';
+            html += `<div class="fee-box" style="border-color:#8b5cf6;"><label style="margin-top:0; color:#7e22ce;">${labelName} (${aFee} TK)</label><input type="hidden" class="${gridId}-total" data-name="${labelName}" value="${aFee}"><input type="number" class="${gridId}-paid pay-input" style="color:#8b5cf6;" placeholder="Amount Paying" value="${aFee}"></div>`;
         }
         
         if(html === "") html = "<p style='grid-column: span 2; color:#ef4444; font-weight:bold;'>No advance fees configured for Class " + cls + " in Accounts Portal.</p>";
         document.getElementById(gridId).innerHTML = html;
-    } catch(e) {
-        document.getElementById(gridId).innerHTML = "<p style='color:red;'>Error loading fees.</p>";
-    }
+    } catch(e) { document.getElementById(gridId).innerHTML = "<p style='color:red;'>Error loading fees.</p>"; }
 }
 
 function getFeeData(gridId) {
     let fees = { schoolFeeTotal: 0, schoolFeePaid: 0, hostelFeeTotal: 0, hostelFeePaid: 0, admFeeTotal: 0, admFeePaid: 0, admFeeName: "Session Fee" };
     let totals = document.querySelectorAll(`.${gridId}-total`);
     let paids = document.querySelectorAll(`.${gridId}-paid`);
-    
     for(let i=0; i<totals.length; i++) {
         let name = totals[i].getAttribute('data-name');
-        let t = parseFloat(totals[i].value) || 0;
-        let p = parseFloat(paids[i].value) || 0;
-        
+        let t = parseFloat(totals[i].value) || 0; let p = parseFloat(paids[i].value) || 0;
         if(name === "School Fee") { fees.schoolFeeTotal = t; fees.schoolFeePaid = p; }
         else if(name === "Hostel Fee") { fees.hostelFeeTotal = t; fees.hostelFeePaid = p; }
         else { fees.admFeeName = name; fees.admFeeTotal = t; fees.admFeePaid = p; }
@@ -425,25 +406,28 @@ function getFeeData(gridId) {
     return fees;
 }
 
-// 🚀 ADMIT WITH FEES
+// 🚀 ADMIT
 async function saveStudent() {
     var cls = document.getElementById('sClass').value;
     var d = { 
-        name: document.getElementById('sName').value, classVal: cls, sectionVal: document.getElementById('sSection').value || "", 
+        name: document.getElementById('sName').value, fatherName: document.getElementById('sFatherName').value,
+        motherName: document.getElementById('sMotherName').value, fatherNid: document.getElementById('sFatherNid').value,
+        motherNid: document.getElementById('sMotherNid').value, classVal: cls, sectionVal: document.getElementById('sSection').value || "", 
         roll: document.getElementById('sRoll').value, resStatus: document.getElementById('sRes').value, 
         category: document.getElementById('sCategory').value || "Civil", phone: document.getElementById('sPhone').value || "",
+        email: document.getElementById('sEmail').value, bloodGroup: document.getElementById('sBloodGroup').value,
+        dob: document.getElementById('sDob').value, gender: document.getElementById('sGender').value, religion: document.getElementById('sReligion').value,
+        addr: document.getElementById('sAddr').value, permAddr: document.getElementById('sPermAddr').value, cert: document.getElementById('sCert').value, prev: document.getElementById('sPrev').value,
+        cardNumber: document.getElementById('sCardNumber').value, machineId: document.getElementById('sMachineId').value, group: document.getElementById('sGroup').value,
         fees: getFeeData('admitFeeGrid')
     };
 
     if(!d.name || !d.roll || !d.phone || !cls) return alert("Name, Class, Roll and Phone are required!");
 
-    document.getElementById('loader').style.display = 'flex'; 
-    showLoaderText("SAVING PROFILE & COLLECTING FEES...<br><span style='font-size:11px; color:#64748b;'>Syncing with Accounts securely...</span>");
-    
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("SAVING PROFILE & COLLECTING FEES...");
     try {
         let res = await apiCall('addNewStudentProfile', {data: d});
         document.getElementById('loader').style.display = 'none'; 
-        
         if(res.receiptData) {
             currentReceiptData = res.receiptData;
             document.getElementById('receiptMsg').innerText = `ID: ${res.id} generated. Fees collected successfully.`;
@@ -451,13 +435,8 @@ async function saveStudent() {
         } else {
             alert(`Admission Successful! Student ID: ${res.id}\n(No fees collected)`);
         }
-        
-        // Reset Form
-        document.getElementById('sName').value = ""; document.getElementById('sRoll').value = ""; document.getElementById('sPhone').value = ""; document.getElementById('admitFeeZone').style.display = "none";
-    } catch(err) {
-        document.getElementById('loader').style.display = 'none'; 
-        alert("Error: " + err.message);
-    }
+        document.querySelectorAll('input').forEach(i => i.value=''); document.getElementById('admitFeeZone').style.display = "none";
+    } catch(err) { document.getElementById('loader').style.display = 'none'; alert("Error: " + err.message); }
 }
 
 async function loadStudents() {
@@ -468,54 +447,90 @@ async function loadStudents() {
         let data = [];
         snapshot.forEach(doc => { let f = doc.data(); f.rowId = doc.id; data.push(f); });
         data.sort((a,b) => (parseInt(a.roll)||9999) - (parseInt(b.roll)||9999));
-        allData = data.reverse();
-        renderList(allData);
+        allData = data;
+        filterStudents(); 
         document.getElementById('loader').style.display = 'none';
     } catch(e) { document.getElementById('loader').style.display = 'none'; }
 }
 
+function filterStudents() {
+    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fGrp = document.getElementById('filterGroup').value; var fRes = document.getElementById('filterRes').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
+    
+    currentlyFilteredData = allData.filter(s => {
+        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchGrp = fGrp === "" || String(s.group) === fGrp; var matchRes = fRes === "" || String(s.resStatus) === fRes; var matchCat = fCat === "" || String(s.category) === fCat;
+        var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt) || String(s.roll).includes(fTxt) || (s.phone && String(s.phone).includes(fTxt)); 
+        return matchCls && matchSec && matchGrp && matchRes && matchCat && matchTxt;
+    });
+    
+    renderList(currentlyFilteredData);
+}
+
 function renderList(data) {
-    var h = ""; var total = data.length; 
+    var h = ""; var classCounts = {};
     data.forEach(s => {
+        var cls = s.class || "N/A"; classCounts[cls] = (classCounts[cls] || 0) + 1;
+        var cBadge = s.category === 'Army' ? `<span class="badge-army">Army</span>` : `<span class="badge-civil">Civil</span>`;
+        var sBadge = s.resStatus === 'Residential' ? `<span class="badge-civil" style="border-color:#f87171; color:#dc2626;">RES</span>` : ``;
         h += `<div class="list-item">
         <div style="flex:1;">
-        <div style="margin-bottom:5px;"><b style="font-size:16px; color:#005f40;">${s.name || 'Unknown'}</b></div>
+        <div style="margin-bottom:5px;"><b style="font-size:16px; color:#005f40;">${s.name || 'Unknown'}</b> <span style="margin-left:8px;">${cBadge} ${sBadge}</span></div>
         <small style="color:#64748b; font-weight:500; font-size:12px; line-height:1.6;">
-        <b style="color:#334155;">ID:</b> ${s.studentID} | <b style="color:#334155;">Class:</b> ${s.class} | <b style="color:#334155;">Roll:</b> ${s.roll} | <b style="color:#334155;">Phone:</b> ${s.phone || 'N/A'}
+        <b style="color:#334155;">ID:</b> ${s.studentID} | <b style="color:#334155;">Class:</b> ${s.class} (${s.section || '-'}) | <b style="color:#334155;">Roll:</b> ${s.roll} | <b style="color:#334155;">Phone:</b> ${s.phone || 'N/A'}
         </small>
         </div>
-        <div class="btn-group" style="display:flex; flex-direction:column; gap:8px;">
-        <button onclick="openEditByRow('${s.rowId}')" style="color:var(--edit)"><i class="fas fa-edit"></i> Edit/Promote</button>
+        <div class="btn-group" style="display:flex; flex-wrap:wrap; gap:8px;">
+        <button onclick="viewProfile('${s.rowId}')" style="color:#0f766e"><i class="fas fa-eye"></i> View</button>
+        <button onclick="openEditByRow('${s.rowId}')" style="color:var(--edit)"><i class="fas fa-edit"></i> Edit</button>
         <button onclick="delStu('${s.rowId}')" style="color:var(--danger)"><i class="fas fa-trash"></i> Del</button>
         </div>
         </div>`;
     });
-    document.getElementById('studentListDisplay').innerHTML = h;
-    document.getElementById('totalStuCount').innerText = total;
+    document.getElementById('studentListDisplay').innerHTML = h || "<p style='text-align:center;'>No matching records.</p>";
+    document.getElementById('totalStuCount').innerText = data.length;
+    
+    var statsHtml = "";
+    for(var c in classCounts) { statsHtml += `<span style="background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3); padding: 6px 12px; border-radius: 8px;">Class ${c}: <b style="color:var(--gold); margin-left:4px;">${classCounts[c]}</b></span>`; }
+    document.getElementById('classWiseStats').innerHTML = statsHtml;
 }
 
-function filterStudents() {
-    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fGrp = document.getElementById('filterGroup').value; var fRes = document.getElementById('filterRes').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
-    var filtered = allData.filter(s => {
-        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchGrp = fGrp === "" || String(s.group) === fGrp; var matchRes = fRes === "" || String(s.resStatus) === fRes; var matchCat = fCat === "" || String(s.category) === fCat;
-        var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt) || String(s.roll).includes(fTxt) || (s.machineID && String(s.machineID).toLowerCase().includes(fTxt)) || (s.phone && String(s.phone).includes(fTxt)); 
-        return matchCls && matchSec && matchGrp && matchRes && matchCat && matchTxt;
-    });
-    renderList(filtered);
-}
-
+// 🖨️ Fix Print Logic
 function printReport() {
-    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
-    var data = allData.filter(s => {
-        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchCat = fCat === "" || String(s.category) === fCat; var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt);
-        return matchCls && matchSec && matchCat && matchTxt;
-    });
-
+    var data = currentlyFilteredData;
     var rows = "";
-    data.forEach(s => { rows += `<tr><td>${s.studentID}</td><td>${s.name}</td><td>${s.fatherName || '-'}</td><td>${s.motherName || '-'}</td><td>${s.class}</td><td>${s.section || '-'}</td><td>${s.group || '-'}</td><td>${s.roll}</td><td><b>${s.category || 'Civil'}</b></td><td>${s.phone || ''}</td></tr>`; });
-    document.getElementById('printTitle').innerText = "Student General Information List: " + (fCls ? "Class "+fCls : "All Classes") + (fSec ? " | Sec: "+fSec : "") + (fCat ? " | Cat: "+fCat : "");
-    document.getElementById('printTableBody').innerHTML = rows;
-    setTimeout(() => { window.print(); }, 800);
+    data.forEach(s => { rows += `<tr><td>${s.studentID}</td><td>${s.name}</td><td>${s.fatherName || '-'}</td><td>${s.motherName || '-'}</td><td>${s.class}</td><td>${s.section || '-'}</td><td>${s.roll}</td><td>${s.phone || ''}</td><td>${s.resStatus||'-'}</td></tr>`; });
+    
+    var subtitle = "Filtered Student List";
+    if(document.getElementById('filterClass').value) subtitle += ` | Class: ${document.getElementById('filterClass').value}`;
+    
+    let w = window.open('','','width=1100,height=800'); 
+    w.document.write(`<html><head><title>Student Report</title><style>
+    @page { size: A4 portrait; margin: 15mm; }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 13px; color: #000; }
+    .print-header { text-align: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 15px; }
+    .print-header img { height: 65px; border-radius:6px; margin-bottom:5px;}
+    .print-header h2 { margin: 0; font-size: 22px; font-weight: bold; text-transform: uppercase; color: #000; }
+    .print-header p { margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; page-break-inside: auto;}
+    th, td { border: 1px solid #000; padding: 6px; text-align: left; }
+    th { background: #e2e8f0 !important; color: #000; text-transform: uppercase; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; }
+    tr { page-break-inside: avoid; page-break-after: auto; }
+    thead { display: table-header-group; }
+    .stats { text-align:right; font-weight:bold; margin-top:15px; font-size:14px; }
+    </style></head><body>
+    <div class="print-header"><img src="${LOGO_URL}"><h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2><p>${subtitle}</p></div>
+    <table><thead><tr><th>ID</th><th>Name</th><th>Father</th><th>Mother</th><th>Class</th><th>Sec</th><th>Roll</th><th>Phone</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table>
+    <div class="stats">Total Students: ${data.length}</div>
+    </body></html>`); 
+    w.document.close(); setTimeout(()=>w.print(), 1000);
+}
+
+function viewProfile(rid) {
+    var s = allData.find(item => item.rowId == rid);
+    if(!s) return;
+    let tr = (label, val) => `<tr><th>${label}</th><td>${val || '-'}</td></tr>`;
+    let html = tr("Student ID", s.studentID) + tr("Name", s.name) + tr("Date of Admission", s.admDate) + tr("Class (Section) [Roll]", s.class + (s.section ? ` (${s.section})` : '') + ` [${s.roll}]`) + tr("Category / Status", (s.category||'Civil') + " / " + (s.resStatus||'Non-Residential')) + tr("Father's Name", s.fatherName) + tr("Mother's Name", s.motherName) + tr("Date of Birth", s.dob) + tr("Gender", s.gender) + tr("Religion", s.religion) + tr("Blood Group", s.bloodGroup) + tr("Phone", s.phone) + tr("Present Address", s.address) + tr("Permanent Address", s.permAddr);
+    document.getElementById('viewProfileTable').innerHTML = html;
+    document.getElementById('viewProfileModal').style.display = 'flex';
 }
 
 function openEditByRow(rid) {
@@ -525,78 +540,113 @@ function openEditByRow(rid) {
     originalEditClass = s.class;
     
     document.getElementById('eId').value = s.studentID; document.getElementById('eRowId').value = s.rowId; document.getElementById('eName').value = s.name || ""; document.getElementById('eClass').value = s.class; document.getElementById('eSection').value = s.section || ""; document.getElementById('eRoll').value = s.roll; document.getElementById('eRes').value = s.resStatus; document.getElementById('ePhone').value = s.phone || "";
-    
-    document.getElementById('editFeeZone').style.display = 'none';
-    document.getElementById('editModal').style.display = 'flex';
+    document.getElementById('eFatherName').value = s.fatherName || ""; document.getElementById('eMotherName').value = s.motherName || ""; document.getElementById('eDob').value = s.dob || ""; document.getElementById('eGender').value = s.gender || "Male"; document.getElementById('eAddr').value = s.address || ""; document.getElementById('ePermAddr').value = s.permAddr || "";
+
+    document.getElementById('editFeeZone').style.display = 'none'; document.getElementById('editModal').style.display = 'flex';
 }
 
 function onEditClassChange() {
     let currentCls = document.getElementById('eClass').value;
-    if(currentCls !== originalEditClass) {
-        fetchFeesForClass('eClass', 'eRes', 'editFeeGrid');
-    } else {
-        document.getElementById('editFeeZone').style.display = 'none';
-        document.getElementById('editFeeGrid').innerHTML = "";
-    }
+    if(currentCls !== originalEditClass) { fetchFeesForClass('eClass', 'eRes', 'editFeeGrid'); } 
+    else { document.getElementById('editFeeZone').style.display = 'none'; document.getElementById('editFeeGrid').innerHTML = ""; }
 }
 
-// 🚀 EDIT / UPDATE CLASS WITH FEES
 async function updateStudent() {
     var d = { 
         rowId: document.getElementById('eRowId').value, id: document.getElementById('eId').value,
         name: document.getElementById('eName').value, classVal: document.getElementById('eClass').value, 
         sectionVal: document.getElementById('eSection').value, roll: document.getElementById('eRoll').value, 
         resStatus: document.getElementById('eRes').value, phone: document.getElementById('ePhone').value,
+        fatherName: document.getElementById('eFatherName').value, motherName: document.getElementById('eMotherName').value,
+        dob: document.getElementById('eDob').value, gender: document.getElementById('eGender').value,
+        address: document.getElementById('eAddr').value, permAddr: document.getElementById('ePermAddr').value,
         fees: getFeeData('editFeeGrid')
     };
     
-    document.getElementById('loader').style.display = 'flex'; 
-    showLoaderText("UPDATING PROFILE & FEES...<br><span style='font-size:11px; color:#64748b;'>Direct Write + Smart SMS Trigger</span>");
-    
+    document.getElementById('loader').style.display = 'flex'; showLoaderText("UPDATING PROFILE & FEES...");
     try {
         let res = await apiCall('updateStudentProfileDirect', { data: d });
         document.getElementById('loader').style.display = 'none';
-        
-        closeModal('editModal');
-        loadStudents();
-
+        closeModal('editModal'); loadStudents();
         if(res.receiptData) {
             currentReceiptData = res.receiptData;
             document.getElementById('receiptMsg').innerText = `Class Updated Successfully & Fees Collected.`;
             document.getElementById('receiptModal').style.display = 'flex';
-        } else {
-            alert("Update Successful! Profile saved and SMS sent.");
-        }
-    } catch(e) {
-        document.getElementById('loader').style.display = 'none'; 
-        alert("Update Failed: " + e.message);
-    }
+        } else { alert("Update Successful! Profile saved."); }
+    } catch(e) { document.getElementById('loader').style.display = 'none'; alert("Update Failed: " + e.message); }
 }
 
-function delStu(row) { 
-    if(confirm("Confirm delete?")) {
-        document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING...");
-        apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error: "+e.message);}); 
-    } 
-}
+function delStu(row) { if(confirm("Confirm delete?")) { document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING..."); apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error: "+e.message);}); } }
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-// 🖨️ RECEIPT PRINTING LOGIC (Copied from Accounts)
+// 🎓 TC GENERATOR
+function openTcForm() {
+    document.querySelectorAll('#tcModal input').forEach(i => i.value='');
+    document.getElementById('tcModal').style.display = 'flex';
+}
+function autoFillTc() {
+    let id = document.getElementById('tcSearchId').value.trim();
+    let s = allData.find(x => x.studentID === id);
+    if(s) {
+        document.getElementById('tcName').value = s.name; document.getElementById('tcFather').value = s.fatherName; document.getElementById('tcMother').value = s.motherName;
+        document.getElementById('tcDob').value = s.dob; document.getElementById('tcAdmDate').value = s.admDate || ""; document.getElementById('tcCurrClass').value = s.class; document.getElementById('tcSec').value = s.section || "";
+    } else alert("Student ID not found!");
+}
+function printTC() {
+    let n = document.getElementById('tcName').value, f = document.getElementById('tcFather').value, m = document.getElementById('tcMother').value, d = document.getElementById('tcDob').value, ac = document.getElementById('tcAdmClass').value, ad = document.getElementById('tcAdmDate').value, cc = document.getElementById('tcCurrClass').value, ld = document.getElementById('tcLeaveDate').value, r = document.getElementById('tcReason').value, char = document.getElementById('tcConduct').value;
+    
+    let w = window.open('','','width=900,height=1000'); 
+    w.document.write(`<html><head><title>Transfer Certificate</title><style>
+    @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;600&display=swap');
+    @page { size: A4 portrait; margin: 15mm; } 
+    body { font-family: 'Inter', sans-serif; padding: 0; margin: 0; color: #000; -webkit-print-color-adjust: exact; }
+    .tc-box { border: 8px solid #005f40; padding: 8mm 12mm; border-radius: 4px; position: relative; min-height: 250mm; box-sizing: border-box; }
+    .inner-border { border: 2px solid #005f40; padding: 10mm; min-height: 230mm; box-sizing: border-box; }
+    .header { text-align: center; border-bottom: 2px solid #005f40; padding-bottom: 15px; margin-bottom: 25px; }
+    .header h1 { font-family: 'Cinzel', serif; font-size: 32px; color: #005f40; margin: 0; letter-spacing: 1px; }
+    .header p { margin: 5px 0 0 0; font-size: 13px; font-weight: 600; }
+    .codes { display: flex; justify-content: center; gap: 20px; font-size: 12px; margin-top: 10px; font-weight: bold; background: #e8f5e9; padding: 5px; border-radius: 4px; }
+    .tc-title { text-align: center; margin: 20px 0 30px; }
+    .tc-title span { background: #005f40; color: #fff; padding: 10px 30px; font-size: 22px; font-family: 'Cinzel', serif; font-weight: bold; border-radius: 30px; letter-spacing: 2px; }
+    .content { font-size: 16px; line-height: 2.2; }
+    .fill { border-bottom: 1px dashed #000; font-weight: 600; text-transform: uppercase; color: #000; display: inline-block; padding: 0 10px; }
+    .signatures { margin-top: 80px; display: flex; justify-content: space-between; font-weight: bold; font-size: 15px; text-transform: uppercase; }
+    .sig-line { border-top: 2px solid #000; width: 200px; text-align: center; padding-top: 10px; }
+    .watermark { position: absolute; top: 45%; left: 50%; transform: translate(-50%,-50%); width: 400px; opacity: 0.05; z-index: -1; }
+    </style></head><body>
+    <div class="tc-box"><div class="inner-border">
+        <img src="${LOGO_URL}" class="watermark">
+        <div class="header">
+            <h1>SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+            <p>Sultan Nagar, Saidpur, Nilphamari | Email: info@srms2012.edu.bd | Web: www.srms2012.edu.bd</p>
+            <div class="codes"><span>School Code: 481931</span><span>EMIS Code: 00704061312</span></div>
+        </div>
+        <div class="tc-title"><span>TRANSFER CERTIFICATE</span></div>
+        <div class="content">
+            This is to certify that <span class="fill" style="min-width:350px;">${n}</span>,<br>
+            Son/Daughter of <span class="fill" style="min-width:250px;">${f}</span> and <span class="fill" style="min-width:250px;">${m}</span><br>
+            was a student of this institution. He/She was admitted into Class <span class="fill" style="min-width:100px;">${ac}</span> 
+            on <span class="fill" style="min-width:150px;">${ad}</span>.<br>
+            His/Her Date of Birth according to the Admission Register is <span class="fill" style="min-width:150px;">${d}</span>.<br>
+            He/She leaves the school on <span class="fill" style="min-width:150px;">${ld}</span> while studying in Class <span class="fill" style="min-width:100px;">${cc}</span>.<br>
+            Reason for leaving: <span class="fill" style="min-width:400px;">${r}</span>.<br>
+            His/Her character and conduct during the stay at this school was <span class="fill" style="min-width:150px;">${char}</span>.<br>
+            <br><p style="text-align:center; font-style:italic;">We wish him/her all success in life.</p>
+        </div>
+        <div class="signatures"><div class="sig-line">Prepared By</div><div class="sig-line">Principal Signature & Seal</div></div>
+    </div></div>
+    </body></html>`); 
+    w.document.close(); setTimeout(()=>w.print(), 1000);
+}
+
+// 🖨️ Receipt
 function printGeneratedReceipt() {
     if(!currentReceiptData) return;
     let d = currentReceiptData;
-    let items = d.itemsList.map(i => {
-        let payable = parseFloat(i.original) || 0;
-        let paid = parseFloat(i.paid) || parseFloat(i.amount) || payable; 
-        let dueAmt = payable - paid;
-        return `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="color:#1e293b; font-weight:700;">${i.title}</td><td style="text-align:right; color:#64748b; font-weight:600;">${payable.toFixed(2)}</td><td style="text-align:right; color:#005f40; font-weight:800;">${paid.toFixed(2)}</td><td style="text-align:right; color:#ef4444; font-weight:700;">${dueAmt.toFixed(2)}</td></tr>`;
-    }).join('');
-
-    let secStr = d.section ? ` (Sec: ${d.section})` : "";
+    let items = d.itemsList.map(i => `<tr style="border-bottom: 1px solid #e2e8f0;"><td style="color:#1e293b; font-weight:700;">${i.title}</td><td style="text-align:right; color:#64748b; font-weight:600;">${parseFloat(i.original).toFixed(2)}</td><td style="text-align:right; color:#005f40; font-weight:800;">${parseFloat(i.paid).toFixed(2)}</td><td style="text-align:right; color:#ef4444; font-weight:700;">${(parseFloat(i.original)-parseFloat(i.paid)).toFixed(2)}</td></tr>`).join('');
     let h = `<html><head><style>@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap'); @page { size: A4 portrait; margin: 0; } body { font-family: 'Inter', sans-serif; padding: 6mm; margin: 0; background: #fff; color: #0f172a; -webkit-print-color-adjust: exact; box-sizing: border-box; height: 297mm; overflow: hidden; } .box { height: 138mm; border: 2px solid #cbd5e1; padding: 20px; border-radius: 16px; position: relative; box-sizing: border-box; margin-bottom: 3mm; box-shadow: 0 4px 15px rgba(0,0,0,0.02); } .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 12px; margin-bottom: 15px; } .header-left { display: flex; align-items: center; gap: 15px; } .header-text h2 { margin: 0; font-size: 19px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } .header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; } .receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; } .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; } .info-grid div { line-height: 1.6; } .info-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 800; display: inline-block; width: 75px; } table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; } th { background: #f1f5f9; color: #334155; font-weight: 800; text-transform: uppercase; font-size: 11px; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; border-radius: 6px 6px 0 0; } td { border-bottom: 1px solid #e2e8f0; padding: 8px 10px; } .summary-container { display: flex; justify-content: flex-end; margin-top: 15px; } .summary-box { width: 260px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: white; } .summary-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; } .summary-row:last-child { border-bottom: none; } .total-payable { font-weight: 700; color: #475569; } .total-paid { font-weight: 800; color: #005f40; background: #ecfdf5; border-bottom: 1px solid #a7f3d0;} .total-due { font-weight: 800; color: #b91c1c; background: #fef2f2; } .watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 80px; opacity: 0.03; color: #005f40; font-weight: 900; z-index: -1; pointer-events: none; letter-spacing: 12px; } .signatures { position: absolute; bottom: 20px; left: 25px; right: 25px; display: flex; justify-content: space-between; font-weight: 800; font-size: 12px; color: #475569; } .sig-line { border-top: 2px dashed #94a3b8; width: 160px; text-align: center; padding-top: 8px; } .cut-line { text-align: center; margin: 6px 0; font-size: 12px; color: #94a3b8; font-weight: 700; letter-spacing: 3px; }</style></head><body>
-    ${["STUDENT COPY", "OFFICE COPY"].map((c, idx) => `<div class="box"><div class="watermark">SRMS</div><div class="header"><div class="header-left"><div class="header-text"><h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2><p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p></div></div><div class="receipt-tag">${c}</div></div><div class="info-grid"><div><div><span class="info-label">Receipt No:</span> <b style="color:#005f40;">${d.rNo}</b></div><div><span class="info-label">Student ID:</span> <b>${d.id}</b></div><div><span class="info-label">Name:</span> <b style="color:#0f172a; font-size:13px; text-transform:uppercase;">${d.name}</b></div></div><div style="text-align: right;"><div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div><div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div><div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month}${d.year}</b></div></div></div><table><thead><tr><th>Fee Particulars</th><th style="text-align:right; width: 95px;">Payable (TK)</th><th style="text-align:right; width: 100px;">Paid Now (TK)</th><th style="text-align:right; width: 95px;">Due (TK)</th></tr></thead><tbody>${items}</tbody></table><div class="summary-container"><div class="summary-box"><div class="summary-row total-payable"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div><div class="summary-row total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div><div class="summary-row total-due"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div></div></div><div class="signatures"><div class="sig-line">Accountant / Cashier</div><div class="sig-line">Student / Guardian</div></div></div>${idx === 0 ? '<div class="cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>' : ''}`).join('')}
+    ${["STUDENT COPY", "OFFICE COPY"].map((c, idx) => `<div class="box"><div class="watermark">SRMS</div><div class="header"><div class="header-left"><div class="header-text"><h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2><p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p></div></div><div class="receipt-tag">${c}</div></div><div class="info-grid"><div><div><span class="info-label">Receipt No:</span> <b style="color:#005f40;">${d.rNo}</b></div><div><span class="info-label">Student ID:</span> <b>${d.id}</b></div><div><span class="info-label">Name:</span> <b style="color:#0f172a; font-size:13px; text-transform:uppercase;">${d.name}</b></div></div><div style="text-align: right;"><div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div><div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class} (Roll:${d.roll})</b></div><div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month}${d.year}</b></div></div></div><table><thead><tr><th>Fee Particulars</th><th style="text-align:right; width: 95px;">Payable (TK)</th><th style="text-align:right; width: 100px;">Paid Now (TK)</th><th style="text-align:right; width: 95px;">Due (TK)</th></tr></thead><tbody>${items}</tbody></table><div class="summary-container"><div class="summary-box"><div class="summary-row total-payable"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div><div class="summary-row total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div><div class="summary-row total-due"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div></div></div><div class="signatures"><div class="sig-line">Accountant / Cashier</div><div class="sig-line">Student / Guardian</div></div></div>${idx === 0 ? '<div class="cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>' : ''}`).join('')}
     </body></html>`;
-
     let w = window.open('','','width=900,height=950'); w.document.write(h); w.document.close(); setTimeout(()=>w.print(), 1000);
 }
 </script>
