@@ -3,223 +3,390 @@
 <head>
 <base target="_top">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+<title>SRMS Student DB Manager V7 ERP</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-<script>
-if (window.history.replaceState) {
-var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-window.history.replaceState({path: cleanUrl}, '', cleanUrl);
-}
-</script>
-
 <style>
-:root { --primary: #005f40; --primary-dark: #003d29; --light: #e8f5e9; --bg: #f4f7f9; --danger: #ef4444; --edit: #3b82f6; --gold: #f59e0b; --gold-light: #fef3c7; }
+:root { --primary: #005f40; --primary-dark: #003d29; --light: #e8f5e9; --bg: #f4f7f9; --danger: #ef4444; --edit: #3b82f6; --gold: #f59e0b; --gold-light: #fef3c7; --border: #cbd5e1; }
 body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding-bottom: 95px; color: #334155; }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); padding: 15px 20px; box-shadow: 0 4px 20px rgba(0, 95, 64, 0.08); display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 50; border-bottom: 2px solid var(--light); }
-.header-left { display: flex; align-items: center; gap: 10px; }
-.header h2 { font-size: 16px; color: var(--primary); margin: 0; font-weight: 800; letter-spacing: 0.5px;}
+.header h2 { font-size: 18px; color: var(--primary); margin: 0; font-weight: 900; letter-spacing: 0.5px;}
 
-.btn-back { background: var(--light); color: var(--primary); border: 1.5px solid #a7f3d0; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; white-space: nowrap; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+.btn-back { background: var(--light); color: var(--primary); border: 1.5px solid #a7f3d0; padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; }
 .btn-back:hover { background: var(--primary); color: white; border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);}
 
-.container { display: none; padding: 20px 15px; max-width: 900px; margin: auto; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.container { display: none; padding: 20px 15px; max-width: 1000px; margin: auto; animation: slideUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 .container.active { display: block; }
 
-.card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 95, 64, 0.05); margin-bottom: 25px; border: 1px solid #e2e8f0; transition: all 0.3s ease;}
+.card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 95, 64, 0.05); margin-bottom: 25px; border: 1px solid var(--border); transition: all 0.3s ease;}
+.card-title { margin:0 0 20px 0; color:var(--primary); font-weight:900; text-transform: uppercase; font-size: 18px; border-bottom: 2px solid var(--light); padding-bottom: 10px;}
+
+.form-section { background: #f8fafc; padding: 20px; border-radius: 16px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+.form-section h4 { margin: 0 0 15px 0; color: #475569; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+
 label { display: block; font-size: 12px; font-weight: 700; color: #475569; margin-top: 15px; margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px;}
-input, select, textarea { width: 100%; padding: 14px 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; margin-top: 6px; font-family: inherit; font-size: 14px; transition: 0.3s; background: #f8fafc; font-weight: 500;}
-input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
+input, select, textarea { width: 100%; padding: 14px 15px; border: 2px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; margin-top: 6px; font-family: inherit; font-size: 14px; transition: 0.3s; background: #fff; font-weight: 500;}
+input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); transform: translateY(-1px);}
+
+.flex-row { display: flex; gap: 15px; flex-wrap: wrap; }
+.flex-col { flex: 1; min-width: 200px; }
 
 .btn-submit { width: 100%; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 16px; border: none; border-radius: 14px; font-weight: 800; cursor: pointer; margin-top: 25px; transition: 0.3s; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 8px 20px rgba(0, 95, 64, 0.25);}
 .btn-submit:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(0, 95, 64, 0.35); }
 
+/* Bottom Nav */
 .bottom-nav { position: fixed; bottom: 0; width: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(12px); display: flex; box-shadow: 0 -5px 25px rgba(0, 95, 64, 0.08); z-index: 100; border-radius: 24px 24px 0 0; border-top: 1px solid #e2e8f0; padding: 6px 0;}
 .nav-item { flex: 1; text-align: center; color: #94a3b8; border: none; background: none; font-size: 11px; padding: 12px; cursor: pointer; font-weight: 600; transition: 0.3s;}
 .nav-item i { display: block; font-size: 22px; margin-bottom: 5px; transition: 0.3s;}
 .nav-item.active { color: var(--primary); font-weight: 800; }
 .nav-item.active i { transform: translateY(-4px) scale(1.1); color: var(--gold); }
 
-.list-item { padding: 20px; border-radius: 16px; margin-bottom: 15px; background: #fff; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; transition: 0.3s; animation: fadeIn 0.5s;}
-.btn-group button { border: none; background: #f1f5f9; cursor: pointer; padding: 10px 14px; border-radius: 10px; margin-left: 8px; transition: 0.3s; font-weight: bold;}
+/* List Item */
+.list-item { padding: 20px; border-radius: 16px; margin-bottom: 15px; background: #fff; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; transition: 0.3s; animation: fadeIn 0.5s; flex-wrap: wrap; gap: 10px;}
+.btn-group button { border: none; background: #f1f5f9; cursor: pointer; padding: 10px 14px; border-radius: 10px; margin-left: 8px; transition: 0.3s; font-weight: bold; font-size: 12px;}
+.btn-group button:hover { opacity: 0.8; transform: translateY(-2px); }
 
+/* Modals */
 .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15,23,42,0.65); backdrop-filter: blur(6px); align-items: center; justify-content: center; }
-.modal-content { background: #fff; padding: 35px; border-radius: 24px; width: 95%; max-width: 550px; max-height: 85vh; overflow-y: auto; position: relative; border-top: 6px solid var(--primary); box-shadow: 0 25px 50px rgba(0,0,0,0.3);}
-.close { position: absolute; top: 20px; right: 25px; font-size: 26px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: 0.3s;}
+.modal-content { background: #fff; padding: 35px; border-radius: 24px; width: 95%; max-width: 800px; max-height: 85vh; overflow-y: auto; position: relative; border-top: 6px solid var(--primary); box-shadow: 0 25px 50px rgba(0,0,0,0.3);}
+.close { position: absolute; top: 20px; right: 25px; font-size: 30px; cursor: pointer; color: #94a3b8; font-weight: bold; transition: 0.3s;}
 .close:hover { color: var(--danger); transform: rotate(90deg);}
 
+/* Dashboard Stats */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 20px; }
+.stat-card { background: linear-gradient(135deg, #f8fafc, #f1f5f9); padding: 15px; border-radius: 15px; text-align: center; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: 0.3s; }
+.stat-card:hover { transform: translateY(-3px); border-color: var(--primary); }
+.stat-card h3 { margin: 0; font-size: 24px; color: var(--primary); font-weight: 900; }
+.stat-card p { margin: 5px 0 0 0; font-size: 12px; color: #64748b; font-weight: 700; text-transform: uppercase; }
+.total-stat { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; border: none; }
+.total-stat h3, .total-stat p { color: white; }
+
+/* Readonly Info Table */
+.info-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 14px; }
+.info-table td { padding: 12px 15px; border-bottom: 1px solid #e2e8f0; }
+.info-table td:first-child { font-weight: 700; color: #64748b; width: 35%; text-transform: uppercase; font-size: 11px; }
+.info-table td:last-child { font-weight: 600; color: #0f172a; }
+
+/* Loader */
 #loader { display:flex; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index:9999; flex-direction:column; align-items:center; justify-content:center; backdrop-filter: blur(8px); }
 .spinner { width:55px; height:55px; border:4px solid #e2e8f0; border-top:4px solid var(--primary); border-radius:50%; animation:spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-.badge-army { background: linear-gradient(135deg, var(--gold), #b45309); color: white; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase;}
-.badge-civil { background: var(--light); color: var(--primary); padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; border: 1px solid #a7f3d0; text-transform: uppercase;}
+/* Print Handling */
+@media print { 
+    body * { visibility: hidden; } 
+    .print-active, .print-active * { visibility: visible; } 
+    .print-active { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0; margin: 0; background: #fff;} 
+    @page { size: A4; margin: 15mm; }
+}
 
-.fee-zone { background: #f8fafc; padding: 20px; border-radius: 12px; margin-top: 20px; border: 2px dashed #005f40; }
-.fee-box { background: #fff; padding: 15px; border-radius: 10px; border: 1px solid #cbd5e1; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
-.pay-input { border-color: var(--primary) !important; color: var(--primary); font-weight: 900; font-size: 18px; text-align: center; }
-
-@media print { body * { visibility: hidden; } #printArea, #printArea * { visibility: visible; } #printArea { position: absolute; left: 0; top: 0; width: 100%; display: block !important; padding: 0;} }
+/* TC Specific Styles for Print */
+.tc-pad { font-family: 'Times New Roman', Times, serif; color: #000; line-height: 1.6; }
+.tc-header { text-align: center; border-bottom: 3px solid #005f40; padding-bottom: 15px; margin-bottom: 30px; position: relative; }
+.tc-header h1 { font-size: 26px; color: #005f40; margin: 0 0 5px 0; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; }
+.tc-header p { margin: 3px 0; font-size: 13px; font-weight: bold; font-family: Arial, sans-serif; }
+.tc-title { text-align: center; font-size: 22px; font-weight: bold; text-decoration: underline; margin-bottom: 30px; letter-spacing: 2px; }
+.tc-body { font-size: 16px; text-align: justify; }
+.tc-body .line { margin-bottom: 15px; }
+.tc-body b { border-bottom: 1px dotted #000; padding: 0 10px; }
+.tc-footer { margin-top: 80px; display: flex; justify-content: space-between; font-weight: bold; }
 </style>
 </head>
 <body>
 
-<div id="loader"><div class="spinner"></div><p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--primary); text-align: center;">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p></div>
+<div id="loader"><div class="spinner"></div><p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--primary); text-align: center;">SYSTEM INITIALIZING...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p></div>
 
 <div id="appContainer" style="display: none;">
     <div class="header">
-        <div class="header-left"><h2>SRMS Student DB V6.5</h2></div>
+        <h2><i class="fas fa-school"></i> SRMS ERP DB V7</h2>
         <button class="btn-back" onclick="window.close();"><i class="fas fa-sign-out-alt"></i> Dashboard</button>
     </div>
 
     <!-- ================= ADMIT TAB ================= -->
     <div id="admitTab" class="container active">
-    <div class="card">
-    <h3 style="margin:0 0 20px 0; color:var(--primary); font-weight:900; text-transform: uppercase; font-size: 18px;"><i class="fas fa-user-plus"></i> New Admission</h3>
-    
-    <label>Full Name *</label><input type="text" id="sName" placeholder="Student's Full Name">
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Class *</label>
-        <select id="sClass" onchange="fetchFeesForClass('sClass', 'sRes', 'admitFeeGrid'); toggleGroup('sClass', 'sGroupDiv');">
-            <option value="">Select Class</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
-        </select></div>
-        <div style="flex:1;"><label>Roll *</label><input type="number" id="sRoll" placeholder="Roll No."></div>
-    </div>
+        <div class="card">
+            <h3 class="card-title"><i class="fas fa-user-plus"></i> New Student Admission</h3>
+            
+            <div class="form-section">
+                <h4><i class="fas fa-id-card"></i> Personal Information</h4>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Full Name *</label><input type="text" id="sName" placeholder="Student's Name"></div>
+                    <div class="flex-col"><label>Date of Birth</label><input type="date" id="sDob"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Gender</label><select id="sGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+                    <div class="flex-col"><label>Religion</label><select id="sReligion"><option value="">Select</option><option value="Islam">Islam</option><option value="Hinduism">Hinduism</option><option value="Christianity">Christianity</option><option value="Buddhism">Buddhism</option></select></div>
+                    <div class="flex-col"><label>Blood Group</label><select id="sBloodGroup"><option value="">Select</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option></select></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Birth Certificate / NID</label><input type="text" id="sBirthCert" placeholder="Registration No"></div>
+                </div>
+            </div>
 
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Status *</label>
-        <select id="sRes" onchange="fetchFeesForClass('sClass', 'sRes', 'admitFeeGrid')">
-            <option value="Non-Residential">Non-Residential</option><option value="Residential">Residential</option>
-        </select></div>
-        <div style="flex:1;"><label style="color:var(--primary-dark);">Category *</label>
-        <select id="sCategory" style="border-color:var(--primary); font-weight:700;"><option value="Civil">Civil</option><option value="Army">Army</option></select></div>
-    </div>
+            <div class="form-section">
+                <h4><i class="fas fa-graduation-cap"></i> Academic Information</h4>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Class *</label>
+                        <select id="sClass" onchange="fetchFeesForClass('sClass', 'sRes', 'admitFeeGrid'); toggleGroup('sClass', 'sGroupDiv');">
+                            <option value="">Select Class</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
+                        </select>
+                    </div>
+                    <div class="flex-col"><label>Section</label><select id="sSection"><option value="">Select Section</option></select></div>
+                    <div class="flex-col"><label>Roll *</label><input type="number" id="sRoll" placeholder="Roll No."></div>
+                </div>
+                <div class="flex-row">
+                    <div id="sGroupDiv" class="flex-col" style="display:none;"><label>Group</label><select id="sGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select></div>
+                    <div class="flex-col"><label>Status *</label>
+                        <select id="sRes" onchange="fetchFeesForClass('sClass', 'sRes', 'admitFeeGrid')">
+                            <option value="Non-Residential">Non-Residential</option><option value="Residential">Residential</option>
+                        </select>
+                    </div>
+                    <div class="flex-col"><label style="color:var(--primary-dark);">Category *</label><select id="sCategory" style="border-color:var(--primary); font-weight:700;"><option value="Civil">Civil</option><option value="Army">Army</option></select></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Admission Date</label><input type="date" id="sAdmissionDate"></div>
+                    <div class="flex-col"><label>Previous School (If any)</label><input type="text" id="sPrevSchool" placeholder="School Name"></div>
+                </div>
+            </div>
 
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Father's Name</label><input type="text" id="sFatherName" placeholder="Father's Name"></div>
-        <div style="flex:1;"><label>Mother's Name</label><input type="text" id="sMotherName" placeholder="Mother's Name"></div>
-    </div>
+            <div class="form-section">
+                <h4><i class="fas fa-users"></i> Guardian & Contact Information</h4>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Father's Name</label><input type="text" id="sFatherName" placeholder="Father's Name"></div>
+                    <div class="flex-col"><label>Mother's Name</label><input type="text" id="sMotherName" placeholder="Mother's Name"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Primary Phone Number *</label><input type="tel" id="sPhone" placeholder="017XXXXXXXX (For SMS/Portal)"></div>
+                    <div class="flex-col"><label>Alternative/Guardian Phone</label><input type="tel" id="sGuardianPhone" placeholder="01XXXXXXXXX"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Present Address</label><textarea id="sAddress" rows="2" placeholder="Full Present Address"></textarea></div>
+                    <div class="flex-col"><label>Permanent Address</label><textarea id="sPermanentAddress" rows="2" placeholder="Full Permanent Address"></textarea></div>
+                </div>
+            </div>
 
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Section</label><select id="sSection"><option value="">Select Section</option></select></div>
-        <div id="sGroupDiv" style="flex:1; display:none;"><label>Group *</label><select id="sGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select></div>
-    </div>
+            <div class="form-section" style="border-color: #8b5cf6;">
+                <h4 style="color:#7e22ce;"><i class="fas fa-microchip"></i> System & ID Card</h4>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Machine Card Number (RFID)</label><input type="text" id="sCardNumber" placeholder="Enter RFID Card No"></div>
+                </div>
+            </div>
 
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Phone Number *</label><input type="tel" id="sPhone" placeholder="017XXXXXXXX"></div>
-        <div style="flex:1;"><label>Card Number (RFID)</label><input type="text" id="sCardNumber" placeholder="Enter Card Number"></div>
-    </div>
+            <!-- 💡 AUTO FETCHED ADMISSION FEES ZONE -->
+            <div id="admitFeeZone" style="display:none; background:#f0fdf4; padding:20px; border-radius:16px; border:2px dashed var(--primary); margin-bottom:20px;">
+                <h4 style="margin:0 0 15px 0; color:#005f40; font-size:16px;"><i class="fas fa-file-invoice-dollar"></i> Initial Admission Fees</h4>
+                <div id="admitFeeGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px;"></div>
+            </div>
 
-    <!-- 💡 AUTO FETCHED ADMISSION FEES ZONE -->
-    <div id="admitFeeZone" class="fee-zone" style="display:none;">
-        <h4 style="margin-top:0; color:#005f40; font-size:16px;"><i class="fas fa-file-invoice-dollar"></i> Auto-Fetched Admission Fees</h4>
-        <div id="admitFeeGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:15px;"></div>
-    </div>
-
-    <button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Admit & Collect Fees</button>
-    </div>
+            <button class="btn-submit" onclick="saveStudent()"><i class="fas fa-rocket"></i> Submit Admission & Collect Fees</button>
+        </div>
     </div>
 
     <!-- ================= VIEW TAB ================= -->
     <div id="viewTab" class="container">
-    <div class="card">
-        <div style="display:flex; flex-wrap: wrap; gap:10px; margin-bottom:15px;">
-        <select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:90px;"><option value="">All Classes</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option></select>
-        <select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:90px;"><option value="">All Sections</option></select>
-        <button onclick="window.open('https://www.saidpurresidentialmodelschool.com/tc', '_blank')" style="background:#f59e0b; color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; font-weight:800;"><i class="fas fa-file-signature"></i> Create TC</button>
-        <button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:12px 18px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3);"><i class="fas fa-print"></i></button>
+        <!-- Live Dashboard Stats -->
+        <h3 style="margin-top:0; color:#475569;"><i class="fas fa-chart-pie"></i> School Demographics</h3>
+        <div id="statsDashboard" class="stats-grid"></div>
+
+        <div class="card">
+            <div class="flex-row" style="margin-bottom:15px;">
+                <select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Classes</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option></select>
+                <select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Sections</option></select>
+                <select id="filterCategory" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Category</option><option value="Civil">Civil</option><option value="Army">Army</option></select>
+                
+                <button onclick="openTcModal()" style="background:#f59e0b; color:white; border:none; padding:14px 20px; border-radius:12px; cursor:pointer; font-weight:800; min-width:130px;"><i class="fas fa-file-signature"></i> Create TC</button>
+                <button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:14px 20px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3);"><i class="fas fa-print"></i> List</button>
+            </div>
+            <div style="position: relative;"><i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i><input type="text" id="stuSearch" placeholder="Search Name, ID, Phone, Roll..." onkeyup="filterStudents()" style="padding-left: 45px; border-radius: 30px; font-size: 15px;"></div>
         </div>
-        <div style="position: relative;"><i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i><input type="text" id="stuSearch" placeholder="Search Name, ID, Phone..." onkeyup="filterStudents()" style="padding-left: 40px; border-radius: 30px;"></div>
-    </div>
-    <div class="card" style="background: var(--primary); color:white; padding: 20px; border: none; text-align:center; font-weight: 900; font-size: 18px;">
-        Total Students: <span id="totalStuCount" style="color:var(--gold); font-size:22px;">0</span>
-    </div>
-    <div id="studentListDisplay"></div>
+        
+        <div id="studentListDisplay"></div>
     </div>
 
     <!-- ================= SECTION MANAGER TAB ================= -->
     <div id="sectionTab" class="container">
-    <div class="card" style="border-top-color: #005f40;">
-    <h3 style="margin:0 0 15px 0; color:#005f40; font-weight:900;"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
-    <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">এখানে একবার কোনো সেকশন অ্যাড করলে তা অটোমেটিক অ্যাডমিট এবং এডিট ফর্মে সেভ হয়ে থাকবে।</p>
-    <div style="display:flex; gap:10px;">
-    <input type="text" id="newSecName" placeholder="Enter new section name (e.g. Padma, Lotus)" style="flex:1; border-color:#a7f3d0;">
-    <button onclick="addSection()" class="btn-submit" style="width:130px; margin-top:0; padding:10px; background: linear-gradient(135deg, #005f40, #003d29); box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add</button>
-    </div>
-    <div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;">
-    </div>
-    </div>
+        <div class="card" style="border-top: 4px solid var(--primary);">
+            <h3 class="card-title"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
+            <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">Add sections here globally. They will automatically appear in all Admission and Edit forms.</p>
+            <div style="display:flex; gap:10px;">
+                <input type="text" id="newSecName" placeholder="E.g., Padma, Lotus, A, B" style="flex:1; border-color:#a7f3d0;">
+                <button onclick="addSection()" class="btn-submit" style="width:130px; margin-top:0; padding:10px; box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add</button>
+            </div>
+            <div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;"></div>
+        </div>
     </div>
 
-    <!-- ================= EDIT MODAL (CLASS UPDATE) ================= -->
+    <!-- ================= MODALS ================= -->
+
+    <!-- 👁️ VIEW MODAL -->
+    <div id="viewModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('viewModal')">&times;</span>
+            <h3 style="color:var(--primary); margin-top:0; font-weight:900; border-bottom: 2px solid var(--light); padding-bottom:10px;"><i class="fas fa-user-circle"></i> Student Profile</h3>
+            
+            <table class="info-table" id="viewTable">
+                <!-- Dynamically Populated -->
+            </table>
+            
+            <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeModal('viewModal')">Close View</button>
+        </div>
+    </div>
+
+    <!-- ✏️ EDIT MODAL -->
     <div id="editModal" class="modal">
-    <div class="modal-content">
-    <span class="close" onclick="closeModal('editModal')">×</span>
-    <h3 style="color:var(--edit); margin-top:0; font-weight:900; text-transform: uppercase;"><i class="fas fa-user-edit"></i> Edit Profile / Update Class</h3>
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('editModal')">&times;</span>
+            <h3 style="color:var(--edit); margin-top:0; font-weight:900; border-bottom: 2px solid #e0e7ff; padding-bottom:10px;"><i class="fas fa-user-edit"></i> Edit Profile & Academic Update</h3>
 
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Student ID</label><input type="text" id="eId" readonly></div>
-        <div style="flex:1;"><label>Class</label>
-        <select id="eClass" onchange="onEditClassChange()">
-            <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
-            <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
-            <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
-            <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
-        </select></div>
-    </div>
-    <input type="hidden" id="eRowId">
-    <label>Name</label><input type="text" id="eName">
+            <input type="hidden" id="eRowId">
+            <div class="form-section">
+                <div class="flex-row">
+                    <div class="flex-col"><label>Student ID (Read Only)</label><input type="text" id="eId" readonly style="background:#f1f5f9; color:#94a3b8; border:none;"></div>
+                    <div class="flex-col"><label>Full Name</label><input type="text" id="eName"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Class</label>
+                        <select id="eClass" onchange="onEditClassChange()">
+                            <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
+                        </select>
+                    </div>
+                    <div class="flex-col"><label>Section</label><select id="eSection"><option value="">Select</option></select></div>
+                    <div class="flex-col"><label>Roll</label><input type="number" id="eRoll"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Status</label><select id="eRes" onchange="onEditClassChange()"><option value="Non-Residential">Non-Residential</option><option value="Residential">Residential</option></select></div>
+                    <div class="flex-col"><label>Category</label><select id="eCategory"><option value="Civil">Civil</option><option value="Army">Army</option></select></div>
+                </div>
+            </div>
 
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Roll</label><input type="number" id="eRoll"></div>
-        <div style="flex:1;"><label>Status</label><select id="eRes" onchange="onEditClassChange()"><option value="Non-Residential">Non-Residential</option><option value="Residential">Residential</option></select></div>
-    </div>
-    
-    <div style="display:flex; gap:15px;">
-        <div style="flex:1;"><label>Phone Number</label><input type="tel" id="ePhone"></div>
-        <div style="flex:1;"><label>Section</label><select id="eSection"><option value="">Select</option></select></div>
+            <div class="form-section">
+                <div class="flex-row">
+                    <div class="flex-col"><label>Date of Birth</label><input type="date" id="eDob"></div>
+                    <div class="flex-col"><label>Phone Number</label><input type="tel" id="ePhone"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Father's Name</label><input type="text" id="eFatherName"></div>
+                    <div class="flex-col"><label>Mother's Name</label><input type="text" id="eMotherName"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Present Address</label><textarea id="eAddress" rows="2"></textarea></div>
+                </div>
+            </div>
+
+            <!-- 💡 AUTO FETCHED SESSION/PROMOTION FEES ZONE -->
+            <div id="editFeeZone" style="display:none; background:#eff6ff; padding:20px; border-radius:16px; border:2px dashed #3b82f6; margin-bottom:20px;">
+                <h4 style="margin:0 0 15px 0; color:#1d4ed8; font-size:16px;"><i class="fas fa-level-up-alt"></i> New Session / Promotion Fees</h4>
+                <div id="editFeeGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px;"></div>
+            </div>
+
+            <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="updateStudent()"><i class="fas fa-sync"></i> Save Updates & Collect</button>
+        </div>
     </div>
 
-    <!-- 💡 AUTO FETCHED SESSION/PROMOTION FEES ZONE -->
-    <div id="editFeeZone" class="fee-zone" style="display:none; border-color:#3b82f6;">
-        <h4 style="margin-top:0; color:#3b82f6; font-size:16px;"><i class="fas fa-level-up-alt"></i> New Session / Promotion Fees</h4>
-        <div id="editFeeGrid" style="display:grid; grid-template-columns:1fr 1fr; gap:15px;"></div>
+    <!-- 📜 TC GENERATOR MODAL -->
+    <div id="tcModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('tcModal')">&times;</span>
+            <h3 style="color:#f59e0b; margin-top:0; font-weight:900; border-bottom: 2px solid #fef3c7; padding-bottom:10px;"><i class="fas fa-file-signature"></i> Generate Transfer Certificate</h3>
+            
+            <div class="form-section">
+                <div class="flex-row">
+                    <div class="flex-col"><label>Student Name</label><input type="text" id="tcName" placeholder="Student Name"></div>
+                    <div class="flex-col"><label>Student ID (Optional)</label><input type="text" id="tcId" placeholder="System ID"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Father's Name</label><input type="text" id="tcFather"></div>
+                    <div class="flex-col"><label>Mother's Name</label><input type="text" id="tcMother"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Class</label><input type="text" id="tcClass"></div>
+                    <div class="flex-col"><label>Roll</label><input type="text" id="tcRoll"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Admission Date</label><input type="date" id="tcAdDate"></div>
+                    <div class="flex-col"><label>Date of Leaving</label><input type="date" id="tcLeaveDate"></div>
+                </div>
+                <div class="flex-row">
+                    <div class="flex-col"><label>Reason for Leaving</label><input type="text" id="tcReason" value="Change of Residence" placeholder="E.g. Guardian's Transfer"></div>
+                    <div class="flex-col"><label>Conduct/Character</label><input type="text" id="tcConduct" value="Good" placeholder="E.g. Good, Satisfactory"></div>
+                </div>
+            </div>
+            <button class="btn-submit" style="background:linear-gradient(135deg, #f59e0b, #d97706);" onclick="generateAndPrintTC()"><i class="fas fa-print"></i> Generate & Print TC</button>
+        </div>
     </div>
 
-    <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="updateStudent()"><i class="fas fa-sync"></i> Update Profile & Collect</button>
-    </div>
-    </div>
-
-    <!-- RECEIPT MODAL -->
+    <!-- 🧾 RECEIPT MODAL -->
     <div id="receiptModal" class="modal" style="z-index:9999;">
         <div class="modal-content" style="text-align:center;">
             <h2 style="color:#16a34a; font-size:28px; margin:0;"><i class="fas fa-check-circle"></i> Success!</h2>
-            <p id="receiptMsg" style="font-weight:600; color:#334155;">Student Data Saved & Fees Collected.</p>
+            <p id="receiptMsg" style="font-weight:600; color:#334155; margin-top:10px;">Student Data Saved & Fees Collected.</p>
             <button class="btn-submit" onclick="printGeneratedReceipt()"><i class="fas fa-print"></i> Print Official Receipt</button>
             <button class="btn-submit" style="background:#64748b; margin-top:10px;" onclick="closeModal('receiptModal')">Close</button>
         </div>
     </div>
 
-    <!-- PRINT AREA FOR STUDENT LIST -->
-    <div id="printArea" style="display:none;">
-    <div style="text-align:center; border-bottom:3px solid #005f40; margin-bottom:15px; padding-bottom: 10px;">
-    <h2 style="margin:0; color:#005f40; font-family:'Times New Roman', serif; text-transform:uppercase; font-size: 20px; font-weight: 800;">Saidpur Residential Model School</h2>
-    <p id="printTitle" style="margin:5px 0; font-weight:bold; font-size:13px; color:#475569; font-family:sans-serif; letter-spacing: 0.5px;"></p>
-    </div>
-    <table class="print-table">
-    <thead>
-    <tr><th>ID</th><th>Name</th><th>Father</th><th>Mother</th><th>Class</th><th>Sec</th><th>Grp</th><th>Roll</th><th>Category</th><th>Phone</th></tr>
-    </thead>
-    <tbody id="printTableBody"></tbody>
-    </table>
+    <!-- ================= PRINT AREAS (Hidden from UI) ================= -->
+
+    <!-- Print List -->
+    <div id="printAreaList" style="display:none;">
+        <div style="text-align:center; border-bottom:3px solid #005f40; margin-bottom:15px; padding-bottom: 10px;">
+            <h2 style="margin:0; color:#005f40; font-family:'Times New Roman', serif; text-transform:uppercase; font-size: 22px; font-weight: 900;">Saidpur Residential Model School</h2>
+            <p id="printTitle" style="margin:5px 0; font-weight:bold; font-size:14px; color:#475569; font-family:sans-serif; letter-spacing: 0.5px;"></p>
+        </div>
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+            <thead>
+                <tr style="background:#f1f5f9;">
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">ID</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Name</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Father</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Class</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Sec</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Roll</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Cat.</th>
+                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Phone</th>
+                </tr>
+            </thead>
+            <tbody id="printTableBody"></tbody>
+        </table>
     </div>
 
+    <!-- Print TC Formatted on School Pad -->
+    <div id="printAreaTC" style="display:none; padding: 20px;" class="tc-pad">
+        <div class="tc-header">
+            <h1>SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+            <p>Sultan Nagar, Saidpur, Nilphamari</p>
+            <p>Email: info@srms2012.edu.bd | Website: www.srms2012.edu.bd</p>
+            <p>School Code: 481931 | EMIS Code: 00704061312</p>
+        </div>
+        
+        <div class="tc-title">TRANSFER CERTIFICATE</div>
+        
+        <div class="tc-body">
+            <p class="line">This is to certify that <b><span id="pTcName"></span></b> (ID: <b><span id="pTcId"></span></b>),</p>
+            <p class="line">Son/Daughter of <b><span id="pTcFather"></span></b> and <b><span id="pTcMother"></span></b>,</p>
+            <p class="line">was a student of this institution. He/She was reading in Class <b><span id="pTcClass"></span></b>, Roll No <b><span id="pTcRoll"></span></b>.</p>
+            <p class="line">He/She was admitted to this school on <b><span id="pTcAdDate"></span></b> and left on <b><span id="pTcLeaveDate"></span></b>.</p>
+            <p class="line">The reason for his/her leaving is stated as: <b><span id="pTcReason"></span></b>.</p>
+            <p class="line">To the best of my knowledge, his/her character and conduct during the stay in this school was <b><span id="pTcConduct"></span></b>.</p>
+            <br><br>
+            <p>I wish him/her every success in life.</p>
+        </div>
+        
+        <div class="tc-footer">
+            <div style="text-align:center; border-top: 1px solid #000; padding-top: 5px; width: 200px;">Prepared By / Clerk</div>
+            <div style="text-align:center; border-top: 1px solid #000; padding-top: 5px; width: 200px;">Headmaster / Principal</div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
     <div class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
-    <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
-    <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-layer-group"></i>Sections</button>
+        <button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
+        <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
+        <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-layer-group"></i>Sections</button>
     </div>
 </div> 
 
@@ -245,6 +412,9 @@ var currentReceiptData = null;
 function showLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
 
 window.onload = function() {
+    // Setting default date to today for admission form
+    document.getElementById('sAdmissionDate').valueAsDate = new Date();
+
     auth.onAuthStateChanged(function(user) {
         if (user) {
             user.getIdToken(true).then(token => {
@@ -379,25 +549,25 @@ async function fetchFeesForClass(clsId, resId, gridId) {
         
         let html = "";
         if(sFee > 0) {
-            html += `<div class="fee-box">
+            html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1px solid #cbd5e1;">
                 <label style="margin-top:0; color:#005f40;">School Fee (${sFee} TK)</label>
                 <input type="hidden" class="${gridId}-total" data-name="School Fee" value="${sFee}">
-                <input type="number" class="${gridId}-paid pay-input" placeholder="Amount Paying" value="${sFee}">
+                <input type="number" class="${gridId}-paid" style="border-color:#005f40; color:#005f40; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${sFee}">
             </div>`;
         }
         if(hFee > 0 && resStatus === 'Residential') {
-            html += `<div class="fee-box" style="border-color:#ef4444;">
+            html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1px solid #cbd5e1;">
                 <label style="margin-top:0; color:#ef4444;">Hostel Fee (${hFee} TK)</label>
                 <input type="hidden" class="${gridId}-total" data-name="Hostel Fee" value="${hFee}">
-                <input type="number" class="${gridId}-paid pay-input" style="color:#ef4444;" placeholder="Amount Paying" value="${hFee}">
+                <input type="number" class="${gridId}-paid" style="border-color:#ef4444; color:#ef4444; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${hFee}">
             </div>`;
         }
         if(aFee > 0) {
             let labelName = gridId === 'editFeeGrid' ? 'Session/Promotion Fee' : 'Admission Fee';
-            html += `<div class="fee-box" style="border-color:#8b5cf6;">
+            html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1px solid #cbd5e1;">
                 <label style="margin-top:0; color:#7e22ce;">${labelName} (${aFee} TK)</label>
                 <input type="hidden" class="${gridId}-total" data-name="${labelName}" value="${aFee}">
-                <input type="number" class="${gridId}-paid pay-input" style="color:#8b5cf6;" placeholder="Amount Paying" value="${aFee}">
+                <input type="number" class="${gridId}-paid" style="border-color:#8b5cf6; color:#8b5cf6; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${aFee}">
             </div>`;
         }
         
@@ -429,13 +599,20 @@ function getFeeData(gridId) {
 async function saveStudent() {
     var cls = document.getElementById('sClass').value;
     var d = { 
-        name: document.getElementById('sName').value, classVal: cls, sectionVal: document.getElementById('sSection').value || "", 
-        roll: document.getElementById('sRoll').value, resStatus: document.getElementById('sRes').value, 
-        category: document.getElementById('sCategory').value || "Civil", phone: document.getElementById('sPhone').value || "",
+        name: document.getElementById('sName').value, dob: document.getElementById('sDob').value, 
+        gender: document.getElementById('sGender').value, religion: document.getElementById('sReligion').value, 
+        bloodGroup: document.getElementById('sBloodGroup').value, birthCert: document.getElementById('sBirthCert').value, 
+        classVal: cls, sectionVal: document.getElementById('sSection').value || "", roll: document.getElementById('sRoll').value, 
+        group: document.getElementById('sGroup').value, resStatus: document.getElementById('sRes').value, 
+        category: document.getElementById('sCategory').value || "Civil", admissionDate: document.getElementById('sAdmissionDate').value,
+        previousSchool: document.getElementById('sPrevSchool').value, fatherName: document.getElementById('sFatherName').value, 
+        motherName: document.getElementById('sMotherName').value, phone: document.getElementById('sPhone').value,
+        guardianPhone: document.getElementById('sGuardianPhone').value, address: document.getElementById('sAddress').value,
+        permanentAddress: document.getElementById('sPermanentAddress').value, cardNumber: document.getElementById('sCardNumber').value,
         fees: getFeeData('admitFeeGrid')
     };
 
-    if(!d.name || !d.roll || !d.phone || !cls) return alert("Name, Class, Roll and Phone are required!");
+    if(!d.name || !d.roll || !d.phone || !cls) return alert("Name, Class, Roll and Primary Phone are required!");
 
     document.getElementById('loader').style.display = 'flex'; 
     showLoaderText("SAVING PROFILE & COLLECTING FEES...<br><span style='font-size:11px; color:#64748b;'>Syncing with Accounts securely...</span>");
@@ -452,7 +629,7 @@ async function saveStudent() {
             alert(`Admission Successful! Student ID: ${res.id}\n(No fees collected)`);
         }
         
-        // Reset Form
+        // Reset Form partially
         document.getElementById('sName').value = ""; document.getElementById('sRoll').value = ""; document.getElementById('sPhone').value = ""; document.getElementById('admitFeeZone').style.display = "none";
     } catch(err) {
         document.getElementById('loader').style.display = 'none'; 
@@ -469,62 +646,113 @@ async function loadStudents() {
         snapshot.forEach(doc => { let f = doc.data(); f.rowId = doc.id; data.push(f); });
         data.sort((a,b) => (parseInt(a.roll)||9999) - (parseInt(b.roll)||9999));
         allData = data.reverse();
+        renderStats(allData);
         renderList(allData);
         document.getElementById('loader').style.display = 'none';
     } catch(e) { document.getElementById('loader').style.display = 'none'; }
 }
 
-function renderList(data) {
-    var h = ""; var total = data.length; 
+function renderStats(data) {
+    let total = data.length;
+    let counts = {};
     data.forEach(s => {
+        let c = s.class || "Unknown";
+        counts[c] = (counts[c] || 0) + 1;
+    });
+
+    let html = `<div class="stat-card total-stat"><h3>${total}</h3><p>Total Students</p></div>`;
+    
+    // Sort logic for classes
+    let clsOrder = ["Play", "Nursery", "KG", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+    let sortedKeys = Object.keys(counts).sort((a,b) => {
+        let idxA = clsOrder.indexOf(a); let idxB = clsOrder.indexOf(b);
+        return (idxA === -1 ? 99 : idxA) - (idxB === -1 ? 99 : idxB);
+    });
+
+    sortedKeys.forEach(k => {
+        html += `<div class="stat-card"><h3>${counts[k]}</h3><p>Class ${k}</p></div>`;
+    });
+    
+    document.getElementById('statsDashboard').innerHTML = html;
+}
+
+function renderList(data) {
+    var h = ""; 
+    data.forEach(s => {
+        let catBadge = s.category === "Army" ? `<span style="background:var(--gold); color:#fff; padding:2px 8px; border-radius:10px; font-size:10px; font-weight:800; margin-left:8px;">ARMY</span>` : `<span style="background:var(--light); color:var(--primary); padding:2px 8px; border-radius:10px; font-size:10px; font-weight:800; margin-left:8px; border:1px solid #a7f3d0;">CIVIL</span>`;
+        
         h += `<div class="list-item">
-        <div style="flex:1;">
-        <div style="margin-bottom:5px;"><b style="font-size:16px; color:#005f40;">${s.name || 'Unknown'}</b></div>
-        <small style="color:#64748b; font-weight:500; font-size:12px; line-height:1.6;">
-        <b style="color:#334155;">ID:</b> ${s.studentID} | <b style="color:#334155;">Class:</b> ${s.class} | <b style="color:#334155;">Roll:</b> ${s.roll} | <b style="color:#334155;">Phone:</b> ${s.phone || 'N/A'}
-        </small>
+        <div style="flex:1; min-width:250px;">
+        <div style="margin-bottom:6px;"><b style="font-size:16px; color:var(--primary);">${s.name || 'Unknown'}</b> ${catBadge}</div>
+        <div style="color:#475569; font-size:12px; line-height:1.6; display:flex; gap:10px; flex-wrap:wrap;">
+            <span><i class="fas fa-id-badge" style="color:#94a3b8;"></i> ID: <b>${s.studentID}</b></span>
+            <span><i class="fas fa-graduation-cap" style="color:#94a3b8;"></i> Class: <b>${s.class}</b></span>
+            <span><i class="fas fa-list-ol" style="color:#94a3b8;"></i> Roll: <b>${s.roll}</b></span>
+            <span><i class="fas fa-phone" style="color:#94a3b8;"></i> <b>${s.phone || 'N/A'}</b></span>
         </div>
-        <div class="btn-group" style="display:flex; flex-direction:column; gap:8px;">
-        <button onclick="openEditByRow('${s.rowId}')" style="color:var(--edit)"><i class="fas fa-edit"></i> Edit/Promote</button>
-        <button onclick="delStu('${s.rowId}')" style="color:var(--danger)"><i class="fas fa-trash"></i> Del</button>
+        </div>
+        <div class="btn-group" style="display:flex; gap:8px;">
+        <button onclick="openViewByRow('${s.rowId}')" style="color:#10b981; background:#d1fae5;"><i class="fas fa-eye"></i> View</button>
+        <button onclick="openEditByRow('${s.rowId}')" style="color:var(--edit); background:#dbeafe;"><i class="fas fa-edit"></i> Edit</button>
+        <button onclick="delStu('${s.rowId}')" style="color:var(--danger); background:#fee2e2;"><i class="fas fa-trash"></i></button>
         </div>
         </div>`;
     });
     document.getElementById('studentListDisplay').innerHTML = h;
-    document.getElementById('totalStuCount').innerText = total;
 }
 
 function filterStudents() {
-    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fGrp = document.getElementById('filterGroup').value; var fRes = document.getElementById('filterRes').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
+    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
     var filtered = allData.filter(s => {
-        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchGrp = fGrp === "" || String(s.group) === fGrp; var matchRes = fRes === "" || String(s.resStatus) === fRes; var matchCat = fCat === "" || String(s.category) === fCat;
-        var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt) || String(s.roll).includes(fTxt) || (s.machineID && String(s.machineID).toLowerCase().includes(fTxt)) || (s.phone && String(s.phone).includes(fTxt)); 
-        return matchCls && matchSec && matchGrp && matchRes && matchCat && matchTxt;
+        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchCat = fCat === "" || String(s.category) === fCat;
+        var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt) || String(s.roll).includes(fTxt) || (s.phone && String(s.phone).includes(fTxt)); 
+        return matchCls && matchSec && matchCat && matchTxt;
     });
+    renderStats(filtered);
     renderList(filtered);
 }
 
-function printReport() {
-    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
-    var data = allData.filter(s => {
-        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchCat = fCat === "" || String(s.category) === fCat; var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt);
-        return matchCls && matchSec && matchCat && matchTxt;
-    });
-
-    var rows = "";
-    data.forEach(s => { rows += `<tr><td>${s.studentID}</td><td>${s.name}</td><td>${s.fatherName || '-'}</td><td>${s.motherName || '-'}</td><td>${s.class}</td><td>${s.section || '-'}</td><td>${s.group || '-'}</td><td>${s.roll}</td><td><b>${s.category || 'Civil'}</b></td><td>${s.phone || ''}</td></tr>`; });
-    document.getElementById('printTitle').innerText = "Student General Information List: " + (fCls ? "Class "+fCls : "All Classes") + (fSec ? " | Sec: "+fSec : "") + (fCat ? " | Cat: "+fCat : "");
-    document.getElementById('printTableBody').innerHTML = rows;
-    setTimeout(() => { window.print(); }, 800);
+// 👁️ VIEW DATA FULLY
+function openViewByRow(rid) {
+    if(!isAuthReady) return;
+    var s = allData.find(item => item.rowId == rid);
+    if(!s) return;
+    
+    let html = `
+        <tr><td>Name</td><td>${s.name || '-'}</td></tr>
+        <tr><td>System ID</td><td><b>${s.studentID || '-'}</b></td></tr>
+        <tr><td>Class</td><td>${s.class || '-'} (Section: ${s.section || '-'}, Roll: ${s.roll || '-'})</td></tr>
+        <tr><td>Date of Birth</td><td>${s.dob || '-'}</td></tr>
+        <tr><td>Gender / Religion</td><td>${s.gender || '-'} / ${s.religion || '-'}</td></tr>
+        <tr><td>Blood Group</td><td>${s.bloodGroup || '-'}</td></tr>
+        <tr><td>Admission Date</td><td>${s.admissionDate || '-'}</td></tr>
+        <tr><td>Category / Status</td><td>${s.category || 'Civil'} / ${s.resStatus || '-'}</td></tr>
+        <tr><td>Father's Name</td><td>${s.fatherName || '-'}</td></tr>
+        <tr><td>Mother's Name</td><td>${s.motherName || '-'}</td></tr>
+        <tr><td>Primary Phone</td><td>${s.phone || '-'}</td></tr>
+        <tr><td>Guardian Phone</td><td>${s.guardianPhone || '-'}</td></tr>
+        <tr><td>Present Address</td><td>${s.address || '-'}</td></tr>
+        <tr><td>Previous School</td><td>${s.previousSchool || '-'}</td></tr>
+        <tr><td>Machine Card</td><td>${s.cardNumber || '-'}</td></tr>
+    `;
+    document.getElementById('viewTable').innerHTML = html;
+    document.getElementById('viewModal').style.display = 'flex';
 }
 
+// ✏️ EDIT DATA FULLY
 function openEditByRow(rid) {
     if(!isAuthReady) return;
     var s = allData.find(item => item.rowId == rid);
     if(!s) return;
     originalEditClass = s.class;
     
-    document.getElementById('eId').value = s.studentID; document.getElementById('eRowId').value = s.rowId; document.getElementById('eName').value = s.name || ""; document.getElementById('eClass').value = s.class; document.getElementById('eSection').value = s.section || ""; document.getElementById('eRoll').value = s.roll; document.getElementById('eRes').value = s.resStatus; document.getElementById('ePhone').value = s.phone || "";
+    document.getElementById('eRowId').value = s.rowId; document.getElementById('eId').value = s.studentID; 
+    document.getElementById('eName').value = s.name || ""; document.getElementById('eClass').value = s.class || ""; 
+    document.getElementById('eSection').value = s.section || ""; document.getElementById('eRoll').value = s.roll || ""; 
+    document.getElementById('eRes').value = s.resStatus || ""; document.getElementById('eCategory').value = s.category || "Civil";
+    document.getElementById('eDob').value = s.dob || ""; document.getElementById('ePhone').value = s.phone || ""; 
+    document.getElementById('eFatherName').value = s.fatherName || ""; document.getElementById('eMotherName').value = s.motherName || "";
+    document.getElementById('eAddress').value = s.address || "";
     
     document.getElementById('editFeeZone').style.display = 'none';
     document.getElementById('editModal').style.display = 'flex';
@@ -540,13 +768,15 @@ function onEditClassChange() {
     }
 }
 
-// 🚀 EDIT / UPDATE CLASS WITH FEES
 async function updateStudent() {
     var d = { 
         rowId: document.getElementById('eRowId').value, id: document.getElementById('eId').value,
         name: document.getElementById('eName').value, classVal: document.getElementById('eClass').value, 
         sectionVal: document.getElementById('eSection').value, roll: document.getElementById('eRoll').value, 
-        resStatus: document.getElementById('eRes').value, phone: document.getElementById('ePhone').value,
+        resStatus: document.getElementById('eRes').value, category: document.getElementById('eCategory').value,
+        dob: document.getElementById('eDob').value, phone: document.getElementById('ePhone').value,
+        fatherName: document.getElementById('eFatherName').value, motherName: document.getElementById('eMotherName').value,
+        address: document.getElementById('eAddress').value,
         fees: getFeeData('editFeeGrid')
     };
     
@@ -574,14 +804,80 @@ async function updateStudent() {
 }
 
 function delStu(row) { 
-    if(confirm("Confirm delete?")) {
+    if(confirm("Confirm delete? This action cannot be undone.")) {
         document.getElementById('loader').style.display = 'flex'; showLoaderText("DELETING...");
         apiCall('deleteStudent', {docId: row}).then(() => { alert("Deleted!"); loadStudents(); }).catch(e => {document.getElementById('loader').style.display = 'none'; alert("Error: "+e.message);}); 
     } 
 }
+
+// 📜 TC GENERATOR 
+function openTcModal() {
+    // Fill with first filtered student data if available to save time
+    var fTxt = document.getElementById('stuSearch').value.toLowerCase();
+    if(fTxt !== "" && allData.length > 0) {
+        let match = allData.find(s => String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt));
+        if(match) {
+            document.getElementById('tcName').value = match.name || "";
+            document.getElementById('tcId').value = match.studentID || "";
+            document.getElementById('tcFather').value = match.fatherName || "";
+            document.getElementById('tcMother').value = match.motherName || "";
+            document.getElementById('tcClass').value = match.class || "";
+            document.getElementById('tcRoll').value = match.roll || "";
+            document.getElementById('tcAdDate').value = match.admissionDate || "";
+        }
+    }
+    document.getElementById('tcLeaveDate').valueAsDate = new Date();
+    document.getElementById('tcModal').style.display = 'flex';
+}
+
+function generateAndPrintTC() {
+    document.getElementById('pTcName').innerText = document.getElementById('tcName').value || "......................";
+    document.getElementById('pTcId').innerText = document.getElementById('tcId').value || "..........";
+    document.getElementById('pTcFather').innerText = document.getElementById('tcFather').value || "......................";
+    document.getElementById('pTcMother').innerText = document.getElementById('tcMother').value || "......................";
+    document.getElementById('pTcClass').innerText = document.getElementById('tcClass').value || "..........";
+    document.getElementById('pTcRoll').innerText = document.getElementById('tcRoll').value || "..........";
+    document.getElementById('pTcAdDate').innerText = document.getElementById('tcAdDate').value || "..........";
+    document.getElementById('pTcLeaveDate').innerText = document.getElementById('tcLeaveDate').value || "..........";
+    document.getElementById('pTcReason').innerText = document.getElementById('tcReason').value || "..........";
+    document.getElementById('pTcConduct').innerText = document.getElementById('tcConduct').value || "..........";
+    
+    closeModal('tcModal');
+    
+    // Setup Print Class
+    document.getElementById('printAreaTC').classList.add('print-active');
+    document.getElementById('printAreaList').classList.remove('print-active');
+    
+    window.print();
+    
+    // Remove class after print dialog
+    setTimeout(() => { document.getElementById('printAreaTC').classList.remove('print-active'); }, 500);
+}
+
+// 🖨️ PRINT LIST
+function printReport() {
+    var fCls = document.getElementById('filterClass').value; var fSec = document.getElementById('filterSection').value; var fCat = document.getElementById('filterCategory').value; var fTxt = document.getElementById('stuSearch').value.toLowerCase();
+    var data = allData.filter(s => {
+        var matchCls = fCls === "" || String(s.class) === fCls; var matchSec = fSec === "" || String(s.section) === fSec; var matchCat = fCat === "" || String(s.category) === fCat; var matchTxt = String(s.name).toLowerCase().includes(fTxt) || String(s.studentID).toLowerCase().includes(fTxt);
+        return matchCls && matchSec && matchCat && matchTxt;
+    });
+
+    var rows = "";
+    data.forEach(s => { rows += `<tr><td style="padding:8px; border:1px solid #cbd5e1;">${s.studentID}</td><td style="padding:8px; border:1px solid #cbd5e1;">${s.name}</td><td style="padding:8px; border:1px solid #cbd5e1;">${s.fatherName || '-'}</td><td style="padding:8px; border:1px solid #cbd5e1;">${s.class}</td><td style="padding:8px; border:1px solid #cbd5e1; text-align:center;">${s.section || '-'}</td><td style="padding:8px; border:1px solid #cbd5e1; text-align:center;">${s.roll}</td><td style="padding:8px; border:1px solid #cbd5e1; text-align:center;"><b>${s.category || 'Civil'}</b></td><td style="padding:8px; border:1px solid #cbd5e1;">${s.phone || ''}</td></tr>`; });
+    document.getElementById('printTitle').innerText = "Student Demographics Data: " + (fCls ? "Class "+fCls : "All Classes") + (fSec ? " | Sec: "+fSec : "") + (fCat ? " | Cat: "+fCat : "") + " (Total: " + data.length + ")";
+    document.getElementById('printTableBody').innerHTML = rows;
+    
+    document.getElementById('printAreaList').classList.add('print-active');
+    document.getElementById('printAreaTC').classList.remove('print-active');
+    
+    window.print();
+    
+    setTimeout(() => { document.getElementById('printAreaList').classList.remove('print-active'); }, 500);
+}
+
 function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-// 🖨️ RECEIPT PRINTING LOGIC (Copied from Accounts)
+// 🧾 RECEIPT PRINTING LOGIC 
 function printGeneratedReceipt() {
     if(!currentReceiptData) return;
     let d = currentReceiptData;
