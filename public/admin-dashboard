@@ -151,10 +151,12 @@
 
             <button onclick="openAppModule('student-management')" class="btn-link"><i class="fas fa-user-graduate"></i> Students Management</button>
             <button onclick="openAppModule('accounts-portal')" class="btn-link"><i class="fas fa-file-invoice-dollar"></i> Accounts Portal</button>
-            <button onclick="openAppModule('website-management')" class="btn-link"><i class="fas fa-globe"></i> Website Management</button>
-            <button onclick="openAppModule('result-management')" class="btn-link"><i class="fas fa-poll-h"></i> Result Management</button>
+            
+            <!-- Updated Links with Relative Paths -->
+            <button onclick="window.location.href='/website-management'" class="btn-link"><i class="fas fa-globe"></i> Website Management</button>
+            <button onclick="window.location.href='/result-management'" class="btn-link"><i class="fas fa-poll-h"></i> Result Management</button>
 
-            <button onclick="openAppModule('attendance-management')" class="btn-link" style="background: #0f172a; color: white; border: none; margin: 10px 0;">
+            <button onclick="window.location.href='/attendance-management'" class="btn-link" style="background: #0f172a; color: white; border: none; margin: 10px 0;">
             <i class="fas fa-school"></i> Smart Attendance Dashboard
             </button>
 
