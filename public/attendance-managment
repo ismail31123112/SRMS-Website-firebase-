@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ultimate Attendance Dashboard - SRMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+if (window.history.replaceState) {
+var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+}
+</script>
+
+<style>
+:root { --primary: #005f40; --primary-dark: #003d29; --accent: #f59e0b; --danger: #e11d48; --success: #10b981; --warning: #f59e0b; --info: #3b82f6; --leave: #6366f1; --bg-color: #f4f7f6; --card-bg: #ffffff; --text-main: #1e293b; --text-muted: #64748b; }
+body { font-family: 'Poppins', sans-serif; background: var(--bg-color); margin: 0; padding: 20px; color: var(--text-main); }
+.container { max-width: 1250px; margin: auto; animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; display: none; }
+.container.active { display: block; }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.brand-header { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 30px; border-radius: 20px; margin-bottom: 25px; box-shadow: 0 15px 35px rgba(0, 95, 64, 0.2); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; border-bottom: 5px solid var(--accent); }
+.brand-header::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); z-index: 0; }
+.header-left { display: flex; align-items: center; gap: 20px; z-index: 1; }
+.brand-logo { width: 85px; height: 85px; background: #fff; border-radius: 50%; padding: 6px; border: 3px solid rgba(255,255,255,0.2); object-fit: contain; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.brand-text h1 { margin: 0; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; text-transform: uppercase; }
+.brand-text p { margin: 5px 0 0 0; color: #e2e8f0; font-weight: 500; font-size: 14px; letter-spacing: 0.5px; }
+.live-clock-box { background: rgba(0,0,0,0.3); padding: 12px 20px; border-radius: 12px; z-index: 1; text-align: center; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(5px); }
+.live-clock-time { font-size: 22px; font-weight: 800; color: var(--accent); margin-bottom: 2px; }
+.live-clock-date { font-size: 12px; font-weight: 500; color: #cbd5e1; text-transform: uppercase; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+.summary-card { background: var(--card-bg); padding: 20px; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-left: 5px solid; display: flex; flex-direction: column; transition: transform 0.3s;}
+.summary-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.06); }
+.summary-card.total { border-color: var(--info); }
+.summary-card.in { border-color: var(--success); }
+.summary-card.out { border-color: var(--warning); }
+.summary-card.sms { border-color: var(--primary); }
+.card-title { font-size: 13px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between;}
+.card-value { font-size: 28px; font-weight: 800; color: var(--text-main); }
+
+.chart-container { background: var(--card-bg); padding: 20px; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border: 1px solid #e2e8f0; display: flex; justify-content: center; align-items: center; max-height: 250px; margin-bottom: 25px; }
+
+.panel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; margin-bottom: 25px; }
+.panel { background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.03); position: relative; overflow: hidden; }
+.panel-title { font-weight: 800; font-size: 16px; margin-bottom: 15px; padding-bottom: 12px; border-bottom: 2px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; color: var(--primary-dark); text-transform: uppercase; }
+.flex-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+select, input { padding: 12px 16px; border-radius: 10px; border: 2px solid #e2e8f0; font-size: 13px; outline: none; font-family: inherit; font-weight: 500; transition: all 0.3s; background: #f8fafc; color: var(--text-main); width: 100%; box-sizing: border-box;}
+input:focus, select:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); }
+.input-group { flex: 1; display: flex; flex-direction: column; gap: 5px; }
+.input-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-left: 2px; }
+.search-wrapper { position: relative; flex: 1; }
+.search-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+.search-wrapper input { padding-left: 40px; }
+
+button { padding: 12px 16px; border-radius: 10px; border: none; font-weight: 700; font-size: 13px; font-family: inherit; cursor: pointer; display: flex; align-items: center; gap: 8px; justify-content: center; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; }
+button:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(0,0,0,0.1); }
+button:active { transform: translateY(0); box-shadow: none; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-accent { background: var(--accent); color: white; }
+.btn-green { background: var(--success); color: white; }
+.btn-red { background: var(--danger); color: white; }
+.btn-dark { background: #0f172a; color: white; }
+.btn-warn { background: var(--warning); color: #000; } 
+.btn-leave { background: var(--leave); color: white; } 
+.btn-info { background: var(--info); color: white; } 
+.btn-small { padding: 4px 8px; font-size: 10px; border-radius: 6px; }
+
+#loaderOverlay { display: flex; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 9999; justify-content: center; align-items: center; flex-direction: column; backdrop-filter: blur(8px); }
+.loader-box { background: white; padding: 35px 50px; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.1); text-align: center; font-weight: 800; color: var(--primary-dark); font-size: 16px; border-top: 5px solid var(--primary); }
+.spinner { border: 4px solid #e2e8f0; border-top: 4px solid var(--primary); border-radius: 50%; width: 55px; height: 55px; animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin: 0 auto 15px auto; }
+@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.7); backdrop-filter: blur(5px); align-items: center; justify-content: center; }
+.modal-content { background: #fff; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; position: relative; animation: zoomIn 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto;}
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.close { position: absolute; top: 15px; right: 20px; font-size: 24px; cursor: pointer; color: #94a3b8; transition: 0.3s; z-index: 10;}
+.close:hover { color: var(--danger); transform: rotate(90deg); }
+.flatpickr-calendar { margin: 0 auto 15px auto; box-shadow: none !important; border: 1px solid #e2e8f0; width: 100%; }
+
+.table-container { overflow-x: auto; border-radius: 16px; border: 1px solid #e2e8f0; margin-top: 15px; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { padding: 14px 18px; text-align: left; border-bottom: 1px solid #f1f5f9; font-size: 13px;}
+th { background: #f8fafc; color: var(--text-muted); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; white-space: nowrap; }
+tbody tr { transition: background 0.2s; }
+tbody tr:hover { background-color: #f8fafc; }
+
+.badge-in { background: #dcfce7; color: #166534; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; border: 1px solid #bbf7d0; display: inline-block;}
+.badge-out { background: #fef3c7; color: #92400e; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; border: 1px solid #fde68a; display: inline-block;}
+.badge-absent { background: #fee2e2; color: #991b1b; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; border: 1px solid #fecaca; display: inline-block;}
+.badge-leave { background: #e0e7ff; color: #3730a3; padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; border: 1px solid #c7d2fe; display: inline-block;}
+.badge-manual { font-size: 10px; color: var(--accent); margin-left: 6px; font-weight: 700; background: #fef3c7; padding: 2px 6px; border-radius: 8px; border: 1px solid #fde68a; }
+.badge-late { background: #fca5a5; color: #7f1d1d; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; margin-left: 5px; }
+.badge-early { background: #fcd34d; color: #78350f; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; margin-left: 5px; }
+.badge-exempt { background: #bfdbfe; color: #1e3a8a; padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; margin-left: 5px; }
+
+.sms-sent { color: var(--success); font-weight: 700; }
+.sms-failed { color: var(--danger); font-weight: 700; }
+.sms-na { color: var(--text-muted); font-style: italic; }
+
+@media print {
+@page { size: A4 portrait; margin: 15mm 10mm; }
+body { background: white; padding: 0; color: black; font-size: 11pt; font-family: 'Times New Roman', serif; }
+.no-print, .summary-grid, .chart-container, .live-clock-box, .btn-group, button { display: none !important; }
+.brand-header { background: transparent !important; color: black !important; box-shadow: none; border-bottom: 2px solid #000; border-radius: 0; padding: 0 0 15px 0; margin-bottom: 20px; display: flex !important; justify-content: center !important; align-items: center !important; flex-direction: column;}
+.header-left { display: flex; align-items: center; justify-content: center; gap: 15px; width: 100%; text-align: center; }
+.brand-logo { border: none; box-shadow: none; width: 65px; height: 65px; padding: 0; }
+.brand-text h1 { font-size: 20pt; margin: 0; color: black !important; text-transform: uppercase; font-family: 'Times New Roman', serif; font-weight: bold;}
+.brand-text p { font-size: 12pt; margin: 4px 0 0 0; color: #333 !important; }
+.panel { box-shadow: none; border: none; padding: 0; margin: 0; }
+#printableArea { border-top: none !important; }
+#reportTitle { font-size: 14pt; margin-bottom: 15px; color: black !important; text-align: center; border-bottom: 1px dashed #ccc; padding-bottom: 8px; width: 100%; display: block; font-weight: bold;}
+.table-container { border: none; border-radius: 0; margin-top: 0; overflow: visible; }
+table { width: 100%; border-collapse: collapse; border: 1px solid #000; table-layout: auto; }
+th, td { border: 1px solid #000; padding: 6px 5px; text-align: center; font-size: 10.5pt; word-break: break-word; color: black !important;}
+td:nth-child(2) { text-align: left; font-weight: bold; } 
+th { background-color: #f0f0f0 !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; text-transform: uppercase;}
+.badge-in, .badge-out, .badge-absent, .badge-leave, .badge-manual, .badge-late, .badge-early, .badge-exempt, .sms-sent, .sms-failed, .sms-na { border: none; background: transparent !important; color: black !important; padding: 0; font-weight: bold; font-size: 10pt; display: inline; }
+tr { page-break-inside: avoid; }
+}
+
+@media (max-width: 768px) {
+.brand-header { flex-direction: column; text-align: center; justify-content: center; gap: 15px;}
+.header-left { flex-direction: column; }
+.panel-grid { grid-template-columns: 1fr; }
+.summary-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<div id="loaderOverlay">
+<div class="loader-box">
+<div class="spinner"></div>
+<div id="loaderMsg">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b; font-weight: 500;">Verifying Admin Session</span></div>
+</div>
+</div>
+
+<div class="container" id="appContainer">
+
+<div class="brand-header">
+<div class="header-left">
+<img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="SRMS Logo" class="brand-logo">
+<div class="brand-text">
+<h1>Saidpur Residential Model School</h1>
+<p>Premium Smart Attendance & Web Management System</p>
+</div>
+</div>
+<div class="live-clock-box">
+<div class="live-clock-time" id="clockTime">00:00:00 AM</div>
+<div class="live-clock-date" id="clockDate">Loading...</div>
+</div>
+</div>
+
+<div class="summary-grid no-print" id="analyticsGrid">
+<div class="summary-card total">
+<div class="card-title"><span>Total Records</span> <i class="fas fa-database"></i></div>
+<div class="card-value" id="statTotal">0</div>
+</div>
+<div class="summary-card in">
+<div class="card-title"><span>Total IN / Present</span> <i class="fas fa-sign-in-alt"></i></div>
+<div class="card-value" id="statIn">0</div>
+</div>
+<div class="summary-card out">
+<div class="card-title"><span>Total OUT / Absent</span> <i class="fas fa-sign-out-alt"></i></div>
+<div class="card-value" id="statOut">0</div>
+</div>
+<div class="summary-card sms">
+<div class="card-title"><span>Late / Leave / SMS</span> <i class="fas fa-envelope-open-text"></i></div>
+<div class="card-value" id="statSms">0</div>
+</div>
+</div>
+
+<!-- Interactive Chart Section -->
+<div class="chart-container no-print" id="chartContainer" style="display:none;">
+<canvas id="attendanceChart"></canvas>
+</div>
+
+<div class="panel-grid no-print">
+<div class="panel" style="border-left: 4px solid var(--accent);">
+<div class="panel-title">
+<span><i class="fas fa-edit"></i> Manual Override & Leaves</span>
+<div style="display:flex; gap:8px;">
+<button class="btn-warn btn-small" onclick="openTimeModal()"><i class="fas fa-clock"></i> Timings</button>
+<button class="btn-leave btn-small" onclick="openLeaveModal()"><i class="fas fa-user-shield"></i> Grant Leave</button>
+</div>
+</div>
+<div class="flex-row">
+<div class="input-group" style="flex: 2;">
+<input type="text" id="manualId" placeholder="Student/Teacher ID or Machine ID">
+</div>
+<div class="input-group" style="flex: 1;">
+<select id="manualType">
+<option value="IN">Only IN</option>
+<option value="OUT">Only OUT</option>
+<option value="BOTH">Both (IN & OUT)</option>
+</select>
+</div>
+</div>
+<div class="flex-row" style="margin-top: 10px;">
+<div class="input-group" style="flex: 2;">
+<input type="password" id="manualPwd" placeholder="Admin Password">
+</div>
+<div class="input-group" style="flex: 1;">
+<button class="btn-accent" onclick="submitManual()" style="width: 100%;"><i class="fas fa-check-circle"></i> Submit</button>
+</div>
+</div>
+</div>
+
+<div class="panel" style="border-left: 4px solid var(--primary);">
+<div class="panel-title">
+<span><i class="fas fa-filter"></i> Reports & Data Filters</span>
+<div style="display:flex; gap:8px;">
+<button class="btn-warn" onclick="openHolidayModal()" style="font-size: 11px; padding: 6px 10px;"><i class="fas fa-umbrella-beach"></i> Holidays</button>
+<button class="btn-accent" onclick="syncMachineManually()" style="font-size: 11px; padding: 6px 10px;"><i class="fas fa-sync"></i> Sync</button>
+<button class="btn-red" onclick="resetData()" style="font-size: 11px; padding: 6px 10px;"><i class="fas fa-trash-alt"></i> Reset</button>
+</div>
+</div>
+<div class="flex-row">
+<div class="input-group">
+<span class="input-label">From Date</span>
+<input type="date" id="dateFilterFrom">
+</div>
+<div class="input-group">
+<span class="input-label">To Date</span>
+<input type="date" id="dateFilterTo">
+</div>
+<div class="input-group">
+<span class="input-label">Select Month (For Monthly)</span>
+<input type="month" id="monthFilter">
+</div>
+</div>
+<div class="flex-row" style="margin-top: 10px;">
+<div class="input-group">
+<span class="input-label">Select Category/Class</span>
+<select id="classFilter">
+<option value="All" style="font-weight:bold; color:var(--primary);">All (Teachers + Students)</option>
+<option value="AllStudents" style="font-weight:bold; color:var(--accent);">All Students Only</option>
+<option value="Teacher" style="font-weight:bold;">All Teachers & Staff</option>
+<option disabled>──────────</option>
+<option value="Play">Play Group</option>
+<option value="Nursery">Nursery</option>
+<option value="Class 1">Class 1</option>
+<option value="Class 2">Class 2</option>
+<option value="Class 3">Class 3</option>
+<option value="Class 4">Class 4</option>
+<option value="Class 5">Class 5</option>
+<option value="Class 6">Class 6</option>
+<option value="Class 7">Class 7</option>
+<option value="Class 8">Class 8</option>
+<option value="Class 9">Class 9</option>
+<option value="Class 10">Class 10</option>
+<option value="Class 11">Class 11</option>
+<option value="Class 12">Class 12</option>
+</select>
+</div>
+</div>
+<div class="flex-row" style="margin-top: 15px;">
+<button class="btn-primary" onclick="loadData('Present')" style="flex: 1;"><i class="fas fa-user-check"></i> Present</button>
+<button class="btn-red" onclick="loadData('Absent')" style="flex: 1;"><i class="fas fa-user-times"></i> Absent</button>
+<button class="btn-dark" onclick="loadData('Bunked')" style="flex: 1;"><i class="fas fa-user-ninja"></i> Bunked</button>
+<button class="btn-warn" onclick="loadData('LateEarly')" style="flex: 1;"><i class="fas fa-clock"></i> Late/Early</button>
+<button class="btn-info" onclick="loadData('Monthly')" style="flex: 1;"><i class="fas fa-calendar-check"></i> Monthly</button>
+</div>
+</div>
+</div>
+
+<div class="panel" id="printableArea" style="border-top: 4px solid var(--primary);">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; margin-bottom: 10px; gap: 10px;">
+<h2 id="reportTitle" style="color:var(--primary-dark); margin:0; font-weight: 800; text-transform: uppercase; font-size: 18px;">Attendance Report</h2>
+
+<div class="search-wrapper no-print" style="max-width: 300px; width: 100%; flex: 1;">
+<i class="fas fa-search"></i>
+<input type="text" id="searchInput" onkeyup="filterTableFast()" placeholder="Search Name, ID or Roll...">
+</div>
+
+<div class="no-print" style="display:flex; gap:10px;">
+<button class="btn-green" onclick="exportTableToCSV('SRMS_Attendance_Report.csv')"><i class="fas fa-file-excel"></i> Export CSV</button>
+<button class="btn-dark" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+</div>
+
+</div>
+<div class="table-container">
+<table id="reportTable">
+<thead id="tableHead">
+<tr>
+<th>ID Number</th>
+<th>Full Name</th>
+<th>Class/Role</th>
+<th>Roll</th>
+<th>Date</th>
+<th>Time</th>
+<th>Status / Punctuality</th>
+<th class="no-print">Action / SMS</th>
+</tr>
+</thead>
+<tbody id="tableBody">
+<tr><td colspan="10" style="text-align:center; color:var(--text-muted); padding: 40px; font-weight: 500;"><i class="fas fa-table" style="font-size: 24px; display: block; margin-bottom: 10px; opacity: 0.5;"></i>Select filters, then click View to load data...</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+<!-- === MODALS === -->
+<div id="timeModal" class="modal">
+<div class="modal-content" style="max-width: 400px; text-align: left;">
+<span class="close" onclick="closeModal('timeModal')">&times;</span>
+<h3 style="color:var(--primary); margin-top:0; text-align:center; font-weight:800;"><i class="fas fa-clock"></i> Set Entry & Exit Time</h3>
+<p style="font-size:12px; color:var(--text-muted); text-align:center; margin-bottom:15px;">Configure cut-off timings for Late Entry and Early Exit markings.</p>
+<label style="font-size:12px; font-weight:700;">Maximum Allowed Entry Time (After this = Late)</label>
+<input type="time" id="setEntryTime" style="margin-bottom: 10px;">
+<label style="font-size:12px; font-weight:700;">Minimum Required Exit Time (Before this = Early)</label>
+<input type="time" id="setExitTime" style="margin-bottom: 15px;">
+<label style="font-size:12px; font-weight:700;">Admin Password</label>
+<input type="password" id="timePwd" placeholder="Master Password" style="margin-bottom: 20px;">
+<button class="btn-submit btn-primary" style="width:100%; font-size:14px;" onclick="saveTimings()"><i class="fas fa-save"></i> Save Settings</button>
+</div>
+</div>
+
+<div id="holidayModal" class="modal">
+<div class="modal-content" style="max-width: 450px; text-align: left;">
+<span class="close" onclick="closeModal('holidayModal')">&times;</span>
+<h3 style="color:var(--warning); margin-top:0; text-align:center; font-weight:800;"><i class="fas fa-umbrella-beach"></i> Global Calendar Holidays</h3>
+<p style="font-size:12px; color:var(--text-muted); text-align:center; margin-bottom:15px; font-weight:500;">Click on multiple days in the calendar below to select them all at once for Everyone.</p>
+<input type="text" id="holDates" style="display:none;">
+<div style="margin-top: 15px;">
+<label style="font-size:12px; font-weight:700;">Reason (e.g., Eid, Friday, Strike)</label>
+<input type="text" id="holReason" placeholder="Holiday Reason" style="margin-bottom: 10px;">
+<label style="font-size:12px; font-weight:700;">Admin Password</label>
+<input type="password" id="holPwd" placeholder="Master Password" style="margin-bottom: 20px;">
+<button class="btn-submit btn-warn" style="width:100%; font-size:14px;" onclick="submitHolidays()"><i class="fas fa-save"></i> Save Global Holidays</button>
+</div>
+</div>
+</div>
+
+<div id="leaveModal" class="modal">
+<div class="modal-content" style="max-width: 450px; text-align: left;">
+<span class="close" onclick="closeModal('leaveModal')">&times;</span>
+<h3 style="color:var(--leave); margin-top:0; text-align:center; font-weight:800;"><i class="fas fa-user-shield"></i> Grant Leave of Absence</h3>
+<p style="font-size:12px; color:var(--text-muted); text-align:center; margin-bottom:15px; font-weight:500;">Grant targeted leave to a specific user or an entire class.</p>
+
+<label style="font-size:12px; font-weight:700;">Target Audience</label>
+<select id="leaveTargetType" onchange="toggleLeaveTarget()" style="margin-bottom: 10px;">
+<option value="ID">Specific Student / Teacher</option>
+<option value="Class">Specific Class</option>
+<option value="Teacher">All Teachers & Staff</option>
+</select>
+
+<div id="leaveIdDiv">
+<input type="text" id="leaveTargetId" placeholder="Enter valid User ID" style="margin-bottom: 10px;">
+</div>
+
+<div id="leaveClassDiv" style="display:none;">
+<select id="leaveTargetClass" style="margin-bottom: 10px;">
+<option value="Play">Play Group</option><option value="Nursery">Nursery</option>
+<option value="Class 1">Class 1</option><option value="Class 2">Class 2</option>
+<option value="Class 3">Class 3</option><option value="Class 4">Class 4</option>
+<option value="Class 5">Class 5</option><option value="Class 6">Class 6</option>
+<option value="Class 7">Class 7</option><option value="Class 8">Class 8</option>
+<option value="Class 9">Class 9</option><option value="Class 10">Class 10</option>
+</select>
+</div>
+
+<label style="font-size:12px; font-weight:700;">Select Leave Dates</label>
+<input type="text" id="leaveDates" style="display:none;">
+
+<div style="margin-top: 15px;">
+<label style="font-size:12px; font-weight:700;">Reason (e.g., Sick, Urgent Family Work)</label>
+<input type="text" id="leaveReason" placeholder="Leave Reason" style="margin-bottom: 10px;">
+<label style="font-size:12px; font-weight:700;">Admin Password</label>
+<input type="password" id="leavePwd" placeholder="Master Password" style="margin-bottom: 20px;">
+<button class="btn-submit btn-leave" style="width:100%; font-size:14px;" onclick="submitLeave()"><i class="fas fa-check-circle"></i> Grant Approved Leave</button>
+</div>
+</div>
+</div>
+
+<!-- ================= FIREBASE & BACKEND LOGIC ================= -->
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+
+<script>
+// 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwH9DwN_CXp8WzYhFPzCHRcX5O7lnpbNPFde9gASN70xoUVMEZVGrRc1u4dGjFg-Mh/exec";
+
+// ✅ Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+    authDomain: "srms-website-management.firebaseapp.com",
+    projectId: "srms-website-management"
+};
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+var holidayCalendar;
+var leaveCalendar;
+var attendanceChartInstance = null;
+var isAuthReady = false; 
+
+function updateClock() {
+var now = new Date();
+var hours = now.getHours(); var minutes = now.getMinutes(); var seconds = now.getSeconds();
+var ampm = hours >= 12 ? 'PM' : 'AM';
+hours = hours % 12; hours = hours ? hours : 12; 
+minutes = minutes < 10 ? '0' + minutes : minutes;
+seconds = seconds < 10 ? '0' + seconds : seconds;
+document.getElementById('clockTime').innerText = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+document.getElementById('clockDate').innerText = now.toLocaleDateString('en-US', options);
+}
+setInterval(updateClock, 1000); updateClock();
+
+document.addEventListener("DOMContentLoaded", function() {
+document.getElementById('dateFilterFrom').valueAsDate = new Date();
+document.getElementById('dateFilterTo').valueAsDate = new Date();
+var yyyyMM = new Date().toISOString().substring(0,7);
+document.getElementById('monthFilter').value = yyyyMM;
+
+holidayCalendar = flatpickr("#holDates", { mode: "multiple", dateFormat: "Y-m-d", inline: true });
+leaveCalendar = flatpickr("#leaveDates", { mode: "multiple", dateFormat: "Y-m-d", inline: true });
+});
+
+function showLoader(msg) { document.getElementById('loaderMsg').innerHTML = msg + "<br><span style='font-size:11px; color:#64748b; font-weight: 500;'>Connecting to Server securely</span>"; document.getElementById('loaderOverlay').style.display = 'flex'; }
+function hideLoader() { document.getElementById('loaderOverlay').style.display = 'none'; }
+function closeModal(id) { document.getElementById(id).style.display = "none"; }
+
+function catchError(err) {
+hideLoader(); console.error("Error:", err);
+Swal.fire({ title: "System Error!", html: `<span style='color:red;'>${err.message}</span>`, icon: "error" });
+}
+
+// 🌐 BACKEND API CALLER 
+async function apiCall(actionName, payloadData = {}) {
+    let token = await auth.currentUser.getIdToken(true);
+    let payload = { action: actionName, token: token, ...payloadData };
+    try {
+        let res = await fetch(SCRIPT_URL, {
+            method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+        });
+        let data = await res.json();
+        if(data.status === "error") throw new Error(data.message || data.msg);
+        return data;
+    } catch (error) { throw error; }
+}
+
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+.then(() => {
+    auth.onAuthStateChanged(function(user) {
+        if (user) {
+            isAuthReady = true; hideLoader(); document.getElementById('appContainer').classList.add('active');
+        } else {
+            showLoader("UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
+            setTimeout(() => {
+                var currentDomain = window.location.protocol + "//" + window.location.host;
+                window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
+            }, 1000);
+        }
+    });
+})
+.catch(err => { console.error("Auth Persistence Error:", err); });
+
+function normalizeClass(clsName) {
+if (!clsName) return "";
+return String(clsName).toLowerCase().replace(/class\s*/g, "").trim();
+}
+
+function parseTimeToMinutes(timeStr) {
+if(!timeStr) return 0;
+let cleanTime = timeStr.replace(" (M)", "");
+if (cleanTime.includes("AM") || cleanTime.includes("PM")) {
+let parts = cleanTime.split(' ');
+let hm = parts[0].split(':');
+let hours = parseInt(hm[0], 10);
+if (hours === 12) hours = 0;
+if (parts[1].toUpperCase().includes('PM')) hours += 12;
+return (hours * 60) + parseInt(hm[1], 10);
+} else {
+let hm = cleanTime.split(':');
+return (parseInt(hm[0], 10) * 60) + parseInt(hm[1], 10);
+}
+}
+
+function exportTableToCSV(filename) {
+var csv = [];
+var rows = document.querySelectorAll("table tr");
+for (var i = 0; i < rows.length; i++) {
+var row = [], cols = rows[i].querySelectorAll("td, th");
+for (var j = 0; j < cols.length; j++) {
+if(cols[j].classList.contains('no-print')) continue;
+var data = cols[j].innerText.replace(/(\r\n|\n|\r)/gm, " ").replace(/"/g, '""');
+row.push('"' + data + '"');
+}
+if(row.length > 0) csv.push(row.join(","));
+}
+var csvFile = new Blob([csv.join("\n")], {type: "text/csv"});
+var downloadLink = document.createElement("a");
+downloadLink.download = filename;
+downloadLink.href = window.URL.createObjectURL(csvFile);
+downloadLink.style.display = "none";
+document.body.appendChild(downloadLink);
+downloadLink.click();
+document.body.removeChild(downloadLink);
+}
+
+function filterTableFast() {
+var input = document.getElementById("searchInput");
+var filter = input.value.toUpperCase();
+var table = document.getElementById("reportTable");
+var tr = table.getElementsByTagName("tr");
+for (var i = 1; i < tr.length; i++) { 
+if(tr[i].cells.length === 1) continue;
+tr[i].style.display = "none";
+for (var j = 0; j < tr[i].cells.length; j++) {
+if (tr[i].cells[j] && tr[i].cells[j].innerText.toUpperCase().indexOf(filter) > -1) { tr[i].style.display = ""; break; }
+}
+}
+}
+
+function updateChartData(present, absent, leave, late) {
+document.getElementById('chartContainer').style.display = 'flex';
+var ctx = document.getElementById('attendanceChart').getContext('2d');
+if (attendanceChartInstance) { attendanceChartInstance.destroy(); }
+attendanceChartInstance = new Chart(ctx, {
+type: 'doughnut',
+data: {
+labels: ['Present/IN', 'Absent/OUT', 'On Leave', 'Late/Early'],
+datasets: [{ data: [present, absent, leave, late], backgroundColor: ['#10b981', '#ef4444', '#6366f1', '#f59e0b'], borderWidth: 2, borderColor: '#ffffff' }]
+},
+options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { font: { family: 'Poppins', size: 12 } } } } }
+});
+}
+
+function openTimeModal() { document.getElementById('timePwd').value = ""; document.getElementById('timeModal').style.display = "flex"; }
+async function saveTimings() {
+let entry = document.getElementById('setEntryTime').value;
+let exit = document.getElementById('setExitTime').value;
+let pwd = document.getElementById('timePwd').value;
+if(!entry || !exit || !pwd) return Swal.fire("Required", "All fields and password are required!", "warning");
+showLoader("Saving Time Settings...");
+try {
+let res = await apiCall('saveTimeSettings', { entry: entry, exit: exit, pwd: pwd });
+hideLoader();
+Swal.fire("Success!", res.msg, "success"); closeModal('timeModal'); 
+} catch(e) { catchError(e); }
+}
+
+function exemptUser(docId) {
+Swal.fire({
+title: 'Grant Special Exemption?', text: 'This user will be marked as "Exempt" from Late/Early rules.', input: 'password', inputPlaceholder: 'Enter Admin Password', showCancelButton: true, confirmButtonText: 'Grant Exemption'
+}).then(async (result) => {
+if (result.isConfirmed && result.value) {
+showLoader("Updating Punctuality Status...");
+try {
+let res = await apiCall('grantExemption', { docId: docId, pwd: result.value });
+hideLoader();
+Swal.fire("Success!", res.msg, "success"); loadData('LateEarly'); 
+} catch(e) { catchError(e); }
+}
+});
+}
+
+async function sendBunkerAlert(id, dateStr) {
+    if(!confirm("Send SMS Alert to Guardian about missing OUT punch?")) return;
+    showLoader("Sending Alert SMS...");
+    try {
+        let res = await apiCall('sendBunkerAlert', { id: id, date: dateStr });
+        hideLoader();
+        Swal.fire("Alert Sent!", res.msg, "success");
+    } catch(e) { catchError(e); }
+}
+
+function openHolidayModal() { holidayCalendar.clear(); document.getElementById('holReason').value = ""; document.getElementById('holPwd').value = ""; document.getElementById('holidayModal').style.display = "flex"; }
+async function submitHolidays() {
+let selectedDates = document.getElementById('holDates').value;
+let r = document.getElementById('holReason').value.trim();
+let p = document.getElementById('holPwd').value.trim();
+if(!selectedDates || !r || !p) { Swal.fire("Required", "Please select at least one date, write a reason and enter password!", "warning"); return; }
+let dateArray = selectedDates.split(',').map(d => d.trim());
+showLoader("Saving Global Holidays...");
+try {
+let res = await apiCall('setMultipleHolidays', { dateArray: dateArray, reason: r, pwd: p });
+hideLoader();
+Swal.fire("Success!", res.msg, "success"); closeModal('holidayModal'); 
+} catch(e) { catchError(e); }
+}
+
+function openLeaveModal() { leaveCalendar.clear(); document.getElementById('leaveTargetId').value = ""; document.getElementById('leaveReason').value = ""; document.getElementById('leavePwd').value = ""; document.getElementById('leaveModal').style.display = "flex"; toggleLeaveTarget(); }
+function toggleLeaveTarget() {
+let type = document.getElementById('leaveTargetType').value;
+document.getElementById('leaveIdDiv').style.display = (type === 'ID') ? 'block' : 'none';
+document.getElementById('leaveClassDiv').style.display = (type === 'Class') ? 'block' : 'none';
+}
+async function submitLeave() {
+let tType = document.getElementById('leaveTargetType').value;
+let tValue = (tType === 'ID') ? document.getElementById('leaveTargetId').value.trim() : document.getElementById('leaveTargetClass').value;
+let selectedDates = document.getElementById('leaveDates').value;
+let r = document.getElementById('leaveReason').value.trim();
+let p = document.getElementById('leavePwd').value.trim();
+
+if(tType === 'ID' && !tValue) return Swal.fire("Required", "Please enter User ID!", "warning");
+if(!selectedDates || !r || !p) return Swal.fire("Required", "Please select dates, write a reason and enter password!", "warning");
+
+let dateArray = selectedDates.split(',').map(d => d.trim());
+showLoader("Granting Official Leave...");
+try {
+let res = await apiCall('grantLeaveToTarget', { targetType: tType, targetValue: tValue, dateArray: dateArray, reason: r, pwd: p });
+hideLoader();
+Swal.fire("Success!", res.msg, "success"); closeModal('leaveModal'); 
+} catch(e) { catchError(e); }
+}
+
+async function syncMachineManually() {
+showLoader("Connecting to Cloud API...");
+try {
+let res = await apiCall('syncMachineLogsManual');
+hideLoader();
+if(res.msg.includes("✅")) { Swal.fire("Sync Successful!", res.msg, "success"); loadData('Present'); } 
+else if(res.msg.includes("⚠️")) { Swal.fire("Up to Date", res.msg, "info"); } 
+else { Swal.fire("Sync Failed", res.msg, "error"); }
+} catch(e) { catchError(e); }
+}
+
+async function submitManual() {
+let id = document.getElementById('manualId').value.trim();
+let type = document.getElementById('manualType').value;
+let pwd = document.getElementById('manualPwd').value.trim();
+if(!id || !pwd) return Swal.fire("Required", "Please enter ID and Password!", "warning");
+showLoader("Submitting & Sending SMS...");
+try {
+let res = await apiCall('submitManualAttendance', { id: id, type: type, pwd: pwd });
+hideLoader();
+Swal.fire("Success!", res.msg, "success"); document.getElementById('manualId').value = ""; document.getElementById('manualPwd').value = ""; loadData('Present');
+} catch(e) { catchError(e); }
+}
+
+function resetData() {
+Swal.fire({
+title: '⚠️ Danger Zone', text: "Permanently delete ALL attendance history?", input: 'password', inputPlaceholder: 'Master Password', icon: 'warning', showCancelButton: true, confirmButtonColor: '#e11d48', confirmButtonText: 'Permanently Delete'
+}).then(async (result) => {
+if (result.isConfirmed && result.value) {
+showLoader("Deleting history...");
+try {
+let res = await apiCall('resetAllAttendance', { pwd: result.value });
+hideLoader();
+Swal.fire("Deleted!", res.msg, "success"); document.getElementById('tableBody').innerHTML = ''; updateAnalytics(0,0,0,0); document.getElementById('chartContainer').style.display = 'none';
+} catch(e) { catchError(e); }
+}
+});
+}
+
+function setDailyHeaders() {
+document.getElementById('tableHead').innerHTML = `<tr>
+<th>ID Number</th><th>Full Name</th><th>Class/Role</th><th>Roll</th>
+<th>Date</th><th>Time</th><th>Status / Punctuality</th><th class="no-print">Action / SMS</th>
+</tr>`;
+}
+
+function setMonthlyHeaders() {
+document.getElementById('tableHead').innerHTML = `<tr>
+<th>ID Number</th><th>Full Name</th><th>Class/Role</th><th>Roll</th>
+<th>Total Working Days</th><th>Present</th><th>Absent</th><th>On Leave</th><th>Late / Early</th><th>Total Hours</th>
+</tr>`;
+}
+
+async function loadData(type) {
+if(!isAuthReady) return;
+var fromDate = document.getElementById('dateFilterFrom').value;
+var toDate = document.getElementById('dateFilterTo').value;
+var monthStr = document.getElementById('monthFilter').value;
+var classVal = document.getElementById('classFilter').value;
+var classText = document.getElementById('classFilter').options[document.getElementById('classFilter').selectedIndex].text;
+
+try {
+if (type === 'Monthly') {
+showLoader("Generating Monthly Summary...");
+setMonthlyHeaders();
+document.getElementById('tableBody').innerHTML = '';
+document.getElementById('searchInput').value = ''; 
+document.getElementById('reportTitle').innerText = classText + " - Monthly Report (" + monthStr + ")";
+
+let data = await fetchMonthlySummaryFromFirebase(monthStr, classVal);
+displayMonthly(data);
+return;
+}
+
+setDailyHeaders();
+if (type === 'Present' || type === 'LateEarly') {
+showLoader("Fetching Records from DB...");
+document.getElementById('tableBody').innerHTML = '';
+document.getElementById('searchInput').value = ''; 
+let titleStr = (fromDate === toDate) ? `Attendance History (${fromDate})` : `Attendance History (${fromDate} to ${toDate})`;
+if(type === 'LateEarly') titleStr = `Late & Early Exit Report (${fromDate})`;
+document.getElementById('reportTitle').innerText = classText + " - " + titleStr;
+let pFilter = (type === 'LateEarly') ? "LateEarly" : "All";
+
+let data = await fetchReportDataFromFirebase(fromDate, toDate, classVal, pFilter);
+displayPresent(data);
+
+} else if (type === 'Bunked') {
+showLoader("Calculating Bunked Data...");
+document.getElementById('tableBody').innerHTML = '';
+document.getElementById('searchInput').value = ''; 
+document.getElementById('reportTitle').innerText = classText + " - Bunked/Escaped List (" + fromDate + ")";
+
+let data = await fetchBunkedDataFromFirebase(fromDate, classVal);
+displayBunked(data);
+
+} else {
+showLoader("Calculating Absent Data...");
+document.getElementById('tableBody').innerHTML = '';
+document.getElementById('searchInput').value = ''; 
+document.getElementById('reportTitle').innerText = classText + " - Daily Absent List (" + fromDate + ")";
+
+let data = await fetchAbsentDataFromFirebase(fromDate, classVal);
+displayAbsent(data);
+}
+} catch(e) { catchError(e); }
+}
+
+async function fetchReportDataFromFirebase(fromDate, toDate, classFilter, punctualityFilter) {
+let snap = await db.collection('AttendanceHistory').where('pureDate', '>=', fromDate).where('pureDate', '<=', toDate).get();
+let records = [];
+snap.forEach(doc => {
+let f = doc.data();
+let dbClass = f.class || "";
+let pStatus = f.punctuality || "On Time";
+let type = f.type || "";
+
+let matchClass = false;
+if (classFilter === "All") matchClass = true;
+else if (classFilter === "AllStudents") matchClass = (dbClass !== "Teacher");
+else if (classFilter === "Teacher") matchClass = (dbClass === "Teacher");
+else matchClass = (normalizeClass(dbClass) === normalizeClass(classFilter));
+
+let matchPunctuality = true;
+if (punctualityFilter === "LateEarly") matchPunctuality = (pStatus === "Late" || pStatus === "Early Exit");
+else if (punctualityFilter === "LeaveOnly") matchPunctuality = (type === "LEAVE");
+
+if (type === "LEAVE" && punctualityFilter !== "LeaveOnly" && punctualityFilter !== "All") matchPunctuality = false;
+
+if (matchClass && matchPunctuality) {
+records.push({
+docId: doc.id, id: f.studentID || "", name: f.name || "", cls: f.class || "",
+roll: f.roll || "", time: f.time || "", type: type, date: f.pureDate || "",
+punctuality: pStatus, smsStatus: f.smsStatus || "N/A"
+});
+}
+});
+records.sort((a,b) => {
+if (a.date !== b.date) return a.date > b.date ? -1 : 1;
+return a.time > b.time ? 1 : -1;
+});
+return records;
+}
+
+// 🚀 NEW: BUNKED DATA FETCHING
+async function fetchBunkedDataFromFirebase(dateStr, classFilter) {
+    let snap = await db.collection('AttendanceHistory').where('pureDate', '==', dateStr).get();
+    let records = {};
+    snap.forEach(doc => {
+        let f = doc.data();
+        let sid = String(f.studentID).trim();
+        if(!records[sid]) records[sid] = { in: false, out: false, data: f };
+        if(f.type === "IN") records[sid].in = true;
+        if(f.type === "OUT") records[sid].out = true;
+    });
+
+    let bunkedList = [];
+    for (let sid in records) {
+        if (records[sid].in && !records[sid].out) {
+            let f = records[sid].data;
+            let dbClass = f.class || "";
+            let matchClass = false;
+            if (classFilter === "All") matchClass = true;
+            else if (classFilter === "AllStudents") matchClass = (dbClass !== "Teacher");
+            else if (classFilter === "Teacher") matchClass = (dbClass === "Teacher");
+            else matchClass = (normalizeClass(dbClass) === normalizeClass(classFilter));
+            
+            if (matchClass) {
+                bunkedList.push({
+                    id: f.studentID || "", name: f.name || "", cls: f.class || "",
+                    roll: f.roll || "", date: f.pureDate || "", inTime: f.time || ""
+                });
+            }
+        }
+    }
+    return bunkedList;
+}
+
+async function fetchAbsentDataFromFirebase(dateStr, classFilter) {
+let holDoc = await db.collection('Holidays').doc(dateStr).get();
+if (holDoc.exists && holDoc.data().reason) return { isHoliday: true, reason: holDoc.data().reason };
+
+let allMembers = [];
+let fetchTeachers = (classFilter === "All" || classFilter === "Teacher");
+let fetchStudents = (classFilter === "All" || classFilter === "AllStudents" || (classFilter !== "Teacher" && classFilter !== "All"));
+
+if(fetchTeachers) {
+let tSnap = await db.collection('Teachers').get();
+tSnap.forEach(t => {
+let d = t.data();
+allMembers.push({ id: d.phone || t.id, name: d.name || "Unknown", roll: d.designation || "Staff", cls: "Teacher" });
+});
+}
+if(fetchStudents) {
+let sSnap = await db.collection('Students').get();
+sSnap.forEach(s => {
+let d = s.data(); let dbClass = d.class || "";
+if (classFilter === "All" || classFilter === "AllStudents" || normalizeClass(dbClass) === normalizeClass(classFilter)) {
+allMembers.push({ id: d.studentID || s.id, name: d.name || "Unknown", roll: d.roll || "0", cls: dbClass || "Student" });
+}
+});
+}
+if (allMembers.length === 0) return { error: "NO_STUDENTS" };
+
+let aSnap = await db.collection('AttendanceHistory').where('pureDate', '==', dateStr).get();
+let presentIds = []; let leaveIds = {};
+aSnap.forEach(doc => {
+let p = doc.data(); let cleanId = String(p.studentID).trim();
+if (p.type === "LEAVE") { leaveIds[cleanId] = p.time; presentIds.push(cleanId); }
+else { presentIds.push(cleanId); }
+});
+
+let absentList = [];
+allMembers.forEach(m => {
+if (presentIds.indexOf(m.id) === -1) absentList.push(m);
+else if (leaveIds[m.id]) absentList.push({...m, isLeave: true, reason: leaveIds[m.id]});
+});
+return absentList;
+}
+
+async function fetchMonthlySummaryFromFirebase(monthStr, classFilter) {
+let allMembers = [];
+let fetchTeachers = (classFilter === "All" || classFilter === "Teacher");
+let fetchStudents = (classFilter === "All" || classFilter === "AllStudents" || (classFilter !== "Teacher" && classFilter !== "All"));
+
+if(fetchTeachers) {
+let tSnap = await db.collection('Teachers').get();
+tSnap.forEach(t => { let d = t.data(); allMembers.push({ id: d.phone || t.id, name: d.name || "Unknown", roll: d.designation || "Staff", cls: "Teacher" }); });
+}
+if(fetchStudents) {
+let sSnap = await db.collection('Students').get();
+sSnap.forEach(s => {
+let d = s.data(); let dbClass = d.class || "";
+if (classFilter === "All" || classFilter === "AllStudents" || normalizeClass(dbClass) === normalizeClass(classFilter)) {
+allMembers.push({ id: d.studentID || s.id, name: d.name || "Unknown", roll: d.roll || "0", cls: dbClass || "Student" });
+}
+});
+}
+
+let monthStart = monthStr + "-01";
+let monthEnd = monthStr + "-31";
+let aSnap = await db.collection('AttendanceHistory').where('pureDate', '>=', monthStart).where('pureDate', '<=', monthEnd).get();
+
+let workingDaysSet = new Set();
+let userStats = {};
+allMembers.forEach(m => { userStats[m.id] = { ...m, presentDays: new Set(), leaveDays: new Set(), totalLate: 0, totalEarly: 0, dailyPunches: {} }; });
+
+aSnap.forEach(doc => {
+let f = doc.data(); let sid = f.studentID || ""; let pDate = f.pureDate; let type = f.type || "";
+if(pDate && pDate.startsWith(monthStr)) {
+workingDaysSet.add(pDate);
+if (userStats[sid]) {
+let time = f.time || "";
+if (!userStats[sid].dailyPunches[pDate]) userStats[sid].dailyPunches[pDate] = {};
+userStats[sid].dailyPunches[pDate][type] = time;
+
+if(type === "IN") userStats[sid].presentDays.add(pDate);
+else if(type === "LEAVE") userStats[sid].leaveDays.add(pDate);
+
+let pStatus = f.punctuality || "On Time";
+if (pStatus === "Late") userStats[sid].totalLate++;
+if (pStatus === "Early Exit") userStats[sid].totalEarly++;
+}
+}
+});
+
+let totalWorkingDays = workingDaysSet.size;
+let finalReport = [];
+
+Object.keys(userStats).forEach(id => {
+let u = userStats[id];
+u.totalPresent = u.presentDays.size;
+u.totalLeave = u.leaveDays.size;
+u.totalAbsent = totalWorkingDays - (u.totalPresent + u.totalLeave);
+if (u.totalAbsent < 0) u.totalAbsent = 0;
+u.totalWorkingDays = totalWorkingDays;
+
+let totalMins = 0;
+Object.values(u.dailyPunches).forEach(day => {
+if(day["IN"] && day["OUT"]) {
+let inM = parseTimeToMinutes(day["IN"]);
+let outM = parseTimeToMinutes(day["OUT"]);
+if(outM > inM) totalMins += (outM - inM);
+}
+});
+let hrs = Math.floor(totalMins / 60);
+let mins = totalMins % 60;
+u.totalHoursStr = `${hrs}h ${mins}m`;
+finalReport.push(u);
+});
+
+finalReport.sort((a,b) => a.totalPresent > b.totalPresent ? -1 : 1);
+return finalReport;
+}
+
+function displayMonthly(data) {
+hideLoader();
+var tbody = document.getElementById('tableBody');
+if(data.length === 0) { 
+tbody.innerHTML = '<tr><td colspan="10" style="text-align:center; padding: 40px; color: var(--text-muted); font-weight: 500;">No data available for this month.</td></tr>'; 
+updateAnalytics(0, 0, 0, 0); 
+document.getElementById('chartContainer').style.display = 'none';
+return; 
+}
+var tW = 0, tP = 0, tA = 0, tL = 0, tLeave = 0;
+data.forEach(r => {
+tW += r.totalWorkingDays; tP += r.totalPresent; tA += r.totalAbsent; tL += (r.totalLate + r.totalEarly); tLeave += r.totalLeave;
+var lateEarlyBadge = (r.totalLate > 0 || r.totalEarly > 0) ? `<span style="color:var(--danger); font-weight:bold;">${r.totalLate} L, ${r.totalEarly} E</span>` : `0`;
+var leaveBadge = r.totalLeave > 0 ? `<span style="color:var(--leave); font-weight:bold;">${r.totalLeave} Days</span>` : `0`;
+
+var tr = `<tr>
+<td style="font-weight:800; color: var(--primary-dark);">${r.id}</td>
+<td style="font-weight:600;">${r.name}</td>
+<td>${r.cls}</td>
+<td style="font-weight:600; color: var(--accent);">${r.roll}</td>
+<td style="font-weight:bold; color:var(--info);">${r.totalWorkingDays} Days</td>
+<td style="font-weight:bold; color:var(--success);">${r.totalPresent} Days</td>
+<td style="font-weight:bold; color:var(--danger);">${r.totalAbsent} Days</td>
+<td>${leaveBadge}</td>
+<td>${lateEarlyBadge}</td>
+<td style="font-weight:bold; color:var(--primary); background:#e8f5e9;">${r.totalHoursStr}</td>
+</tr>`;
+tbody.innerHTML += tr;
+});
+document.getElementById('statTotal').innerText = data.length;
+document.getElementById('statTotal').parentElement.querySelector('span').innerText = "Total Students/Staff";
+document.getElementById('statIn').innerText = tP;
+document.getElementById('statIn').parentElement.querySelector('span').innerText = "Total Monthly Present";
+document.getElementById('statOut').innerText = tA;
+document.getElementById('statOut').parentElement.querySelector('span').innerText = "Total Monthly Absent";
+document.getElementById('statSms').innerText = tL;
+document.getElementById('statSms').parentElement.querySelector('span').innerText = "Total Late/Early Exits";
+
+updateChartData(tP, tA, tLeave, tL);
+}
+
+function displayPresent(data) {
+hideLoader();
+var tbody = document.getElementById('tableBody');
+var totalIn = 0; var totalOut = 0; var totalSms = 0; var totalLate = 0; var totalLeave = 0;
+
+if(data.length === 0) { 
+tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: var(--text-muted); font-weight: 500;">No records found for this selection.</td></tr>'; 
+updateAnalytics(0, 0, 0, 0); 
+document.getElementById('chartContainer').style.display = 'none';
+return; 
+}
+
+data.forEach(r => {
+var badgeClass = r.type === 'IN' ? 'badge-in' : (r.type === 'OUT' ? 'badge-out' : 'badge-leave');
+var isManual = r.time.includes("(M)") ? '<span class="badge-manual">Manual</span>' : '';
+var cleanTime = r.time.replace(" (M)", "");
+
+var punctualityHtml = "";
+var actionHtml = "";
+if(r.type === 'LEAVE') {
+punctualityHtml = `<span style="font-size:10px; color:var(--leave); margin-left:5px; font-weight:bold;">${r.punctuality}</span>`; 
+actionHtml = `-`;
+totalLeave++;
+}
+else if(r.punctuality === "Late") { punctualityHtml = `<span class="badge-late">LATE</span>`; actionHtml = `<button class="btn-warn btn-small" onclick="exemptUser('${r.docId}')">Exempt</button>`; totalLate++;}
+else if(r.punctuality === "Early Exit") { punctualityHtml = `<span class="badge-early">EARLY EXIT</span>`; actionHtml = `<button class="btn-warn btn-small" onclick="exemptUser('${r.docId}')">Exempt</button>`; totalLate++;}
+else if(r.punctuality === "Exempt") { punctualityHtml = `<span class="badge-exempt">EXEMPT (Permission)</span>`; actionHtml = `-`; }
+else { punctualityHtml = `<span style="font-size:10px; color:var(--success); margin-left:5px; font-weight:bold;">ON TIME</span>`; actionHtml = `-`; }
+
+var smsHtml = `<span class="sms-na">N/A</span>`;
+if(r.smsStatus === "Sent") { smsHtml = `<span class="sms-sent"><i class="fas fa-check"></i> Sent</span>`; totalSms++; }
+else if(r.smsStatus === "Failed" || r.smsStatus === "Error") { smsHtml = `<span class="sms-failed"><i class="fas fa-times"></i> Failed</span>`; }
+
+if(r.type === 'IN') totalIn++; if(r.type === 'OUT') totalOut++;
+
+var tr = `<tr>
+<td style="font-weight:800; color: var(--primary-dark);">${r.id}</td>
+<td style="font-weight:600;">${r.name}</td>
+<td>${r.cls}</td>
+<td style="font-weight:600; color: var(--accent);">${r.roll}</td>
+<td>${r.date}</td>
+<td style="font-weight:600;">${cleanTime}</td>
+<td><span class="${badgeClass}">${r.type}</span> ${isManual} ${punctualityHtml}</td>
+<td class="no-print" style="display:flex; gap:5px; align-items:center;">${actionHtml} <span style="margin-left:5px;">${smsHtml}</span></td>
+</tr>`;
+tbody.innerHTML += tr;
+});
+updateAnalytics(data.length, totalIn, totalOut, totalSms);
+updateChartData(totalIn, totalOut, totalLeave, totalLate);
+}
+
+// 🚀 NEW: DISPLAY BUNKED DATA
+function displayBunked(data) {
+hideLoader();
+var tbody = document.getElementById('tableBody');
+
+if(data.length === 0) { 
+tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: var(--success); font-weight:700;"><i class="fas fa-glass-cheers" style="font-size:20px; display:block; margin-bottom:10px;"></i> No one bunked today! All IN records have corresponding OUT records.</td></tr>'; 
+updateAnalytics(0, 0, 0, 0); 
+document.getElementById('chartContainer').style.display = 'none';
+return; 
+}
+
+data.forEach(r => {
+var tr = `<tr>
+<td style="font-weight:800; color: var(--primary-dark);">${r.id}</td>
+<td style="font-weight:600;">${r.name}</td>
+<td>${r.cls}</td>
+<td style="font-weight:600; color: var(--accent);">${r.roll}</td>
+<td style="color:var(--text-muted);">${r.date}</td>
+<td style="color:var(--text-muted);">IN: ${r.inTime}</td>
+<td><span class="badge-absent" style="background:#000; color:#fff; border-color:#000;">NO OUT PUNCH (BUNKED)</span></td>
+<td class="no-print"><button class="btn-warn btn-small" onclick="sendBunkerAlert('${r.id}', '${r.date}')"><i class="fas fa-sms"></i> Alert Guardian</button></td>
+</tr>`;
+tbody.innerHTML += tr;
+});
+
+document.getElementById('statTotal').innerText = data.length;
+document.getElementById('statTotal').parentElement.querySelector('span').innerText = "Total Escaped/Bunked";
+document.getElementById('statIn').innerText = data.length;
+document.getElementById('statIn').parentElement.querySelector('span').innerText = "Entered (IN)";
+document.getElementById('statOut').innerText = "0";
+document.getElementById('statOut').parentElement.querySelector('span').innerText = "Exited (OUT)";
+document.getElementById('statSms').innerText = "Action";
+document.getElementById('statSms').parentElement.querySelector('span').innerText = "Requires SMS Alert";
+
+updateChartData(data.length, 0, 0, data.length);
+}
+
+function displayAbsent(data) {
+hideLoader();
+var tbody = document.getElementById('tableBody');
+
+if(data.isHoliday) {
+tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; padding: 40px; color: var(--warning); font-weight:700;"><i class="fas fa-umbrella-beach" style="font-size:30px; display:block; margin-bottom:10px;"></i> School Closed!<br><span style="font-size:14px; color:#555;">Reason: ${data.reason}</span></td></tr>`;
+updateAnalytics(0, 0, 0, 0); 
+document.getElementById('chartContainer').style.display = 'none';
+return;
+}
+
+if(data.error === "NO_STUDENTS") {
+tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: var(--danger); font-weight:700;"><i class="fas fa-exclamation-triangle" style="font-size:20px; display:block; margin-bottom:10px;"></i> No Users found in database!</td></tr>';
+updateAnalytics(0, 0, 0, 0); 
+document.getElementById('chartContainer').style.display = 'none';
+return;
+}
+
+if(data.length === 0) { 
+tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 40px; color: var(--success); font-weight:700;"><i class="fas fa-glass-cheers" style="font-size:20px; display:block; margin-bottom:10px;"></i> Everyone is present!</td></tr>'; 
+updateAnalytics(0, 0, 0, 0); 
+document.getElementById('chartContainer').style.display = 'none';
+return; 
+}
+
+var totalLeaves = 0;
+data.forEach(r => {
+var isLeave = r.isLeave || false;
+var statusBadge = isLeave ? `<span class="badge-leave">ON LEAVE</span>` : `<span class="badge-absent">ABSENT</span>`;
+var timeText = isLeave ? `<span style="color:var(--leave); font-size:11px; font-weight:bold;">${r.reason}</span>` : `Not Punched`;
+if (isLeave) totalLeaves++;
+
+var tr = `<tr>
+<td style="font-weight:800; color: var(--primary-dark);">${r.id}</td>
+<td style="font-weight:600;">${r.name}</td>
+<td>${r.cls}</td>
+<td style="font-weight:600; color: var(--accent);">${r.roll}</td>
+<td style="color:var(--text-muted);">${document.getElementById('dateFilterFrom').value}</td>
+<td style="color:var(--text-muted);">${timeText}</td>
+<td>${statusBadge}</td>
+<td class="no-print"><span class="sms-na">-</span></td>
+</tr>`;
+tbody.innerHTML += tr;
+});
+
+document.getElementById('statTotal').innerText = data.length;
+document.getElementById('statTotal').parentElement.querySelector('span').innerText = "Total Away";
+document.getElementById('statIn').innerText = data.length - totalLeaves;
+document.getElementById('statIn').parentElement.querySelector('span').innerText = "Total Absent";
+document.getElementById('statOut').innerText = totalLeaves;
+document.getElementById('statOut').parentElement.querySelector('span').innerText = "Total On Leave";
+document.getElementById('statSms').innerText = "-";
+document.getElementById('statSms').parentElement.querySelector('span').innerText = "SMS Info";
+
+updateChartData(0, data.length - totalLeaves, totalLeaves, 0);
+}
+
+function updateAnalytics(total, inCount, outCount, smsCount) {
+document.getElementById('statTotal').parentElement.querySelector('span').innerText = "Total Records";
+document.getElementById('statTotal').innerText = total;
+document.getElementById('statIn').innerText = inCount;
+document.getElementById('statIn').parentElement.querySelector('span').innerText = "Total IN (Entry)";
+document.getElementById('statOut').innerText = outCount;
+document.getElementById('statOut').parentElement.querySelector('span').innerText = "Total OUT (Exit)";
+document.getElementById('statSms').innerText = smsCount;
+document.getElementById('statSms').parentElement.querySelector('span').innerText = "Late / Early / SMS";
+}
+</script>
+</body>
+</html>
