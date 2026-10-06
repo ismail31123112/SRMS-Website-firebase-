@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>SRMS Accounts Portal V4</title>
+<title>SRMS Accounts Portal V5</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -82,9 +82,9 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .calc-btn:hover { background: #555; transform: scale(1.05); }
 
 @media print {
-body { background: white; padding: 0; margin: 0; }
-.navbar, .bottom-nav, .card, .container { display: none !important; }
-#printArea { display: block !important; position: static; width: 100%; }
+  body { background: white; padding: 0; margin: 0; }
+  .navbar, .bottom-nav, .card, .container { display: none !important; }
+  #printArea { display: block !important; position: static; width: 100%; }
 }
 </style>
 </head>
@@ -264,13 +264,13 @@ body { background: white; padding: 0; margin: 0; }
     <div id="fineSetupZone" style="display:none; margin-top:15px;">
     <div style="background:#fff7ed; border:2px dashed #fb923c; padding:25px; border-radius:16px;">
     <h3 style="color:#ea580c; margin-top:0; font-weight:900;"><i class="fas fa-gavel"></i> Late Fee & Absence Fine Settings</h3>
-    <p style="font-size:13px; color:#475569; margin-bottom:20px;">Set automated rules for late payments and student absences. These apply globally to all matching students.</p>
+    <p style="font-size:13px; color:#475569; margin-bottom:20px;">Set automated rules for late payments and student absences. These apply globally to all matching students. (Saving will overwrite previous settings).</p>
     
     <label style="font-weight:700; color:#9a3412;">Late Fee (বেতন বকেয়া জরিমানা) Amount (TK):</label>
     <input type="number" id="fLateAmount" placeholder="e.g. 100">
     
     <label style="font-weight:700; color:#9a3412;">Last Payment Date (বেতন দেওয়ার শেষ তারিখ):</label>
-    <input type="date" id="fLateDay" style="border-color:#fb923c; font-weight:bold; color:#9a3412;">
+    <input type="number" id="fLateDay" placeholder="e.g. 10" style="border-color:#fb923c; font-weight:bold; color:#9a3412;">
 
     <label style="font-weight:700; color:#9a3412; margin-top:15px; display:block;">Absence Fine (অনুপস্থিতির জরিমানা) Amount Per Day (TK):</label>
     <input type="number" id="fAbsenceAmount" placeholder="e.g. 50">
@@ -354,14 +354,21 @@ body { background: white; padding: 0; margin: 0; }
        </div>
     </div>
 
-    <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:center;">
+    <div style="margin-top:30px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
        <h4 style="margin:0; color:#334155;">Cashbook Ledger</h4>
-       <button onclick="loadCashbook()" class="btn" style="width:auto; padding:10px 15px; background:#475569; color:white;"><i class="fas fa-sync"></i> Refresh</button>
+       <div style="display:flex; gap:8px; flex-wrap:wrap;">
+           <select id="cbMonth" onchange="filterCashbook()" style="margin:0; padding:8px; width:auto; border-radius:8px;">
+               <option value="All">All Months</option><option value="01">January</option><option value="02">February</option><option value="03">March</option><option value="04">April</option><option value="05">May</option><option value="06">June</option><option value="07">July</option><option value="08">August</option><option value="09">September</option><option value="10">October</option><option value="11">November</option><option value="12">December</option>
+           </select>
+           <select id="cbYear" onchange="filterCashbook()" style="margin:0; padding:8px; width:auto; border-radius:8px;"><option value="All">All Years</option></select>
+           <button onclick="printCashbook()" class="btn" style="width:auto; padding:8px 15px; background:#1e293b; color:white;"><i class="fas fa-print"></i></button>
+           <button onclick="resetCashbookPrompt()" class="btn" style="width:auto; padding:8px 15px; background:#ef4444; color:white;" title="Clear Cashbook"><i class="fas fa-trash-alt"></i></button>
+       </div>
     </div>
 
     <div style="max-height:400px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:16px; margin-top:15px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);">
     <table id="cbTable">
-    <thead><tr><th>Date</th><th>Type</th><th>Category/Title</th><th>Description</th><th>Amount</th></tr></thead>
+    <thead><tr><th>Date</th><th>Type</th><th>Category/Title</th><th>Description</th><th>Amount</th><th>Action</th></tr></thead>
     <tbody></tbody>
     </table>
     </div>
@@ -453,9 +460,6 @@ body { background: white; padding: 0; margin: 0; }
     </div>
     </div>
 
-    <!-- Hidden Print Area -->
-    <div id="printArea" style="display:none;"></div>
-
     <div class="bottom-nav">
     <button class="nav-item active" onclick="switchTab('collectTab', this)"><i class="fas fa-hand-holding-dollar"></i>Collect</button>
     <button class="nav-item" onclick="switchTab('cashbookTab', this)"><i class="fas fa-book"></i>Cashbook</button>
@@ -471,7 +475,6 @@ body { background: white; padding: 0; margin: 0; }
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-// 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec"; 
 
 const firebaseConfig = {
@@ -486,6 +489,7 @@ const auth = firebase.auth();
 let lastR = null;
 let historyData = [];
 let reportsData = []; 
+let cashbookData = [];
 let currentStudentDocId = null; 
 let currentStudentData = null; 
 var isAuthReady = false; 
@@ -496,6 +500,7 @@ const currentY = new Date().getFullYear();
 for(let i=2020; i<=2099; i++) years.push(i);
 document.getElementById('bYear').innerHTML = years.map(y => `<option ${y === currentY ? 'selected' : ''}>${y}</option>`).join('');
 document.getElementById('hYear').innerHTML += years.map(y => `<option>${y}</option>`).join('');
+document.getElementById('cbYear').innerHTML += years.map(y => `<option>${y}</option>`).join('');
 
 function showLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
 function showLoading() { document.getElementById('loader').style.display = "flex"; }
@@ -512,30 +517,24 @@ async function apiCall(actionName, payloadData = {}) {
         });
         
         let text = await res.text();
-        
         if (text.includes("<html") || text.includes("<body")) {
             throw new Error("Deployment Access Error! Apps Script Web App is blocking access. Ensure 'Who has access' is set to 'Anyone'.");
         }
         
         let data;
-        try { 
-            data = JSON.parse(text); 
-        } catch(e) { 
-            throw new Error("Invalid Response from server: " + text.substring(0, 80)); 
-        }
+        try { data = JSON.parse(text); } 
+        catch(e) { throw new Error("Invalid Response from server: " + text.substring(0, 80)); }
         
         if (data.error) throw new Error(data.error);
         if (data.status === "error") throw new Error(data.message);
         
         return data;
-        
     } catch (error) {
         console.error("API Call Failed:", error); 
         throw error;
     }
 }
 
-// 🛡 Security Gate
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
     auth.onAuthStateChanged(function(user) {
         if (user) {
@@ -591,16 +590,12 @@ async function saveFineSettings() {
     let lAmt = document.getElementById('fLateAmount').value;
     let lDate = document.getElementById('fLateDay').value; 
     let aAmt = document.getElementById('fAbsenceAmount').value;
-    
     showLoading(); showLoaderText("SAVING SETTINGS...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
     try {
         await apiCall('saveFineSettings', { lateAmt: lAmt, lateDate: lDate, absAmt: aAmt });
         hideLoading();
         alert("Fine settings saved successfully! Automated systems will now use these rules."); 
-    } catch(e) { 
-        hideLoading(); 
-        alert("Fine Setup Error: " + e.message); 
-    }
+    } catch(e) { hideLoading(); alert("Fine Setup Error: " + e.message); }
 }
 
 async function saveAdvanceFees() {
@@ -608,7 +603,6 @@ async function saveAdvanceFees() {
     let sFee = document.getElementById('advSchoolFee').value || 0;
     let hFee = document.getElementById('advHostelFee').value || 0;
     let aFee = document.getElementById('advAdmFee').value || 0;
-    
     showLoading(); showLoaderText("SAVING ADMISSION FEES...");
     try {
         await apiCall('saveAdvanceFees', { cls: cls, schoolFee: sFee, hostelFee: hFee, admissionFee: aFee });
@@ -617,10 +611,7 @@ async function saveAdvanceFees() {
         document.getElementById('advSchoolFee').value = '';
         document.getElementById('advHostelFee').value = '';
         document.getElementById('advAdmFee').value = '';
-    } catch(e) { 
-        hideLoading(); 
-        alert("Admission Setup Error: " + e.message); 
-    }
+    } catch(e) { hideLoading(); alert("Admission Setup Error: " + e.message); }
 }
 
 async function searchStu() {
@@ -628,7 +619,6 @@ async function searchStu() {
     let id = document.getElementById('sid').value.trim();
     if(!id) return;
     showLoading(); showLoaderText("SEARCHING...<br><span style='font-size:11px; color:#64748b;'>Querying Database securely</span>");
-    
     try {
         let snap = await db.collection('Students').where('studentID', '==', id).get();
         hideLoading();
@@ -652,13 +642,8 @@ async function searchStu() {
             customFees: activeCustomFees,
             originalCustomFees: customFees 
         };
-        
         renderPaymentZone(d);
-        
-    } catch(err) { 
-        hideLoading(); 
-        alert("Search Error: " + err.message); 
-    }
+    } catch(err) { hideLoading(); alert("Search Error: " + err.message); }
 }
 
 function renderPaymentZone(d) {
@@ -723,7 +708,6 @@ function renderPaymentZone(d) {
             </div>`;
         });
     }
-
     fg.innerHTML = html;
     document.getElementById('sumDueAmt').innerText = totalDueAmount.toFixed(2);
     calcTotalPay(); 
@@ -749,7 +733,6 @@ async function payNowDirect() {
     });
     
     let sendSms = document.getElementById('sendSmsChk') ? document.getElementById('sendSmsChk').checked : false;
-
     showLoading(); showLoaderText("PROCESSING PAYMENT...<br><span style='font-size:11px; color:#64748b;'>Securely updating Database</span>");
     
     try {
@@ -820,10 +803,7 @@ async function payNowDirect() {
         if(totalPaidNow > 0 && sendSms) {
             apiCall('sendPaymentNotification', { txData: txData, netDue: netDue, phone: f.phone, email: f.email });
         }
-    } catch(err) { 
-        hideLoading(); 
-        alert("Payment Error: " + err.message); 
-    }
+    } catch(err) { hideLoading(); alert("Payment Error: " + err.message); }
 }
 
 async function addCashbookEntryBackend() {
@@ -831,20 +811,15 @@ async function addCashbookEntryBackend() {
     let amt = parseFloat(document.getElementById('cbAmount').value);
     let title = document.getElementById('cbTitle').value.trim();
     let desc = document.getElementById('cbDesc').value.trim();
-    
     if(!amt || amt <= 0 || !title) return alert("Amount and Category Title are required!");
-    
-    showLoading(); showLoaderText("SAVING ENTRY...<br><span style='font-size:11px; color:#64748b;'>Securely updating Server</span>");
+    showLoading(); showLoaderText("SAVING ENTRY...");
     try {
         await apiCall('addCashbookEntry', { type: type, amount: amt, title: title, desc: desc });
         hideLoading();
         document.getElementById('cbAmount').value = ""; document.getElementById('cbTitle').value = ""; document.getElementById('cbDesc').value = "";
         alert("Entry successfully added to Cashbook!");
         loadCashbook(); 
-    } catch (e) { 
-        hideLoading(); 
-        alert("Cashbook Error: " + e.message); 
-    }
+    } catch (e) { hideLoading(); alert("Cashbook Error: " + e.message); }
 }
 
 async function loadCashbook() {
@@ -852,25 +827,128 @@ async function loadCashbook() {
     try {
         let snap = await db.collection('Cashbook').get();
         let list = [];
-        snap.forEach(doc => { list.push(doc.data()); });
-        list.sort((a,b) => b.timestamp - a.timestamp); 
-        
-        let h = ""; let tInc = 0; let tExp = 0;
-        list.forEach(data => {
-            let amount = parseFloat(data.amount) || 0;
-            if(data.type === 'Income') { tInc += amount; } else { tExp += amount; }
-            let badge = data.type === 'Income' ? `<span class="badge-income">Income</span>` : `<span class="badge-expense">Expense</span>`;
-            let color = data.type === 'Income' ? '#16a34a' : '#dc2626';
-            h += `<tr><td>${data.date}</td><td>${badge}</td><td><b>${data.title}</b></td><td>${data.description}</td><td><b style="color:${color};">৳ ${amount}</b></td></tr>`;
+        snap.forEach(doc => { 
+            let d = doc.data();
+            d.docId = doc.id;
+            list.push(d); 
         });
-        document.querySelector("#cbTable tbody").innerHTML = h || `<tr><td colspan="5" style="text-align:center;">No entries found.</td></tr>`;
-        document.getElementById('cbTotalIncome').innerText = tInc;
-        document.getElementById('cbTotalExpense').innerText = tExp;
+        list.sort((a,b) => b.timestamp - a.timestamp); 
+        cashbookData = list;
+        renderCashbook();
         hideLoading();
-    } catch (e) { 
-        hideLoading(); 
-        alert("Cashbook Load Error: " + e.message); 
+    } catch (e) { hideLoading(); alert("Cashbook Load Error: " + e.message); }
+}
+
+function renderCashbook() {
+    let mFilter = document.getElementById('cbMonth').value;
+    let yFilter = document.getElementById('cbYear').value;
+
+    let h = ""; let tInc = 0; let tExp = 0;
+    
+    let filtered = cashbookData.filter(d => {
+        let parts = d.date.split('/'); // DD/MM/YYYY
+        let month = parts[1];
+        let year = parts[2];
+        let matchM = mFilter === "All" || month === mFilter;
+        let matchY = yFilter === "All" || year === yFilter;
+        return matchM && matchY;
+    });
+
+    filtered.forEach(data => {
+        let amount = parseFloat(data.amount) || 0;
+        if(data.type === 'Income') { tInc += amount; } else { tExp += amount; }
+        let badge = data.type === 'Income' ? `<span class="badge-income">Income</span>` : `<span class="badge-expense">Expense</span>`;
+        let color = data.type === 'Income' ? '#16a34a' : '#dc2626';
+        h += `<tr>
+        <td>${data.date}</td>
+        <td>${badge}</td>
+        <td><b>${data.title}</b></td>
+        <td>${data.description}</td>
+        <td><b style="color:${color};">৳ ${amount}</b></td>
+        <td><button onclick="delCashbookEntry('${data.docId}')" style="background:#fef2f2; color:#ef4444; border:none; padding:5px 10px; border-radius:6px; cursor:pointer;"><i class="fas fa-trash"></i></button></td>
+        </tr>`;
+    });
+    document.querySelector("#cbTable tbody").innerHTML = h || `<tr><td colspan="6" style="text-align:center;">No entries found.</td></tr>`;
+    document.getElementById('cbTotalIncome').innerText = tInc;
+    document.getElementById('cbTotalExpense').innerText = tExp;
+}
+
+function filterCashbook() { renderCashbook(); }
+
+async function delCashbookEntry(id) {
+    if(confirm("Are you sure you want to delete this cashbook entry?")) {
+        showLoading(); showLoaderText("DELETING ENTRY...");
+        try {
+            await apiCall('deleteCashbookEntry', { docId: id });
+            hideLoading();
+            alert("Entry deleted successfully!");
+            loadCashbook();
+        } catch(e) { hideLoading(); alert("Delete Error: " + e.message); }
     }
+}
+
+async function resetCashbookPrompt() {
+    let pwd = prompt("WARNING: This will CLEAR all cashbook data. Enter Admin Password to confirm:");
+    if(pwd) {
+        showLoading(); showLoaderText("CLEARING CASHBOOK...");
+        try {
+            await apiCall('resetCashbook', { pwd: pwd });
+            hideLoading();
+            alert("Cashbook factory reset completed.");
+            loadCashbook();
+        } catch(e) { hideLoading(); alert("Reset Error: " + e.message); }
+    }
+}
+
+function printCashbook() {
+    let t = document.getElementById('cbTable').outerHTML; 
+    let tInc = document.getElementById('cbTotalIncome').innerText;
+    let tExp = document.getElementById('cbTotalExpense').innerText;
+    let m = document.getElementById('cbMonth').options[document.getElementById('cbMonth').selectedIndex].text;
+    let y = document.getElementById('cbYear').value;
+
+    let subtitleText = `Period: ${m} ${y === 'All' ? 'All Years' : y}`;
+
+    let w = window.open('','','width=1200,height=800'); 
+    w.document.write(`<html><head><title>Cashbook Ledger</title><style>
+    @page { size: A4 portrait; margin: 15mm; }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 13px; margin: 0; padding: 0; color: #000; background: #fff; line-height: 1.4; height: auto; }
+    .print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
+    .print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px;}
+    .print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
+    .print-header .title { font-size: 16px; font-weight: bold; margin-top: 12px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 6px 20px; border: 1px solid #000; border-radius: 20px; -webkit-print-color-adjust: exact; color-adjust: exact; }
+    .print-header .filters { font-size: 13px; margin-top: 12px; color: #000; font-weight: bold; border-top: 1px dashed #ccc; padding-top: 8px; display: inline-block; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; page-break-inside: auto; }
+    th, td { border: 1px solid #000 !important; padding: 8px 6px; text-align: left; vertical-align: middle; }
+    th { background-color: #e2e8f0 !important; color: #000; text-transform: uppercase; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact; }
+    tr { page-break-inside: avoid; page-break-after: auto;}
+    thead { display: table-header-group; }
+    td:last-child, th:last-child { display: none; } /* Hide action column */
+    .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; border-top: 2px solid #000; padding-top: 15px; page-break-inside: avoid;}
+    .signatures { margin-top: 60px; display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: #000; page-break-inside: avoid; padding: 0 30px; }
+    .sig-line { border-top: 1px dashed #000; width: 220px; text-align: center; padding-top: 8px; }
+    </style></head><body>
+
+    <div class="print-header">
+    <img src="${LOGO_URL}">
+    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+    <div class="title">Cashbook / Income & Expense Ledger</div><br>
+    <div class="filters">${subtitleText}</div>
+    </div>
+
+    ${t}
+    <div class="totals">
+    <div style="color: #166534;">Total Income: ৳ ${tInc}</div>
+    <div style="color: #991b1b; margin-top:5px;">Total Expense: ৳ ${tExp}</div>
+    <div style="margin-top:10px; border-top:1px dashed #000; padding-top:5px; font-size: 18px;">Net Balance: ৳ ${parseFloat(tInc) - parseFloat(tExp)}</div>
+    </div>
+
+    <div class="signatures">
+    <div class="sig-line">Prepared By</div>
+    <div class="sig-line">Principal / Authorized Signature</div>
+    </div>
+    </body></html>`); 
+    w.document.close(); setTimeout(()=>w.print(), 1000); 
 }
 
 function checkCustomOption(selectElement) {
@@ -910,7 +988,7 @@ async function runBulkBackend() {
         if(!amt || amt < 0) { alert("Please enter a valid amount!"); return; }
     }
 
-    showLoading(); showLoaderText("UPDATING STUDENTS...<br><span style='font-size:11px; color:#64748b;'>Executing Batch Commit</span>");
+    showLoading(); showLoaderText("UPDATING STUDENTS...<br><span style='font-size:11px; color:#64748b;'>Executing Batch Update</span>");
     
     try {
         await apiCall('processBulkUpdateBatch', {
@@ -920,10 +998,7 @@ async function runBulkBackend() {
         alert(actionType === "Edit" ? "Fees Setup Successfully Updated!" : "Fees Setup Completed Successfully!"); 
         document.getElementById('bulkControls').style.display = "none";
         document.getElementById('setupPwd').value = "";
-    } catch(err) { 
-        hideLoading(); 
-        alert("Bulk Update Error: " + err.message); 
-    }
+    } catch(err) { hideLoading(); alert("Bulk Update Error: " + err.message); }
 }
 
 async function executeFactoryResetBackend() {
@@ -939,10 +1014,7 @@ async function executeFactoryResetBackend() {
             document.getElementById('resetPwd').value = "";
             document.getElementById('feeAction').value = "Add";
             toggleActionUI();
-        } catch(err) { 
-            hideLoading(); 
-            alert("Factory Reset Error: " + err.message); 
-        }
+        } catch(err) { hideLoading(); alert("Factory Reset Error: " + err.message); }
     }
 }
 
@@ -986,10 +1058,7 @@ async function loadBulk() {
         document.getElementById('bulkList').innerHTML = h + "</tbody></table>"; 
         document.getElementById('bulkControls').style.display = "block"; 
         document.getElementById('pwdZoneSetup').style.display = document.getElementById('feeAction').value === "Edit" ? "block" : "none";
-    } catch(err) { 
-        hideLoading(); 
-        alert("Load List Error: " + err.message); 
-    }
+    } catch(err) { hideLoading(); alert("Load List Error: " + err.message); }
 }
 
 function toggleAll(s) { document.querySelectorAll('.s-chk').forEach(c => c.checked = s.checked); }
@@ -1100,10 +1169,7 @@ async function loadRep() {
         hideLoading();
         reportsData = list; 
         renderReports(reportsData); 
-    } catch(err) { 
-        hideLoading(); 
-        alert("Report Error: " + err.message); 
-    }
+    } catch(err) { hideLoading(); alert("Report Error: " + err.message); }
 }
 
 function renderReports(list) {
@@ -1156,7 +1222,7 @@ function printRep() {
     let w = window.open('','','width=1200,height=800'); 
     w.document.write(`<html><head><title>Financial Report</title><style>
     @page { size: A4 landscape; margin: 15mm; }
-    body { font-family: 'Times New Roman', Times, serif; font-size: 12px; margin: 0; padding: 0; color: #000; background: #fff; line-height: 1.4; }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 12px; margin: 0; padding: 0; color: #000; background: #fff; line-height: 1.4; height: auto; overflow: visible; }
     .print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
     .print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px; }
     .print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
@@ -1210,10 +1276,7 @@ async function loadHistory() {
         hideLoading();
         historyData = list;
         renderHistory(list);
-    } catch(err) { 
-        hideLoading(); 
-        alert("Ledger Error: " + err.message); 
-    }
+    } catch(err) { hideLoading(); alert("Ledger Error: " + err.message); }
 }
 
 function renderHistory(data) {
@@ -1280,7 +1343,7 @@ function printHistory() {
     let w = window.open('','','width=1200,height=800'); 
     w.document.write(`<html><head><title>Payment Ledger</title><style>
     @page { size: A4 landscape; margin: 15mm; }
-    body { font-family: 'Times New Roman', Times, serif; font-size: 12px; margin: 0; padding: 0; color: #000; background: #fff; line-height: 1.4; }
+    body { font-family: 'Times New Roman', Times, serif; font-size: 12px; margin: 0; padding: 0; color: #000; background: #fff; line-height: 1.4; height: auto; overflow: visible;}
     .print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
     .print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px;}
     .print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
