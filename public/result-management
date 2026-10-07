@@ -213,13 +213,12 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 <!-- ================= FIREBASE & APP LOGIC ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
 
-// ✅ Firebase Configuration
+// ✅ Firebase Configuration (শুধু Firestore ডেটা লোডের জন্য)
 const firebaseConfig = { 
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", 
     authDomain: "srms-website-management.firebaseapp.com", 
@@ -227,12 +226,13 @@ const firebaseConfig = {
 };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
-const auth = firebase.auth();
 
+// 💡 ব্যাকএন্ড থেকে আসা টোকেন রিসিভ করা হচ্ছে
+var SERVER_TOKEN = "<?= serverToken ?>"; 
 var appData = [];
 var cachedHeaders = [];
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg"; 
-var isAuthReady = false;
+var isAuthReady = true; // এখন আর ব্লক করবে না
 
 const swalPro = Swal.mixin({ customClass: { confirmButton: 'btn-open', cancelButton: 'btn-danger' }, buttonsStyling: false });
 
@@ -241,32 +241,23 @@ function showLoader(show, text="PROCESSING...") {
     else { document.getElementById('loader').style.display = 'none'; }
 }
 
-// 🛡️ API Caller
+// 🛡️ API Caller (টোকেন সহ রিকোয়েস্ট পাঠাবে)
 async function apiCall(actionName, payloadData = {}) {
-    let token = await auth.currentUser.getIdToken(true);
-    let payload = { action: actionName, token: token, ...payloadData };
+    let payload = { action: actionName, token: SERVER_TOKEN, ...payloadData };
     try {
         let res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
         let text = await res.text();
-        if (text.includes("<html") || text.includes("<body")) throw new Error("Deployment Access Error!");
+        if (text.includes("<html") || text.includes("<body")) throw new Error("Deployment Access Error! Ensure SCRIPT_URL is correct.");
         let data = JSON.parse(text);
         if(data.status === "error") throw new Error(data.message);
         return data;
     } catch (error) { throw error; }
 }
 
-// 🛡️ Auth Observer (Blocks Hackers)
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-    auth.onAuthStateChanged(function(user) {
-        if (user) { isAuthReady = true; showLoader(false); document.getElementById('appContainer').style.display = 'block'; } 
-        else { 
-            showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>"); 
-            setTimeout(() => { window.location.replace(window.location.protocol + "//" + window.location.host + "/login-panel/teacher-login-portal"); }, 1000); 
-        }
-    });
-}).catch(err => { console.error("Auth Persistence Error:", err); });
-
 window.onload = function() {
+    showLoader(false); 
+    document.getElementById('appContainer').style.display = 'block';
+    
     var yrSelect = document.getElementById("yearSelector");
     var currentYear = new Date().getFullYear();
     for(var i = 2024; i <= 2050; i++) {
@@ -501,6 +492,40 @@ async function openDataEntryForm(rowIndex) {
 }
 
 // ==========================================
+// 💡 UNIVERSAL CALCULATE ALL RESULTS
+// ==========================================
+async function calculateAllResults() {
+    if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
+    
+    var cls = document.getElementById("classSelector").value;
+    var yr = document.getElementById("yearSelector").value;
+    var testW = document.getElementById('testWeight').value;
+    var mainW = document.getElementById('mainWeight').value;
+    var passPercentage = document.getElementById('genPass').value;
+
+    swalPro.fire({
+        title: 'Calculate All Results?',
+        text: `This will calculate GPA, Grade and Rank for ALL students in ${cls}.`,
+        icon: 'warning', showCancelButton: true, cancelButtonText: '<i class="fas fa-times"></i> Cancel', confirmButtonText: 'Yes, Calculate All', confirmButtonColor: '#2563eb'
+    }).then(async (result) => {
+        if(result.isConfirmed) {
+            showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms to all students securely</span>");
+            try {
+                let res = await apiCall('calculateAllClassResults', {
+                    className: cls, selectedYear: yr, 
+                    testWeightStr: testW, mainWeightStr: mainW, passPercentage: passPercentage
+                });
+                showLoader(false);
+                if(res.status === "success") {
+                    swalPro.fire('Success', res.msg, 'success');
+                    loadData(); 
+                } else { swalPro.fire('Error', res.message, 'error'); }
+            } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
+        }
+    });
+}
+
+// ==========================================
 // EXAM AND SUBJECT SETUP (GLOBAL)
 // ==========================================
 async function addGlobalExamPopup() {
@@ -623,40 +648,6 @@ function setupSheetHeader() {
                 let res = await apiCall('setupStandardHeaders', { className: cls });
                 showLoader(false); 
                 if(res.status === "success") { swalPro.fire('Success', res.msg, 'success'); loadData(); }
-            } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
-        }
-    });
-}
-
-// ==========================================
-// 💡 UNIVERSAL CALCULATE ALL RESULTS
-// ==========================================
-async function calculateAllResults() {
-    if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
-    
-    var cls = document.getElementById("classSelector").value;
-    var yr = document.getElementById("yearSelector").value;
-    var testW = document.getElementById('testWeight').value;
-    var mainW = document.getElementById('mainWeight').value;
-    var passPercentage = document.getElementById('genPass').value;
-
-    swalPro.fire({
-        title: 'Calculate All Results?',
-        text: `This will calculate GPA, Grade and Rank for ALL students in ${cls}.`,
-        icon: 'warning', showCancelButton: true, cancelButtonText: '<i class="fas fa-times"></i> Cancel', confirmButtonText: 'Yes, Calculate All', confirmButtonColor: '#2563eb'
-    }).then(async (result) => {
-        if(result.isConfirmed) {
-            showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms to all students securely</span>");
-            try {
-                let res = await apiCall('calculateAllClassResults', {
-                    className: cls, selectedYear: yr, 
-                    testWeightStr: testW, mainWeightStr: mainW, passPercentage: passPercentage
-                });
-                showLoader(false);
-                if(res.status === "success") {
-                    swalPro.fire('Success', res.msg, 'success');
-                    loadData(); 
-                } else { swalPro.fire('Error', res.message, 'error'); }
             } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
         }
     });
