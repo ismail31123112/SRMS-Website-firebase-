@@ -16,11 +16,9 @@ window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 </script>
 
 <style>
-/* === Global Styles & Theme (SRMS Green & Gold) === */
+/* === Global Styles & Theme === */
 :root { --main: #005f40; --main-dark: #003d29; --gold: #f59e0b; --bg: #f4f6f9; }
 body { font-family: 'Poppins', sans-serif; background-color: var(--bg); padding: 20px; margin: 0; color: #333; }
-
-/* === Animations & Loaders === */
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
@@ -28,7 +26,6 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg); padding:
 .spinner { width: 60px; height: 60px; border: 5px solid #e2e8f0; border-top: 5px solid var(--main); border-radius: 50%; animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 15px; }
 .loader-text { font-weight: 800; color: var(--main); font-size: 16px; letter-spacing: 1px; text-align: center; }
 
-/* === App Header === */
 #appContainer { display: none; }
 .app-header { background: #ffffff; padding: 20px 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 95, 64, 0.08); margin-bottom: 20px; border-top: 6px solid var(--main); animation: fadeInUp 0.5s ease-out forwards; }
 .header-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
@@ -76,6 +73,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 body { padding: 10px; }
 .control-group, #feature-panel { justify-content: center; }
 button { flex: 1 1 45%; font-size: 12px; padding: 8px 10px; }
+.mobile-swal { width: 95% !important; padding: 10px; }
 #student-list-container { grid-template-columns: 1fr; }
 }
 
@@ -101,20 +99,24 @@ body { background: white; margin: 0; padding: 0; -webkit-print-color-adjust: exa
 .student-info { width: 100%; margin-bottom: 8px; font-size: 11px; font-weight: 600; border: 1px solid #ccc; border-radius: 6px; padding: 4px; background: #f8fafc !important; border-collapse: collapse; }
 .student-info td { padding: 4px 8px; }
 
+.legend-box { width: 100%; border: 1px dashed #005f40; padding: 5px; font-size: 9px; font-weight: bold; color: #005f40; text-align: center; margin-bottom: 8px; border-radius: 4px; background: #f0fdf4 !important; }
+
 .marks-wrapper { display: flex; justify-content: space-between; gap: 10px; width: 100%; flex-grow: 1; align-items: flex-start; overflow: hidden; }
 .marks-table { width: 100%; border-collapse: collapse; font-size: 10px; } 
 .marks-table th, .marks-table td { border: 1px solid #333; padding: 3px 2px; text-align: center; word-wrap: break-word; }
-.marks-table th { background-color: #e2e8f0 !important; font-weight: 700; color: #005f40; font-size: 9px; }
+.marks-table th { background-color: #e2e8f0 !important; font-weight: 700; color: #005f40; font-size: 10px; }
 .marks-table td.sub-name { text-align: left; padding-left: 6px; font-weight: 700; }
 .marks-table td.exam-name { font-weight: 600; color: #1e293b; background: #f8fafc !important; font-size: 9px; }
 
 .summary-box { border: 2px solid #005f40; padding: 6px; width: 90%; margin: 5px auto; text-align: center; border-radius: 6px; background: #f0fdf4 !important; }
-.remark-text { font-size: 12px; font-weight: 700; color: #dc2626; font-style: italic; margin: 4px 0 0 0; }
+.remark-text { font-size: 12px; font-weight: 700; color: #dc2626; margin: 4px 0 0 0; }
 .footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 15px; }
 .signature { border-top: 1.5px solid #333; width: 150px; text-align: center; padding-top: 4px; font-weight: 700; font-size: 11px; color: #333; }
 
+/* --- TABULATION SPECIFIC CSS --- */
 .tabulation-print { width: 100%; font-family: 'Poppins', sans-serif; }
-.tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: fixed; word-wrap: break-word; }
+.tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: auto; word-wrap: break-word; }
+.tab-table th.vert-header { background: #e2e8f0 !important; padding: 10px 4px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; writing-mode: vertical-rl; transform: rotate(180deg); height: 100px; white-space: nowrap;}
 .tab-table th { background: #e2e8f0 !important; padding: 6px 3px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; }
 .tab-table td { padding: 6px 3px; border: 1px solid #1e293b; overflow: hidden; vertical-align: middle; }
 .tab-table tr { page-break-inside: avoid; }
@@ -181,21 +183,17 @@ body::before { content: "⚠️ PRINT ERROR: Please change the layout to 'Landsc
 </div>
 
 <div class="weight-controls" style="border-color:#10b981;">
-<strong style="font-size:12px; color:#047857;">Pass Marks Rule:</strong>
-<label style="font-size:12px;">Gen <input type="number" id="genPass" value="33"></label>
-<label style="font-size:12px; color:#991b1b;">CQ <input type="number" id="cqPass" value="23"></label>
-<label style="font-size:12px; color:#991b1b;">MCQ <input type="number" id="mcqPass" value="10"></label>
-<label style="font-size:12px; color:#991b1b;">Prac <input type="number" id="pracPass" value="8"></label>
+<strong style="font-size:12px; color:#047857;">Pass Mark Percentage:</strong>
+<label style="font-size:12px;"><input type="number" id="genPass" value="33">%</label>
 </div>
 
-<button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> +Exam/Sub</button>
-<button class="btn-danger" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="deleteSubjectPopup()"><i class="fa-solid fa-book-dead"></i> -Exam/Sub</button>
+<button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> +Add Exam</button>
+<button class="btn-danger" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="deleteSubjectPopup()"><i class="fa-solid fa-book-dead"></i> -Remove Exam</button>
 
-<!-- 🔥 Universal Calculate Button -->
 <button class="btn-calc" onclick="calculateAllResults()"><i class="fa-solid fa-gears"></i> Calculate All Results</button>
 
 <button class="btn-print" onclick="printTabulation()"><i class="fa-solid fa-table"></i> Tabulation</button>
-<button class="btn-report" onclick="generateMarkSheets()"><i class="fa-solid fa-file-invoice"></i> Marksheets</button>
+<button class="btn-report" onclick="openPrintMarksheetPopup()"><i class="fa-solid fa-file-invoice"></i> Marksheets</button>
 
 <div style="display:flex; align-items:center; gap:10px; background:#f0fdf4; padding:5px 15px; border-radius:12px; border:2px solid #10b981;">
 <input type="checkbox" id="smsPublishChk" checked style="width:20px; height:20px; accent-color:#047857;">
@@ -210,12 +208,20 @@ body::before { content: "⚠️ PRINT ERROR: Please change the layout to 'Landsc
 <div id="print-area"></div>
 </div>
 
+<!-- ================= FIREBASE & FRONTEND LOGIC ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
+// 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
-const firebaseConfig = { apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", authDomain: "srms-website-management.firebaseapp.com", projectId: "srms-website-management" };
+
+// ✅ Firebase Configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+    authDomain: "srms-website-management.firebaseapp.com",
+    projectId: "srms-website-management"
+};
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const auth = firebase.auth();
 
@@ -381,24 +387,26 @@ async function openDataEntryForm(rowIndex) {
         while(c < firstEmpty && c < cachedHeaders.length) {
             if (isOptHeader(cachedHeaders[c])) {
                 var optName = rowData[c] || ''; var tM = rowData[c+1] || ''; var mM = rowData[c+2] || '';
+                var isBoard = cachedHeaders[c+2].includes("[Board Format");
                 html += '<div style="background:#fffbeb; padding:15px; border-radius:8px; margin-bottom:12px; border:2px dashed #f59e0b;">';
                 html += '<label style="font-weight:bold; color:#d97706; font-size:14px; display:block;"><i class="fa-solid fa-star"></i> Optional / Group Subject</label>';
                 html += '<input id="edit-'+c+'" class="swal2-input" style="margin:10px 0; height:40px; width:100%; font-size:14px; border:1px solid #fcd34d; font-weight:bold; color:#92400e;" placeholder="Enter Subject Name" value="'+optName+'">';
                 html += '<div style="display:flex; gap:10px;">';
                 html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Test Exam Marks</label><input id="edit-'+(c+1)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+tM+'"></div>';
-                if(isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+2)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
+                if(isBoard || isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+2)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
                 else { html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+2)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; }
                 html += '</div></div>';
                 c += 3;
             } else {
                 var cleanSub = extractSubAndExam(getSafeHeader(cachedHeaders[c]), 'test').sub;
                 var tM = rowData[c] || ''; var mM = rowData[c+1] || '';
+                var isBoard = cachedHeaders[c+1].includes("[Board Format");
                 html += '<div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid #e2e8f0;">';
                 html += '<label style="font-weight:bold; color:#333; font-size:13px; display:block;"><i class="fa-solid fa-book"></i> '+cleanSub+'</label>';
                 html += '<div style="display:flex; gap:10px; margin-top:5px;">';
                 html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Test Exam Marks</label><input id="edit-'+c+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+tM+'"></div>';
-                if(isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+1)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
-                else { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+1)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; }
+                if(isBoard || isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+1)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
+                else { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+1)+'" type="text" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; }
                 html += '</div></div>';
                 c += 2;
             }
@@ -448,13 +456,7 @@ async function calculateAllResults() {
     var term = document.getElementById("examTermSelector").value;
     var testW = document.getElementById('testWeight').value;
     var mainW = document.getElementById('mainWeight').value;
-
-    var passRules = {
-        general: document.getElementById('genPass').value,
-        cq: document.getElementById('cqPass').value,
-        mcq: document.getElementById('mcqPass').value,
-        prac: document.getElementById('pracPass').value
-    };
+    var passPercentage = document.getElementById('genPass').value;
 
     swalPro.fire({
         title: 'Calculate All Results?',
@@ -466,7 +468,7 @@ async function calculateAllResults() {
             try {
                 let res = await apiCall('calculateAllClassResults', {
                     className: cls, selectedYear: yr, examTerm: term, 
-                    testWeightStr: testW, mainWeightStr: mainW, passMarksRules: passRules
+                    testWeightStr: testW, mainWeightStr: mainW, passPercentage: passPercentage
                 });
                 showLoader(false);
                 if(res.status === "success") {
@@ -490,7 +492,9 @@ function viewSingleResult(rowIndex) {
     <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} | <b>Roll:</b> ${row[2]}</p>`;
 
     if(firstEmpty !== -1 && row[firstEmpty+2]) {
-        html += `<p><b>GPA:</b> ${row[firstEmpty+2]} | <b>Grade:</b> ${row[firstEmpty+3]} | <b>Pos:</b> ${row[firstEmpty+4]}</p>
+        let failReason = row[firstEmpty+5];
+        let failHtml = (failReason && failReason !== "None") ? `<p style="color:#dc2626; font-weight:bold; font-size:12px;">Failed In: ${failReason}</p>` : ``;
+        html += `<p><b>GPA:</b> ${row[firstEmpty+2]} | <b>Grade:</b> <span style="color:${row[firstEmpty+3]==='F'?'#dc2626':'#16a34a'}; font-weight:bold;">${row[firstEmpty+3]}</span> | <b>Pos:</b> ${row[firstEmpty+4]}</p>${failHtml}
         <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
         <tr style="background:#e2e8f0;"><th style="border:1px solid #ccc; padding:5px;">Subject</th><th style="border:1px solid #ccc; padding:5px;">Test</th><th style="border:1px solid #ccc; padding:5px;">Main</th><th style="border:1px solid #ccc; padding:5px;">Grade</th></tr>`;
 
@@ -505,7 +509,7 @@ function viewSingleResult(rowIndex) {
                         var totalMain = 0;
                         if(hasMain) { if(mMRaw.includes("+")) totalMain = mMRaw.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); else totalMain = parseFloat(mMRaw) || 0; }
                         var tFullMatch = (cachedHeaders[c+1]||"").match(/\((\d+)\)/); var tFull = tFullMatch ? parseInt(tFullMatch[1]) : 50;
-                        var mFullMatch = (cachedHeaders[c+2]||"").match(/\((\d+)\)/); var mFull = mFullMatch ? parseInt(mFullMatch[1]) : 100;
+                        var mFullMatch = (cachedHeaders[c+2]||"").match(/\((\d+)\)/); var mFull = mFullMatch ? mFullMatch[0].replace(/[()]/g, '').split('+').reduce((a,b)=>a+(parseInt(b)||0), 0) : 100;
                         var finalMark = 0; tM = hasTest ? tM : 0;
                         if (hasTest && hasMain) finalMark = Math.round(((tM / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
                         else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
@@ -522,7 +526,7 @@ function viewSingleResult(rowIndex) {
                         var totalMain = 0;
                         if(hasMain) { if(mMRaw.includes("+")) totalMain = mMRaw.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); else totalMain = parseFloat(mMRaw) || 0; }
                         var tFullMatch = (cachedHeaders[c]||"").match(/\((\d+)\)/); var tFull = tFullMatch ? parseInt(tFullMatch[1]) : 50;
-                        var mFullMatch = (cachedHeaders[c+1]||"").match(/\((\d+)\)/); var mFull = mFullMatch ? parseInt(mFullMatch[1]) : 100;
+                        var mFullMatch = (cachedHeaders[c+1]||"").match(/\((\d+)\)/); var mFull = mFullMatch ? mFullMatch[0].replace(/[()]/g, '').split('+').reduce((a,b)=>a+(parseInt(b)||0), 0) : 100;
                         var finalMark = 0; tM = hasTest ? tM : 0;
                         if (hasTest && hasMain) finalMark = Math.round(((tM / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
                         else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
@@ -560,7 +564,7 @@ async function addNewSubjectPopup() {
         </div>
         <div style="width:48%;">
         <label style="font-size:11px; font-weight:bold;">Main Full Marks:</label>
-        <input id="mM" type="number" class="swal2-input" value="100" style="margin-top:0; height:40px;">
+        <input id="mM" type="text" class="swal2-input" placeholder="e.g. 50+25+25 or 100" value="100" style="margin-top:0; height:40px;">
         </div>
         </div>
         <div style="margin-top: 15px; text-align: left; padding: 0 10px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 6px;">
@@ -627,10 +631,47 @@ function setupSheetHeader() {
 }
 
 // ==========================================
-// MARKSHEET GENERATOR (FRONTEND ONLY - VERY FAST)
+// MARKSHEET GENERATOR (FRONTEND ONLY)
 // ==========================================
-function generateMarkSheets() {
+async function openPrintMarksheetPopup() {
     if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
+    var firstEmpty = cachedHeaders.indexOf("");
+    if(firstEmpty === -1) { swalPro.fire('Format Error', 'Please click the Format DB button.', 'error'); return; }
+
+    var examOptions = {};
+    var i = 3;
+    while (i < firstEmpty && i < cachedHeaders.length) {
+        if (isOptHeader(cachedHeaders[i])) {
+            var mInfo = extractSubAndExam(getSafeHeader(cachedHeaders[i + 2]), 'main');
+            if(mInfo.exam !== "Exam") examOptions[mInfo.exam] = mInfo.exam;
+            i += 3;
+        } else {
+            var mInfo = extractSubAndExam(getSafeHeader(cachedHeaders[i + 1]), 'main');
+            if(mInfo.exam !== "Exam") examOptions[mInfo.exam] = mInfo.exam;
+            i += 2;
+        }
+    }
+
+    if(Object.keys(examOptions).length === 0) {
+        generateMarkSheets("All"); // Fallback if no specific exams named
+        return;
+    }
+
+    examOptions["All"] = "Print All Combined Results";
+
+    const { value: selectedExam } = await swalPro.fire({ 
+        title: 'Select Exam to Print', 
+        input: 'select', 
+        inputOptions: examOptions, 
+        inputPlaceholder: 'Select an Exam...', 
+        showCancelButton: true, 
+        confirmButtonText: '<i class="fa-solid fa-print"></i> Generate Marksheet' 
+    });
+
+    if (selectedExam) { generateMarkSheets(selectedExam); }
+}
+
+function generateMarkSheets(examFilter) {
     var data = appData;
     var headers = cachedHeaders;
     var rawClassName = document.getElementById("classSelector").value;
@@ -638,9 +679,9 @@ function generateMarkSheets() {
     var term = document.getElementById("examTermSelector").value;
     var testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
     var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+    var passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
 
     var firstEmpty = headers.indexOf("");
-    if(firstEmpty === -1) { swalPro.fire('Format Error', 'Please click the Format DB button.', 'error'); return; }
 
     var groupName = "N/A";
     var baseClassName = rawClassName;
@@ -651,14 +692,29 @@ function generateMarkSheets() {
     var printHtml = "";
     var theadHtml = `
     <tr>
-    <th width="22%">Subject / Exam</th>
-    <th width="15%">Test Type</th>
-    <th width="12%">Marks</th>
-    <th width="15%">Main Type</th>
-    <th width="12%">Marks</th>
+    <th width="22%">Subject</th>
+    <th width="15%">Test Mark(s)</th>
+    <th width="27%">Main Exam (CQ+MCQ+Prac)</th>
+    <th width="12%">Total</th>
     <th width="12%">Grade</th>
     <th width="12%">GP</th>
     </tr>`;
+
+    // Legend Collection
+    var legendSet = new Set();
+    var i = 3;
+    while (i < firstEmpty && i < headers.length) {
+        if (isOptHeader(headers[i])) {
+            let tInfo = extractSubAndExam(getSafeHeader(headers[i + 1]), 'test');
+            if(tInfo.exam !== "Exam") legendSet.add(`Test: ${tInfo.exam}`);
+            i += 3;
+        } else {
+            let tInfo = extractSubAndExam(getSafeHeader(headers[i]), 'test');
+            if(tInfo.exam !== "Exam") legendSet.add(`Test: ${tInfo.exam}`);
+            i += 2;
+        }
+    }
+    var legendHtml = legendSet.size > 0 ? `<div class="legend-box"><b>Marks Reference:</b> [ ${Array.from(legendSet).join(" | ")} ]</div>` : "";
 
     try {
         let printCount = 0;
@@ -672,108 +728,152 @@ function generateMarkSheets() {
 
             var id = row[0]; var name = row[1]; var roll = row[2];
             var totalAvg = row[firstEmpty+1]; var gpa = row[firstEmpty+2]; var pos = row[firstEmpty+4];
+            var failReason = row[firstEmpty+5];
+            
             if(!gpa || gpa === "") { gpa = "0.00"; grade = "F"; totalAvg = "0.00"; pos = "N/A"; }
 
             var teacherRemark = "";
-            if(grade === "A+") teacherRemark = "Outstanding!";
+            if(grade === "F") teacherRemark = `Failed in: ${failReason && failReason !== "None" ? failReason : "Subjects"}. Needs special care.`;
+            else if(grade === "A+") teacherRemark = "Outstanding! Keep it up.";
             else if(grade === "A") teacherRemark = "Very Good!";
             else if(grade === "A-") teacherRemark = "Good performance.";
             else if(grade === "B") teacherRemark = "Satisfactory.";
             else if(grade === "C") teacherRemark = "Average result.";
             else if(grade === "D") teacherRemark = "Needs improvement.";
-            else teacherRemark = "Failed. Consult parents.";
 
             var rowsHtmlArray = [];
+            
+            // Re-calculate based on exam filter if not "All"
+            var filterTotalMarks = 0; var filterTotalRegularGP = 0; var filterOptExtraGP = 0;
+            var filterRegularSubCount = 0; var filterTotalSubCount = 0; var filterIsFail = false;
+
             if(firstEmpty > 3) {
                 var colIndex = 3;
                 while(colIndex < firstEmpty && colIndex < headers.length) {
                     if (isOptHeader(headers[colIndex])) {
-                        var optNameVal = row[colIndex]; 
-                        var testHeader = getSafeHeader(headers[colIndex + 1]);
-                        var mainHeader = getSafeHeader(headers[colIndex + 2]);
-                        if (!testHeader || !mainHeader) break;
+                        var mInfo = extractSubAndExam(getSafeHeader(headers[colIndex + 2]), 'main');
+                        
+                        if (examFilter === "All" || mInfo.exam === examFilter) {
+                            var optNameVal = row[colIndex]; 
+                            var tValRaw = row[colIndex + 1];
+                            var mValRaw = row[colIndex + 2];
+                            var tObt = parseFloat(tValRaw);
+                            var mMStr = String(mValRaw || "").trim();
 
-                        var tValRaw = row[colIndex + 1];
-                        var mValRaw = row[colIndex + 2];
-                        var tObt = parseFloat(tValRaw);
-                        var mMStr = String(mValRaw || "").trim();
+                            var hasTest = !isNaN(tObt); var hasMain = mMStr !== "";
+                            
+                            if(hasTest || hasMain || optNameVal) {
+                                var safeOptName = (optNameVal !== null && optNameVal !== undefined) ? String(optNameVal) : "";
+                                var finalSubName = safeOptName.trim() !== "" ? safeOptName : "Optional Subject";
 
-                        var hasTest = !isNaN(tObt); var hasMain = mMStr !== "";
+                                var totalMain = 0;
+                                if(hasMain) {
+                                    if(mMStr.includes("+")) { totalMain = mMStr.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); } 
+                                    else { totalMain = parseFloat(mMStr) || 0; }
+                                }
 
-                        var tInfo = extractSubAndExam(testHeader, 'test');
-                        var mInfo = extractSubAndExam(mainHeader, 'main');
-                        var testMatch = testHeader.match(/\((\d+)\)/); var testFull = testMatch ? parseInt(testMatch[1]) : 50;
-                        var mainMatch = mainHeader.match(/\((\d+)\)/); var mainFull = mainMatch ? parseInt(mainMatch[1]) : 100;
+                                var tVal = hasTest ? tObt : 0; 
+                                var finalMark = 0;
+                                var tFullMatch = (headers[colIndex + 1]||"").match(/\((\d+)\)/); var tFull = tFullMatch ? parseInt(tFullMatch[1]) : 50;
+                                var mFullMatch = (headers[colIndex + 2]||"").match(/\((\d+)\)/); var mFull = mFullMatch ? mFullMatch[0].replace(/[()]/g, '').split('+').reduce((a,b)=>a+(parseInt(b)||0), 0) : 100;
+                                
+                                if (hasTest && hasMain) finalMark = Math.round(((tVal / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
+                                else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
+                                else if (hasTest && !hasMain) finalMark = Math.round((tVal / tFull) * 100);
 
-                        if(hasTest || hasMain || optNameVal) {
-                            var safeOptName = (optNameVal !== null && optNameVal !== undefined) ? String(optNameVal) : "";
-                            var finalSubName = safeOptName.trim() !== "" ? safeOptName : "Optional Subject";
+                                var subGP = getGP_JS(finalMark); var subGrade = getGrade_JS(subGP);
+                                
+                                if(subGP > 2.00) filterOptExtraGP += (subGP - 2.00);
+                                filterTotalMarks += finalMark; filterTotalSubCount++;
 
-                            var totalMain = 0;
-                            if(hasMain) {
-                                if(mMStr.includes("+")) { totalMain = mMStr.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); } 
-                                else { totalMain = parseFloat(mMStr) || 0; }
+                                rowsHtmlArray.push(`<tr><td class="sub-name">${finalSubName} (Opt)</td>
+                                <td class="exam-name">${hasTest ? tVal : '-'}</td>
+                                <td class="exam-name">${hasMain ? mMStr : '-'}</td>
+                                <td>${finalMark}</td>
+                                <td><strong>${subGrade}</strong></td><td><strong>${subGP.toFixed(2)}</strong></td></tr>`);
                             }
-
-                            var tVal = hasTest ? tObt : 0; 
-                            var finalMark = 0;
-                            if (hasTest && hasMain) finalMark = Math.round(((tVal / testFull) * testWeight) + ((totalMain / mainFull) * mainWeight));
-                            else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mainFull) * 100);
-                            else if (hasTest && !hasMain) finalMark = Math.round((tVal / testFull) * 100);
-
-                            var subGP = getGP_JS(finalMark); var subGrade = getGrade_JS(subGP);
-
-                            rowsHtmlArray.push(`<tr><td class="sub-name">${finalSubName}</td>
-                            <td class="exam-name">${tInfo.exam}</td><td>${hasTest ? tVal : '-'}</td>
-                            <td class="exam-name">${mInfo.exam}</td><td>${hasMain ? totalMain : '-'}</td>
-                            <td><strong>${subGrade}</strong></td><td><strong>${subGP.toFixed(2)}</strong></td></tr>`);
                         }
                         colIndex += 3; 
                     } else {
-                        var testHeader = getSafeHeader(headers[colIndex]); 
-                        var mainHeader = getSafeHeader(headers[colIndex+1]);
-                        if (!testHeader || !mainHeader) break;
+                        var mInfo = extractSubAndExam(getSafeHeader(headers[colIndex + 1]), 'main');
+                        
+                        if (examFilter === "All" || mInfo.exam === examFilter) {
+                            var tInfo = extractSubAndExam(getSafeHeader(headers[colIndex]), 'test');
+                            var cleanSub = tInfo.sub;
+                            
+                            var tValRaw = row[colIndex];
+                            var mValRaw = row[colIndex+1];
+                            var tObt = parseFloat(tValRaw);
+                            var mMStr = String(mValRaw || "").trim();
 
-                        var tValRaw = row[colIndex];
-                        var mValRaw = row[colIndex+1];
-                        var tObt = parseFloat(tValRaw);
-                        var mMStr = String(mValRaw || "").trim();
+                            var hasTest = !isNaN(tObt); var hasMain = mMStr !== "";
 
-                        var tInfo = extractSubAndExam(testHeader, 'test');
-                        var mInfo = extractSubAndExam(mainHeader, 'main');
-                        var testMatch = testHeader.match(/\((\d+)\)/); var testFull = testMatch ? parseInt(testMatch[1]) : 50;
-                        var mainMatch = mainHeader.match(/\((\d+)\)/); var mainFull = mainMatch ? parseInt(mainMatch[1]) : 100;
+                            if(hasTest || hasMain) {
+                                var isSubFail = false;
+                                var totalMain = 0;
+                                var mFullMatch = (headers[colIndex+1]||"").match(/\((\d+)\+?(\d+)?\+?(\d+)?\)/); 
+                                
+                                if(hasMain && mMStr.includes("+")) { 
+                                    let obtParts = mMStr.split('+').map(p => parseFloat(p) || 0);
+                                    if(mFullMatch) {
+                                        let fullParts = mFullMatch[0].replace(/[()]/g, '').split('+').map(p => parseInt(p) || 0);
+                                        if(fullParts.length > 0 && obtParts[0] < Math.ceil(fullParts[0] * passRatio)) { isSubFail = true; }
+                                        else if(fullParts.length > 1 && obtParts[1] < Math.ceil(fullParts[1] * passRatio)) { isSubFail = true; }
+                                        else if(fullParts.length > 2 && fullParts[2] > 0 && obtParts[2] < Math.ceil(fullParts[2] * passRatio)) { isSubFail = true; }
+                                    }
+                                    totalMain = obtParts.reduce((a,b)=>a+b, 0); 
+                                } 
+                                else if (hasMain) { totalMain = parseFloat(mMStr) || 0; }
 
-                        var hasTest = !isNaN(tObt); var hasMain = mMStr !== "";
+                                var tVal = hasTest ? tObt : 0; 
+                                var finalMark = 0;
+                                var tFullMatch = (headers[colIndex]||"").match(/\((\d+)\)/); var tFull = tFullMatch ? parseInt(tFullMatch[1]) : 50;
+                                var mFullTotal = mFullMatch ? mFullMatch[0].replace(/[()]/g, '').split('+').reduce((a,b)=>a+(parseInt(b)||0), 0) : 100;
+                                
+                                if (hasTest && hasMain) finalMark = Math.round(((tVal / tFull) * testWeight) + ((totalMain / mFullTotal) * mainWeight));
+                                else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFullTotal) * 100);
+                                else if (hasTest && !hasMain) finalMark = Math.round((tVal / tFull) * 100);
 
-                        if(hasTest || hasMain) {
-                            var totalMain = 0;
-                            if(hasMain) {
-                                if(mMStr.includes("+")) { totalMain = mMStr.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); } 
-                                else { totalMain = parseFloat(mMStr) || 0; }
+                                if(!isSubFail && finalMark < Math.ceil(100 * passRatio)) isSubFail = true;
+
+                                var subGP = getGP_JS(finalMark); var subGrade = getGrade_JS(subGP);
+                                if(isSubFail || subGP === 0.00) filterIsFail = true;
+                                
+                                filterTotalRegularGP += subGP; filterTotalMarks += finalMark;
+                                filterRegularSubCount++; filterTotalSubCount++; 
+
+                                rowsHtmlArray.push(`<tr><td class="sub-name">${cleanSub}</td>
+                                <td class="exam-name">${hasTest ? tVal : '-'}</td>
+                                <td class="exam-name">${hasMain ? mMStr : '-'}</td>
+                                <td>${finalMark}</td>
+                                <td><strong>${subGrade}</strong></td><td><strong>${subGP.toFixed(2)}</strong></td></tr>`);
                             }
-
-                            var tVal = hasTest ? tObt : 0; 
-                            var finalMark = 0;
-                            if (hasTest && hasMain) finalMark = Math.round(((tVal / testFull) * testWeight) + ((totalMain / mFull) * mainWeight));
-                            else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
-                            else if (hasTest && !hasMain) finalMark = Math.round((tVal / testFull) * 100);
-
-                            var subGP = getGP_JS(finalMark); var subGrade = getGrade_JS(subGP);
-
-                            rowsHtmlArray.push(`<tr><td class="sub-name">${tInfo.sub}</td>
-                            <td class="exam-name">${tInfo.exam}</td><td>${hasTest ? tVal : '-'}</td>
-                            <td class="exam-name">${mInfo.exam}</td><td>${hasMain ? totalMain : '-'}</td>
-                            <td><strong>${subGrade}</strong></td><td><strong>${subGP.toFixed(2)}</strong></td></tr>`);
                         }
                         colIndex += 2; 
                     }
                 }
             }
 
+            // Recalculate Summary for Filtered View
+            let dispGPA = gpa; let dispGrade = grade; let dispAvg = totalAvg; let dispPos = pos;
+            if(examFilter !== "All") {
+                if(filterRegularSubCount > 0) {
+                    if (filterIsFail) { dispGPA = "0.00"; dispGrade = "F"; } 
+                    else {
+                        let combinedGP = filterTotalRegularGP + filterOptExtraGP;
+                        let rawGPA = combinedGP / filterRegularSubCount; 
+                        if (rawGPA > 5.00) rawGPA = 5.00; 
+                        dispGPA = rawGPA.toFixed(2);
+                        dispGrade = getGrade_JS(parseFloat(dispGPA));
+                    }
+                } else { dispGPA = "0.00"; dispGrade = "N/A"; }
+                dispAvg = filterTotalSubCount > 0 ? (filterTotalMarks / filterTotalSubCount).toFixed(2) : "0.00";
+                dispPos = "N/A"; // Rank is only valid for combined
+            }
+
             var finalTableHtml = "";
             if(rowsHtmlArray.length === 0) {
-                finalTableHtml = `<table class="marks-table"><thead>${theadHtml}</thead><tbody><tr><td colspan="7" style="padding:15px; color:#dc2626;">No Exam/Subject Data Found!</td></tr></tbody></table>`;
+                finalTableHtml = `<table class="marks-table"><thead>${theadHtml}</thead><tbody><tr><td colspan="6" style="padding:15px; color:#dc2626;">No Subject Data Found for ${examFilter}!</td></tr></tbody></table>`;
             } else if(rowsHtmlArray.length > 12) {
                 var half = Math.ceil(rowsHtmlArray.length / 2);
                 var col1 = rowsHtmlArray.slice(0, half).join("");
@@ -789,26 +889,28 @@ function generateMarkSheets() {
             <img src="${SCHOOL_LOGO}" class="school-logo" alt="School Logo">
             <div class="header-center">
             <h1>SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
-            <p class="school-address">Sultan Nagar, Saidpur, Nilphamari</p>
+            <p class="school-address">Sultan Nagar, Saidpur, Nilphamari | School Code: 481931 | EMIS Code: 00704061312</p>
+            <p class="school-address">Email: info@srms2012.edu.bd | Web: www.srms2012.edu.bd</p>
             </div>
-            <div class="transcript-title">Academic Transcript - ${term} (${year})</div>
+            <div class="transcript-title">Academic Transcript - ${examFilter === "All" ? term : examFilter} (${year})</div>
             </div>
 
             <table class="student-info">
             <tr><td width="33%"><strong>Student Name:</strong> ${name}</td><td width="33%"><strong>Class:</strong> ${baseClassName}</td><td width="33%"><strong>Group:</strong> ${groupName}</td></tr>
             <tr><td><strong>Student ID:</strong> ${id}</td><td><strong>Roll Number:</strong> ${roll}</td><td></td></tr>
             </table>
-
+            
+            ${legendHtml}
             ${finalTableHtml}
 
             <div class="summary-box">
             <div style="display: flex; justify-content: space-around; margin-bottom: 5px; font-size: 15px; font-weight: 800; color: #005f40; flex-wrap: wrap;">
-            <span>Total Avg: ${parseFloat(totalAvg).toFixed(2)}</span>
-            <span>GPA: ${parseFloat(gpa).toFixed(2)}</span>
-            <span>Grade: ${grade}</span>
-            <span>Position: ${pos}</span>
+            <span>Total Avg: ${dispAvg}</span>
+            <span>GPA: ${dispGPA}</span>
+            <span>Grade: ${dispGrade}</span>
+            <span>Position: ${dispPos}</span>
             </div>
-            <p class="remark-text">Comment: ${teacherRemark}</p>
+            <p class="remark-text">Remark: ${teacherRemark}</p>
             </div>
 
             <div class="footer"><div class="signature">Class Teacher</div><div class="signature">Headmaster</div><div class="signature">Guardian</div></div>
@@ -865,145 +967,100 @@ async function printTabulation() {
 
     if(subjects.length === 0) { swalPro.fire('Error', 'No subjects found!', 'error'); return; }
 
-    var checkboxesHtml = '<div style="text-align:left; max-height:220px; overflow-y:auto; border:1px solid #cbd5e1; padding:12px; border-radius:8px; background:#f8fafc;">';
-    subjects.forEach((sub, idx) => {
-        var isChecked = sub.isOpt ? "checked" : ""; 
-        checkboxesHtml += `<label style="display:block; margin-bottom:10px; cursor:pointer; font-size:14px; font-weight:700; color:#1e293b;">
-        <input type="checkbox" id="grp-check-${idx}" ${isChecked} style="transform: scale(1.3); margin-right: 10px; accent-color:var(--main);">
-        ${sub.rawName}
-        </label>`;
-    });
-    checkboxesHtml += '</div>';
-
-    const { value: proceed } = await swalPro.fire({
-        title: 'Select Group Subjects',
-        html: '<p style="font-size:13px; margin-bottom:12px; color:#475569; font-weight:600;">Please mark the Group/Optional subjects. <br><b>These will be printed on Page-2.</b></p>' + checkboxesHtml,
-        showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-print"></i> Print Tabulation', confirmButtonColor: '#005f40'
-    });
-
-    if (!proceed) return;
-
-    var selectedGroups = [];
-    subjects.forEach((sub, idx) => { if (document.getElementById(`grp-check-${idx}`).checked) selectedGroups.push(idx); });
-
-    var coreSubjects = subjects.filter((sub, idx) => !selectedGroups.includes(idx));
-    var groupSubjects = subjects.filter((sub, idx) => selectedGroups.includes(idx));
-
     var stats = {'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0};
     data.forEach(row => {
         if(!row[0] && !row[1]) return;
         stats['Total']++;
         var g = row[firstEmpty + 3];
-        if(g === 'Incomplete') return; // Skip from pass/fail stats if incomplete
+        if(g === 'Incomplete') return; 
         if(g === 'A+') stats['A+']++; else if(g === 'A') stats['A']++; else if(g === 'A-') stats['A-']++; else if(g === 'B') stats['B']++; else if(g === 'C') stats['C']++; else if(g === 'D') stats['D']++; else stats['F']++; 
     });
 
     var passed = stats['Total'] - stats['F'];
     var passRate = stats['Total'] > 0 ? ((passed / stats['Total']) * 100).toFixed(2) : "0.00";
 
-    var printHtml = "";
+    var printHtml = `<div class="tabulation-print" style="padding-top: 10px;">
+    <div style="text-align:center; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <img src="${SCHOOL_LOGO}" alt="School Logo" style="height: 60px; margin-bottom: 8px;">
+    <h1 style="margin:0; font-size:22px; color:#005f40; text-transform:uppercase; font-weight:900;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+    <h3 style="margin:2px 0 0 0; color:#333; font-size:15px; font-weight:bold;">Master Tabulation Sheet (${term}) - ${cls} | Year: ${year}</h3>
+    </div>
+    <table class="tab-table">
+    <thead>
+    <tr>
+    <th style="width:4%; padding:6px 2px;">ID</th>
+    <th style="width:12%; text-align:left; padding-left:5px;">Student Name</th>
+    <th style="width:4%;">Roll</th>`;
 
-    function buildPage(pageTitle, isMain, subList, includeResults, isLastPage) {
-        if(subList.length === 0 && !includeResults) return ""; 
-
-        var html = `<div class="tabulation-print" style="${isLastPage ? '' : 'page-break-after: always;'} padding-top: 10px;">
-        <div style="text-align:center; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-        <img src="${SCHOOL_LOGO}" alt="School Logo" style="height: 60px; margin-bottom: 8px;">
-        <h1 style="margin:0; font-size:22px; color:#005f40; text-transform:uppercase; font-weight:900;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
-        <h3 style="margin:2px 0 0 0; color:#333; font-size:15px; font-weight:bold;">Tabulation Sheet (${term}) - ${cls} | Year: ${year}</h3>
-        <h4 style="margin:2px 0 0 0; color:#475569; font-size:13px; font-weight:600;">${pageTitle}</h4>
-        </div>
-        <table class="tab-table">
-        <thead>
-        <tr>
-        <th style="width:4%; padding:6px 2px;">ID</th>
-        <th style="width:12%; text-align:left; padding-left:5px;">Student Name</th>
-        <th style="width:4%;">Roll</th>`;
-
-        subList.forEach(sub => {
-            var typeLabel = isMain ? "Main" : "Test";
-            var examName = isMain ? sub.mainExamName : sub.testExamName;
-            var examLabelHtml = examName && examName !== "Exam" ? `<br><span style="font-size:9px; color:#005f40;">${examName}</span>` : "";
-            html += `<th>${sub.subName} ${examLabelHtml} <br><span style="font-size:8px; color:#555;">(${typeLabel})</span></th>`;
-        });
-
-        if (includeResults) {
-            html += `<th style="background:#e2e8f0 !important;">Avg</th>
-            <th style="background:#e2e8f0 !important;">GPA</th>
-            <th style="background:#e2e8f0 !important;">Grade</th>
-            <th style="background:#e2e8f0 !important;">Pos</th>`;
-        }
-        html += `</tr></thead><tbody>`;
-
-        data.forEach(row => {
-            if(!row[0] && !row[1]) return;
-            html += `<tr><td>${row[0]||'-'}</td><td style="text-align:left; padding-left:5px; font-weight:bold;">${row[1]||'-'}</td><td>${row[2]||'-'}</td>`;
-            subList.forEach(sub => {
-                var markCol = isMain ? sub.mainCol : sub.testCol;
-                var markVal = row[markCol] || '-';
-
-                if (sub.isOpt) {
-                    var optName = row[sub.nameCol] && row[sub.nameCol].trim() !== "" ? row[sub.nameCol] : 'N/A';
-                    html += `<td><span style="display:block; font-size:8px; color:#005f40; line-height:1; margin-bottom:2px; font-weight:bold;">${optName}</span><strong>${markVal}</strong></td>`;
-                } else { html += `<td><strong>${markVal}</strong></td>`; }
-            });
-
-            if (includeResults) {
-                html += `<td>${row[firstEmpty+1]||'-'}</td>
-                <td><strong>${row[firstEmpty+2]||'-'}</strong></td>
-                <td><strong>${row[firstEmpty+3]||'-'}</strong></td>
-                <td>${row[firstEmpty+4]||'-'}</td>`;
-            }
-            html += `</tr>`;
-        });
-        html += `</tbody></table>`;
-
-        if (isLastPage) {
-            html += `
-            <div style="margin-top: 25px; border: 2px solid #005f40; border-radius: 8px; overflow: hidden; page-break-inside: avoid; width: 80%; margin-left: auto; margin-right: auto;">
-            <div style="background: #e2e8f0; color: #005f40; padding: 6px; text-align: center; font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #005f40;">Class Result Summary & Grade Statistics</div>
-            <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
-            <tr style="font-weight: bold; color: #005f40;">
-            <td style="border: 1px solid #005f40; padding: 6px;">Total Students</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">Passed</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">Failed</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">Pass Rate</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">A+</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">A</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">A-</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">B</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">C</td>
-            <td style="border: 1px solid #005f40; padding: 6px;">D</td>
-            </tr>
-            <tr>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px;">${stats['Total']}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px; color:#166534;">${passed}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px; color:#dc2626;">${stats['F']}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px;">${passRate}%</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['A+']}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['A']}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['A-']}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['B']}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['C']}</td>
-            <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['D']}</td>
-            </tr>
-            </table>
-            </div>`;
-        }
-        html += `</div>`;
-        return html;
-    }
-
-    var pagesToPrint = [];
-    if(coreSubjects.length > 0) pagesToPrint.push({ title: "TEST MARKS - Default Subjects", isMain: false, list: coreSubjects, results: false });
-    if(groupSubjects.length > 0) pagesToPrint.push({ title: "TEST MARKS - Group Subjects", isMain: false, list: groupSubjects, results: false });
-    if(coreSubjects.length > 0) pagesToPrint.push({ title: "MAIN EXAM - Default Subjects", isMain: true, list: coreSubjects, results: (groupSubjects.length === 0) });
-    if(groupSubjects.length > 0) pagesToPrint.push({ title: "MAIN EXAM & FINAL - Group Subjects", isMain: true, list: groupSubjects, results: true });
-
-    pagesToPrint.forEach((p, idx) => {
-        var isLast = (idx === pagesToPrint.length - 1);
-        printHtml += buildPage(p.title, p.isMain, p.list, p.results, isLast);
+    subjects.forEach(sub => {
+        htmlLabel = `${sub.subName}<br><span style="font-size:8px; font-weight:normal;">[${sub.isOpt ? 'Opt' : 'Comp'}]</span>`;
+        printHtml += `<th class="vert-header">${htmlLabel}</th>`;
     });
+
+    printHtml += `<th style="background:#e2e8f0 !important;">Avg</th>
+    <th style="background:#e2e8f0 !important;">GPA</th>
+    <th style="background:#e2e8f0 !important;">Grade</th>
+    <th style="background:#e2e8f0 !important;">Pos</th>
+    </tr></thead><tbody>`;
+
+    data.forEach(row => {
+        if(!row[0] && !row[1]) return;
+        printHtml += `<tr><td>${row[0]||'-'}</td><td style="text-align:left; padding-left:5px; font-weight:bold;">${row[1]||'-'}</td><td>${row[2]||'-'}</td>`;
+        subjects.forEach(sub => {
+            var hasTest = !isNaN(parseFloat(row[sub.testCol]));
+            var hasMain = String(row[sub.mainCol] || "").trim() !== "";
+            
+            var cellHtml = "";
+            if (sub.isOpt) {
+                var optName = row[sub.nameCol] && row[sub.nameCol].trim() !== "" ? row[sub.nameCol] : 'N/A';
+                cellHtml = `<span style="display:block; font-size:8px; color:#005f40; line-height:1; margin-bottom:2px; font-weight:bold;">${optName}</span>`;
+            }
+
+            if(hasMain && hasTest) { cellHtml += `<b>${row[sub.mainCol]}</b><br><span style="font-size:8px; color:#64748b;">T:${row[sub.testCol]}</span>`; }
+            else if(hasMain) { cellHtml += `<b>${row[sub.mainCol]}</b>`; }
+            else if(hasTest) { cellHtml += `<span style="font-size:9px; color:#dc2626;">T:${row[sub.testCol]}</span>`; }
+            else { cellHtml += `-`; }
+
+            printHtml += `<td>${cellHtml}</td>`;
+        });
+
+        printHtml += `<td>${row[firstEmpty+1]||'-'}</td>
+        <td><strong>${row[firstEmpty+2]||'-'}</strong></td>
+        <td><strong style="color:${row[firstEmpty+3]==='F'?'#dc2626':'#16a34a'};">${row[firstEmpty+3]||'-'}</strong></td>
+        <td>${row[firstEmpty+4]||'-'}</td></tr>`;
+    });
+    printHtml += `</tbody></table>`;
+
+    printHtml += `
+    <div style="margin-top: 25px; border: 2px solid #005f40; border-radius: 8px; overflow: hidden; page-break-inside: avoid; width: 80%; margin-left: auto; margin-right: auto;">
+    <div style="background: #e2e8f0; color: #005f40; padding: 6px; text-align: center; font-weight: bold; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid #005f40;">Class Result Summary & Grade Statistics</div>
+    <table style="width: 100%; border-collapse: collapse; font-size: 12px; text-align: center;">
+    <tr style="font-weight: bold; color: #005f40;">
+    <td style="border: 1px solid #005f40; padding: 6px;">Total Students</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">Passed</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">Failed</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">Pass Rate</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">A+</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">A</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">A-</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">B</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">C</td>
+    <td style="border: 1px solid #005f40; padding: 6px;">D</td>
+    </tr>
+    <tr>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px;">${stats['Total']}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px; color:#166534;">${passed}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px; color:#dc2626;">${stats['F']}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold; font-size:14px;">${passRate}%</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['A+']}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['A']}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['A-']}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['B']}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['C']}</td>
+    <td style="border: 1px solid #005f40; padding: 8px; font-weight: bold;">${stats['D']}</td>
+    </tr>
+    </table>
+    </div></div>`;
 
     document.getElementById("print-area").innerHTML = printHtml;
     window.print();
