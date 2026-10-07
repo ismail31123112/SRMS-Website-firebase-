@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<base target="_top">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SRMS Manager V19</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -106,7 +107,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
 <div id="appContainer" style="display:none;">
     <div class="header">
     <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
-    <h2>SRMS <span id="portalModeTitle">Manager</span></h2>
+    <h2>SRMS Manager</h2>
     <button class="btn-back" onclick="window.close();" title="Back to Dashboard"><i class="fas fa-sign-out-alt"></i> Dashboard</button>
     </div> 
 
@@ -125,20 +126,31 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
     <div class="card">
     <label><i class="fas fa-bullseye" style="color:var(--primary); margin-right:6px; font-size:16px;"></i> Target Page / Section</label>
     <select id="upCat" onchange="updateTitleLabel(this)">
-    <optgroup label="General"><option value="Notice">Notice Board</option><option value="HomeSlide">Home Slide Show</option><option value="HomeVideo">Home Video</option><option value="TeacherDashboard">Teacher Dashboard</option></optgroup>
-    <optgroup label="Website & Administration" id="adminOnlyUploads" style="display:none;">
-    <option value="GoverningBody">Governing Body</option>
-    <option value="PresidentMessage">Message of President</option>
-    <option value="VPMessage">Message of Vice President</option>
-    <option value="HeadmasterMessage">Message of Headmaster</option>
-    <option value="Facilities">Facilities</option>
-    <option value="News">News</option><option value="Teachers">Teacher List</option><option value="Admission">Admission Info</option><option value="Routine">Routine</option><option value="Syllabus">Syllabus</option><option value="Exam">Exam Routine</option><option value="Gallery">Gallery</option>
+    <optgroup label="General">
+        <option value="Notice">Notice Board</option>
+        <option value="HomeSlide">Home Slide Show</option>
+        <option value="HomeVideo">Home Video</option>
+        <option value="TeacherDashboard">Teacher Dashboard</option>
+    </optgroup>
+    <optgroup label="Website & Administration" id="adminOnlyUploads">
+        <option value="GoverningBody">Governing Body</option>
+        <option value="PresidentMessage">Message of President</option>
+        <option value="VPMessage">Message of Vice President</option>
+        <option value="HeadmasterMessage">Message of Headmaster</option>
+        <option value="Facilities">Facilities</option>
+        <option value="News">News</option>
+        <option value="Teachers">Teacher List</option>
+        <option value="Admission">Admission Info</option>
+        <option value="Routine">Routine</option>
+        <option value="Syllabus">Syllabus</option>
+        <option value="Exam">Exam Routine</option>
+        <option value="Gallery">Gallery</option>
     </optgroup>
     <optgroup label="Class Dashboards">
-    <option value="ClassPlay">Class Play</option><option value="ClassNursery">Class Nursery</option><option value="ClassKG">Class KG</option>
-    <option value="Class1">Class 1</option><option value="Class2">Class 2</option><option value="Class3">Class 3</option>
-    <option value="Class4">Class 4</option><option value="Class5">Class 5</option><option value="Class6">Class 6</option>
-    <option value="Class7">Class 7</option><option value="Class8">Class 8</option><option value="Class9">Class 9</option><option value="Class10">Class 10</option>
+        <option value="ClassPlay">Class Play</option><option value="ClassNursery">Class Nursery</option><option value="ClassKG">Class KG</option>
+        <option value="Class1">Class 1</option><option value="Class2">Class 2</option><option value="Class3">Class 3</option>
+        <option value="Class4">Class 4</option><option value="Class5">Class 5</option><option value="Class6">Class 6</option>
+        <option value="Class7">Class 7</option><option value="Class8">Class 8</option><option value="Class9">Class 9</option><option value="Class10">Class 10</option>
     </optgroup>
     </select>
 
@@ -157,7 +169,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
     </div>
     </div> 
 
-    <!-- ================= 2. USERS TAB (Admin Only) ================= -->
+    <!-- ================= 2. USERS TAB ================= -->
     <div id="users" class="container">
     <div class="card">
     <h3 style="margin-top:0; color:var(--primary); font-weight:900; text-transform: uppercase; font-size:18px;"><i class="fas fa-chart-pie"></i> User Statistics</h3>
@@ -240,7 +252,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
     <button class="nav-item active" onclick="switchTab('upload', this)"><i class="fas fa-plus-circle"></i>Post</button>
-    <button class="nav-item admin-only" onclick="switchTab('users', this)" style="display:none;"><i class="fas fa-users"></i>Users</button>
+    <button class="nav-item" onclick="switchTab('users', this)"><i class="fas fa-users"></i>Users</button>
     <button class="nav-item" onclick="switchTab('manage', this)"><i class="fas fa-tasks"></i>Manage</button>
     </div> 
 </div>
@@ -266,7 +278,6 @@ const auth = firebase.auth();
 
 // Variables
 var isAuthReady = false; 
-var appMode = "<?= mode ?>"; // 'admin' or 'teacher' from backend
 var globalUsersList = []; 
 
 function changeLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
@@ -283,7 +294,19 @@ async function apiCall(actionName, payloadData = {}) {
         let res = await fetch(SCRIPT_URL, {
             method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
         });
-        return await res.json();
+        let text = await res.text();
+        if (text.includes("<html") || text.includes("<body")) {
+            throw new Error("Deployment Access Error! Apps Script Web App is blocking access. Ensure 'Who has access' is set to 'Anyone'.");
+        }
+        
+        let data;
+        try { data = JSON.parse(text); } 
+        catch(e) { throw new Error("Invalid Response from server: " + text.substring(0, 80)); }
+        
+        if (data.error) throw new Error(data.error);
+        if (data.status === "error") throw new Error(data.message);
+        
+        return data;
     } catch (error) {
         console.error("API Call Failed:", error); throw error;
     }
@@ -295,14 +318,6 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
     auth.onAuthStateChanged(function(user) {
         if (user) {
             isAuthReady = true;
-            // Mode UI Adjustments
-            if(appMode === 'admin') {
-                document.getElementById('adminOnlyUploads').style.display = 'block';
-                document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'block');
-                document.getElementById('portalModeTitle').innerText = "Manager";
-            } else {
-                document.getElementById('portalModeTitle').innerText = "Teachers Portal";
-            }
             showLoader(false);
             document.getElementById('appContainer').style.display = 'block';
         } else {
@@ -378,7 +393,7 @@ function handleUploadResponse(res) {
         document.getElementById('upLink').value = ""; document.getElementById('upFile').value = "";
         document.getElementById('upCat').selectedIndex = 0; updateTitleLabel(document.getElementById('upCat')); 
         if(document.getElementById('manage').classList.contains('active')) loadPosts();
-    } else { Swal.fire("Error", res.msg, "error"); }
+    } else { Swal.fire("Error", res.msg || res.message, "error"); }
 }
 
 function pubHead() { 
@@ -391,8 +406,7 @@ function pubHead() {
             try {
                 let res = await apiCall('addHeadline', { text: t });
                 showLoader(false); 
-                if(res.includes("❌")) Swal.fire("Failed!", res, "error"); 
-                else { Swal.fire("Published!", res, "success"); document.getElementById('hText').value=""; }
+                Swal.fire("Published!", res.msg || res.message, "success"); document.getElementById('hText').value="";
             } catch(err) { showLoader(false); Swal.fire("Error", err.message, "error"); }
         }
     });
@@ -404,8 +418,8 @@ function delPost(docId) {
             showLoader(true, "DELETING POST..."); 
             try {
                 let res = await apiCall('deletePost', { docId: docId });
-                showLoader(false); Swal.fire("Deleted!", res, "success"); loadPosts();
-            } catch(err) { showLoader(false); Swal.fire("Error", "Could not delete post.", "error"); }
+                showLoader(false); Swal.fire("Deleted!", res.msg || res.message, "success"); loadPosts();
+            } catch(err) { showLoader(false); Swal.fire("Error", err.message, "error"); }
         } 
     });
 }
@@ -427,7 +441,7 @@ async function addUser() {
     showLoader(true, "SAVING ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing with Machine & Server</span>");
     try {
         let res = await apiCall('addUserDatabase', { info: d });
-        showLoader(false); Swal.fire("Success!", res, "success"); 
+        showLoader(false); Swal.fire("Success!", res.msg || res.message, "success"); 
         document.getElementById('uSId').value = ""; document.getElementById('uSMachineId').value = ""; document.getElementById('uTMachineId').value = ""; document.getElementById('uTPhone').value = ""; document.getElementById('uTName').value = ""; document.getElementById('uTEmail').value = ""; document.getElementById('uPass').value = ""; document.getElementById('uCardNumber').value = ""; 
         if(document.getElementById('users').classList.contains('active')) loadUsers(); 
     } catch(err) { showLoader(false); Swal.fire("Error", err.message, "error"); }
@@ -441,7 +455,7 @@ async function submitUserEdit() {
     showLoader(true, "UPDATING USER...");
     try {
         let res = await apiCall('updateUserDatabase', { info: d });
-        showLoader(false); Swal.fire("Updated!", res, "success"); closeModal('editUserModal'); loadUsers();
+        showLoader(false); Swal.fire("Updated!", res.msg || res.message, "success"); closeModal('editUserModal'); loadUsers();
     } catch(err) { showLoader(false); Swal.fire("Error", err.message, "error"); }
 }
 
@@ -451,8 +465,8 @@ function deleteUser(type, docId) {
             showLoader(true, "REMOVING USER..."); 
             try {
                 let res = await apiCall('deleteUser', { type: type, rowId: docId });
-                showLoader(false); Swal.fire("Removed!", res, "success"); loadUsers();
-            } catch(err) { showLoader(false); Swal.fire("Error", "Could not remove user.", "error"); }
+                showLoader(false); Swal.fire("Removed!", res.msg || res.message, "success"); loadUsers();
+            } catch(err) { showLoader(false); Swal.fire("Error", err.message, "error"); }
         } 
     });
 }
@@ -480,8 +494,6 @@ async function loadPosts() {
         showLoader(false);
         
         var h = "<h3 style='margin-top:0; color:var(--primary); font-weight:900; text-transform:uppercase; font-size:18px;'><i class='fas fa-list-ul'></i> Website Posts Manager</h3>";
-        
-        if(appMode === 'teacher') posts = posts.filter(r => String(r.targetPage).startsWith('Class') || r.targetPage === 'Notice' || r.targetPage === 'TeacherDashboard' || r.targetPage === 'Teachers');
         
         if(posts.length === 0) h += "<p style='text-align:center; color:#94a3b8; padding:20px; font-weight:600;'>No posts available.</p>";
         
