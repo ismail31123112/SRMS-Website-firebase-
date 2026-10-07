@@ -94,7 +94,6 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     #print-area { display: block !important; width: 100%; }
     @page { size: A4 landscape; margin: 5mm; }
 
-    /* Marksheet Layout */
     .report-card { width: 100%; height: 98vh; max-height: 98vh; page-break-after: always; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid #005f40; padding: 10px 15px; border-radius: 8px; background: #fff; overflow: hidden; }
     .school-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #005f40; padding-bottom: 5px; margin-bottom: 8px; }
     .school-logo { width: 65px; height: auto; object-fit: contain;}
@@ -120,7 +119,6 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     .footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 15px; }
     .signature { border-top: 1.5px solid #333; width: 150px; text-align: center; padding-top: 4px; font-weight: 700; font-size: 11px; color: #333; }
 
-    /* Tabulation Layout */
     .tabulation-print { width: 100%; font-family: 'Poppins', sans-serif; }
     .tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: auto; word-wrap: break-word; }
     .tab-table th.vert-header { background: #e2e8f0 !important; padding: 10px 4px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; writing-mode: vertical-rl; transform: rotate(180deg); height: 110px; white-space: nowrap;}
@@ -141,7 +139,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 
 <div class="loader-overlay" id="loader">
     <div class="spinner"></div>
-    <div class="loader-text" id="loaderText">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b; font-weight: 500;">Verifying User Session</span></div>
+    <div class="loader-text" id="loaderText">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b; font-weight: 500;">Verifying User Session & Access Rules</span></div>
 </div>
 
 <div id="appContainer">
@@ -218,7 +216,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
 
-// ✅ Firebase Configuration
+// ✅ Firebase Configuration (Includes authDomain for proper Authentication)
 const firebaseConfig = { 
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", 
     authDomain: "srms-website-management.firebaseapp.com", 
@@ -231,7 +229,6 @@ const auth = firebase.auth();
 var appData = [];
 var cachedHeaders = [];
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg"; 
-var isAuthReady = false;
 
 const swalPro = Swal.mixin({ customClass: { confirmButton: 'btn-open', cancelButton: 'btn-danger' }, buttonsStyling: false });
 
@@ -240,55 +237,56 @@ function showLoader(show, text="PROCESSING...") {
     else { document.getElementById('loader').style.display = 'none'; }
 }
 
-// 🛡️ API Caller (গুগলের সিল মারা টোকেন ব্যবহার করে)
+// 🛡️ API Caller (টোকেন সহ রিকোয়েস্ট পাঠাবে)
 async function apiCall(actionName, payloadData = {}) {
     let token = await auth.currentUser.getIdToken(true);
     let payload = { action: actionName, token: token, ...payloadData };
     try {
         let res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
         let text = await res.text();
-        if (text.includes("<html") || text.includes("<body")) throw new Error("Deployment Access Error!");
+        if (text.includes("<html") || text.includes("<body")) throw new Error("Deployment Access Error! Ensure SCRIPT_URL is correct.");
         let data = JSON.parse(text);
-        if(data.status === "error") throw new Error(data.message);
+        if(data.status === "error") throw new Error(data.message || data.error);
         return data;
     } catch (error) { throw error; }
 }
 
-// 🛡️ ORIGINAL AUTH OBSERVER + ADMIN/TEACHER CHECK
+// 🛡️ THE GATEKEEPER: AUTO VERIFY OR KICK OUT
+let isAuthReady = false;
+
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-    auth.onAuthStateChanged(function(user) {
-        if (user) { 
-            let email = user.email;
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            let email = user.email || "";
             let isAdmin = email === "admin@srms.edu.bd" || email === "srms2012.edu@gmail.com";
-            let isTeacher = /^01.*@srms\.edu\.bd$/.test(email);
+            let isTeacher = email.endsWith("@srms.edu.bd");
 
             if (isAdmin || isTeacher) {
-                isAuthReady = true; 
-                showLoader(false); 
-                document.getElementById('appContainer').style.display = 'block'; 
-            } else {
-                kickOut();
-            }
-        } 
-        else { kickOut(); }
+                // ✅ Authorized User Detected
+                isAuthReady = true;
+                showLoader(false);
+                document.getElementById('appContainer').style.display = 'block';
+                
+                var yrSelect = document.getElementById("yearSelector");
+                var currentYear = new Date().getFullYear();
+                if(yrSelect.options.length === 0) {
+                    for(var i = 2024; i <= 2050; i++) {
+                        var opt = document.createElement("option");
+                        opt.value = i; opt.text = i;
+                        if(i === currentYear) opt.selected = true;
+                        yrSelect.appendChild(opt);
+                    }
+                }
+            } else { kickOut(); }
+        } else { kickOut(); }
     });
-}).catch(err => { console.error("Auth Persistence Error:", err); kickOut(); });
+}).catch(err => { kickOut(); });
 
 function kickOut() {
-    showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>"); 
-    setTimeout(() => { window.location.replace(window.location.origin + "/login-panel/accounting-and-management-department"); }, 1000);
+    showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Security Breach Detected. Redirecting to Login...</span>");
+    let redirectUrl = window.location.protocol + "//" + window.location.host + "/login-panel/teacher-login-portal";
+    setTimeout(() => { window.location.replace(redirectUrl); }, 1200);
 }
-
-window.onload = function() {
-    var yrSelect = document.getElementById("yearSelector");
-    var currentYear = new Date().getFullYear();
-    for(var i = 2024; i <= 2050; i++) {
-        var opt = document.createElement("option");
-        opt.value = i; opt.text = i;
-        if(i === currentYear) opt.selected = true;
-        yrSelect.appendChild(opt);
-    }
-};
 
 // ==========================================
 // PARSING & HELPERS
@@ -344,7 +342,7 @@ function parseSubjectHeaders(headers) {
     return { subjects, testSeq, mainSeq, firstEmpty };
 }
 
-// 🚀 FAST FRONTEND DATA LOAD (Firebase SDK)
+// 🚀 LIGHTNING FAST FRONTEND LOAD 
 async function loadData() {
     if(!isAuthReady) return;
     var className = document.getElementById("classSelector").value;
@@ -434,7 +432,7 @@ function getGP_JS(p) { if(p>=80) return 5.00; if(p>=70) return 4.00; if(p>=60) r
 function getGrade_JS(g) { if(g>=5.00) return "A+"; if(g>=4.00) return "A"; if(g>=3.50) return "A-"; if(g>=3.00) return "B"; if(g>=2.00) return "C"; if(g>=1.00) return "D"; return "F"; }
 
 // ==========================================
-// DATA ENTRY FORM
+// DATA ENTRY FORM (Saves securely via Backend API to bypass write blocks)
 // ==========================================
 async function openDataEntryForm(rowIndex) {
     var rowData = appData[rowIndex];
@@ -498,7 +496,7 @@ async function openDataEntryForm(rowIndex) {
     });
 
     if(formValues) {
-        showLoader(true, "SAVING RAW MARKS...<br><span style='font-size:11px; color:#64748b;'>Direct Write to Database</span>");
+        showLoader(true, "SAVING RAW MARKS...<br><span style='font-size:11px; color:#64748b;'>Writing securely via Backend</span>");
         try {
             let rowDocId = appData[rowIndex][appData[rowIndex].length - 1]; 
             let res = await apiCall('saveRawMarks', { rowId: rowDocId, rowData: formValues });
@@ -531,7 +529,7 @@ async function calculateAllResults() {
         icon: 'warning', showCancelButton: true, cancelButtonText: '<i class="fas fa-times"></i> Cancel', confirmButtonText: 'Yes, Calculate All', confirmButtonColor: '#2563eb'
     }).then(async (result) => {
         if(result.isConfirmed) {
-            showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms to all students securely</span>");
+            showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms securely via Backend</span>");
             try {
                 let res = await apiCall('calculateAllClassResults', {
                     className: cls, selectedYear: yr, 
@@ -578,13 +576,12 @@ async function addNewSubjectPopup() {
     var cls = document.getElementById("classSelector").value;
     if(!cls) return swalPro.fire('Hold On!', 'Please select a class first.', 'warning');
 
-    showLoader(true, "Fetching Exams securely...");
+    showLoader(true, "Fetching Exams...");
     let globalExams = [];
     try {
-        let res = await apiCall('getGlobalExams');
+        let setDoc = await db.collection('Admin').doc('Settings').get();
+        if(setDoc.exists && setDoc.data().globalExams) globalExams = JSON.parse(setDoc.data().globalExams);
         showLoader(false);
-        if(res.status === "success") { globalExams = res.data || []; } 
-        else { return swalPro.fire('Error', res.message, 'error'); }
     } catch(e) { showLoader(false); return swalPro.fire('Error', e.message, 'error'); }
 
     if(globalExams.length === 0) return swalPro.fire('No Exams Found', 'Please add Exams via "+Add Exam" first.', 'warning');
@@ -676,7 +673,7 @@ function setupSheetHeader() {
     });
 }
 
-// 🚀 VIEW SINGLE PROFILE
+// 🚀 VIEW SINGLE PROFILE 
 function viewSingleResult(rowIndex) {
     let row = appData[rowIndex];
     let parsed = parseSubjectHeaders(cachedHeaders);
@@ -972,7 +969,7 @@ function generateMarkSheets(examFilter) {
 }
 
 // ==========================================
-// TABULATION GENERATOR
+// TABULATION GENERATOR 
 // ==========================================
 async function printTabulation() {
     if(appData.length === 0) { swalPro.fire('Error', 'Load data first', 'error'); return; }
