@@ -114,7 +114,6 @@ body { background: white; margin: 0; padding: 0; -webkit-print-color-adjust: exa
 /* --- TABULATION SPECIFIC CSS --- */
 .tabulation-print { width: 100%; font-family: 'Poppins', sans-serif; }
 .tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: auto; word-wrap: break-word; }
-.tab-table th.vert-header { background: #e2e8f0 !important; padding: 10px 4px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; writing-mode: vertical-rl; transform: rotate(180deg); height: 100px; white-space: nowrap;}
 .tab-table th { background: #e2e8f0 !important; padding: 6px 3px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; }
 .tab-table td { padding: 6px 3px; border: 1px solid #1e293b; overflow: hidden; vertical-align: middle; font-size:9px;}
 .tab-table tr { page-break-inside: avoid; }
@@ -161,16 +160,10 @@ body::before { content: "⚠️ PRINT ERROR: Please change the layout to 'Landsc
 </optgroup>
 </select>
 <button class="btn-open" onclick="loadData()"><i class="fa-solid fa-folder-open"></i> Load Data</button>
-<button class="btn-reset" onclick="setupSheetHeader()"><i class="fa-solid fa-wrench"></i> Fix Format</button>
+<button class="btn-reset" onclick="setupSheetHeader()"><i class="fa-solid fa-wrench"></i> Fix/Reset Format</button>
 </div>
 
 <div id="feature-panel">
-<select id="examTermSelector" style="border-color:var(--main); font-weight:900;">
-<option value="1st Term Exam">1st Term / Half Yearly</option>
-<option value="Final Exam">Final / Annual Exam</option>
-<option value="Pre-Test Exam">Pre-Test Exam</option>
-<option value="Test Exam">Test Exam</option>
-</select>
 <select id="yearSelector"></select>
 
 <div class="weight-controls">
@@ -185,8 +178,9 @@ body::before { content: "⚠️ PRINT ERROR: Please change the layout to 'Landsc
 <label style="font-size:12px;"><input type="number" id="genPass" value="33">%</label>
 </div>
 
-<button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> +Add Exam</button>
-<button class="btn-danger" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="deleteSubjectPopup()"><i class="fa-solid fa-book-dead"></i> -Remove Exam</button>
+<button class="btn-tool" onclick="addGlobalExamPopup()"><i class="fa-solid fa-calendar-plus"></i> +Add Exam</button>
+<button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> +Add Subject</button>
+<button class="btn-danger" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="deleteSubjectPopup()"><i class="fa-solid fa-book-dead"></i> -Remove</button>
 
 <button class="btn-calc" onclick="calculateAllResults()"><i class="fa-solid fa-gears"></i> Calculate All Results</button>
 
@@ -207,15 +201,15 @@ body::before { content: "⚠️ PRINT ERROR: Please change the layout to 'Landsc
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
-// 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
 
-// ✅ Firebase Configuration
 const firebaseConfig = { apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", authDomain: "srms-website-management.firebaseapp.com", projectId: "srms-website-management" };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const db = firebase.firestore();
 const auth = firebase.auth();
 
 var appData = [];
@@ -264,18 +258,16 @@ window.onload = function() {
 function isOptHeader(h) { return h ? String(h).toLowerCase().includes("opt") && String(h).toLowerCase().includes("name") : false; }
 function getSafeHeader(h) { return h ? String(h) : ""; }
 
-function extractSubAndExam(headerText, type) {
-    if(!headerText) return { sub: "Unknown", exam: "Exam", isBoardFormat: false };
-    var typeReg = type === 'test' ? /-?\s*Test\s*\(\d+\)/gi : /-?\s*Main\s*\(\d+\)/gi;
-    var isBoardFormat = headerText.includes("[Board Format");
-    var clean = String(headerText).replace(typeReg, '').replace(/\[.*\]/g, '').trim();
-    var idx = clean.lastIndexOf(" - ");
-    if(idx === -1) idx = clean.lastIndexOf("-"); 
-    if(idx !== -1) { return { sub: clean.substring(0, idx).trim(), exam: clean.substring(idx + 1).replace(/^-/,'').trim(), isBoardFormat: isBoardFormat }; }
-    return { sub: clean, exam: "Exam", isBoardFormat: isBoardFormat };
+function extractSubAndExam(headerText) {
+    if(!headerText) return { sub: "Unknown", exam: "Exam", type: "Test" };
+    var clean = String(headerText).replace(/\[.*\]/g, '').trim();
+    var parts = clean.split(" - ");
+    if(parts.length >= 3) {
+        return { sub: parts[0].trim(), exam: parts[1].trim(), type: parts[2].includes("Main") ? "Main" : "Test" };
+    }
+    return { sub: clean, exam: "Exam", type: "Test" };
 }
 
-// 💡 Extract Structured Grouped Headers for Smart Legend & Comma
 function parseSubjectHeaders(headers) {
     let firstEmpty = headers.indexOf("");
     if(firstEmpty === -1) firstEmpty = headers.length;
@@ -286,53 +278,74 @@ function parseSubjectHeaders(headers) {
     let c = 3;
     while(c < firstEmpty && c < headers.length) {
         if (isOptHeader(headers[c])) {
-            let testH = getSafeHeader(headers[c+1]);
-            let mainH = getSafeHeader(headers[c+2]);
-            let tInfo = extractSubAndExam(testH, 'test');
-            let mInfo = extractSubAndExam(mainH, 'main');
+            let optSubName = headers[c].replace(" Opt Name", "").trim();
+            if(!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
             
-            if(!subjects["Optional"]) subjects["Optional"] = { isOpt: true, nameCol: c, tests: [], mains: [] };
-            subjects["Optional"].tests.push({ col: c+1, name: tInfo.exam });
-            subjects["Optional"].mains.push({ col: c+2, name: mInfo.exam });
-            
-            if(!testSeq.includes(tInfo.exam) && tInfo.exam !== "Exam") testSeq.push(tInfo.exam);
-            if(!mainSeq.includes(mInfo.exam) && mInfo.exam !== "Exam") mainSeq.push(mInfo.exam);
-            c += 3;
+            let j = c + 1;
+            while(j < firstEmpty && headers[j].startsWith(optSubName + " - ")) {
+                let info = extractSubAndExam(headers[j]);
+                if(info.type === "Test") { subjects[optSubName].tests.push({ col: j, name: info.exam }); if(!testSeq.includes(info.exam)) testSeq.push(info.exam); }
+                else { subjects[optSubName].mains.push({ col: j, name: info.exam }); if(!mainSeq.includes(info.exam)) mainSeq.push(info.exam); }
+                j++;
+            }
+            c = j;
         } else {
-            let testH = getSafeHeader(headers[c]);
-            let mainH = getSafeHeader(headers[c+1]);
-            let tInfo = extractSubAndExam(testH, 'test');
-            let mInfo = extractSubAndExam(mainH, 'main');
-            let subName = tInfo.sub;
-            
+            let subName = headers[c].split(" - ")[0].trim();
             if(!subjects[subName]) subjects[subName] = { isOpt: false, tests: [], mains: [] };
-            subjects[subName].tests.push({ col: c, name: tInfo.exam });
-            subjects[subName].mains.push({ col: c+1, name: mInfo.exam });
             
-            if(!testSeq.includes(tInfo.exam) && tInfo.exam !== "Exam") testSeq.push(tInfo.exam);
-            if(!mainSeq.includes(mInfo.exam) && mInfo.exam !== "Exam") mainSeq.push(mInfo.exam);
-            c += 2;
+            let j = c;
+            while(j < firstEmpty && headers[j].startsWith(subName + " - ")) {
+                let info = extractSubAndExam(headers[j]);
+                if(info.type === "Test") { subjects[subName].tests.push({ col: j, name: info.exam }); if(!testSeq.includes(info.exam)) testSeq.push(info.exam); }
+                else { subjects[subName].mains.push({ col: j, name: info.exam }); if(!mainSeq.includes(info.exam)) mainSeq.push(info.exam); }
+                j++;
+            }
+            c = j;
         }
     }
     return { subjects, testSeq, mainSeq, firstEmpty };
 }
 
+// 🚀 FAST FRONTEND DATA LOAD (Firebase SDK)
 async function loadData() {
     if(!isAuthReady) return;
     var className = document.getElementById("classSelector").value;
     if(!className) { swalPro.fire({title: 'Hold On!', text: 'Please select a class first.', icon: 'warning'}); return; }
 
-    showLoader(true, "FETCHING DATA...<br><span style='font-size:11px; color:#64748b;'>Querying Server securely</span>");
+    showLoader(true, "FETCHING DATA...<br><span style='font-size:11px; color:#64748b;'>Directly reading from Firebase...</span>");
     document.getElementById("feature-panel").style.display = "none";
     document.getElementById("student-list-container").innerHTML = "";
 
     try {
-        let res = await apiCall('getData', { className: className });
-        showLoader(false);
-        if(res.error) { swalPro.fire('Error', res.error, 'error'); return; }
+        let docName = className.replace(/\s+/g, '_'); 
+        let headerDoc = await db.collection('ClassHeaders').doc(docName).get();
+        cachedHeaders = headerDoc.exists ? JSON.parse(headerDoc.data().headers) : ["ID", "Name", "Roll", "", "Total Avg", "GPA", "Grade", "Position", "Fail_Reason", "Year", "Pass_Marks_Rules"];
+
+        let rawCls = className.trim(); let searchGroup = "";
+        if(rawCls.toLowerCase().includes("science")) { searchGroup = "Science"; rawCls = rawCls.replace(/Science/i, "").trim(); }
+        else if(rawCls.toLowerCase().includes("arts")) { searchGroup = "Arts"; rawCls = rawCls.replace(/Arts/i, "").trim(); }
+        else if(rawCls.toLowerCase().includes("commerce")) { searchGroup = "Commerce"; rawCls = rawCls.replace(/Commerce/i, "").trim(); }
+        let searchClass = rawCls.replace(/Class/i, "").trim(); 
+
+        let snap = await db.collection('Students').where('class', '==', searchClass).get();
+        appData = [];
+        snap.forEach(doc => {
+            let f = doc.data();
+            let dbGroup = f.group ? String(f.group).trim() : "";
+            if(searchGroup === "" || dbGroup.toLowerCase() === searchGroup.toLowerCase()) {
+                let row = new Array(cachedHeaders.length).fill("");
+                row[0] = f.studentID || ""; row[1] = f.name || ""; row[2] = f.roll || "";
+                row[row.length - 2] = f.phone || ""; row[row.length - 1] = doc.id; 
+                if (f.resultMarks) {
+                    let marks = JSON.parse(f.resultMarks);
+                    for(let i=3; i<cachedHeaders.length; i++) { if(marks[i] !== undefined) row[i] = marks[i]; }
+                }
+                appData.push(row);
+            }
+        });
         
-        cachedHeaders = res.headers;
-        appData = res.data;
+        appData.sort((a,b) => (parseInt(a[2])||9999) - (parseInt(b[2])||9999));
+        showLoader(false);
         renderStudentCards();
         document.getElementById("feature-panel").style.display = "flex";
     } catch (err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
@@ -372,7 +385,6 @@ function renderStudentCards() {
         </div>
         <div class="card-footer">
         <button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> Input Marks</button>
-        <button class="btn-view-result" onclick="viewSingleResult(${index})"><i class="fa-solid fa-eye"></i> View Result</button>
         </div>
         `;
         container.appendChild(card);
@@ -383,12 +395,12 @@ function getGP_JS(p) { if(p>=80) return 5.00; if(p>=70) return 4.00; if(p>=60) r
 function getGrade_JS(g) { if(g>=5.00) return "A+"; if(g>=4.00) return "A"; if(g>=3.50) return "A-"; if(g>=3.00) return "B"; if(g>=2.00) return "C"; if(g>=1.00) return "D"; return "F"; }
 
 // ==========================================
-// DATA ENTRY FORM (SAVE RAW ONLY)
+// DATA ENTRY FORM
 // ==========================================
 async function openDataEntryForm(rowIndex) {
     var rowData = appData[rowIndex];
-    var firstEmpty = cachedHeaders.indexOf("");
-    var isBoardClass = document.getElementById("classSelector").value.toLowerCase().includes("class 9") || document.getElementById("classSelector").value.toLowerCase().includes("class 10");
+    var parsed = parseSubjectHeaders(cachedHeaders);
+    var firstEmpty = parsed.firstEmpty;
 
     var html = '<div style="text-align:left; max-height:70vh; overflow-y:auto; padding:10px; background:#f4f6f9; border-radius:10px;">';
     html += '<div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05); margin-bottom:15px;">';
@@ -399,39 +411,34 @@ async function openDataEntryForm(rowIndex) {
     html += '<div style="flex:1;"><label style="font-size:11px; font-weight:bold; color:#475569;">Roll</label><input id="edit-2" readonly class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px; background:#f1f5f9;" value="'+(rowData[2]||'')+'"></div>';
     html += '</div></div>';
     html += '<div style="background:#fff; padding:15px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.05);">';
-    html += '<h4 style="margin:0 0 15px 0; color:var(--main); border-bottom:2px solid #e2e8f0; padding-bottom:5px;"><i class="fa-solid fa-pen-to-square"></i> Input Marks</h4>';
+    html += '<h4 style="margin:0 0 15px 0; color:var(--main); border-bottom:2px solid #e2e8f0; padding-bottom:5px;"><i class="fa-solid fa-pen-to-square"></i> Input Marks <span style="font-size:10px; color:#ef4444; float:right;">*Leave Blank if not taken</span></h4>';
 
-    var c = 3;
-    if(c >= firstEmpty || firstEmpty === -1) {
-        html += '<p style="color:#dc2626; font-size:13px; font-weight:bold;">No subjects added yet! Use "+Add Exam" button.</p>';
+    if(Object.keys(parsed.subjects).length === 0) {
+        html += '<p style="color:#dc2626; font-size:13px; font-weight:bold;">No subjects added yet! Use "+Add Subject" button.</p>';
     } else {
-        while(c < firstEmpty && c < cachedHeaders.length) {
-            if (isOptHeader(cachedHeaders[c])) {
-                var optName = rowData[c] || ''; var tM = rowData[c+1] || ''; var mM = rowData[c+2] || '';
-                var isBoard = cachedHeaders[c+2].includes("[Board Format");
+        Object.keys(parsed.subjects).forEach(subName => {
+            let sub = parsed.subjects[subName];
+            if(sub.isOpt) {
+                var optName = rowData[sub.nameCol] || '';
                 html += '<div style="background:#fffbeb; padding:15px; border-radius:8px; margin-bottom:12px; border:2px dashed #f59e0b;">';
-                html += '<label style="font-weight:bold; color:#d97706; font-size:14px; display:block;"><i class="fa-solid fa-star"></i> Optional / Group Subject</label>';
-                html += '<input id="edit-'+c+'" class="swal2-input" style="margin:10px 0; height:40px; width:100%; font-size:14px; border:1px solid #fcd34d; font-weight:bold; color:#92400e;" placeholder="Enter Subject Name" value="'+optName+'">';
-                html += '<div style="display:flex; gap:10px;">';
-                html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Test Exam Marks</label><input id="edit-'+(c+1)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+tM+'"></div>';
-                if(isBoard || isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+2)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
-                else { html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+2)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; }
-                html += '</div></div>';
-                c += 3;
+                html += '<label style="font-weight:bold; color:#d97706; font-size:14px; display:block;"><i class="fa-solid fa-star"></i> Optional / 4th Subject</label>';
+                html += '<input id="edit-'+sub.nameCol+'" class="swal2-input" style="margin:10px 0; height:40px; width:100%; font-size:14px; border:1px solid #fcd34d; font-weight:bold; color:#92400e;" placeholder="Enter Subject Name (e.g. Higher Math)" value="'+optName+'">';
             } else {
-                var cleanSub = extractSubAndExam(getSafeHeader(cachedHeaders[c]), 'test').sub;
-                var tM = rowData[c] || ''; var mM = rowData[c+1] || '';
-                var isBoard = cachedHeaders[c+1].includes("[Board Format");
                 html += '<div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid #e2e8f0;">';
-                html += '<label style="font-weight:bold; color:#333; font-size:13px; display:block;"><i class="fa-solid fa-book"></i> '+cleanSub+'</label>';
-                html += '<div style="display:flex; gap:10px; margin-top:5px;">';
-                html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Test Exam Marks</label><input id="edit-'+c+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+tM+'"></div>';
-                if(isBoard || isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+1)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
-                else { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+1)+'" type="text" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; }
-                html += '</div></div>';
-                c += 2;
+                html += '<label style="font-weight:bold; color:#333; font-size:13px; display:block;"><i class="fa-solid fa-book"></i> '+subName+'</label>';
             }
-        }
+
+            html += '<div style="display:flex; gap:10px; margin-top:5px; flex-wrap:wrap;">';
+            sub.tests.forEach(t => {
+                var val = rowData[t.col] || '';
+                html += '<div style="flex:1; min-width:100px;"><label style="font-size:11px; color:#475569; font-weight:bold;">'+t.name+' (Test)</label><input id="edit-'+t.col+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+val+'"></div>';
+            });
+            sub.mains.forEach(m => {
+                var val = rowData[m.col] || '';
+                html += '<div style="flex:1; min-width:100px;"><label style="font-size:11px; color:#475569; font-weight:bold;">'+m.name+' (Main)</label><input id="edit-'+m.col+'" type="text" placeholder="e.g. 50+25+25 or 80" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+val+'"></div>';
+            });
+            html += '</div></div>';
+        });
     }
     html += '</div></div>'; 
 
@@ -439,6 +446,7 @@ async function openDataEntryForm(rowIndex) {
         title: 'Input Student Marks',
         html: html,
         showCancelButton: true,
+        cancelButtonText: '<i class="fas fa-times"></i> Close/Cancel',
         confirmButtonText: '<i class="fa-solid fa-cloud-arrow-up"></i> Save Marks',
         preConfirm: () => {
             var newData = [...appData[rowIndex]]; 
@@ -460,7 +468,7 @@ async function openDataEntryForm(rowIndex) {
                 appData[rowIndex] = res.updatedRow;
                 renderStudentCards();
                 const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true });
-                Toast.fire({ icon: 'success', title: 'Marks saved successfully! Click "Calculate All Results" to finalize.' });
+                Toast.fire({ icon: 'success', title: 'Marks saved successfully!' });
             } else { swalPro.fire('Error', res.message, 'error'); }
         } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
     }
@@ -474,7 +482,6 @@ async function calculateAllResults() {
     
     var cls = document.getElementById("classSelector").value;
     var yr = document.getElementById("yearSelector").value;
-    var term = document.getElementById("examTermSelector").value;
     var testW = document.getElementById('testWeight').value;
     var mainW = document.getElementById('mainWeight').value;
     var passPercentage = document.getElementById('genPass').value;
@@ -482,186 +489,148 @@ async function calculateAllResults() {
     swalPro.fire({
         title: 'Calculate All Results?',
         text: `This will calculate GPA, Grade and Rank for ALL students in ${cls}.`,
-        icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Calculate All', confirmButtonColor: '#2563eb'
+        icon: 'warning', showCancelButton: true, cancelButtonText: '<i class="fas fa-times"></i> Cancel', confirmButtonText: 'Yes, Calculate All', confirmButtonColor: '#2563eb'
     }).then(async (result) => {
         if(result.isConfirmed) {
             showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms to all students securely</span>");
             try {
                 let res = await apiCall('calculateAllClassResults', {
-                    className: cls, selectedYear: yr, examTerm: term, 
+                    className: cls, selectedYear: yr, 
                     testWeightStr: testW, mainWeightStr: mainW, passPercentage: passPercentage
                 });
                 showLoader(false);
                 if(res.status === "success") {
                     swalPro.fire('Success', res.msg, 'success');
-                    loadData(); // Reload updated data
+                    loadData(); 
                 } else { swalPro.fire('Error', res.message, 'error'); }
             } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
         }
     });
 }
 
-// 🚀 VIEW SINGLE PROFILE & RESULT (Using Comma Logic)
-function viewSingleResult(rowIndex) {
-    let row = appData[rowIndex];
-    let parsed = parseSubjectHeaders(cachedHeaders);
-    var firstEmpty = parsed.firstEmpty;
-    var testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
-    var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
-    var passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
-    
-    var html = `<div style="text-align:left; background:#fff; padding:15px; border-radius:10px;">
-    <h3 style="color:#005f40; border-bottom:2px solid #005f40; padding-bottom:5px; margin-top:0;">ACADEMIC PROFILE</h3>
-    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} | <b>Roll:</b> ${row[2]}</p>`;
-
-    if(firstEmpty !== -1 && row[firstEmpty+2]) {
-        let failReason = row[firstEmpty+5];
-        let failHtml = (failReason && failReason !== "None") ? `<p style="color:#dc2626; font-weight:bold; font-size:12px;">Failed In: ${failReason}</p>` : ``;
-        html += `<p><b>GPA:</b> ${row[firstEmpty+2]} | <b>Grade:</b> <span style="color:${row[firstEmpty+3]==='F'?'#dc2626':'#16a34a'}; font-weight:bold;">${row[firstEmpty+3]}</span> | <b>Pos:</b> ${row[firstEmpty+4]}</p>${failHtml}
-        
-        <div style="border: 1px dashed #005f40; padding: 6px; font-size: 10px; color: #005f40; margin-bottom: 8px; border-radius: 4px; background: #f0fdf4;">
-        <b>Tests:</b> [ ${parsed.testSeq.join(", ")} ] | <b>Mains:</b> [ ${parsed.mainSeq.join(", ")} ]
-        </div>
-
-        <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
-        <tr style="background:#e2e8f0;"><th style="border:1px solid #ccc; padding:5px;">Subject</th><th style="border:1px solid #ccc; padding:5px;">Test(s)</th><th style="border:1px solid #ccc; padding:5px;">Main(s)</th><th style="border:1px solid #ccc; padding:5px;">Total</th><th style="border:1px solid #ccc; padding:5px;">Grade</th></tr>`;
-
-        Object.keys(parsed.subjects).forEach(subName => {
-            let sub = parsed.subjects[subName];
-            let actualSubName = sub.isOpt ? (row[sub.nameCol] || "Optional") + " (Opt)" : subName;
-            
-            let tMarks = []; let mMarks = []; let tCalc = 0; let mCalc = 0;
-            let hasTest = false; let hasMain = false; let isSubFail = false;
-            let totalTFull = 0; let totalMFull = 0;
-
-            sub.tests.forEach(t => { 
-                let v = parseFloat(row[t.col]); 
-                if(!isNaN(v)) { tMarks.push(v); tCalc += v; hasTest = true; } else { tMarks.push("-"); }
-                let fullMatch = (cachedHeaders[t.col]||"").match(/\((\d+)\)/); totalTFull += fullMatch ? parseInt(fullMatch[1]) : 50;
-            });
-            sub.mains.forEach(m => { 
-                let vStr = String(row[m.col] || "").trim();
-                if(vStr !== "") {
-                    mMarks.push(vStr); hasMain = true;
-                    if(vStr.includes("+")) {
-                        let obtParts = vStr.split('+').map(p=>parseFloat(p)||0);
-                        mCalc += obtParts.reduce((a,b)=>a+b, 0);
-                        let mFullMatch = (cachedHeaders[m.col]||"").match(/\((\d+)\+?(\d+)?\+?(\d+)?\)/); 
-                        if(mFullMatch) {
-                            let fullParts = mFullMatch[0].replace(/[()]/g, '').split('+').map(p=>parseInt(p)||0);
-                            if(fullParts.length > 0 && obtParts[0] < Math.ceil(fullParts[0] * passRatio)) isSubFail = true;
-                            else if(fullParts.length > 1 && obtParts[1] < Math.ceil(fullParts[1] * passRatio)) isSubFail = true;
-                            else if(fullParts.length > 2 && fullParts[2] > 0 && obtParts[2] < Math.ceil(fullParts[2] * passRatio)) isSubFail = true;
-                        }
-                    } else { mCalc += parseFloat(vStr) || 0; }
-                } else { mMarks.push("-"); }
-                
-                let mFMatch = (cachedHeaders[m.col]||"").match(/\((\d+)\+?(\d+)?\+?(\d+)?\)/); 
-                totalMFull += mFMatch ? mFMatch[0].replace(/[()]/g, '').split('+').reduce((a,b)=>a+(parseInt(b)||0), 0) : 100;
-            });
-
-            if(hasTest || hasMain) {
-                let finalMark = 0;
-                if (hasTest && hasMain) finalMark = Math.round(((tCalc / totalTFull) * testWeight) + ((mCalc / totalMFull) * mainWeight));
-                else if (!hasTest && hasMain) finalMark = Math.round((mCalc / totalMFull) * 100);
-                else if (hasTest && !hasMain) finalMark = Math.round((tCalc / totalTFull) * 100);
-
-                if(!isSubFail && finalMark < Math.ceil(100 * passRatio)) isSubFail = true;
-                var subGP = getGP_JS(finalMark); var subGrade = getGrade_JS(subGP);
-                if(isSubFail) subGrade = "F";
-
-                html += `<tr>
-                <td style="border:1px solid #ccc; padding:5px;">${actualSubName}</td>
-                <td style="border:1px solid #ccc; padding:5px;">${tMarks.join(", ")}</td>
-                <td style="border:1px solid #ccc; padding:5px;">${mMarks.join(", ")}</td>
-                <td style="border:1px solid #ccc; padding:5px;">${finalMark}</td>
-                <td style="border:1px solid #ccc; padding:5px;"><b>${subGrade}</b></td></tr>`;
-            }
-        });
-        html += '</table></div>';
-    } else { html += `<p style="color:#dc2626; font-weight:bold;">Result not calculated yet.</p></div>`; }
-    swalPro.fire({ title: 'Student Profile', html: html, confirmButtonText: 'Close' });
+// ==========================================
+// EXAM AND SUBJECT SETUP (GLOBAL)
+// ==========================================
+async function addGlobalExamPopup() {
+    const { value: v } = await swalPro.fire({
+        title: 'Add Global Exam',
+        html: `
+        <input id="exN" class="swal2-input" placeholder="Exam Name (e.g. 1st Monthly, Final Exam)">
+        <select id="exT" class="swal2-input" style="width:100%; height:40px; margin-top:10px;">
+            <option value="Test">Test Exam (e.g. Monthly/Tutorial)</option>
+            <option value="Main">Main Exam (e.g. Term/Final)</option>
+        </select>
+        `,
+        showCancelButton: true, confirmButtonText: 'Add Exam', cancelButtonText: 'Close',
+        preConfirm: () => ({ name: document.getElementById('exN').value, type: document.getElementById('exT').value })
+    });
+    if(v && v.name) {
+        showLoader(true, "SAVING EXAM...");
+        try {
+            let res = await apiCall('addGlobalExam', { examName: v.name, examType: v.type });
+            showLoader(false);
+            if(res.status === "success") swalPro.fire('Success', res.msg, 'success');
+            else swalPro.fire('Error', res.message, 'error');
+        } catch(e) { showLoader(false); swalPro.fire('Error', e.message, 'error'); }
+    }
 }
 
-// ==========================================
-// CRUD OPERATIONS (REST API)
-// ==========================================
 async function addNewSubjectPopup() {
     var cls = document.getElementById("classSelector").value;
+    if(!cls) return swalPro.fire('Hold On!', 'Please select a class first.', 'warning');
+
+    showLoader(true, "Fetching Exams...");
+    let globalExams = [];
+    try {
+        let setDoc = await db.collection('Admin').doc('Settings').get();
+        if(setDoc.exists && setDoc.data().globalExams) globalExams = JSON.parse(setDoc.data().globalExams);
+        showLoader(false);
+    } catch(e) { showLoader(false); return swalPro.fire('Error', e.message, 'error'); }
+
+    if(globalExams.length === 0) return swalPro.fire('No Exams Found', 'Please add Exams via "+Add Exam" first.', 'warning');
+
+    let examHtml = `<div style="text-align:left; max-height:200px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0; margin-top:10px;">`;
+    globalExams.forEach((ex, i) => {
+        let isMain = ex.type === "Main";
+        let placeholder = isMain ? "e.g. 50+25+25 or 100" : "50";
+        examHtml += `
+        <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #cbd5e1;">
+            <label style="font-weight:bold; color:#1e293b; display:block;"><input type="checkbox" id="chkEx-${i}" style="margin-right:5px; transform:scale(1.2);"> ${ex.name} <span style="font-size:10px; color:#64748b;">(${ex.type})</span></label>
+            <input type="text" id="mrkEx-${i}" placeholder="Full Marks: ${placeholder}" style="width:100%; margin-top:5px; padding:6px; border:1px solid #cbd5e1; border-radius:4px; font-size:12px;">
+        </div>`;
+    });
+    examHtml += `</div>`;
+
     const { value: v } = await swalPro.fire({ 
-        title: 'Add New Exam / Subject', 
+        title: 'Add New Subject', 
         html: `
-        <input id="subN" class="swal2-input" placeholder="Subject Name (e.g. Bangla or Optional)">
-        <input id="tEN" class="swal2-input" placeholder="Test Exam Name (e.g. 1st Monthly)">
-        <input id="mEN" class="swal2-input" placeholder="Main Exam Name (e.g. 1st Term)">
-        <div style="display:flex; justify-content:space-between; margin-top:15px; text-align:left; padding: 0 10px;">
-        <div style="width:48%;">
-        <label style="font-size:11px; font-weight:bold;">Test Full Marks:</label>
-        <input id="tM" type="number" class="swal2-input" value="50" style="margin-top:0; height:40px;">
-        </div>
-        <div style="width:48%;">
-        <label style="font-size:11px; font-weight:bold;">Main Full Marks:</label>
-        <input id="mM" type="text" class="swal2-input" placeholder="e.g. 50+25+25 or 100" value="100" style="margin-top:0; height:40px;">
-        </div>
-        </div>
-        <div style="margin-top: 15px; text-align: left; padding: 0 10px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 6px;">
+        <input id="subN" class="swal2-input" placeholder="Subject Name (e.g. Physics, Bangla)">
+        ${examHtml}
+        <div style="margin-top: 15px; text-align: left; padding: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px;">
         <label style="font-size:12px; font-weight:bold; color:#166534; cursor:pointer; display:flex; align-items:center;">
         <input type="checkbox" id="isOptCheck" style="transform: scale(1.3); margin-right: 10px;">
-        This is an Optional Subject
+        This is a 4th / Optional Subject
         </label>
         </div>
         `, 
-        showCancelButton: true, confirmButtonText: 'Add to Database',
-        preConfirm: () => ({ 
-            subject: document.getElementById('subN').value, testName: document.getElementById('tEN').value, mainName: document.getElementById('mEN').value, testM: document.getElementById('tM').value, mainM: document.getElementById('mM').value, isOpt: document.getElementById('isOptCheck').checked
-        }) 
+        showCancelButton: true, confirmButtonText: 'Add to Database', cancelButtonText: 'Cancel',
+        preConfirm: () => {
+            let selected = [];
+            globalExams.forEach((ex, i) => {
+                if(document.getElementById(`chkEx-${i}`).checked) {
+                    let marks = document.getElementById(`mrkEx-${i}`).value;
+                    if(!marks) marks = ex.type === "Main" ? "100" : "50";
+                    selected.push({ name: ex.name, type: ex.type, marks: marks });
+                }
+            });
+            return { subject: document.getElementById('subN').value, isOpt: document.getElementById('isOptCheck').checked, selectedExams: selected }
+        } 
     });
 
-    if (v && v.subject && (v.testName || v.mainName)) {
-        showLoader(true, "ADDING SUBJECT...");
+    if (v && v.subject && v.selectedExams.length > 0) {
+        showLoader(true, "LINKING SUBJECT...");
         try {
-            let res;
-            if(v.isOpt) { res = await apiCall('addOptionalSubjectColumn', { className: cls, subjectName: v.subject, testName: v.testName||"Test", mainName: v.mainName||"Main", testMarks: v.testM, mainMarks: v.mainM }); } 
-            else { res = await apiCall('addSubjectColumn', { className: cls, subjectName: v.subject, testName: v.testName||"Test", mainName: v.mainName||"Main", testMarks: v.testM, mainMarks: v.mainM }); }
-            showLoader(false); swalPro.fire('Success', res.msg, 'success'); loadData();
+            let res = await apiCall('addSubjectAdvanced', { className: cls, subjectData: v });
+            showLoader(false); 
+            if(res.status === "success") { swalPro.fire('Success', res.msg, 'success'); loadData(); }
+            else { swalPro.fire('Error', res.message, 'error'); }
         } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
-    } else if (v) { swalPro.fire('Error', 'Subject and at least one Exam Name required!', 'error'); }
+    } else if (v) { swalPro.fire('Error', 'Subject name and at least one Exam must be selected!', 'error'); }
 }
 
 async function deleteSubjectPopup() {
-    var firstEmpty = cachedHeaders.indexOf("");
-    if (firstEmpty <= 3) { swalPro.fire('Notice', 'No exams/subjects available to delete.', 'info'); return; }
+    var parsed = parseSubjectHeaders(cachedHeaders);
+    if (Object.keys(parsed.subjects).length === 0) { swalPro.fire('Notice', 'No subjects available to delete.', 'info'); return; }
+    
     var subOptions = {};
+    Object.keys(parsed.subjects).forEach(subName => {
+        let sub = parsed.subjects[subName];
+        subOptions[sub.nameCol || sub.tests[0].col] = sub.isOpt ? `Optional: ${subName}` : subName;
+    });
 
-    var i = 3;
-    while (i < firstEmpty && i < cachedHeaders.length) {
-        if (isOptHeader(cachedHeaders[i])) { subOptions[i] = "Optional Group: " + getSafeHeader(cachedHeaders[i]).replace(/Opt Name/gi, '').trim(); i += 3; } 
-        else { subOptions[i] = getSafeHeader(cachedHeaders[i]).replace(/- Test|\(\d+\)|\[.*\]/gi, '').trim(); i += 2; }
-    }
-
-    const { value: selectedCol } = await swalPro.fire({ title: 'Remove Exam/Subject', input: 'select', inputOptions: subOptions, inputPlaceholder: 'Select to remove', showCancelButton: true, confirmButtonText: 'Remove Data', confirmButtonColor: '#dc2626' });
+    const { value: selectedCol } = await swalPro.fire({ title: 'Remove Subject', input: 'select', inputOptions: subOptions, inputPlaceholder: 'Select Subject', showCancelButton: true, confirmButtonText: 'Remove Completely', confirmButtonColor: '#dc2626' });
 
     if (selectedCol) {
         var cls = document.getElementById("classSelector").value;
-        var isOpt = isOptHeader(cachedHeaders[selectedCol]);
         showLoader(true, "REMOVING SUBJECT...");
         try {
-            let res;
-            if(isOpt) { res = await apiCall('deleteOptionalSubjectColumns', { className: cls, colIndex: parseInt(selectedCol) }); } 
-            else { res = await apiCall('deleteSubjectColumns', { className: cls, colIndex: parseInt(selectedCol) }); }
-            showLoader(false); swalPro.fire('Removed!', res.msg, 'success'); loadData();
+            let res = await apiCall('deleteSubjectColumn', { className: cls, colIndex: parseInt(selectedCol) });
+            showLoader(false); 
+            if(res.status === "success") { swalPro.fire('Removed!', res.msg, 'success'); loadData(); }
+            else { swalPro.fire('Error', res.message, 'error'); }
         } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
     }
 }
 
 function setupSheetHeader() {
     var cls = document.getElementById("classSelector").value;
-    swalPro.fire({ title: 'Format Database?', text: 'Warning: This will clear ALL data and create a Blank Format!', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Format Now', confirmButtonColor: '#dc2626' }).then(async r => {
+    swalPro.fire({ title: 'Format Database?', text: 'Warning: This will clear ALL marks format!', icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Format Now', confirmButtonColor: '#dc2626' }).then(async r => {
         if(r.isConfirmed) { 
             showLoader(true, "FORMATTING DATABASE..."); 
             try {
                 let res = await apiCall('setupStandardHeaders', { className: cls });
-                showLoader(false); swalPro.fire('Success', res.msg, 'success'); loadData();
+                showLoader(false); 
+                if(res.status === "success") { swalPro.fire('Success', res.msg, 'success'); loadData(); }
             } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
         }
     });
@@ -672,12 +641,10 @@ function setupSheetHeader() {
 // ==========================================
 async function openPrintMarksheetPopup() {
     if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
-    var firstEmpty = cachedHeaders.indexOf("");
-    if(firstEmpty === -1) { swalPro.fire('Format Error', 'Please click the Format DB button.', 'error'); return; }
-
     var parsed = parseSubjectHeaders(cachedHeaders);
-    var examOptions = { "All": "Combined Result (Print All Data)" };
-    
+    if(parsed.firstEmpty === -1) { swalPro.fire('Format Error', 'Please click the Format DB button.', 'error'); return; }
+
+    var examOptions = { "All": "Combined Final Result (All Exams)" };
     parsed.mainSeq.forEach(m => { examOptions[m] = m + " (Main Exam Only)"; });
 
     const { value: selectedExam } = await swalPro.fire({ 
@@ -698,9 +665,6 @@ function generateMarkSheets(examFilter) {
     var firstEmpty = parsed.firstEmpty;
     var rawClassName = document.getElementById("classSelector").value;
     var year = document.getElementById("yearSelector").value;
-    var term = document.getElementById("examTermSelector").value;
-    var testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
-    var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
     var passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
 
     var groupName = "N/A"; var baseClassName = rawClassName;
@@ -718,19 +682,23 @@ function generateMarkSheets(examFilter) {
     <th width="12%">GP</th>
     </tr>`;
 
-    var legendHtml = `<div class="legend-box"><b>Exams Reference:</b> [ Tests: ${parsed.testSeq.join(", ")} | Mains: ${parsed.mainSeq.join(", ")} ]</div>`;
+    let activeTests = []; let activeMains = [];
+    parsed.testSeq.forEach(t => { if(examFilter === "All" || t === examFilter) activeTests.push(t); });
+    parsed.mainSeq.forEach(m => { if(examFilter === "All" || m === examFilter) activeMains.push(m); });
+    var legendHtml = `<div class="legend-box"><b>Exams Reference:</b> [ Tests Sequence: ${activeTests.join(", ") || "None"} | Mains Sequence: ${activeMains.join(", ") || "None"} ]</div>`;
 
     try {
         let printCount = 0;
         data.forEach(row => {
             if(!row[0] && !row[1]) return; 
             var grade = row[firstEmpty+3]; 
-            if(grade === "Incomplete") return; 
+            if(grade === "Incomplete") return; // 🛑 Skips incomplete results
             printCount++;
 
             var id = row[0]; var name = row[1]; var roll = row[2];
             var totalAvg = row[firstEmpty+1]; var gpa = row[firstEmpty+2]; var pos = row[firstEmpty+4];
             var failReason = row[firstEmpty+5];
+            
             if(!gpa || gpa === "") { gpa = "0.00"; grade = "F"; totalAvg = "0.00"; pos = "N/A"; }
 
             var teacherRemark = "";
@@ -744,9 +712,6 @@ function generateMarkSheets(examFilter) {
 
             var rowsHtmlArray = [];
             
-            var filterTotalMarks = 0; var filterTotalRegularGP = 0; var filterOptExtraGP = 0;
-            var filterRegularSubCount = 0; var filterTotalSubCount = 0; var filterIsFail = false;
-
             Object.keys(parsed.subjects).forEach(subName => {
                 let sub = parsed.subjects[subName];
                 let actualSubName = sub.isOpt ? (row[sub.nameCol] || "Optional") + " (Opt)" : subName;
@@ -788,18 +753,16 @@ function generateMarkSheets(examFilter) {
 
                 if(hasTest || hasMain) {
                     let finalMark = 0;
+                    let testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
+                    let mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+
                     if (hasTest && hasMain) finalMark = Math.round(((tCalc / totalTFull) * testWeight) + ((mCalc / totalMFull) * mainWeight));
                     else if (!hasTest && hasMain) finalMark = Math.round((mCalc / totalMFull) * 100);
                     else if (hasTest && !hasMain) finalMark = Math.round((tCalc / totalTFull) * 100);
 
                     if(!isSubFail && finalMark < Math.ceil(100 * passRatio)) isSubFail = true;
                     var subGP = getGP_JS(finalMark); var subGrade = getGrade_JS(subGP);
-                    if(isSubFail) { subGrade = "F"; filterIsFail = true; }
-                    
-                    if(sub.isOpt && subGP > 2.00) filterOptExtraGP += (subGP - 2.00);
-                    else if (!sub.isOpt) { filterTotalRegularGP += subGP; filterRegularSubCount++; }
-                    
-                    filterTotalMarks += finalMark; filterTotalSubCount++;
+                    if(isSubFail) subGrade = "F";
 
                     rowsHtmlArray.push(`<tr><td class="sub-name">${actualSubName}</td>
                     <td class="exam-name">${tMarks.join(", ")}</td>
@@ -808,23 +771,6 @@ function generateMarkSheets(examFilter) {
                     <td><strong>${subGrade}</strong></td><td><strong>${subGP.toFixed(2)}</strong></td></tr>`);
                 }
             });
-
-            // Filter Re-Calc
-            let dispGPA = gpa; let dispGrade = grade; let dispAvg = totalAvg; let dispPos = pos;
-            if(examFilter !== "All") {
-                if(filterRegularSubCount > 0) {
-                    if (filterIsFail) { dispGPA = "0.00"; dispGrade = "F"; } 
-                    else {
-                        let combinedGP = filterTotalRegularGP + filterOptExtraGP;
-                        let rawGPA = combinedGP / filterRegularSubCount; 
-                        if (rawGPA > 5.00) rawGPA = 5.00; 
-                        dispGPA = rawGPA.toFixed(2);
-                        dispGrade = getGrade_JS(parseFloat(dispGPA));
-                    }
-                } else { dispGPA = "0.00"; dispGrade = "N/A"; }
-                dispAvg = filterTotalSubCount > 0 ? (filterTotalMarks / filterTotalSubCount).toFixed(2) : "0.00";
-                dispPos = "N/A"; 
-            }
 
             var finalTableHtml = "";
             if(rowsHtmlArray.length === 0) {
@@ -847,7 +793,7 @@ function generateMarkSheets(examFilter) {
             <p class="school-address">Sultan Nagar, Saidpur, Nilphamari | School Code: 481931 | EMIS Code: 00704061312</p>
             <p class="school-address">Email: info@srms2012.edu.bd | Web: www.srms2012.edu.bd</p>
             </div>
-            <div class="transcript-title">Academic Transcript - ${examFilter === "All" ? term : examFilter} (${year})</div>
+            <div class="transcript-title">Academic Transcript - ${examFilter === "All" ? "Final Result" : examFilter} (${year})</div>
             </div>
 
             <table class="student-info">
@@ -860,10 +806,10 @@ function generateMarkSheets(examFilter) {
 
             <div class="summary-box">
             <div style="display: flex; justify-content: space-around; margin-bottom: 5px; font-size: 15px; font-weight: 800; color: #005f40; flex-wrap: wrap;">
-            <span>Total Avg: ${dispAvg}</span>
-            <span>GPA: ${dispGPA}</span>
-            <span>Grade: ${dispGrade}</span>
-            <span>Position: ${dispPos}</span>
+            <span>Total Avg: ${totalAvg}</span>
+            <span>GPA: ${gpa}</span>
+            <span>Grade: <span style="color:${grade==='F'?'#dc2626':'#16a34a'};">${grade}</span></span>
+            <span>Position: ${pos}</span>
             </div>
             <p class="remark-text">Remark: ${teacherRemark}</p>
             </div>
@@ -872,10 +818,10 @@ function generateMarkSheets(examFilter) {
             </div>`;
         });
         
-        if (printCount === 0) { swalPro.fire('Warning', 'No completed results to print.', 'warning'); return; }
+        if (printCount === 0) { swalPro.fire('Warning', 'No completed results to print. Only calculating results will be printed.', 'warning'); return; }
         document.getElementById("print-area").innerHTML = printHtml;
         window.print();
-    } catch (err) { swalPro.fire('Error Generating Marksheet', 'Format Error: ' + err.message, 'error'); }
+    } catch (err) { swalPro.fire('Error Generating Marksheet', err.message, 'error'); }
 }
 
 // ==========================================
@@ -885,7 +831,6 @@ async function printTabulation() {
     if(appData.length === 0) { swalPro.fire('Error', 'Load data first', 'error'); return; }
     var cls = document.getElementById("classSelector").value;
     var year = document.getElementById("yearSelector").value;
-    var term = document.getElementById("examTermSelector").value;
     
     var parsed = parseSubjectHeaders(cachedHeaders);
     var firstEmpty = parsed.firstEmpty;
@@ -907,7 +852,7 @@ async function printTabulation() {
     <div style="text-align:center; margin-bottom: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
     <img src="${SCHOOL_LOGO}" alt="School Logo" style="height: 60px; margin-bottom: 8px;">
     <h1 style="margin:0; font-size:22px; color:#005f40; text-transform:uppercase; font-weight:900;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
-    <h3 style="margin:2px 0 0 0; color:#333; font-size:15px; font-weight:bold;">Master Tabulation Sheet (${term}) - ${cls} | Year: ${year}</h3>
+    <h3 style="margin:2px 0 0 0; color:#333; font-size:15px; font-weight:bold;">Master Tabulation Sheet - ${cls} | Year: ${year}</h3>
     </div>
     <table class="tab-table">
     <thead>
