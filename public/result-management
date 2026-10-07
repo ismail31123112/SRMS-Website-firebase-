@@ -24,19 +24,16 @@ body { font-family: 'Poppins', sans-serif; background-color: var(--bg); padding:
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* Loader */
 .loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .spinner { width: 60px; height: 60px; border: 5px solid #e2e8f0; border-top: 5px solid var(--main); border-radius: 50%; animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 15px; }
 .loader-text { font-weight: 800; color: var(--main); font-size: 16px; letter-spacing: 1px; text-align: center; }
 
 #appContainer { display: none; }
 
-/* Header Elements */
 .app-header { background: #ffffff; padding: 20px 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0, 95, 64, 0.08); margin-bottom: 20px; border-top: 6px solid var(--main); animation: fadeInUp 0.5s ease-out forwards; }
 .header-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
 .header-title h2 { margin: 0; color: var(--main); font-size: 24px; font-weight: 900; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
 
-/* Controls & Buttons */
 .control-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .weight-controls { display: flex; gap: 10px; align-items: center; background: #f8fafc; padding: 10px 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
 .weight-controls input { border: 1px solid #cbd5e1; border-radius: 6px; padding: 6px; font-weight: bold; color: var(--main); width: 50px; text-align: center; }
@@ -59,7 +56,6 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 
 #feature-panel { display: none; gap: 12px; align-items: center; flex-wrap: wrap; border-top: 1px dashed #cbd5e1; padding-top: 20px; margin-top: 15px; }
 
-/* Student Cards Grid */
 #student-list-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; margin-top: 20px; animation: fadeInUp 0.5s ease; }
 .student-card { background: white; border-radius: 16px; box-shadow: 0 4px 15px rgba(0, 95, 64, 0.05); border: 1px solid #e2e8f0; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; }
 .student-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 95, 64, 0.1); border-color: #cbd5e1; }
@@ -94,7 +90,6 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     #print-area { display: block !important; width: 100%; }
     @page { size: A4 landscape; margin: 5mm; }
 
-    /* Marksheet Layout */
     .report-card { width: 100%; height: 98vh; max-height: 98vh; page-break-after: always; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid #005f40; padding: 10px 15px; border-radius: 8px; background: #fff; overflow: hidden; }
     .school-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #005f40; padding-bottom: 5px; margin-bottom: 8px; }
     .school-logo { width: 65px; height: auto; object-fit: contain;}
@@ -120,7 +115,6 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     .footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 15px; }
     .signature { border-top: 1.5px solid #333; width: 150px; text-align: center; padding-top: 4px; font-weight: 700; font-size: 11px; color: #333; }
 
-    /* Tabulation Layout */
     .tabulation-print { width: 100%; font-family: 'Poppins', sans-serif; }
     .tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: auto; word-wrap: break-word; }
     .tab-table th.vert-header { background: #e2e8f0 !important; padding: 10px 4px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; writing-mode: vertical-rl; transform: rotate(180deg); height: 110px; white-space: nowrap;}
@@ -209,24 +203,11 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     <div id="print-area"></div>
 </div>
 
-<!-- ================= FIREBASE & APP LOGIC ================= -->
-<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
-
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
 
-// ✅ Firebase Configuration (শুধু Firestore ডেটা লোডের জন্য)
-const firebaseConfig = { 
-    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", 
-    authDomain: "srms-website-management.firebaseapp.com", 
-    projectId: "srms-website-management" 
-};
-if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-const db = firebase.firestore();
-
-// 💡 100% SECURE: ব্যাকএন্ড থেকে আসা টোকেন রিসিভ করা হচ্ছে
+// 💡 100% SECURE: ব্যাকএন্ড থেকে আসা টোকেন রিসিভ করা হচ্ছে (No Firebase Frontend Initialization Needed)
 var SERVER_TOKEN = "<?= serverToken ?>"; 
 var appData = [];
 var cachedHeaders = [];
@@ -331,47 +312,26 @@ function parseSubjectHeaders(headers) {
     return { subjects, testSeq, mainSeq, firstEmpty };
 }
 
-// 🚀 FAST FRONTEND DATA LOAD (Firebase SDK)
+// 🚀 FETCH DATA SECURELY VIA BACKEND
 async function loadData() {
     var className = document.getElementById("classSelector").value;
     if(!className) { swalPro.fire({title: 'Hold On!', text: 'Please select a class first.', icon: 'warning'}); return; }
 
-    showLoader(true, "FETCHING DATA...<br><span style='font-size:11px; color:#64748b;'>Directly reading from Firebase...</span>");
+    showLoader(true, "FETCHING DATA...<br><span style='font-size:11px; color:#64748b;'>Verifying Token & Loading Securely...</span>");
     document.getElementById("feature-panel").style.display = "none";
     document.getElementById("student-list-container").innerHTML = "";
 
     try {
-        let docName = className.replace(/\s+/g, '_'); 
-        let headerDoc = await db.collection('ClassHeaders').doc(docName).get();
-        cachedHeaders = headerDoc.exists ? JSON.parse(headerDoc.data().headers) : ["ID", "Name", "Roll", "", "Total Avg", "GPA", "Grade", "Position", "Fail_Reason", "Year", "Pass_Marks_Rules"];
-
-        let rawCls = className.trim(); let searchGroup = "";
-        if(rawCls.toLowerCase().includes("science")) { searchGroup = "Science"; rawCls = rawCls.replace(/Science/i, "").trim(); }
-        else if(rawCls.toLowerCase().includes("arts")) { searchGroup = "Arts"; rawCls = rawCls.replace(/Arts/i, "").trim(); }
-        else if(rawCls.toLowerCase().includes("commerce")) { searchGroup = "Commerce"; rawCls = rawCls.replace(/Commerce/i, "").trim(); }
-        let searchClass = rawCls.replace(/Class/i, "").trim(); 
-
-        let snap = await db.collection('Students').where('class', '==', searchClass).get();
-        appData = [];
-        snap.forEach(doc => {
-            let f = doc.data();
-            let dbGroup = f.group ? String(f.group).trim() : "";
-            if(searchGroup === "" || dbGroup.toLowerCase() === searchGroup.toLowerCase()) {
-                let row = new Array(cachedHeaders.length).fill("");
-                row[0] = f.studentID || ""; row[1] = f.name || ""; row[2] = f.roll || "";
-                row[row.length - 2] = f.phone || ""; row[row.length - 1] = doc.id; 
-                if (f.resultMarks) {
-                    let marks = JSON.parse(f.resultMarks);
-                    for(let i=3; i<cachedHeaders.length; i++) { if(marks[i] !== undefined) row[i] = marks[i]; }
-                }
-                appData.push(row);
-            }
-        });
-        
-        appData.sort((a,b) => (parseInt(a[2])||9999) - (parseInt(b[2])||9999));
+        let res = await apiCall('getClassData', { className: className });
         showLoader(false);
-        renderStudentCards();
-        document.getElementById("feature-panel").style.display = "flex";
+        if (res.status === "success") {
+            cachedHeaders = res.headers;
+            appData = res.data;
+            renderStudentCards();
+            document.getElementById("feature-panel").style.display = "flex";
+        } else {
+            swalPro.fire('Error', res.message, 'error');
+        }
     } catch (err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
 }
 
@@ -405,7 +365,7 @@ function renderStudentCards() {
         <div class="card-header"><h4><i class="fa-solid fa-user-graduate" style="color:var(--main);"></i> ${name}</h4><span class="roll-badge">Roll: ${roll}</span></div>
         <div class="card-body">
         <p><i class="fa-solid fa-id-badge" style="color:#94a3b8; width:20px;"></i> <b>ID:</b> ${id}</p>
-        <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade: ${grade}</span></div>
+        <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade:${grade}</span></div>
         </div>
         <div class="card-footer">
         <button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> Input Marks</button>
@@ -564,12 +524,13 @@ async function addNewSubjectPopup() {
     var cls = document.getElementById("classSelector").value;
     if(!cls) return swalPro.fire('Hold On!', 'Please select a class first.', 'warning');
 
-    showLoader(true, "Fetching Exams...");
+    showLoader(true, "Fetching Exams securely...");
     let globalExams = [];
     try {
-        let setDoc = await db.collection('Admin').doc('Settings').get();
-        if(setDoc.exists && setDoc.data().globalExams) globalExams = JSON.parse(setDoc.data().globalExams);
+        let res = await apiCall('getGlobalExams');
         showLoader(false);
+        if(res.status === "success") { globalExams = res.data || []; } 
+        else { return swalPro.fire('Error', res.message, 'error'); }
     } catch(e) { showLoader(false); return swalPro.fire('Error', e.message, 'error'); }
 
     if(globalExams.length === 0) return swalPro.fire('No Exams Found', 'Please add Exams via "+Add Exam" first.', 'warning');
@@ -672,7 +633,7 @@ function viewSingleResult(rowIndex) {
     
     var html = `<div style="text-align:left; background:#fff; padding:15px; border-radius:10px;">
     <h3 style="color:#005f40; border-bottom:2px solid #005f40; padding-bottom:5px; margin-top:0;">ACADEMIC PROFILE</h3>
-    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} | <b>Roll:</b> ${row[2]}</p>`;
+    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} \vert{} <b>Roll:</b>${row[2]}</p>`;
 
     if(firstEmpty !== -1 && row[firstEmpty+2]) {
         let failReason = row[firstEmpty+5];
