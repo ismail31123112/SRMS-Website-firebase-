@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <script>
-// URL থেকে টোকেন বা সিক্রেট প্যারামিটার হাইড করার জন্য
 if (window.history.replaceState) {
     var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
     window.history.replaceState({path: cleanUrl}, '', cleanUrl);
@@ -142,7 +141,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 
 <div class="loader-overlay" id="loader">
     <div class="spinner"></div>
-    <div class="loader-text" id="loaderText">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b; font-weight: 500;">Verifying User Session</span></div>
+    <div class="loader-text" id="loaderText">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b; font-weight: 500;">Verifying User Session & Access Rules</span></div>
 </div>
 
 <div id="appContainer">
@@ -216,7 +215,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec";
 
 // ✅ Firebase Configuration (শুধু Firestore ডেটা লোডের জন্য)
 const firebaseConfig = { 
@@ -227,12 +226,11 @@ const firebaseConfig = {
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
 
-// 💡 ব্যাকএন্ড থেকে আসা টোকেন রিসিভ করা হচ্ছে
+// 💡 100% SECURE: ব্যাকএন্ড থেকে আসা টোকেন রিসিভ করা হচ্ছে
 var SERVER_TOKEN = "<?= serverToken ?>"; 
 var appData = [];
 var cachedHeaders = [];
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg"; 
-var isAuthReady = true; // এখন আর ব্লক করবে না
 
 const swalPro = Swal.mixin({ customClass: { confirmButton: 'btn-open', cancelButton: 'btn-danger' }, buttonsStyling: false });
 
@@ -254,7 +252,18 @@ async function apiCall(actionName, payloadData = {}) {
     } catch (error) { throw error; }
 }
 
+// 🛡️ SECURITY KICK-OUT PROTOCOL
 window.onload = function() {
+    if (!SERVER_TOKEN || SERVER_TOKEN.trim() === "") {
+        showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Security Breach Detected. Redirecting to Login...</span>");
+        let redirectUrl = "https://www.srms2012.edu.bd/login-panel/accounting-and-management-department";
+        setTimeout(() => { 
+            try { window.top.location.replace(redirectUrl); } 
+            catch(e) { window.location.href = redirectUrl; }
+        }, 1200);
+        return;
+    }
+
     showLoader(false); 
     document.getElementById('appContainer').style.display = 'block';
     
@@ -324,7 +333,6 @@ function parseSubjectHeaders(headers) {
 
 // 🚀 FAST FRONTEND DATA LOAD (Firebase SDK)
 async function loadData() {
-    if(!isAuthReady) return;
     var className = document.getElementById("classSelector").value;
     if(!className) { swalPro.fire({title: 'Hold On!', text: 'Please select a class first.', icon: 'warning'}); return; }
 
@@ -397,7 +405,7 @@ function renderStudentCards() {
         <div class="card-header"><h4><i class="fa-solid fa-user-graduate" style="color:var(--main);"></i> ${name}</h4><span class="roll-badge">Roll: ${roll}</span></div>
         <div class="card-body">
         <p><i class="fa-solid fa-id-badge" style="color:#94a3b8; width:20px;"></i> <b>ID:</b> ${id}</p>
-        <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade:${grade}</span></div>
+        <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade: ${grade}</span></div>
         </div>
         <div class="card-footer">
         <button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> Input Marks</button>
@@ -664,7 +672,7 @@ function viewSingleResult(rowIndex) {
     
     var html = `<div style="text-align:left; background:#fff; padding:15px; border-radius:10px;">
     <h3 style="color:#005f40; border-bottom:2px solid #005f40; padding-bottom:5px; margin-top:0;">ACADEMIC PROFILE</h3>
-    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} \vert{} <b>Roll:</b>${row[2]}</p>`;
+    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} | <b>Roll:</b> ${row[2]}</p>`;
 
     if(firstEmpty !== -1 && row[firstEmpty+2]) {
         let failReason = row[firstEmpty+5];
