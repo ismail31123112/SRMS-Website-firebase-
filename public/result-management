@@ -94,7 +94,6 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     #print-area { display: block !important; width: 100%; }
     @page { size: A4 landscape; margin: 5mm; }
 
-    /* Marksheet Layout */
     .report-card { width: 100%; height: 98vh; max-height: 98vh; page-break-after: always; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid #005f40; padding: 10px 15px; border-radius: 8px; background: #fff; overflow: hidden; }
     .school-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #005f40; padding-bottom: 5px; margin-bottom: 8px; }
     .school-logo { width: 65px; height: auto; object-fit: contain;}
@@ -120,7 +119,6 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     .footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 15px; }
     .signature { border-top: 1.5px solid #333; width: 150px; text-align: center; padding-top: 4px; font-weight: 700; font-size: 11px; color: #333; }
 
-    /* Tabulation Layout */
     .tabulation-print { width: 100%; font-family: 'Poppins', sans-serif; }
     .tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: auto; word-wrap: break-word; }
     .tab-table th.vert-header { background: #e2e8f0 !important; padding: 10px 4px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; writing-mode: vertical-rl; transform: rotate(180deg); height: 110px; white-space: nowrap;}
@@ -141,7 +139,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 
 <div class="loader-overlay" id="loader">
     <div class="spinner"></div>
-    <div class="loader-text" id="loaderText">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b; font-weight: 500;">Verifying User Session</span></div>
+    <div class="loader-text" id="loaderText">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b; font-weight: 500;">Verifying User Session & Access Rules</span></div>
 </div>
 
 <div id="appContainer">
@@ -228,7 +226,8 @@ if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-var SERVER_TOKEN = ""; 
+// 💡 100% SECURE: ব্যাকএন্ড থেকে আসা টোকেন রিসিভ করা হচ্ছে 
+var SERVER_TOKEN = "<?= serverToken ?>"; 
 var appData = [];
 var cachedHeaders = [];
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg"; 
@@ -240,7 +239,7 @@ function showLoader(show, text="PROCESSING...") {
     else { document.getElementById('loader').style.display = 'none'; }
 }
 
-// 🛡️ API Caller
+// 🛡️ API Caller (টোকেন সহ রিকোয়েস্ট পাঠাবে)
 async function apiCall(actionName, payloadData = {}) {
     let payload = { action: actionName, token: SERVER_TOKEN, ...payloadData };
     try {
@@ -256,14 +255,18 @@ async function apiCall(actionName, payloadData = {}) {
 // 🛡️ THE GATEKEEPER: AUTO VERIFY OR KICK OUT
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
     auth.onAuthStateChanged(async (user) => {
-        if (user) {
-            let email = user.email;
+        // Link checking
+        let hasTokenInUrl = SERVER_TOKEN && SERVER_TOKEN.trim() !== "";
+        
+        if (user || hasTokenInUrl) {
+            let email = user ? user.email : "";
             let isAdmin = email === "admin@srms.edu.bd" || email === "srms2012.edu@gmail.com";
             let isTeacher = /^01.*@srms\.edu\.bd$/.test(email);
 
-            if (isAdmin || isTeacher) {
+            if ((user && (isAdmin || isTeacher)) || hasTokenInUrl) {
                 // ✅ Authorized User Detected
-                SERVER_TOKEN = await user.getIdToken(true);
+                if(user) SERVER_TOKEN = await user.getIdToken(true);
+                
                 showLoader(false);
                 document.getElementById('appContainer').style.display = 'block';
                 
@@ -285,7 +288,10 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
 function kickOut() {
     showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Security Breach Detected. Redirecting to Login...</span>");
     let redirectUrl = window.location.origin + "/login-panel/accounting-and-management-department";
-    setTimeout(() => { window.location.replace(redirectUrl); }, 1200);
+    setTimeout(() => { 
+        try { window.top.location.replace(redirectUrl); } 
+        catch(e) { window.location.href = redirectUrl; }
+    }, 1200);
 }
 
 // ==========================================
@@ -755,7 +761,7 @@ function viewSingleResult(rowIndex) {
 }
 
 // ==========================================
-// MARKSHEET GENERATOR (SMART COMMA APPROACH)
+// MARKSHEET GENERATOR
 // ==========================================
 async function openPrintMarksheetPopup() {
     if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
@@ -968,7 +974,7 @@ function generateMarkSheets(examFilter) {
 }
 
 // ==========================================
-// TABULATION GENERATOR (FRONTEND ONLY)
+// TABULATION GENERATOR
 // ==========================================
 async function printTabulation() {
     if(appData.length === 0) { swalPro.fire('Error', 'Load data first', 'error'); return; }
