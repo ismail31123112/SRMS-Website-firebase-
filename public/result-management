@@ -8,7 +8,6 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-<!-- 🔒 URL Security Script: URL থেকে টোকেন গায়েব করে দেবে -->
 <script>
 if (window.history.replaceState) {
 var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
@@ -18,19 +17,13 @@ window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 
 <style>
 /* === Global Styles & Theme (SRMS Green & Gold) === */
-:root { 
---main: #005f40; 
---main-dark: #003d29; 
---gold: #f59e0b; 
---bg: #f4f6f9; 
-}
+:root { --main: #005f40; --main-dark: #003d29; --gold: #f59e0b; --bg: #f4f6f9; }
 body { font-family: 'Poppins', sans-serif; background-color: var(--bg); padding: 20px; margin: 0; color: #333; }
 
-/* === Animations === */
+/* === Animations & Loaders === */
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* === Loader Overlay === */
 .loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
 .spinner { width: 60px; height: 60px; border: 5px solid #e2e8f0; border-top: 5px solid var(--main); border-radius: 50%; animation: spin 1s cubic-bezier(0.55, 0.15, 0.45, 0.85) infinite; margin-bottom: 15px; }
 .loader-text { font-weight: 800; color: var(--main); font-size: 16px; letter-spacing: 1px; text-align: center; }
@@ -55,10 +48,9 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 .btn-reset { background: linear-gradient(135deg, #ef4444, #b91c1c); }
 .btn-tool { background: linear-gradient(135deg, #475569, #1e293b); }
 .btn-add-sub { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
-.btn-add-stu { background: linear-gradient(135deg, #0ea5e9, #0284c7); }
+.btn-calc { background: linear-gradient(135deg, #2563eb, #1d4ed8); font-weight: 900;}
 .btn-print { background: linear-gradient(135deg, #1f2937, #111827); }
 .btn-report { background: linear-gradient(135deg, var(--gold), #b45309); }
-.btn-save { background: linear-gradient(135deg, #16a34a, #15803d); }
 .btn-publish { background: linear-gradient(135deg, #10b981, #047857); font-weight: 900;}
 .btn-back { background: linear-gradient(135deg, #64748b, #475569); }
 
@@ -75,18 +67,15 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 .card-body p { margin: 0 0 10px 0; font-size: 13px; color: #475569; font-weight: 500;}
 .result-mini { display: flex; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 800; color: #166534; }
 .result-mini.failed { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+.result-mini.incomp { background: #fffbeb; border-color: #fde68a; color: #b45309; }
 .card-footer { padding: 15px 20px; background: #f8fafc; border-top: 1px solid #e2e8f0; display: flex; gap: 10px; }
 .btn-edit-marks { background: linear-gradient(135deg, #0ea5e9, #0284c7); color: white; flex-grow: 1; border-radius: 10px; padding: 12px; font-size: 14px;}
 .btn-view-result { background: linear-gradient(135deg, var(--main), var(--main-dark)); color: white; flex-grow: 1; border-radius: 10px; padding: 12px; font-size: 14px;}
-.btn-del-stu { background: #fecaca; color: #dc2626; width: 45px; border-radius: 10px; border: none;}
-.btn-del-stu:hover { background: #dc2626; color: white; }
 
-/* Responsive adjustments for Mobile */
 @media (max-width: 768px) {
 body { padding: 10px; }
 .control-group, #feature-panel { justify-content: center; }
 button { flex: 1 1 45%; font-size: 12px; padding: 8px 10px; }
-.mobile-swal { width: 95% !important; padding: 10px; }
 #student-list-container { grid-template-columns: 1fr; }
 }
 
@@ -99,16 +88,9 @@ PRINT AREA (STRICT LANDSCAPE A4)
 .app-header, #student-list-container, .loader-overlay, .swal2-container { display: none !important; }
 body { background: white; margin: 0; padding: 0; -webkit-print-color-adjust: exact; font-family: 'Poppins', sans-serif; }
 #print-area { display: block !important; width: 100%; }
-
 @page { size: A4 landscape; margin: 5mm; }
 
-/* --- MARKSHEET SPECIFIC CSS --- */
-.report-card { 
-width: 100%; height: 98vh; max-height: 98vh;
-page-break-after: always; box-sizing: border-box; display: flex; 
-flex-direction: column; border: 2px solid #005f40; padding: 10px 15px; 
-border-radius: 8px; background: #fff; overflow: hidden; 
-}
+.report-card { width: 100%; height: 98vh; max-height: 98vh; page-break-after: always; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid #005f40; padding: 10px 15px; border-radius: 8px; background: #fff; overflow: hidden; }
 .school-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #005f40; padding-bottom: 5px; margin-bottom: 8px; }
 .school-logo { width: 65px; height: auto; object-fit: contain;}
 .header-center { text-align: center; flex-grow: 1; }
@@ -116,22 +98,21 @@ border-radius: 8px; background: #fff; overflow: hidden;
 .school-address { font-size: 11px; font-weight: 500; color: #333; margin: 2px 0 0 0; }
 .transcript-title { background: #005f40; color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
 
-.student-info { width: 100%; margin-bottom: 10px; font-size: 12px; font-weight: 600; border: 1px solid #ccc; border-radius: 6px; padding: 4px; background: #f8fafc !important; border-collapse: collapse; }
+.student-info { width: 100%; margin-bottom: 8px; font-size: 11px; font-weight: 600; border: 1px solid #ccc; border-radius: 6px; padding: 4px; background: #f8fafc !important; border-collapse: collapse; }
 .student-info td { padding: 4px 8px; }
 
 .marks-wrapper { display: flex; justify-content: space-between; gap: 10px; width: 100%; flex-grow: 1; align-items: flex-start; overflow: hidden; }
 .marks-table { width: 100%; border-collapse: collapse; font-size: 10px; } 
 .marks-table th, .marks-table td { border: 1px solid #333; padding: 3px 2px; text-align: center; word-wrap: break-word; }
-.marks-table th { background-color: #e2e8f0 !important; font-weight: 700; color: #005f40; font-size: 10px; }
+.marks-table th { background-color: #e2e8f0 !important; font-weight: 700; color: #005f40; font-size: 9px; }
 .marks-table td.sub-name { text-align: left; padding-left: 6px; font-weight: 700; }
 .marks-table td.exam-name { font-weight: 600; color: #1e293b; background: #f8fafc !important; font-size: 9px; }
 
-.summary-box { border: 2px solid #005f40; padding: 8px; width: 90%; margin: 5px auto; text-align: center; border-radius: 6px; background: #f0fdf4 !important; }
-.remark-text { font-size: 13px; font-weight: 700; color: #dc2626; font-style: italic; margin: 5px 0 0 0; }
-.footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 20px; }
+.summary-box { border: 2px solid #005f40; padding: 6px; width: 90%; margin: 5px auto; text-align: center; border-radius: 6px; background: #f0fdf4 !important; }
+.remark-text { font-size: 12px; font-weight: 700; color: #dc2626; font-style: italic; margin: 4px 0 0 0; }
+.footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 15px; }
 .signature { border-top: 1.5px solid #333; width: 150px; text-align: center; padding-top: 4px; font-weight: 700; font-size: 11px; color: #333; }
 
-/* --- TABULATION SPECIFIC CSS --- */
 .tabulation-print { width: 100%; font-family: 'Poppins', sans-serif; }
 .tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: fixed; word-wrap: break-word; }
 .tab-table th { background: #e2e8f0 !important; padding: 6px 3px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; }
@@ -143,10 +124,7 @@ thead { display: table-header-group; }
 
 @media print and (orientation: portrait) {
 #print-area { display: none !important; }
-body::before {
-content: "⚠️ PRINT ERROR: This document is strictly designed for LANDSCAPE orientation. Please change the layout to 'Landscape' in your print settings to proceed.";
-display: flex; align-items: center; justify-content: center; height: 50vh; text-align: center; font-size: 24px; font-family: 'Poppins', sans-serif; font-weight: 800; color: #dc2626; padding: 40px; border: 4px dashed #dc2626; margin: 50px; background-color: #fef2f2; border-radius: 10px;
-}
+body::before { content: "⚠️ PRINT ERROR: Please change the layout to 'Landscape' in your print settings."; display: flex; align-items: center; justify-content: center; height: 50vh; text-align: center; font-size: 24px; font-family: 'Poppins', sans-serif; font-weight: 800; color: #dc2626; padding: 40px; border: 4px dashed #dc2626; margin: 50px; background-color: #fef2f2; border-radius: 10px; }
 }
 </style>
 </head>
@@ -212,12 +190,12 @@ display: flex; align-items: center; justify-content: center; height: 50vh; text-
 
 <button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> +Exam/Sub</button>
 <button class="btn-danger" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="deleteSubjectPopup()"><i class="fa-solid fa-book-dead"></i> -Exam/Sub</button>
-<button class="btn-add-stu" onclick="addStudentPopup()"><i class="fa-solid fa-user-plus"></i> +Student</button>
-<button class="btn-tool" onclick="pasteDataHelper()"><i class="fa-solid fa-clipboard-list"></i> Paste Data</button> 
-<button class="btn-danger" onclick="clearDataPopup()"><i class="fa-solid fa-eraser"></i> Format</button> 
+
+<!-- 🔥 Universal Calculate Button -->
+<button class="btn-calc" onclick="calculateAllResults()"><i class="fa-solid fa-gears"></i> Calculate All Results</button>
+
 <button class="btn-print" onclick="printTabulation()"><i class="fa-solid fa-table"></i> Tabulation</button>
 <button class="btn-report" onclick="generateMarkSheets()"><i class="fa-solid fa-file-invoice"></i> Marksheets</button>
-<button class="btn-save" onclick="saveData()"><i class="fa-solid fa-cloud-arrow-up"></i> Sync & Save (Bulk)</button>
 
 <div style="display:flex; align-items:center; gap:10px; background:#f0fdf4; padding:5px 15px; border-radius:12px; border:2px solid #10b981;">
 <input type="checkbox" id="smsPublishChk" checked style="width:20px; height:20px; accent-color:#047857;">
@@ -232,20 +210,12 @@ display: flex; align-items: center; justify-content: center; height: 50vh; text-
 <div id="print-area"></div>
 </div>
 
-<!-- ================= FIREBASE & FRONTEND LOGIC ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
-// 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
-
-// ✅ Firebase Configuration
-const firebaseConfig = {
-    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
-    authDomain: "srms-website-management.firebaseapp.com",
-    projectId: "srms-website-management"
-};
+const firebaseConfig = { apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", authDomain: "srms-website-management.firebaseapp.com", projectId: "srms-website-management" };
 if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const auth = firebase.auth();
 
@@ -261,38 +231,25 @@ function showLoader(show, text="PROCESSING...") {
     else { document.getElementById('loader').style.display = 'none'; }
 }
 
-// 🌐 BACKEND API CALLER 
 async function apiCall(actionName, payloadData = {}) {
     let token = await auth.currentUser.getIdToken(true);
     let payload = { action: actionName, token: token, ...payloadData };
     try {
-        let res = await fetch(SCRIPT_URL, {
-            method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-        });
-        return await res.json();
-    } catch (error) {
-        console.error("API Call Failed:", error); throw error;
-    }
+        let res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+        let text = await res.text();
+        if (text.includes("<html") || text.includes("<body")) throw new Error("Deployment Access Error!");
+        let data = JSON.parse(text);
+        if(data.status === "error") throw new Error(data.message);
+        return data;
+    } catch (error) { throw error; }
 }
 
-// 🛡️ Security Gate - Check Auth State
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-.then(() => {
+auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
     auth.onAuthStateChanged(function(user) {
-        if (user) {
-            isAuthReady = true;
-            showLoader(false);
-            document.getElementById('appContainer').style.display = 'block';
-        } else {
-            showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
-            setTimeout(() => {
-                var currentDomain = window.location.protocol + "//" + window.location.host;
-                window.location.replace(currentDomain + "/login-panel/teacher-login-portal");
-            }, 1000);
-        }
+        if (user) { isAuthReady = true; showLoader(false); document.getElementById('appContainer').style.display = 'block'; } 
+        else { showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>"); setTimeout(() => { window.location.replace(window.location.protocol + "//" + window.location.host + "/login-panel/teacher-login-portal"); }, 1000); }
     });
-})
-.catch(err => { console.error("Auth Persistence Error:", err); });
+}).catch(err => { console.error("Auth Persistence Error:", err); });
 
 window.onload = function() {
     var yrSelect = document.getElementById("yearSelector");
@@ -305,15 +262,9 @@ window.onload = function() {
     }
 };
 
-function isOptHeader(h) {
-    if (!h) return false;
-    var str = String(h).toLowerCase();
-    return str.includes("opt") && str.includes("name");
-}
-
+function isOptHeader(h) { return h ? String(h).toLowerCase().includes("opt") && String(h).toLowerCase().includes("name") : false; }
 function getSafeHeader(h) { return h ? String(h) : ""; }
 
-// 🚀 LOAD DATA (REST API)
 async function loadData() {
     if(!isAuthReady) return;
     var className = document.getElementById("classSelector").value;
@@ -332,20 +283,15 @@ async function loadData() {
         appData = res.data;
         renderStudentCards();
         document.getElementById("feature-panel").style.display = "flex";
-    } catch (err) {
-        showLoader(false); swalPro.fire('Error', err.message, 'error');
-    }
+    } catch (err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
 }
 
-// ==========================================
-// RENDER APP-STYLE CARDS
-// ==========================================
 function renderStudentCards() {
     var container = document.getElementById("student-list-container");
     container.innerHTML = "";
     var firstEmpty = cachedHeaders.indexOf("");
     if(appData.length === 0) {
-        container.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding: 40px; color:#94a3b8;"><i class="fa-solid fa-users-slash fa-3x mb-3"></i><br><h3>No Students Found</h3><p>Ensure students exist in this class database.</p></div>';
+        container.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding: 40px; color:#94a3b8;"><i class="fa-solid fa-users-slash fa-3x mb-3"></i><br><h3>No Students Found</h3></div>';
         return;
     }
 
@@ -354,12 +300,15 @@ function renderStudentCards() {
         var id = row[0] || 'N/A';
         var name = row[1] || 'Unknown Student';
         var roll = row[2] || 'N/A';
-        var rowDbId = row[row.length - 1]; // Quick update doc ID
         
         var gpa = firstEmpty !== -1 ? (row[firstEmpty+2] || '0.00') : 'N/A';
         var grade = firstEmpty !== -1 ? (row[firstEmpty+3] || '-') : 'N/A';
+        
         var isFailed = (grade === 'F' || gpa === '0.00');
-        var resClass = isFailed ? 'result-mini failed' : 'result-mini';
+        var isIncomp = (grade === 'Incomplete');
+        var resClass = 'result-mini';
+        if(isFailed) resClass += ' failed';
+        if(isIncomp) resClass += ' incomp';
 
         var optSubjectsHtml = '';
         if(firstEmpty > 3) {
@@ -367,9 +316,7 @@ function renderStudentCards() {
             while(cIdx < firstEmpty && cIdx < cachedHeaders.length) {
                 if (isOptHeader(cachedHeaders[cIdx])) {
                     var stuOptName = row[cIdx];
-                    if(stuOptName && String(stuOptName).trim() !== "") {
-                        optSubjectsHtml += `<span style="background:#fef08a; color:#854d0e; font-size:11px; padding:3px 8px; border-radius:12px; margin-right:5px; font-weight:700; display:inline-block; margin-top:8px; border:1px solid #fde047;"><i class="fa-solid fa-star"></i> ${stuOptName}</span>`;
-                    }
+                    if(stuOptName && String(stuOptName).trim() !== "") { optSubjectsHtml += `<span style="background:#fef08a; color:#854d0e; font-size:11px; padding:3px 8px; border-radius:12px; margin-right:5px; font-weight:700; display:inline-block; margin-top:8px; border:1px solid #fde047;"><i class="fa-solid fa-star"></i> ${stuOptName}</span>`; }
                     cIdx += 3;
                 } else { cIdx += 2; }
             }
@@ -379,29 +326,20 @@ function renderStudentCards() {
         var card = document.createElement("div");
         card.className = "student-card";
         card.innerHTML = `
-        <div class="card-header">
-        <h4><i class="fa-solid fa-user-graduate" style="color:var(--main);"></i> ${name}</h4>
-        <span class="roll-badge">Roll: ${roll}</span>
-        </div>
+        <div class="card-header"><h4><i class="fa-solid fa-user-graduate" style="color:var(--main);"></i> ${name}</h4><span class="roll-badge">Roll: ${roll}</span></div>
         <div class="card-body">
         <p><i class="fa-solid fa-id-badge" style="color:#94a3b8; width:20px;"></i> <b>ID:</b> ${id}</p>
-        <div class="${resClass}">
-        <span>GPA: ${gpa}</span>
-        <span>Grade: ${grade}</span>
-        </div>
+        <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade: ${grade}</span></div>
         ${optDisplay}
         </div>
         <div class="card-footer">
         <button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> Input Marks</button>
-        <button class="btn-view-result" onclick="generateSingleResult(${index})"><i class="fa-solid fa-gears"></i> Create Result's</button>
+        <button class="btn-view-result" onclick="viewSingleResult(${index})"><i class="fa-solid fa-eye"></i> View Profile/Result</button>
         </div>
         `;
         container.appendChild(card);
     });
 }
-
-function getGP_JS(p) { if(p>=80) return 5.00; if(p>=70) return 4.00; if(p>=60) return 3.50; if(p>=50) return 3.00; if(p>=40) return 2.00; if(p>=33) return 1.00; return 0.00; }
-function getGrade_JS(g) { if(g>=5.00) return "A+"; if(g>=4.00) return "A"; if(g>=3.50) return "A-"; if(g>=3.00) return "B"; if(g>=2.00) return "C"; if(g>=1.00) return "D"; return "F"; }
 
 function extractSubAndExam(headerText, type) {
     if(!headerText) return { sub: "Unknown", exam: "Exam", isBoardFormat: false };
@@ -410,13 +348,15 @@ function extractSubAndExam(headerText, type) {
     var clean = String(headerText).replace(typeReg, '').replace(/\[.*\]/g, '').trim();
     var idx = clean.lastIndexOf(" - ");
     if(idx === -1) idx = clean.lastIndexOf("-"); 
-
     if(idx !== -1) { return { sub: clean.substring(0, idx).trim(), exam: clean.substring(idx + 1).replace(/^-/,'').trim(), isBoardFormat: isBoardFormat }; }
     return { sub: clean, exam: "Exam", isBoardFormat: isBoardFormat };
 }
 
+function getGP_JS(p) { if(p>=80) return 5.00; if(p>=70) return 4.00; if(p>=60) return 3.50; if(p>=50) return 3.00; if(p>=40) return 2.00; if(p>=33) return 1.00; return 0.00; }
+function getGrade_JS(g) { if(g>=5.00) return "A+"; if(g>=4.00) return "A"; if(g>=3.50) return "A-"; if(g>=3.00) return "B"; if(g>=2.00) return "C"; if(g>=1.00) return "D"; return "F"; }
+
 // ==========================================
-// 💡 DATA ENTRY FORM (FAST RAW DATA SAVE)
+// DATA ENTRY FORM (SAVE RAW ONLY)
 // ==========================================
 async function openDataEntryForm(rowIndex) {
     var rowData = appData[rowIndex];
@@ -436,39 +376,29 @@ async function openDataEntryForm(rowIndex) {
 
     var c = 3;
     if(c >= firstEmpty || firstEmpty === -1) {
-        html += '<p style="color:#dc2626; font-size:13px; font-weight:bold;">No subjects added yet! Close this and use "+Add Exam" button.</p>';
+        html += '<p style="color:#dc2626; font-size:13px; font-weight:bold;">No subjects added yet! Use "+Add Exam" button.</p>';
     } else {
         while(c < firstEmpty && c < cachedHeaders.length) {
             if (isOptHeader(cachedHeaders[c])) {
-                var optName = rowData[c] || '';
-                var tM = rowData[c+1] || '';
-                var mM = rowData[c+2] || '';
+                var optName = rowData[c] || ''; var tM = rowData[c+1] || ''; var mM = rowData[c+2] || '';
                 html += '<div style="background:#fffbeb; padding:15px; border-radius:8px; margin-bottom:12px; border:2px dashed #f59e0b;">';
-                html += '<label style="font-weight:bold; color:#d97706; font-size:14px; display:block;"><i class="fa-solid fa-star"></i> Optional / Group Subject Setup</label>';
+                html += '<label style="font-weight:bold; color:#d97706; font-size:14px; display:block;"><i class="fa-solid fa-star"></i> Optional / Group Subject</label>';
                 html += '<input id="edit-'+c+'" class="swal2-input" style="margin:10px 0; height:40px; width:100%; font-size:14px; border:1px solid #fcd34d; font-weight:bold; color:#92400e;" placeholder="Enter Subject Name" value="'+optName+'">';
                 html += '<div style="display:flex; gap:10px;">';
                 html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Test Exam Marks</label><input id="edit-'+(c+1)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+tM+'"></div>';
-                if(isBoardClass) {
-                    html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+2)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>';
-                } else {
-                    html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+2)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>';
-                }
+                if(isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+2)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
+                else { html += '<div style="flex:1;"><label style="font-size:11px; color:#92400e; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+2)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; }
                 html += '</div></div>';
                 c += 3;
             } else {
-                var subInfo = extractSubAndExam(getSafeHeader(cachedHeaders[c]), 'test');
-                var cleanSub = subInfo.sub;
-                var tM = rowData[c] || '';
-                var mM = rowData[c+1] || '';
+                var cleanSub = extractSubAndExam(getSafeHeader(cachedHeaders[c]), 'test').sub;
+                var tM = rowData[c] || ''; var mM = rowData[c+1] || '';
                 html += '<div style="background:#f8fafc; padding:12px; border-radius:8px; margin-bottom:12px; border:1px solid #e2e8f0;">';
                 html += '<label style="font-weight:bold; color:#333; font-size:13px; display:block;"><i class="fa-solid fa-book"></i> '+cleanSub+'</label>';
                 html += '<div style="display:flex; gap:10px; margin-top:5px;">';
                 html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Test Exam Marks</label><input id="edit-'+c+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+tM+'"></div>';
-                if(isBoardClass) {
-                    html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+1)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>';
-                } else {
-                    html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+1)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>';
-                }
+                if(isBoardClass) { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main (CQ+MCQ+Prac)</label><input id="edit-'+(c+1)+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; } 
+                else { html += '<div style="flex:1;"><label style="font-size:11px; color:#475569; font-weight:bold;">Main Exam Marks</label><input id="edit-'+(c+1)+'" type="number" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+mM+'"></div>'; }
                 html += '</div></div>';
                 c += 2;
             }
@@ -494,31 +424,25 @@ async function openDataEntryForm(rowIndex) {
     if(formValues) {
         showLoader(true, "SAVING RAW MARKS...<br><span style='font-size:11px; color:#64748b;'>Direct Write to Database</span>");
         try {
-            let rowDocId = appData[rowIndex][appData[rowIndex].length - 1]; // Use doc ID directly
+            let rowDocId = appData[rowIndex][appData[rowIndex].length - 1]; 
             let res = await apiCall('saveRawMarks', { rowId: rowDocId, rowData: formValues });
             showLoader(false);
             if(res.status === "success") {
                 appData[rowIndex] = res.updatedRow;
                 renderStudentCards();
                 const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 3000, timerProgressBar: true });
-                Toast.fire({ icon: 'success', title: 'Marks saved successfully! Click "Create Result\'s" to calculate.' });
-            } else {
-                swalPro.fire('Error', res.message, 'error');
-            }
-        } catch(err) {
-            showLoader(false); swalPro.fire('Error', err.message, 'error');
-        }
+                Toast.fire({ icon: 'success', title: 'Marks saved successfully! Click "Calculate All Results" to finalize.' });
+            } else { swalPro.fire('Error', res.message, 'error'); }
+        } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
     }
 }
 
 // ==========================================
-// 💡 GENERATE / CREATE RESULT (BACKEND CALCULATOR)
+// 💡 UNIVERSAL CALCULATE ALL RESULTS
 // ==========================================
-async function generateSingleResult(rowIndex) {
-    let rowData = appData[rowIndex];
-    var firstEmpty = cachedHeaders.indexOf("");
-    if(firstEmpty === -1) { swalPro.fire('Format Error', 'Format is broken. Fix format first.', 'error'); return; }
-
+async function calculateAllResults() {
+    if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
+    
     var cls = document.getElementById("classSelector").value;
     var yr = document.getElementById("yearSelector").value;
     var term = document.getElementById("examTermSelector").value;
@@ -532,166 +456,91 @@ async function generateSingleResult(rowIndex) {
         prac: document.getElementById('pracPass').value
     };
 
-    showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms securely via Server</span>");
-    try {
-        let rowDocId = rowData[rowData.length - 1]; 
-        let res = await apiCall('calculateSingleResult', {
-            className: cls, rowId: rowDocId, selectedYear: yr,
-            examTerm: term, testWeightStr: testW, mainWeightStr: mainW, passMarksRules: passRules
-        });
-        showLoader(false);
-        if(res.status === "success") {
-            appData[rowIndex] = res.updatedRow;
-            renderStudentCards();
-            viewSingleResult(rowIndex); // Auto open modal to view result after generation
-        } else {
-            swalPro.fire('Error', res.message, 'error');
+    swalPro.fire({
+        title: 'Calculate All Results?',
+        text: `This will calculate GPA, Grade and Rank for ALL students in ${cls}.`,
+        icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Calculate All', confirmButtonColor: '#2563eb'
+    }).then(async (result) => {
+        if(result.isConfirmed) {
+            showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms to all students securely</span>");
+            try {
+                let res = await apiCall('calculateAllClassResults', {
+                    className: cls, selectedYear: yr, examTerm: term, 
+                    testWeightStr: testW, mainWeightStr: mainW, passMarksRules: passRules
+                });
+                showLoader(false);
+                if(res.status === "success") {
+                    swalPro.fire('Success', res.msg, 'success');
+                    loadData(); // Reload updated data
+                } else { swalPro.fire('Error', res.message, 'error'); }
+            } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
         }
-    } catch(err) {
-        showLoader(false); swalPro.fire('Error', err.message, 'error');
-    }
+    });
 }
 
-// 🚀 VIEW SINGLE RESULT MODAL
+// 🚀 VIEW SINGLE PROFILE & RESULT
 function viewSingleResult(rowIndex) {
     let row = appData[rowIndex];
     var firstEmpty = cachedHeaders.indexOf("");
     var testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
     var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
     
-    if(firstEmpty === -1 || !row[firstEmpty+2]) {
-        swalPro.fire('Notice', 'Result not calculated yet. Please click "Create Result\'s".', 'info'); return;
-    }
-
     var html = `<div style="text-align:left; background:#fff; padding:15px; border-radius:10px;">
-    <h3 style="color:#005f40; border-bottom:2px solid #005f40; padding-bottom:5px; margin-top:0;">ACADEMIC RESULT</h3>
-    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} | <b>Roll:</b> ${row[2]}<br><b>GPA:</b> ${row[firstEmpty+2]} | <b>Grade:</b> ${row[firstEmpty+3]} | <b>Pos:</b> ${row[firstEmpty+4]}</p>
-    <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
-    <tr style="background:#e2e8f0;"><th style="border:1px solid #ccc; padding:5px;">Subject</th><th style="border:1px solid #ccc; padding:5px;">Test</th><th style="border:1px solid #ccc; padding:5px;">Main</th><th style="border:1px solid #ccc; padding:5px;">Grade</th></tr>`;
+    <h3 style="color:#005f40; border-bottom:2px solid #005f40; padding-bottom:5px; margin-top:0;">ACADEMIC PROFILE</h3>
+    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} | <b>Roll:</b> ${row[2]}</p>`;
 
-    if(firstEmpty > 3) {
-        var c = 3;
-        while(c < firstEmpty && c < cachedHeaders.length) {
-            if (isOptHeader(cachedHeaders[c])) {
-                var optName = row[c] || 'Optional';
-                var tM = parseFloat(row[c+1]); var mMRaw = String(row[c+2]);
-                var hasTest = !isNaN(tM); var hasMain = mMRaw.trim() !== "";
-                if(hasTest || hasMain) {
-                    var totalMain = 0;
-                    if(hasMain) { if(mMRaw.includes("+")) totalMain = mMRaw.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); else totalMain = parseFloat(mMRaw) || 0; }
-                    var testFullMatch = (cachedHeaders[c+1]||"").match(/\((\d+)\)/); var tFull = testFullMatch ? parseInt(testFullMatch[1]) : 50;
-                    var mainFullMatch = (cachedHeaders[c+2]||"").match(/\((\d+)\)/); var mFull = mainFullMatch ? parseInt(mainFullMatch[1]) : 100;
-                    var finalMark = 0; tM = hasTest ? tM : 0;
-                    if (hasTest && hasMain) finalMark = Math.round(((tM / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
-                    else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
-                    else if (hasTest && !hasMain) finalMark = Math.round((tM / tFull) * 100);
-                    var subGrade = getGrade_JS(getGP_JS(finalMark));
-                    html += `<tr><td style="border:1px solid #ccc; padding:5px;">${optName} (Opt)</td><td style="border:1px solid #ccc; padding:5px;">${hasTest?tM:'-'}</td><td style="border:1px solid #ccc; padding:5px;">${hasMain?totalMain:'-'}</td><td style="border:1px solid #ccc; padding:5px;"><b>${subGrade}</b></td></tr>`;
+    if(firstEmpty !== -1 && row[firstEmpty+2]) {
+        html += `<p><b>GPA:</b> ${row[firstEmpty+2]} | <b>Grade:</b> ${row[firstEmpty+3]} | <b>Pos:</b> ${row[firstEmpty+4]}</p>
+        <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
+        <tr style="background:#e2e8f0;"><th style="border:1px solid #ccc; padding:5px;">Subject</th><th style="border:1px solid #ccc; padding:5px;">Test</th><th style="border:1px solid #ccc; padding:5px;">Main</th><th style="border:1px solid #ccc; padding:5px;">Grade</th></tr>`;
+
+        if(firstEmpty > 3) {
+            var c = 3;
+            while(c < firstEmpty && c < cachedHeaders.length) {
+                if (isOptHeader(cachedHeaders[c])) {
+                    var optName = row[c] || 'Optional';
+                    var tM = parseFloat(row[c+1]); var mMRaw = String(row[c+2] || "").trim();
+                    var hasTest = !isNaN(tM); var hasMain = mMRaw !== "";
+                    if(hasTest || hasMain) {
+                        var totalMain = 0;
+                        if(hasMain) { if(mMRaw.includes("+")) totalMain = mMRaw.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); else totalMain = parseFloat(mMRaw) || 0; }
+                        var tFullMatch = (cachedHeaders[c+1]||"").match(/\((\d+)\)/); var tFull = tFullMatch ? parseInt(tFullMatch[1]) : 50;
+                        var mFullMatch = (cachedHeaders[c+2]||"").match(/\((\d+)\)/); var mFull = mFullMatch ? parseInt(mFullMatch[1]) : 100;
+                        var finalMark = 0; tM = hasTest ? tM : 0;
+                        if (hasTest && hasMain) finalMark = Math.round(((tM / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
+                        else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
+                        else if (hasTest && !hasMain) finalMark = Math.round((tM / tFull) * 100);
+                        var subGrade = getGrade_JS(getGP_JS(finalMark));
+                        html += `<tr><td style="border:1px solid #ccc; padding:5px;">${optName} (Opt)</td><td style="border:1px solid #ccc; padding:5px;">${hasTest?tM:'-'}</td><td style="border:1px solid #ccc; padding:5px;">${hasMain?totalMain:'-'}</td><td style="border:1px solid #ccc; padding:5px;"><b>${subGrade}</b></td></tr>`;
+                    }
+                    c += 3;
+                } else {
+                    var cleanSub = extractSubAndExam(getSafeHeader(cachedHeaders[c]), 'test').sub;
+                    var tM = parseFloat(row[c]); var mMRaw = String(row[c+1] || "").trim();
+                    var hasTest = !isNaN(tM); var hasMain = mMRaw !== "";
+                    if(hasTest || hasMain) {
+                        var totalMain = 0;
+                        if(hasMain) { if(mMRaw.includes("+")) totalMain = mMRaw.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); else totalMain = parseFloat(mMRaw) || 0; }
+                        var tFullMatch = (cachedHeaders[c]||"").match(/\((\d+)\)/); var tFull = tFullMatch ? parseInt(tFullMatch[1]) : 50;
+                        var mFullMatch = (cachedHeaders[c+1]||"").match(/\((\d+)\)/); var mFull = mFullMatch ? parseInt(mFullMatch[1]) : 100;
+                        var finalMark = 0; tM = hasTest ? tM : 0;
+                        if (hasTest && hasMain) finalMark = Math.round(((tM / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
+                        else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
+                        else if (hasTest && !hasMain) finalMark = Math.round((tM / tFull) * 100);
+                        var subGrade = getGrade_JS(getGP_JS(finalMark));
+                        html += `<tr><td style="border:1px solid #ccc; padding:5px;">${cleanSub}</td><td style="border:1px solid #ccc; padding:5px;">${hasTest?tM:'-'}</td><td style="border:1px solid #ccc; padding:5px;">${hasMain?totalMain:'-'}</td><td style="border:1px solid #ccc; padding:5px;"><b>${subGrade}</b></td></tr>`;
+                    }
+                    c += 2;
                 }
-                c += 3;
-            } else {
-                var cleanSub = extractSubAndExam(getSafeHeader(cachedHeaders[c]), 'test').sub;
-                var tM = parseFloat(row[c]); var mMRaw = String(row[c+1]);
-                var hasTest = !isNaN(tM); var hasMain = mMRaw.trim() !== "";
-                if(hasTest || hasMain) {
-                    var totalMain = 0;
-                    if(hasMain) { if(mMRaw.includes("+")) totalMain = mMRaw.split('+').reduce((sum, val) => sum + (parseFloat(val) || 0), 0); else totalMain = parseFloat(mMRaw) || 0; }
-                    var testFullMatch = (cachedHeaders[c]||"").match(/\((\d+)\)/); var tFull = testFullMatch ? parseInt(testFullMatch[1]) : 50;
-                    var mainFullMatch = (cachedHeaders[c+1]||"").match(/\((\d+)\)/); var mFull = mainFullMatch ? parseInt(mainFullMatch[1]) : 100;
-                    var finalMark = 0; tM = hasTest ? tM : 0;
-                    if (hasTest && hasMain) finalMark = Math.round(((tM / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
-                    else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
-                    else if (hasTest && !hasMain) finalMark = Math.round((tM / tFull) * 100);
-                    var subGrade = getGrade_JS(getGP_JS(finalMark));
-                    html += `<tr><td style="border:1px solid #ccc; padding:5px;">${cleanSub}</td><td style="border:1px solid #ccc; padding:5px;">${hasTest?tM:'-'}</td><td style="border:1px solid #ccc; padding:5px;">${hasMain?totalMain:'-'}</td><td style="border:1px solid #ccc; padding:5px;"><b>${subGrade}</b></td></tr>`;
-                }
-                c += 2;
             }
         }
+        html += '</table></div>';
+    } else {
+        html += `<p style="color:#dc2626; font-weight:bold;">Result not calculated yet.</p></div>`;
     }
-    html += '</table></div>';
-    swalPro.fire({ title: 'Result Summary', html: html, confirmButtonText: 'Close' });
+    swalPro.fire({ title: 'Student Profile', html: html, confirmButtonText: 'Close' });
 }
 
-
-// ==========================================
-// BULK SAVE & OLD METHODS (Paste/Delete) API
-// ==========================================
-async function saveData() { 
-    var cls = document.getElementById("classSelector").value;
-    var yr = document.getElementById("yearSelector").value;
-    var term = document.getElementById("examTermSelector").value;
-    var testW = document.getElementById('testWeight').value;
-    var mainW = document.getElementById('mainWeight').value;
-    var passRules = { general: document.getElementById('genPass').value, cq: document.getElementById('cqPass').value, mcq: document.getElementById('mcqPass').value, prac: document.getElementById('pracPass').value };
-
-    showLoader(true, "PROCESSING BULK SAVE...");
-    try {
-        let res = await apiCall('processAndSaveData', {
-            className: cls, clientData: appData, selectedYear: yr,
-            examTerm: term, testWeightStr: testW, mainWeightStr: mainW, passMarksRules: passRules
-        });
-        showLoader(false); 
-        swalPro.fire('Success!', res.msg, 'success'); 
-        loadData();
-    } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
-}
-
-function deleteStudent(index) {
-    swalPro.fire({ title: 'Remove Student from List?', text: "This action cannot be undone!", icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Remove', confirmButtonColor: '#dc2626' }).then((result) => {
-        if (result.isConfirmed) { appData.splice(index, 1); renderStudentCards(); }
-    });
-}
-
-async function clearDataPopup() {
-    const { value: option } = await swalPro.fire({ title: 'Format Data', input: 'radio', inputOptions: { 'marks': 'Clear Only Marks', 'all': 'Factory Reset (Blank Format)' }, inputValidator: (v) => { if (!v) return 'You need to select an option!' }, showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-check"></i> Proceed' });
-    if (option === 'marks') {
-        appData.forEach((r, i) => { 
-            for(var j=3; j<r.length; j++) { if(cachedHeaders[j] !== "" && cachedHeaders[j] !== "RESULTS ➔") { appData[i][j] = ""; } }
-        }); 
-        renderStudentCards();
-    } else if (option === 'all') { setupSheetHeader(); }
-}
-
-async function pasteDataHelper() {
-    const { value: text } = await swalPro.fire({ input: 'textarea', inputLabel: 'Paste Data', inputPlaceholder: 'Copy from Excel/CSV and paste here...', showCancelButton: true, confirmButtonText: 'Insert Data' });
-    if (text) { 
-        var rows = text.split(/\r\n|\n|\r/); 
-        if(rows.length > 0) { 
-            rows.forEach(row => { 
-                var cols = row.split(/\t/); 
-                var newRow = new Array(cachedHeaders.length).fill("");
-                cols.forEach((c, idx) => { if(idx < newRow.length) newRow[idx] = c; });
-                appData.push(newRow);
-            }); 
-            renderStudentCards();
-        } 
-    }
-}
-
-// ==========================================
-// PUBLISH & SMS LOGIC (REST API)
-// ==========================================
-function publishResults() {
-    var cls = document.getElementById("classSelector").value;
-    var term = document.getElementById("examTermSelector").value;
-    var yr = document.getElementById("yearSelector").value;
-    var sendSms = document.getElementById('smsPublishChk').checked;
-
-    swalPro.fire({
-        title: 'Publish Results?',
-        html: `You are about to publish the results for <b>${cls}</b> (${term}).<br>${sendSms ? '<b style="color:green;">SMS Notifications will be sent!</b>' : ''}`,
-        icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Publish Now', confirmButtonColor: '#047857'
-    }).then(async (result) => {
-        if(result.isConfirmed) {
-            showLoader(true, "PUBLISHING...<br><span style='font-size:11px;'>Please do not close this window</span>");
-            try {
-                let res = await apiCall('publishAndSendSMS', { className: cls, examTerm: term, year: yr, sendSmsCheck: sendSms });
-                showLoader(false); swalPro.fire('Success', res.msg, 'success');
-            } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
-        }
-    });
-}
 
 // ==========================================
 // CRUD OPERATIONS (REST API)
@@ -702,8 +551,8 @@ async function addNewSubjectPopup() {
         title: 'Add New Exam / Subject', 
         html: `
         <input id="subN" class="swal2-input" placeholder="Subject Name (e.g. Bangla or Optional)">
-        <input id="tEN" class="swal2-input" placeholder="Test Exam Name (e.g. Tutorial-1)">
-        <input id="mEN" class="swal2-input" placeholder="Main Exam Name (e.g. Half Yearly)">
+        <input id="tEN" class="swal2-input" placeholder="Test Exam Name (e.g. Tutorial-1) (Optional)">
+        <input id="mEN" class="swal2-input" placeholder="Main Exam Name (e.g. Half Yearly) (Optional)">
         <div style="display:flex; justify-content:space-between; margin-top:15px; text-align:left; padding: 0 10px;">
         <div style="width:48%;">
         <label style="font-size:11px; font-weight:bold;">Test Full Marks:</label>
@@ -717,7 +566,7 @@ async function addNewSubjectPopup() {
         <div style="margin-top: 15px; text-align: left; padding: 0 10px; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 6px;">
         <label style="font-size:12px; font-weight:bold; color:#166534; cursor:pointer; display:flex; align-items:center;">
         <input type="checkbox" id="isOptCheck" style="transform: scale(1.3); margin-right: 10px;">
-        This is an Optional Subject (Varies by student)
+        This is an Optional Subject
         </label>
         </div>
         `, 
@@ -727,15 +576,15 @@ async function addNewSubjectPopup() {
         }) 
     });
 
-    if (v && v.subject && v.testName && v.mainName) {
+    if (v && v.subject && (v.testName || v.mainName)) {
         showLoader(true, "ADDING SUBJECT...");
         try {
             let res;
-            if(v.isOpt) { res = await apiCall('addOptionalSubjectColumn', { className: cls, subjectName: v.subject, testName: v.testName, mainName: v.mainName, testMarks: v.testM, mainMarks: v.mainM }); } 
-            else { res = await apiCall('addSubjectColumn', { className: cls, subjectName: v.subject, testName: v.testName, mainName: v.mainName, testMarks: v.testM, mainMarks: v.mainM }); }
+            if(v.isOpt) { res = await apiCall('addOptionalSubjectColumn', { className: cls, subjectName: v.subject, testName: v.testName||"Test", mainName: v.mainName||"Main", testMarks: v.testM, mainMarks: v.mainM }); } 
+            else { res = await apiCall('addSubjectColumn', { className: cls, subjectName: v.subject, testName: v.testName||"Test", mainName: v.mainName||"Main", testMarks: v.testM, mainMarks: v.mainM }); }
             showLoader(false); swalPro.fire('Success', res.msg, 'success'); loadData();
         } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
-    } else if (v) { swalPro.fire('Error', 'Please fill in Subject, Test Name, and Main Name!', 'error'); }
+    } else if (v) { swalPro.fire('Error', 'Subject and at least one Exam Name required!', 'error'); }
 }
 
 async function deleteSubjectPopup() {
@@ -812,10 +661,17 @@ function generateMarkSheets() {
     </tr>`;
 
     try {
+        let printCount = 0;
         data.forEach(row => {
             if(!row[0] && !row[1]) return; 
+            var grade = row[firstEmpty+3]; 
+            
+            // 🛑 CRITICAL CHECK: Do not print marksheet if term is incomplete (No Main Marks)
+            if(grade === "Incomplete") return;
+            printCount++;
+
             var id = row[0]; var name = row[1]; var roll = row[2];
-            var totalAvg = row[firstEmpty+1]; var gpa = row[firstEmpty+2]; var grade = row[firstEmpty+3]; var pos = row[firstEmpty+4];
+            var totalAvg = row[firstEmpty+1]; var gpa = row[firstEmpty+2]; var pos = row[firstEmpty+4];
             if(!gpa || gpa === "") { gpa = "0.00"; grade = "F"; totalAvg = "0.00"; pos = "N/A"; }
 
             var teacherRemark = "";
@@ -837,9 +693,12 @@ function generateMarkSheets() {
                         var mainHeader = getSafeHeader(headers[colIndex + 2]);
                         if (!testHeader || !mainHeader) break;
 
-                        var tObt = parseFloat(row[colIndex + 1]);
-                        var mMStr = String(row[colIndex + 2]);
-                        var hasTest = !isNaN(tObt); var hasMain = mMStr.trim() !== "";
+                        var tValRaw = row[colIndex + 1];
+                        var mValRaw = row[colIndex + 2];
+                        var tObt = parseFloat(tValRaw);
+                        var mMStr = String(mValRaw || "").trim();
+
+                        var hasTest = !isNaN(tObt); var hasMain = mMStr !== "";
 
                         var tInfo = extractSubAndExam(testHeader, 'test');
                         var mInfo = extractSubAndExam(mainHeader, 'main');
@@ -875,14 +734,17 @@ function generateMarkSheets() {
                         var mainHeader = getSafeHeader(headers[colIndex+1]);
                         if (!testHeader || !mainHeader) break;
 
+                        var tValRaw = row[colIndex];
+                        var mValRaw = row[colIndex+1];
+                        var tObt = parseFloat(tValRaw);
+                        var mMStr = String(mValRaw || "").trim();
+
                         var tInfo = extractSubAndExam(testHeader, 'test');
                         var mInfo = extractSubAndExam(mainHeader, 'main');
                         var testMatch = testHeader.match(/\((\d+)\)/); var testFull = testMatch ? parseInt(testMatch[1]) : 50;
                         var mainMatch = mainHeader.match(/\((\d+)\)/); var mainFull = mainMatch ? parseInt(mainMatch[1]) : 100;
 
-                        var tObt = parseFloat(row[colIndex]); 
-                        var mMStr = String(row[colIndex+1]);
-                        var hasTest = !isNaN(tObt); var hasMain = mMRaw.trim() !== "";
+                        var hasTest = !isNaN(tObt); var hasMain = mMStr !== "";
 
                         if(hasTest || hasMain) {
                             var totalMain = 0;
@@ -893,9 +755,9 @@ function generateMarkSheets() {
 
                             var tVal = hasTest ? tObt : 0; 
                             var finalMark = 0;
-                            if (hasTest && hasMain) finalMark = Math.round(((tM / tFull) * testWeight) + ((totalMain / mFull) * mainWeight));
+                            if (hasTest && hasMain) finalMark = Math.round(((tVal / testFull) * testWeight) + ((totalMain / mFull) * mainWeight));
                             else if (!hasTest && hasMain) finalMark = Math.round((totalMain / mFull) * 100);
-                            else if (hasTest && !hasMain) finalMark = Math.round((tM / tFull) * 100);
+                            else if (hasTest && !hasMain) finalMark = Math.round((tVal / testFull) * 100);
 
                             var subGP = getGP_JS(finalMark); var subGrade = getGrade_JS(subGP);
 
@@ -952,6 +814,12 @@ function generateMarkSheets() {
             <div class="footer"><div class="signature">Class Teacher</div><div class="signature">Headmaster</div><div class="signature">Guardian</div></div>
             </div>`;
         });
+        
+        if (printCount === 0) {
+            swalPro.fire('Warning', 'No completed results to print. Please ensure Term/Main marks are entered before generating Marksheets. Tabulation can still be printed.', 'warning');
+            return;
+        }
+
         document.getElementById("print-area").innerHTML = printHtml;
         window.print();
     } catch (err) {
@@ -1026,6 +894,7 @@ async function printTabulation() {
         if(!row[0] && !row[1]) return;
         stats['Total']++;
         var g = row[firstEmpty + 3];
+        if(g === 'Incomplete') return; // Skip from pass/fail stats if incomplete
         if(g === 'A+') stats['A+']++; else if(g === 'A') stats['A']++; else if(g === 'A-') stats['A-']++; else if(g === 'B') stats['B']++; else if(g === 'C') stats['C']++; else if(g === 'D') stats['D']++; else stats['F']++; 
     });
 
@@ -1140,6 +1009,26 @@ async function printTabulation() {
     window.print();
 }
 
+function publishResults() {
+    var cls = document.getElementById("classSelector").value;
+    var term = document.getElementById("examTermSelector").value;
+    var yr = document.getElementById("yearSelector").value;
+    var sendSms = document.getElementById('smsPublishChk').checked;
+
+    swalPro.fire({
+        title: 'Publish Results?',
+        html: `You are about to publish the results for <b>${cls}</b> (${term}).<br>${sendSms ? '<b style="color:green;">SMS Notifications will be sent!</b>' : ''}`,
+        icon: 'warning', showCancelButton: true, confirmButtonText: 'Yes, Publish Now', confirmButtonColor: '#047857'
+    }).then(async (result) => {
+        if(result.isConfirmed) {
+            showLoader(true, "PUBLISHING...<br><span style='font-size:11px;'>Please do not close this window</span>");
+            try {
+                let res = await apiCall('publishAndSendSMS', { className: cls, examTerm: term, year: yr, sendSmsCheck: sendSms });
+                showLoader(false); swalPro.fire('Success', res.msg, 'success');
+            } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
+        }
+    });
+}
 </script>
 </body>
 </html>
