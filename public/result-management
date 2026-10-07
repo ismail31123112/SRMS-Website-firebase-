@@ -228,11 +228,10 @@ if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
 const db = firebase.firestore();
 const auth = firebase.auth();
 
-// 💡 100% SECURE: টোকেন রিসিভ
-var SERVER_TOKEN = "<?= serverToken ?>"; 
 var appData = [];
 var cachedHeaders = [];
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg"; 
+var isAuthReady = false;
 
 const swalPro = Swal.mixin({ customClass: { confirmButton: 'btn-open', cancelButton: 'btn-danger' }, buttonsStyling: false });
 
@@ -241,9 +240,10 @@ function showLoader(show, text="PROCESSING...") {
     else { document.getElementById('loader').style.display = 'none'; }
 }
 
-// 🛡️ API Caller
+// 🛡️ API Caller (গুগলের সিল মারা টোকেন ব্যবহার করে)
 async function apiCall(actionName, payloadData = {}) {
-    let payload = { action: actionName, token: SERVER_TOKEN, ...payloadData };
+    let token = await auth.currentUser.getIdToken(true);
+    let payload = { action: actionName, token: token, ...payloadData };
     try {
         let res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
         let text = await res.text();
@@ -254,42 +254,41 @@ async function apiCall(actionName, payloadData = {}) {
     } catch (error) { throw error; }
 }
 
-// 🛡️ THE GATEKEEPER: AUTO VERIFY OR KICK OUT
+// 🛡️ ORIGINAL AUTH OBSERVER + ADMIN/TEACHER CHECK
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-    auth.onAuthStateChanged(async (user) => {
-        let hasTokenInUrl = SERVER_TOKEN && SERVER_TOKEN.trim() !== "";
-        
-        if (user || hasTokenInUrl) {
-            let email = user ? user.email : "";
+    auth.onAuthStateChanged(function(user) {
+        if (user) { 
+            let email = user.email;
             let isAdmin = email === "admin@srms.edu.bd" || email === "srms2012.edu@gmail.com";
             let isTeacher = /^01.*@srms\.edu\.bd$/.test(email);
 
-            if ((user && (isAdmin || isTeacher)) || hasTokenInUrl) {
-                if(user) SERVER_TOKEN = await user.getIdToken(true);
-                
-                showLoader(false);
-                document.getElementById('appContainer').style.display = 'block';
-                
-                var yrSelect = document.getElementById("yearSelector");
-                var currentYear = new Date().getFullYear();
-                if(yrSelect.options.length === 0) {
-                    for(var i = 2024; i <= 2050; i++) {
-                        var opt = document.createElement("option");
-                        opt.value = i; opt.text = i;
-                        if(i === currentYear) opt.selected = true;
-                        yrSelect.appendChild(opt);
-                    }
-                }
-            } else { kickOut(); }
-        } else { kickOut(); }
+            if (isAdmin || isTeacher) {
+                isAuthReady = true; 
+                showLoader(false); 
+                document.getElementById('appContainer').style.display = 'block'; 
+            } else {
+                kickOut();
+            }
+        } 
+        else { kickOut(); }
     });
-}).catch(err => { kickOut(); });
+}).catch(err => { console.error("Auth Persistence Error:", err); kickOut(); });
 
 function kickOut() {
-    showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Security Breach Detected. Redirecting to Login...</span>");
-    let redirectUrl = window.location.origin + "/login-panel/accounting-and-management-department";
-    setTimeout(() => { window.location.replace(redirectUrl); }, 1200);
+    showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>"); 
+    setTimeout(() => { window.location.replace(window.location.origin + "/login-panel/accounting-and-management-department"); }, 1000);
 }
+
+window.onload = function() {
+    var yrSelect = document.getElementById("yearSelector");
+    var currentYear = new Date().getFullYear();
+    for(var i = 2024; i <= 2050; i++) {
+        var opt = document.createElement("option");
+        opt.value = i; opt.text = i;
+        if(i === currentYear) opt.selected = true;
+        yrSelect.appendChild(opt);
+    }
+};
 
 // ==========================================
 // PARSING & HELPERS
@@ -345,8 +344,9 @@ function parseSubjectHeaders(headers) {
     return { subjects, testSeq, mainSeq, firstEmpty };
 }
 
-// 🚀 DIRECT FRONTEND LOAD 
+// 🚀 FAST FRONTEND DATA LOAD (Firebase SDK)
 async function loadData() {
+    if(!isAuthReady) return;
     var className = document.getElementById("classSelector").value;
     if(!className) { swalPro.fire({title: 'Hold On!', text: 'Please select a class first.', icon: 'warning'}); return; }
 
@@ -498,7 +498,7 @@ async function openDataEntryForm(rowIndex) {
     });
 
     if(formValues) {
-        showLoader(true, "SAVING RAW MARKS...<br><span style='font-size:11px; color:#64748b;'>Writing securely via Backend</span>");
+        showLoader(true, "SAVING RAW MARKS...<br><span style='font-size:11px; color:#64748b;'>Direct Write to Database</span>");
         try {
             let rowDocId = appData[rowIndex][appData[rowIndex].length - 1]; 
             let res = await apiCall('saveRawMarks', { rowId: rowDocId, rowData: formValues });
@@ -531,7 +531,7 @@ async function calculateAllResults() {
         icon: 'warning', showCancelButton: true, cancelButtonText: '<i class="fas fa-times"></i> Cancel', confirmButtonText: 'Yes, Calculate All', confirmButtonColor: '#2563eb'
     }).then(async (result) => {
         if(result.isConfirmed) {
-            showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms securely via Backend</span>");
+            showLoader(true, "CALCULATING RESULTS...<br><span style='font-size:11px; color:#64748b;'>Applying algorithms to all students securely</span>");
             try {
                 let res = await apiCall('calculateAllClassResults', {
                     className: cls, selectedYear: yr, 
@@ -578,12 +578,13 @@ async function addNewSubjectPopup() {
     var cls = document.getElementById("classSelector").value;
     if(!cls) return swalPro.fire('Hold On!', 'Please select a class first.', 'warning');
 
-    showLoader(true, "Fetching Exams...");
+    showLoader(true, "Fetching Exams securely...");
     let globalExams = [];
     try {
-        let setDoc = await db.collection('Admin').doc('Settings').get();
-        if(setDoc.exists && setDoc.data().globalExams) globalExams = JSON.parse(setDoc.data().globalExams);
+        let res = await apiCall('getGlobalExams');
         showLoader(false);
+        if(res.status === "success") { globalExams = res.data || []; } 
+        else { return swalPro.fire('Error', res.message, 'error'); }
     } catch(e) { showLoader(false); return swalPro.fire('Error', e.message, 'error'); }
 
     if(globalExams.length === 0) return swalPro.fire('No Exams Found', 'Please add Exams via "+Add Exam" first.', 'warning');
@@ -758,7 +759,7 @@ function viewSingleResult(rowIndex) {
 }
 
 // ==========================================
-// MARKSHEET GENERATOR
+// MARKSHEET GENERATOR 
 // ==========================================
 async function openPrintMarksheetPopup() {
     if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
@@ -971,7 +972,7 @@ function generateMarkSheets(examFilter) {
 }
 
 // ==========================================
-// TABULATION GENERATOR 
+// TABULATION GENERATOR
 // ==========================================
 async function printTabulation() {
     if(appData.length === 0) { swalPro.fire('Error', 'Load data first', 'error'); return; }
@@ -1119,4 +1120,4 @@ function publishResults() {
 }
 </script>
 </body>
-</html
+</html>
