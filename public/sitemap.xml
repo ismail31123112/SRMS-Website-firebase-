@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- হোমপেজ (সবচেয়ে বেশি প্রায়োরিটি) -->
+  <url>
+       <loc>https://srms2012.edu.bd/</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>1.0000</priority>
+  </url>
+
+  <!-- ইম্পর্ট্যান্ট পাবলিক পেজ (যেগুলো সাধারণ মানুষ বা অভিভাবকরা খুঁজবে) -->
+  <url>
+       <loc>https://srms2012.edu.bd/notice-board</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.9000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/admission</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.9000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/about-us</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.9000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/contact-us</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.9000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/message-from-headmaster</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.9000</priority>
+  </url>
+
+  <!-- একাডেমিক ও ফি পেজ -->
+  <url>
+       <loc>https://srms2012.edu.bd/menu/school-fees</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/menu/academic/exam-results</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/result-management</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+
+  <!-- লগিন পোর্টালসমূহ -->
+  <url>
+       <loc>https://srms2012.edu.bd/login-panel/student-login</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/login-panel/teacher-login-portal</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+  <url>
+       <loc>https://srms2012.edu.bd/login-panel/guardian-portal</loc>
+       <lastmod>2026-10-08T17:29:17+00:00</lastmod>
+       <priority>0.8000</priority>
+  </url>
+
+</urlset>
