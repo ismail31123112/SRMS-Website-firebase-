@@ -110,8 +110,9 @@
   .marquee { display: inline-block; padding-left: 100%; animation: scroll 30s linear infinite; white-space: nowrap; line-height: 50px; font-size: 15px; color: #333; font-weight: 500; }
   @keyframes scroll { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
   
-  .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 25px; padding: 0 20px; }
-  .q-card { background: white; padding: 15px 10px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.3s ease; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; cursor: pointer; }
+  /* Modified for better responsive scaling on large screens */
+  .quick-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; max-width: 1200px; margin: 0 auto 25px; padding: 0 20px; }
+  .q-card { flex: 1 1 110px; max-width: 140px; background: white; padding: 15px 10px; border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: all 0.3s ease; border: 1px solid #eee; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #555; cursor: pointer; }
   .q-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-color: #005f40; color: #005f40; }
   .q-icon { font-size: 26px; margin-bottom: 8px; }
   .q-title { font-size: 11.5px; font-weight: 700; text-transform: uppercase; line-height: 1.2; }
@@ -121,20 +122,30 @@
   .slide { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 1s; display: flex; align-items: center; justify-content: center; }
   .slide.active { opacity: 1; z-index: 2; }
   .slide img { max-width: 100%; max-height: 100%; object-fit: contain; }
-  .info-container { max-width: 1200px; margin: auto; padding: 0 20px 60px; display: grid; grid-template-columns: 380px 1fr; gap: 40px; align-items: start; }
-  .headmaster-card, .about-card, .widget-box, .anthem-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-top: 4px solid #005f40; transition: 0.3s; }
-  .hm-img { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 5px solid #e0f2f1; margin-bottom: 20px; }
+  
+  /* Restructured the Info Container for perfectly balanced Desktop View */
+  .info-container { max-width: 1200px; margin: auto; padding: 0 20px 60px; display: flex; flex-direction: column; gap: 40px; }
+  .messages-left-column { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; width: 100%; }
+  .content-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; align-items: start; width: 100%; }
+  
+  .headmaster-card, .about-card, .widget-box, .anthem-card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); border-top: 4px solid #005f40; transition: 0.3s; height: 100%; box-sizing: border-box; }
+  .hm-img { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 5px solid #e0f2f1; margin-bottom: 20px; }
   .hm-btn { display: block; background: #005f40; color: white; padding: 12px; border-radius: 6px; margin-top: 20px; font-weight: 700; text-align: center; font-size: 13px; }
   .section-title { font-size: 22px; color: #2c3e50; font-weight: 800; margin-bottom: 20px; border-left: 5px solid #9e9e9e; padding-left: 15px; }
-  .school-featured-img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 20px; }
-  .anthem-card { margin-top: 30px; text-align: center; }
+  
+  /* Prevent huge image stretch on large monitors */
+  .school-featured-img { width: 100%; height: auto; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
+  
+  .anthem-card { text-align: center; display: flex; flex-direction: column; justify-content: center; align-items: center; }
   .lyrics { font-style: italic; font-size: 14px; color: #004d33; line-height: 1.6; margin-top: 10px; margin-bottom: 15px; }
-  .bottom-section { max-width: 1200px; margin: auto; padding: 0 20px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  
+  /* Fixed vertical stretching using align-items: start */
+  .bottom-section { max-width: 1200px; margin: auto; padding: 0 20px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
   
   /* =========================================
      FLAWLESS DYNAMIC VIDEO GALLERY CSS 
   ========================================= */
-  .video-container { grid-column: 1 / -1; margin-top: 30px; }
+  .video-container { grid-column: 1 / -1; margin-top: 30px; width: 100%; }
   .video-grid { 
       display: flex; 
       flex-wrap: wrap; 
@@ -234,6 +245,7 @@
   .modal-btn { background: #005f40; color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; transition: 0.3s; margin-top: 10px; }
   .modal-btn:hover { background: #004d33; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3); }
 
+  /* Responsive Media Queries for Mobile and Tablet */
   @media (max-width: 950px) {
     .menu-toggle { display: flex; }
     .nav-menu { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #fff; padding: 15px 0; border-top: 1px solid #f0f0f0; max-height: 80vh; overflow-y: auto; }
@@ -242,9 +254,15 @@
     .nav-link { padding: 15px 30px; border-bottom: 1px solid #f9f9f9; border-radius: 0; }
     .dropdown-content { position: static; box-shadow: none; background: #fafafa; padding-left: 20px; border: none; border-left: 4px solid #005f40; margin: 0 20px; display: none; }
     .nav-item.active > .dropdown-content { display: block; }
-    .info-container, .bottom-section { grid-template-columns: 1fr; }
+    
+    .content-wrapper { grid-template-columns: 1fr; }
+    .bottom-section { grid-template-columns: 1fr; gap: 30px; }
     .custom-banner { flex-direction: column; text-align: center; }
     .banner-text { text-align: center; }
+  }
+  
+  @media (max-width: 768px) {
+    .slider-wrapper { height: 250px; }
   }
 </style>
 
@@ -410,7 +428,7 @@
 
 <div class="info-container">
   
-  <div id="messages-left-column" class="messages-left-column" style="display:flex; flex-direction: column; gap:20px;">
+  <div id="messages-left-column" class="messages-left-column">
     <!-- Dynamic Messages Will Inject Here Automatically based on sequence -->
   </div>
 
@@ -425,9 +443,9 @@
     </div>
 
     <div class="anthem-card animate-up">
-        <h4 style="margin:0; color:#005f40; font-weight:800;">National Anthem</h4>
+        <h4 style="margin:0; color:#005f40; font-weight:800; font-size: 22px;">National Anthem</h4>
         <div class="lyrics">আমার সোনার বাংলা, আমি তোমায় ভালোবাসি...</div>
-        <div class="audio-player-wrapper" style="margin-top: 15px; background: #e8f5e9; padding: 5px 15px; border-radius: 30px; border: 1px solid #a5d6a7; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);">
+        <div class="audio-player-wrapper" style="margin-top: 15px; background: #e8f5e9; padding: 5px 15px; border-radius: 30px; border: 1px solid #a5d6a7; display: flex; align-items: center; justify-content: center; box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); width: 100%;">
             <audio controls controlsList="nodownload" style="width: 100%; height: 35px; outline: none; background: transparent;">
                 <source src="https://videotourl.com/audio/1790932882077-dd40d78d-33dd-41eb-827c-e7372dbf46a7.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
