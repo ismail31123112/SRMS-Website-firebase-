@@ -120,12 +120,12 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
     .footer { display: flex; justify-content: space-between; margin-top: auto; padding-top: 15px; }
     .signature { border-top: 1.5px solid #333; width: 150px; text-align: center; padding-top: 4px; font-weight: 700; font-size: 11px; color: #333; }
 
-    /* Tabulation Layout */
+    /* Tabulation Layout - FIXED HORIZONTAL HEADERS */
     .tabulation-print { width: 100%; font-family: 'Poppins', sans-serif; }
     .tab-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; table-layout: auto; word-wrap: break-word; }
-    .tab-table th.vert-header { background: #e2e8f0 !important; padding: 10px 4px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; writing-mode: vertical-rl; transform: rotate(180deg); height: 110px; white-space: nowrap;}
-    .tab-table th { background: #e2e8f0 !important; padding: 6px 3px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 9px; }
-    .tab-table td { padding: 6px 3px; border: 1px solid #1e293b; overflow: hidden; vertical-align: middle; font-size:9px;}
+    .tab-table th.vert-header { background: #e2e8f0 !important; padding: 8px 5px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 10px; white-space: normal; vertical-align: middle; }
+    .tab-table th { background: #e2e8f0 !important; padding: 8px 5px; border: 1px solid #1e293b; font-weight: bold; color: #005f40; font-size: 10px; vertical-align: middle; }
+    .tab-table td { padding: 6px 4px; border: 1px solid #1e293b; overflow: hidden; vertical-align: middle; font-size: 10px; }
     .tab-table tr { page-break-inside: avoid; }
     .tab-table tbody tr:nth-child(even) { background-color: #f8fafc !important; }
     thead { display: table-header-group; }
@@ -426,7 +426,7 @@ function renderStudentCards() {
         <div class="card-header"><h4><i class="fa-solid fa-user-graduate" style="color:var(--main);"></i> ${name}</h4><span class="roll-badge">Roll: ${roll}</span></div>
         <div class="card-body">
         <p><i class="fa-solid fa-id-badge" style="color:#94a3b8; width:20px;"></i> <b>ID:</b> ${id}</p>
-        <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade: ${grade}</span></div>
+        <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade:${grade}</span></div>
         </div>
         <div class="card-footer">
         <button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> Input Marks</button>
@@ -633,7 +633,6 @@ async function addNewSubjectPopup() {
                     selected.push({ name: ex.name, type: ex.type, marks: marks });
                 }
             });
-            // ✅ FIX: "subject:" changed to "name:" to fix the undefined issue
             return { name: document.getElementById('subN').value, isOpt: document.getElementById('isOptCheck').checked, selectedExams: selected }
         } 
     });
@@ -756,6 +755,9 @@ function viewSingleResult(rowIndex) {
 
             if(hasTest || hasMain) {
                 let finalMark = 0;
+                let testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
+                let mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+
                 if (hasTest && hasMain) finalMark = Math.round(((tCalc / totalTFull) * testWeight) + ((mCalc / totalMFull) * mainWeight));
                 else if (!hasTest && hasMain) finalMark = Math.round((mCalc / totalMFull) * 100);
                 else if (hasTest && !hasMain) finalMark = Math.round((tCalc / totalTFull) * 100);
@@ -998,7 +1000,7 @@ function generateMarkSheets(examFilter) {
 }
 
 // ==========================================
-// TABULATION GENERATOR
+// TABULATION GENERATOR (100% FIXED HORIZONTAL HEADERS)
 // ==========================================
 async function printTabulation() {
     if(appData.length === 0) { swalPro.fire('Error', 'Load data first', 'error'); return; }
