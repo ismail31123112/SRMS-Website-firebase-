@@ -333,8 +333,8 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
   
-  // 🔒 NEW: Force Firebase Session Persistence (Tab close = Logout)
-  auth.setPersistence(firebase.auth.Auth.Persistence.SESSION).catch((error) => {
+  // 🔒 Changed: Use LOCAL Persistence to allow cross-tab authentication
+  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
       console.error("Session persistence error:", error);
   });
   
