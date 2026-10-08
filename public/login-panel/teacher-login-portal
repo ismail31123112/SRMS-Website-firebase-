@@ -90,7 +90,8 @@
   .section-title { font-weight: 800; color: var(--text-main); margin: 40px 0 15px; font-size: 18px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
   .card { background: var(--card-bg); border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
 
-  .action-btn-large { width: 100%; padding: 20px; font-size: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .action-btn-large { width: 100%; padding: 20px; font-size: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; color: white; cursor: pointer; font-weight: 700; transition: all 0.3s ease; text-transform: uppercase; }
+  .action-btn-large:hover { transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(0,0,0,0.2); }
 
   /* Board Items */
   .notice-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 6px solid var(--accent); transition: 0.3s; }
@@ -173,10 +174,11 @@
       <button id="passBtn" class="btn-p" style="background:var(--accent);" onclick="changePass()">Save Password</button>
     </div>
 
+    <!-- 🚀 ডাইনামিক লাইভ ক্লাস লিংক -->
     <div class="section-title">🎥 Live Class Hub</div>
     <div class="card" style="padding: 20px;">
-        <a href="https://www.saidpurresidentialmodelschool.com/live-classmeeting-panel" target="_blank" style="text-decoration:none;">
-            <button class="btn-p action-btn-large"><i class="fas fa-video"></i> Start Live Class / Meeting</button>
+        <a href="/live-classmeeting-panel" target="_blank" style="text-decoration:none;">
+            <button class="action-btn-large" style="background:var(--primary);"><i class="fas fa-video"></i> Start Live Class / Meeting</button>
         </a>
     </div>
 
@@ -222,19 +224,19 @@
         <button class="btn-p" style="background:var(--primary);" onclick="openTeacherAttendanceModal()"><i class="fas fa-calendar-check"></i> View My Detailed Attendance</button>
     </div>
     
+    <!-- 🚀 ডাইনামিক রেজাল্ট ম্যানেজমেন্ট লিংক -->
     <div class="section-title">📈 Result Processing</div>
     <div class="card" style="padding: 20px;">
-      <form action="https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec" method="POST" target="_blank" style="margin:0;">
-          <button type="submit" class="btn-p action-btn-large" style="background:#0288D1;">
-              <i class="fas fa-poll-h"></i> Open Result Manager
-          </button>
-      </form>
+        <a href="/result-management" target="_blank" style="text-decoration:none;">
+            <button class="action-btn-large" style="background:#0288D1;"><i class="fas fa-poll-h"></i> Open Result Manager</button>
+        </a>
     </div>
 
     <div class="section-title">🛠️ Manage My Content</div>
     <div id="manageBox"></div>
 </div>
 
+<!-- Modals -->
 <div id="forgotModal" class="modal-overlay">
   <div class="modal-box">
     <h3 style="margin-top:0; color:var(--primary); font-size:24px;">Reset Password</h3>
@@ -345,7 +347,6 @@
   let exactDbPhone = "";
   let resetPhone = null;
   
-  // Variables for Attendance & Holiday Sync
   let allTeacherAttendance = {};
   let allHolidays = {};
 
@@ -356,7 +357,7 @@
 
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 🔒 NEW: sessionStorage check for Auto-login
+  // 🔒 Auto-login check
   window.onload = function() {
     const savedPhone = sessionStorage.getItem("srms_phone");
     const savedName = sessionStorage.getItem("srms_name");
@@ -367,13 +368,12 @@
       exactDbPhone = savedExact || savedPhone;
       showDashboard(savedName);
     } else {
-       // Ensure ui is on login page if not authenticated
        document.getElementById('dash-sec').style.display = 'none';
        document.getElementById('login-sec').style.display = 'flex';
     }
   };
 
-  // 🔒 NEW: Secure Logout clearing sessionStorage
+  // 🔒 Secure Logout
   function logout() {
     try { if(auth) auth.signOut(); } catch(e) {}
     sessionStorage.clear();
@@ -438,13 +438,12 @@
       tPhone = ph;
       exactDbPhone = dbPhoneToSave;
       
-      // 🔒 NEW: Store details in sessionStorage
       sessionStorage.setItem("srms_phone", ph);
       sessionStorage.setItem("srms_exact_phone", dbPhoneToSave);
       sessionStorage.setItem("srms_name", foundName);
       if(teacherDocId) sessionStorage.setItem("srms_teacher_id", teacherDocId); 
       
-      // 🔒 NEW: Assign Teacher Powers (Roles) in sessionStorage
+      // Teacher Powers (Roles)
       const teacherRoles = ["teacher_dashboard", "special_page_access"];
       sessionStorage.setItem("srms_user_roles", JSON.stringify(teacherRoles));
       sessionStorage.setItem("srms_active_session", "true");
@@ -571,7 +570,7 @@
   async function changePass() {
     let p = document.getElementById('newPass').value.trim(); const btn = document.getElementById('passBtn');
     if(!p || p.length < 6) return alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
-    const docId = sessionStorage.getItem("srms_teacher_id"); // Updated to sessionStorage
+    const docId = sessionStorage.getItem("srms_teacher_id"); 
     if(!docId) return alert("Session expired, please login again.");
 
     btn.innerHTML = '<span class="loader-spinner"></span> Updating...'; btn.disabled = true;
@@ -737,9 +736,6 @@
     btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Publish Content';
   }
 
-  // =====================================================================
-  // 🔴 TEACHER DETAILED ATTENDANCE LOGIC (HOLIDAYS + ABSENT TRACKING API)
-  // =====================================================================
   function openTeacherAttendanceModal() {
       document.getElementById('attendanceModal').style.display = 'flex';
       fetchTeacherDetailedAttendance();
@@ -834,7 +830,6 @@
       let summaryBox = document.getElementById('modalAttSummary');
       let yearlySummaryBox = document.getElementById('modalYearlySummary');
       
-      // Bangladesh Time Logic
       const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
       const today = new Date(bdTime);
       
@@ -856,7 +851,6 @@
            daysToLoop = today.getDate();
       }
 
-      // Yearly Calculation 
       let isYearFinished = (sYear < today.getFullYear());
       if (!isYearFinished) {
           yearlySummaryBox.style.display = 'none';
@@ -879,7 +873,7 @@
               }
 
               yearlyPresentCount += mPresent;
-              let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4); // General estimation
+              let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4); 
               let mAbsent = Math.max(0, workingDaysInM - mPresent);
               yearlyAbsentCount += mAbsent;
           }
