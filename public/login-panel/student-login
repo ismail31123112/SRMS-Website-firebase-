@@ -159,13 +159,13 @@
 <body>
 
 <div id="loader">
-    <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" class="loader-img" alt="Loading">
+    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="loader-img" alt="Loading">
     <div class="loader-text">Loading Secure Data...</div>
 </div>
 
 <div id="login-container" class="animate-up">
     <div class="login-card">
-        <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Logo" class="login-logo">
+        <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo" class="login-logo">
         <h2 class="login-title">Student Portal</h2>
         <div class="login-subtitle">Enter credentials to access your dashboard</div>
         <input type="text" id="stuID" placeholder="Enter Student ID" autocomplete="off">
@@ -186,7 +186,7 @@
 </nav>
 
 <div class="custom-banner" id="main-banner">
-  <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" class="banner-logo" alt="Logo">
+  <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="banner-logo" alt="Logo">
   <div class="banner-text">
     <h1>Saidpur Residential Model School</h1>
     <div class="school-codes">Smart Student Dashboard</div>
@@ -223,13 +223,13 @@
             <a onclick="openAttendanceModal();" class="l-btn"><span>📅</span><span>Attendance</span></a>
             <a id="liveClassMainBtn" onclick="openLiveClassModal();" class="l-btn"><span>🎥</span><span>Live Class</span></a>
             <a onclick="openFeesModal();" class="l-btn"><span>💳</span><span>Pay Fees</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/syllabus" target="_blank" class="l-btn"><span>📖</span><span>Syllabus</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/class-routine" target="_blank" class="l-btn"><span>🎯</span><span>Routine</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/exam-routine" target="_blank" class="l-btn"><span>📅</span><span>Exams</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/notice-board" target="_blank" class="l-btn"><span>📢</span><span>Notice</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/gallery" target="_blank" class="l-btn"><span>🖼️</span><span>Gallery</span></a>
+            <a href="/menu/academic/syllabus" class="l-btn"><span>📖</span><span>Syllabus</span></a>
+            <a href="/menu/academic/class-routine" class="l-btn"><span>🎯</span><span>Routine</span></a>
+            <a href="/menu/academic/exam-routine" class="l-btn"><span>📅</span><span>Exams</span></a>
+            <a href="/notice-board" class="l-btn"><span>📢</span><span>Notice</span></a>
+            <a href="/menu/gallery" class="l-btn"><span>🖼️</span><span>Gallery</span></a>
             <a onclick="openSecurityModal();" class="l-btn"><span>🔐</span><span>Security</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/contact-us" target="_blank" class="l-btn"><span>📞</span><span>Support</span></a>
+            <a href="/menu/contact-us" class="l-btn"><span>📞</span><span>Support</span></a>
         </div>
     </div>
 </div>
@@ -343,7 +343,6 @@
   let std = null;
   let markSheetHTML = "";
   
-  // Variables for Security and Attendance
   let resettingDocId = null; 
   let resettingStudentID = null;
   let allStudentAttendance = {}; 
@@ -604,17 +603,32 @@
               });
           }
           if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'>No class materials available.</div>";
-      } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
+      } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600; Materials sync error.</div>"; }
   }
 
+  // ✅ UPDATED RENDER RESULTS WITH DETAILED FAIL REASON SUPPORT FOR 9-10
   function renderResults(h, d) {
       let firstEmpty = h.indexOf("");
       if (firstEmpty !== -1) {
-          let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00"); let grade = sanitizeHTML(d[firstEmpty+3] || "F");
-          let pos = sanitizeHTML(d[firstEmpty+4] || "-"); let year = sanitizeHTML(d[firstEmpty+5] || "2026");
+          let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00"); 
+          let grade = sanitizeHTML(d[firstEmpty+3] || "F");
+          let pos = sanitizeHTML(d[firstEmpty+4] || "-"); 
+          let year = sanitizeHTML(d[firstEmpty+5] || "2026");
+          let failReason = sanitizeHTML(d[firstEmpty+5] || "None");
+          
+          let failNoticeHtml = "";
+          if(grade === "F" && failReason && failReason !== "None") {
+              failNoticeHtml = `<div style="background:#7f1d1d; color:#fef2f2; padding:10px 15px; border-radius:8px; margin-bottom:15px; font-size:12px; font-weight:600; border:1px solid #f87171;">
+                  ⚠️ Academic Warning: Failed in <b>${failReason}</b>. Please consult your class teacher.
+              </div>`;
+          }
+
           let subHtml = ""; let i = 3;
-          while (i < firstEmpty) {
-            let hNameTest = h[i] ? h[i].toString() : "Test"; let hNameMain = h[i+1] ? h[i+1].toString() : "Main";
+          while (i < firstEmpty && i < h.length) {
+            let startI = i; // 🛑 INFINITE LOOP PROTECTION
+            
+            let hNameTest = h[i] ? h[i].toString() : "Test"; 
+            let hNameMain = h[i+1] ? h[i+1].toString() : "Main";
             let isOpt = hNameTest.toLowerCase().includes("opt") && hNameTest.toLowerCase().includes("name");
 
             if (isOpt) {
@@ -644,6 +658,7 @@
                           </div>`;
               i += 2;
             }
+            if (i === startI) i++; // 🛑 FAILSAFE
           }
 
           markSheetHTML = `
@@ -657,6 +672,7 @@
                   <span><span style="color:#94a3b8;">ID:</span> <b style="color:#fff;">${std.id}</b></span>
                   <span><span style="color:#94a3b8;">Class:</span> <b style="color:#fff;">${std.class}</b></span>
               </div>
+              ${failNoticeHtml}
               <div style="margin-bottom:20px;">${subHtml}</div>
               <div class="dt-summary-box">
                   <div style="text-align:center;"><p style="margin:0 0 5px 0; font-size:10px; color:#cbd5e1; font-weight:700;">TOTAL GPA</p><h2 style="margin:0; font-size:28px; color:#fff;">${gpa}</h2></div>
@@ -961,8 +977,8 @@
     fetch(url).then(r => r.json()).then(data => {
         if (data.payment_url) { 
             btn.style.display = "none"; const linkBtn = document.getElementById("feesPayLink"); linkBtn.style.display = "block"; linkBtn.href = sanitizeHTML(data.payment_url); document.getElementById("feesMsg").innerHTML = "";
-        } else { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Payment generation failed.</span>"; }
-    }).catch(e => { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; });
+        } else { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);">Payment generation failed.</span>"; }
+    }).catch(e => { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);">Network Error.</span>"; });
   }
 </script>
 </body>
