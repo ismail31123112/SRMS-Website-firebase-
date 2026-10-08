@@ -216,7 +216,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxV7n_pRwwt0JJ4ko1G0ranFItZv9x5nSltz56h-2F05gaWM7-afNcKy3v1blcFCI-G/exec";
 
 // ✅ Firebase Configuration
 const firebaseConfig = { 
@@ -633,11 +633,12 @@ async function addNewSubjectPopup() {
                     selected.push({ name: ex.name, type: ex.type, marks: marks });
                 }
             });
-            return { subject: document.getElementById('subN').value, isOpt: document.getElementById('isOptCheck').checked, selectedExams: selected }
+            // ✅ FIX: "subject:" changed to "name:" to fix the undefined issue
+            return { name: document.getElementById('subN').value, isOpt: document.getElementById('isOptCheck').checked, selectedExams: selected }
         } 
     });
 
-    if (v && v.subject && v.selectedExams.length > 0) {
+    if (v && v.name && v.selectedExams.length > 0) {
         showLoader(true, "LINKING SUBJECT...");
         try {
             let res = await apiCall('addSubjectAdvanced', { className: cls, subjectData: v });
