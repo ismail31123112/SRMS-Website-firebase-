@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>SRMS Accounts Portal V5</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- 🌟 FAVICON ADDED -->
+<link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -161,9 +163,10 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
     </div>
     </div>
 
+    <!-- 💡 DO NOT FORGET TO CHANGE LABEL FOR DUAL NOTIFICATION -->
     <div style="margin-top:25px; background:#eff6ff; padding:15px 20px; border-radius:12px; border:2px dashed #bfdbfe; display:flex; align-items:center; gap:12px; justify-content:center;">
     <input type="checkbox" id="sendSmsChk" checked style="width:24px; height:24px; margin:0; cursor:pointer; accent-color: var(--main);">
-    <label for="sendSmsChk" style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS Notification for Parent</label>
+    <label for="sendSmsChk" style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS/Email Notification for Parent</label>
     </div>
 
     <div id="success-msg"><i class="fas fa-check-circle"></i> PAYMENT RECORDED SUCCESSFULLY</div>
