@@ -185,10 +185,14 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
     </select>
 
     <div id="studentSection">
-    <label>Student ID</label>
+    <label>Student ID (Student Login)</label>
     <input type="text" id="uSId" placeholder="Enter valid Student ID" style="margin-top:0;">
+    <label>Guardian Phone / Email (Guardian Login)</label>
+    <input type="text" id="uSPhone" placeholder="017XXXXXX or Email" style="margin-top:0;">
     <label>Machine/Card ID</label>
     <input type="text" id="uSMachineId" placeholder="Machine ID (Blank = Same as Student ID)" style="margin-top:0;">
+    <label>Guardian Password</label>
+    <input type="text" id="uSGPass" placeholder="Default: 1234" style="margin-top:0;">
     </div>
 
     <div id="teacherSection" style="display:none;">
@@ -202,8 +206,8 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
     <label style="color:var(--gold); font-weight:800; margin-top:20px; font-size:14.5px;"><i class="fas fa-id-card"></i> RFID Card Number <small style="color:#64748b; font-weight:600;">(Type or Scan)</small></label>
     <input type="text" id="uCardNumber" placeholder="Enter Card Number for Machine" style="border: 2px solid var(--gold); background:#fffbeb; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02);">
 
-    <label>Login Password</label>
-    <input type="text" id="uPass" placeholder="Enter Password (Default: 1234)">
+    <label>Student/Teacher Login Password</label>
+    <input type="text" id="uPass" placeholder="Enter Password (Default: 123456)">
     <button class="btn-submit" id="accBtn" onclick="addUser()"><i class="fas fa-save" style="margin-right: 8px;"></i> Save Account</button>
     </div>
 
@@ -240,11 +244,18 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
     <span class="close" onclick="closeModal('editUserModal')">&times;</span>
     <h3 style="text-align:center; color:var(--primary); margin-top:0; font-weight:900; text-transform:uppercase; font-size:20px;"><i class="fas fa-user-edit"></i> Edit User</h3>
     <input type="hidden" id="euRow"> <input type="hidden" id="euType">
-    <label>Login ID / Phone</label><input type="text" id="euId" disabled style="background:#f1f5f9; color:#94a3b8; font-weight:bold;">
+    <label>Login ID</label><input type="text" id="euId" disabled style="background:#f1f5f9; color:#94a3b8; font-weight:bold;">
     <label>Name</label><input type="text" id="euName" disabled style="background:#f1f5f9; color:#94a3b8; font-weight:bold;">
     <div id="euMachineDiv"><label>Machine ID</label><input type="text" id="euMachineId" placeholder="Update Machine ID"></div>
     <div id="euTeacherEmailDiv" style="display:none;"><label>Email</label><input type="email" id="euEmail" placeholder="Update email"></div>
-    <label>Password</label><input type="text" id="euPass" placeholder="Update password">
+    
+    <!-- 💡 Guardian Update Inputs (Only for Students) -->
+    <div id="euStudentDiv" style="display:none;">
+        <label>Guardian Phone / Email</label><input type="text" id="euPhone" placeholder="Update Guardian Phone/Email">
+        <label>Guardian Password</label><input type="text" id="euGPass" placeholder="Update Guardian Password">
+    </div>
+    
+    <label>Student/Teacher Password</label><input type="text" id="euPass" placeholder="Update password">
     <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="submitUserEdit()"><i class="fas fa-sync-alt"></i> Update User</button>
     </div>
     </div>
@@ -264,7 +275,7 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); backgr
 
 <script>
 // 🚀 🚀 🚀 IMPORTANT: Insert your actual Google Apps Script Web App URL below 🚀 🚀 🚀
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec;
 
 // ✅ Firebase Configuration with authDomain for Security Verification
 const firebaseConfig = {
@@ -427,29 +438,50 @@ function delPost(docId) {
 async function addUser() {
     var type = document.getElementById('userType').value;
     var passVal = document.getElementById('uPass').value.trim(); 
-    var d = { type: type, pass: passVal || "1234" };
+    var d = { type: type, pass: passVal || "123456" };
     d.cardNumber = document.getElementById('uCardNumber').value.trim();
 
     if(type === 'Student') {
-        d.id = document.getElementById('uSId').value.trim(); d.machineId = document.getElementById('uSMachineId').value.trim();
+        d.id = document.getElementById('uSId').value.trim(); 
+        d.machineId = document.getElementById('uSMachineId').value.trim();
+        d.phone = document.getElementById('uSPhone').value.trim();
+        d.guardianPass = document.getElementById('uSGPass').value.trim() || "1234";
         if(!d.id) return Swal.fire("Warning", "Please enter Student ID", "warning");
     } else {
-        d.id = document.getElementById('uTPhone').value.trim(); d.machineId = document.getElementById('uTMachineId').value.trim(); d.name = document.getElementById('uTName').value.trim(); d.email = document.getElementById('uTEmail').value.trim();
+        d.id = document.getElementById('uTPhone').value.trim(); 
+        d.machineId = document.getElementById('uTMachineId').value.trim(); 
+        d.name = document.getElementById('uTName').value.trim(); 
+        d.email = document.getElementById('uTEmail').value.trim();
         if(!d.id || !d.pass || !d.name) return Swal.fire("Warning", "Name, Phone & Password are required for Teacher!", "warning");
     }
     
-    showLoader(true, "SAVING ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing with Machine & Server</span>");
+    showLoader(true, "SAVING ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing Auth & Server</span>");
     try {
         let res = await apiCall('addUserDatabase', { info: d });
         showLoader(false); Swal.fire("Success!", res.msg || res.message, "success"); 
-        document.getElementById('uSId').value = ""; document.getElementById('uSMachineId').value = ""; document.getElementById('uTMachineId').value = ""; document.getElementById('uTPhone').value = ""; document.getElementById('uTName').value = ""; document.getElementById('uTEmail').value = ""; document.getElementById('uPass').value = ""; document.getElementById('uCardNumber').value = ""; 
+        
+        document.getElementById('uSId').value = ""; document.getElementById('uSMachineId').value = ""; document.getElementById('uTMachineId').value = ""; document.getElementById('uTPhone').value = ""; document.getElementById('uTName').value = ""; document.getElementById('uTEmail').value = ""; document.getElementById('uPass').value = ""; document.getElementById('uCardNumber').value = ""; document.getElementById('uSPhone').value = ""; document.getElementById('uSGPass').value = "";
+        
         if(document.getElementById('users').classList.contains('active')) loadUsers(); 
     } catch(err) { showLoader(false); Swal.fire("Error", err.message, "error"); }
 }
 
 async function submitUserEdit() {
-    var d = { row: document.getElementById('euRow').value, type: document.getElementById('euType').value, id: document.getElementById('euId').value, name: document.getElementById('euName').value, pass: document.getElementById('euPass').value.trim(), machineId: document.getElementById('euMachineId').value.trim() };
-    if(d.type === 'Teacher') { d.email = document.getElementById('euEmail').value.trim(); }
+    var d = { 
+        row: document.getElementById('euRow').value, 
+        type: document.getElementById('euType').value, 
+        id: document.getElementById('euId').value, 
+        name: document.getElementById('euName').value, 
+        pass: document.getElementById('euPass').value.trim(), 
+        machineId: document.getElementById('euMachineId').value.trim() 
+    };
+    if(d.type === 'Teacher') { 
+        d.email = document.getElementById('euEmail').value.trim(); 
+    } else if (d.type === 'Student') {
+        d.phone = document.getElementById('euPhone').value.trim();
+        d.guardianPass = document.getElementById('euGPass').value.trim();
+    }
+
     if(!d.pass) { Swal.fire("Warning", "Password cannot be empty!", "warning"); return; }
     
     showLoader(true, "UPDATING USER...");
@@ -527,8 +559,12 @@ async function loadUsers() {
 
         let sSnap = await db.collection('Students').get();
         sSnap.forEach(doc => {
-            let f = doc.data(); let sid = f.studentID || ""; if(!sid) return; let pass = f.pass || "123456";
-            users.push({ type: "Student", id: sid, machineId: f.machineID || "", name: f.name || "Student", classVal: f.class || "", roll: f.roll || "", email: f.email || "N/A", phone: f.phone || "N/A", pass: pass, info: `Name: ${f.name||""} <br> Pass: <span style='color:#e11d48; font-weight:600;'>${pass}</span>`, row: doc.id });
+            let f = doc.data(); let sid = f.studentID || ""; if(!sid) return; 
+            let pass = f.pass || "123456";
+            let phone = f.phone || "N/A";
+            let gPass = f.guardianPass || "1234";
+
+            users.push({ type: "Student", id: sid, machineId: f.machineID || "", name: f.name || "Student", classVal: f.class || "", roll: f.roll || "", email: f.email || "N/A", phone: phone, pass: pass, guardianPass: gPass, info: `Name: ${f.name||""} <br> Std Pass: <span style='color:#e11d48; font-weight:600;'>${pass}</span> <br> Guard. ID: <b>${phone}</b> <br> Guard. Pass: <span style='color:#ea580c; font-weight:600;'>${gPass}</span>`, row: doc.id });
         });
 
         showLoader(false);
@@ -555,7 +591,7 @@ function renderUserList() {
             <div>
             <span style="background:${bClr}; color:${tClr}; padding:5px 12px; border-radius:8px; font-size:10px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">${u.type}</span><br>
             <b style="font-size:15px; color:#0f172a; display: inline-block; margin-top: 8px;">${u.id}${machineText}</b><br>
-            <small style="color:#64748b; font-weight:500;">${u.info}</small>
+            <small style="color:#64748b; font-weight:500; line-height: 1.5; display: inline-block;">${u.info}</small>
             </div>
             </div>
             <div style="display:flex; flex-direction:column; gap:8px;">
@@ -612,9 +648,29 @@ function setUserType(t) {
 
 function openEditUser(index) {
     var u = globalUsersList[index];
-    document.getElementById('euRow').value = u.row; document.getElementById('euType').value = u.type; document.getElementById('euId').value = u.id; document.getElementById('euName').value = u.name; document.getElementById('euPass').value = u.pass; document.getElementById('euMachineId').value = u.machineId || "";
-    if(u.type === 'Teacher') { document.getElementById('euTeacherEmailDiv').style.display = "block"; document.getElementById('euEmail').value = u.email; document.getElementById('euName').disabled = false; document.getElementById('euName').style.background = "#fff"; document.getElementById('euName').style.color = "var(--primary-dark)"; } 
-    else { document.getElementById('euTeacherEmailDiv').style.display = "none"; document.getElementById('euName').disabled = true; document.getElementById('euName').style.background = "#f1f5f9"; document.getElementById('euName').style.color = "#94a3b8"; }
+    document.getElementById('euRow').value = u.row; 
+    document.getElementById('euType').value = u.type; 
+    document.getElementById('euId').value = u.id; 
+    document.getElementById('euName').value = u.name; 
+    document.getElementById('euPass').value = u.pass; 
+    document.getElementById('euMachineId').value = u.machineId || "";
+    
+    if(u.type === 'Teacher') { 
+        document.getElementById('euTeacherEmailDiv').style.display = "block"; 
+        document.getElementById('euEmail').value = u.email; 
+        document.getElementById('euName').disabled = false; 
+        document.getElementById('euName').style.background = "#fff"; 
+        document.getElementById('euName').style.color = "var(--primary-dark)"; 
+        document.getElementById('euStudentDiv').style.display = "none";
+    } else { 
+        document.getElementById('euTeacherEmailDiv').style.display = "none"; 
+        document.getElementById('euName').disabled = true; 
+        document.getElementById('euName').style.background = "#f1f5f9"; 
+        document.getElementById('euName').style.color = "#94a3b8"; 
+        document.getElementById('euStudentDiv').style.display = "block";
+        document.getElementById('euPhone').value = u.phone || "";
+        document.getElementById('euGPass').value = u.guardianPass || "";
+    }
     document.getElementById('editUserModal').style.display = "flex";
 }
 
