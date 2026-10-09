@@ -4,8 +4,6 @@
 <meta charset="UTF-8">
 <title>SRMS Accounts Portal V6</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- 🌟 FAVICON ADDED -->
-<link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" type="image/x-icon">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
@@ -83,25 +81,47 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .calc-btn { padding: 15px; border: none; border-radius: 8px; background: #333; color: white; font-weight: bold; cursor: pointer; transition: 0.2s;}
 .calc-btn:hover { background: #555; transform: scale(1.05); }
 
-/* Premium Print Styles */
+/* ================= 🖨️ PERFECT PRINT CSS ================= */
 @media print {
-  body { background: white; padding: 0; margin: 0; }
-  .navbar, .bottom-nav, .card, .container, #loader { display: none !important; }
-  .print-active { display: block !important; position: static; width: 100%; }
-}
+  body { background: white; padding: 0; margin: 0; color: #000; }
+  .navbar, .bottom-nav, .container, #loader { display: none !important; }
+  #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 15mm; box-sizing: border-box; }
+  
+  /* Print Specific Styling */
+  .print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
+  .print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px;}
+  .print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
+  .print-header .title { font-size: 16px; font-weight: bold; margin-top: 12px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 6px 20px; border: 1px solid #000; border-radius: 20px; -webkit-print-color-adjust: exact; color-adjust: exact; }
+  .print-header .filters { font-size: 13px; margin-top: 12px; color: #000; font-weight: bold; border-top: 1px dashed #ccc; padding-top: 8px; display: inline-block; }
+  
+  .print-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; page-break-inside: auto; }
+  .print-table th, .print-table td { border: 1px solid #000 !important; padding: 8px 6px; text-align: left; vertical-align: middle; color: #000; }
+  .print-table th { background-color: #e2e8f0 !important; text-transform: uppercase; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact; }
+  .print-table tr { page-break-inside: avoid; page-break-after: auto;}
+  .print-table td:last-child, .print-table th:last-child { display: none; } /* Hide action column */
+  
+  .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; border-top: 2px solid #000; padding-top: 15px; page-break-inside: avoid;}
+  .signatures { margin-top: 60px; display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: #000; page-break-inside: avoid; padding: 0 30px; }
+  .sig-line { border-top: 1px dashed #000; width: 220px; text-align: center; padding-top: 8px; }
 
-.print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
-.print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px;}
-.print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
-.print-header .title { font-size: 16px; font-weight: bold; margin-top: 12px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 6px 20px; border: 1px solid #000; border-radius: 20px; -webkit-print-color-adjust: exact; color-adjust: exact; }
-.print-header .filters { font-size: 13px; margin-top: 12px; color: #000; font-weight: bold; border-top: 1px dashed #ccc; padding-top: 8px; display: inline-block; }
-.print-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; page-break-inside: auto; }
-.print-table th, .print-table td { border: 1px solid #000 !important; padding: 8px 6px; text-align: left; vertical-align: middle; color: #000;}
-.print-table th { background-color: #e2e8f0 !important; text-transform: uppercase; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact; }
-.print-table tr { page-break-inside: avoid; page-break-after: auto;}
-.print-totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; border-top: 2px solid #000; padding-top: 15px; page-break-inside: avoid; color:#000;}
-.print-signatures { margin-top: 60px; display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: #000; page-break-inside: avoid; padding: 0 30px; }
-.print-sig-line { border-top: 1px dashed #000; width: 220px; text-align: center; padding-top: 8px; }
+  /* Receipt Print Styling */
+  .r-box { height: 138mm; border: 2px solid #cbd5e1; padding: 20px; border-radius: 16px; position: relative; box-sizing: border-box; margin-bottom: 3mm; box-shadow: none; } 
+  .r-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 12px; margin-bottom: 15px; } 
+  .r-header-left { display: flex; align-items: center; gap: 15px; }
+  .r-header-text h2 { margin: 0; font-size: 19px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } 
+  .r-header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }
+  .r-receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; -webkit-print-color-adjust: exact; color-adjust: exact; }
+  .r-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; -webkit-print-color-adjust: exact; color-adjust: exact;}
+  .r-info-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 800; display: inline-block; width: 75px; }
+  .r-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; } 
+  .r-table th { background: #f1f5f9 !important; color: #334155; font-weight: 800; text-transform: uppercase; font-size: 11px; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; border-radius: 6px 6px 0 0; -webkit-print-color-adjust: exact; color-adjust: exact;}
+  .r-table td { border-bottom: 1px solid #e2e8f0; padding: 8px 10px; }
+  .r-summary-box { width: 260px; border: 1.5px solid #cbd5e1; border-radius: 8px; float: right; margin-top: 15px; }
+  .r-summary-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; }
+  .r-total-paid { font-weight: 800; color: #005f40; background: #ecfdf5 !important; border-bottom: 1px solid #a7f3d0; -webkit-print-color-adjust: exact; color-adjust: exact;}
+  .r-watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 80px; opacity: 0.03; color: #005f40; font-weight: 900; z-index: -1; pointer-events: none; letter-spacing: 12px; }
+  .r-cut-line { text-align: center; margin: 6px 0; font-size: 12px; color: #94a3b8; font-weight: 700; letter-spacing: 3px; }
+}
 </style>
 </head>
 <body>
@@ -111,10 +131,8 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
     <p id="loaderText" style="margin-top:15px; font-weight:800; color:var(--main); letter-spacing: 1px; text-align: center;">SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span></p>
 </div>
 
-<!-- ================= HIDDEN PRINT AREAS ================= -->
-<div id="printAreaLedger" class="container" style="display:none;"></div>
-<div id="printAreaReport" class="container" style="display:none;"></div>
-<div id="printAreaHistory" class="container" style="display:none;"></div>
+<!-- ================= 🖨️ PERFECT SAME-PAGE PRINT DOM ================= -->
+<div id="printArea" style="display:none;"></div>
 
 <div id="appContainer" style="display:none;">
     <div class="navbar">
@@ -184,7 +202,7 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 
     <div style="margin-top:25px; background:#eff6ff; padding:15px 20px; border-radius:12px; border:2px dashed #bfdbfe; display:flex; align-items:center; gap:12px; justify-content:center;">
     <input type="checkbox" id="sendSmsChk" checked style="width:24px; height:24px; margin:0; cursor:pointer; accent-color: var(--main);">
-    <label for="sendSmsChk" style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS/Email Notification for Parent</label>
+    <label for="sendSmsChk" style="font-weight:800; color:#005f40; cursor:pointer; font-size:15px; margin:0;">Enable SMS Notification for Parent</label>
     </div>
 
     <div id="success-msg"><i class="fas fa-check-circle"></i> PAYMENT RECORDED SUCCESSFULLY</div>
@@ -519,15 +537,15 @@ const LOGO_URL = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
 const years = []; 
 const currentY = new Date().getFullYear();
 for(let i=2020; i<=2099; i++) years.push(i);
-document.getElementById('bYear').innerHTML = years.map(function(y) { return "<option " + (y === currentY ? 'selected' : '') + ">" + y + "</option>"; }).join('');
-document.getElementById('hYear').innerHTML += years.map(function(y) { return "<option>" + y + "</option>"; }).join('');
-document.getElementById('cbYear').innerHTML += years.map(function(y) { return "<option>" + y + "</option>"; }).join('');
+document.getElementById('bYear').innerHTML = years.map(y => "<option " + (y === currentY ? "selected" : "") + ">" + y + "</option>").join("");
+document.getElementById('hYear').innerHTML += years.map(y => "<option>" + y + "</option>").join("");
+document.getElementById('cbYear').innerHTML += years.map(y => "<option>" + y + "</option>").join("");
 
 function showLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
 function showLoading() { document.getElementById('loader').style.display = "flex"; }
 function hideLoading() { document.getElementById('loader').style.display = "none"; }
 
-// 🌐 BACKEND API CALLER 
+// 🌐 BACKEND API CALLER - NOW WITH SMART ERROR TRACKING
 async function apiCall(actionName, payloadData = {}) {
     let token = await auth.currentUser.getIdToken(true);
     let payload = { action: actionName, token: token, ...payloadData };
@@ -588,7 +606,7 @@ async function loadSectionsData() {
         const doc = await db.collection('Admin').doc('Settings').get();
         let opts = '<option value="">All Sections</option>';
         if (doc.exists && doc.data().sections) {
-            doc.data().sections.split(',').filter(s=>s.trim()!=='').forEach(function(s) { opts += "<option value='" + s + "'>" + s + "</option>"; });
+            doc.data().sections.split(',').filter(s=>s.trim()!=='').forEach(s => { opts += "<option value='" + s + "'>" + s + "</option>"; });
         }
         document.getElementById('rSec').innerHTML = opts;
         document.getElementById('hSec').innerHTML = opts;
@@ -682,51 +700,48 @@ function renderPaymentZone(d) {
     if(d.genStatus !== "Paid") totalDueAmount += genAmtNum;
 
     let fg = document.getElementById('feeGrid');
-    let html = `
-    <div class="fee-card gen">
-    <h4 style="margin-top:0; color:var(--main);"><i class="fas fa-graduation-cap"></i> School Fee (${d.genStatus})</h4>
-    <div style="background:#f1f5f9; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #cbd5e1;">
-    <span style="font-size:12px; color:#64748b; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br>
-    <b style="font-size:24px; color:var(--main);">${d.genAmt} TK</b>
-    </div>
-    <div style="text-align:left;">
-    <label style="font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;">Amount Paying Now:</label>
-    <input type="number" id="pGen" class="pay-input calc-pay" placeholder="0.00" value="${d.genStatus!=='Paid'?d.genAmt:0}" oninput="calcTotalPay()" style="margin:0; width:100%;">
-    </div>
-    </div>`;
+    let html = "<div class='fee-card gen'>" +
+    "<h4 style='margin-top:0; color:var(--main);'><i class='fas fa-graduation-cap'></i> School Fee (" + d.genStatus + ")</h4>" +
+    "<div style='background:#f1f5f9; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #cbd5e1;'>" +
+    "<span style='font-size:12px; color:#64748b; font-weight:800; text-transform:uppercase;'>Total Due Amount:</span><br>" +
+    "<b style='font-size:24px; color:var(--main);'>" + d.genAmt + " TK</b>" +
+    "</div>" +
+    "<div style='text-align:left;'>" +
+    "<label style='font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;'>Amount Paying Now:</label>" +
+    "<input type='number' id='pGen' class='pay-input calc-pay' placeholder='0.00' value='" + (d.genStatus!=='Paid'?d.genAmt:0) + "' oninput='calcTotalPay()' style='margin:0; width:100%;'>" +
+    "</div>" +
+    "</div>";
 
     let hosAmtNum = d.isRes ? (parseFloat(d.hosAmt) || 0) : 0;
     if(d.isRes && d.hosStatus !== "Paid") totalDueAmount += hosAmtNum;
 
-    html += `
-    <div class="fee-card hos" id="hosBox" style="opacity:${d.isRes ? '1' : '0.5'}">
-    <h4 style="margin-top:0; color:var(--accent);"><i class="fas fa-bed"></i> Hostel Fee (${d.isRes ? d.hosStatus : 'N/A'})</h4>
-    <div style="background:#fef2f2; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #fecaca;">
-    <span style="font-size:12px; color:#ef4444; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br>
-    <b style="font-size:24px; color:var(--accent);">${d.isRes ? d.hosAmt : 0} TK</b>
-    </div>
-    <div style="text-align:left;">
-    <label style="font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;">Amount Paying Now:</label>
-    <input type="number" id="pHos" class="pay-input calc-pay" placeholder="0.00" value="${(d.isRes && d.hosStatus!=='Paid') ? d.hosAmt : 0}" ${d.isRes ? '' : 'disabled'} oninput="calcTotalPay()" style="margin:0; width:100%; border-color:var(--accent) !important; color:var(--accent);">
-    </div>
-    </div>`;
+    html += "<div class='fee-card hos' id='hosBox' style='opacity:" + (d.isRes ? '1' : '0.5') + "'>" +
+    "<h4 style='margin-top:0; color:var(--accent);'><i class='fas fa-bed'></i> Hostel Fee (" + (d.isRes ? d.hosStatus : 'N/A') + ")</h4>" +
+    "<div style='background:#fef2f2; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #fecaca;'>" +
+    "<span style='font-size:12px; color:#ef4444; font-weight:800; text-transform:uppercase;'>Total Due Amount:</span><br>" +
+    "<b style='font-size:24px; color:var(--accent);'>" + (d.isRes ? d.hosAmt : 0) + " TK</b>" +
+    "</div>" +
+    "<div style='text-align:left;'>" +
+    "<label style='font-size:13px; font-weight:800; color:#334155; margin-bottom:8px; display:block;'>Amount Paying Now:</label>" +
+    "<input type='number' id='pHos' class='pay-input calc-pay' placeholder='0.00' value='" + ((d.isRes && d.hosStatus!=='Paid') ? d.hosAmt : 0) + "' " + (d.isRes ? '' : 'disabled') + " oninput='calcTotalPay()' style='margin:0; width:100%; border-color:var(--accent) !important; color:var(--accent);'>" +
+    "</div>" +
+    "</div>";
 
     if (d.customFees && d.customFees.length > 0) {
-        d.customFees.forEach(function(cf) {
+        d.customFees.forEach((cf) => {
             let cAmtNum = parseFloat(cf.amount) || 0;
             totalDueAmount += cAmtNum;
-            html += `
-            <div class="fee-card custom">
-            <h4 style="margin-top:0; color:#8b5cf6;"><i class="fas fa-star"></i> ${cf.name} (<span style="color:#7e22ce;">${cf.status}</span>)</h4>
-            <div style="background:#f3e8ff; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #d8b4fe;">
-            <span style="font-size:12px; color:#7e22ce; font-weight:800; text-transform:uppercase;">Total Due Amount:</span><br>
-            <b style="font-size:24px; color:#8b5cf6;">${cf.amount} TK</b>
-            </div>
-            <div style="text-align:left;">
-            <label style="font-size:13px; font-weight:800; color:#8b5cf6; margin-bottom:8px; display:block;">Amount Paying Now:</label>
-            <input type="number" class="pay-input custom-pay calc-pay" data-col="${cf.colIdx}" data-name="${cf.name}" placeholder="0" value="${cf.amount}" style="border-color:#8b5cf6 !important; color:#8b5cf6; margin:0; width:100%;" oninput="calcTotalPay()">
-            </div>
-            </div>`;
+            html += "<div class='fee-card custom'>" +
+            "<h4 style='margin-top:0; color:#8b5cf6;'><i class='fas fa-star'></i> " + cf.name + " (<span style='color:#7e22ce;'>" + cf.status + "</span>)</h4>" +
+            "<div style='background:#f3e8ff; padding:15px; border-radius:12px; margin-bottom:15px; border:1px dashed #d8b4fe;'>" +
+            "<span style='font-size:12px; color:#7e22ce; font-weight:800; text-transform:uppercase;'>Total Due Amount:</span><br>" +
+            "<b style='font-size:24px; color:#8b5cf6;'>" + cf.amount + " TK</b>" +
+            "</div>" +
+            "<div style='text-align:left;'>" +
+            "<label style='font-size:13px; font-weight:800; color:#8b5cf6; margin-bottom:8px; display:block;'>Amount Paying Now:</label>" +
+            "<input type='number' class='pay-input custom-pay calc-pay' data-col='" + cf.colIdx + "' data-name='" + cf.name + "' placeholder='0' value='" + cf.amount + "' style='border-color:#8b5cf6 !important; color:#8b5cf6; margin:0; width:100%;' oninput='calcTotalPay()'>" +
+            "</div>" +
+            "</div>";
         });
     }
     fg.innerHTML = html;
@@ -748,7 +763,7 @@ async function payNowDirect() {
     let gP = parseFloat(document.getElementById('pGen').value) || 0;
     let hP = parseFloat(document.getElementById('pHos').value) || 0;
     let customArr = [];
-    document.querySelectorAll('.custom-pay').forEach(function(inp) {
+    document.querySelectorAll('.custom-pay').forEach(inp => {
         let p = parseFloat(inp.value) || 0;
         if(p > 0) customArr.push({ colIdx: parseInt(inp.getAttribute('data-col')), name: inp.getAttribute('data-name'), paid: p });
     });
@@ -878,18 +893,18 @@ function renderCashbook() {
     filtered.forEach(data => {
         let amount = parseFloat(data.amount) || 0;
         if(data.type === 'Income') { tInc += amount; } else { tExp += amount; }
-        let badge = data.type === 'Income' ? `<span class="badge-income">Income</span>` : `<span class="badge-expense">Expense</span>`;
+        let badge = data.type === 'Income' ? "<span class='badge-income'>Income</span>" : "<span class='badge-expense'>Expense</span>";
         let color = data.type === 'Income' ? '#16a34a' : '#dc2626';
-        h += `<tr>
-        <td>${data.date}</td>
-        <td>${badge}</td>
-        <td><b>${data.title}</b></td>
-        <td>${data.description}</td>
-        <td><b style="color:${color};">৳ ${amount}</b></td>
-        <td><button onclick="delCashbookEntry('${data.docId}')" style="background:#fef2f2; color:#ef4444; border:none; padding:5px 10px; border-radius:6px; cursor:pointer;"><i class="fas fa-trash"></i></button></td>
-        </tr>`;
+        h += "<tr>" +
+        "<td>" + data.date + "</td>" +
+        "<td>" + badge + "</td>" +
+        "<td><b>" + data.title + "</b></td>" +
+        "<td>" + data.description + "</td>" +
+        "<td><b style='color:" + color + ";'>৳ " + amount + "</b></td>" +
+        "<td><button onclick=\"delCashbookEntry('" + data.docId + "')\" style='background:#fef2f2; color:#ef4444; border:none; padding:5px 10px; border-radius:6px; cursor:pointer;'><i class='fas fa-trash'></i></button></td>" +
+        "</tr>";
     });
-    document.querySelector("#cbTable tbody").innerHTML = h || `<tr><td colspan="6" style="text-align:center;">No entries found.</td></tr>`;
+    document.querySelector("#cbTable tbody").innerHTML = h || "<tr><td colspan='6' style='text-align:center;'>No entries found.</td></tr>";
     document.getElementById('cbTotalIncome').innerText = tInc;
     document.getElementById('cbTotalExpense').innerText = tExp;
 }
@@ -922,9 +937,6 @@ async function resetCashbookPrompt() {
 }
 
 function printCashbook() {
-    document.getElementById('printAreaLedger').innerHTML = "";
-    document.getElementById('printAreaHistory').innerHTML = "";
-    
     let t = document.getElementById('cbTable').outerHTML; 
     let tInc = document.getElementById('cbTotalIncome').innerText;
     let tExp = document.getElementById('cbTotalExpense').innerText;
@@ -933,36 +945,27 @@ function printCashbook() {
 
     let subtitleText = "Period: " + m + " " + (y === 'All' ? 'All Years' : y);
 
-    let html = `
-    <div class="print-header">
-    <img src="${LOGO_URL}">
-    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <div class="title">Cashbook / Income & Expense Ledger</div><br>
-    <div class="filters">${subtitleText}</div>
-    </div>
-    ${t.replace('<table', '<table class="print-table"')}
-    <div class="print-totals">
-    <div style="color: #166534;">Total Income: ৳ ${tInc}</div>
-    <div style="color: #991b1b; margin-top:5px;">Total Expense: ৳ ${tExp}</div>
-    <div style="margin-top:10px; border-top:1px dashed #000; padding-top:5px; font-size: 18px;">Net Balance: ৳ ${parseFloat(tInc) - parseFloat(tExp)}</div>
-    </div>
-    <div class="print-signatures">
-    <div class="print-sig-line">Prepared By</div>
-    <div class="print-sig-line">Principal / Authorized Signature</div>
-    </div>`;
+    let html = "<div class='print-header'>" +
+    "<img src='" + LOGO_URL + "'>" +
+    "<h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>" +
+    "<div class='title'>Cashbook / Income & Expense Ledger</div><br>" +
+    "<div class='filters'>" + subtitleText + "</div>" +
+    "</div>" +
+    t.replace('<table', '<table class="print-table"') +
+    "<div class='totals'>" +
+    "<div style='color: #166534;'>Total Income: ৳ " + tInc + "</div>" +
+    "<div style='color: #991b1b; margin-top:5px;'>Total Expense: ৳ " + tExp + "</div>" +
+    "<div style='margin-top:10px; border-top:1px dashed #000; padding-top:5px; font-size: 18px;'>Net Balance: ৳ " + (parseFloat(tInc) - parseFloat(tExp)) + "</div>" +
+    "</div>" +
+    "<div class='signatures'>" +
+    "<div class='sig-line'>Prepared By</div>" +
+    "<div class='sig-line'>Principal / Authorized Signature</div>" +
+    "</div>";
 
-    let printBox = document.getElementById('printAreaLedger');
+    let printBox = document.getElementById('printArea');
     printBox.innerHTML = html;
-    
-    document.getElementById('collectTab').classList.remove('active');
-    document.getElementById('cashbookTab').classList.remove('active');
-    document.getElementById('setupTab').classList.remove('active');
-    document.getElementById('reportsTab').classList.remove('active');
-    document.getElementById('historyTab').classList.remove('active');
-    
-    printBox.classList.add('print-active');
     window.print();
-    setTimeout(() => { printBox.classList.remove('print-active'); document.getElementById('cashbookTab').classList.add('active'); }, 500); 
+    setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
 }
 
 function checkCustomOption(selectElement) {
@@ -1036,7 +1039,7 @@ async function loadBulk() {
     if(!isAuthReady) return;
     let clsValues = [];
     if(document.getElementById('bClsAll').checked) { clsValues.push("All"); } 
-    else { document.querySelectorAll('.bCls-chk:checked').forEach(function(c) { clsValues.push(c.value); }); }
+    else { document.querySelectorAll('.bCls-chk:checked').forEach(c => clsValues.push(c.value)); }
     
     if(clsValues.length === 0) { alert("Please select at least one class."); return; }
     showLoading(); showLoaderText("LOADING LIST...");
@@ -1051,12 +1054,12 @@ async function loadBulk() {
             let isRes = f.resStatus === "Residential";
             let sCat = f.category || "Civil";
             
-            let targetClasses = clsValues.map(function(c) { return c.trim().toLowerCase(); });
+            let targetClasses = clsValues.map(c => c.trim().toLowerCase());
             let categoryFilter = document.getElementById('bCat').value;
             let feeType = document.getElementById('bType').value;
             
             let matchCat = (categoryFilter === "All" || sCat === categoryFilter);
-            let matchClass = targetClasses.indexOf("all") !== -1 || targetClasses.indexOf(sClass) !== -1;
+            let matchClass = targetClasses.includes("all") || targetClasses.includes(sClass);
             
             if (matchClass && matchCat && (feeType === "General" || feeType === "Custom" || isRes)) {
                 list.push({ id: sId, name: f.name || "", category: sCat });
@@ -1067,7 +1070,7 @@ async function loadBulk() {
         let h = "<table style='box-shadow:none; border:none;'><thead><tr><th style='border-radius:10px 0 0 0;'><input type='checkbox' checked onclick='toggleAll(this)' style='width:18px; height:18px; cursor:pointer;'></th><th>Student ID</th><th>Student Name</th><th style='border-radius:0 10px 0 0;'>Category</th></tr></thead><tbody>"; 
         list.forEach(s => {
             let badgeClass = s.category === 'Army' ? 'badge-army' : 'badge-civil';
-            h += `<tr><td><input type='checkbox' class='s-chk' value='${s.id}' checked style='width:18px; height:18px; cursor:pointer;'></td><td><b style='color:#005f40;'>${s.id}</b></td><td><b>${s.name}</b></td><td><span class="${badgeClass}">${s.category || 'Civil'}</span></td></tr>`;
+            h += "<tr><td><input type='checkbox' class='s-chk' value='" + s.id + "' checked style='width:18px; height:18px; cursor:pointer;'></td><td><b style='color:#005f40;'>" + s.id + "</b></td><td><b>" + s.name + "</b></td><td><span class='" + badgeClass + "'>" + (s.category || 'Civil') + "</span></td></tr>";
         }); 
         document.getElementById('bulkList').innerHTML = h + "</tbody></table>"; 
         document.getElementById('bulkControls').style.display = "block"; 
@@ -1075,8 +1078,8 @@ async function loadBulk() {
     } catch(err) { hideLoading(); alert("Load List Error: " + err.message); }
 }
 
-function toggleAll(s) { document.querySelectorAll('.s-chk').forEach(function(c) { c.checked = s.checked; }); }
-function toggleClassCheckboxes(source) { document.querySelectorAll('.bCls-chk').forEach(function(c) { c.checked = source.checked; }); }
+function toggleAll(s) { document.querySelectorAll('.s-chk').forEach(c => c.checked = s.checked); }
+function toggleClassCheckboxes(source) { document.querySelectorAll('.bCls-chk').forEach(c => c.checked = source.checked); }
 
 function toggleCustomUI() { 
     let type = document.getElementById('bType').value;
@@ -1090,20 +1093,20 @@ function toggleCustomUI() {
 }
 
 function addCustomFeeRow() {
-    let html = `
-    <div class="custom-fee-item" style="display:flex; gap:12px; margin-bottom:10px;">
-    <select class="c-fee-name" onchange="checkCustomOption(this)" style="margin:0; flex:1;">
-        <option value="Admission Fee">Admission Fee</option>
-        <option value="Promotion Fee">Promotion Fee</option>
-        <option value="Session Charge">Session Charge</option>
-        <option value="Late Fee">Late Fee</option>
-        <option value="Exam Fee">Exam Fee</option>
-        <option value="Other">Other (Specify)</option>
-    </select>
-    <input type="text" class="c-fee-name-other" placeholder="Type Fee Name" style="display:none; margin:0; flex:1;">
-    <input type="number" class="c-fee-amt" placeholder="Amount (TK)" style="margin:0; flex:1;">
-    <button class="btn" style="background:#ef4444; color:white; width:auto; padding:10px 18px;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
-    </div>`;
+    let html = "" +
+    "<div class='custom-fee-item' style='display:flex; gap:12px; margin-bottom:10px;'>" +
+    "<select class='c-fee-name' onchange='checkCustomOption(this)' style='margin:0; flex:1;'>" +
+        "<option value='Admission Fee'>Admission Fee</option>" +
+        "<option value='Promotion Fee'>Promotion Fee</option>" +
+        "<option value='Session Charge'>Session Charge</option>" +
+        "<option value='Late Fee'>Late Fee</option>" +
+        "<option value='Exam Fee'>Exam Fee</option>" +
+        "<option value='Other'>Other (Specify)</option>" +
+    "</select>" +
+    "<input type='text' class='c-fee-name-other' placeholder='Type Fee Name' style='display:none; margin:0; flex:1;'>" +
+    "<input type='number' class='c-fee-amt' placeholder='Amount (TK)' style='margin:0; flex:1;'>" +
+    "<button class='btn' style='background:#ef4444; color:white; width:auto; padding:10px 18px;' onclick='this.parentElement.remove()'><i class='fas fa-times'></i></button>" +
+    "</div>";
     document.getElementById('customFeeList').insertAdjacentHTML('beforeend', html);
 }
 
@@ -1189,15 +1192,15 @@ async function loadRep() {
 function renderReports(list) {
     let h = ""; let pCount = 0; let dCount = 0; let tPaid = 0; let tDue = 0;
     list.forEach(x => {
-        let sBadge = x.status.trim() === "Paid" ? `<span style="background:#dcfce7; color:#16a34a; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;">PAID</span>` : `<span style="background:#fee2e2; color:#ef4444; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;">DUE</span>`;
-        let cBadge = x.category === 'Army' ? `<span style="color:#b45309; font-weight:900;">Army</span>` : `<span style="color:#005f40; font-weight:900;">Civil</span>`;
-        h += `<tr><td><b>${x.id}</b></td><td>${x.name}</td><td>${x.class}</td><td>${x.section || '-'}</td><td>${x.roll}</td><td>${cBadge}</td><td><b>${x.feeName}</b></td><td>${x.period}</td><td><b style="color:var(--main);">${x.amount} TK</b></td><td>${sBadge}</td></tr>`;
+        let sBadge = x.status.trim() === "Paid" ? "<span style='background:#dcfce7; color:#16a34a; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;'>PAID</span>" : "<span style='background:#fee2e2; color:#ef4444; padding:4px 8px; border-radius:6px; font-weight:800; font-size:11px;'>DUE</span>";
+        let cBadge = x.category === 'Army' ? "<span style='color:#b45309; font-weight:900;'>Army</span>" : "<span style='color:#005f40; font-weight:900;'>Civil</span>";
+        h += "<tr><td><b>" + x.id + "</b></td><td>" + x.name + "</td><td>" + x.class + "</td><td>" + (x.section || '-') + "</td><td>" + x.roll + "</td><td>" + cBadge + "</td><td><b>" + x.feeName + "</b></td><td>" + x.period + "</td><td><b style='color:var(--main);'>" + x.amount + " TK</b></td><td>" + sBadge + "</td></tr>";
 
         if (x.status && x.status.trim() === "Paid") { pCount++; tPaid += parseFloat(x.amount) || 0; } 
         else if (x.status && x.status.trim() === "Due") { dCount++; tDue += parseFloat(x.amount) || 0; }
     }); 
 
-    document.querySelector("#rTable tbody").innerHTML = h || `<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No matching records found.</td></tr>`; 
+    document.querySelector("#rTable tbody").innerHTML = h || "<tr><td colspan='10' style='text-align:center; color:#94a3b8;'>No matching records found.</td></tr>"; 
     document.getElementById('tPaidVal').innerText = tPaid; 
     document.getElementById('tDueVal').innerText = tDue; 
     document.getElementById('tStuCount').innerText = list.length;
@@ -1219,9 +1222,6 @@ function filterReports() {
 }
 
 function printRep() { 
-    document.getElementById('printAreaLedger').innerHTML = "";
-    document.getElementById('printAreaHistory').innerHTML = "";
-    
     let t = document.getElementById('rTable').outerHTML; 
     let sc = document.getElementById('tStuCount').innerText;
     let pc = document.getElementById('tPaidCount').innerText;
@@ -1236,38 +1236,29 @@ function printRep() {
     if(cat !== "All") subtitleText += " | Category: " + cat;
     if(sts !== "All") subtitleText += " | Status: " + sts;
 
-    let html = `
-    <div class="print-header">
-    <img src="${LOGO_URL}">
-    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <div class="title">Comprehensive Financial Report</div><br>
-    <div class="filters">${subtitleText}</div>
-    </div>
-    <div style="text-align: center; font-size: 13px; margin-bottom: 15px; font-weight: bold; background: #f8fafc; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px; color:#000;">
-    Total Records: ${sc} &nbsp;|&nbsp; Paid Records: ${pc} &nbsp;|&nbsp; Due Records: ${dc}
-    </div>
-    ${t.replace('<table', '<table class="print-table"')}
-    <div class="print-totals">
-    <div>Total Collected: ৳ ${document.getElementById('tPaidVal').innerText}</div>
-    <div style="color: #444; margin-top:5px;">Total Due Amount: ৳ ${document.getElementById('tDueVal').innerText}</div>
-    </div>
-    <div class="print-signatures">
-    <div class="print-sig-line">Prepared By</div>
-    <div class="print-sig-line">Principal / Authorized Signature</div>
-    </div>`;
+    let html = "<div class='print-header'>" +
+    "<img src='" + LOGO_URL + "'>" +
+    "<h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>" +
+    "<div class='title'>Comprehensive Financial Report</div><br>" +
+    "<div class='filters'>" + subtitleText + "</div>" +
+    "</div>" +
+    "<div style='text-align: center; font-size: 13px; margin-bottom: 15px; font-weight: bold; background: #f8fafc; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px; color:#000;'>" +
+    "Total Records: " + sc + " &nbsp;|&nbsp; Paid Records: " + pc + " &nbsp;|&nbsp; Due Records: " + dc +
+    "</div>" +
+    t.replace('<table', '<table class="print-table"') +
+    "<div class='totals'>" +
+    "<div>Total Collected: ৳ " + document.getElementById('tPaidVal').innerText + "</div>" +
+    "<div style='color: #444; margin-top:5px;'>Total Due Amount: ৳ " + document.getElementById('tDueVal').innerText + "</div>" +
+    "</div>" +
+    "<div class='signatures'>" +
+    "<div class='sig-line'>Prepared By</div>" +
+    "<div class='sig-line'>Principal / Authorized Signature</div>" +
+    "</div>";
 
-    let printBox = document.getElementById('printAreaReport');
+    let printBox = document.getElementById('printArea');
     printBox.innerHTML = html;
-    
-    document.getElementById('collectTab').classList.remove('active');
-    document.getElementById('cashbookTab').classList.remove('active');
-    document.getElementById('setupTab').classList.remove('active');
-    document.getElementById('reportsTab').classList.remove('active');
-    document.getElementById('historyTab').classList.remove('active');
-    
-    printBox.classList.add('print-active');
     window.print();
-    setTimeout(() => { printBox.classList.remove('print-active'); document.getElementById('reportsTab').classList.add('active'); }, 500); 
+    setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
 }
 
 async function loadHistory() {
@@ -1289,20 +1280,20 @@ function renderHistory(data) {
     let h = ""; let total = 0;
     data.forEach(x => {
         total += parseFloat(x.paidAmount) || 0;
-        let cBadge = x.category === 'Army' ? `<span class="badge-army">Army</span>` : `<span class="badge-civil">Civil</span>`;
-        let secStr = x.section ? ` (${x.section})` : "";
-        h += `<tr>
-        <td>${x.date || "-"}</td>
-        <td><b>${x.receiptNo || "-"}</b></td>
-        <td><b style="color:var(--main);">${x.studentID || "-"}</b></td>
-        <td>${x.name || "-"}</td>
-        <td>${x.class || "-"}${secStr} (Roll: ${x.roll || "-"})</td>
-        <td>${cBadge}</td>
-        <td>${x.month || "-"} ${x.year || "-"}</td>
-        <td><b style="color:#0369a1;">${x.paidAmount || "0"} TK</b></td>
-        </tr>`;
+        let cBadge = x.category === 'Army' ? "<span class='badge-army'>Army</span>" : "<span class='badge-civil'>Civil</span>";
+        let secStr = x.section ? " (" + x.section + ")" : "";
+        h += "<tr>" +
+        "<td>" + (x.date || "-") + "</td>" +
+        "<td><b>" + (x.receiptNo || "-") + "</b></td>" +
+        "<td><b style='color:var(--main);'>" + (x.studentID || "-") + "</b></td>" +
+        "<td>" + (x.name || "-") + "</td>" +
+        "<td>" + (x.class || "-") + secStr + " (Roll: " + (x.roll || "-") + ")</td>" +
+        "<td>" + cBadge + "</td>" +
+        "<td>" + (x.month || "-") + " " + (x.year || "-") + "</td>" +
+        "<td><b style='color:#0369a1;'>" + (x.paidAmount || "0") + " TK</b></td>" +
+        "</tr>";
     });
-    document.querySelector("#hTable tbody").innerHTML = h || `<tr><td colspan="8" style="text-align:center; color:#94a3b8;">No transactions found.</td></tr>`;
+    document.querySelector("#hTable tbody").innerHTML = h || "<tr><td colspan='8' style='text-align:center; color:#94a3b8;'>No transactions found.</td></tr>";
     document.getElementById('hTotalVal').innerText = total.toFixed(2);
 }
 
@@ -1333,9 +1324,6 @@ function filterHistory() {
 }
 
 function printHistory() {
-    document.getElementById('printAreaLedger').innerHTML = "";
-    document.getElementById('printAreaReport').innerHTML = "";
-    
     let t = document.getElementById('hTable').outerHTML; 
     let total = document.getElementById('hTotalVal').innerText;
     let c = document.getElementById('hClass').value;
@@ -1349,138 +1337,102 @@ function printHistory() {
     if(cat !== "All") subtitleText += " | Category: " + cat;
     subtitleText += " | Period: " + m + " " + (y === 'All' ? 'All Years' : y);
 
-    let html = `
-    <div class="print-header">
-    <img src="${LOGO_URL}">
-    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <div class="title">Payment Ledger / Transaction History</div><br>
-    <div class="filters">${subtitleText}</div>
-    </div>
-    ${t.replace('<table', '<table class="print-table"')}
-    <div class="print-totals">Total Collected: ৳ ${total}</div>
-    <div class="print-signatures">
-    <div class="print-sig-line">Prepared By</div>
-    <div class="print-sig-line">Principal / Authorized Signature</div>
-    </div>`;
+    let html = "<div class='print-header'>" +
+    "<img src='" + LOGO_URL + "'>" +
+    "<h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>" +
+    "<div class='title'>Payment Ledger / Transaction History</div><br>" +
+    "<div class='filters'>" + subtitleText + "</div>" +
+    "</div>" +
+    t.replace('<table', '<table class="print-table"') +
+    "<div class='totals'>Total Collected: ৳ " + total + "</div>" +
+    "<div class='signatures'>" +
+    "<div class='sig-line'>Prepared By</div>" +
+    "<div class='sig-line'>Principal / Authorized Signature</div>" +
+    "</div>";
 
-    let printBox = document.getElementById('printAreaHistory');
+    let printBox = document.getElementById('printArea');
     printBox.innerHTML = html;
-    
-    document.getElementById('collectTab').classList.remove('active');
-    document.getElementById('cashbookTab').classList.remove('active');
-    document.getElementById('setupTab').classList.remove('active');
-    document.getElementById('reportsTab').classList.remove('active');
-    document.getElementById('historyTab').classList.remove('active');
-    
-    printBox.classList.add('print-active');
     window.print();
-    setTimeout(() => { printBox.classList.remove('print-active'); document.getElementById('historyTab').classList.add('active'); }, 500); 
+    setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
 }
 
 function printReceiptDirect() {
     if(!lastR) return;
     let d = lastR;
-    let items = d.itemsList.map(function(i) {
+    let items = "";
+    d.itemsList.forEach(function(i) {
         let payable = parseFloat(i.original) || 0;
         let paid = parseFloat(i.paid) || parseFloat(i.amount) || payable; 
         let dueAmt = payable - paid;
-        return `
-        <tr style="border-bottom: 1px solid #e2e8f0;">
-        <td style="color:#1e293b; font-weight:700;">${i.title}</td>
-        <td style="text-align:right; color:#64748b; font-weight:600;">${payable.toFixed(2)}</td>
-        <td style="text-align:right; color:#005f40; font-weight:800;">${paid.toFixed(2)}</td>
-        <td style="text-align:right; color:#ef4444; font-weight:700;">${dueAmt.toFixed(2)}</td>
-        </tr>`;
-    }).join('');
+        items += "<tr style='border-bottom: 1px solid #e2e8f0;'>" +
+        "<td style='color:#1e293b; font-weight:700;'>" + i.title + "</td>" +
+        "<td style='text-align:right; color:#64748b; font-weight:600;'>" + payable.toFixed(2) + "</td>" +
+        "<td style='text-align:right; color:#005f40; font-weight:800;'>" + paid.toFixed(2) + "</td>" +
+        "<td style='text-align:right; color:#ef4444; font-weight:700;'>" + dueAmt.toFixed(2) + "</td>" +
+        "</tr>";
+    });
 
     let secStr = d.section ? " (Sec: " + d.section + ")" : "";
-    let h = `<html><head><style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-    @page { size: A4 portrait; margin: 0; } 
-    body { font-family: 'Inter', sans-serif; padding: 6mm; margin: 0; background: #fff; color: #0f172a; -webkit-print-color-adjust: exact; box-sizing: border-box; height: 297mm; overflow: hidden; } 
-    .box { height: 138mm; border: 2px solid #cbd5e1; padding: 20px; border-radius: 16px; position: relative; box-sizing: border-box; margin-bottom: 3mm; box-shadow: 0 4px 15px rgba(0,0,0,0.02); } 
-    .header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 12px; margin-bottom: 15px; } 
-    .header-left { display: flex; align-items: center; gap: 15px; }
-    .header-text h2 { margin: 0; font-size: 19px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } 
-    .header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }
-    .receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; }
-    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 12px; margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
-    .info-grid div { line-height: 1.6; }
-    .info-label { color: #64748b; font-size: 11px; text-transform: uppercase; font-weight: 800; display: inline-block; width: 75px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 12px; } 
-    th { background: #f1f5f9; color: #334155; font-weight: 800; text-transform: uppercase; font-size: 11px; padding: 10px; text-align: left; border-bottom: 2px solid #cbd5e1; border-radius: 6px 6px 0 0; }
-    td { border-bottom: 1px solid #e2e8f0; padding: 8px 10px; }
-    .summary-container { display: flex; justify-content: flex-end; margin-top: 15px; }
-    .summary-box { width: 260px; border: 1.5px solid #cbd5e1; border-radius: 8px; overflow: hidden; background: white; }
-    .summary-row { display: flex; justify-content: space-between; padding: 8px 12px; font-size: 12px; border-bottom: 1px solid #e2e8f0; }
-    .summary-row:last-child { border-bottom: none; }
-    .total-payable { font-weight: 700; color: #475569; }
-    .total-paid { font-weight: 800; color: #005f40; background: #ecfdf5; border-bottom: 1px solid #a7f3d0;}
-    .total-due { font-weight: 800; color: #b91c1c; background: #fef2f2; }
-    .watermark { position: absolute; top: 55%; left: 50%; transform: translate(-50%,-50%) rotate(-30deg); font-size: 80px; opacity: 0.03; color: #005f40; font-weight: 900; z-index: -1; pointer-events: none; letter-spacing: 12px; }
-    .signatures { position: absolute; bottom: 20px; left: 25px; right: 25px; display: flex; justify-content: space-between; font-weight: 800; font-size: 12px; color: #475569; }
-    .sig-line { border-top: 2px dashed #94a3b8; width: 160px; text-align: center; padding-top: 8px; }
-    .cut-line { text-align: center; margin: 6px 0; font-size: 12px; color: #94a3b8; font-weight: 700; letter-spacing: 3px; }
-    </style></head><body>
+    
+    let generateCopy = function(copyName, isFirst) {
+        return "<div class='r-box'>" +
+        "<div class='r-watermark'>SRMS</div>" +
+        "<div class='r-header'>" +
+        "<div class='r-header-left'>" +
+        "<img src='" + LOGO_URL + "' width='55' style='border-radius: 8px;'>" +
+        "<div class='r-header-text'>" +
+        "<h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>" +
+        "<p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>" +
+        "</div>" +
+        "</div>" +
+        "<div class='r-receipt-tag'>" + copyName + "</div>" +
+        "</div>" +
+        "<div class='r-info-grid'>" +
+        "<div>" +
+        "<div><span class='r-info-label'>Receipt No:</span> <b style='color:#005f40;'>" + d.rNo + "</b></div>" +
+        "<div><span class='r-info-label'>Student ID:</span> <b>" + d.id + "</b></div>" +
+        "<div><span class='r-info-label'>Name:</span> <b style='color:#0f172a; font-size:13px; text-transform:uppercase;'>" + d.name + "</b></div>" +
+        "</div>" +
+        "<div style='text-align: right;'>" +
+        "<div><span class='r-info-label' style='text-align:left;'>Date:</span> <b>" + d.date + "</b></div>" +
+        "<div><span class='r-info-label' style='text-align:left;'>Class:</span> <b>" + d.class + secStr + " (Roll:" + d.roll + ")</b></div>" +
+        "<div><span class='r-info-label' style='text-align:left;'>Session:</span> <b>" + d.month + " " + d.year + "</b></div>" +
+        "</div>" +
+        "</div>" +
+        "<table class='r-table'>" +
+        "<thead>" +
+        "<tr>" +
+        "<th>Fee Particulars</th>" +
+        "<th style='text-align:right; width: 95px;'>Payable (TK)</th>" +
+        "<th style='text-align:right; width: 100px;'>Paid Now (TK)</th>" +
+        "<th style='text-align:right; width: 95px;'>Due (TK)</th>" +
+        "</tr>" +
+        "</thead>" +
+        "<tbody>" +
+        items +
+        "</tbody>" +
+        "</table>" +
+        "<div style='overflow:hidden;'>" +
+        "<div class='r-summary-box'>" +
+        "<div class='r-summary-row'><span>Total Payable:</span> <span>৳ " + d.totalBill.toFixed(2) + "</span></div>" +
+        "<div class='r-summary-row r-total-paid'><span>Amount Paid Now:</span> <span>৳ " + d.paid.toFixed(2) + "</span></div>" +
+        "<div class='r-summary-row'><span>Remaining Due:</span> <span style='color: #b91c1c; font-weight: bold;'>৳ " + d.remaining.toFixed(2) + "</span></div>" +
+        "</div>" +
+        "</div>" +
+        "<div class='signatures'>" +
+        "<div class='sig-line'>Accountant / Cashier</div>" +
+        "<div class='sig-line'>Student / Guardian</div>" +
+        "</div>" +
+        "</div>" +
+        (isFirst ? "<div class='r-cut-line'>✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>" : "");
+    };
 
-    ${["STUDENT COPY", "OFFICE COPY"].map(function(c, idx) { return `
-    <div class="box">
-    <div class="watermark">SRMS</div>
-    <div class="header">
-    <div class="header-left">
-    <img src="${LOGO_URL}" width="55" style="border-radius: 8px;">
-    <div class="header-text">
-    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
-    </div>
-    </div>
-    <div class="receipt-tag">${c}</div>
-    </div>
-    <div class="info-grid">
-    <div>
-    <div><span class="info-label">Receipt No:</span> <b style="color:#005f40;">${d.rNo}</b></div>
-    <div><span class="info-label">Student ID:</span> <b>${d.id}</b></div>
-    <div><span class="info-label">Name:</span> <b style="color:#0f172a; font-size:13px; text-transform:uppercase;">${d.name}</b></div>
-    </div>
-    <div style="text-align: right;">
-    <div><span class="info-label" style="text-align:left;">Date:</span> <b>${d.date}</b></div>
-    <div><span class="info-label" style="text-align:left;">Class:</span> <b>${d.class}${secStr} (Roll:${d.roll})</b></div>
-    <div><span class="info-label" style="text-align:left;">Session:</span> <b>${d.month} ${d.year}</b></div>
-    </div>
-    </div>
-    <table>
-    <thead>
-    <tr>
-    <th>Fee Particulars</th>
-    <th style="text-align:right; width: 95px;">Payable (TK)</th>
-    <th style="text-align:right; width: 100px;">Paid Now (TK)</th>
-    <th style="text-align:right; width: 95px;">Due (TK)</th>
-    </tr>
-    </thead>
-    <tbody>
-    ${items}
-    </tbody>
-    </table>
-    <div class="summary-container">
-    <div class="summary-box">
-    <div class="summary-row total-payable"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div>
-    <div class="summary-row total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div>
-    <div class="summary-row total-due"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div>
-    </div>
-    </div>
-    <div class="signatures">
-    <div class="sig-line">Accountant / Cashier</div>
-    <div class="sig-line">Student / Guardian</div>
-    </div>
-    </div>
-    ${idx === 0 ? '<div class="cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>' : ''}
-    `}).join('')}
-    </body></html>`;
-
-    let w = window.open('','','width=900,height=950'); 
-    w.document.write(h); 
-    w.document.close(); 
-    setTimeout(()=>w.print(), 1000);
+    let html = generateCopy("STUDENT COPY", true) + generateCopy("OFFICE COPY", false);
+    
+    let printBox = document.getElementById('printArea');
+    printBox.innerHTML = html;
+    window.print();
+    setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
 }
 
 const cScr = document.getElementById('cScr');
