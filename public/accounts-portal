@@ -83,66 +83,130 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .calc-btn { padding: 15px; border: none; border-radius: 8px; background: #333; color: white; font-weight: bold; cursor: pointer; transition: 0.2s;}
 .calc-btn:hover { background: #555; transform: scale(1.05); }
 
-/* ================= 🖨️ PERFECT PRINT CSS (SINGLE PAGE GUARANTEE) ================= */
+/* ================= 🖨️ PERFECT SINGLE-PAGE PRINT CSS ================= */
 @media print {
-  @page { size: A4 portrait; margin: 5mm; }
-  body { background: white; padding: 0; margin: 0; color: #000; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { size: A4 portrait; margin: 8mm; }
+  body { background: white; padding: 0; margin: 0; color: #000; font-size: 11px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .navbar, .bottom-nav, .container, #loader, .sweet-alert, .swal2-container { display: none !important; }
-  #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; box-sizing: border-box; }
+  #printArea { display: block !important; position: relative; width: 100%; margin: 0; padding: 0; box-sizing: border-box; }
   
-  /* Print Specific Styling (For Reports & Ledgers) */
+  /* General Print Styling for Reports */
   .print-header { text-align: center; border-bottom: 3px double #000; padding-bottom: 10px; margin-bottom: 15px; }
   .print-header img { height: 60px; object-fit: contain; margin-bottom: 5px; border-radius:6px;}
-  .print-header h2 { margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
-  .print-header .title { font-size: 14px; font-weight: bold; margin-top: 8px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 5px 15px; border: 1px solid #000; border-radius: 15px; }
-  .print-header .filters { font-size: 12px; margin-top: 8px; color: #000; font-weight: bold; border-top: 1px dashed #ccc; padding-top: 5px; display: inline-block; }
+  .print-header h2 { margin: 0; font-size: 20px; font-weight: bold; text-transform: uppercase; color: #000; }
+  .print-header .title { font-size: 14px; font-weight: bold; margin-top: 8px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 4px 15px; border: 1px solid #000; border-radius: 15px; }
+  .print-header .filters { font-size: 11px; margin-top: 8px; color: #000; font-weight: bold; }
   
-  .print-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; page-break-inside: auto; }
+  .print-table { width: 100%; border-collapse: collapse; font-size: 10.5px; margin-top: 8px; }
   .print-table th, .print-table td { border: 1px solid #000 !important; padding: 6px 4px; text-align: left; vertical-align: middle; color: #000; }
   .print-table th { background-color: #e2e8f0 !important; text-transform: uppercase; font-size: 10px; font-weight: bold; }
-  .print-table tr { page-break-inside: avoid; page-break-after: auto;}
   .print-table td:last-child, .print-table th:last-child { display: none; }
   
-  .totals { margin-top: 15px; text-align: right; font-weight: bold; font-size: 14px; border-top: 2px solid #000; padding-top: 10px; page-break-inside: avoid;}
-  .signatures { margin-top: 40px; display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; color: #000; page-break-inside: avoid; padding: 0 20px; }
-  .sig-line { border-top: 1px dashed #000; width: 180px; text-align: center; padding-top: 5px; }
+  .totals { margin-top: 15px; text-align: right; font-weight: bold; font-size: 13px; border-top: 2px solid #000; padding-top: 10px; page-break-inside: avoid;}
+  .signatures { margin-top: 40px; display: flex; justify-content: space-between; font-weight: bold; font-size: 11px; color: #000; page-break-inside: avoid; padding: 0 20px; }
+  .sig-line { border-top: 1px dashed #000; width: 180px; text-align: center; padding-top: 6px; }
 
-  /* ================= SRMS OFFICIAL RECEIPT STYLING (PERFECT FIT) ================= */
-  .r-box { width: 100%; border: 1px solid #94a3b8; padding: 12px 15px; border-radius: 10px; position: relative; box-sizing: border-box; margin-bottom: 8px; font-family: 'Arial', sans-serif; min-height: 46vh; display: flex; flex-direction: column; overflow: hidden; page-break-inside: avoid; background: white;} 
+  /* ================= 🧾 STRICT 1-PAGE DUAL-COPY RECEIPT CSS ================= */
+  .receipt-page-container {
+    width: 100%;
+    max-height: 275mm;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .r-box { 
+    width: 100%; 
+    border: 1.5px solid #64748b; 
+    padding: 10px 14px; 
+    border-radius: 8px; 
+    position: relative; 
+    box-sizing: border-box; 
+    background: #fff;
+    font-family: 'Arial', sans-serif;
+  } 
+
+  .r-header { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    border-bottom: 2.5px solid #005f40; 
+    padding-bottom: 6px; 
+    margin-bottom: 8px; 
+  } 
+
+  .r-logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .r-logo-title img {
+    height: 45px;
+    width: 45px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
+
+  .r-header-text h2 { margin: 0; font-size: 15px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } 
+  .r-header-text p { margin: 2px 0 0 0; font-size: 9.5px; color: #475569; font-weight: 600; }
   
-  /* Watermark */
-  .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 250px; height: 250px; background-image: url('https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg'); background-size: contain; background-repeat: no-repeat; background-position: center; opacity: 0.06; z-index: 0; pointer-events: none; }
-  
-  /* Official Seal */
-  .seal { position: absolute; bottom: 35px; left: 35%; transform: translateX(-50%) rotate(-15deg); width: 75px; height: 75px; border: 3px solid rgba(0, 95, 64, 0.45); border-radius: 50%; display: flex; align-items: center; justify-content: center; text-align: center; color: rgba(0, 95, 64, 0.6); font-size: 11px; font-weight: 900; line-height: 1.1; box-shadow: inset 0 0 0 1px rgba(0, 95, 64, 0.45); padding: 3px; z-index: 0; pointer-events: none; }
-  .seal-inner { border: 1px dashed rgba(0, 95, 64, 0.45); border-radius: 50%; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; text-transform: uppercase;}
-  
-  .r-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #005f40; padding-bottom: 8px; margin-bottom: 10px; position: relative; z-index: 1; } 
-  .r-logo img { height: 50px; border-radius: 6px; }
-  .r-header-text { flex: 1; text-align: center; padding: 0 10px;}
-  .r-header-text h2 { margin: 0; font-size: 17px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } 
-  .r-header-text p { margin: 2px 0 0 0; font-size: 10px; color: #475569; font-weight: 600; }
-  .r-receipt-tag { background: #005f40 !important; color: white !important; padding: 5px 12px; border-radius: 12px; font-size: 11px; font-weight: 800; border: 1px solid #003d29;}
-  
-  .r-info-table { width: 100%; font-size: 11px; margin-bottom: 10px; position: relative; z-index: 1;}
-  .r-info-table td { padding: 3px 0; border: none !important; }
-  .r-label { font-weight: bold; color: #475569; font-size: 10px; text-transform: uppercase;}
+  .r-receipt-tag-wrap {
+    text-align: right;
+  }
+
+  .r-receipt-tag { 
+    background: #005f40; 
+    color: white; 
+    padding: 4px 10px; 
+    border-radius: 12px; 
+    font-size: 9.5px; 
+    font-weight: 800; 
+    letter-spacing: 1px; 
+  }
+
+  .r-info-table { width: 100%; font-size: 10.5px; margin-bottom: 6px; }
+  .r-info-table td { padding: 2px 0; border: none !important; }
+  .r-label { font-weight: bold; color: #475569; text-transform: uppercase; font-size: 9.5px; }
   .r-val { font-weight: bold; color: #000; }
   
-  .r-table { width: 100%; border-collapse: collapse; font-size: 11px; border: 1px solid #cbd5e1; position: relative; z-index: 1; margin-bottom: 10px; flex-grow: 1;} 
-  .r-table th { background: #f1f5f9 !important; color: #334155 !important; font-weight: bold; font-size: 10px; padding: 6px; border: 1px solid #cbd5e1; text-transform: uppercase;}
-  .r-table td { border: 1px solid #cbd5e1; padding: 5px 6px; color: #000; font-weight: bold;}
+  .r-table { width: 100%; border-collapse: collapse; margin-top: 4px; font-size: 10.5px; border: 1px solid #cbd5e1;} 
+  .r-table th { background: #f1f5f9 !important; color: #334155; font-weight: bold; text-transform: uppercase; font-size: 9.5px; padding: 5px 6px; text-align: left; border: 1px solid #cbd5e1;}
+  .r-table td { border: 1px solid #cbd5e1; padding: 4px 6px; color: #000; font-weight: bold;}
   
-  .r-bottom-wrap { display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; position: relative; z-index: 1; }
-  .r-summary-box { width: 230px; font-size: 11px; border: 1px solid #cbd5e1; background: #fff;}
-  .r-summary-row { display: flex; justify-content: space-between; padding: 5px 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;}
+  .r-footer-grid {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 6px;
+  }
+
+  .r-stamp-box {
+    border: 2px dashed #005f40;
+    color: #005f40;
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 900;
+    font-size: 9.5px;
+    transform: rotate(-5deg);
+    background: rgba(0, 95, 64, 0.03);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .r-summary-box { width: 220px; font-size: 10.5px; border: 1px solid #cbd5e1; }
+  .r-summary-row { display: flex; justify-content: space-between; padding: 3px 8px; border-bottom: 1px solid #e2e8f0; font-weight: bold;}
   .r-total-paid { font-weight: 900; color: #000; background: #e2e8f0 !important; }
   
-  .r-signatures { display: flex; gap: 40px; font-weight: bold; font-size: 11px; color: #000; margin-bottom: 10px; margin-left: 10px;}
-  .r-sig-line { border-top: 1px solid #000; width: 110px; text-align: center; padding-top: 4px; }
+  .r-signatures { margin-top: 15px; display: flex; justify-content: space-between; font-weight: bold; font-size: 10px; color: #000; }
+  .r-sig-line { border-top: 1px solid #000; width: 130px; text-align: center; padding-top: 3px; }
   
-  .r-cut-line { text-align: center; margin: 12px 0; font-size: 12px; color: #94a3b8; font-weight: bold; letter-spacing: 2px; clear: both; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .r-cut-line::before, .r-cut-line::after { content: ""; flex: 1; border-top: 1px dashed #94a3b8; margin: 0 15px; }
+  .r-cut-line { text-align: center; margin: 8px 0; font-size: 10px; color: #64748b; font-weight: bold; letter-spacing: 2px; }
 }
 </style>
 </head>
@@ -1409,74 +1473,75 @@ function printReceiptDirect() {
 
     let secStr = d.section ? " (Sec: " + d.section + ")" : "";
     
-    let generateCopy = function(copyName, isFirst) {
+    let generateCopy = function(copyName) {
         return `
         <div class="r-box">
-            <!-- Background Watermark -->
-            <div class="watermark"></div>
-            
-            <!-- Official Seal -->
-            <div class="seal">
-                <div class="seal-inner">SRMS<br>PAID</div>
-            </div>
-
-            <div class="r-header">
-                <div class="r-logo">
-                    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
-                </div>
-                <div class="r-header-text">
-                    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-                    <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
-                </div>
-                <div class="r-receipt-tag">${copyName}</div>
-            </div>
-            
-            <table class="r-info-table">
-                <tr>
-                    <td width="48%"><span class="r-label">RECEIPT NO:</span> <span class="r-val">${d.rNo}</span></td>
-                    <td width="52%"><span class="r-label">DATE:</span> <span class="r-val">${d.date}</span></td>
-                </tr>
-                <tr>
-                    <td><span class="r-label">STUDENT ID:</span> <span class="r-val">${d.id}</span></td>
-                    <td><span class="r-label">CLASS:</span> <span class="r-val">${d.class}${secStr} (Roll:${d.roll})</span></td>
-                </tr>
-                <tr>
-                    <td><span class="r-label">NAME:</span> <span class="r-val">${d.name}</span></td>
-                    <td><span class="r-label">SESSION:</span> <span class="r-val">${d.month} ${d.year}</span></td>
-                </tr>
-            </table>
-            
-            <table class="r-table">
-                <thead>
-                    <tr>
-                        <th>FEE PARTICULARS</th>
-                        <th style="text-align:right;">PAYABLE (TK)</th>
-                        <th style="text-align:right;">PAID NOW (TK)</th>
-                        <th style="text-align:right;">DUE (TK)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${items}
-                </tbody>
-            </table>
-            
-            <div class="r-bottom-wrap">
-                <div class="r-signatures">
-                    <div class="r-sig-line">Accountant / Cashier</div>
-                    <div class="r-sig-line">Student / Guardian</div>
-                </div>
-                
-                <div class="r-summary-box">
-                    <div class="r-summary-row"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div>
-                    <div class="r-summary-row r-total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div>
-                    <div class="r-summary-row" style="border-bottom: none;"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div>
-                </div>
-            </div>
+        <div class="r-header">
+        <div class="r-logo-title">
+        <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo">
+        <div class="r-header-text">
+        <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+        <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
         </div>
-        ${isFirst ? '<div class="r-cut-line">✂</div>' : ''}`;
+        </div>
+        <div class="r-receipt-tag-wrap">
+        <span class="r-receipt-tag">${copyName}</span>
+        </div>
+        </div>
+        
+        <table class="r-info-table">
+        <tr>
+        <td width="50%"><span class="r-label">RECEIPT NO:</span> <span class="r-val">${d.rNo}</span></td>
+        <td width="50%"><span class="r-label">DATE:</span> <span class="r-val">${d.date}</span></td>
+        </tr>
+        <tr>
+        <td><span class="r-label">STUDENT ID:</span> <span class="r-val">${d.id}</span></td>
+        <td><span class="r-label">CLASS:</span> <span class="r-val">${d.class}${secStr} (Roll:${d.roll})</span></td>
+        </tr>
+        <tr>
+        <td><span class="r-label">NAME:</span> <span class="r-val">${d.name}</span></td>
+        <td><span class="r-label">SESSION:</span> <span class="r-val">${d.month} ${d.year}</span></td>
+        </tr>
+        </table>
+        
+        <table class="r-table">
+        <thead>
+        <tr>
+        <th>FEE PARTICULARS</th>
+        <th style="text-align:right;">PAYABLE (TK)</th>
+        <th style="text-align:right;">PAID NOW (TK)</th>
+        <th style="text-align:right;">DUE (TK)</th>
+        </tr>
+        </thead>
+        <tbody>
+        ${items}
+        </tbody>
+        </table>
+        
+        <div class="r-footer-grid">
+        <div class="r-stamp-box">
+          SRMS OFFICIAL<br>PAID & VERIFIED
+        </div>
+        <div class="r-summary-box">
+        <div class="r-summary-row"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div>
+        <div class="r-summary-row r-total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div>
+        <div class="r-summary-row"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div>
+        </div>
+        </div>
+        
+        <div class="r-signatures">
+        <div class="r-sig-line">Accountant/Cashier</div>
+        <div class="r-sig-line">Principal/Authorized</div>
+        </div>
+        </div>`;
     };
 
-    let html = generateCopy("STUDENT COPY", true) + generateCopy("OFFICE COPY", false);
+    let html = `
+    <div class="receipt-page-container">
+      ${generateCopy("STUDENT COPY")}
+      <div class="r-cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>
+      ${generateCopy("OFFICE COPY")}
+    </div>`;
     
     let printBox = document.getElementById('printArea');
     printBox.innerHTML = html;
