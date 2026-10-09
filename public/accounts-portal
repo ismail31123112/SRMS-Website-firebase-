@@ -11,8 +11,8 @@
 
 <script>
 if (window.history.replaceState) {
-  var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-  window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+window.history.replaceState({path: cleanUrl}, '', cleanUrl);
 }
 </script>
 
@@ -100,6 +100,7 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
   .print-table { width: 100%; border-collapse: collapse; font-size: 10.5px; margin-top: 8px; }
   .print-table th, .print-table td { border: 1px solid #000 !important; padding: 6px 4px; text-align: left; vertical-align: middle; color: #000; }
   .print-table th { background-color: #e2e8f0 !important; text-transform: uppercase; font-size: 10px; font-weight: bold; }
+  .print-table td:last-child, .print-table th:last-child { display: none; }
   
   .totals { margin-top: 15px; text-align: right; font-weight: bold; font-size: 13px; border-top: 2px solid #000; padding-top: 10px; page-break-inside: avoid;}
   .signatures { margin-top: 40px; display: flex; justify-content: space-between; font-weight: bold; font-size: 11px; color: #000; page-break-inside: avoid; padding: 0 20px; }
@@ -618,47 +619,44 @@ let currentStudentDocId = null;
 let currentStudentData = null; 
 var isAuthReady = false; 
 
+// Real-time Clock
+setInterval(() => {
+    let d = new Date();
+    let clockEl = document.getElementById('clock');
+    if (clockEl) {
+        clockEl.innerText = d.toLocaleDateString('en-GB') + " " + d.toLocaleTimeString('en-US');
+    }
+}, 1000);
+
+// Calculator Functions
+let calcScr = document.getElementById('cScr');
+function cClr() { if(calcScr) calcScr.value = '0'; }
+function cPush(val) { 
+    if(!calcScr) return;
+    if(calcScr.value === '0') calcScr.value = val; 
+    else calcScr.value += val; 
+}
+function cBack() { 
+    if(!calcScr) return;
+    calcScr.value = calcScr.value.slice(0, -1); 
+    if(calcScr.value === '') calcScr.value = '0'; 
+}
+function cSolve() { 
+    if(!calcScr) return;
+    try { 
+        // Note: eval is used here safely as input is restricted by calculator buttons
+        calcScr.value = eval(calcScr.value); 
+    } catch(e) { 
+        calcScr.value = 'Error'; 
+    } 
+}
+
 const years = []; 
 const currentY = new Date().getFullYear();
 for(let i=2020; i<=2099; i++) years.push(i);
 document.getElementById('bYear').innerHTML = years.map(function(y) { return "<option " + (y === currentY ? "selected" : "") + ">" + y + "</option>"; }).join('');
 document.getElementById('hYear').innerHTML += years.map(function(y) { return "<option>" + y + "</option>"; }).join('');
 document.getElementById('cbYear').innerHTML += years.map(function(y) { return "<option>" + y + "</option>"; }).join('');
-
-function updateClock() {
-    const clockEl = document.getElementById('clock');
-    if (clockEl) {
-        const now = new Date();
-        clockEl.innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-    }
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-function cPush(val) {
-    let scr = document.getElementById('cScr');
-    if (scr.value === "0" || scr.value === "Error") scr.value = val;
-    else scr.value += val;
-}
-function cClr() { document.getElementById('cScr').value = "0"; }
-function cBack() {
-    let scr = document.getElementById('cScr');
-    scr.value = scr.value.slice(0, -1);
-    if (scr.value === "") scr.value = "0";
-}
-function cSolve() {
-    let scr = document.getElementById('cScr');
-    try {
-        let expr = scr.value.replace(/×/g, '*');
-        if (/^[0-9+\-*/. ]+$/.test(expr)) {
-            scr.value = Function('"use strict";return (' + expr + ')')();
-        } else {
-            scr.value = "Error";
-        }
-    } catch(e) {
-        scr.value = "Error";
-    }
-}
 
 function showLoaderText(text) { document.getElementById('loaderText').innerHTML = text; }
 function showLoading() { document.getElementById('loader').style.display = "flex"; }
@@ -1283,7 +1281,7 @@ async function loadRep() {
     
     try {
         let snap = await db.collection('Students').get();
-        let list = [];
+        let list = []; let tPaid = 0; let tDue = 0;
         
         snap.forEach(doc => {
             let f = doc.data();
@@ -1488,107 +1486,92 @@ function printHistory() {
     setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
 }
 
-function generateReceiptBoxHtml(copyType) {
+function printReceiptDirect() {
+    if(!lastR) return;
     let d = lastR;
-    let itemsRows = "";
+    let items = "";
+    
     d.itemsList.forEach(function(i) {
         let payable = parseFloat(i.original) || 0;
         let paid = parseFloat(i.paid) || parseFloat(i.amount) || payable; 
         let dueAmt = payable - paid;
-        itemsRows += `
+        items += `
         <tr>
-            <td>${i.title}</td>
-            <td style="text-align:right;">৳ ${payable.toFixed(2)}</td>
-            <td style="text-align:right;">৳ ${paid.toFixed(2)}</td>
-            <td style="text-align:right;">৳ ${dueAmt.toFixed(2)}</td>
+        <td>${i.title}</td>
+        <td style="text-align:right;">${payable.toFixed(2)}</td>
+        <td style="text-align:right; font-weight:bold; color:#005f40;">${paid.toFixed(2)}</td>
+        <td style="text-align:right;">${dueAmt.toFixed(2)}</td>
         </tr>`;
     });
 
-    let secStr = d.section ? " (Sec: " + d.section + ")" : "";
-
-    return `
+    let receiptCopy = (type) => `
     <div class="r-box">
         <div class="r-header">
             <div class="r-logo-title">
                 <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo">
                 <div class="r-header-text">
                     <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-                    <p>Saidpur, Nilphamari | Official Fees Receipt</p>
+                    <p>Saidpur Cantonment, Saidpur, Nilphamari | Phone: 01309124803</p>
                 </div>
             </div>
             <div class="r-receipt-tag-wrap">
-                <div class="r-receipt-tag">${copyType.toUpperCase()} COPY</div>
-                <div style="font-size: 10px; font-weight: bold; margin-top: 4px; color: #475569;">Receipt No: ${d.rNo}</div>
+                <div class="r-receipt-tag">${type}</div>
+                <div style="font-size:9.5px; font-weight:bold; margin-top:4px;">Date: ${d.date}</div>
             </div>
         </div>
-
+        
         <table class="r-info-table">
             <tr>
-                <td><span class="r-label">Student ID:</span> <span class="r-val">${d.id}</span></td>
-                <td><span class="r-label">Student Name:</span> <span class="r-val">${d.name}</span></td>
-                <td><span class="r-label">Class:</span> <span class="r-val">${d.class}${secStr}</span></td>
+                <td width="12%"><span class="r-label">ID No:</span></td><td width="28%"><span class="r-val">${d.id}</span></td>
+                <td width="15%"><span class="r-label">Month:</span></td><td width="45%"><span class="r-val">${d.month} ${d.year}</span></td>
             </tr>
             <tr>
-                <td><span class="r-label">Roll No:</span> <span class="r-val">${d.roll || '-'}</span></td>
-                <td><span class="r-label">Billing Period:</span> <span class="r-val">${d.month} ${d.year}</span></td>
-                <td><span class="r-label">Date:</span> <span class="r-val">${d.date}</span></td>
+                <td><span class="r-label">Name:</span></td><td><span class="r-val">${d.name}</span></td>
+                <td><span class="r-label">Class:</span></td><td><span class="r-val">${d.class} (Sec: ${d.section || '-'}, Roll: ${d.roll || '-'})</span></td>
+            </tr>
+            <tr>
+                <td><span class="r-label">Receipt:</span></td><td colspan="3"><span class="r-val" style="font-family:monospace; color:#005f40;">${d.rNo}</span></td>
             </tr>
         </table>
-
+        
         <table class="r-table">
             <thead>
                 <tr>
-                    <th>Fee Description</th>
-                    <th style="text-align:right;">Payable</th>
-                    <th style="text-align:right;">Paid Now</th>
-                    <th style="text-align:right;">Balance Due</th>
+                    <th>Particulars / Fee Name</th>
+                    <th style="text-align:right; width:60px;">Payable</th>
+                    <th style="text-align:right; width:60px;">Paid</th>
+                    <th style="text-align:right; width:60px;">Due</th>
                 </tr>
             </thead>
             <tbody>
-                ${itemsRows}
+                ${items}
             </tbody>
         </table>
-
+        
         <div class="r-footer-grid">
-            <div class="r-stamp-box">
-                PAID & VERIFIED<br>
-                <span style="font-size: 8px; font-weight: normal;">OFFICIAL RECEIPT</span>
-            </div>
+            <div class="r-stamp-box">PAID</div>
             <div class="r-summary-box">
-                <div class="r-summary-row">
-                    <span>Total Due:</span>
-                    <span>৳ ${(parseFloat(d.totalBill) || 0).toFixed(2)}</span>
-                </div>
-                <div class="r-summary-row r-total-paid">
-                    <span>Total Paid:</span>
-                    <span>৳ ${(parseFloat(d.paid) || 0).toFixed(2)}</span>
-                </div>
-                <div class="r-summary-row">
-                    <span>Remaining Balance:</span>
-                    <span>৳ ${(parseFloat(d.remaining) || 0).toFixed(2)}</span>
-                </div>
+                <div class="r-summary-row"><span>Total Payable:</span> <span>৳ ${parseFloat(d.totalBill).toFixed(2)}</span></div>
+                <div class="r-summary-row r-total-paid"><span>Total Paid:</span> <span>৳ ${parseFloat(d.paid).toFixed(2)}</span></div>
+                <div class="r-summary-row" style="border:none;"><span>Net Due:</span> <span style="color:#dc2626;">৳ ${parseFloat(d.remaining).toFixed(2)}</span></div>
             </div>
         </div>
-
+        
         <div class="r-signatures">
             <div class="r-sig-line">Student / Guardian</div>
-            <div class="r-sig-line">Accounts Officer / Cashier</div>
+            <div class="r-sig-line">Accountant / Cashier</div>
         </div>
     </div>`;
-}
 
-function printReceiptDirect() {
-    if(!lastR) return alert("No recent transaction found to print!");
-    
-    let html = `
+    let finalHtml = `
     <div class="receipt-page-container">
-        ${generateReceiptBoxHtml("Student Copy")}
-        <div class="r-cut-line">✂ - - - - - - - - - - - - - - - - CUT HERE - - - - - - - - - - - - - - - - ✂</div>
-        ${generateReceiptBoxHtml("Office Copy")}
+        ${receiptCopy("SCHOOL COPY")}
+        <div class="r-cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>
+        ${receiptCopy("STUDENT COPY")}
     </div>`;
 
     let printBox = document.getElementById('printArea');
-    printBox.innerHTML = html;
+    printBox.innerHTML = finalHtml;
     window.print();
     setTimeout(function() { printBox.innerHTML = ''; }, 1000);
 }
