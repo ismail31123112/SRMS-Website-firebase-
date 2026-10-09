@@ -57,8 +57,10 @@
   #login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; position: relative; }
   .login-card { background: var(--card-bg); padding: 50px 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(30, 58, 138, 0.15); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary); }
   .login-logo { width: 85px; margin-bottom: 20px; }
-  .login-title { color: var(--primary); font-size: 24px; font-weight: 800; text-transform: uppercase; margin-bottom: 5px; }
-  .login-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; font-weight: 500; }
+  .login-title { color: var(--primary); font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
+  .login-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 10px; font-weight: 500; }
+  .default-pass-note { font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 25px; }
+  
   input { width: 100%; padding: 15px 18px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 15px; box-sizing: border-box; background: #f8fafc; color: var(--text-main); font-weight: 500; }
   input:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1); }
   .login-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 16px; margin-top: 15px; transition: 0.3s; letter-spacing: 0.5px; }
@@ -69,6 +71,12 @@
   .forgot-pass-btn { display: inline-block; margin-top: 20px; color: var(--accent); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.3s; border-bottom: 2px solid transparent; }
   .forgot-pass-btn:hover { border-color: var(--accent); color: var(--primary); }
 
+  /* === Multi-Child Selection Modal === */
+  .child-card { background: #f8fafc; border: 2px solid #e2e8f0; padding: 15px 20px; border-radius: 16px; text-align: left; margin-bottom: 15px; cursor: pointer; transition: 0.3s; display: flex; justify-content: space-between; align-items: center; }
+  .child-card:hover { border-color: var(--primary); background: #eff6ff; transform: translateY(-3px); box-shadow: 0 10px 20px rgba(30, 58, 138, 0.1); }
+  .child-name { font-size: 16px; font-weight: 800; color: var(--primary); margin: 0 0 5px 0; }
+  .child-meta { font-size: 13px; color: #64748b; font-weight: 600; margin: 0; }
+
   /* === Premium Loader === */
   #loader { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index: 10000; justify-content:center; align-items:center; flex-direction:column; backdrop-filter: blur(10px); }
   .loader-img { width: 80px; height: 80px; animation: pulseLoader 2s infinite; border: 3px solid var(--primary); padding: 5px; border-radius: 50%; background: #fff; margin-bottom: 20px; }
@@ -78,11 +86,12 @@
   /* === Dashboard Layout === */
   #dashboard-section { display: none; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
   
-  /* 🚀 Scroll Cue Wrapper & Animation */
+  /* Scroll Cue Wrapper & Animation */
   .scroll-cue-container { width: 100%; margin-bottom: 25px; text-align: center; }
   .scroll-cue { display: inline-block; color: var(--primary); font-size: 14px; font-weight: 700; padding: 10px 25px; background: #e0e7ff; border-radius: 20px; border: 1px solid #c7d2fe; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(30, 58, 138, 0.1); }
 
-  .header-card { background: var(--card-bg); padding: 25px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-left: 6px solid var(--primary); margin-bottom: 30px; }
+  .header-card { background: var(--card-bg); padding: 25px 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border-left: 6px solid var(--primary); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+  
   #noticeBox { background: #fff1f2; color: var(--danger-dark); padding: 20px 25px; border-radius: 16px; border-left: 6px solid var(--danger); margin-bottom: 30px; display: none; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.08); }
   
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; margin-bottom: 30px; }
@@ -126,6 +135,7 @@
 
   @media (max-width: 768px) {
     .custom-banner { flex-direction: column; text-align: center; }
+    .header-card { flex-direction: column; text-align: center; gap: 15px; }
     .grid { grid-template-columns: 1fr; }
     .link-grid { grid-template-columns: repeat(2, 1fr); }
     .dt-row-top, .dt-row-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -136,20 +146,31 @@
 <body>
 
 <div id="loader">
-    <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" class="loader-img" alt="Loading">
+    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="loader-img" alt="Loading">
     <div class="loader-text">AUTHENTICATING... PLEASE WAIT</div>
 </div>
 
 <div id="login-container" class="animate-up">
     <div class="login-card">
-        <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Logo" class="login-logo">
+        <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo" class="login-logo">
         <h2 class="login-title">Guardian Portal</h2>
         <div class="login-subtitle">Secured Access for SRMS Parents</div>
-        <input type="text" id="stuID" placeholder="Your Child's Student ID" autocomplete="off">
+        <div class="default-pass-note">Default Password is: 123456</div>
+        
+        <input type="text" id="stuID" placeholder="Your Phone Number / Email" autocomplete="off">
         <input type="password" id="stuPass" placeholder="Password">
         <button id="lBtn" class="login-btn" onclick="handleLogin()">ENTER PORTAL</button>
         <div class="forgot-pass-btn" onclick="openForgotPassModal()">Forgot Password?</div>
         <p id="err" style="color:var(--danger); font-size:13px; margin-top:15px; font-weight:700;"></p>
+    </div>
+</div>
+
+<!-- Child Selection Modal -->
+<div id="childSelectionModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 500px; text-align: center;">
+        <h3 style="color:var(--primary); margin:0 0 5px 0; font-size:22px;">Select Child</h3>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">You have multiple children enrolled. Please select one to view their dashboard.</p>
+        <div id="childListContainer" style="max-height: 350px; overflow-y: auto;"></div>
     </div>
 </div>
 
@@ -161,7 +182,7 @@
 </nav>
 
 <div class="custom-banner" id="main-banner">
-  <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" class="banner-logo" alt="Logo">
+  <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="banner-logo" alt="Logo">
   <div class="banner-text">
     <h1>Guardian Dashboard</h1>
     <div class="school-codes">Access your child's educational records securely</div>
@@ -175,9 +196,10 @@
 
     <div class="header-card animate-up delay-1">
         <div>
-            <h3 id="uName" style="margin:0; color:var(--primary); font-size:24px; font-weight:800;">Assalamu Alaikum...</h3>
+            <h3 id="uName" style="margin:0; color:var(--primary); font-size:22px; font-weight:800;">Assalamu Alaikum...</h3>
             <p id="uMeta" style="margin:5px 0 0 0; font-size:14px; color:var(--text-muted); font-weight:600;"></p>
         </div>
+        <button class="login-btn" id="btnSwitchChild" style="width: auto; padding: 10px 20px; font-size: 12px; border-radius: 8px; margin: 0; background: var(--accent); display: none;" onclick="showChildSelectionModal()">SWITCH CHILD</button>
     </div>
 
     <div id="noticeBox" class="animate-up delay-1">
@@ -215,13 +237,13 @@
             <a onclick="openAttendanceModal();" class="l-btn"><span>📊</span><span>Attendance</span></a>
             <a onclick="openFeesModal();" class="l-btn"><span>💳</span><span>Pay Fees</span></a>
             <a id="guardianLiveBtn" onclick="openGuardianMeetModal();" class="l-btn" style="border: 2px solid var(--primary);"><span>🎥</span><span>Guardian Meet</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/syllabus" target="_blank" class="l-btn"><span>📖</span><span>Syllabus</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/class-routine" target="_blank" class="l-btn"><span>🎯</span><span>Routine</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/academic/exam-routine" target="_blank" class="l-btn"><span>📅</span><span>Exams</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/notice-board" target="_blank" class="l-btn"><span>📢</span><span>Notice</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/gallery" target="_blank" class="l-btn"><span>🖼️</span><span>Gallery</span></a>
+            <a href="/menu/academic/syllabus" target="_blank" class="l-btn"><span>📖</span><span>Syllabus</span></a>
+            <a href="/menu/academic/class-routine" target="_blank" class="l-btn"><span>🎯</span><span>Routine</span></a>
+            <a href="/menu/academic/exam-routine" target="_blank" class="l-btn"><span>📅</span><span>Exams</span></a>
+            <a href="/notice-board" target="_blank" class="l-btn"><span>📢</span><span>Notice</span></a>
+            <a href="/menu/gallery" target="_blank" class="l-btn"><span>🖼️</span><span>Gallery</span></a>
             <a onclick="openSecurityModal();" class="l-btn"><span>🔐</span><span>Security</span></a>
-            <a href="https://www.saidpurresidentialmodelschool.com/menu/contact-us" target="_blank" class="l-btn"><span>📞</span><span>Support</span></a>
+            <a href="/menu/contact-us" target="_blank" class="l-btn"><span>📞</span><span>Support</span></a>
         </div>
     </div>
 </div>
@@ -230,16 +252,16 @@
     <div class="modal-content" style="text-align: center;">
         <span class="close-btn" onclick="closeModal('forgotPassModal')">×</span>
         <h3 style="color:var(--primary); margin:0 0 5px 0; font-size:22px;">Reset Password</h3>
-        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Verify email to reset child's account security key</p>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Enter your Phone Number/Email to receive OTP</p>
         
         <div id="fpStep1">
-            <input type="text" id="fpID" placeholder="Enter your Child's Student ID">
-            <button id="btnRequestOTP" class="login-btn" onclick="requestOTP()">SEND OTP TO EMAIL</button>
+            <input type="text" id="fpID" placeholder="Your Phone Number / Email">
+            <button id="btnRequestOTP" class="login-btn" onclick="requestOTP()">SEND OTP</button>
         </div>
         
         <div id="fpStep2" style="display:none;">
             <input type="text" id="fpOTP" placeholder="Enter 6-digit OTP">
-            <button id="btnVerifyOTP" class="login-btn" onclick="verifyOTP()">VERIFY OTP</button>
+            <button class="login-btn" onclick="verifyOTP()">VERIFY OTP</button>
         </div>
         
         <div id="fpStep3" style="display:none;">
@@ -251,19 +273,8 @@
     </div>
 </div>
 
-<div id="feesModal" class="modal-overlay">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('feesModal')">×</span>
-        <div id="feesModalBody"></div>
-    </div>
-</div>
-
-<div id="liveClassModal" class="modal-overlay">
-    <div class="modal-content">
-        <span class="close-btn" onclick="closeModal('liveClassModal')">×</span>
-        <div id="liveClassModalBody"></div>
-    </div>
-</div>
+<div id="feesModal" class="modal-overlay"><div class="modal-content"><span class="close-btn" onclick="closeModal('feesModal')">×</span><div id="feesModalBody"></div></div></div>
+<div id="liveClassModal" class="modal-overlay"><div class="modal-content"><span class="close-btn" onclick="closeModal('liveClassModal')">×</span><div id="liveClassModalBody"></div></div></div>
 
 <div id="resultModal" class="modal-overlay">
     <div class="modal-content" style="max-width:700px; background: #0f172a; padding: 0;">
@@ -287,8 +298,7 @@
             <span class="loader-spinner"></span> Synchronizing Database...
         </div>
         
-        <div id="modalYearlySummary" style="margin-bottom:15px; font-weight:700; color:#fff; padding:15px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius:12px; text-align:center; box-shadow: 0 5px 15px rgba(30, 58, 138, 0.2); display: none;">
-        </div>
+        <div id="modalYearlySummary" style="margin-bottom:15px; font-weight:700; color:#fff; padding:15px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius:12px; text-align:center; box-shadow: 0 5px 15px rgba(30, 58, 138, 0.2); display: none;"></div>
 
         <div style="max-height: 350px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
             <table style="width:100%; border-collapse: collapse; font-size: 13px; text-align: left;">
@@ -300,13 +310,11 @@
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">OUT Time</th>
                     </tr>
                 </thead>
-                <tbody id="modalAttTableBody" style="background: white;">
-                </tbody>
+                <tbody id="modalAttTableBody" style="background: white;"></tbody>
             </table>
         </div>
         
-        <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#e0e7ff; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #c7d2fe;">
-        </div>
+        <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#e0e7ff; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #c7d2fe;"></div>
     </div>
 </div>
 
@@ -316,7 +324,7 @@
         <h3 style="margin:0 0 15px 0; font-size:20px; color:var(--text-main); border-bottom:2px solid #f1f5f9; padding-bottom:15px;">🔐 Update Security Key</h3>
         <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Protect your child's account by changing your password regularly.</p>
         <input type="password" id="newPass" placeholder="Enter New Password (Min. 6 chars)">
-        <button id="btnUpdateSecurity" class="login-btn" style="padding:14px; font-size:14px;" onclick="updatePassword()">SAVE NEW PASSWORD</button>
+        <button class="login-btn" style="padding:14px; font-size:14px;" onclick="updatePassword()">SAVE NEW PASSWORD</button>
         <p id="passMsg" style="font-size:13px; margin-top:10px; font-weight:700; text-align:center;"></p>
     </div>
 </div>
@@ -344,103 +352,144 @@
   const FIREBASE_PROJECT_ID = firebaseConfig.projectId;
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
   
-  // Script Endpoints
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXWc-JW1TpzHHgRp7viUvHW4pUm_lw600wOaHBIIT-_Hwn0K36bxbXjHcQLgtRfWvP/exec";
   const FEE_PAY_SCRIPT = "https://script.google.com/macros/s/AKfycbzUkDxT8bO6HrMMkBOGr_ewCDaMQg7bZxvPr_8Omh3kDEqeX1T_JmL1v9JXMW2jwo88hw/exec";
 
+  let allChildrenData = [];
   let std = null;
   let markSheetHTML = "";
   
   // Variables for Security and Attendance
   let resettingDocId = null; 
-  let resettingStudentID = null;
+  let resettingPhoneEmail = null;
   let allStudentAttendance = {}; 
   let allHolidays = {};
 
   function sanitizeHTML(str) {
       if (typeof str !== 'string') return str;
-      return str.replace(/[&<>'"]/g, tag => ({
-          '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-      }[tag]));
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
   }
 
   window.onload = function() {
-    const saved = sessionStorage.getItem('srms_guardian_session');
-    if(saved) { std = JSON.parse(saved).std; showDashboardUI(); initDash(); }
+    const savedSession = sessionStorage.getItem('srms_guardian_session');
+    if(savedSession) { 
+        let sData = JSON.parse(savedSession);
+        std = sData.currentChild;
+        allChildrenData = sData.allChildren;
+        showDashboardUI(); 
+        initDash(); 
+    }
   };
 
   function loader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 🚀 Login Flow 
+  // 🚀 Login Flow with Guardian Multi-Child Check
   async function handleLogin() {
-    const id = sanitizeHTML(document.getElementById('stuID').value.trim());
+    let id = sanitizeHTML(document.getElementById('stuID').value.trim());
     let pass = document.getElementById('stuPass').value.trim();
     const btn = document.getElementById('lBtn');
     
-    if(!id || !pass) { document.getElementById('err').innerText = "All fields are required."; return; }
-    
-    if (pass.length > 0 && pass.length < 6) {
-        pass = pass.padEnd(6, '0');
-    }
+    if(!id || !pass) { document.getElementById('err').innerText = "Please provide Phone/Email and Password."; return; }
+    if (pass.length > 0 && pass.length < 6) pass = pass.padEnd(6, '0');
 
-    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> Authenticating..."; btn.disabled = true;
+    btn.innerHTML = "<span class='loader-spinner'></span> Authenticating..."; btn.disabled = true;
     try {
-        const email = `${id}@srms.edu.bd`;
+        let authEmail = id;
+        if (!id.includes('@')) authEmail = id + "@guardian.srms.edu.bd";
         
-        await auth.signInWithEmailAndPassword(email, pass);
+        await auth.signInWithEmailAndPassword(authEmail, pass);
         const token = await auth.currentUser.getIdToken();
 
-        const queryUrl = `${FIREBASE_DB_BASE}:runQuery`;
-        const reqBody = {
-            structuredQuery: {
-                from: [{ collectionId: "Students" }],
-                where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: id } } },
-                limit: 1
-            }
-        };
-
-        const res = await fetch(queryUrl, { 
-            method: "POST", 
-            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
-            body: JSON.stringify(reqBody) 
-        });
-        const data = await res.json();
-        
-        if (data && data[0] && data[0].document) {
-            const doc = data[0].document;
-            const studentFields = doc.fields;
-            const stdDocId = doc.name.split('/').pop();
-
-            std = { 
-                id: sanitizeHTML(studentFields.studentID?.stringValue || ""),
-                name: sanitizeHTML(studentFields.name?.stringValue || "Student"),
-                class: sanitizeHTML(studentFields.class?.stringValue || ""),
-                roll: sanitizeHTML(studentFields.roll?.stringValue || ""),
-                group: sanitizeHTML(studentFields.group?.stringValue || ""),
-                phone: sanitizeHTML(studentFields.phone?.stringValue || ""),
-                email: sanitizeHTML(studentFields.email?.stringValue || ""),
-                schoolFeeDue: sanitizeHTML(studentFields.schoolFeeDue?.stringValue || "0"),
-                schoolFeeStatus: sanitizeHTML(studentFields.schoolFeeStatus?.stringValue || ""),
-                hostelFeeDue: sanitizeHTML(studentFields.hostelFeeDue?.stringValue || "0"),
-                hostelFeeStatus: sanitizeHTML(studentFields.hostelFeeStatus?.stringValue || ""),
-                customFees: studentFields.customFees ? JSON.parse(studentFields.customFees.stringValue) : [],
-                resultMarks: studentFields.resultMarks ? JSON.parse(studentFields.resultMarks.stringValue) : null
-            };
-            
-            sessionStorage.setItem('srms_guardian_session', JSON.stringify({ std: std }));
-            sessionStorage.setItem('srms_student_docId', stdDocId);
-            
-            document.getElementById('stuPass').value = '';
-            showDashboardUI();
-            initDash();
-        } else { 
-            document.getElementById('err').innerText = "Student data not found in database!"; 
+        // Check if Guardian by Phone OR Email
+        let queryFilters = [];
+        if (!id.includes('@')) {
+            queryFilters = [{ fieldFilter: { field: { fieldPath: "phone" }, op: "EQUAL", value: { stringValue: id } } }, { fieldFilter: { field: { fieldPath: "guardianPhone" }, op: "EQUAL", value: { stringValue: id } } }];
+        } else {
+            queryFilters = [{ fieldFilter: { field: { fieldPath: "email" }, op: "EQUAL", value: { stringValue: id } } }];
         }
+
+        let childrenFound = [];
+        for (let filter of queryFilters) {
+            let reqBody = { structuredQuery: { from: [{ collectionId: "Students" }], where: filter } };
+            let res = await fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, body: JSON.stringify(reqBody) });
+            let data = await res.json();
+            
+            if (data && data[0] && data[0].document) {
+                data.forEach(item => {
+                    if (item.document) {
+                        let f = item.document.fields;
+                        let childObj = {
+                            docId: item.document.name.split('/').pop(),
+                            id: f.studentID?.stringValue || "",
+                            name: f.name?.stringValue || "Student",
+                            class: f.class?.stringValue || "",
+                            roll: f.roll?.stringValue || "",
+                            group: f.group?.stringValue || "",
+                            phone: f.phone?.stringValue || "",
+                            email: f.email?.stringValue || "",
+                            schoolFeeDue: f.schoolFeeDue?.stringValue || "0",
+                            schoolFeeStatus: f.schoolFeeStatus?.stringValue || "",
+                            hostelFeeDue: f.hostelFeeDue?.stringValue || "0",
+                            hostelFeeStatus: f.hostelFeeStatus?.stringValue || "",
+                            customFees: f.customFees ? JSON.parse(f.customFees.stringValue) : [],
+                            resultMarks: f.resultMarks ? JSON.parse(f.resultMarks.stringValue) : null
+                        };
+                        // Avoid duplicates
+                        if (!childrenFound.find(c => c.id === childObj.id)) childrenFound.push(childObj);
+                    }
+                });
+            }
+        }
+        
+        if (childrenFound.length === 0) {
+            document.getElementById('err').innerText = "No student found linked to this Phone/Email!";
+            btn.innerHTML = "ENTER PORTAL"; btn.disabled = false;
+            return;
+        }
+
+        allChildrenData = childrenFound;
+
+        if (childrenFound.length === 1) {
+            selectChild(0);
+        } else {
+            document.getElementById('login-container').style.display = "none";
+            showChildSelectionModal();
+        }
+        document.getElementById('stuPass').value = '';
     } catch (e) { 
-        document.getElementById('err').innerText = "Invalid ID or Password!";
+        document.getElementById('err').innerText = "Invalid Phone/Email or Password!";
+        btn.innerHTML = "ENTER PORTAL"; btn.disabled = false;
     }
-    btn.innerHTML = "ENTER PORTAL"; btn.disabled = false;
+  }
+
+  function showChildSelectionModal() {
+      let container = document.getElementById('childListContainer');
+      container.innerHTML = "";
+      allChildrenData.forEach((child, index) => {
+          container.innerHTML += `
+            <div class="child-card" onclick="selectChild(${index})">
+                <div>
+                    <p class="child-name">${sanitizeHTML(child.name)}</p>
+                    <p class="child-meta">ID: ${child.id} | Class: ${child.class} | Roll: ${child.roll}</p>
+                </div>
+                <div style="font-size: 24px; color: var(--primary);">➡️</div>
+            </div>`;
+      });
+      document.getElementById('childSelectionModal').style.display = 'flex';
+  }
+
+  function selectChild(index) {
+      std = allChildrenData[index];
+      sessionStorage.setItem('srms_guardian_session', JSON.stringify({ currentChild: std, allChildren: allChildrenData }));
+      sessionStorage.setItem('srms_student_docId', std.docId);
+      
+      document.getElementById('childSelectionModal').style.display = 'none';
+      if (allChildrenData.length > 1) document.getElementById('btnSwitchChild').style.display = 'block';
+      else document.getElementById('btnSwitchChild').style.display = 'none';
+      
+      showDashboardUI();
+      initDash();
   }
 
   function showDashboardUI() {
@@ -448,16 +497,16 @@
     document.getElementById('main-navbar').style.display = "flex";
     document.getElementById('main-banner').style.display = "flex";
     document.getElementById('dashboard-section').style.display = "block";
+    if (allChildrenData.length > 1) document.getElementById('btnSwitchChild').style.display = 'block';
   }
 
   function logout() {
     if(auth) auth.signOut();
     sessionStorage.removeItem('srms_guardian_session');
     sessionStorage.removeItem('srms_student_docId');
-    std = null;
-    markSheetHTML = "";
-    allStudentAttendance = {}; 
-    allHolidays = {};
+    std = null; allChildrenData = [];
+    markSheetHTML = ""; allStudentAttendance = {}; allHolidays = {};
+    
     document.getElementById('dashboard-section').style.display = "none";
     document.getElementById('main-navbar').style.display = "none";
     document.getElementById('main-banner').style.display = "none";
@@ -473,74 +522,56 @@
   // FORGOT PASSWORD LOGIC
   // ==========================================
   function openForgotPassModal() {
-    document.getElementById('fpStep1').style.display = 'block';
-    document.getElementById('fpStep2').style.display = 'none';
-    document.getElementById('fpStep3').style.display = 'none';
-    document.getElementById('fpID').value = '';
-    document.getElementById('fpOTP').value = '';
-    document.getElementById('fpNewPass').value = '';
-    document.getElementById('fpMsg').innerText = '';
+    document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
+    document.getElementById('fpID').value = ''; document.getElementById('fpOTP').value = ''; document.getElementById('fpNewPass').value = ''; document.getElementById('fpMsg').innerText = '';
     document.getElementById('forgotPassModal').style.display = 'flex';
   }
 
   async function requestOTP() {
     const id = sanitizeHTML(document.getElementById('fpID').value.trim());
-    if(!id) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Please enter Student ID.</span>`; return; }
+    if(!id) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Please enter Phone Number or Email.</span>`; return; }
     
     const btn = document.getElementById('btnRequestOTP');
     btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SENDING..."; btn.disabled = true;
     
     try {
-        const res = await fetch(SCRIPT_URL, { 
-            method: "POST", 
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "sendOTP", id: id }) 
-        });
-        
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "sendOTP", id: id }) });
         const textResponse = await res.text();
         const data = JSON.parse(textResponse);
         
         if(data.status === "success") {
-            resettingStudentID = id;
-            resettingDocId = data.docId; 
-            document.getElementById('fpStep1').style.display = 'none';
-            document.getElementById('fpStep2').style.display = 'block';
-            let sMsg = data.msg || data.message || (data.email ? `OTP sent to ${data.email}` : "OTP Sent Successfully!");
+            resettingPhoneEmail = id; resettingDocId = data.docId; 
+            document.getElementById('fpStep1').style.display = 'none'; document.getElementById('fpStep2').style.display = 'block';
+            let sMsg = data.email ? `OTP sent to ${data.email}` : "OTP Sent Successfully!";
             document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;"><b>${sanitizeHTML(sMsg)}</b></span>`;
         } else {
-            let eMsg = data.message || data.msg || "Error finding student.";
+            let eMsg = data.message || "Error finding records.";
             document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`;
         }
     } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; }
-    btn.innerHTML = "SEND OTP TO EMAIL"; btn.disabled = false;
+    btn.innerHTML = "SEND OTP"; btn.disabled = false;
   }
 
   async function verifyOTP() {
     const entered = sanitizeHTML(document.getElementById('fpOTP').value.trim());
     if(!entered) return;
     
-    const btn = document.getElementById('btnVerifyOTP');
-    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> VERIFYING..."; btn.disabled = true;
+    const btns = document.getElementById('fpStep2').getElementsByTagName('button');
+    const verifyBtn = btns[0];
+    verifyBtn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> VERIFYING..."; verifyBtn.disabled = true;
 
     try {
-        const res = await fetch(SCRIPT_URL, { 
-            method: "POST", 
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "verifyOTP", id: resettingStudentID, otp: entered }) 
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "verifyOTP", id: resettingPhoneEmail, otp: entered }) });
         const data = await res.json();
 
         if(data.status === "success") {
-            document.getElementById('fpStep2').style.display = 'none';
-            document.getElementById('fpStep3').style.display = 'block';
+            document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'block';
             document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">OTP Verified! You can now set a new password.</span>`;
         } else {
-            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message || "Invalid OTP Code! Check your email carefully.")}</span>`;
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message || "Invalid OTP Code!")}</span>`;
         }
-    } catch (e) {
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`;
-    }
-    btn.innerHTML = "VERIFY OTP"; btn.disabled = false;
+    } catch (e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; }
+    verifyBtn.innerHTML = "VERIFY OTP"; verifyBtn.disabled = false;
   }
 
   async function saveResetPassword() {
@@ -551,11 +582,7 @@
     btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SAVING..."; btn.disabled = true;
 
     try {
-        const res = await fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass })
-        });
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass }) });
         const data = await res.json();
         
         if(data.status === "success") {
@@ -589,7 +616,6 @@
             }
         }).catch(e=>{});
 
-        // Basic Monthly Attendance Count (For Dashboard Card)
         fetch(`${FIREBASE_DB_BASE}/Attendance?pageSize=1000`, { headers }).then(r=>r.json()).then(data=>{
             let attMap = {}; let t = 0;
             if(data.documents) {
@@ -626,12 +652,9 @@
 
         fetchMat(headers);
         checkGuardianMeetStatus(headers);
-    } catch(err) {
-        console.log("Token Sync Error");
-    }
+    } catch(err) { console.log("Token Sync Error"); }
   }
 
-  // 🚀 FETCH CLASS MATERIALS DIRECTLY FROM FIREBASE
   async function fetchMat(headers) {
       const box = document.getElementById('matList');
       box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading resources...</div>";
@@ -639,8 +662,7 @@
       try {
           const res = await fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=1000`, { headers });
           const data = await res.json();
-          box.innerHTML = "";
-          let count = 0;
+          box.innerHTML = ""; let count = 0;
           
           if(data.documents) {
               let posts = data.documents.map(d => d.fields).sort((a,b) => {
@@ -669,29 +691,22 @@
               });
           }
           if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'>No class materials available.</div>";
-      } catch(e) { 
-          box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; 
-      }
+      } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
-  // Result Renderer Logic
   function renderResults(h, d) {
       let idx = h.indexOf("");
       if (idx !== -1) {
-          let gpa = sanitizeHTML(d[idx+2] || "0.00");
-          let grade = sanitizeHTML(d[idx+3] || "F");
-          let pos = sanitizeHTML(d[idx+4] || "-");
-          let year = sanitizeHTML(d[idx+5] || "2026");
+          let gpa = sanitizeHTML(d[idx+2] || "0.00"); let grade = sanitizeHTML(d[idx+3] || "F");
+          let pos = sanitizeHTML(d[idx+4] || "-"); let year = sanitizeHTML(d[idx+5] || "2026");
 
           document.getElementById('appGPA').innerText = "GPA: " + gpa;
           document.getElementById('appMeta').innerText = `Grade: ${grade} | Rank: #${pos}`;
           document.getElementById('appSession').innerText = "Session: " + year;
           
-          let subHtml = "";
-          let i = 3;
+          let subHtml = ""; let i = 3;
           while (i < idx) {
-            let hNameTest = h[i] ? h[i].toString() : "Test";
-            let hNameMain = h[i+1] ? h[i+1].toString() : "Main";
+            let hNameTest = h[i] ? h[i].toString() : "Test"; let hNameMain = h[i+1] ? h[i+1].toString() : "Main";
             let isOpt = hNameTest.toLowerCase().includes("opt") && hNameTest.toLowerCase().includes("name");
 
             if (isOpt) {
@@ -700,9 +715,7 @@
               let optMainLabel = sanitizeHTML(h[i+2] ? h[i+2].toString().split('-').slice(1).join('-').replace(/\(\d+\)/, '').trim() || "Main Exam" : "Main Exam");
               
               subHtml += `<div class="dt-row">
-                            <div class="dt-row-top">
-                                <div class="sub-name">${optSubName} <span style="font-size:11px; color:#64748b; font-weight:normal;">(Optional)</span></div>
-                            </div>
+                            <div class="dt-row-top"><div class="sub-name">${optSubName} <span style="font-size:11px; color:#64748b; font-weight:normal;">(Optional)</span></div></div>
                             <div class="dt-row-bottom">
                                 <div class="mark-group"><div class="mark-label">${optTestLabel}</div><div class="mark-val" style="color:#94a3b8;">${sanitizeHTML(d[i+1]||'0')}</div></div>
                                 <div class="mark-group"><div class="mark-label">${optMainLabel}</div><div class="mark-val" style="color:#10b981;">${sanitizeHTML(d[i+2]||'0')}</div></div>
@@ -715,9 +728,7 @@
               let mainLabel = sanitizeHTML(hNameMain.replace(subName, '').replace(/^-/, '').replace(/\(\d+\)/, '').trim() || "Main Exam");
               
               subHtml += `<div class="dt-row">
-                            <div class="dt-row-top">
-                                <div class="sub-name" style="color:#f8fafc;">${subName}</div>
-                            </div>
+                            <div class="dt-row-top"><div class="sub-name" style="color:#f8fafc;">${subName}</div></div>
                             <div class="dt-row-bottom">
                                 <div class="mark-group"><div class="mark-label">${testLabel}</div><div class="mark-val" style="color:#94a3b8;">${sanitizeHTML(d[i]||'0')}</div></div>
                                 <div class="mark-group"><div class="mark-label">${mainLabel}</div><div class="mark-val" style="color:#38bdf8;">${sanitizeHTML(d[i+1]||'0')}</div></div>
@@ -756,7 +767,7 @@
   }
 
   // =====================================================================
-  // 🔴 DETAILED ATTENDANCE LOGIC (HOLIDAYS + ABSENT TRACKING API)
+  // DETAILED ATTENDANCE LOGIC
   // =====================================================================
   function openAttendanceModal() { 
       document.getElementById('attendanceModal').style.display = 'flex'; 
@@ -863,69 +874,43 @@
       
       if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
-           summaryBox.style.display = 'none';
-           yearlySummaryBox.style.display = 'none';
-           return;
+           summaryBox.style.display = 'none'; yearlySummaryBox.style.display = 'none'; return;
       }
-      
-      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) {
-           daysToLoop = today.getDate();
-      }
+      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) { daysToLoop = today.getDate(); }
 
-      // Yearly Calculation 
       let isYearFinished = (sYear < today.getFullYear());
-      if (!isYearFinished) {
-          yearlySummaryBox.style.display = 'none';
-          yearlySummaryBox.innerHTML = '';
-      } else {
-          let yearlyPresentCount = 0;
-          let yearlyAbsentCount = 0;
-
+      if (!isYearFinished) { yearlySummaryBox.style.display = 'none'; yearlySummaryBox.innerHTML = ''; } 
+      else {
+          let yearlyPresentCount = 0; let yearlyAbsentCount = 0;
           for(let m = 1; m <= 12; m++) {
               let mStr = sYear + "-" + String(m).padStart(2, '0');
-              let mPresent = 0;
-              let mHoliday = 0;
-              let daysInM = new Date(sYear, m, 0).getDate();
-
+              let mPresent = 0; let mHoliday = 0; let daysInM = new Date(sYear, m, 0).getDate();
               for(let d=1; d<=daysInM; d++) {
-                  let dStr = String(d).padStart(2, '0');
-                  let fDate = `${mStr}-${dStr}`;
-                  if(allStudentAttendance[fDate]) mPresent++;
-                  else if(allHolidays[fDate]) mHoliday++;
+                  let dStr = String(d).padStart(2, '0'); let fDate = `${mStr}-${dStr}`;
+                  if(allStudentAttendance[fDate]) mPresent++; else if(allHolidays[fDate]) mHoliday++;
               }
-
               yearlyPresentCount += mPresent;
               let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4); 
               let mAbsent = Math.max(0, workingDaysInM - mPresent);
               yearlyAbsentCount += mAbsent;
           }
-
           yearlySummaryBox.style.display = 'block';
           yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${sYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
       }
 
-      let presentCount = 0; let absentCount = 0; let holidayCount = 0;
-      let html = "";
-      
+      let presentCount = 0; let absentCount = 0; let holidayCount = 0; let html = "";
       for(let d = daysToLoop; d >= 1; d--) {
            let dStr = String(d).padStart(2, '0');
            let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
-           
            let statusHtml = ""; let inTime = "-"; let outTime = "-"; let bgRow = "";
            
            if(allHolidays[fullDate]) {
-               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`;
-               holidayCount++;
-               bgRow = "background: #fffbeb;";
+               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`; holidayCount++; bgRow = "background: #fffbeb;";
            } else if (allStudentAttendance[fullDate]) {
-               let rec = allStudentAttendance[fullDate];
-               inTime = rec.in; outTime = rec.out;
-               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`;
-               presentCount++;
+               let rec = allStudentAttendance[fullDate]; inTime = rec.in; outTime = rec.out;
+               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`; presentCount++;
            } else {
-               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`;
-               absentCount++;
-               bgRow = "background: #fff1f2;";
+               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`; absentCount++; bgRow = "background: #fff1f2;";
            }
            
            html += `
@@ -938,25 +923,13 @@
       }
       
       if(html === "") {
-           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>';
-           summaryBox.style.display = 'none';
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>'; summaryBox.style.display = 'none';
       } else {
-           tbody.innerHTML = html;
-           summaryBox.style.display = 'flex';
+           tbody.innerHTML = html; summaryBox.style.display = 'flex';
            summaryBox.innerHTML = `
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small>
-                <span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span>
-            </span>
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small>
-                <span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span>
-            </span>
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small>
-                <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
-            </span>
-        `;
+            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small><span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small><span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small><span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span></span>`;
       }
   }
 
@@ -966,45 +939,28 @@
   async function updatePassword() {
     const p = document.getElementById('newPass').value; 
     const msgBox = document.getElementById('passMsg');
-    const btn = document.getElementById('btnUpdateSecurity');
     
-    if(!p || p.length < 6) { 
-        msgBox.style.color = "var(--danger)"; 
-        msgBox.innerText = "Password must be at least 6 characters."; 
-        return; 
-    }
-    
+    if(!p || p.length < 6) { msgBox.style.color="var(--danger)"; msgBox.innerText="Password must be at least 6 characters."; return; }
     let docId = sessionStorage.getItem('srms_student_docId');
     if(!docId) return;
 
-    msgBox.style.color = "var(--primary)";
-    msgBox.innerText = "Updating...";
-    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SAVING..."; btn.disabled = true;
-    
+    msgBox.style.color = "var(--primary)"; msgBox.innerText = "Updating...";
     try { 
         const res = await fetch(SCRIPT_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({ action: "updatePassword", docId: docId, newPass: p })
         });
         const data = await res.json();
         
         if(data.status === "success") {
-            msgBox.style.color = "#059669"; 
-            msgBox.innerText = `✅ ${sanitizeHTML(data.message || "Password Changed Successfully!")}`; 
+            msgBox.style.color = "#059669"; msgBox.innerText = `✅ ${sanitizeHTML(data.message || "Password Changed Successfully!")}`; 
             document.getElementById('newPass').value = "";
         } else {
-            msgBox.style.color = "var(--danger)"; 
-            msgBox.innerText = sanitizeHTML(data.message || "Error updating password.");
+            msgBox.style.color = "var(--danger)"; msgBox.innerText = sanitizeHTML(data.message || "Error updating password.");
         }
-    } catch(e) { 
-        msgBox.style.color = "var(--danger)"; 
-        msgBox.innerText = "Error! Please check your network and try again."; 
-    }
-    btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false;
+    } catch(e) { msgBox.style.color="var(--danger)"; msgBox.innerText = "Error! Please check your network and try again."; }
   }
 
-  // MEET & OTHERS
   async function checkGuardianMeetStatus(headers) {
     try {
         const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/Guardian`, { headers });
@@ -1057,13 +1013,13 @@
     
     let genAmt = parseFloat(std.schoolFeeDue) || 0; let genSts = (std.schoolFeeStatus || "").toLowerCase();
     if(genAmt > 0 && genSts !== "paid") { 
-        if(genSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
+        if(genSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:#ea580c;">Pending Review ⏳</b></div>`; }
         else { total += genAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:var(--primary);">${genAmt} Tk</b></div>`; }
     }
 
     let hosAmt = parseFloat(std.hostelFeeDue) || 0; let hosSts = (std.hostelFeeStatus || "").toLowerCase();
     if(hosAmt > 0 && hosSts !== "paid") { 
-        if(hosSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
+        if(hosSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:#ea580c;">Pending Review ⏳</b></div>`; }
         else { total += hosAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:var(--primary);">${hosAmt} Tk</b></div>`; }
     }
 
@@ -1071,7 +1027,7 @@
         std.customFees.forEach(cf => { 
             let cAmt = parseFloat(cf.amount) || 0; let cSts = (cf.status || "").toLowerCase();
             if(cAmt > 0 && cSts !== "paid") { 
-                if(cSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
+                if(cSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:#ea580c;">Pending Review ⏳</b></div>`; }
                 else { total += cAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:var(--primary);">${cAmt} Tk</b></div>`; }
             }
         });
@@ -1079,20 +1035,9 @@
     html += `</div>`;
     
     if(total > 0) {
-        html += `<div style="margin-top:25px; text-align:center; background:#fff1f2; padding:20px; border-radius:16px;">
-                    <p style="margin:0 0 5px 0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Payable Amount</p>
-                    <h2 style="margin:0; color:var(--danger); font-size:32px;">${total} Tk</h2>
-                 </div>
-                 <div style="margin-top:20px;">
-                    <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mobile Number (For Payment)</label>
-                    <input type="text" id="feesPhone" value="${sanitizeHTML(std.phone) || ''}" placeholder="Enter Bkash/Nagad Number">
-                 </div>
-                 <p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center; margin-top:12px; line-height:1.4;">⚠️ Note: If your transaction shows "Pending" in gateway, please do NOT pay again. We will verify manually.</p>
-                 <button id="btnPayNow" class="login-btn" style="background:var(--danger); font-size:15px;" onclick="generatePaymentLink()">PROCEED TO SECURE PAYMENT</button>
-                 <a id="feesPayLink" href="#" target="_blank" class="login-btn" style="display:none; background:#059669; font-size:15px; text-align:center;">✅ CLICK HERE TO PAY</a>
-                 <div id="feesMsg" style="margin-top:15px; font-size:13px; font-weight:bold; text-align:center;"></div>`;
+        html += `<div style="margin-top:25px; text-align:center; background:#fff1f2; padding:20px; border-radius:16px;"><p style="margin:0 0 5px 0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Payable Amount</p><h2 style="margin:0; color:var(--danger); font-size:32px;">${total} Tk</h2></div><div style="margin-top:20px;"><label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mobile Number (For Payment)</label><input type="text" id="feesPhone" value="${sanitizeHTML(std.phone) || ''}" placeholder="Enter Bkash/Nagad Number"></div><p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center; margin-top:12px; line-height:1.4;">⚠️ Note: If your transaction shows "Pending" in gateway, please do NOT pay again. We will verify manually.</p><button id="btnPayNow" class="login-btn" style="background:var(--danger); font-size:15px;" onclick="generatePaymentLink()">PROCEED TO SECURE PAYMENT</button><a id="feesPayLink" href="#" target="_blank" class="login-btn" style="display:none; background:#059669; font-size:15px; text-align:center;">✅ CLICK HERE TO PAY</a><div id="feesMsg" style="margin-top:15px; font-size:13px; font-weight:bold; text-align:center;"></div>`;
     } else if (pendingCount > 0) {
-        html += `<div style="text-align:center; color:#d97706; font-weight:700; padding:30px; background:#fef3c7; border-radius:16px; margin-top:20px; border:1px solid #fde68a;">⏳ Your child's payment is currently under Pending Review. We will update it soon.</div>`;
+        html += `<div style="text-align:center; color:#ea580c; font-weight:700; padding:30px; background:#ffedd5; border-radius:16px; margin-top:20px; border:1px solid #fdba74;">⏳ Your child's payment is currently under Pending Review. We will update it soon.</div>`;
     } else { 
         html += `<div style="text-align:center; color:#059669; font-weight:700; padding:30px; background:#f0fdf4; border-radius:16px; margin-top:20px; border:1px solid #a7f3d0;">✅ All Fees Already Paid. Thank You!</div>`; 
     }
@@ -1103,17 +1048,12 @@
     const phone = sanitizeHTML(document.getElementById("feesPhone").value.trim());
     if (phone.length < 11) { document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>⚠️ সঠিক মোবাইল নম্বর দিন।</span>"; return; }
     
-    const btn = document.getElementById("btnPayNow");
-    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> Connecting Server..."; btn.disabled = true;
-    
+    const btn = document.getElementById("btnPayNow"); btn.innerHTML = "<span class='loader-spinner'></span> Connecting Server..."; btn.disabled = true;
     const url = FEE_PAY_SCRIPT + "?action=create_payment&student_id=" + encodeURIComponent(std.id) + "&phone=" + encodeURIComponent(phone) + "&email=" + encodeURIComponent(std.email || '');
     
     fetch(url).then(r => r.json()).then(data => {
         if (data.payment_url) { 
-            btn.style.display = "none"; 
-            const linkBtn = document.getElementById("feesPayLink"); 
-            linkBtn.style.display = "block"; linkBtn.href = sanitizeHTML(data.payment_url); 
-            document.getElementById("feesMsg").innerHTML = "";
+            btn.style.display = "none"; const linkBtn = document.getElementById("feesPayLink"); linkBtn.style.display = "block"; linkBtn.href = sanitizeHTML(data.payment_url); document.getElementById("feesMsg").innerHTML = "";
         } else { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Payment generation failed.</span>"; }
     }).catch(e => { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; });
   }
