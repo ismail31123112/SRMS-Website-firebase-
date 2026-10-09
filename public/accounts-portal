@@ -5,7 +5,7 @@
 <title>SRMS Accounts Portal V7 - Pro</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" type="image/x-icon">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -83,52 +83,70 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 .calc-btn { padding: 15px; border: none; border-radius: 8px; background: #333; color: white; font-weight: bold; cursor: pointer; transition: 0.2s;}
 .calc-btn:hover { background: #555; transform: scale(1.05); }
 
-/* ================= 🖨️ PERFECT PRINT CSS ================= */
+/* ================= 🖨️ HIGH-QUALITY ERP PRINT CSS ================= */
 @media print {
-  body { background: white; padding: 0; margin: 0; color: #000; }
-  .navbar, .bottom-nav, .container, #loader, .sweet-alert, .swal2-container { display: none !important; }
-  #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 10mm; box-sizing: border-box; }
+  @page { size: auto; margin: 8mm 10mm; } /* Professional margins */
   
-  /* Print Specific Styling */
-  .print-header { text-align: center; border-bottom: 4px double #000; padding-bottom: 15px; margin-bottom: 20px; }
-  .print-header img { height: 75px; object-fit: contain; margin-bottom: 8px; border-radius:8px;}
-  .print-header h2 { margin: 0; font-size: 24px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #000; }
-  .print-header .title { font-size: 16px; font-weight: bold; margin-top: 12px; text-transform: uppercase; background-color: #f1f5f9; display: inline-block; padding: 6px 20px; border: 1px solid #000; border-radius: 20px; -webkit-print-color-adjust: exact; color-adjust: exact; }
-  .print-header .filters { font-size: 13px; margin-top: 12px; color: #000; font-weight: bold; border-top: 1px dashed #ccc; padding-top: 8px; display: inline-block; }
+  body { background: white !important; padding: 0; margin: 0; color: #000 !important; font-family: 'Inter', sans-serif; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .navbar, .bottom-nav, .container, #loader, .sweet-alert, .swal2-container, #appContainer { display: none !important; }
   
-  .print-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; page-break-inside: auto; }
-  .print-table th, .print-table td { border: 1px solid #000 !important; padding: 8px 6px; text-align: left; vertical-align: middle; color: #000; }
-  .print-table th { background-color: #e2e8f0 !important; text-transform: uppercase; font-size: 11px; font-weight: bold; -webkit-print-color-adjust: exact; color-adjust: exact; }
+  #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; box-sizing: border-box; }
+  
+  /* Print Header for Reports */
+  .print-header { display: flex; flex-direction: column; align-items: center; border-bottom: 2px solid #005f40; padding-bottom: 15px; margin-bottom: 20px; text-align: center; position: relative; }
+  .print-header img { height: 75px; object-fit: contain; margin-bottom: 10px; border-radius:8px;}
+  .print-header h2 { margin: 0; font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; color: #005f40 !important; }
+  .print-header .title { font-size: 14px; font-weight: 800; margin-top: 8px; text-transform: uppercase; background-color: #005f40 !important; color: #fff !important; display: inline-block; padding: 6px 20px; border-radius: 20px; letter-spacing: 1px; }
+  .print-header .filters { font-size: 12px; margin-top: 15px; color: #333; font-weight: 600; padding: 5px 15px; border: 1px solid #cbd5e1; border-radius: 6px; display: inline-block; background: #f8fafc !important; }
+  
+  /* Modern Print Tables */
+  .print-table { width: 100%; border-collapse: collapse; font-size: 11px; margin-top: 10px; page-break-inside: auto; border: 1px solid #94a3b8; }
+  .print-table th, .print-table td { border: 1px solid #cbd5e1 !important; padding: 8px 6px; text-align: left; vertical-align: middle; color: #000; }
+  .print-table th { background-color: #f1f5f9 !important; color: #005f40 !important; text-transform: uppercase; font-size: 10px; font-weight: 800; letter-spacing: 0.5px; }
   .print-table tr { page-break-inside: avoid; page-break-after: auto;}
-  .print-table td:last-child, .print-table th:last-child { display: none; }
+  .print-table tr:nth-child(even) { background-color: #f8fafc !important; }
+  .print-table td:last-child, .print-table th:last-child { display: none; } /* Usually hides action columns if any */
   
-  .totals { margin-top: 20px; text-align: right; font-weight: bold; font-size: 15px; border-top: 2px solid #000; padding-top: 15px; page-break-inside: avoid;}
-  .signatures { margin-top: 60px; display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: #000; page-break-inside: avoid; padding: 0 30px; }
-  .sig-line { border-top: 1px dashed #000; width: 220px; text-align: center; padding-top: 8px; }
+  .totals { margin-top: 20px; text-align: right; font-weight: 800; font-size: 14px; border-top: 2px solid #005f40; padding-top: 15px; page-break-inside: avoid;}
+  
+  .signatures { margin-top: 50px; display: flex; justify-content: space-between; font-weight: 700; font-size: 12px; color: #000; page-break-inside: avoid; padding: 0 40px; }
+  .sig-line { border-top: 1px solid #000; width: 220px; text-align: center; padding-top: 8px; }
 
-  /* SRMS Official Receipt Print Styling */
-  .r-box { width: 100%; border: 2px solid #cbd5e1; padding: 15px 20px; border-radius: 12px; position: relative; box-sizing: border-box; margin-bottom: 25px; box-shadow: none; font-family: 'Arial', sans-serif;} 
-  .r-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #005f40; padding-bottom: 10px; margin-bottom: 12px; } 
-  .r-header-text h2 { margin: 0; font-size: 18px; font-weight: 900; color: #005f40; letter-spacing: 0.5px; } 
-  .r-header-text p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }
-  .r-receipt-tag { background: #005f40; color: white; padding: 6px 14px; border-radius: 20px; font-size: 11px; font-weight: 800; letter-spacing: 1.5px; -webkit-print-color-adjust: exact; color-adjust: exact; }
-  .r-info-table { width: 100%; font-size: 12px; margin-bottom: 10px; }
-  .r-info-table td { padding: 4px 0; border: none !important; }
-  .r-label { font-weight: bold; color: #475569; text-transform: uppercase; font-size: 11px; }
-  .r-val { font-weight: bold; color: #000; }
+  /* ================= ERP GRADE RECEIPT STYLING ================= */
+  .receipt-wrapper { position: relative; width: 100%; max-width: 800px; margin: 0 auto 30px auto; border: 1px solid #94a3b8; border-radius: 8px; padding: 25px; box-sizing: border-box; background: #fff; page-break-inside: avoid; font-family: 'Inter', sans-serif;}
   
-  .r-table { width: 100%; border-collapse: collapse; margin-top: 5px; font-size: 12px; border: 1px solid #cbd5e1;} 
-  .r-table th { background: #f1f5f9 !important; color: #334155; font-weight: bold; text-transform: uppercase; font-size: 11px; padding: 8px; text-align: left; border: 1px solid #cbd5e1; -webkit-print-color-adjust: exact; color-adjust: exact;}
-  .r-table td { border: 1px solid #cbd5e1; padding: 6px 8px; color: #000; font-weight: bold;}
+  /* Watermark Effect */
+  .receipt-wrapper::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.04; background-image: url('https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg'); background-repeat: no-repeat; background-position: center; background-size: 300px; z-index: 0; pointer-events: none; }
   
-  .r-summary-box { width: 280px; float: right; margin-top: 10px; font-size: 12px; border: 1px solid #cbd5e1; }
-  .r-summary-row { display: flex; justify-content: space-between; padding: 6px 10px; border-bottom: 1px solid #e2e8f0; font-weight: bold;}
-  .r-total-paid { font-weight: 900; color: #000; background: #e2e8f0 !important; -webkit-print-color-adjust: exact; color-adjust: exact;}
+  .r-header-flex { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #005f40; padding-bottom: 15px; margin-bottom: 15px; position: relative; z-index: 1; }
+  .r-logo-container { display: flex; align-items: center; gap: 15px; }
+  .r-logo-container img { height: 65px; border-radius: 8px; }
+  .r-school-info h2 { margin: 0; font-size: 20px; font-weight: 900; color: #005f40 !important; letter-spacing: 0.5px; }
+  .r-school-info p { margin: 4px 0 0 0; font-size: 11px; color: #475569; font-weight: 600; }
+  .r-copy-badge { background: #005f40 !important; color: white !important; padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 800; letter-spacing: 1px; border: 1px solid #003d29; box-shadow: 0 2px 0 #003d29; text-transform: uppercase;}
   
-  .r-signatures { margin-top: 40px; display: flex; justify-content: space-between; font-weight: bold; font-size: 12px; color: #000; }
-  .r-sig-line { border-top: 1px solid #000; width: 150px; text-align: center; padding-top: 5px; }
+  .r-meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 12px; position: relative; z-index: 1; background: #f8fafc !important; padding: 12px; border-radius: 6px; border: 1px solid #e2e8f0; }
+  .r-meta-item { display: flex; justify-content: space-between; padding-bottom: 4px; border-bottom: 1px dashed #cbd5e1; }
+  .r-meta-item:nth-last-child(-n+2) { border-bottom: none; padding-bottom: 0; }
+  .r-label { font-weight: 700; color: #475569; text-transform: uppercase; font-size: 10px; letter-spacing: 0.5px; }
+  .r-val { font-weight: 800; color: #0f172a; text-align: right; }
   
-  .r-cut-line { text-align: center; margin: 15px 0; font-size: 12px; color: #94a3b8; font-weight: bold; letter-spacing: 2px; clear: both;}
+  .r-table { width: 100%; border-collapse: collapse; font-size: 12px; border: 1px solid #94a3b8; position: relative; z-index: 1; margin-bottom: 15px;} 
+  .r-table th { background: #f1f5f9 !important; color: #005f40 !important; font-weight: 800; text-transform: uppercase; font-size: 10px; padding: 8px 10px; text-align: left; border: 1px solid #cbd5e1; letter-spacing: 0.5px; }
+  .r-table td { border: 1px solid #cbd5e1; padding: 8px 10px; color: #000; font-weight: 600;}
+  .r-table .num-col { text-align: right; }
+  
+  .r-summary-container { display: flex; justify-content: flex-end; position: relative; z-index: 1; }
+  .r-summary-box { width: 300px; font-size: 12px; border: 1px solid #94a3b8; border-radius: 6px; overflow: hidden; background: #fff !important; }
+  .r-summary-row { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #e2e8f0; font-weight: 700; color: #334155;}
+  .r-summary-row:last-child { border-bottom: none; }
+  .r-total-paid { font-weight: 900; color: #005f40 !important; background: #dcfce7 !important; border-bottom: 1px solid #bbf7d0; font-size: 14px;}
+  
+  .r-signatures { margin-top: 50px; display: flex; justify-content: space-between; font-weight: 700; font-size: 11px; color: #000; position: relative; z-index: 1; padding: 0 10px;}
+  .r-sig-line { border-top: 1px solid #334155; width: 160px; text-align: center; padding-top: 6px; text-transform: uppercase; letter-spacing: 0.5px;}
+  
+  .r-cut-line { display: flex; align-items: center; justify-content: center; margin: 25px 0; font-size: 14px; color: #64748b; font-weight: 800; }
+  .r-cut-line::before, .r-cut-line::after { content: ""; flex: 1; border-top: 2px dashed #94a3b8; margin: 0 15px; }
 }
 </style>
 </head>
@@ -955,41 +973,6 @@ async function resetCashbookPrompt() {
     }
 }
 
-function printCashbook() {
-    let t = document.getElementById('cbTable').outerHTML; 
-    let tInc = document.getElementById('cbTotalIncome').innerText;
-    let tExp = document.getElementById('cbTotalExpense').innerText;
-    let m = document.getElementById('cbMonth').options[document.getElementById('cbMonth').selectedIndex].text;
-    let y = document.getElementById('cbYear').value;
-
-    let subtitleText = "Period: " + m + " " + (y === 'All' ? 'All Years' : y);
-
-    let html = `
-    <div class="print-header">
-    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
-    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <div class="title">Cashbook / Income & Expense Ledger</div><br>
-    <div class="filters">${subtitleText}</div>
-    </div>
-
-    ${t}
-    <div class="totals">
-    <div style="color: #166534;">Total Income: ৳ ${tInc}</div>
-    <div style="color: #991b1b; margin-top:5px;">Total Expense: ৳ ${tExp}</div>
-    <div style="margin-top:10px; border-top:1px dashed #000; padding-top:5px; font-size: 18px;">Net Balance: ৳ ${parseFloat(tInc) - parseFloat(tExp)}</div>
-    </div>
-
-    <div class="signatures">
-    <div class="sig-line">Prepared By</div>
-    <div class="sig-line">Principal / Authorized Signature</div>
-    </div>`;
-    
-    let printBox = document.getElementById('printArea');
-    printBox.innerHTML = html;
-    window.print();
-    setTimeout(function() { printBox.innerHTML = ''; }, 1000);
-}
-
 function checkCustomOption(selectElement) {
     let otherInput = selectElement.nextElementSibling;
     if(selectElement.value === "Other") {
@@ -1243,50 +1226,6 @@ function filterReports() {
     renderReports(filtered);
 }
 
-function printRep() { 
-    let t = document.getElementById('rTable').outerHTML; 
-    let sc = document.getElementById('tStuCount').innerText;
-    let pc = document.getElementById('tPaidCount').innerText;
-    let dc = document.getElementById('tDueCount').innerText;
-    let cls = document.getElementById('rClass').value;
-    let sec = document.getElementById('rSec').value;
-    let cat = document.getElementById('rCat').value;
-    let sts = document.getElementById('rStatus').value;
-
-    let subtitleText = "Class: " + (cls === 'All' ? 'All Classes' : cls);
-    if(sec !== "") subtitleText += " | Section: " + sec;
-    if(cat !== "All") subtitleText += " | Category: " + cat;
-    if(sts !== "All") subtitleText += " | Status: " + sts;
-
-    let html = `
-    <div class="print-header">
-    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
-    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <div class="title">Comprehensive Financial Report</div><br>
-    <div class="filters">${subtitleText}</div>
-    </div>
-    
-    <div style="text-align: center; font-size: 13px; margin-bottom: 15px; font-weight: bold; background: #f8fafc; padding: 8px; border: 1px solid #e2e8f0; border-radius: 6px; color:#000;">
-    Total Records: ${sc} &nbsp;|&nbsp; Paid Records: ${pc} &nbsp;|&nbsp; Due Records: ${dc}
-    </div>
-
-    ${t.replace('<table', '<table class="print-table"')}
-    <div class="totals">
-    <div>Total Collected: ৳ ${document.getElementById('tPaidVal').innerText}</div>
-    <div style="color: #444; margin-top:5px;">Total Due Amount: ৳ ${document.getElementById('tDueVal').innerText}</div>
-    </div>
-
-    <div class="signatures">
-    <div class="sig-line">Prepared By</div>
-    <div class="sig-line">Principal / Authorized Signature</div>
-    </div>`;
-    
-    let printBox = document.getElementById('printArea');
-    printBox.innerHTML = html;
-    window.print();
-    setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
-}
-
 async function loadHistory() {
     if(!isAuthReady) return;
     showLoading(); showLoaderText("FETCHING HISTORY...");
@@ -1340,6 +1279,87 @@ function filterHistory() {
     renderHistory(filtered);
 }
 
+// ================= 🖨️ PERFECT PRINT LOGIC =================
+
+function printCashbook() {
+    let t = document.getElementById('cbTable').outerHTML; 
+    let tInc = document.getElementById('cbTotalIncome').innerText;
+    let tExp = document.getElementById('cbTotalExpense').innerText;
+    let m = document.getElementById('cbMonth').options[document.getElementById('cbMonth').selectedIndex].text;
+    let y = document.getElementById('cbYear').value;
+
+    let subtitleText = "Period: " + m + " " + (y === 'All' ? 'All Years' : y);
+
+    let html = `
+    <div class="print-header">
+    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
+    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+    <div class="title">Cashbook / Income & Expense Ledger</div>
+    <div class="filters">${subtitleText}</div>
+    </div>
+
+    ${t.replace('<table', '<table class="print-table"')}
+    <div class="totals">
+    <div style="color: #005f40;">Total Income: ৳ ${tInc}</div>
+    <div style="color: #dc2626; margin-top:5px;">Total Expense: ৳ ${tExp}</div>
+    <div style="margin-top:10px; border-top:1px dashed #000; padding-top:8px; font-size: 18px;">Net Balance: ৳ ${parseFloat(tInc) - parseFloat(tExp)}</div>
+    </div>
+
+    <div class="signatures">
+    <div class="sig-line">Prepared By</div>
+    <div class="sig-line">Principal / Authorized Signature</div>
+    </div>`;
+    
+    let printBox = document.getElementById('printArea');
+    printBox.innerHTML = html;
+    window.print();
+    setTimeout(function() { printBox.innerHTML = ''; }, 1000);
+}
+
+function printRep() { 
+    let t = document.getElementById('rTable').outerHTML; 
+    let sc = document.getElementById('tStuCount').innerText;
+    let pc = document.getElementById('tPaidCount').innerText;
+    let dc = document.getElementById('tDueCount').innerText;
+    let cls = document.getElementById('rClass').value;
+    let sec = document.getElementById('rSec').value;
+    let cat = document.getElementById('rCat').value;
+    let sts = document.getElementById('rStatus').value;
+
+    let subtitleText = "Class: " + (cls === 'All' ? 'All Classes' : cls);
+    if(sec !== "") subtitleText += " | Section: " + sec;
+    if(cat !== "All") subtitleText += " | Category: " + cat;
+    if(sts !== "All") subtitleText += " | Status: " + sts;
+
+    let html = `
+    <div class="print-header">
+    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
+    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+    <div class="title">Comprehensive Financial Report</div>
+    <div class="filters">${subtitleText}</div>
+    </div>
+    
+    <div style="text-align: center; font-size: 13px; margin-bottom: 15px; font-weight: bold; background: #f8fafc; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; color:#0f172a;">
+    Total Records: ${sc} &nbsp;|&nbsp; Paid Records: <span style="color:#005f40;">${pc}</span> &nbsp;|&nbsp; Due Records: <span style="color:#dc2626;">${dc}</span>
+    </div>
+
+    ${t.replace('<table', '<table class="print-table"')}
+    <div class="totals">
+    <div>Total Collected: ৳ ${document.getElementById('tPaidVal').innerText}</div>
+    <div style="color: #dc2626; margin-top:5px;">Total Due Amount: ৳ ${document.getElementById('tDueVal').innerText}</div>
+    </div>
+
+    <div class="signatures">
+    <div class="sig-line">Prepared By</div>
+    <div class="sig-line">Principal / Authorized Signature</div>
+    </div>`;
+    
+    let printBox = document.getElementById('printArea');
+    printBox.innerHTML = html;
+    window.print();
+    setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
+}
+
 function printHistory() {
     let t = document.getElementById('hTable').outerHTML; 
     let total = document.getElementById('hTotalVal').innerText;
@@ -1358,7 +1378,7 @@ function printHistory() {
     <div class="print-header">
     <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
     <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-    <div class="title">Payment Ledger / Transaction History</div><br>
+    <div class="title">Payment Ledger / Transaction History</div>
     <div class="filters">${subtitleText}</div>
     </div>
 
@@ -1387,9 +1407,9 @@ function printReceiptDirect() {
         items += `
         <tr>
         <td>${i.title}</td>
-        <td style="text-align:right;">${payable.toFixed(2)}</td>
-        <td style="text-align:right;">${paid.toFixed(2)}</td>
-        <td style="text-align:right;">${dueAmt.toFixed(2)}</td>
+        <td class="num-col">${payable.toFixed(2)}</td>
+        <td class="num-col">${paid.toFixed(2)}</td>
+        <td class="num-col">${dueAmt.toFixed(2)}</td>
         </tr>`;
     });
 
@@ -1397,58 +1417,59 @@ function printReceiptDirect() {
     
     let generateCopy = function(copyName, isFirst) {
         return `
-        <div class="r-box">
-        <div class="r-header">
-        <div class="r-header-text">
-        <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-        <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
+        <div class="receipt-wrapper">
+            <div class="r-header-flex">
+                <div class="r-logo-container">
+                    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
+                    <div class="r-school-info">
+                        <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+                        <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
+                    </div>
+                </div>
+                <div class="r-copy-badge">${copyName}</div>
+            </div>
+            
+            <div class="r-meta-grid">
+                <div>
+                    <div class="r-meta-item"><span class="r-label">Receipt No:</span> <span class="r-val">${d.rNo}</span></div>
+                    <div class="r-meta-item"><span class="r-label">Student ID:</span> <span class="r-val">${d.id}</span></div>
+                    <div class="r-meta-item"><span class="r-label">Name:</span> <span class="r-val">${d.name}</span></div>
+                </div>
+                <div>
+                    <div class="r-meta-item"><span class="r-label">Date:</span> <span class="r-val">${d.date}</span></div>
+                    <div class="r-meta-item"><span class="r-label">Class:</span> <span class="r-val">${d.class}${secStr} (Roll: ${d.roll})</span></div>
+                    <div class="r-meta-item"><span class="r-label">Session:</span> <span class="r-val">${d.month} ${d.year}</span></div>
+                </div>
+            </div>
+            
+            <table class="r-table">
+                <thead>
+                    <tr>
+                        <th>FEE PARTICULARS</th>
+                        <th class="num-col">PAYABLE (TK)</th>
+                        <th class="num-col">PAID NOW (TK)</th>
+                        <th class="num-col">DUE (TK)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${items}
+                </tbody>
+            </table>
+            
+            <div class="r-summary-container">
+                <div class="r-summary-box">
+                    <div class="r-summary-row"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div>
+                    <div class="r-summary-row r-total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div>
+                    <div class="r-summary-row"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div>
+                </div>
+            </div>
+            
+            <div class="r-signatures">
+                <div class="r-sig-line">Accountant / Cashier</div>
+                <div class="r-sig-line">Student / Guardian</div>
+            </div>
         </div>
-        </div>
-        
-        <table class="r-info-table">
-        <tr>
-        <td width="50%"><span class="r-label">RECEIPT NO:</span> <span class="r-val">${d.rNo}</span></td>
-        <td width="50%"><span class="r-label">DATE:</span> <span class="r-val">${d.date}</span></td>
-        </tr>
-        <tr>
-        <td><span class="r-label">STUDENT ID:</span> <span class="r-val">${d.id}</span></td>
-        <td><span class="r-label">CLASS:</span> <span class="r-val">${d.class}${secStr} (Roll:${d.roll})</span></td>
-        </tr>
-        <tr>
-        <td><span class="r-label">NAME:</span> <span class="r-val">${d.name}</span></td>
-        <td><span class="r-label">SESSION:</span> <span class="r-val">${d.month} ${d.year}</span></td>
-        </tr>
-        </table>
-        
-        <table class="r-table">
-        <thead>
-        <tr>
-        <th>FEE PARTICULARS</th>
-        <th style="text-align:right;">PAYABLE (TK)</th>
-        <th style="text-align:right;">PAID NOW (TK)</th>
-        <th style="text-align:right;">DUE (TK)</th>
-        </tr>
-        </thead>
-        <tbody>
-        ${items}
-        </tbody>
-        </table>
-        
-        <div style="overflow:hidden;">
-        <div class="r-summary-box">
-        <div class="r-summary-row"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div>
-        <div class="r-summary-row r-total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div>
-        <div class="r-summary-row"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div>
-        </div>
-        </div>
-        
-        <div class="r-signatures">
-        <div class="r-sig-line">Accountant/Cashier</div>
-        <div>${copyName}</div>
-        <div class="r-sig-line">Student/Guardian</div>
-        </div>
-        </div>
-        ${isFirst ? '<div class="r-cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>' : ''}`;
+        ${isFirst ? '<div class="r-cut-line">CUT HERE</div>' : ''}`;
     };
 
     let html = generateCopy("STUDENT COPY", true) + generateCopy("OFFICE COPY", false);
