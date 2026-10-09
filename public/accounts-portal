@@ -619,38 +619,6 @@ let currentStudentDocId = null;
 let currentStudentData = null; 
 var isAuthReady = false; 
 
-// Real-time Clock
-setInterval(() => {
-    let d = new Date();
-    let clockEl = document.getElementById('clock');
-    if (clockEl) {
-        clockEl.innerText = d.toLocaleDateString('en-GB') + " " + d.toLocaleTimeString('en-US');
-    }
-}, 1000);
-
-// Calculator Functions
-let calcScr = document.getElementById('cScr');
-function cClr() { if(calcScr) calcScr.value = '0'; }
-function cPush(val) { 
-    if(!calcScr) return;
-    if(calcScr.value === '0') calcScr.value = val; 
-    else calcScr.value += val; 
-}
-function cBack() { 
-    if(!calcScr) return;
-    calcScr.value = calcScr.value.slice(0, -1); 
-    if(calcScr.value === '') calcScr.value = '0'; 
-}
-function cSolve() { 
-    if(!calcScr) return;
-    try { 
-        // Note: eval is used here safely as input is restricted by calculator buttons
-        calcScr.value = eval(calcScr.value); 
-    } catch(e) { 
-        calcScr.value = 'Error'; 
-    } 
-}
-
 const years = []; 
 const currentY = new Date().getFullYear();
 for(let i=2020; i<=2099; i++) years.push(i);
@@ -1490,7 +1458,6 @@ function printReceiptDirect() {
     if(!lastR) return;
     let d = lastR;
     let items = "";
-    
     d.itemsList.forEach(function(i) {
         let payable = parseFloat(i.original) || 0;
         let paid = parseFloat(i.paid) || parseFloat(i.amount) || payable; 
@@ -1499,82 +1466,104 @@ function printReceiptDirect() {
         <tr>
         <td>${i.title}</td>
         <td style="text-align:right;">${payable.toFixed(2)}</td>
-        <td style="text-align:right; font-weight:bold; color:#005f40;">${paid.toFixed(2)}</td>
+        <td style="text-align:right;">${paid.toFixed(2)}</td>
         <td style="text-align:right;">${dueAmt.toFixed(2)}</td>
         </tr>`;
     });
 
-    let receiptCopy = (type) => `
-    <div class="r-box">
+    let secStr = d.section ? " (Sec: " + d.section + ")" : "";
+    
+    let generateCopy = function(copyName) {
+        return `
+        <div class="r-box">
         <div class="r-header">
-            <div class="r-logo-title">
-                <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo">
-                <div class="r-header-text">
-                    <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
-                    <p>Saidpur Cantonment, Saidpur, Nilphamari | Phone: 01309124803</p>
-                </div>
-            </div>
-            <div class="r-receipt-tag-wrap">
-                <div class="r-receipt-tag">${type}</div>
-                <div style="font-size:9.5px; font-weight:bold; margin-top:4px;">Date: ${d.date}</div>
-            </div>
+        <div class="r-logo-title">
+        <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo">
+        <div class="r-header-text">
+        <h2>SAIDPUR RESIDENTIAL MODEL SCHOOL</h2>
+        <p>Sultan Nagar, Saidpur, Nilphamari | Official Payment Receipt</p>
+        </div>
+        </div>
+        <div class="r-receipt-tag-wrap">
+        <span class="r-receipt-tag">${copyName}</span>
+        </div>
         </div>
         
         <table class="r-info-table">
-            <tr>
-                <td width="12%"><span class="r-label">ID No:</span></td><td width="28%"><span class="r-val">${d.id}</span></td>
-                <td width="15%"><span class="r-label">Month:</span></td><td width="45%"><span class="r-val">${d.month} ${d.year}</span></td>
-            </tr>
-            <tr>
-                <td><span class="r-label">Name:</span></td><td><span class="r-val">${d.name}</span></td>
-                <td><span class="r-label">Class:</span></td><td><span class="r-val">${d.class} (Sec: ${d.section || '-'}, Roll: ${d.roll || '-'})</span></td>
-            </tr>
-            <tr>
-                <td><span class="r-label">Receipt:</span></td><td colspan="3"><span class="r-val" style="font-family:monospace; color:#005f40;">${d.rNo}</span></td>
-            </tr>
+        <tr>
+        <td width="50%"><span class="r-label">RECEIPT NO:</span> <span class="r-val">${d.rNo}</span></td>
+        <td width="50%"><span class="r-label">DATE:</span> <span class="r-val">${d.date}</span></td>
+        </tr>
+        <tr>
+        <td><span class="r-label">STUDENT ID:</span> <span class="r-val">${d.id}</span></td>
+        <td><span class="r-label">CLASS:</span> <span class="r-val">${d.class}${secStr} (Roll:${d.roll})</span></td>
+        </tr>
+        <tr>
+        <td><span class="r-label">NAME:</span> <span class="r-val">${d.name}</span></td>
+        <td><span class="r-label">SESSION:</span> <span class="r-val">${d.month} ${d.year}</span></td>
+        </tr>
         </table>
         
         <table class="r-table">
-            <thead>
-                <tr>
-                    <th>Particulars / Fee Name</th>
-                    <th style="text-align:right; width:60px;">Payable</th>
-                    <th style="text-align:right; width:60px;">Paid</th>
-                    <th style="text-align:right; width:60px;">Due</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${items}
-            </tbody>
+        <thead>
+        <tr>
+        <th>FEE PARTICULARS</th>
+        <th style="text-align:right;">PAYABLE (TK)</th>
+        <th style="text-align:right;">PAID NOW (TK)</th>
+        <th style="text-align:right;">DUE (TK)</th>
+        </tr>
+        </thead>
+        <tbody>
+        ${items}
+        </tbody>
         </table>
         
         <div class="r-footer-grid">
-            <div class="r-stamp-box">PAID</div>
-            <div class="r-summary-box">
-                <div class="r-summary-row"><span>Total Payable:</span> <span>৳ ${parseFloat(d.totalBill).toFixed(2)}</span></div>
-                <div class="r-summary-row r-total-paid"><span>Total Paid:</span> <span>৳ ${parseFloat(d.paid).toFixed(2)}</span></div>
-                <div class="r-summary-row" style="border:none;"><span>Net Due:</span> <span style="color:#dc2626;">৳ ${parseFloat(d.remaining).toFixed(2)}</span></div>
-            </div>
+        <div class="r-stamp-box">
+          SRMS OFFICIAL<br>PAID & VERIFIED
+        </div>
+        <div class="r-summary-box">
+        <div class="r-summary-row"><span>Total Payable:</span> <span>৳ ${d.totalBill.toFixed(2)}</span></div>
+        <div class="r-summary-row r-total-paid"><span>Amount Paid Now:</span> <span>৳ ${d.paid.toFixed(2)}</span></div>
+        <div class="r-summary-row"><span>Remaining Due:</span> <span>৳ ${d.remaining.toFixed(2)}</span></div>
+        </div>
         </div>
         
         <div class="r-signatures">
-            <div class="r-sig-line">Student / Guardian</div>
-            <div class="r-sig-line">Accountant / Cashier</div>
+        <div class="r-sig-line">Accountant/Cashier</div>
+        <div class="r-sig-line">Principal/Authorized</div>
         </div>
-    </div>`;
+        </div>`;
+    };
 
-    let finalHtml = `
+    let html = `
     <div class="receipt-page-container">
-        ${receiptCopy("SCHOOL COPY")}
-        <div class="r-cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>
-        ${receiptCopy("STUDENT COPY")}
+      ${generateCopy("STUDENT COPY")}
+      <div class="r-cut-line">✂ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - ✂</div>
+      ${generateCopy("OFFICE COPY")}
     </div>`;
-
+    
     let printBox = document.getElementById('printArea');
-    printBox.innerHTML = finalHtml;
+    printBox.innerHTML = html;
     window.print();
-    setTimeout(function() { printBox.innerHTML = ''; }, 1000);
+    setTimeout(function() { printBox.innerHTML = ''; }, 1000); 
 }
+
+const cScr = document.getElementById('cScr');
+function cPush(v) { if(cScr.value === "0" || cScr.value === "Error") cScr.value = v; else cScr.value += v; }
+function cClr() { cScr.value = "0"; }
+function cBack() { cScr.value = cScr.value.slice(0,-1) || "0"; }
+function cSolve() { try { cScr.value = eval(cScr.value); } catch(e){ cScr.value = "Error"; } }
+window.addEventListener('keydown', (e) => { 
+if(document.activeElement.tagName === 'INPUT' && document.activeElement.id !== 'cScr') return;
+if(e.key >= 0 && e.key <= 9) cPush(e.key); 
+if(["+","-","*","/"].includes(e.key)) cPush(e.key); 
+if(e.key === "Enter" || e.key === "=") cSolve(); 
+if(e.key === "Backspace") cBack(); 
+if(e.key === "Escape") cClr(); 
+});
+setInterval(() => { document.getElementById('clock').innerText = new Date().toLocaleString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }); }, 1000);
 </script>
+
 </body>
 </html>
