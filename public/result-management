@@ -744,6 +744,33 @@ function viewSingleResult(rowIndex) {
     swalPro.fire({ title: 'Student Profile', html: html, confirmButtonText: 'Close' });
 }
 
+// ==========================================
+// THE ULTIMATE SAME-PAGE PRINTING ENGINE 
+// ==========================================
+function executePrint(htmlContent) {
+    let style = document.createElement('style');
+    style.id = "temp-print-style";
+    // 💡 THE ULTIMATE FORCE LANDSCAPE CSS HACK 
+    style.innerHTML = `@media print { @page { size: A4 landscape !important; margin: 8mm; } body { background: white !important; -webkit-print-color-adjust: exact; margin: 0; padding: 0; } #appContainer, .loader-overlay, .swal2-container { display: none !important; } #print-area { display: block !important; width: 100%; } }`;
+    document.head.appendChild(style);
+
+    document.getElementById('appContainer').style.display = 'none';
+    let printArea = document.getElementById('print-area');
+    printArea.innerHTML = htmlContent;
+    printArea.style.display = 'block';
+
+    // Wait for DOM to render to prevent blank page bug
+    setTimeout(() => {
+        window.print();
+        // Reset after print dialog is closed
+        printArea.style.display = 'none';
+        printArea.innerHTML = '';
+        document.getElementById('appContainer').style.display = 'block';
+        let tempStyle = document.getElementById("temp-print-style");
+        if(tempStyle) tempStyle.remove();
+    }, 500);
+}
+
 async function openPrintMarksheetPopup() {
     if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
     var parsed = parseSubjectHeaders(cachedHeaders);
@@ -763,29 +790,6 @@ async function openPrintMarksheetPopup() {
     });
 
     if (selectedExam) { generateMarkSheets(selectedExam); }
-}
-
-function executePrint(htmlContent) {
-    let style = document.createElement('style');
-    style.id = "temp-print-style";
-    // 💡 THE ULTIMATE FORCE LANDSCAPE CSS HACK 
-    style.innerHTML = `@media print { @page { size: A4 landscape !important; margin: 8mm; } body { background: white !important; -webkit-print-color-adjust: exact; margin: 0; padding: 0; } #appContainer, .loader-overlay, .swal2-container { display: none !important; } #print-area { display: block !important; width: 100%; } }`;
-    document.head.appendChild(style);
-
-    document.getElementById('appContainer').style.display = 'none';
-    let printArea = document.getElementById('print-area');
-    printArea.innerHTML = htmlContent;
-    printArea.style.display = 'block';
-
-    setTimeout(() => {
-        window.print();
-        // Reset after print dialog is closed
-        printArea.style.display = 'none';
-        printArea.innerHTML = '';
-        document.getElementById('appContainer').style.display = 'block';
-        let tempStyle = document.getElementById("temp-print-style");
-        if(tempStyle) tempStyle.remove();
-    }, 500);
 }
 
 function generateMarkSheets(examFilter) {
@@ -1011,6 +1015,7 @@ function generateMarkSheets(examFilter) {
         
         if (printCount === 0) { swalPro.fire('Warning', 'No completed results to print. Only calculating results will be printed.', 'warning'); return; }
         
+        // Execute Same-Page Print
         executePrint(printHtml);
     } catch (err) { swalPro.fire('Error Generating Marksheet', err.message, 'error'); }
 }
