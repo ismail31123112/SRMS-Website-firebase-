@@ -84,7 +84,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 }
 
 /* =========================================
-   PRINT AREA (STRICT LANDSCAPE A4 - 100% FIXED 1 PAGE) 
+   PRINT AREA (100% FIXED AUTO LANDSCAPE DOM)
 ========================================= */
 #print-area { display: none; }
 
@@ -143,6 +143,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
             </div>
 
             <button class="btn-tool" onclick="addGlobalExamPopup()"><i class="fa-solid fa-calendar-plus"></i> +Add Exam</button>
+            <button class="btn-tool" style="background: linear-gradient(135deg, #ef4444, #991b1b);" onclick="deleteGlobalExamPopup()"><i class="fa-solid fa-trash"></i> -Del Exam</button>
             <button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> +Add Subject</button>
             <button class="btn-danger" style="background: linear-gradient(135deg, #ef4444, #b91c1c);" onclick="deleteSubjectPopup()"><i class="fa-solid fa-book-dead"></i> -Remove</button>
 
@@ -187,6 +188,7 @@ const auth = firebase.auth();
 var SERVER_TOKEN = "<?= serverToken ?>"; 
 var appData = [];
 var cachedHeaders = [];
+var cachedGlobalExams = []; 
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg"; 
 
 const swalPro = Swal.mixin({ customClass: { confirmButton: 'btn-open', cancelButton: 'btn-danger' }, buttonsStyling: false });
@@ -320,6 +322,9 @@ async function loadData() {
         let headerDoc = await db.collection('ClassHeaders').doc(docName).get();
         cachedHeaders = headerDoc.exists ? JSON.parse(headerDoc.data().headers) : ["ID", "Name", "Roll", "", "Total Avg", "GPA", "Grade", "Position", "Fail_Reason", "Year", "Pass_Marks_Rules"];
 
+        let setDoc = await db.collection('Admin').doc('Settings').get();
+        if(setDoc.exists && setDoc.data().globalExams) cachedGlobalExams = JSON.parse(setDoc.data().globalExams);
+
         let rawCls = className.trim(); let searchGroup = "";
         if(rawCls.toLowerCase().includes("science")) { searchGroup = "Science"; rawCls = rawCls.replace(/Science/i, "").trim(); }
         else if(rawCls.toLowerCase().includes("arts")) { searchGroup = "Arts"; rawCls = rawCls.replace(/Arts/i, "").trim(); }
@@ -335,9 +340,12 @@ async function loadData() {
                 let row = new Array(cachedHeaders.length).fill("");
                 row[0] = f.studentID || ""; row[1] = f.name || ""; row[2] = f.roll || "";
                 row[row.length - 2] = f.phone || ""; row[row.length - 1] = doc.id; 
-                if (f.resultMarks) {
-                    let marks = JSON.parse(f.resultMarks);
-                    for(let i=3; i<cachedHeaders.length; i++) { if(marks[i] !== undefined) row[i] = marks[i]; }
+                
+                if (f.resultMarks && f.resultMarks.trim() !== "") {
+                    try {
+                        let marks = JSON.parse(f.resultMarks);
+                        for(let i=3; i<cachedHeaders.length; i++) { if(marks[i] !== undefined) row[i] = marks[i]; }
+                    } catch(e) {}
                 }
                 appData.push(row);
             }
@@ -432,11 +440,11 @@ async function openDataEntryForm(rowIndex) {
             
             sub.tests.forEach(t => {
                 var val = rowData[t.col] || '';
-                html += '<div style="flex:1; min-width:100px;"><label style="font-size:11px; color:#475569; font-weight:bold;">'+t.name+' (Test)</label><input id="edit-'+t.col+'" type="text" placeholder="e.g. 50+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+val+'"></div>';
+                html += '<div style="flex:1; min-width:100px;"><label style="font-size:11px; color:#475569; font-weight:bold;">'+t.name+' (Test)</label><input id="edit-'+t.col+'" type="text" placeholder="e.g. 50+25 or 50" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+val+'"></div>';
             });
             sub.mains.forEach(m => {
                 var val = rowData[m.col] || '';
-                html += '<div style="flex:1; min-width:100px;"><label style="font-size:11px; color:#475569; font-weight:bold;">'+m.name+' (Main)</label><input id="edit-'+m.col+'" type="text" placeholder="e.g. 50+25+25" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+val+'"></div>';
+                html += '<div style="flex:1; min-width:100px;"><label style="font-size:11px; color:#475569; font-weight:bold;">'+m.name+' (Main)</label><input id="edit-'+m.col+'" type="text" placeholder="e.g. 50+25+25 or 80" class="swal2-input" style="margin:0; height:35px; width:100%; font-size:13px;" value="'+val+'"></div>';
             });
             html += '</div></div>';
         });
@@ -532,9 +540,34 @@ async function addGlobalExamPopup() {
         try {
             let res = await apiCall('addGlobalExam', { examName: v.name, examType: v.type });
             showLoader(false);
-            if(res.status === "success") swalPro.fire('Success', res.msg, 'success');
+            if(res.status === "success") {
+                swalPro.fire('Success', res.msg, 'success');
+                cachedGlobalExams.push({name: v.name, type: v.type});
+            }
             else swalPro.fire('Error', res.message, 'error');
         } catch(e) { showLoader(false); swalPro.fire('Error', e.message, 'error'); }
+    }
+}
+
+async function deleteGlobalExamPopup() {
+    if (cachedGlobalExams.length === 0) { swalPro.fire('Notice', 'No global exams available to delete.', 'info'); return; }
+    
+    var examOptions = {};
+    cachedGlobalExams.forEach(ex => { examOptions[ex.name] = ex.name + " (" + ex.type + ")"; });
+
+    const { value: selectedExam } = await swalPro.fire({ title: 'Delete Global Exam', input: 'select', inputOptions: examOptions, inputPlaceholder: 'Select Exam to Delete', showCancelButton: true, confirmButtonText: 'Delete Completely', cancelButtonText: '<i class="fas fa-times"></i> Cancel', confirmButtonColor: '#dc2626' });
+
+    if (selectedExam) {
+        showLoader(true, "DELETING EXAM...");
+        try {
+            let res = await apiCall('deleteGlobalExam', { examName: selectedExam });
+            showLoader(false); 
+            if(res.status === "success") { 
+                swalPro.fire('Deleted!', res.msg, 'success'); 
+                cachedGlobalExams = cachedGlobalExams.filter(e => e.name !== selectedExam);
+            }
+            else { swalPro.fire('Error', res.message, 'error'); }
+        } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
     }
 }
 
@@ -542,18 +575,10 @@ async function addNewSubjectPopup() {
     var cls = document.getElementById("classSelector").value;
     if(!cls) return swalPro.fire('Hold On!', 'Please select a class first.', 'warning');
 
-    showLoader(true, "Fetching Exams...");
-    let globalExams = [];
-    try {
-        let setDoc = await db.collection('Admin').doc('Settings').get();
-        if(setDoc.exists && setDoc.data().globalExams) globalExams = JSON.parse(setDoc.data().globalExams);
-        showLoader(false);
-    } catch(e) { showLoader(false); return swalPro.fire('Error', e.message, 'error'); }
-
-    if(globalExams.length === 0) return swalPro.fire('No Exams Found', 'Please add Exams via "+Add Exam" first.', 'warning');
+    if(cachedGlobalExams.length === 0) return swalPro.fire('No Exams Found', 'Please add Exams via "+Add Exam" first.', 'warning');
 
     let examHtml = `<div style="text-align:left; max-height:200px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0; margin-top:10px;">`;
-    globalExams.forEach((ex, i) => {
+    cachedGlobalExams.forEach((ex, i) => {
         let placeholder = (ex.type === "Main") ? "e.g. 50+25+25 or 100" : "e.g. 50+25 or 50";
         examHtml += `
         <div style="margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #cbd5e1;">
@@ -578,7 +603,7 @@ async function addNewSubjectPopup() {
         showCancelButton: true, confirmButtonText: 'Add to Database', cancelButtonText: '<i class="fas fa-times"></i> Cancel',
         preConfirm: () => {
             let selected = [];
-            globalExams.forEach((ex, i) => {
+            cachedGlobalExams.forEach((ex, i) => {
                 if(document.getElementById(`chkEx-${i}`).checked) {
                     let marks = document.getElementById(`mrkEx-${i}`).value;
                     if(!marks) marks = ex.type === "Main" ? "100" : "50";
@@ -638,11 +663,44 @@ function setupSheetHeader() {
     });
 }
 
+function viewSingleResult(rowIndex) {
+    let row = appData[rowIndex];
+    let parsed = parseSubjectHeaders(cachedHeaders);
+    var firstEmpty = parsed.firstEmpty;
+    var passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
+    
+    var html = `<div style="text-align:left; background:#fff; padding:15px; border-radius:10px;">
+    <h3 style="color:#005f40; border-bottom:2px solid #005f40; padding-bottom:5px; margin-top:0;">ACADEMIC PROFILE</h3>
+    <p><b>Name:</b> ${row[1]} <br><b>ID:</b> ${row[0]} \vert{} <b>Roll:</b>${row[2]}</p>`;
+
+    if(firstEmpty !== -1 && row[firstEmpty+2]) {
+        let failReason = row[firstEmpty+5];
+        let failHtml = (failReason && failReason !== "None") ? `<p style="color:#dc2626; font-weight:bold; font-size:12px;">Failed In: ${failReason}</p>` : ``;
+        html += `<p><b>GPA:</b> ${row[firstEmpty+2]} | <b>Grade:</b> <span style="color:${row[firstEmpty+3]==='F'?'#dc2626':'#16a34a'}; font-weight:bold;">${row[firstEmpty+3]}</span> | <b>Pos:</b> ${row[firstEmpty+4]}</p>${failHtml}
+        <table style="width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;">
+        <tr style="background:#e2e8f0;"><th style="border:1px solid #ccc; padding:5px;">Subject</th><th style="border:1px solid #ccc; padding:5px;">Test(s)</th><th style="border:1px solid #ccc; padding:5px;">Main(s)</th></tr>`;
+
+        Object.keys(parsed.subjects).forEach(subName => {
+            let sub = parsed.subjects[subName];
+            let actualSubName = sub.isOpt ? (row[sub.nameCol] || "Optional") + " (Opt)" : subName;
+            let tMarks = []; let mMarks = []; 
+            sub.tests.forEach(t => { tMarks.push(row[t.col] || "-"); });
+            sub.mains.forEach(m => { mMarks.push(row[m.col] || "-"); });
+
+            html += `<tr>
+            <td style="border:1px solid #ccc; padding:5px;">${actualSubName}</td>
+            <td style="border:1px solid #ccc; padding:5px;">${tMarks.join(", ")}</td>
+            <td style="border:1px solid #ccc; padding:5px;">${mMarks.join(", ")}</td></tr>`;
+        });
+        html += '</table></div>';
+    } else { html += `<p style="color:#dc2626; font-weight:bold;">Result not calculated yet.</p></div>`; }
+    swalPro.fire({ title: 'Student Profile', html: html, confirmButtonText: 'Close' });
+}
+
 // ==========================================
-// 🖨️ PRINT LOGIC (SAME PAGE INJECTION)
+// 🖨️ SAME PAGE AUTO LANDSCAPE PRINT LOGIC
 // ==========================================
 function executePrint(htmlContent) {
-    // Inject Custom Print Style dynamically to force Landscape
     let style = document.createElement('style');
     style.id = "temp-print-style";
     style.innerHTML = `
@@ -655,29 +713,23 @@ function executePrint(htmlContent) {
     `;
     document.head.appendChild(style);
 
-    // Hide main app, show print area
     document.getElementById('appContainer').style.display = 'none';
     let printArea = document.getElementById('print-area');
     printArea.innerHTML = htmlContent;
     printArea.style.display = 'block';
 
-    // Wait a brief moment for DOM to paint, then print
     setTimeout(() => {
         window.print();
-        
-        // Clean up after print dialog closes
         printArea.style.display = 'none';
         printArea.innerHTML = '';
         document.getElementById('appContainer').style.display = 'block';
-        
         let tempStyle = document.getElementById("temp-print-style");
         if(tempStyle) tempStyle.remove();
-        
     }, 500);
 }
 
 // ==========================================
-// MARKSHEET GENERATOR 
+// MARKSHEET GENERATOR
 // ==========================================
 async function openPrintMarksheetPopup() {
     if(appData.length === 0) { swalPro.fire('Error','Load data first','error'); return; }
@@ -773,7 +825,8 @@ function generateMarkSheets(examFilter) {
                                 tCalc += obtParts.reduce((a,b)=>a+b, 0);
                             } else { tCalc += parseFloat(vStr) || 0; }
                         } else { tMarks.push("-"); }
-                        let tFMatch = (cachedHeaders[t.col]||"").match(/\((\d+)\)/); totalTFull += tFMatch ? parseInt(tFMatch[1]) : 50;
+                        let tFMatch = (cachedHeaders[t.col]||"").match(/\((\d+)\+?(\d+)?\+?(\d+)?\)/); 
+                        totalTFull += tFMatch ? tFMatch[0].replace(/[()]/g, '').split('+').reduce((a,b)=>a+(parseInt(b)||0), 0) : 50;
                     }
                 });
 
@@ -1022,28 +1075,31 @@ function publishResults() {
     var yr = document.getElementById("yearSelector").value;
     var sendSms = document.getElementById('smsPublishChk').checked;
 
+    if (cachedGlobalExams.length === 0) { swalPro.fire('Notice', 'Please add Exams from "+Add Exam" first.', 'warning'); return; }
+
+    var examOptions = {};
+    cachedGlobalExams.forEach(ex => { examOptions[ex.name] = ex.name + " (" + ex.type + ")"; });
+
     swalPro.fire({
         title: 'Publish Results?',
         html: `You are about to publish the final results for <b>${cls}</b>.<br>${sendSms ? '<b style="color:green;">SMS & Email Notifications will be sent to all Valid Students!</b>' : ''}`,
-        icon: 'warning', showCancelButton: true, cancelButtonText: '<i class="fas fa-times"></i> Cancel', confirmButtonText: 'Yes, Publish Now', confirmButtonColor: '#047857'
+        icon: 'warning', 
+        input: 'select',
+        inputOptions: examOptions,
+        inputPlaceholder: 'Select Exam Name for SMS',
+        showCancelButton: true, 
+        cancelButtonText: '<i class="fas fa-times"></i> Cancel', 
+        confirmButtonText: 'Yes, Publish Now', 
+        confirmButtonColor: '#047857',
+        inputValidator: (value) => { if (!value) return 'You need to select an exam!' }
     }).then(async (result) => {
-        if(result.isConfirmed) {
-            const { value: examTerm } = await swalPro.fire({
-                title: 'Enter Exam Name',
-                input: 'text',
-                inputLabel: 'This name will appear on the SMS (e.g. 1st Term)',
-                inputValue: '1st Term Exam',
-                showCancelButton: true,
-                inputValidator: (value) => { if (!value) return 'You need to write something!' }
-            });
-
-            if(examTerm) {
-                showLoader(true, "PUBLISHING...<br><span style='font-size:11px;'>Please do not close this window</span>");
-                try {
-                    let res = await apiCall('publishAndSendSMS', { className: cls, examTerm: examTerm, year: yr, sendSmsCheck: sendSms });
-                    showLoader(false); swalPro.fire('Success', res.msg, 'success');
-                } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
-            }
+        if(result.isConfirmed && result.value) {
+            let examTerm = result.value;
+            showLoader(true, "PUBLISHING...<br><span style='font-size:11px;'>Please do not close this window</span>");
+            try {
+                let res = await apiCall('publishAndSendSMS', { className: cls, examTerm: examTerm, year: yr, sendSmsCheck: sendSms });
+                showLoader(false); swalPro.fire('Success', res.msg, 'success');
+            } catch(err) { showLoader(false); swalPro.fire('Error', err.message, 'error'); }
         }
     });
 }
