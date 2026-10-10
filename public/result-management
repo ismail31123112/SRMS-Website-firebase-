@@ -65,6 +65,7 @@ button:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(0,0,0,0.
 .card-header { background: #f8fafc; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
 .card-header h4 { margin: 0; color: var(--main); font-size: 16px; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70%; }
 .roll-badge { background: var(--main); color: white; font-size: 11px; font-weight: bold; padding: 4px 10px; border-radius: 12px; }
+
 .card-body { padding: 20px; flex-grow: 1; }
 .card-body p { margin: 0 0 10px 0; font-size: 13px; color: #475569; font-weight: 500;}
 .result-mini { display: flex; justify-content: space-between; background: #f0fdf4; border: 1px solid #bbf7d0; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 800; color: #166534; }
@@ -737,7 +738,6 @@ function generateMarkSheets(examFilter) {
     else if(rawClassName.includes("Commerce")) { groupName = "Commerce"; baseClassName = rawClassName.replace(" Commerce", ""); }
 
     var printHtml = "";
-    // UPDATED THEAD for distinct CQ, MCQ, Prac and proper divider
     var theadHtml = `<tr>
     <th width="22%" style="border: 1px solid #333; padding: 6px;">Subject</th>
     <th width="12%" style="border: 1px solid #333; border-right: 2.5px solid #005f40; padding: 6px;">Test Mark(s)</th>
@@ -845,7 +845,6 @@ function generateMarkSheets(examFilter) {
                     
                     filterTotalMarks += finalMark; filterTotalSubCount++;
 
-                    // Breakdown Main Exam Marks for CQ, MCQ, PRAC columns
                     let cqOut = "-", mcqOut = "-", pracOut = "-";
                     if(mMarks.length > 0) {
                         let mPrimary = mMarks[0];
@@ -872,7 +871,6 @@ function generateMarkSheets(examFilter) {
                 }
             });
 
-            // Filter Re-Calc
             let dispGPA = gpa; let dispGrade = grade; let dispAvg = totalAvg; let dispPos = pos;
             if(examFilter !== "All") {
                 if(filterRegularSubCount > 0) {
@@ -901,7 +899,6 @@ function generateMarkSheets(examFilter) {
                 finalTableHtml = `<div class="marks-wrapper" style="display: flex; justify-content: space-between; gap: 10px; width: 100%; flex-grow: 1; align-items: flex-start; overflow: visible;"><table class="marks-table" style="width: 100%; border-collapse: collapse; font-size: 11px; table-layout: fixed; word-wrap: break-word;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.join("")}</tbody></table></div>`;
             }
 
-            // Report Card HTML setup without hard max-height limiting
             printHtml += `
             <div class="report-card" style="width: 100%; min-height: 188mm; box-sizing: border-box; display: flex; flex-direction: column; border: 2px solid #005f40; padding: 10mm 15mm; border-radius: 8px; background: #fff; overflow: visible; margin-bottom: 20px;">
             <div class="school-header" style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #005f40; padding-bottom: 5px; margin-bottom: 8px;">
