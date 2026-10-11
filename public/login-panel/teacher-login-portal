@@ -29,6 +29,7 @@
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } 60% { transform: translateY(-4px); } }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  @keyframes livePulseAlert { 0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.45); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
   .animate-up { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
 
   /* Custom Scrollbar */
@@ -39,13 +40,13 @@
 
   /* === Premium Navbar === */
   #main-navbar { display: none; background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--accent); }
-  .nav-top-container { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; }
+  .nav-top-container { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; width: 100%; }
   .nav-brand { font-weight: 800; color: var(--primary); font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
   .nav-link { font-weight: 700; font-size: 13px; color: var(--danger); background: #fff1f2; padding: 10px 20px; border-radius: 8px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
   .nav-link:hover { color: #fff; background: var(--danger); box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3); }
 
   /* === Premium Banner === */
-  #main-banner { display: none; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 40px 5%; display: flex; align-items: center; justify-content: center; gap: 25px; text-align: left; position: relative; overflow: hidden; }
+  #main-banner { display: none; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 40px 5%; align-items: center; justify-content: center; gap: 25px; text-align: left; position: relative; overflow: hidden; }
   .custom-banner::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); z-index: 0; }
   .banner-logo { width: 90px; height: 90px; background: #fff; border-radius: 50%; padding: 8px; border: 3px solid rgba(255,255,255,0.2); object-fit: contain; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1; }
   .banner-text { z-index: 1; }
@@ -77,7 +78,6 @@
   /* === Dashboard Section === */
   .container { max-width: 1000px; margin: 0 auto; padding: 40px 5%; display: none; }
   
-  /* 🚀 Scroll Cue Animation - TOP POSITION */
   .scroll-cue-container { width: 100%; margin-bottom: 30px; text-align: center; }
   .scroll-cue { display: inline-block; color: var(--danger); font-size: 15px; font-weight: 700; padding: 10px 25px; background: #fff1f2; border-radius: 20px; border: 1px solid #fecdd3; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.1); }
 
@@ -92,6 +92,28 @@
 
   .action-btn-large { width: 100%; padding: 20px; font-size: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; color: white; cursor: pointer; font-weight: 700; transition: all 0.3s ease; text-transform: uppercase; }
   .action-btn-large:hover { transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(0,0,0,0.2); }
+
+  /* 🎥 Embedded Live Classroom & Meeting Styles */
+  .admin-live-meeting-banner {
+    background: linear-gradient(135deg, #be123c, #e11d48);
+    color: white; border-radius: 18px; padding: 22px 25px; margin-bottom: 22px;
+    display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+    animation: livePulseAlert 2s infinite; border: 2px solid #fecdd3;
+  }
+  .live-class-item {
+    background: #f0fdf4; border: 2px solid #bbf7d0; padding: 18px 20px; border-radius: 16px;
+    margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .live-class-item p { margin: 3px 0; font-size: 14px; color: #065f46; }
+  .btn-stop-live {
+    background: var(--danger); color: white; border: none; padding: 10px 18px;
+    border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.3s;
+  }
+  .btn-stop-live:hover { background: var(--danger-dark); }
+  .btn-rejoin-live {
+    background: var(--primary); color: white; border: none; padding: 10px 18px;
+    border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.3s;
+  }
 
   /* Board Items */
   .notice-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 6px solid var(--accent); transition: 0.3s; }
@@ -108,7 +130,6 @@
   .modal-box.danger-modal { border-top-color: var(--danger); }
   .close-modal-btn { background: #f1f5f9; color: #333; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s; margin-top: 10px; font-size: 15px; }
   .close-modal-btn:hover { background: #e2e8f0; }
-  .at-input { width: 90px !important; padding: 10px !important; text-align: center; border: 2px solid var(--primary) !important; font-weight: 800; border-radius: 10px !important; font-size: 16px; }
   .premium-footer { display: none; background: #0f172a; color: #f8fafc; padding: 50px 5% 30px; margin-top: 60px; text-align: center; border-top: 5px solid var(--primary); }
 
   @media (max-width: 768px) {
@@ -174,12 +195,67 @@
       <button id="passBtn" class="btn-p" style="background:var(--accent);" onclick="changePass()">Save Password</button>
     </div>
 
-    <!-- 🚀 ডাইনামিক লাইভ ক্লাস লিংক -->
-    <div class="section-title">🎥 Live Class Hub</div>
-    <div class="card" style="padding: 20px;">
-        <a href="/live-classmeeting-panel" target="_blank" style="text-decoration:none;">
-            <button class="action-btn-large" style="background:var(--primary);"><i class="fas fa-video"></i> Start Live Class / Meeting</button>
-        </a>
+    <!-- ========================================================================= -->
+    <!-- 🎥 INTEGRATED LIVE CLASSROOM & TEACHERS' MEETING HUB (NO SEPARATE PAGE!) -->
+    <!-- ========================================================================= -->
+    <div class="section-title">🎥 Live Classroom &amp; Meeting Studio</div>
+    <div class="card" style="border-top: 6px solid var(--accent);">
+        
+        <!-- 🔴 Admin's Live Meeting Alert Banner (Only visible when Teachers' or All School Meeting is active) -->
+        <div id="teacherMeetingAlertBox" class="admin-live-meeting-banner">
+            <div>
+                <div style="font-size:11px; font-weight:800; background:rgba(255,255,255,0.2); display:inline-block; padding:3px 10px; border-radius:20px; margin-bottom:5px;">🔴 ADMIN LIVE BROADCAST RUNNING</div>
+                <h3 id="teacherMeetingTitle" style="margin:0; font-size:19px; font-weight:800;">Teachers' Official Meeting</h3>
+                <p id="teacherMeetingHost" style="margin:4px 0 0 0; font-size:13px; opacity:0.95;">Hosted by: Principal / Admin</p>
+            </div>
+            <button id="joinAdminMeetingBtn" style="background:#fff; color:var(--danger); border:none; padding:12px 22px; border-radius:12px; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.2);">
+                🎥 JOIN MEETING NOW
+            </button>
+        </div>
+
+        <div style="background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:12px 15px; border-radius:12px; font-size:13px; margin-bottom:18px; line-height:1.6;">
+            <b>💡 নির্দেশনা:</b> আপনি নিচের ফর্ম থেকে যেকোনো শ্রেণির <b>Student Live Class</b> শুরু করতে পারবেন এবং ক্লাস শুরু হলেই শিক্ষার্থীদের কাছে স্বয়ংক্রিয়ভাবে অফিশিয়াল <b>Push Notification</b> চলে যাবে। আর কর্তৃপক্ষ কোনো <b>Teachers' Meeting</b> শুরু করলে উপরে লাল বাটনে ক্লিক করে সরাসরি জয়েন করতে পারবেন।
+        </div>
+
+        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+            <div>
+                <label style="font-size:12px; font-weight:700; color:var(--text-muted);">শিক্ষকের নাম (Host Name)</label>
+                <input type="text" id="tLiveName" placeholder="শিক্ষকের নাম" style="margin-top:4px;">
+            </div>
+            <div>
+                <label style="font-size:12px; font-weight:700; color:var(--text-muted);">ক্লাস নির্বাচন করুন (Students Only)</label>
+                <select id="tLiveClass" style="margin-top:4px; font-weight:700; color:var(--primary);">
+                    <optgroup label="Primary & Junior Classes">
+                        <option value="Play">Class Play</option><option value="Nursery">Class Nursery</option><option value="KG">Class KG</option>
+                        <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option>
+                        <option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option>
+                    </optgroup>
+                    <optgroup label="Secondary Classes">
+                        <option value="9-Science">Class 9 (Science)</option><option value="9-Arts">Class 9 (Arts)</option><option value="9-Commerce">Class 9 (Commerce)</option>
+                        <option value="10-Science">Class 10 (Science)</option><option value="10-Arts">Class 10 (Arts)</option><option value="10-Commerce">Class 10 (Commerce)</option>
+                    </optgroup>
+                </select>
+            </div>
+        </div>
+
+        <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:block; margin-top:6px;">পাঠের বিষয় ও অধ্যায় (Subject &amp; Topic)</label>
+        <input type="text" id="tLiveSub" placeholder="যেমন: গণিত - অধ্যায় ৩ (বীজগণিত)" style="margin-top:4px;">
+        <input type="hidden" id="tLivePic" value="https://i.postimg.cc/hGQQqrsb/20260117_231551.png">
+
+        <button class="btn-p" id="tStartLiveBtn" onclick="startTeacherStudentLiveClass()" style="background:linear-gradient(135deg, #b45309, #d97706); font-size:15px;">
+            <i class="fas fa-video"></i> START STUDENT LIVE CLASS 🚀
+        </button>
+
+        <!-- Active Student Live Classes List -->
+        <div style="margin-top:25px; border-top:2px dashed #e2e8f0; padding-top:18px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h4 style="margin:0; color:var(--primary); font-size:15px; font-weight:800;">🟢 বর্তমানে চলমান স্টুডেন্ট লাইভ ক্লাসসমূহ</h4>
+                <button onclick="loadTeacherLiveHubSessions()" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;"><i class="fas fa-sync-alt"></i> চেক করুন</button>
+            </div>
+            <div id="teacherActiveClassesContainer">
+                <p style="font-size:13px; color:var(--text-muted);">সেশন চেক করা হচ্ছে...</p>
+            </div>
+        </div>
     </div>
 
     <div class="section-title">📢 Official Notice Board</div>
@@ -215,6 +291,14 @@
       <input type="text" id="uTtl" placeholder="Post Title / Subject Name">
       <textarea id="uDsc" rows="3" placeholder="Description / Instructions"></textarea>
       <input type="url" id="uUrl" placeholder="Enter Document or Drive Link (Optional)">
+      
+      <!-- Optional Image Upload via ImgBB API v1 -->
+      <div style="background:#f8fafc; padding:12px 15px; border-radius:12px; border:1px dashed #cbd5e1; margin-top:8px;">
+          <label style="font-size:12px; font-weight:700; color:var(--primary); display:block; margin-bottom:4px;">🖼️ অথবা সরাসরি ছবি আপলোড করুন (ImgBB Auto Link):</label>
+          <input type="file" id="uImgFile" accept="image/*" onchange="uploadContentImageToImgBB(this)" style="margin:0; padding:8px; background:#fff; font-size:13px;">
+          <small id="uImgStatus" style="font-size:11.5px; font-weight:700; color:var(--primary);"></small>
+      </div>
+
       <button class="btn-p" id="uBtn" onclick="upload()"><i class="fas fa-cloud-upload-alt"></i> Publish Content</button>
     </div>
 
@@ -330,10 +414,9 @@
     appId: "1:960037316778:web:d6f9b1f434572d9374c8d3"
   };
 
-  firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
   const auth = firebase.auth();
   
-  // 🔒 Changed: Use LOCAL Persistence to allow cross-tab authentication
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
       console.error("Session persistence error:", error);
   });
@@ -342,8 +425,11 @@
   
   const OTP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec"; 
   const MANAGER_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec"; 
-  
+  const LIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxaayPCwfdZvXSXJPdzPspPmAeH72-NAvqGJIbuhwid3T28imRxNRypPI9m1bJQrfqLhg/exec";
+  const IMGBB_API_KEY = ""; // Optional: এখানে আপনার ImgBB API Key বসালে ফাইল সরাসরি আপলোড হয়ে লিংক তৈরি হবে
+
   let tPhone = "";
+  let tTeacherName = "Teacher";
   let exactDbPhone = "";
   let resetPhone = null;
   
@@ -357,7 +443,7 @@
 
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 🔒 Auto-login check
+  // 🔒 Non-stop Auto-login & Auth Restoration
   window.onload = function() {
     const savedPhone = sessionStorage.getItem("srms_phone");
     const savedName = sessionStorage.getItem("srms_name");
@@ -365,15 +451,22 @@
     
     if(savedPhone && savedName) {
       tPhone = savedPhone;
+      tTeacherName = savedName;
       exactDbPhone = savedExact || savedPhone;
-      showDashboard(savedName);
+      showDashboardUI(savedName);
     } else {
        document.getElementById('dash-sec').style.display = 'none';
        document.getElementById('login-sec').style.display = 'flex';
     }
+
+    auth.onAuthStateChanged(function(user) {
+      if (user && tPhone) {
+        loadBoard();
+        loadTeacherLiveHubSessions();
+      }
+    });
   };
 
-  // 🔒 Secure Logout
   function logout() {
     try { if(auth) auth.signOut(); } catch(e) {}
     sessionStorage.clear();
@@ -414,7 +507,7 @@
           await auth.signInWithEmailAndPassword(emailToTry, s);
       }
 
-      const token = await auth.currentUser.getIdToken();
+      const token = await auth.currentUser.getIdToken(true);
       const res = await fetch(`${FIREBASE_DB_BASE}/Teachers?pageSize=1000`, {
           headers: { "Authorization": "Bearer " + token }
       });
@@ -436,20 +529,23 @@
       }
           
       tPhone = ph;
+      tTeacherName = foundName;
       exactDbPhone = dbPhoneToSave;
       
       sessionStorage.setItem("srms_phone", ph);
       sessionStorage.setItem("srms_exact_phone", dbPhoneToSave);
       sessionStorage.setItem("srms_name", foundName);
+      sessionStorage.setItem("srms_active_pass", s);
       if(teacherDocId) sessionStorage.setItem("srms_teacher_id", teacherDocId); 
       
-      // Teacher Powers (Roles)
       const teacherRoles = ["teacher_dashboard", "special_page_access"];
       sessionStorage.setItem("srms_user_roles", JSON.stringify(teacherRoles));
       sessionStorage.setItem("srms_active_session", "true");
       
       document.getElementById('lPs').value = '';
-      showDashboard(foundName);
+      showDashboardUI(foundName);
+      loadBoard();
+      loadTeacherLiveHubSessions();
       
     } catch(e) { 
         err.innerText = "Teacher account not found or invalid password!"; 
@@ -457,15 +553,257 @@
     }
   }
 
-  function showDashboard(name) {
+  function showDashboardUI(name) {
     document.getElementById('tGreet').innerText = `Assalamu Alaikum, ${name} Sir`;
+    document.getElementById('tLiveName').value = name;
     document.getElementById('login-sec').style.display = 'none';
     document.getElementById('main-navbar').style.display = 'flex';
     document.getElementById('main-banner').style.display = 'flex';
     document.getElementById('dash-sec').style.display = 'block';
     document.getElementById('main-footer').style.display = 'block';
     document.getElementById('lBtn').innerHTML = "Secure Login ➔"; document.getElementById('lBtn').disabled = false;
-    loadBoard();
+  }
+
+  // =========================================================================
+  // 🎥 TEACHER EMBEDDED LIVE CLASS & MEETING ENGINE
+  // - Teachers can ONLY host Student Classes
+  // - Teachers can JOIN Admin's Teachers' Meeting / All School Meeting
+  // =========================================================================
+  function getStudentClassLabel(code) {
+    const sel = document.getElementById('tLiveClass');
+    const opt = Array.from(sel.options).find(o => o.value === code);
+    return opt ? opt.text : ("Class " + code);
+  }
+
+  async function loadTeacherLiveHubSessions() {
+    const container = document.getElementById('teacherActiveClassesContainer');
+    const meetingBanner = document.getElementById('teacherMeetingAlertBox');
+    container.innerHTML = `<p style="font-size:13px; color:#b45309; font-weight:600;">⏳ লাইভ সেশন সিঙ্ক হচ্ছে...</p>`;
+
+    try {
+      const res = await fetch(`${FIREBASE_DB_BASE}/LiveSessions?pageSize=100`);
+      const data = await res.json();
+      const docs = data.documents || [];
+
+      let studentClassesHtml = "";
+      let activeAdminMeeting = null;
+
+      docs.forEach(d => {
+        const f = d.fields || {};
+        const docName = d.name.split("/").pop();
+        const status = f.status ? f.status.stringValue : "FALSE";
+
+        if (status === "TRUE") {
+          const title = f.title ? f.title.stringValue : "Live Session";
+          const host = f.host ? f.host.stringValue : "Educator";
+          const startTime = f.startTime ? f.startTime.stringValue : "Running";
+
+          // Check if Admin started a Teachers' Meeting or All School Meeting
+          if (docName === "Teachers" || docName === "All") {
+            activeAdminMeeting = { room: docName, title: title, host: host, startTime: startTime };
+          } else if (docName !== "Guardian") {
+            // It's a Student Class Session
+            const clsLabel = getStudentClassLabel(docName);
+            studentClassesHtml += `
+              <div class="live-class-item">
+                <div>
+                  <p style="font-size:15px; font-weight:800; color:var(--primary);">🔴 ${sanitizeHTML(clsLabel)} <span style="font-size:11px; background:#dcfce7; padding:2px 8px; border-radius:10px; margin-left:6px;">${sanitizeHTML(startTime)}</span></p>
+                  <p><b>বিষয়:</b> ${sanitizeHTML(title)}</p>
+                  <p style="font-size:12px; color:#475569;"><b>শিক্ষক:</b> ${sanitizeHTML(host)}</p>
+                </div>
+                <div style="display:flex; gap:8px;">
+                  <button class="btn-rejoin-live" onclick="joinStudentLiveClassAsTeacher('${docName}')"><i class="fas fa-video"></i> Join</button>
+                  <button class="btn-stop-live" onclick="endStudentLiveClassByTeacher('${docName}', '${sanitizeHTML(title).replace(/'/g, "")}', this)">🔴 End Class</button>
+                </div>
+              </div>`;
+          }
+        }
+      });
+
+      // Render Admin's Teachers' Meeting Alert Banner if active
+      if (activeAdminMeeting) {
+        meetingBanner.style.display = "flex";
+        document.getElementById('teacherMeetingTitle').innerText = `📢 ${activeAdminMeeting.title}`;
+        document.getElementById('teacherMeetingHost').innerText = `পরিচালনায়: ${activeAdminMeeting.host} • শুরু: ${activeAdminMeeting.startTime}`;
+        document.getElementById('joinAdminMeetingBtn').onclick = function() {
+          joinAdminTeachersMeeting(activeAdminMeeting.room);
+        };
+      } else {
+        meetingBanner.style.display = "none";
+      }
+
+      if (studentClassesHtml !== "") {
+        container.innerHTML = studentClassesHtml;
+      } else {
+        container.innerHTML = `<p style="font-size:13px; color:#64748b; background:#f8fafc; padding:14px; border-radius:12px; border:1px dashed #cbd5e1; margin:0;">বর্তমানে কোনো শ্রেণির লাইভ ক্লাস চলছে না।</p>`;
+      }
+    } catch (e) {
+      container.innerHTML = `<p style="color:var(--danger); font-size:13px; font-weight:700;">সেশন লোড করতে সমস্যা হয়েছে।</p>`;
+    }
+  }
+
+  function joinAdminTeachersMeeting(roomCode) {
+    const teacherName = document.getElementById('tLiveName').value.trim() || tTeacherName || "Teacher";
+    const pic = document.getElementById('tLivePic').value;
+    const config = `#config.startWithAudioMuted=true&config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(teacherName + ' (Teacher)')}"&userInfo.avatarUrl="${encodeURIComponent(pic)}"`;
+    window.open(`https://meet.jit.si/SRMS-Live-${roomCode}${config}`, '_blank');
+  }
+
+  function joinStudentLiveClassAsTeacher(sClass) {
+    const teacherName = document.getElementById('tLiveName').value.trim() || tTeacherName || "Teacher";
+    const pic = document.getElementById('tLivePic').value;
+    const config = `#config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(teacherName + ' (Teacher)')}"&userInfo.avatarUrl="${encodeURIComponent(pic)}"&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","chat","raisehand","mute-everyone","security","tileview","fullscreen","hangup","settings","recording","livestreaming"]`;
+    window.open(`https://meet.jit.si/SRMS-Live-${sClass}${config}`, '_blank');
+  }
+
+  async function startTeacherStudentLiveClass() {
+    const sClass = document.getElementById('tLiveClass').value;
+    const name = document.getElementById('tLiveName').value.trim() || tTeacherName || "Teacher";
+    const sub = document.getElementById('tLiveSub').value.trim();
+    const pic = document.getElementById('tLivePic').value;
+    const btn = document.getElementById('tStartLiveBtn');
+
+    if (!name || !sub) {
+      alert("⚠️ অনুগ্রহ করে শিক্ষকের নাম এবং পাঠের বিষয় লিখুন!");
+      return;
+    }
+
+    // Security guard: Teachers can only start student classes
+    if (sClass === "Teachers" || sClass === "Guardian" || sClass === "All") {
+      alert("শুধুমাত্র অ্যাডমিন এই মিটিং শুরু করতে পারবেন।");
+      return;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = `<span class="loader-spinner"></span> ক্লাস শুরু হচ্ছে...`;
+
+    // 1. Launch Jitsi Meet Room
+    const config = `#config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(name + ' (Teacher)')}"&userInfo.avatarUrl="${encodeURIComponent(pic)}"&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","chat","raisehand","mute-everyone","security","tileview","fullscreen","hangup","settings","recording","livestreaming"]`;
+    window.open(`https://meet.jit.si/SRMS-Live-${sClass}${config}`, '_blank');
+
+    const nowTime = new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' });
+
+    try {
+      // 2. Direct Firestore REST Update with Teacher Auth Token
+      if (auth.currentUser) {
+        const token = await auth.currentUser.getIdToken();
+        const payload = {
+          fields: {
+            status: { stringValue: "TRUE" },
+            title: { stringValue: sub },
+            host: { stringValue: name },
+            hostRole: { stringValue: "Teacher" },
+            startTime: { stringValue: nowTime },
+            updatedAt: { integerValue: Date.now().toString() }
+          }
+        };
+        const patchUrl = `${FIREBASE_DB_BASE}/LiveSessions/${encodeURIComponent(sClass)}?updateMask.fieldPaths=status&updateMask.fieldPaths=title&updateMask.fieldPaths=host&updateMask.fieldPaths=hostRole&updateMask.fieldPaths=startTime&updateMask.fieldPaths=updatedAt`;
+        const pRes = await fetch(patchUrl, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+          body: JSON.stringify(payload)
+        });
+        if (pRes.status === 404) {
+          await fetch(`${FIREBASE_DB_BASE}/LiveSessions?documentId=${encodeURIComponent(sClass)}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+            body: JSON.stringify(payload)
+          });
+        }
+      }
+
+      // 3. Call Live Backend for Official OneSignal Push Notification
+      fetch(LIVE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({
+          action: "update",
+          className: sClass,
+          status: "TRUE",
+          title: sub,
+          host: name,
+          hostRole: "Teacher"
+        })
+      }).catch(e => {});
+
+      document.getElementById('tLiveSub').value = '';
+      setTimeout(loadTeacherLiveHubSessions, 900);
+    } catch (e) {}
+
+    btn.disabled = false;
+    btn.innerHTML = `<i class="fas fa-video"></i> START STUDENT LIVE CLASS 🚀`;
+  }
+
+  async function endStudentLiveClassByTeacher(sClass, sub, btnElement) {
+    btnElement.disabled = true;
+    btnElement.innerHTML = `<span class="loader-spinner"></span> বন্ধ হচ্ছে...`;
+
+    try {
+      if (auth.currentUser) {
+        const token = await auth.currentUser.getIdToken();
+        const payload = {
+          fields: {
+            status: { stringValue: "FALSE" },
+            title: { stringValue: sub },
+            updatedAt: { integerValue: Date.now().toString() }
+          }
+        };
+        await fetch(`${FIREBASE_DB_BASE}/LiveSessions/${encodeURIComponent(sClass)}?updateMask.fieldPaths=status&updateMask.fieldPaths=title&updateMask.fieldPaths=updatedAt`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      fetch(LIVE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify({ action: "update", className: sClass, status: "FALSE", title: sub })
+      }).catch(e => {});
+
+      setTimeout(loadTeacherLiveHubSessions, 800);
+    } catch (e) {
+      btnElement.disabled = false;
+      btnElement.innerHTML = `🔴 End Class`;
+    }
+  }
+
+  // 🖼️ ImgBB API v1 Image Upload Helper for Academic Content
+  async function uploadContentImageToImgBB(fileInput) {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const statusEl = document.getElementById('uImgStatus');
+
+    if (!IMGBB_API_KEY) {
+      statusEl.style.color = "#d97706";
+      statusEl.innerText = "ℹ️ সরাসরি ফাইল আপলোডের জন্য কোডে IMGBB_API_KEY যুক্ত করুন, অথবা উপরে ড্রাইভ লিংক দিন।";
+      return;
+    }
+
+    statusEl.style.color = "var(--primary)";
+    statusEl.innerText = "⏳ ছবিটি ImgBB সার্ভারে আপলোড হচ্ছে...";
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+        method: "POST",
+        body: formData
+      });
+      const json = await res.json();
+      if (json && json.success && json.data && json.data.url) {
+        document.getElementById('uUrl').value = json.data.url;
+        statusEl.style.color = "#059669";
+        statusEl.innerText = "✅ ছবি আপলোড সম্পন্ন! লিংকটি স্বয়ংক্রিয়ভাবে যুক্ত হয়েছে।";
+      } else {
+        statusEl.style.color = "var(--danger)";
+        statusEl.innerText = "❌ ছবি আপলোড ব্যর্থ হয়েছে।";
+      }
+    } catch (err) {
+      statusEl.style.color = "var(--danger)";
+      statusEl.innerText = "❌ নেটওয়ার্ক সমস্যা, আবার চেষ্টা করুন।";
+    }
   }
 
   // ==========================================
@@ -576,18 +914,31 @@
     btn.innerHTML = '<span class="loader-spinner"></span> Updating...'; btn.disabled = true;
     try {
       const user = auth.currentUser;
-      const token = await user.getIdToken();
-      if(user) await user.updatePassword(p);
+      if(user) {
+        try {
+          await user.updatePassword(p);
+        } catch(reAuthErr) {
+          if (reAuthErr.code === 'auth/requires-recent-login') {
+            const oldPass = sessionStorage.getItem("srms_active_pass") || "123456";
+            const cred = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
+            await user.reauthenticateWithCredential(cred);
+            await user.updatePassword(p);
+          }
+        }
+      }
+      const token = await user.getIdToken(true);
       await fetch(`${FIREBASE_DB_BASE}/Teachers/${docId}?updateMask.fieldPaths=pass`, { 
           method: "PATCH", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
           body: JSON.stringify({ fields: { pass: { stringValue: p } } }) 
       });
+      sessionStorage.setItem("srms_active_pass", p);
       alert("✅ Security Key Updated Successfully!"); document.getElementById('newPass').value = ""; document.getElementById('passBox').style.display = 'none';
     } catch(e) { alert("Error! Please logout, login and try again."); }
     btn.innerHTML = "Save Password"; btn.disabled = false;
   }
 
   async function loadBoard() {
+    if (!auth.currentUser) return;
     const nBox = document.getElementById('notice-board'), mBox = document.getElementById('manageBox');
     mBox.innerHTML = "<p style='text-align:center; color:#64748b; font-weight:600;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Fetching secure data...</p>";
     try {
@@ -629,7 +980,7 @@
             if(type === 'warn') {
                 await fetch(`${FIREBASE_DB_BASE}/Warnings/${id}`, { method: "DELETE", headers });
             } else {
-                fetch(MANAGER_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "deletePost", id: id }) }).catch(e=>{});
+                fetch(MANAGER_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "deletePost", docId: id }) }).catch(e=>{});
                 await fetch(`${FIREBASE_DB_BASE}/WebsitePosts/${id}`, { method: "DELETE", headers });
             }
             alert("✅ Successfully Removed!"); 
@@ -710,23 +1061,12 @@
                 timestamp: { integerValue: d.getTime().toString() },
                 uploader: { stringValue: tPhone }
             }
-        }
+        };
         await fetch(`${FIREBASE_DB_BASE}/WebsitePosts`, {
             method: "POST",
             headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
             body: JSON.stringify(firestorePayload)
         });
-
-        const scriptPayload = {
-            action: "uploadData",
-            data: { targetPage: cls, title: ttl, desc: dsc, externalUrl: url },
-            uploader: tPhone
-        };
-        fetch(MANAGER_SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            body: JSON.stringify(scriptPayload)
-        }).catch(e => {});
 
         alert("✅ Data Successfully Published!"); 
         document.getElementById('uCls').value = ""; document.getElementById('uTtl').value = ""; document.getElementById('uDsc').value = ""; document.getElementById('uUrl').value = ""; 
@@ -795,7 +1135,6 @@
 
           populateTeacherAttendanceMonths();
       } catch(e) {
-          console.error(e);
           document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
       }
       document.getElementById('attLoader').style.display = 'none';
