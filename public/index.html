@@ -165,7 +165,8 @@
   .cal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
   .cal-btn { background: none; border: none; font-size: 20px; font-weight: bold; cursor: pointer; color: #005f40; }
   .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; text-align: center; }
-  .cal-date { padding: 10px; font-size: 14px; background: #f8f9fa; border-radius: 6px; cursor: pointer; font-weight: 500; }
+  .cal-date { padding: 10px; font-size: 14px; background: #f8f9fa; border-radius: 6px; cursor: pointer; font-weight: 500; transition: 0.2s; }
+  .cal-date:hover { transform: scale(1.06); }
   .cal-today { background: #005f40 !important; color: white !important; font-weight: bold; }
   .cal-holiday { background: #ffebee; color: #d32f2f; font-weight: bold; }
   #holiday-info { margin-top: 15px; padding: 12px; background: #fff3e0; border-left: 4px solid #9e9e9e; font-size: 13px; font-weight: 600; color: #e65100; text-align: center; display: none; border-radius: 6px; }
@@ -439,7 +440,7 @@
   </div>
 
   <div class="animate-up">
-    <div class="section-title">Academic Calendar 2026</div>
+    <div class="section-title">Academic Calendar <span id="cal-title-year">2026</span></div>
     <div class="widget-box calendar-box">
       <div class="cal-header">
         <button class="cal-btn" onclick="changeMonth(-1)">❮</button>
@@ -535,7 +536,9 @@
 </div>
 
 <script>
-  document.getElementById('auto-year').innerText = new Date().getFullYear();
+  const nowYear = new Date().getFullYear();
+  document.getElementById('auto-year').innerText = nowYear;
+  document.getElementById('cal-title-year').innerText = nowYear;
 
   const FIREBASE_PROJECT_ID = "srms-website-management";
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
@@ -594,29 +597,207 @@
     }
   });
 
-  async function fetchCloudData() {
-    try {
-      const [hRes, lRes] = await Promise.all([
-        fetch(`${FIREBASE_DB_BASE}/Website/Headline`),
-        fetch(`${FIREBASE_DB_BASE}/LiveSessions`)
-      ]);
-      const hData = await hRes.json();
-      if(hData.fields && hData.fields.text) {
-        document.getElementById('notice-text').innerText = hData.fields.text.stringValue;
-      }
+  // ============================================================================
+  // 🗓️ ULTRA-FAST AUTO-UPDATING ACADEMIC CALENDAR ENGINE (DATABASE + LOCAL CACHE)
+  // ============================================================================
+  let currentDate = new Date();
 
-      const lData = await lRes.json();
-      let isAnyLive = false;
-      if(lData.documents) {
-        isAnyLive = lData.documents.some(d => d.fields && d.fields.status && d.fields.status.stringValue === "TRUE");
-      }
-      const liveBtn = document.getElementById('live-btn-card');
-      if(isAnyLive) liveBtn.classList.add('live-active');
-      else liveBtn.classList.remove('live-active');
+  // Fixed National & School Holidays (Works for ANY year automatically)
+  const fixedYearlyHolidays = {
+    "0-1": "New Year's Day & Book Festival",
+    "1-21": "Shaheed Day & International Mother Language Day",
+    "2-17": "Children's Day",
+    "2-26": "Independence & National Day",
+    "3-14": "Bengali New Year (Pohela Boishakh)",
+    "4-1": "May Day",
+    "7-5": "July Revolution Day",
+    "11-16": "Victory Day",
+    "11-25": "Christmas Day"
+  };
 
-    } catch(e) { console.log("Cloud sync error"); }
+  // Default fallback (Instantly overwritten by Firebase Database or LocalCache)
+  let singleHolidays = Object.assign({}, fixedYearlyHolidays, {
+    "0-17": "Shab-e-Meraj", "0-23": "Saraswati Puja", "1-1": "Maghi Purnima",
+    "1-4": "Shab-e-Barat", "1-15": "Shivratri", "2-3": "Dol Jatra",
+    "2-17": "Shab-e-Qadr", "3-5": "Easter Sunday", "4-1": "May Day & Buddha Purnima",
+    "5-26": "Ashura", "6-29": "Ashari Purnima", "7-26": "Eid-e-Miladunnabi",
+    "8-4": "Janmashtami", "8-24": "Fateha-e-Yazdaham", "9-10": "Mahalaya",
+    "10-8": "Shyama Puja"
+  });
+
+  let holidayRanges = [
+    { start: "2-18", end: "2-22", title: "Eid-ul-Fitr Holidays" },
+    { start: "4-25", end: "4-29", title: "Eid-ul-Azha Holidays" },
+    { start: "9-19", end: "9-21", title: "Durga Puja (Dashami)" },
+    { start: "11-20", end: "11-30", title: "Winter Vacation" }
+  ];
+
+  // Exact YYYY-MM-DD map synced directly from Firebase `Holidays` collection & `Website/AcademicCalendar`
+  let dbExactHolidays = {};
+
+  // Load cached calendar from localStorage in 0.00s if available
+  try {
+    const cachedCal = localStorage.getItem("SRMS_CALENDAR_CACHE_V1");
+    if (cachedCal) {
+      const parsed = JSON.parse(cachedCal);
+      if (parsed.singleHolidays) singleHolidays = Object.assign({}, fixedYearlyHolidays, parsed.singleHolidays);
+      if (parsed.holidayRanges) holidayRanges = parsed.holidayRanges;
+      if (parsed.dbExactHolidays) dbExactHolidays = parsed.dbExactHolidays;
+    }
+  } catch (e) {}
+
+  function getHoliday(y, m, d) {
+    // 1. Check exact YYYY-MM-DD from Firebase `Holidays` collection first (100% Priority)
+    const isoKey = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    if (dbExactHolidays[isoKey]) return dbExactHolidays[isoKey];
+
+    // 2. Check M-D singleHolidays (0-indexed month)
+    const key = `${m}-${d}`;
+    if (singleHolidays[key]) return singleHolidays[key];
+    if (fixedYearlyHolidays[key]) return fixedYearlyHolidays[key];
+
+    // 3. Check M-D holidayRanges
+    const check = m * 100 + d;
+    for (let r of holidayRanges) {
+      let [sm, sd] = r.start.split('-').map(Number);
+      let [em, ed] = r.end.split('-').map(Number);
+      if (check >= (sm * 100 + sd) && check <= (em * 100 + ed)) return r.title;
+    }
+    return null;
   }
-  fetchCloudData();
+
+  function renderCalendar() {
+    let m = currentDate.getMonth(), y = currentDate.getFullYear();
+    document.getElementById('cal-title-year').innerText = y;
+    document.getElementById('cal-month-year').innerText = `${currentDate.toLocaleString('default',{month:'long'})} ${y}`;
+    let firstDay = new Date(y, m, 1).getDay();
+    let start = (firstDay === 5) ? 0 : (firstDay === 6 ? 1 : firstDay + 2);
+    let daysInMonth = new Date(y, m + 1, 0).getDate();
+    let html = "";
+    for (let i = start; i > 0; i--) {
+      html += `<div class="cal-date" style="background:transparent; cursor:default;"></div>`;
+    }
+    let now = new Date();
+    let shortMonth = currentDate.toLocaleString('default', { month: 'short' });
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      let dayOfWeek = new Date(y, m, d).getDay();
+      let holiday = getHoliday(y, m, d);
+      let cls = "cal-date";
+      if (dayOfWeek === 5) {
+        cls += " cal-holiday";
+        if (!holiday) holiday = "Weekly Holiday (Friday)";
+      } else if (holiday) {
+        cls += " cal-holiday";
+      }
+      let safeHoliday = holiday ? holiday.replace(/'/g, "\\'") : "";
+      let clickEvent = holiday ? `onclick="showHoliday('${safeHoliday}', ${d}, '${shortMonth}')"` : "";
+      if (d === now.getDate() && m === now.getMonth() && y === now.getFullYear()) {
+        cls += " cal-today";
+      }
+      html += `<div class="${cls}" ${clickEvent}>${d}</div>`;
+    }
+    document.getElementById('cal-dates').innerHTML = html;
+  }
+
+  function showHoliday(name, day, month) {
+    let div = document.getElementById('holiday-info');
+    div.innerHTML = `📅 <strong>${month} ${day}:</strong> ${name}`;
+    div.style.display = 'block';
+  }
+
+  function changeMonth(dir) {
+    currentDate.setMonth(currentDate.getMonth() + dir);
+    renderCalendar();
+    document.getElementById('holiday-info').style.display = 'none';
+  }
+
+  // Initial instant render
+  renderCalendar();
+
+  // ⚡ Parallel Cloud Sync: Headline + LiveSessions + AcademicCalendar + Holidays Collection
+  async function fetchCloudDataAndCalendar() {
+    try {
+      const [hRes, lRes, calDocRes, holColRes] = await Promise.all([
+        fetch(`${FIREBASE_DB_BASE}/Website/Headline`).catch(() => null),
+        fetch(`${FIREBASE_DB_BASE}/LiveSessions`).catch(() => null),
+        fetch(`${FIREBASE_DB_BASE}/Website/AcademicCalendar`).catch(() => null),
+        fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`).catch(() => null)
+      ]);
+
+      // 1. Headline
+      if (hRes && hRes.ok) {
+        const hData = await hRes.json();
+        if (hData.fields && hData.fields.text) {
+          document.getElementById('notice-text').innerText = hData.fields.text.stringValue;
+        }
+      }
+
+      // 2. Live Sessions
+      if (lRes && lRes.ok) {
+        const lData = await lRes.json();
+        let isAnyLive = false;
+        if (lData.documents) {
+          isAnyLive = lData.documents.some(d => d.fields && d.fields.status && d.fields.status.stringValue === "TRUE");
+        }
+        const liveBtn = document.getElementById('live-btn-card');
+        if (isAnyLive) liveBtn.classList.add('live-active');
+        else liveBtn.classList.remove('live-active');
+      }
+
+      let calendarUpdated = false;
+
+      // 3. Master AcademicCalendar Document (Uploaded by Auto-Backend)
+      if (calDocRes && calDocRes.ok) {
+        const calDoc = await calDocRes.json();
+        if (calDoc.fields) {
+          const cf = calDoc.fields;
+          if (cf.singleHolidaysJson && cf.singleHolidaysJson.stringValue) {
+            singleHolidays = Object.assign({}, fixedYearlyHolidays, JSON.parse(cf.singleHolidaysJson.stringValue));
+            calendarUpdated = true;
+          }
+          if (cf.holidayRangesJson && cf.holidayRangesJson.stringValue) {
+            holidayRanges = JSON.parse(cf.holidayRangesJson.stringValue);
+            calendarUpdated = true;
+          }
+          if (cf.expandedDatesJson && cf.expandedDatesJson.stringValue) {
+            Object.assign(dbExactHolidays, JSON.parse(cf.expandedDatesJson.stringValue));
+            calendarUpdated = true;
+          }
+        }
+      }
+
+      // 4. Individual `Holidays` Collection Documents (From Attendance Portal / Admin)
+      if (holColRes && holColRes.ok) {
+        const holData = await holColRes.json();
+        if (holData.documents) {
+          holData.documents.forEach(doc => {
+            const hf = doc.fields || {};
+            const dateStr = hf.date ? hf.date.stringValue.trim() : doc.name.split('/').pop();
+            const reasonStr = hf.reason ? hf.reason.stringValue.trim() : "Academic Holiday";
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+              dbExactHolidays[dateStr] = reasonStr;
+              calendarUpdated = true;
+            }
+          });
+        }
+      }
+
+      if (calendarUpdated) {
+        renderCalendar();
+        try {
+          localStorage.setItem("SRMS_CALENDAR_CACHE_V1", JSON.stringify({
+            singleHolidays: singleHolidays,
+            holidayRanges: holidayRanges,
+            dbExactHolidays: dbExactHolidays
+          }));
+        } catch (e) {}
+      }
+    } catch (e) {
+      console.log("Cloud sync error", e);
+    }
+  }
+  fetchCloudDataAndCalendar();
 
   function startSliderRotation() {
     if (slideIntervalId) {
@@ -771,15 +952,6 @@
     }
   }
   loadAllHomeData();
-
-  let currentDate = new Date();
-  const singleHolidays = { "0-1": "New Year's Day", "0-17": "Shab-e-Meraj", "0-23": "Saraswati Puja", "1-1": "Maghi Purnima", "1-4": "Shab-e-Barat", "1-15": "Shivratri", "1-21": "Shaheed Day", "2-3": "Dol Jatra", "2-17": "Shab-e-Qadr", "2-26": "Independence Day", "3-5": "Easter Sunday", "3-14": "Bengali New Year", "4-1": "May Day & Buddha Purnima", "5-26": "Ashura", "6-29": "Ashari Purnima", "7-5": "July Revolution Day", "7-26": "Eid-e-Miladunnabi", "8-4": "Janmashtami", "8-24": "Fateha-e-Yazdaham", "9-10": "Mahalaya", "10-8": "Shyama Puja", "11-16": "Victory Day", "11-25": "Christmas Day" };
-  const holidayRanges = [ { start: "2-18", end: "2-22", title: "Eid-ul-Fitr Holidays" }, { start: "4-25", end: "4-29", title: "Eid-ul-Azha Holidays" }, { start: "9-19", end: "9-21", title: "Durga Puja (Dashami)" }, { start: "11-20", end: "11-30", title: "Winter Vacation" } ];
-  function getHoliday(m, d) { let key = `${m}-${d}`; if(singleHolidays[key]) return singleHolidays[key]; let check = m * 100 + d; for(let r of holidayRanges) { let [sm, sd] = r.start.split('-').map(Number); let [em, ed] = r.end.split('-').map(Number); if(check >= (sm*100+sd) && check <= (em*100+ed)) return r.title; } return null; }
-  function renderCalendar() { let m = currentDate.getMonth(), y = currentDate.getFullYear(); document.getElementById('cal-month-year').innerText = `${currentDate.toLocaleString('default',{month:'long'})} ${y}`; let firstDay = new Date(y, m, 1).getDay(); let start = (firstDay === 5) ? 0 : (firstDay === 6 ? 1 : firstDay + 2); let daysInMonth = new Date(y, m + 1, 0).getDate(); let html = ""; for(let i=start; i>0; i--) html += `<div class="cal-date" style="background:transparent"></div>`; for(let d=1; d<=daysInMonth; d++) { let dayOfWeek = new Date(y, m, d).getDay(); let holiday = getHoliday(m, d); let cls = "cal-date"; if(dayOfWeek === 5) { cls += " cal-holiday"; if(!holiday) holiday = "Weekly Holiday (Friday)"; } else if(holiday) cls += " cal-holiday"; let clickEvent = holiday ? `onclick="showHoliday('${holiday}', ${d}, '${currentDate.toLocaleString('default',{month:'short'})}')"` : ""; let now = new Date(); if(d===now.getDate() && m===now.getMonth() && y===now.getFullYear()) cls += " cal-today"; html += `<div class="${cls}" ${clickEvent}>${d}</div>`; } document.getElementById('cal-dates').innerHTML = html; }
-  function showHoliday(name, day, month) { let div = document.getElementById('holiday-info'); div.innerHTML = `📅 <strong>${month} ${day}:</strong> ${name}`; div.style.display = 'block'; }
-  function changeMonth(dir) { currentDate.setMonth(currentDate.getMonth() + dir); renderCalendar(); document.getElementById('holiday-info').style.display = 'none'; }
-  renderCalendar();
 
   function openLiveModal(e) {
     if (e) e.stopPropagation();
