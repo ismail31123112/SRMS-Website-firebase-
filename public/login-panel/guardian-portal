@@ -11,6 +11,8 @@
     --primary: #1e3a8a; /* Royal Blue */
     --primary-dark: #172554; /* Deep Navy */
     --accent: #ea580c; /* Orange Accent */
+    --success: #059669;
+    --warning: #d97706;
     --danger: #e11d48;
     --danger-dark: #be123c;
     --bg-color: #f0f4f8; /* Soft Blue-Gray Background */
@@ -55,7 +57,7 @@
 
   /* === Login Section === */
   #login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; position: relative; }
-  .login-card { background: var(--card-bg); padding: 50px 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(30, 58, 138, 0.15); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary); }
+  .login-card { background: var(--card-bg); padding: 50px 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(30, 58, 138, 0.15); width: 100%; max-width: 420px; text-align: center; border-top: 6px solid var(--primary); box-sizing: border-box; }
   .login-logo { width: 85px; margin-bottom: 20px; }
   .login-title { color: var(--primary); font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
   .login-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 10px; font-weight: 500; }
@@ -113,24 +115,25 @@
 
   /* === Modals === */
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
-  .modal-content { background: var(--card-bg); width: 100%; max-width: 480px; border-radius: 28px; padding: 40px; position: relative; animation: fadeInUp 0.4s ease; overflow-y: auto; max-height: 85vh; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+  .modal-content { background: var(--card-bg); width: 100%; max-width: 520px; border-radius: 28px; padding: 40px; position: relative; animation: fadeInUp 0.4s ease; overflow-y: auto; max-height: 85vh; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
   .close-btn { position: absolute; top: 20px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; line-height: 1; transition: 0.3s; }
   .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
 
-  /* === Anti-Forgery Marksheet === */
-  .digital-transcript { background: #0f172a; color: #f8fafc; border-radius: 24px; padding: 35px 30px; position: relative; }
-  .scroll-indicator { text-align: center; color: #cbd5e1; font-size: 12px; font-weight: 600; margin-bottom: 20px; animation: bounce 2s infinite; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; display: inline-block; width: 100%; box-sizing: border-box; }
-  .dt-header { border-bottom: 1px solid #334155; padding-bottom: 20px; margin-bottom: 25px; text-align: center; }
-  .dt-row { background: #1e293b; border-radius: 16px; padding: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; border: 1px solid #334155; transition: 0.3s; }
-  .dt-row:hover { background: #2dd4bf; border-color: #2dd4bf; }
-  .dt-row:hover .sub-name, .dt-row:hover .mark-label, .dt-row:hover .mark-val { color: #0f172a !important; }
-  .dt-row-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 10px; }
-  .dt-row-bottom { display: flex; justify-content: space-between; align-items: center; }
-  .sub-name { font-weight: 700; font-size: 16px; color: #38bdf8; }
-  .mark-group { text-align: right; }
-  .mark-label { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
-  .mark-val { font-size: 18px; font-weight: 800; color: #f8fafc; }
-  .dt-summary-box { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 25px; border-radius: 20px; margin-top: 30px; display: flex; justify-content: space-around; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  /* === Digital Marksheet (Top Summary + CQ/MCQ/Prac Split) === */
+  .digital-transcript { background: #0f172a; color: #f8fafc; border-radius: 24px; padding: 30px 25px; position: relative; }
+  .scroll-indicator { text-align: center; color: #cbd5e1; font-size: 12px; font-weight: 600; margin-bottom: 18px; animation: bounce 2s infinite; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; display: inline-block; width: 100%; box-sizing: border-box; }
+  .dt-header { border-bottom: 1px solid #334155; padding-bottom: 16px; margin-bottom: 18px; text-align: center; }
+  
+  .dt-summary-box { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 20px 15px; border-radius: 18px; margin-bottom: 22px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); }
+
+  .dt-row { background: #1e293b; border-radius: 16px; padding: 16px 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; border: 1px solid #334155; transition: 0.3s; }
+  .dt-row:hover { border-color: #38bdf8; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.12); }
+  .dt-row-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
+  .dt-row-bottom { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 10px; width: 100%; }
+  .sub-name { font-weight: 700; font-size: 15px; color: #38bdf8; }
+  .mark-group { background: rgba(15, 23, 42, 0.6); padding: 8px 10px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05); }
+  .mark-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 3px; letter-spacing: 0.5px; }
+  .mark-val { font-size: 15px; font-weight: 800; color: #f8fafc; }
   .dt-warning-text { font-size: 10px; color: #64748b; text-align: center; margin-top: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
   @media (max-width: 768px) {
@@ -138,8 +141,8 @@
     .header-card { flex-direction: column; text-align: center; gap: 15px; }
     .grid { grid-template-columns: 1fr; }
     .link-grid { grid-template-columns: repeat(2, 1fr); }
-    .dt-row-top, .dt-row-bottom { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .mark-group { text-align: left; display: flex; align-items: center; gap: 10px; width: 100%; justify-content: space-between; background: rgba(0,0,0,0.2); padding: 8px 15px; border-radius: 10px; box-sizing: border-box; }
+    .dt-summary-box { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+    .dt-row { padding: 14px; }
   }
 </style>
 </head>
@@ -208,7 +211,7 @@
     </div>
 
     <div class="card animate-up delay-2" style="border-left: 6px solid var(--accent); margin-bottom: 30px;">
-        <h3 style="margin:0 0 15px 0; color:var(--primary); font-size:18px;">📚 Class Materials & Content</h3>
+        <h3 style="margin:0 0 15px 0; color:var(--primary); font-size:18px;">📚 Class Materials &amp; Content</h3>
         <div id="matList" style="font-size:14.5px; color:#475569; max-height: 350px; overflow-y: auto; padding-right: 5px;"></div>
     </div>
 
@@ -290,7 +293,7 @@
         
         <div style="margin-bottom: 15px;">
             <select id="attMonthFilter" onchange="renderAttendanceTable()" style="width:100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
-                <option value=''>Loading Months...</option>
+                <option value="">Loading Months...</option>
             </select>
         </div>
         
@@ -346,7 +349,7 @@
     measurementId: "G-4KB8S6YCV0"
   };
 
-  firebase.initializeApp(firebaseConfig);
+  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
   const auth = firebase.auth();
 
   const FIREBASE_PROJECT_ID = firebaseConfig.projectId;
@@ -370,25 +373,39 @@
       return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
   }
 
+  // 🛡️ Crash-Proof JSON Parser
+  function safeJSONParse(str, fallback = null) {
+      if (!str || typeof str !== 'string' || str.trim() === "") return fallback;
+      try { return JSON.parse(str); } catch (e) { return fallback; }
+  }
+
+  // 🛡️ Non-stop Session & Auth Restoration on Page Reload
   window.onload = function() {
     const savedSession = sessionStorage.getItem('srms_guardian_session');
     if(savedSession) { 
-        let sData = JSON.parse(savedSession);
-        std = sData.currentChild;
-        allChildrenData = sData.allChildren;
-        showDashboardUI(); 
-        initDash(); 
+        let sData = safeJSONParse(savedSession, null);
+        if (sData && sData.currentChild) {
+            std = sData.currentChild;
+            allChildrenData = sData.allChildren || [std];
+            showDashboardUI(); 
+        }
     }
+    auth.onAuthStateChanged(function(user) {
+        if (user && std) {
+            initDash();
+        }
+    });
   };
 
   function loader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 🚀 Login Flow with Guardian Multi-Child Check
+  // 🚀 Non-Stop Crash-Proof Login Flow with Multi-Child Support
   async function handleLogin() {
     let id = sanitizeHTML(document.getElementById('stuID').value.trim());
     let pass = document.getElementById('stuPass').value.trim();
     const btn = document.getElementById('lBtn');
+    document.getElementById('err').innerText = "";
     
     if(!id || !pass) { document.getElementById('err').innerText = "Please provide Phone/Email and Password."; return; }
     if (pass.length > 0 && pass.length < 6) pass = pass.padEnd(6, '0');
@@ -399,12 +416,15 @@
         if (!id.includes('@')) authEmail = id + "@guardian.srms.edu.bd";
         
         await auth.signInWithEmailAndPassword(authEmail, pass);
-        const token = await auth.currentUser.getIdToken();
+        const token = await auth.currentUser.getIdToken(true);
 
         // Check if Guardian by Phone OR Email
         let queryFilters = [];
         if (!id.includes('@')) {
-            queryFilters = [{ fieldFilter: { field: { fieldPath: "phone" }, op: "EQUAL", value: { stringValue: id } } }, { fieldFilter: { field: { fieldPath: "guardianPhone" }, op: "EQUAL", value: { stringValue: id } } }];
+            queryFilters = [
+                { fieldFilter: { field: { fieldPath: "phone" }, op: "EQUAL", value: { stringValue: id } } },
+                { fieldFilter: { field: { fieldPath: "guardianPhone" }, op: "EQUAL", value: { stringValue: id } } }
+            ];
         } else {
             queryFilters = [{ fieldFilter: { field: { fieldPath: "email" }, op: "EQUAL", value: { stringValue: id } } }];
         }
@@ -418,24 +438,24 @@
             if (data && data[0] && data[0].document) {
                 data.forEach(item => {
                     if (item.document) {
-                        let f = item.document.fields;
+                        let f = item.document.fields || {};
                         let childObj = {
                             docId: item.document.name.split('/').pop(),
-                            id: f.studentID?.stringValue || "",
-                            name: f.name?.stringValue || "Student",
-                            class: f.class?.stringValue || "",
-                            roll: f.roll?.stringValue || "",
-                            group: f.group?.stringValue || "",
-                            phone: f.phone?.stringValue || "",
-                            email: f.email?.stringValue || "",
-                            schoolFeeDue: f.schoolFeeDue?.stringValue || "0",
-                            schoolFeeStatus: f.schoolFeeStatus?.stringValue || "",
-                            hostelFeeDue: f.hostelFeeDue?.stringValue || "0",
-                            hostelFeeStatus: f.hostelFeeStatus?.stringValue || "",
-                            customFees: f.customFees ? JSON.parse(f.customFees.stringValue) : [],
-                            resultMarks: f.resultMarks ? JSON.parse(f.resultMarks.stringValue) : null
+                            id: sanitizeHTML(f.studentID?.stringValue || ""),
+                            name: sanitizeHTML(f.name?.stringValue || "Student"),
+                            class: sanitizeHTML(f.class?.stringValue || ""),
+                            roll: sanitizeHTML(f.roll?.stringValue || ""),
+                            group: sanitizeHTML(f.group?.stringValue || ""),
+                            phone: sanitizeHTML(f.phone?.stringValue || ""),
+                            email: sanitizeHTML(f.email?.stringValue || ""),
+                            schoolFeeDue: sanitizeHTML(f.schoolFeeDue?.stringValue || "0"),
+                            schoolFeeStatus: sanitizeHTML(f.schoolFeeStatus?.stringValue || ""),
+                            hostelFeeDue: sanitizeHTML(f.hostelFeeDue?.stringValue || "0"),
+                            hostelFeeStatus: sanitizeHTML(f.hostelFeeStatus?.stringValue || ""),
+                            customFees: safeJSONParse(f.customFees?.stringValue, []),
+                            resultMarks: safeJSONParse(f.resultMarks?.stringValue, null),
+                            resultStatus: sanitizeHTML(f.resultStatus?.stringValue || "")
                         };
-                        // Avoid duplicates
                         if (!childrenFound.find(c => c.id === childObj.id)) childrenFound.push(childObj);
                     }
                 });
@@ -458,9 +478,10 @@
         }
         document.getElementById('stuPass').value = '';
     } catch (e) { 
+        console.error("Guardian Login Error:", e);
         document.getElementById('err').innerText = "Invalid Phone/Email or Password!";
-        btn.innerHTML = "ENTER PORTAL"; btn.disabled = false;
     }
+    btn.innerHTML = "ENTER PORTAL"; btn.disabled = false;
   }
 
   function showChildSelectionModal() {
@@ -471,7 +492,7 @@
             <div class="child-card" onclick="selectChild(${index})">
                 <div>
                     <p class="child-name">${sanitizeHTML(child.name)}</p>
-                    <p class="child-meta">ID: ${child.id} | Class: ${child.class} | Roll: ${child.roll}</p>
+                    <p class="child-meta">ID: ${child.id} | Class: ${child.class}${child.group ? ' ('+child.group+')' : ''} | Roll: ${child.roll}</p>
                 </div>
                 <div style="font-size: 24px; color: var(--primary);">➡️</div>
             </div>`;
@@ -481,6 +502,12 @@
 
   function selectChild(index) {
       std = allChildrenData[index];
+      markSheetHTML = "";
+      document.getElementById('appGPA').innerText = "GPA: --";
+      document.getElementById('appMeta').innerText = "Grade: -- | Rank: --";
+      document.getElementById('appSession').innerText = "Session: --";
+      document.getElementById('noticeBox').style.display = "none";
+
       sessionStorage.setItem('srms_guardian_session', JSON.stringify({ currentChild: std, allChildren: allChildrenData }));
       sessionStorage.setItem('srms_student_docId', std.docId);
       
@@ -596,13 +623,15 @@
   }
 
   // =====================================================================
-  // DASHBOARD INITIALIZATION 
+  // DASHBOARD INITIALIZATION & ADVANCED RESULT PARSER
   // =====================================================================
   async function initDash() { 
+    if (!std) return;
     document.getElementById('uName').innerText = "Assalamu Alaikum, Guardian of " + std.name;
     document.getElementById('uMeta').innerText = `ID: ${std.id} | Class: ${std.class}${std.group ? ` (${std.group})` : ''} | Roll: ${std.roll}`;
     
     try {
+        if (!auth.currentUser) return;
         const token = await auth.currentUser.getIdToken();
         const headers = { "Authorization": "Bearer " + token };
 
@@ -637,22 +666,23 @@
             document.getElementById('attSummary').innerText = `Total Presence: ${t} Days`;
         }).catch(e=>{});
 
-        if(std.resultMarks) {
-            let headerClsName = "Class " + std.class;
-            if(std.group) headerClsName += " " + std.group;
+        if(std.resultMarks && Array.isArray(std.resultMarks) && std.resultMarks.length > 0) {
+            let rawCls = String(std.class).trim();
+            let headerClsName = (rawCls === "Play" || rawCls === "Nursery" || rawCls === "KG" || rawCls.toLowerCase().startsWith("class")) ? rawCls : "Class " + rawCls;
+            if(std.group && std.group !== "None" && std.group !== "N/A") headerClsName += " " + std.group;
             let hDocName = headerClsName.replace(/\s+/g, '_');
 
             fetch(`${FIREBASE_DB_BASE}/ClassHeaders/${hDocName}`, { headers }).then(r=>r.json()).then(data=>{
                 if(data.fields && data.fields.headers) {
-                    let headers = JSON.parse(data.fields.headers.stringValue);
-                    renderResults(headers, std.resultMarks);
+                    let parsedHeaders = safeJSONParse(data.fields.headers.stringValue, []);
+                    if (parsedHeaders.length > 0) renderResults(parsedHeaders, std.resultMarks);
                 }
             }).catch(e=>{});
         }
 
         fetchMat(headers);
         checkGuardianMeetStatus(headers);
-    } catch(err) { console.log("Token Sync Error"); }
+    } catch(err) { console.log("Token Sync Error:", err); }
   }
 
   async function fetchMat(headers) {
@@ -694,74 +724,151 @@
       } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
+  // 💡 Smart Subject & Multi-Exam Parser
+  function parsePortalHeaders(headers) {
+      let firstEmpty = headers.indexOf("");
+      if(firstEmpty === -1) firstEmpty = headers.length;
+      let subjects = {};
+      let c = 3;
+      while(c < firstEmpty && c < headers.length) {
+          let startC = c;
+          let hStr = String(headers[c] || "");
+          if (hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name")) {
+              let optSubName = hStr.replace(/Opt Name/i, "").trim();
+              if(!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
+              let j = c + 1;
+              while(j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
+                  if(String(headers[j]).includes(" - Main")) subjects[optSubName].mains.push(j);
+                  else subjects[optSubName].tests.push(j);
+                  j++;
+              }
+              c = j;
+          } else {
+              let subName = hStr.split(" - ")[0].trim();
+              if(!subjects[subName]) subjects[subName] = { isOpt: false, tests: [], mains: [] };
+              let j = c;
+              while(j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
+                  if(String(headers[j]).includes(" - Main")) subjects[subName].mains.push(j);
+                  else subjects[subName].tests.push(j);
+                  j++;
+              }
+              c = j;
+          }
+          if (c === startC) c++;
+      }
+      return { subjects, firstEmpty };
+  }
+
+  // 💡 Digital Marksheet Renderer (Summary at TOP + Class 9/10 CQ, MCQ, Prac Split)
   function renderResults(h, d) {
-      let idx = h.indexOf("");
-      if (idx !== -1) {
-          let gpa = sanitizeHTML(d[idx+2] || "0.00"); let grade = sanitizeHTML(d[idx+3] || "F");
-          let pos = sanitizeHTML(d[idx+4] || "-"); let year = sanitizeHTML(d[idx+5] || "2026");
+      let parsed = parsePortalHeaders(h);
+      let firstEmpty = parsed.firstEmpty;
+      if (firstEmpty !== -1 && d[firstEmpty + 2]) {
+          let totalAvg = sanitizeHTML(d[firstEmpty+1] || "0.00");
+          let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00");
+          let grade = sanitizeHTML(d[firstEmpty+3] || "F");
+          let pos = sanitizeHTML(d[firstEmpty+4] || "-");
+          let failReason = sanitizeHTML(d[firstEmpty+5] || "None");
+          let year = sanitizeHTML(d[firstEmpty+6] || d[firstEmpty+5] || new Date().getFullYear().toString());
+          if (year === failReason) year = new Date().getFullYear().toString();
 
           document.getElementById('appGPA').innerText = "GPA: " + gpa;
-          document.getElementById('appMeta').innerText = `Grade: ${grade} | Rank: #${pos}`;
+          document.getElementById('appMeta').innerText = `Grade: ${grade} | Rank: ${pos}`;
           document.getElementById('appSession').innerText = "Session: " + year;
-          
-          let subHtml = ""; let i = 3;
-          while (i < idx) {
-            let hNameTest = h[i] ? h[i].toString() : "Test"; let hNameMain = h[i+1] ? h[i+1].toString() : "Main";
-            let isOpt = hNameTest.toLowerCase().includes("opt") && hNameTest.toLowerCase().includes("name");
 
-            if (isOpt) {
-              let optSubName = sanitizeHTML(d[i] || "Optional Subject");
-              let optTestLabel = sanitizeHTML(hNameMain.split('-').slice(1).join('-').replace(/\(\d+\)/, '').trim() || "Test Exam");
-              let optMainLabel = sanitizeHTML(h[i+2] ? h[i+2].toString().split('-').slice(1).join('-').replace(/\(\d+\)/, '').trim() || "Main Exam" : "Main Exam");
+          let isNineTen = String(std.class).includes("9") || String(std.class).includes("10");
+          let subHtml = "";
+
+          Object.keys(parsed.subjects).forEach(subName => {
+              let sub = parsed.subjects[subName];
+              let displaySubName = sub.isOpt ? sanitizeHTML(d[sub.nameCol] || subName) + ` <span style="font-size:11px; color:#94a3b8; font-weight:normal;">(Optional)</span>` : sanitizeHTML(subName);
               
-              subHtml += `<div class="dt-row">
-                            <div class="dt-row-top"><div class="sub-name">${optSubName} <span style="font-size:11px; color:#64748b; font-weight:normal;">(Optional)</span></div></div>
-                            <div class="dt-row-bottom">
-                                <div class="mark-group"><div class="mark-label">${optTestLabel}</div><div class="mark-val" style="color:#94a3b8;">${sanitizeHTML(d[i+1]||'0')}</div></div>
-                                <div class="mark-group"><div class="mark-label">${optMainLabel}</div><div class="mark-val" style="color:#10b981;">${sanitizeHTML(d[i+2]||'0')}</div></div>
-                            </div>
-                          </div>`;
-              i += 3;
-            } else {
-              let subName = sanitizeHTML(hNameTest.split('-')[0].trim());
-              let testLabel = sanitizeHTML(hNameTest.replace(subName, '').replace(/^-/, '').replace(/\(\d+\)/, '').trim() || "Test Exam");
-              let mainLabel = sanitizeHTML(hNameMain.replace(subName, '').replace(/^-/, '').replace(/\(\d+\)/, '').trim() || "Main Exam");
+              let tVals = [];
+              sub.tests.forEach(col => {
+                  let v = String(d[col] || "").trim();
+                  if(v !== "") tVals.push(sanitizeHTML(v));
+              });
               
-              subHtml += `<div class="dt-row">
-                            <div class="dt-row-top"><div class="sub-name" style="color:#f8fafc;">${subName}</div></div>
-                            <div class="dt-row-bottom">
-                                <div class="mark-group"><div class="mark-label">${testLabel}</div><div class="mark-val" style="color:#94a3b8;">${sanitizeHTML(d[i]||'0')}</div></div>
-                                <div class="mark-group"><div class="mark-label">${mainLabel}</div><div class="mark-val" style="color:#38bdf8;">${sanitizeHTML(d[i+1]||'0')}</div></div>
-                            </div>
-                          </div>`;
-              i += 2;
-            }
-          }
+              let mVals = [];
+              let cqs = [], mcqs = [], pracs = [];
+              let hasPlusInMain = false;
+
+              sub.mains.forEach(col => {
+                  let v = String(d[col] || "").trim();
+                  if(v !== "") {
+                      mVals.push(sanitizeHTML(v));
+                      if (v.includes("+")) {
+                          hasPlusInMain = true;
+                          let parts = v.split("+").map(p => sanitizeHTML(p.trim()));
+                          if (parts[0]) cqs.push(parts[0]);
+                          if (parts[1]) mcqs.push(parts[1]);
+                          if (parts[2]) pracs.push(parts[2]);
+                      } else {
+                          cqs.push(sanitizeHTML(v));
+                      }
+                  }
+              });
+
+              if(tVals.length > 0 || mVals.length > 0) {
+                  if (isNineTen || hasPlusInMain) {
+                      subHtml += `<div class="dt-row">
+                                    <div class="dt-row-top">
+                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                    </div>
+                                    <div class="dt-row-bottom">
+                                        <div class="mark-group"><div class="mark-label">Test</div><div class="mark-val" style="color:#94a3b8;">${tVals.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">CQ</div><div class="mark-val" style="color:#38bdf8;">${cqs.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">MCQ</div><div class="mark-val" style="color:#fbbf24;">${mcqs.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">Prac</div><div class="mark-val" style="color:#34d399;">${pracs.join(", ") || "-"}</div></div>
+                                    </div>
+                                  </div>`;
+                  } else {
+                      subHtml += `<div class="dt-row">
+                                    <div class="dt-row-top">
+                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                    </div>
+                                    <div class="dt-row-bottom">
+                                        <div class="mark-group"><div class="mark-label">Test Marks</div><div class="mark-val" style="color:#94a3b8;">${tVals.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">Main Exam</div><div class="mark-val" style="color:${sub.isOpt ? '#10b981' : '#38bdf8'};">${mVals.join(", ") || "-"}</div></div>
+                                    </div>
+                                  </div>`;
+                  }
+              }
+          });
+
+          let failBanner = (failReason && failReason !== "None") ? `<div style="text-align:center; color:#fecdd3; background:rgba(225,29,72,0.2); border:1px solid rgba(225,29,72,0.4); padding:10px; border-radius:12px; font-size:12px; font-weight:700; margin-bottom:18px;">⚠️ Remarks: Failed in ${failReason}</div>` : "";
 
           markSheetHTML = `
             <div class="digital-transcript">
-                <div class="scroll-indicator">⬇️ Scroll down for full details ⬇️</div>
+                <div class="scroll-indicator">⬇️ Scroll down for subject-wise marks ⬇️</div>
                 <div class="dt-header">
                     <h2 style="margin:0; color:#38bdf8; font-size:20px; font-weight:800; letter-spacing:1px;">YOUR CHILD'S MARKSHEET</h2>
-                    <p style="margin:5px 0; color:#94a3b8; font-size:12px;">Real-time Secure Academic Record</p>
+                    <p style="margin:5px 0 0 0; color:#94a3b8; font-size:12px;">Real-time Secure Academic Record • Session: ${year}</p>
                 </div>
-                <div style="padding:15px 20px; background:rgba(0,0,0,0.2); border-radius:16px; margin-bottom:25px; display:flex; justify-content:space-between; font-size:14px; border:1px solid #334155;">
+                
+                <div style="padding:12px 15px; background:rgba(255,255,255,0.04); border-radius:12px; margin-bottom:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:13px; border:1px solid #334155;">
                     <span><span style="color:#94a3b8;">Student ID:</span> <b style="color:#fff;">${std.id}</b></span>
-                    <span><span style="color:#94a3b8;">Class:</span> <b style="color:#fff;">${std.class}</b></span>
+                    <span><span style="color:#94a3b8;">Class:</span> <b style="color:#fff;">${std.class}${std.group ? ' ('+std.group+')' : ''}</b></span>
+                    <span><span style="color:#94a3b8;">Roll:</span> <b style="color:#fff;">${std.roll}</b></span>
                 </div>
-                <div style="margin-bottom:25px;">${subHtml}</div>
+
+                <!-- 🌟 FINAL RESULT SUMMARY AT THE TOP 🌟 -->
                 <div class="dt-summary-box">
-                    <div style="text-align:center;"><p style="margin:0 0 5px 0; font-size:11px; color:#cbd5e1; font-weight:600;">TOTAL GPA</p><h2 style="margin:0; font-size:32px; color:#fff;">${gpa}</h2></div>
-                    <div style="text-align:center;"><p style="margin:0 0 5px 0; font-size:11px; color:#cbd5e1; font-weight:600;">GRADE</p><h2 style="margin:0; font-size:32px; color:#fff;">${grade}</h2></div>
-                    <div style="text-align:center;"><p style="margin:0 0 5px 0; font-size:11px; color:#cbd5e1; font-weight:600;">RANK</p><h2 style="margin:0; font-size:32px; color:#fff;">#${pos}</h2></div>
+                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">GPA</p><h2 style="margin:0; font-size:24px; color:#fff; font-weight:900;">${gpa}</h2></div>
+                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Grade</p><h2 style="margin:0; font-size:24px; color:${grade==='F'?'#fda4af':'#4ade80'}; font-weight:900;">${grade}</h2></div>
+                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Rank</p><h2 style="margin:0; font-size:24px; color:#fbbf24; font-weight:900;">${pos}</h2></div>
+                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Total Avg</p><h2 style="margin:0; font-size:22px; color:#38bdf8; font-weight:900;">${totalAvg}</h2></div>
                 </div>
+                ${failBanner}
+
+                <div style="margin-bottom:25px;">${subHtml}</div>
                 <div class="dt-warning-text">⚠️ THIS IS A DIGITAL PREVIEW • FOR GUARDIAN REFERENCE</div>
             </div>`;
       }
   }
 
   function viewResultModal() {
-    if(!markSheetHTML) return alert("Result data is not available yet.");
+    if(!markSheetHTML) return alert("Result data is not available or not calculated yet.");
     document.getElementById('resultModal').style.display = 'flex';
     document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
   }
