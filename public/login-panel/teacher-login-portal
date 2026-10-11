@@ -41,7 +41,7 @@
   /* === Premium Navbar === */
   #main-navbar { display: none; background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--accent); }
   .nav-top-container { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; width: 100%; }
-  .nav-brand { font-weight: 800; color: var(--primary); font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .nav-brand { font-weight: 800; color: var(--primary); font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
   .nav-link { font-weight: 700; font-size: 13px; color: var(--danger); background: #fff1f2; padding: 10px 20px; border-radius: 8px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
   .nav-link:hover { color: #fff; background: var(--danger); box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3); }
 
@@ -81,11 +81,20 @@
   .scroll-cue-container { width: 100%; margin-bottom: 30px; text-align: center; }
   .scroll-cue { display: inline-block; color: var(--danger); font-size: 15px; font-weight: 700; padding: 10px 25px; background: #fff1f2; border-radius: 20px; border: 1px solid #fecdd3; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.1); }
 
-  .welcome-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 35px 30px; border-radius: 20px; margin-bottom: 35px; border-left: 8px solid var(--accent); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 35px rgba(0,95,64,0.2); flex-wrap: wrap; gap: 20px; }
-  .welcome-card h2 { margin: 0; font-size: 26px; font-weight: 800; }
-  .welcome-card p { margin: 5px 0 0 0; opacity: 0.9; font-weight: 500; }
-  .btn-gold { background: var(--accent); padding: 12px 25px; border: none; color: white; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 15px; box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3); }
+  /* 📸 Welcome Card + Teacher Profile Avatar System */
+  .welcome-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 30px; border-radius: 22px; margin-bottom: 35px; border-left: 8px solid var(--accent); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 35px rgba(0,95,64,0.22); flex-wrap: wrap; gap: 20px; }
+  .teacher-profile-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .teacher-avatar-box { position: relative; width: 88px; height: 88px; border-radius: 50%; border: 3.5px solid var(--accent); padding: 3px; background: rgba(255,255,255,0.15); box-shadow: 0 8px 25px rgba(0,0,0,0.25); flex-shrink: 0; }
+  .teacher-avatar-box img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
+  .change-photo-badge { position: absolute; bottom: -2px; right: -2px; background: var(--accent); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.25s; font-size: 13px; }
+  .change-photo-badge:hover { transform: scale(1.12); background: #a67c2e; }
+  .welcome-card h2 { margin: 0; font-size: 25px; font-weight: 800; }
+  .welcome-card p { margin: 5px 0 0 0; opacity: 0.92; font-weight: 500; font-size: 14px; }
+  .welcome-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-gold { background: var(--accent); padding: 12px 22px; border: none; color: white; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 14px; box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3); display: inline-flex; align-items: center; gap: 7px; }
   .btn-gold:hover { background: #a67c2e; transform: translateY(-2px); }
+  .btn-outline-light { background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.35); padding: 11px 18px; color: #fff; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 13.5px; transition: 0.25s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-outline-light:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
 
   .section-title { font-weight: 800; color: var(--text-main); margin: 40px 0 15px; font-size: 18px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
   .card { background: var(--card-bg); border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
@@ -115,14 +124,23 @@
     border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.3s;
   }
 
+  /* File Upload Preview Box */
+  .file-preview-box {
+    display: none; margin-top: 12px; padding: 12px 15px; border-radius: 14px;
+    background: #f0fdf4; border: 1.5px solid #bbf7d0; align-items: center; gap: 14px;
+  }
+  .file-preview-box img { width: 58px; height: 58px; object-fit: cover; border-radius: 10px; border: 2px solid var(--primary); background: #fff; }
+  .file-preview-meta { flex: 1; font-size: 12.5px; color: #065f46; font-weight: 600; }
+
   /* Board Items */
   .notice-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 6px solid var(--accent); transition: 0.3s; }
   .notice-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); transform: translateX(5px); }
-  .item-box { background: #fff; border: 1px solid #e2e8f0; padding: 25px; border-radius: 16px; margin-bottom: 15px; position: relative; border-left: 6px solid var(--primary); transition: 0.3s; }
+  .item-box { background: #fff; border: 1px solid #e2e8f0; padding: 22px 25px; border-radius: 16px; margin-bottom: 15px; position: relative; border-left: 6px solid var(--primary); transition: 0.3s; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
   .item-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-  .del-btn { position: absolute; right: 20px; top: 20px; color: var(--danger); cursor: pointer; font-size: 12px; border: 2px solid #fecdd3; padding: 8px 16px; border-radius: 10px; font-weight: 700; background: #fff1f2; transition: 0.3s; }
+  .del-btn { color: var(--danger); cursor: pointer; font-size: 12.5px; border: 2px solid #fecdd3; padding: 8px 16px; border-radius: 10px; font-weight: 700; background: #fff1f2; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; }
   .del-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
-  .tag { background: #f1f5f9; color: #475569; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; display: inline-block; margin-bottom: 10px; }
+  .readonly-badge { background: #f1f5f9; color: #64748b; padding: 7px 14px; border-radius: 10px; font-size: 11.5px; font-weight: 800; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; gap: 5px; }
+  .tag { background: #ecfdf5; color: var(--primary); padding: 5px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 800; display: inline-block; margin-bottom: 6px; text-transform: uppercase; }
 
   /* Modals */
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
@@ -138,11 +156,13 @@
     .banner-text h1 { font-size: 22px; }
     .login-card { padding: 40px 25px; border-radius: 20px; }
     .container { padding: 30px 20px; }
-    .welcome-card { flex-direction: column; text-align: center; padding: 30px 20px; }
-    .welcome-card h2 { font-size: 22px; }
-    .btn-gold { width: 100%; margin-top: 10px; }
+    .welcome-card { flex-direction: column; text-align: center; padding: 28px 20px; }
+    .teacher-profile-wrap { flex-direction: column; justify-content: center; text-align: center; }
+    .welcome-card h2 { font-size: 21px; }
+    .welcome-actions { width: 100%; justify-content: center; }
+    .btn-gold, .btn-outline-light { width: 100%; justify-content: center; }
     .card { padding: 25px 20px; }
-    .del-btn { position: relative; right: auto; top: auto; display: inline-block; margin-top: 15px; width: 100%; text-align: center; box-sizing: border-box; }
+    .item-box { flex-direction: column; align-items: flex-start; }
   }
 </style>
 </head>
@@ -150,7 +170,10 @@
 
 <nav class="navbar" id="main-navbar">
   <div class="nav-top-container">
-    <div class="nav-brand">SRMS Portal</div>
+    <div class="nav-brand">
+      <img id="navTeacherThumb" src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Avatar" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--accent);">
+      <span>SRMS Teacher Portal</span>
+    </div>
     <a onclick="logout()" class="nav-link"><i class="fas fa-lock"></i> Logout</a>
   </div>
 </nav>
@@ -181,27 +204,49 @@
         <div class="scroll-cue">⬇️ Scroll down for more options ⬇️</div>
     </div>
 
+    <!-- 📸 Welcome Card with Teacher Profile Photo & Instant Change Option -->
     <div class="welcome-card">
-      <div>
-        <h2 id="tGreet" style="margin:0;">Assalamu Alaikum</h2>
-        <p>Academic Management Portal</p>
+      <div class="teacher-profile-wrap">
+        <div class="teacher-avatar-box" title="Change Profile Picture">
+          <img id="teacherProfileAvatar" src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Teacher Photo" onerror="this.src='https://i.postimg.cc/hGQQqrsb/20260117_231551.png'">
+          <label for="teacherPhotoInput" class="change-photo-badge" title="Change Photo">
+            <i class="fas fa-camera"></i>
+          </label>
+          <input type="file" id="teacherPhotoInput" accept="image/*" style="display:none;" onchange="changeTeacherProfilePhoto(this)">
+        </div>
+        <div>
+          <h2 id="tGreet" style="margin:0;">Assalamu Alaikum</h2>
+          <p id="tPhoneSub">Academic Management Portal</p>
+          <small id="photoSyncStatus" style="display:block; margin-top:4px; color:#fde68a; font-weight:700; font-size:12px;"></small>
+        </div>
       </div>
-      <button class="btn-gold" onclick="togglePass()">Change Key 🔑</button>
+      <div class="welcome-actions">
+        <button class="btn-outline-light" onclick="document.getElementById('teacherPhotoInput').click()">
+          <i class="fas fa-camera"></i> Change Photo
+        </button>
+        <button class="btn-gold" onclick="togglePass()">
+          <i class="fas fa-key"></i> Change Key
+        </button>
+      </div>
     </div>
 
-    <div id="passBox" class="card" style="display:none; border-top-color:var(--accent);">
-      <h3 style="margin-top:0; color:var(--text-main);">🔐 Update Security Key</h3>
-      <input type="password" id="newPass" placeholder="Enter New Password (Min. 6 chars)">
-      <button id="passBtn" class="btn-p" style="background:var(--accent);" onclick="changePass()">Save Password</button>
+    <!-- 🔐 Direct Password Change Box -->
+    <div id="passBox" class="card" style="display:none; border-top: 5px solid var(--accent);">
+      <h3 style="margin-top:0; color:var(--text-main);"><i class="fas fa-lock" style="color:var(--accent);"></i> সরাসরি পাসওয়ার্ড পরিবর্তন করুন</h3>
+      <p style="font-size:13px; color:var(--text-muted); margin-top:0;">নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন। সেভ করার সাথে সাথেই আপনার পাসওয়ার্ড পরিবর্তন হয়ে যাবে।</p>
+      <input type="text" id="newPass" placeholder="নতুন পাসওয়ার্ড লিখুন (কমপক্ষে ৬ অক্ষর)">
+      <button id="passBtn" class="btn-p" style="background:var(--accent);" onclick="changePass()">
+        <i class="fas fa-check-circle"></i> Save New Password Directly
+      </button>
     </div>
 
     <!-- ========================================================================= -->
-    <!-- 🎥 INTEGRATED LIVE CLASSROOM & TEACHERS' MEETING HUB (NO SEPARATE PAGE!) -->
+    <!-- 🎥 INTEGRATED LIVE CLASSROOM & TEACHERS' MEETING HUB -->
     <!-- ========================================================================= -->
     <div class="section-title">🎥 Live Classroom &amp; Meeting Studio</div>
     <div class="card" style="border-top: 6px solid var(--accent);">
         
-        <!-- 🔴 Admin's Live Meeting Alert Banner (Only visible when Teachers' or All School Meeting is active) -->
+        <!-- 🔴 Admin's Live Meeting Alert Banner -->
         <div id="teacherMeetingAlertBox" class="admin-live-meeting-banner">
             <div>
                 <div style="font-size:11px; font-weight:800; background:rgba(255,255,255,0.2); display:inline-block; padding:3px 10px; border-radius:20px; margin-bottom:5px;">🔴 ADMIN LIVE BROADCAST RUNNING</div>
@@ -258,7 +303,7 @@
         </div>
     </div>
 
-    <div class="section-title">📢 Official Notice Board</div>
+    <div class="section-title">📢 Official Notice Board (For Teachers)</div>
     <div class="card" id="notice-board"><p style="text-align:center; color:var(--text-muted); font-weight:600;">⌛ Syncing notices...</p></div>
     
     <div class="section-title">⚠️ Disciplinary Warning System</div>
@@ -275,31 +320,53 @@
         <button class="btn-p" style="background:var(--danger);" id="wBtn" onclick="sendWarning()"><i class="fas fa-exclamation-triangle"></i> Send Warning Directly</button>
     </div>
 
-    <div class="section-title">📤 Academic Content Publishing</div>
+    <!-- 🚀 Academic Content Publishing (Strictly Class Categories ONLY + ImgBB + PDF + Push) -->
+    <div class="section-title">📤 Academic Content Publishing (Class Dashboards Only)</div>
     <div class="card">
+      <label style="font-size:13px; font-weight:700; color:var(--primary); display:block;">🎯 ক্লাস নির্বাচন করুন (Class Play - Class 10)</label>
       <select id="uCls">
-          <option value="">Select Target Audience...</option>
-          <option value="TeacherDashboard">Teacher Dashboard (Internal Notice)</option>
-          <option value="ClassPlay">Class Play</option><option value="ClassNursery">Class Nursery</option>
-          <option value="ClassKG">Class KG</option><option value="Class1">Class 1</option>
-          <option value="Class2">Class 2</option><option value="Class3">Class 3</option>
-          <option value="Class4">Class 4</option><option value="Class5">Class 5</option>
-          <option value="Class6">Class 6</option><option value="Class7">Class 7</option>
-          <option value="Class8">Class 8</option><option value="Class9">Class 9</option>
+          <option value="">Select Target Class...</option>
+          <option value="ClassPlay">Class Play</option>
+          <option value="ClassNursery">Class Nursery</option>
+          <option value="ClassKG">Class KG</option>
+          <option value="Class1">Class 1</option>
+          <option value="Class2">Class 2</option>
+          <option value="Class3">Class 3</option>
+          <option value="Class4">Class 4</option>
+          <option value="Class5">Class 5</option>
+          <option value="Class6">Class 6</option>
+          <option value="Class7">Class 7</option>
+          <option value="Class8">Class 8</option>
+          <option value="Class9">Class 9</option>
           <option value="Class10">Class 10</option>
       </select>
-      <input type="text" id="uTtl" placeholder="Post Title / Subject Name">
-      <textarea id="uDsc" rows="3" placeholder="Description / Instructions"></textarea>
-      <input type="url" id="uUrl" placeholder="Enter Document or Drive Link (Optional)">
+
+      <label style="font-size:13px; font-weight:700; color:var(--text-main); display:block; margin-top:8px;">📝 শিরোনাম / বিষয় (Title / Subject)</label>
+      <input type="text" id="uTtl" placeholder="যেমন: গণিত বাড়ির কাজ - অধ্যায় ৩">
+
+      <label style="font-size:13px; font-weight:700; color:var(--text-main); display:block; margin-top:8px;">📄 বিস্তারিত নির্দেশনা (Description)</label>
+      <textarea id="uDsc" rows="3" placeholder="শিক্ষার্থীদের জন্য বিস্তারিত নির্দেশনা লিখুন..."></textarea>
       
-      <!-- Optional Image Upload via ImgBB API v1 -->
-      <div style="background:#f8fafc; padding:12px 15px; border-radius:12px; border:1px dashed #cbd5e1; margin-top:8px;">
-          <label style="font-size:12px; font-weight:700; color:var(--primary); display:block; margin-bottom:4px;">🖼️ অথবা সরাসরি ছবি আপলোড করুন (ImgBB Auto Link):</label>
-          <input type="file" id="uImgFile" accept="image/*" onchange="uploadContentImageToImgBB(this)" style="margin:0; padding:8px; background:#fff; font-size:13px;">
-          <small id="uImgStatus" style="font-size:11.5px; font-weight:700; color:var(--primary);"></small>
+      <!-- 📸 Photo (ImgBB) or PDF/Document (Google Drive) Upload -->
+      <div style="background:#f8fafc; padding:14px 16px; border-radius:14px; border:2px dashed var(--primary); margin-top:10px;">
+          <label style="font-size:13px; font-weight:700; color:var(--primary); display:block; margin-bottom:6px;">
+            <i class="fas fa-camera"></i> ছবি (ImgBB Server) অথবা PDF/Doc ফাইল সিলেক্ট করুন:
+          </label>
+          <input type="file" id="uFileInput" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="handleAcademicFileSelect(this)" style="margin:0; padding:9px; background:#fff; font-size:13px; cursor:pointer;">
+          
+          <div id="uFilePreviewBox" class="file-preview-box">
+            <img id="uFilePreviewImg" src="" alt="Preview">
+            <div class="file-preview-meta" id="uFilePreviewMeta">Ready</div>
+            <button type="button" onclick="clearAcademicFile()" style="background:#fff1f2; color:var(--danger); border:1px solid #fecdd3; padding:7px 12px; border-radius:8px; cursor:pointer; font-weight:700;">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
       </div>
 
-      <button class="btn-p" id="uBtn" onclick="upload()"><i class="fas fa-cloud-upload-alt"></i> Publish Content</button>
+      <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-top:12px;">🔗 অথবা বাহ্যিক লিংক দিন (Optional External Link)</label>
+      <input type="url" id="uUrl" placeholder="https://...">
+
+      <button class="btn-p" id="uBtn" onclick="upload()"><i class="fas fa-rocket"></i> Publish to Class &amp; Send Push Notification</button>
     </div>
 
     <div class="section-title">📊 My Attendance Record</div>
@@ -316,7 +383,7 @@
         </a>
     </div>
 
-    <div class="section-title">🛠️ Manage My Content</div>
+    <div class="section-title">🛠️ Manage Class Content &amp; Warnings</div>
     <div id="manageBox"></div>
 </div>
 
@@ -348,7 +415,7 @@
 <div id="delModal" class="modal-overlay">
   <div class="modal-box danger-modal">
     <h3 style="color:var(--danger); margin-top:0; font-size:22px;"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
-    <p style="font-size:15px; color:#475569; font-weight:500;">Are you sure? This will permanently remove the post and any linked files from the server.</p>
+    <p style="font-size:15px; color:#475569; font-weight:500;">আপনি কি নিশ্চিত? ডিলিট করলে এটি ওয়েবসাইট, ডাটাবেস এবং সার্ভার (ImgBB / Drive) থেকে চিরতরে মুছে যাবে।</p>
     <button id="modalLink" class="btn-p" style="background:var(--danger); margin-top:20px;">Yes, Delete Permanently</button>
     <button class="close-modal-btn" onclick="closeDeleteModal()">Cancel</button>
   </div>
@@ -360,7 +427,7 @@
         
         <div style="margin-bottom: 15px;">
             <select id="attMonthFilter" onchange="renderTeacherAttendanceTable()" style="width:100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
-                <option value=''>Loading Months...</option>
+                <option value="">Loading Months...</option>
             </select>
         </div>
         
@@ -403,7 +470,7 @@
 
 <script>
   // =====================================================================
-  // CONFIGURATION: FIREBASE & APPS SCRIPT
+  // CONFIGURATION: FIREBASE, TEACHER BACKEND & IMGBB API V1
   // =====================================================================
   const firebaseConfig = {
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
@@ -423,16 +490,33 @@
   
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
   
-  const OTP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec"; 
-  const MANAGER_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec"; 
+  // 🔗 আপনার Teacher Login Backend URL (Website Management-এর ব্যাকএন্ড এখানে ব্যবহৃত হচ্ছে না)
+  const TEACHER_BACKEND_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec"; 
   const LIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxaayPCwfdZvXSXJPdzPspPmAeH72-NAvqGJIbuhwid3T28imRxNRypPI9m1bJQrfqLhg/exec";
-  const IMGBB_API_KEY = ""; // Optional: এখানে আপনার ImgBB API Key বসালে ফাইল সরাসরি আপলোড হয়ে লিংক তৈরি হবে
+  
+  // 🖼️ অফিশিয়াল ImgBB API Key
+  const IMGBB_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
+  const IMGBB_UPLOAD_URL = "https://api.imgbb.com/1/upload";
+  const DEFAULT_AVATAR = "https://i.postimg.cc/hGQQqrsb/20260117_231551.png";
+
+  // শুধুমাত্র ক্লাস ক্যাটাগরি লিস্ট (শিক্ষকদের জন্য অনুমোদিত)
+  const ALLOWED_CLASS_TARGETS = [
+    "ClassPlay", "ClassNursery", "ClassKG",
+    "Class1", "Class2", "Class3", "Class4", "Class5",
+    "Class6", "Class7", "Class8", "Class9", "Class10"
+  ];
 
   let tPhone = "";
   let tTeacherName = "Teacher";
+  let tTeacherPhoto = DEFAULT_AVATAR;
   let exactDbPhone = "";
   let resetPhone = null;
   
+  let globalPostsCache = [];
+  let globalWarnsCache = [];
+  let preparedAcademicFile = null;
+  let isUploadingPost = false;
+
   let allTeacherAttendance = {};
   let allHolidays = {};
 
@@ -441,19 +525,78 @@
       return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
   }
 
+  function cleanPhoneCoreJS(p) {
+    if (!p) return "";
+    let d = p.toString().replace(/[^0-9]/g, "");
+    if (d.startsWith("880") && d.length === 13) d = d.substring(3);
+    else if (d.startsWith("0") && d.length === 11) d = d.substring(1);
+    return d;
+  }
+
+  function normalizePhone11JS(p) {
+    let core = cleanPhoneCoreJS(p);
+    return core.length === 10 ? ("0" + core) : p.toString().trim();
+  }
+
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+  // 📡 Teacher Backend API Caller
+  async function teacherApiCall(actionName, payloadObj = {}) {
+    let token = "";
+    if (auth.currentUser) {
+      try { token = await auth.currentUser.getIdToken(false); } catch (e) {
+        try { token = await auth.currentUser.getIdToken(true); } catch (e2) {}
+      }
+    }
+    const res = await fetch(TEACHER_BACKEND_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify({
+        action: actionName,
+        token: token,
+        ...payloadObj
+      })
+    });
+    const text = await res.text();
+    let data = JSON.parse(text);
+    if (data.status === "error") throw new Error(data.message || data.msg || "Request failed");
+    return data;
+  }
+
+  // 🖼️ Direct ImgBB Upload Helper (Turbo 1-Second Upload)
+  async function uploadBase64ToImgBB(base64Data, fileName) {
+    const formData = new FormData();
+    formData.append("key", IMGBB_API_KEY);
+    formData.append("image", base64Data);
+    if (fileName) {
+      formData.append("name", fileName.replace(/\.[^/.]+$/, ""));
+    }
+    const res = await fetch(IMGBB_UPLOAD_URL, { method: "POST", body: formData });
+    const json = await res.json();
+    if (json && json.success && json.data) {
+      return {
+        url: json.data.url || json.data.display_url,
+        thumbUrl: (json.data.thumb && json.data.thumb.url) ? json.data.thumb.url : json.data.url,
+        deleteUrl: json.data.delete_url || "",
+        imgbbId: json.data.id || ""
+      };
+    }
+    throw new Error("ImgBB Upload Failed");
+  }
 
   // 🔒 Non-stop Auto-login & Auth Restoration
   window.onload = function() {
     const savedPhone = sessionStorage.getItem("srms_phone");
     const savedName = sessionStorage.getItem("srms_name");
     const savedExact = sessionStorage.getItem("srms_exact_phone");
+    const savedPhoto = sessionStorage.getItem("srms_teacher_photo");
     
     if(savedPhone && savedName) {
       tPhone = savedPhone;
       tTeacherName = savedName;
-      exactDbPhone = savedExact || savedPhone;
-      showDashboardUI(savedName);
+      exactDbPhone = savedExact || normalizePhone11JS(savedPhone);
+      tTeacherPhoto = savedPhoto || DEFAULT_AVATAR;
+      showDashboardUI(savedName, tTeacherPhoto);
     } else {
        document.getElementById('dash-sec').style.display = 'none';
        document.getElementById('login-sec').style.display = 'flex';
@@ -461,6 +604,7 @@
 
     auth.onAuthStateChanged(function(user) {
       if (user && tPhone) {
+        syncTeacherProfileFromFirestore();
         loadBoard();
         loadTeacherLiveHubSessions();
       }
@@ -495,8 +639,7 @@
     
     b.innerHTML = '<span class="loader-spinner"></span> Authenticating...'; b.disabled = true;
     
-    let ph = p;
-    if (ph.startsWith('0')) ph = ph.substring(1); 
+    let ph = cleanPhoneCoreJS(p);
 
     try {
       let emailToTry = `0${ph}@srms.edu.bd`;
@@ -513,16 +656,17 @@
       });
       const data = await res.json();
       
-      let foundName = "Teacher", teacherDocId = null, dbPhoneToSave = ph;
+      let foundName = "Teacher", teacherDocId = null, dbPhoneToSave = "0" + ph, foundPhoto = DEFAULT_AVATAR;
 
       if(data.documents) {
         for(let d of data.documents) {
             let f = d.fields || {};
             let dbPhone = f.phone ? f.phone.stringValue : "";
-            if(dbPhone === ph || dbPhone === "0"+ph || dbPhone === "+880"+ph) {
+            if(cleanPhoneCoreJS(dbPhone) === ph) {
                 foundName = f.name ? f.name.stringValue : "Teacher";
                 teacherDocId = d.name.split('/').pop(); 
-                dbPhoneToSave = dbPhone; 
+                dbPhoneToSave = dbPhone;
+                foundPhoto = (f.photoUrl && f.photoUrl.stringValue) ? f.photoUrl.stringValue : ((f.photo && f.photo.stringValue) ? f.photo.stringValue : DEFAULT_AVATAR);
                 break;
             }
         }
@@ -531,11 +675,13 @@
       tPhone = ph;
       tTeacherName = foundName;
       exactDbPhone = dbPhoneToSave;
+      tTeacherPhoto = foundPhoto || DEFAULT_AVATAR;
       
       sessionStorage.setItem("srms_phone", ph);
       sessionStorage.setItem("srms_exact_phone", dbPhoneToSave);
       sessionStorage.setItem("srms_name", foundName);
       sessionStorage.setItem("srms_active_pass", s);
+      sessionStorage.setItem("srms_teacher_photo", tTeacherPhoto);
       if(teacherDocId) sessionStorage.setItem("srms_teacher_id", teacherDocId); 
       
       const teacherRoles = ["teacher_dashboard", "special_page_access"];
@@ -543,7 +689,7 @@
       sessionStorage.setItem("srms_active_session", "true");
       
       document.getElementById('lPs').value = '';
-      showDashboardUI(foundName);
+      showDashboardUI(foundName, tTeacherPhoto);
       loadBoard();
       loadTeacherLiveHubSessions();
       
@@ -553,9 +699,37 @@
     }
   }
 
-  function showDashboardUI(name) {
+  function applyTeacherPhotoToUI(photoUrl) {
+    const finalPic = (photoUrl && photoUrl.trim() !== "") ? photoUrl.trim() : DEFAULT_AVATAR;
+    tTeacherPhoto = finalPic;
+    sessionStorage.setItem("srms_teacher_photo", finalPic);
+    document.getElementById('teacherProfileAvatar').src = finalPic;
+    document.getElementById('navTeacherThumb').src = finalPic;
+    document.getElementById('tLivePic').value = finalPic;
+  }
+
+  async function syncTeacherProfileFromFirestore() {
+    if (!auth.currentUser || !tPhone) return;
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const docId = sessionStorage.getItem("srms_teacher_id") || ("T_0" + cleanPhoneCoreJS(tPhone));
+      const res = await fetch(`${FIREBASE_DB_BASE}/Teachers/${docId}`, {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      if (res.status === 200) {
+        const doc = await res.json();
+        const f = doc.fields || {};
+        const pic = (f.photoUrl && f.photoUrl.stringValue) ? f.photoUrl.stringValue : ((f.photo && f.photo.stringValue) ? f.photo.stringValue : "");
+        if (pic) applyTeacherPhotoToUI(pic);
+      }
+    } catch (e) {}
+  }
+
+  function showDashboardUI(name, photoUrl) {
     document.getElementById('tGreet').innerText = `Assalamu Alaikum, ${name} Sir`;
+    document.getElementById('tPhoneSub').innerText = `Login ID: ${normalizePhone11JS(tPhone)} • Academic Management Portal`;
     document.getElementById('tLiveName').value = name;
+    applyTeacherPhotoToUI(photoUrl || tTeacherPhoto);
     document.getElementById('login-sec').style.display = 'none';
     document.getElementById('main-navbar').style.display = 'flex';
     document.getElementById('main-banner').style.display = 'flex';
@@ -565,9 +739,70 @@
   }
 
   // =========================================================================
+  // 📸 TEACHER PROFILE PHOTO CHANGE SYSTEM (IMGBB + FIRESTORE INSTANT SYNC)
+  // =========================================================================
+  function changeTeacherProfilePhoto(input) {
+    if (!input.files || input.files.length === 0) return;
+    const file = input.files[0];
+    const statusEl = document.getElementById('photoSyncStatus');
+    statusEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ছবি অপটিমাইজ ও আপলোড হচ্ছে...`;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = async function() {
+        const maxDim = 650;
+        let w = img.width, h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+          else { w = Math.round((w * maxDim) / h); h = maxDim; }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.86);
+        const base64Raw = dataUrl.split(',')[1];
+
+        // সাথে সাথে স্ক্রিনে প্রিভিউ দেখানো
+        document.getElementById('teacherProfileAvatar').src = dataUrl;
+
+        try {
+          let newPhotoUrl = "";
+          try {
+            const imgbbRes = await uploadBase64ToImgBB(base64Raw, "Teacher_" + normalizePhone11JS(tPhone));
+            newPhotoUrl = imgbbRes.url;
+          } catch (directErr) {
+            // যদি ব্রাউজার থেকে ব্লক হয়, ব্যাকএন্ড নিজেই আপলোড করবে
+          }
+
+          const docId = sessionStorage.getItem("srms_teacher_id") || "";
+          const apiRes = await teacherApiCall("updateTeacherPhoto", {
+            phone: exactDbPhone || normalizePhone11JS(tPhone),
+            docId: docId,
+            photoUrl: newPhotoUrl,
+            photoData: newPhotoUrl ? "" : base64Raw
+          });
+
+          const finalUrl = apiRes.photoUrl || newPhotoUrl;
+          applyTeacherPhotoToUI(finalUrl);
+          statusEl.style.color = "#a7f3d0";
+          statusEl.innerHTML = `✅ প্রোফাইল ছবি সফলভাবে আপডেট হয়েছে!`;
+          setTimeout(() => { statusEl.innerHTML = ""; }, 4000);
+        } catch (err) {
+          statusEl.style.color = "#fecdd3";
+          statusEl.innerHTML = `❌ ছবি সেভ করতে সমস্যা হয়েছে: ${err.message}`;
+        }
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  // =========================================================================
   // 🎥 TEACHER EMBEDDED LIVE CLASS & MEETING ENGINE
-  // - Teachers can ONLY host Student Classes
-  // - Teachers can JOIN Admin's Teachers' Meeting / All School Meeting
   // =========================================================================
   function getStudentClassLabel(code) {
     const sel = document.getElementById('tLiveClass');
@@ -598,11 +833,9 @@
           const host = f.host ? f.host.stringValue : "Educator";
           const startTime = f.startTime ? f.startTime.stringValue : "Running";
 
-          // Check if Admin started a Teachers' Meeting or All School Meeting
           if (docName === "Teachers" || docName === "All") {
             activeAdminMeeting = { room: docName, title: title, host: host, startTime: startTime };
           } else if (docName !== "Guardian") {
-            // It's a Student Class Session
             const clsLabel = getStudentClassLabel(docName);
             studentClassesHtml += `
               <div class="live-class-item">
@@ -620,7 +853,6 @@
         }
       });
 
-      // Render Admin's Teachers' Meeting Alert Banner if active
       if (activeAdminMeeting) {
         meetingBanner.style.display = "flex";
         document.getElementById('teacherMeetingTitle').innerText = `📢 ${activeAdminMeeting.title}`;
@@ -668,7 +900,6 @@
       return;
     }
 
-    // Security guard: Teachers can only start student classes
     if (sClass === "Teachers" || sClass === "Guardian" || sClass === "All") {
       alert("শুধুমাত্র অ্যাডমিন এই মিটিং শুরু করতে পারবেন।");
       return;
@@ -677,14 +908,12 @@
     btn.disabled = true;
     btn.innerHTML = `<span class="loader-spinner"></span> ক্লাস শুরু হচ্ছে...`;
 
-    // 1. Launch Jitsi Meet Room
     const config = `#config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(name + ' (Teacher)')}"&userInfo.avatarUrl="${encodeURIComponent(pic)}"&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","chat","raisehand","mute-everyone","security","tileview","fullscreen","hangup","settings","recording","livestreaming"]`;
     window.open(`https://meet.jit.si/SRMS-Live-${sClass}${config}`, '_blank');
 
     const nowTime = new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' });
 
     try {
-      // 2. Direct Firestore REST Update with Teacher Auth Token
       if (auth.currentUser) {
         const token = await auth.currentUser.getIdToken();
         const payload = {
@@ -712,7 +941,6 @@
         }
       }
 
-      // 3. Call Live Backend for Official OneSignal Push Notification
       fetch(LIVE_SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -768,46 +996,8 @@
     }
   }
 
-  // 🖼️ ImgBB API v1 Image Upload Helper for Academic Content
-  async function uploadContentImageToImgBB(fileInput) {
-    const file = fileInput.files[0];
-    if (!file) return;
-    const statusEl = document.getElementById('uImgStatus');
-
-    if (!IMGBB_API_KEY) {
-      statusEl.style.color = "#d97706";
-      statusEl.innerText = "ℹ️ সরাসরি ফাইল আপলোডের জন্য কোডে IMGBB_API_KEY যুক্ত করুন, অথবা উপরে ড্রাইভ লিংক দিন।";
-      return;
-    }
-
-    statusEl.style.color = "var(--primary)";
-    statusEl.innerText = "⏳ ছবিটি ImgBB সার্ভারে আপলোড হচ্ছে...";
-
-    const formData = new FormData();
-    formData.append("image", file);
-
-    try {
-      const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
-        method: "POST",
-        body: formData
-      });
-      const json = await res.json();
-      if (json && json.success && json.data && json.data.url) {
-        document.getElementById('uUrl').value = json.data.url;
-        statusEl.style.color = "#059669";
-        statusEl.innerText = "✅ ছবি আপলোড সম্পন্ন! লিংকটি স্বয়ংক্রিয়ভাবে যুক্ত হয়েছে।";
-      } else {
-        statusEl.style.color = "var(--danger)";
-        statusEl.innerText = "❌ ছবি আপলোড ব্যর্থ হয়েছে।";
-      }
-    } catch (err) {
-      statusEl.style.color = "var(--danger)";
-      statusEl.innerText = "❌ নেটওয়ার্ক সমস্যা, আবার চেষ্টা করুন।";
-    }
-  }
-
   // ==========================================
-  // FORGOT PASSWORD LOGIC 
+  // FORGOT PASSWORD LOGIC (OTP)
   // ==========================================
   function openForgotModal() {
     document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
@@ -819,11 +1009,11 @@
   async function requestOTP(method) {
     let p = document.getElementById('fpPhone').value.trim();
     if(!p) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Please enter mobile number.</span>"; return; }
-    resetPhone = p.startsWith('0') ? p.substring(1) : p; 
+    resetPhone = cleanPhoneCoreJS(p); 
     document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Sending Request...";
     
     try {
-      const response = await fetch(OTP_SCRIPT_URL, { 
+      const response = await fetch(TEACHER_BACKEND_URL, { 
           method: "POST", 
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ action: "sendOTP", phone: resetPhone, method: method }) 
@@ -831,7 +1021,7 @@
       
       const textData = await response.text(); 
       let data;
-      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error! Check Browser Console.</span>`; return; }
+      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error!</span>`; return; }
       
       if(data.status === "success") {
         document.getElementById('fpStep1').style.display = 'none'; 
@@ -855,7 +1045,7 @@
     verifyBtn.disabled = true;
 
     try {
-        const response = await fetch(OTP_SCRIPT_URL, {
+        const response = await fetch(TEACHER_BACKEND_URL, {
             method: "POST",
             headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify({ action: "verifyOTP", phone: resetPhone, otp: input })
@@ -883,7 +1073,7 @@
     document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Saving to Server...";
     
     try {
-      const response = await fetch(OTP_SCRIPT_URL, { 
+      const response = await fetch(TEACHER_BACKEND_URL, { 
           method: "POST", 
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ action: "resetPass", phone: resetPhone, newPass: np }) 
@@ -891,7 +1081,7 @@
       
       const textData = await response.text(); 
       let data;
-      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error! Check Browser Console.</span>`; return; }
+      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error!</span>`; return; }
       
       if(data.status === "success") {
           document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful!</div>`;
@@ -903,44 +1093,49 @@
     } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; }
   }
 
-  function togglePass() { const b = document.getElementById('passBox'); b.style.display = b.style.display === 'none' ? 'block' : 'none'; }
+  // =========================================================================
+  // 🔐 DIRECT 1-SECOND PASSWORD CHANGE (FIRESTORE + FIREBASE AUTH VIA BACKEND)
+  // =========================================================================
+  function togglePass() {
+    const b = document.getElementById('passBox');
+    b.style.display = b.style.display === 'none' ? 'block' : 'none';
+  }
   
   async function changePass() {
-    let p = document.getElementById('newPass').value.trim(); const btn = document.getElementById('passBtn');
-    if(!p || p.length < 6) return alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
-    const docId = sessionStorage.getItem("srms_teacher_id"); 
-    if(!docId) return alert("Session expired, please login again.");
+    let p = document.getElementById('newPass').value.trim();
+    const btn = document.getElementById('passBtn');
+    if(!p || p.length < 6) return alert("⚠️ পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
 
-    btn.innerHTML = '<span class="loader-spinner"></span> Updating...'; btn.disabled = true;
+    const docId = sessionStorage.getItem("srms_teacher_id") || "";
+    btn.innerHTML = '<span class="loader-spinner"></span> Updating Directly...';
+    btn.disabled = true;
+
     try {
-      const user = auth.currentUser;
-      if(user) {
-        try {
-          await user.updatePassword(p);
-        } catch(reAuthErr) {
-          if (reAuthErr.code === 'auth/requires-recent-login') {
-            const oldPass = sessionStorage.getItem("srms_active_pass") || "123456";
-            const cred = firebase.auth.EmailAuthProvider.credential(user.email, oldPass);
-            await user.reauthenticateWithCredential(cred);
-            await user.updatePassword(p);
-          }
-        }
-      }
-      const token = await user.getIdToken(true);
-      await fetch(`${FIREBASE_DB_BASE}/Teachers/${docId}?updateMask.fieldPaths=pass`, { 
-          method: "PATCH", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-          body: JSON.stringify({ fields: { pass: { stringValue: p } } }) 
+      const res = await teacherApiCall("changeTeacherPassDirect", {
+        phone: exactDbPhone || normalizePhone11JS(tPhone),
+        docId: docId,
+        newPass: p
       });
       sessionStorage.setItem("srms_active_pass", p);
-      alert("✅ Security Key Updated Successfully!"); document.getElementById('newPass').value = ""; document.getElementById('passBox').style.display = 'none';
-    } catch(e) { alert("Error! Please logout, login and try again."); }
-    btn.innerHTML = "Save Password"; btn.disabled = false;
+      alert(res.msg || "✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!");
+      document.getElementById('newPass').value = "";
+      document.getElementById('passBox').style.display = 'none';
+    } catch(e) {
+      alert("❌ পাসওয়ার্ড পরিবর্তন ব্যর্থ হয়েছে: " + e.message);
+    }
+    btn.innerHTML = '<i class="fas fa-check-circle"></i> Save New Password Directly';
+    btn.disabled = false;
   }
 
+  // =========================================================================
+  // 📋 BOARD LOADING & STRICT OWNERSHIP POST MANAGEMENT
+  // =========================================================================
   async function loadBoard() {
     if (!auth.currentUser) return;
     const nBox = document.getElementById('notice-board'), mBox = document.getElementById('manageBox');
-    mBox.innerHTML = "<p style='text-align:center; color:#64748b; font-weight:600;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Fetching secure data...</p>";
+    if (globalPostsCache.length === 0) {
+      mBox.innerHTML = "<p style='text-align:center; color:#64748b; font-weight:600;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Fetching secure data...</p>";
+    }
     try {
       const token = await auth.currentUser.getIdToken();
       const headers = { "Authorization": "Bearer " + token };
@@ -950,49 +1145,191 @@
       ]);
       const postsData = await pRes.json(), warnsData = await wRes.json();
       
-      let posts = (postsData.documents || []).map(d => { let f=d.fields||{}; return { rowId: d.name.split('/').pop(), target: f.targetPage?f.targetPage.stringValue:"", title: f.title?f.title.stringValue:"", date: f.date?f.date.stringValue:"", uploader: f.uploader?f.uploader.stringValue:"" }; });
-      let warns = (warnsData.documents || []).map(d => { let f=d.fields||{}; return { id: d.name.split('/').pop(), name: f.name?f.name.stringValue:"" }; });
-
-      let nH = "", mH = "";
-      posts.forEach(p => { if(p.target === "TeacherDashboard") { nH += `<div class="notice-item"><b style="color:var(--primary); font-size:12px;">${sanitizeHTML(p.date)}</b><p style="margin:5px 0 0 0; font-size:14px; font-weight:500;">${sanitizeHTML(p.title)}</p></div>`; } });
-      nBox.innerHTML = nH || "<p style='text-align:center; color:#64748b;'>No current notices.</p>";
-      
-      warns.forEach(w => { mH += `<div class="item-box" style="border-left-color:var(--danger);"><span class="del-btn" onclick="openDeleteModal('${w.id}', 'warn')"><i class="fas fa-trash"></i> DELETE</span><span class="tag" style="background:#fff1f2; color:var(--danger);">WARNING</span><br><p style="margin:5px 0 0 0; font-weight:600; font-size:14px;">Assigned to: ${sanitizeHTML(w.name)}</p></div>`; });
-      
-      posts.forEach(p => { 
-        if(p.rowId) {
-          let isOwner = (p.uploader && String(p.uploader) == String(tPhone)) ? true : false;
-          let btnHtml = isOwner ? `<span class="del-btn" onclick="openDeleteModal('${p.rowId}', 'post')"><i class="fas fa-trash"></i> DELETE</span>` : `<span style="position:absolute; right:20px; top:25px; font-size:11px; color:#94a3b8; font-weight:800;">READ ONLY</span>`;
-          mH += `<div class="item-box">${btnHtml}<span class="tag">${sanitizeHTML(p.target)}</span><br><p style="margin:5px 0 0 0; font-weight:600; font-size:15px;">${sanitizeHTML(p.title)}</p></div>`; 
-        }
+      let posts = (postsData.documents || []).map(d => {
+        let f = d.fields || {};
+        return {
+          rowId: d.name.split('/').pop(),
+          target: f.targetPage ? f.targetPage.stringValue : "",
+          title: f.title ? f.title.stringValue : "",
+          desc: f.desc ? f.desc.stringValue : "",
+          date: f.date ? f.date.stringValue : "",
+          fileType: f.fileType ? f.fileType.stringValue : "None",
+          fileUrl: f.fileUrl ? f.fileUrl.stringValue : "",
+          thumbUrl: f.thumbUrl ? f.thumbUrl.stringValue : (f.fileUrl ? f.fileUrl.stringValue : ""),
+          imgbbId: f.imgbbId ? f.imgbbId.stringValue : "",
+          imgbbDeleteUrl: f.imgbbDeleteUrl ? f.imgbbDeleteUrl.stringValue : "",
+          driveFileId: f.driveFileId ? f.driveFileId.stringValue : "",
+          uploader: f.uploader ? f.uploader.stringValue : "",
+          uploaderName: f.uploaderName ? f.uploaderName.stringValue : "",
+          time: parseInt(f.timestamp && f.timestamp.integerValue ? f.timestamp.integerValue : "0", 10)
+        };
       });
-      mBox.innerHTML = mH || "<p style='text-align:center; color:#64748b;'>No items found on your server board.</p>";
-    } catch(e) { mBox.innerHTML = "<p style='text-align:center; color:var(--danger);'>Network link failed.</p>"; }
+      posts.sort((a, b) => b.time - a.time);
+
+      let warns = (warnsData.documents || []).map(d => {
+        let f = d.fields || {};
+        return {
+          id: d.name.split('/').pop(),
+          name: f.name ? f.name.stringValue : "",
+          message: f.message ? f.message.stringValue : "",
+          teacherPhone: f.teacherPhone ? f.teacherPhone.stringValue : ""
+        };
+      });
+
+      globalPostsCache = posts;
+      globalWarnsCache = warns;
+      renderBoardUI();
+    } catch(e) {
+      mBox.innerHTML = "<p style='text-align:center; color:var(--danger);'>Network link failed.</p>";
+    }
   }
 
+  function renderBoardUI() {
+    const nBox = document.getElementById('notice-board');
+    const mBox = document.getElementById('manageBox');
+    const myCorePhone = cleanPhoneCoreJS(tPhone);
+
+    // 1. Official Notice Board for Teachers (Read-Only from Admin)
+    let nH = "";
+    globalPostsCache.forEach(p => {
+      if (p.target === "TeacherDashboard") {
+        let linkBtn = p.fileUrl ? `<div style="margin-top:8px;"><a href="${sanitizeHTML(p.fileUrl)}" target="_blank" style="color:var(--primary); font-size:12.5px; font-weight:700;"><i class="fas fa-external-link-alt"></i> সংযুক্ত ফাইল দেখুন</a></div>` : "";
+        nH += `<div class="notice-item">
+          <b style="color:var(--primary); font-size:12px;"><i class="far fa-calendar-alt"></i> ${sanitizeHTML(p.date)}</b>
+          <p style="margin:5px 0 0 0; font-size:15px; font-weight:700; color:var(--text-main);">${sanitizeHTML(p.title)}</p>
+          ${p.desc ? `<p style="margin:4px 0 0 0; font-size:13.5px; color:#475569;">${sanitizeHTML(p.desc)}</p>` : ""}
+          ${linkBtn}
+        </div>`;
+      }
+    });
+    nBox.innerHTML = nH || "<p style='text-align:center; color:#64748b;'>No current notices.</p>";
+
+    // 2. Manage Class Content & Warnings (Teachers see Class Posts; can ONLY delete their own)
+    let mH = "";
+    globalWarnsCache.forEach(w => {
+      let isMyWarn = !w.teacherPhone || cleanPhoneCoreJS(w.teacherPhone) === myCorePhone;
+      let actionHtml = isMyWarn
+        ? `<button class="del-btn" onclick="openDeleteModal('${w.id}', 'warn')"><i class="fas fa-trash"></i> DELETE</button>`
+        : `<span class="readonly-badge"><i class="fas fa-eye"></i> VIEW ONLY</span>`;
+
+      mH += `<div class="item-box" style="border-left-color:var(--danger);">
+        <div>
+          <span class="tag" style="background:#fff1f2; color:var(--danger);">⚠️ WARNING</span>
+          <p style="margin:4px 0 0 0; font-weight:700; font-size:14.5px;">Student: ${sanitizeHTML(w.name)}</p>
+          ${w.message ? `<small style="color:#64748b;">${sanitizeHTML(w.message)}</small>` : ""}
+        </div>
+        <div>${actionHtml}</div>
+      </div>`;
+    });
+
+    globalPostsCache.forEach(p => {
+      // শুধুমাত্র ক্লাস ক্যাটাগরির পোস্টগুলোই এখানে দেখানো হবে
+      if (p.rowId && ALLOWED_CLASS_TARGETS.indexOf(p.target) !== -1) {
+        let postOwnerCore = cleanPhoneCoreJS(p.uploader);
+        let isOwner = (postOwnerCore !== "" && postOwnerCore === myCorePhone);
+
+        let thumbHtml = "";
+        if (p.fileType === "Image" && (p.thumbUrl || p.fileUrl)) {
+          thumbHtml = `<img src="${sanitizeHTML(p.thumbUrl || p.fileUrl)}" loading="lazy" style="width:54px; height:54px; object-fit:cover; border-radius:10px; border:1px solid #cbd5e1; flex-shrink:0;" onerror="this.style.display='none'">`;
+        } else if (p.fileType === "PDF" || p.fileType === "Document") {
+          thumbHtml = `<div style="width:54px; height:54px; border-radius:10px; background:#fef2f2; border:1px solid #fecaca; display:flex; align-items:center; justify-content:center; color:var(--danger); font-size:22px; flex-shrink:0;"><i class="fas fa-file-pdf"></i></div>`;
+        }
+
+        let serverBadge = (p.fileUrl && p.fileUrl.includes("ibb.co"))
+          ? `<span style="background:#dbeafe; color:#1d4ed8; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">ImgBB</span>`
+          : (p.fileUrl && p.fileUrl.includes("drive.google.com"))
+          ? `<span style="background:#fef3c7; color:#b45309; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">Drive PDF</span>`
+          : "";
+
+        let ownerBadge = isOwner
+          ? `<span style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">আমার পোস্ট</span>`
+          : (p.uploaderName ? `<span style="font-size:11px; color:#64748b; margin-left:6px;">• ${sanitizeHTML(p.uploaderName)}</span>` : "");
+
+        let btnHtml = isOwner
+          ? `<button class="del-btn" onclick="openDeleteModal('${p.rowId}', 'post')"><i class="fas fa-trash"></i> DELETE</button>`
+          : `<span class="readonly-badge" title="শুধুমাত্র নিজের করা পোস্ট ডিলিট করা যাবে"><i class="fas fa-lock"></i> READ ONLY</span>`;
+
+        let viewLink = p.fileUrl
+          ? `<a href="${sanitizeHTML(p.fileUrl)}" target="_blank" style="font-size:12px; color:var(--primary); font-weight:700; display:inline-block; margin-top:4px;"><i class="fas fa-external-link-alt"></i> ফাইল/ছবি দেখুন</a>`
+          : "";
+
+        mH += `<div class="item-box">
+          <div style="display:flex; gap:14px; align-items:center; flex:1;">
+            ${thumbHtml}
+            <div>
+              <span class="tag">${sanitizeHTML(p.target)}</span>${serverBadge}${ownerBadge}
+              <p style="margin:4px 0 2px 0; font-weight:700; font-size:15px; color:var(--text-main);">${sanitizeHTML(p.title)}</p>
+              <small style="color:#64748b; font-weight:600;"><i class="far fa-calendar-alt"></i> ${sanitizeHTML(p.date)}</small>
+              ${viewLink ? `<br>${viewLink}` : ""}
+            </div>
+          </div>
+          <div>${btnHtml}</div>
+        </div>`;
+      }
+    });
+
+    mBox.innerHTML = mH || "<p style='text-align:center; color:#64748b;'>No class posts found on board.</p>";
+  }
+
+  // =========================================================================
+  // 🗑️ 0.1s INSTANT DELETE (ONLY OWN POSTS + SERVER FILE CLEANUP)
+  // =========================================================================
   function openDeleteModal(id, type) {
     const modal = document.getElementById('delModal'), link = document.getElementById('modalLink');
     link.onclick = async function() {
-        link.innerHTML = '<span class="loader-spinner"></span> Processing...'; link.disabled = true;
-        try {
+        closeDeleteModal();
+
+        if (type === 'warn') {
+          globalWarnsCache = globalWarnsCache.filter(w => w.id !== id);
+          renderBoardUI();
+          try {
             const token = await auth.currentUser.getIdToken();
-            const headers = { "Authorization": "Bearer " + token };
-            if(type === 'warn') {
-                await fetch(`${FIREBASE_DB_BASE}/Warnings/${id}`, { method: "DELETE", headers });
-            } else {
-                fetch(MANAGER_SCRIPT_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ action: "deletePost", docId: id }) }).catch(e=>{});
-                await fetch(`${FIREBASE_DB_BASE}/WebsitePosts/${id}`, { method: "DELETE", headers });
+            await fetch(`${FIREBASE_DB_BASE}/Warnings/${id}`, {
+              method: "DELETE",
+              headers: { "Authorization": "Bearer " + token }
+            });
+          } catch (e) {}
+          return;
+        }
+
+        // Post Deletion (Strict Ownership Check)
+        const targetPost = globalPostsCache.find(p => p.rowId === id);
+        if (!targetPost) return;
+
+        const myCorePhone = cleanPhoneCoreJS(tPhone);
+        if (cleanPhoneCoreJS(targetPost.uploader) !== myCorePhone) {
+          alert("⛔ আপনি শুধুমাত্র আপনার নিজের করা পোস্ট ডিলিট করতে পারবেন!");
+          return;
+        }
+
+        // ০.১ সেকেন্ডে স্ক্রিন থেকে মুছে ফেলা (Optimistic Instant UI)
+        globalPostsCache = globalPostsCache.filter(p => p.rowId !== id);
+        renderBoardUI();
+
+        try {
+          await teacherApiCall("teacherDeletePost", {
+            docId: id,
+            teacherPhone: exactDbPhone || normalizePhone11JS(tPhone),
+            meta: {
+              fileUrl: targetPost.fileUrl || "",
+              fileType: targetPost.fileType || "",
+              driveFileId: targetPost.driveFileId || "",
+              imgbbDeleteUrl: targetPost.imgbbDeleteUrl || "",
+              imgbbId: targetPost.imgbbId || ""
             }
-            alert("✅ Successfully Removed!"); 
-            closeDeleteModal();
-            loadBoard();
-        } catch(e) { alert("Deletion failed due to network."); }
-        link.innerHTML = "Yes, Delete Permanently"; link.disabled = false;
+          });
+        } catch (err) {
+          alert("⚠️ ডিলিট করতে সমস্যা হয়েছে: " + err.message);
+          loadBoard();
+        }
     };
     modal.style.display = 'flex';
   }
   function closeDeleteModal() { document.getElementById('delModal').style.display = 'none'; }
 
+  // =========================================================================
+  // ⚠️ DISCIPLINARY WARNING SYSTEM
+  // =========================================================================
   async function loadStudentsForWarn() {
       const cls = document.getElementById('wCls').value; if(!cls) return;
       document.getElementById('wStuBox').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading Data...";
@@ -1018,12 +1355,13 @@
       const selectBox = document.getElementById('wStuId');
       const sid = selectBox ? selectBox.value : null; 
       const sName = selectBox && selectBox.selectedIndex > 0 ? selectBox.options[selectBox.selectedIndex].getAttribute('data-name') : "Student";
-      const msg = document.getElementById('wMsg').value; const btn = document.getElementById('wBtn');
+      const msg = document.getElementById('wMsg').value.trim(); const btn = document.getElementById('wBtn');
       
       if(!sid || !msg) return alert("Select student and write a message.");
       btn.innerHTML = '<span class="loader-spinner"></span> Transmitting...'; btn.disabled = true;
       
-      const payload = { fields: { studentID: { stringValue: sid }, name: { stringValue: sName }, message: { stringValue: msg }, teacherPhone: { stringValue: tPhone }, timestamp: { stringValue: Date.now().toString() } } };
+      const normPhone = normalizePhone11JS(tPhone);
+      const payload = { fields: { studentID: { stringValue: sid }, name: { stringValue: sName }, message: { stringValue: msg }, teacherPhone: { stringValue: normPhone }, timestamp: { stringValue: Date.now().toString() } } };
       try {
           const token = await auth.currentUser.getIdToken();
           await fetch(`${FIREBASE_DB_BASE}/Warnings`, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, body: JSON.stringify(payload) });
@@ -1034,48 +1372,177 @@
       btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Warning Directly'; btn.disabled = false;
   }
 
+  // =========================================================================
+  // 🚀 ACADEMIC CONTENT PUBLISHING (IMGBB + DRIVE PDF + ONESIGNAL PUSH)
+  // =========================================================================
+  function clearAcademicFile() {
+    document.getElementById('uFileInput').value = "";
+    document.getElementById('uFilePreviewBox').style.display = "none";
+    preparedAcademicFile = null;
+  }
+
+  function handleAcademicFileSelect(input) {
+    if (!input.files || input.files.length === 0) {
+      clearAcademicFile();
+      return;
+    }
+    const file = input.files[0];
+    const box = document.getElementById('uFilePreviewBox');
+    const imgEl = document.getElementById('uFilePreviewImg');
+    const metaEl = document.getElementById('uFilePreviewMeta');
+
+    if (file.type.startsWith("image/")) {
+      metaEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ছবিটি অপটিমাইজ হচ্ছে...`;
+      box.style.display = "flex";
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const maxDim = 1280;
+          let w = img.width, h = img.height;
+          if (w > maxDim || h > maxDim) {
+            if (w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+            else { w = Math.round((w * maxDim) / h); h = maxDim; }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = w;
+          canvas.height = h;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, w, h);
+
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+          imgEl.src = dataUrl;
+          const kbSize = Math.round((dataUrl.length * 0.75) / 1024);
+          const cleanName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+
+          preparedAcademicFile = {
+            isImage: true,
+            fileData: dataUrl.split(',')[1],
+            mimeType: 'image/jpeg',
+            fileName: cleanName
+          };
+          metaEl.innerHTML = `<b>${sanitizeHTML(cleanName)}</b><br>⚡ ImgBB Ready (${w}×${h}px • ~${kbSize} KB)`;
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      imgEl.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
+      metaEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ডকুমেন্ট লোড হচ্ছে...`;
+      box.style.display = "flex";
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const kbSize = Math.round(file.size / 1024);
+        preparedAcademicFile = {
+          isImage: false,
+          fileData: e.target.result.split(',')[1],
+          mimeType: file.type || 'application/octet-stream',
+          fileName: file.name
+        };
+        metaEl.innerHTML = `<b>${sanitizeHTML(file.name)}</b><br>✅ Document Ready (${kbSize} KB)`;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   async function upload() {
+    if (isUploadingPost) return;
     const btn = document.getElementById('uBtn');
     const cls = document.getElementById('uCls').value;
     const ttl = document.getElementById('uTtl').value.trim();
     const dsc = document.getElementById('uDsc').value.trim();
     const url = document.getElementById('uUrl').value.trim();
 
-    if(!cls || !ttl) return alert("Target Class and Title are mandatory.");
-    btn.disabled = true; btn.innerHTML = '<span class="loader-spinner"></span> Publishing...';
-    
-    const fileType = url !== "" ? "Link" : "None";
-    const d = new Date();
-    const dateStr = String(d.getDate()).padStart(2, '0') + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + d.getFullYear();
+    if (!cls || !ttl) return alert("⚠️ অনুগ্রহ করে ক্লাস এবং শিরোনাম (Title) নির্বাচন করুন!");
+    if (ALLOWED_CLASS_TARGETS.indexOf(cls) === -1) {
+      return alert("⛔ শুধুমাত্র ক্লাস ক্যাটাগরিতে (Class Play - Class 10) পোস্ট করা যাবে!");
+    }
+
+    isUploadingPost = true;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loader-spinner"></span> Publishing & Sending Push...';
+
+    const uploaderNorm = normalizePhone11JS(tPhone);
+    let postData = {
+      reqId: "T_REQ_" + Date.now(),
+      targetPage: cls,
+      title: ttl,
+      desc: dsc,
+      externalUrl: url,
+      uploader: uploaderNorm,
+      teacherName: tTeacherName
+    };
 
     try {
-        const token = await auth.currentUser.getIdToken();
-        const firestorePayload = {
-            fields: {
-                date: { stringValue: dateStr },
-                targetPage: { stringValue: cls },
-                title: { stringValue: ttl },
-                desc: { stringValue: dsc },
-                fileType: { stringValue: fileType },
-                fileUrl: { stringValue: url },
-                timestamp: { integerValue: d.getTime().toString() },
-                uploader: { stringValue: tPhone }
-            }
-        };
-        await fetch(`${FIREBASE_DB_BASE}/WebsitePosts`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-            body: JSON.stringify(firestorePayload)
-        });
+      if (preparedAcademicFile) {
+        if (preparedAcademicFile.isImage) {
+          btn.innerHTML = '<span class="loader-spinner"></span> Uploading Photo to ImgBB...';
+          try {
+            const imgbbRes = await uploadBase64ToImgBB(preparedAcademicFile.fileData, preparedAcademicFile.fileName);
+            postData.fileUrl = imgbbRes.url;
+            postData.externalUrl = imgbbRes.url;
+            postData.thumbUrl = imgbbRes.thumbUrl;
+            postData.imgbbId = imgbbRes.imgbbId;
+            postData.imgbbDeleteUrl = imgbbRes.deleteUrl;
+            postData.fileType = "Image";
+          } catch (directErr) {
+            postData.fileData = preparedAcademicFile.fileData;
+            postData.mimeType = preparedAcademicFile.mimeType;
+            postData.fileName = preparedAcademicFile.fileName;
+          }
+        } else {
+          btn.innerHTML = '<span class="loader-spinner"></span> Uploading Document...';
+          postData.fileData = preparedAcademicFile.fileData;
+          postData.mimeType = preparedAcademicFile.mimeType;
+          postData.fileName = preparedAcademicFile.fileName;
+        }
+      }
 
-        alert("✅ Data Successfully Published!"); 
-        document.getElementById('uCls').value = ""; document.getElementById('uTtl').value = ""; document.getElementById('uDsc').value = ""; document.getElementById('uUrl').value = ""; 
-        loadBoard(); 
-    } catch(e) { alert("Transmission failed due to network."); }
-    
-    btn.disabled = false; btn.innerHTML = '<i class="fas fa-cloud-upload-alt"></i> Publish Content';
+      btn.innerHTML = '<span class="loader-spinner"></span> Saving & Sending Push...';
+      const res = await teacherApiCall("teacherUploadPost", { data: postData });
+
+      if (res.docId) {
+        globalPostsCache.unshift({
+          rowId: res.docId,
+          target: cls,
+          title: ttl,
+          desc: dsc,
+          date: res.date || new Date().toLocaleDateString('en-GB').replace(/\//g, '-'),
+          fileType: res.fileType || postData.fileType || (url ? "Link" : "None"),
+          fileUrl: res.fileUrl || postData.fileUrl || url || "",
+          thumbUrl: res.thumbUrl || postData.thumbUrl || res.fileUrl || "",
+          imgbbId: res.imgbbId || postData.imgbbId || "",
+          imgbbDeleteUrl: res.imgbbDeleteUrl || postData.imgbbDeleteUrl || "",
+          driveFileId: res.driveFileId || "",
+          uploader: uploaderNorm,
+          uploaderName: tTeacherName,
+          time: res.timestamp || Date.now()
+        });
+        renderBoardUI();
+      } else {
+        loadBoard();
+      }
+
+      alert(res.msg || "✅ কন্টেন্ট সফলভাবে পাবলিশ হয়েছে!");
+      document.getElementById('uCls').value = "";
+      document.getElementById('uTtl').value = "";
+      document.getElementById('uDsc').value = "";
+      document.getElementById('uUrl').value = "";
+      clearAcademicFile();
+    } catch (e) {
+      alert("❌ পাবলিশ করতে সমস্যা হয়েছে: " + e.message);
+    } finally {
+      isUploadingPost = false;
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fas fa-rocket"></i> Publish to Class & Send Push Notification';
+    }
   }
 
+  // =========================================================================
+  // 📅 TEACHER DETAILED ATTENDANCE MODAL
+  // =========================================================================
   function openTeacherAttendanceModal() {
       document.getElementById('attendanceModal').style.display = 'flex';
       fetchTeacherDetailedAttendance();
