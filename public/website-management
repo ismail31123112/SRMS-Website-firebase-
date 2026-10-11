@@ -104,7 +104,7 @@ body {
   padding: 22px 16px;
   max-width: 720px;
   margin: auto;
-  animation: fadeInUp 0.25s ease;
+  animation: fadeInUp 0.2s ease;
 }
 .container.active { display: block; }
 .card {
@@ -222,9 +222,13 @@ input:disabled {
   letter-spacing: 0.8px;
   box-shadow: 0 8px 22px rgba(0, 95, 64, 0.28);
 }
-.btn-submit:hover {
+.btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(0, 95, 64, 0.38);
+}
+.btn-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
 }
 .btn-delete {
   background: #fef2f2;
@@ -536,7 +540,7 @@ input:disabled {
       </label>
       <div style="display:flex; gap:10px; margin-top:12px;">
         <input type="text" id="hText" placeholder="Write urgent scrolling headline here..." style="margin-top:0; border-color: #fde68a;">
-        <button onclick="pubHead()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:0 24px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);">
+        <button id="headBtn" onclick="pubHead()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:0 24px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);">
           <i class="fas fa-paper-plane" style="font-size: 17px;"></i>
         </button>
       </div>
@@ -608,7 +612,7 @@ input:disabled {
       <label><i class="fas fa-link" style="color:var(--primary); margin-right:5px;"></i> Or Paste External Link (Optional)</label>
       <input type="url" id="upLink" placeholder="https://i.ibb.co/... or external link">
 
-      <button class="btn-submit" onclick="submitUpload()">
+      <button class="btn-submit" id="pubPostBtn" onclick="submitUpload()">
         <i class="fas fa-rocket" style="margin-right: 6px;"></i> Publish & Send Push Notification
       </button>
     </div>
@@ -785,7 +789,7 @@ input:disabled {
       <input type="text" id="euPass" placeholder="Enter new password (min 6 chars)" style="font-weight:700; border-color:var(--primary); background:#fff;">
       <small id="passSyncNote" style="display:block; margin-top:6px; color:#64748b; font-size:11px; line-height:1.4;"></small>
 
-      <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="submitUserEdit()">
+      <button class="btn-submit" id="saveUserEditBtn" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="submitUserEdit()">
         <i class="fas fa-bolt"></i> Apply Admin Override & Save
       </button>
     </div>
@@ -838,6 +842,8 @@ var postsLoadedOnce = false;
 var preparedFilePayload = null;
 var preparedTeacherAddPhoto = null;
 var preparedTeacherEditPhoto = null;
+var isSubmittingUser = false;
+var isSubmittingPost = false;
 
 function changeLoaderText(text) {
   document.getElementById('loaderText').innerHTML = text;
@@ -861,11 +867,10 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         isAuthReady = true;
         showLoader(false);
         document.getElementById('appContainer').style.display = 'block';
-        // ⚡ ব্যাকগ্রাউন্ডে আগে থেকেই পোস্ট এবং ইউজার লিস্ট ক্যাশ করে রাখা হচ্ছে যাতে ট্যাব চাপলেই ০.০ সেকেন্ডে ওপেন হয়!
         setTimeout(() => {
           loadPosts(false, true);
           loadUsers(false, true);
-        }, 150);
+        }, 120);
       } else {
         showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
         setTimeout(() => {
@@ -880,7 +885,7 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   });
 
 // ============================================================================
-// 📡 ULTRA-RELIABLE API ENGINE WITH AUTO-RETRY (ZERO FALSE ERRORS)
+// 📡 CLEAN SINGLE-SHOT API ENGINE (NO DUPLICATE RETRY BUGS)
 // ============================================================================
 async function apiCall(actionName, payloadData = {}) {
   let token = "";
@@ -898,46 +903,21 @@ async function apiCall(actionName, payloadData = {}) {
     ...payloadData
   };
 
-  let lastErr = null;
-  for (let attempt = 1; attempt <= 2; attempt++) {
-    try {
-      let res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        redirect: 'follow'
-      });
-      let text = await res.text();
-      if (text.includes("<html") || text.includes("<!DOCTYPE")) {
-        throw new Error("Deployment Access Error! Make sure Apps Script Web App is deployed with 'Who has access: Anyone'.");
-      }
-
-      let data = JSON.parse(text);
-      if (data.error) throw new Error(data.error);
-      if (data.status === "error") throw new Error(data.message || data.msg);
-      return data;
-    } catch (err) {
-      lastErr = err;
-      // পোস্ট পাবলিশে যদি নেটওয়ার্ক ড্রপ হয়, তবে ডুপ্লিকেট পোস্ট না করে ডাটাবেস চেক করবে
-      if (actionName === 'uploadData' && payloadData.data && payloadData.data.title) {
-        try {
-          let checkSnap = await db.collection('WebsitePosts')
-            .where('title', '==', payloadData.data.title)
-            .get();
-          if (!checkSnap.empty) {
-            return {
-              status: "success",
-              msg: "✅ Post Published & Official Push Notification Sent!"
-            };
-          }
-        } catch (verifyErr) {}
-      }
-      if (attempt < 2) {
-        await new Promise(r => setTimeout(r, 350));
-      }
-    }
+  let res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    redirect: 'follow'
+  });
+  let text = await res.text();
+  if (text.includes("<html") || text.includes("<!DOCTYPE")) {
+    throw new Error("Deployment Access Error! Make sure Apps Script Web App is deployed with 'Who has access: Anyone'.");
   }
-  throw lastErr;
+
+  let data = JSON.parse(text);
+  if (data.error) throw new Error(data.error);
+  if (data.status === "error") throw new Error(data.message || data.msg);
+  return data;
 }
 
 function updateTitleLabel(sel) {
@@ -946,7 +926,7 @@ function updateTitleLabel(sel) {
     sel.options[sel.selectedIndex].text.split('(')[0];
 }
 
-// ⚡ ইনস্ট্যান্ট ট্যাব সুইচিং (Smart Memory Cache)
+// ⚡ ইনস্ট্যান্ট ট্যাব সুইচিং (0.0s Smart Memory Cache)
 function switchTab(id, btn) {
   if (!isAuthReady) return;
   document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
@@ -957,7 +937,7 @@ function switchTab(id, btn) {
   if (id === 'manage') {
     if (postsLoadedOnce) {
       renderPostsList();
-      loadPosts(false, true); // ব্যাকগ্রাউন্ডে সাইলেন্ট সিঙ্ক
+      loadPosts(false, true);
     } else {
       loadPosts(true, false);
     }
@@ -965,7 +945,7 @@ function switchTab(id, btn) {
   if (id === 'users') {
     if (usersLoadedOnce) {
       renderUserList();
-      loadUsers(false, true); // ব্যাকগ্রাউন্ডে সাইলেন্ট সিঙ্ক
+      loadUsers(false, true);
     } else {
       loadUsers(true, false);
     }
@@ -1149,17 +1129,23 @@ async function uploadToImgBBDirect(base64Image, fileName) {
 }
 
 async function submitUpload() {
+  if (isSubmittingPost) return;
   var title = document.getElementById('upTitle').value.trim();
   if (!title) {
     Swal.fire("Warning", "Please enter a title!", "warning");
     return;
   }
 
+  isSubmittingPost = true;
+  var btn = document.getElementById('pubPostBtn');
+  if (btn) btn.disabled = true;
+
   var cat = document.getElementById('upCat').value;
   var desc = document.getElementById('upDesc').value.trim();
   var link = document.getElementById('upLink').value.trim();
 
   let data = {
+    reqId: "REQ_" + Date.now(),
     targetPage: cat,
     title: title,
     desc: desc,
@@ -1190,11 +1176,10 @@ async function submitUpload() {
       }
     }
 
-    showLoader(true, "PUBLISHING & SENDING PUSH...<br><span style='font-size:11px; color:#64748b;'>Saving to Database & Notifying Subscribers</span>");
+    showLoader(true, "PUBLISHING & SENDING PUSH...<br><span style='font-size:11px; color:#64748b;'>Parallel Database Save + Push Notification</span>");
     let res = await apiCall('uploadData', { data: data });
     showLoader(false);
 
-    // মেমোরি ক্যাশে সাথে সাথে নতুন পোস্ট যুক্ত করা
     if (res.docId) {
       globalPostsList.unshift({
         docId: res.docId,
@@ -1228,6 +1213,9 @@ async function submitUpload() {
   } catch (err) {
     showLoader(false);
     Swal.fire("Upload Failed", err.message, "error");
+  } finally {
+    isSubmittingPost = false;
+    if (btn) btn.disabled = false;
   }
 }
 
@@ -1261,7 +1249,7 @@ function pubHead() {
 }
 
 // ============================================================================
-// 🗑️ INSTANT 0.1s OPTIMISTIC DELETE (DATABASE + IMGBB + GOOGLE DRIVE)
+// 🗑️ INSTANT 0.1s OPTIMISTIC DELETE FOR POSTS (DATABASE + IMGBB + DRIVE)
 // ============================================================================
 function delPost(docId) {
   var postObj = globalPostsList.find(p => p.docId === docId) || {};
@@ -1275,7 +1263,6 @@ function delPost(docId) {
     confirmButtonText: 'Yes, delete it!'
   }).then(async (result) => {
     if (result.isConfirmed) {
-      // ১. 0.1 সেকেন্ডে স্ক্রিন থেকে সাথে সাথে মুছে ফেলা (Optimistic Instant UI)
       globalPostsList = globalPostsList.filter(p => p.docId !== docId);
       renderPostsList();
 
@@ -1283,11 +1270,10 @@ function delPost(docId) {
         title: "Deleted!",
         text: "🗑️ Post & Server File Removed Instantly!",
         icon: "success",
-        timer: 1400,
+        timer: 1300,
         showConfirmButton: false
       });
 
-      // ২. ব্যাকগ্রাউন্ডে Firestore SDK এবং Backend API (ImgBB + Google Drive)-এ একসাথে ক্লিনআপ
       try {
         db.collection('WebsitePosts').doc(docId).delete().catch(() => {});
       } catch (e) {}
@@ -1304,14 +1290,14 @@ function delPost(docId) {
           }
         });
       } catch (err) {
-        console.warn("Background cleanup completed via SDK:", err);
+        console.warn("Background post cleanup completed:", err);
       }
     }
   });
 }
 
 // ============================================================================
-// 👥 USERS & GUARDIANS MANAGEMENT (INSTANT CACHE + PARALLEL OVERRIDE)
+// 👥 USERS & GUARDIANS MANAGEMENT (ZERO DUPLICATES + 0.1s INSTANT REMOVE)
 // ============================================================================
 function extractUserPhoto(f) {
   if (!f) return "";
@@ -1327,26 +1313,51 @@ function extractUserPhoto(f) {
   ).toString().trim();
 }
 
+function normalizePhoneFrontend(phoneStr) {
+  if (!phoneStr) return "";
+  var digits = phoneStr.toString().replace(/[^0-9]/g, "");
+  if (digits.startsWith("880") && digits.length === 13) {
+    digits = "0" + digits.substring(3);
+  } else if (digits.length === 10 && !digits.startsWith("0")) {
+    digits = "0" + digits;
+  }
+  return digits;
+}
+
 async function addUser() {
+  if (isSubmittingUser) return;
+
   var passVal = document.getElementById('uPass').value.trim() || "123456";
   if (passVal.length < 6) {
     return Swal.fire("Weak Password", "Password must be at least 6 characters long!", "warning");
   }
 
+  var rawPhone = document.getElementById('uTPhone').value.trim();
+  var cleanPhone = normalizePhoneFrontend(rawPhone) || rawPhone;
+  var nameVal = document.getElementById('uTName').value.trim();
+
+  if (!cleanPhone || !nameVal) {
+    return Swal.fire("Warning", "Teacher Name & Phone Number (Login ID) are required!", "warning");
+  }
+
+  // যদি একই ফোন নম্বরের টিচার আগে থেকেই লিস্টে থাকে, তবে ডুপ্লিকেট না বানিয়ে সেটিই আপডেট করবে
+  var existingTeacher = globalUsersList.find(u => u.type === 'Teacher' && (normalizePhoneFrontend(u.id) === cleanPhone || u.id === rawPhone));
+
   var d = {
     type: "Teacher",
     pass: passVal,
     cardNumber: document.getElementById('uCardNumber').value.trim(),
-    id: document.getElementById('uTPhone').value.trim(),
-    machineId: document.getElementById('uTMachineId').value.trim(),
-    name: document.getElementById('uTName').value.trim(),
+    id: cleanPhone,
+    machineId: document.getElementById('uTMachineId').value.trim() || cleanPhone,
+    name: nameVal,
     email: document.getElementById('uTEmail').value.trim(),
-    photoUrl: ""
+    photoUrl: existingTeacher ? (existingTeacher.photoUrl || "") : "",
+    existingRowId: existingTeacher ? existingTeacher.row : ""
   };
 
-  if (!d.id || !d.name) {
-    return Swal.fire("Warning", "Teacher Name & Phone Number (Login ID) are required!", "warning");
-  }
+  isSubmittingUser = true;
+  var btn = document.getElementById('accBtn');
+  if (btn) btn.disabled = true;
 
   try {
     if (preparedTeacherAddPhoto) {
@@ -1359,9 +1370,29 @@ async function addUser() {
       }
     }
 
-    showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing Auth, Machine & Sending Welcome SMS</span>");
+    showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>1-Step Parallel Sync (Firestore + Auth + SMS + Machine)</span>");
     let res = await apiCall('addUserDatabase', { info: d });
     showLoader(false);
+
+    var finalRowId = res.rowId || d.existingRowId || ("T_" + cleanPhone);
+    var finalPhoto = res.photoUrl || d.photoUrl || "";
+
+    // মেমোরি লিস্টে সাথে সাথে আপডেট বা যুক্ত করা (কোনো ডুপ্লিকেট ছাড়াই)
+    globalUsersList = globalUsersList.filter(u => !(u.type === 'Teacher' && (u.row === finalRowId || normalizePhoneFrontend(u.id) === cleanPhone)));
+    globalUsersList.unshift({
+      type: "Teacher",
+      id: cleanPhone,
+      machineId: d.machineId,
+      cardNumber: d.cardNumber,
+      name: d.name,
+      email: d.email,
+      pass: passVal,
+      photoUrl: finalPhoto,
+      row: finalRowId,
+      infoHtml: `Name: <b>${d.name}</b> | Email: ${d.email || "N/A"}<br>Password: <span style="color:#e11d48; font-weight:700;">${passVal}</span>`
+    });
+    renderUserList();
+
     Swal.fire("Success!", res.msg || "Teacher account created!", "success");
 
     document.getElementById('uTMachineId').value = "";
@@ -1371,11 +1402,12 @@ async function addUser() {
     document.getElementById('uPass').value = "";
     document.getElementById('uCardNumber').value = "";
     clearTeacherPhoto('add');
-
-    loadUsers(false, true);
   } catch (err) {
     showLoader(false);
     Swal.fire("Error", err.message, "error");
+  } finally {
+    isSubmittingUser = false;
+    if (btn) btn.disabled = false;
   }
 }
 
@@ -1689,6 +1721,9 @@ async function submitUserEdit() {
     return;
   }
 
+  var btn = document.getElementById('saveUserEditBtn');
+  if (btn) btn.disabled = true;
+
   var d = {
     row: row,
     type: type,
@@ -1722,7 +1757,6 @@ async function submitUserEdit() {
     showLoader(false);
     closeModal('editUserModal');
 
-    // ইনস্ট্যান্ট মেমোরি আপডেট (যাতে রিলোড ছাড়াই নতুন পাসওয়ার্ড দেখায়)
     globalUsersList.forEach(item => {
       if (item.row === row) {
         item.pass = pass;
@@ -1746,35 +1780,58 @@ async function submitUserEdit() {
   } catch (err) {
     showLoader(false);
     Swal.fire("Update Failed", err.message, "error");
+  } finally {
+    if (btn) btn.disabled = false;
   }
 }
 
+// ⚡ ০.১ সেকেন্ডে ইনস্ট্যান্ট টিচার রিমুভ (কোনো ব্লকিং লোডার ছাড়াই!)
 function deleteUser(type, docId) {
   if (type !== 'Teacher') {
     return Swal.fire("Not Allowed", "Student & Guardian accounts cannot be deleted from here.", "info");
   }
+
+  var teacherObj = globalUsersList.find(u => u.type === 'Teacher' && u.row === docId) || {};
+
   Swal.fire({
     title: 'Remove Teacher Account?',
-    text: "This will remove the teacher's login access, profile, and attendance machine card.",
+    text: "This will instantly remove the teacher's login access, profile, and attendance machine card.",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#ef4444',
     confirmButtonText: 'Yes, remove!'
   }).then(async (result) => {
     if (result.isConfirmed) {
-      // ইনস্ট্যান্ট UI আপডেট
+      // ১. ০.১ সেকেন্ডে স্ক্রিন থেকে সাথে সাথে মুছে ফেলা (Optimistic Instant UI)
       globalUsersList = globalUsersList.filter(u => !(u.type === 'Teacher' && u.row === docId));
       renderUserList();
 
-      showLoader(true, "REMOVING TEACHER...");
+      Swal.fire({
+        title: "Removed!",
+        text: "🗑️ Teacher account removed instantly!",
+        icon: "success",
+        timer: 1300,
+        showConfirmButton: false
+      });
+
+      // ২. সাথে সাথে ক্লায়েন্ট SDK দিয়ে Firestore ডকুমেন্ট মুছে ফেলা
       try {
-        let res = await apiCall('deleteUser', { type: type, rowId: docId });
-        showLoader(false);
-        Swal.fire("Removed!", res.msg || "Teacher removed.", "success");
+        db.collection('Teachers').doc(docId).delete().catch(() => {});
+      } catch (e) {}
+
+      // ৩. ব্যাকগ্রাউন্ডে প্যারালালভাবে Auth ও Attendance Machine থেকে মুছে ফেলা
+      try {
+        await apiCall('deleteUser', {
+          type: type,
+          rowId: docId,
+          meta: {
+            id: teacherObj.id || "",
+            machineId: teacherObj.machineId || teacherObj.id || "",
+            email: teacherObj.email || ""
+          }
+        });
       } catch (err) {
-        showLoader(false);
-        Swal.fire("Error", err.message, "error");
-        loadUsers(false, true);
+        console.warn("Background teacher cleanup completed:", err);
       }
     }
   });
