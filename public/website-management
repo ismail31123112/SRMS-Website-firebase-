@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SRMS Manager V20 Ultra</title>
+<title>SRMS Manager (Final Edition)</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -104,7 +104,7 @@ body {
   padding: 22px 16px;
   max-width: 720px;
   margin: auto;
-  animation: fadeInUp 0.4s ease;
+  animation: fadeInUp 0.35s ease;
 }
 .container.active { display: block; }
 .card {
@@ -169,10 +169,10 @@ input:disabled {
   gap: 14px;
 }
 .preview-box img {
-  width: 68px;
-  height: 68px;
+  width: 64px;
+  height: 64px;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 12px;
   border: 2px solid var(--primary);
   background: #fff;
 }
@@ -181,6 +181,28 @@ input:disabled {
   font-size: 12px;
   color: #166534;
   font-weight: 600;
+}
+
+/* User Avatar in List */
+.user-avatar-wrap {
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #e2e8f0;
+  flex-shrink: 0;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+}
+.user-avatar-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* Buttons */
@@ -358,13 +380,13 @@ input:disabled {
   line-height: 1.7;
   color: #334155;
 }
-.readonly-summary div {
+.readonly-summary .ro-row {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px dashed #e2e8f0;
   padding: 4px 0;
 }
-.readonly-summary div:last-child {
+.readonly-summary .ro-row:last-child {
   border-bottom: none;
 }
 
@@ -432,7 +454,7 @@ input:disabled {
   width: 100%;
   max-width: 440px;
   position: relative;
-  animation: zoomIn 0.3s ease;
+  animation: zoomIn 0.25s ease;
   box-shadow: 0 25px 50px rgba(0,0,0,0.25);
   border-top: 7px solid var(--primary);
   max-height: 90vh;
@@ -458,11 +480,11 @@ input:disabled {
   border: 5px solid #e2e8f0;
   border-top: 5px solid var(--primary);
   border-radius: 50%;
-  animation: spin 0.9s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .close {
   position: absolute;
   top: 16px;
@@ -484,34 +506,12 @@ input:disabled {
 </head>
 <body>
 
-<!-- 🛑 Security Gate & Processing Loader -->
+<!-- 🛑 Security Gate UI (Token & Session Verification Only — No Login Form Here) -->
 <div id="loader">
   <div class="spinner"></div>
   <p id="loaderText" style="margin-top:18px; font-size:14px; font-weight:800; color:var(--primary); letter-spacing:0.8px; text-align:center;">
     SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span>
   </p>
-</div>
-
-<!-- 🔐 Fallback Admin Login Modal (if session expired or opened directly) -->
-<div id="adminLoginModal" class="modal">
-  <div class="modal-content" style="text-align:left;">
-    <h3 style="text-align:center; color:var(--primary); margin-top:0; font-weight:900; font-size:19px;">
-      <i class="fas fa-shield-alt"></i> Admin Authentication
-    </h3>
-    <p style="font-size:12px; color:#64748b; text-align:center; margin-bottom:18px;">
-      Sign in with your SRMS Admin credentials to access Manager V20.
-    </p>
-    <label>Admin Email</label>
-    <input type="email" id="admEmail" value="admin@srms.edu.bd" placeholder="admin@srms.edu.bd">
-    <label>Admin Password</label>
-    <input type="password" id="admPass" placeholder="Enter Admin Password">
-    <button class="btn-submit" onclick="performAdminLogin()">
-      <i class="fas fa-lock-open"></i> Login to Manager
-    </button>
-    <button onclick="redirectToMainLogin()" style="width:100%; background:#f1f5f9; color:#475569; border:none; padding:11px; border-radius:12px; font-weight:700; margin-top:10px; cursor:pointer; font-size:12px;">
-      <i class="fas fa-arrow-left"></i> Go to Main Login Portal
-    </button>
-  </div>
 </div>
 
 <!-- ================= MAIN APPLICATION ================= -->
@@ -520,7 +520,7 @@ input:disabled {
     <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="SRMS Logo">
     <div class="header-title-wrap">
       <h2>SRMS Manager</h2>
-      <span>V20 ULTRA FINAL</span>
+      <span>IMGBB + ONESIGNAL EDITION</span>
     </div>
     <button class="btn-back" onclick="window.close();" title="Back to Dashboard">
       <i class="fas fa-sign-out-alt"></i> Dashboard
@@ -532,7 +532,7 @@ input:disabled {
     <!-- Scrolling Headline Card -->
     <div class="card" style="border-left: 7px solid var(--warn); background: linear-gradient(145deg, #ffffff, #fffbeb);">
       <label style="margin-top:0; color: #b45309; font-weight:800; font-size: 14px; text-transform:uppercase;">
-        <i class="fas fa-bullhorn"></i> Scrolling Headline Notice
+        <i class="fas fa-bullhorn"></i> Scrolling Headline Notice (+ Push Notification)
       </label>
       <div style="display:flex; gap:10px; margin-top:12px;">
         <input type="text" id="hText" placeholder="Write urgent scrolling headline here..." style="margin-top:0; border-color: #fde68a;">
@@ -542,10 +542,10 @@ input:disabled {
       </div>
     </div>
 
-    <!-- Website Content & Photo/File Publisher -->
+    <!-- Website Content & ImgBB Photo Publisher -->
     <div class="card">
       <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:17px;">
-        <i class="fas fa-cloud-upload-alt"></i> Publish Website Content & Photos
+        <i class="fas fa-cloud-upload-alt"></i> Publish Website Content & Photos (ImgBB + OneSignal Push)
       </h3>
 
       <label><i class="fas fa-bullseye" style="color:var(--primary); margin-right:5px;"></i> Target Page / Section</label>
@@ -593,7 +593,7 @@ input:disabled {
       <label><i class="fas fa-align-left" style="color:var(--primary); margin-right:5px;"></i> Description / Message Body</label>
       <textarea id="upDesc" rows="4" placeholder="Write description or full message here..."></textarea>
 
-      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Upload Photo / PDF / Document (Auto-Optimized)</label>
+      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Select Photo (Uploads to ImgBB Server) or PDF/Doc</label>
       <input type="file" id="upFile" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="handleFilePreview(this)">
 
       <!-- Live Photo/File Preview -->
@@ -605,11 +605,11 @@ input:disabled {
         </button>
       </div>
 
-      <label><i class="fas fa-link" style="color:var(--primary); margin-right:5px;"></i> Or Paste External / Google Drive Link (Optional)</label>
-      <input type="url" id="upLink" placeholder="https://drive.google.com/... or direct link">
+      <label><i class="fas fa-link" style="color:var(--primary); margin-right:5px;"></i> Or Paste External Link (Optional)</label>
+      <input type="url" id="upLink" placeholder="https://i.ibb.co/... or external link">
 
       <button class="btn-submit" onclick="submitUpload()">
-        <i class="fas fa-rocket" style="margin-right: 6px;"></i> Publish Content Now
+        <i class="fas fa-rocket" style="margin-right: 6px;"></i> Publish & Send Push Notification
       </button>
     </div>
   </div>
@@ -628,13 +628,23 @@ input:disabled {
       </div>
     </div>
 
-    <!-- Setup Teacher Account ONLY -->
+    <!-- Setup Teacher Account ONLY (With Teacher Photo Upload) -->
     <div class="card">
       <h3 style="margin-top:0; color:var(--primary); font-weight:800; text-transform: uppercase; font-size:16.5px;">
         <i class="fas fa-chalkboard-teacher"></i> Setup Teacher Account
       </h3>
       <div class="policy-banner">
-        <i class="fas fa-info-circle"></i> <b>সিস্টেম পলিসি:</b> এখান থেকে শুধুমাত্র <b>Teacher Account</b> তৈরি করা যাবে। <b>Student</b> এবং <b>Guardian</b> অ্যাকাউন্ট Admission Panel থেকে স্বয়ংক্রিয়ভাবে যুক্ত হয় এবং নিচে তাদের শুধুমাত্র <b>Password</b> পরিবর্তন করা যাবে।
+        <i class="fas fa-info-circle"></i> <b>সিস্টেম পলিসি:</b> এখান থেকে শুধুমাত্র <b>Teacher Account</b> ও তার ছবি যুক্ত করা যাবে (স্বয়ংক্রিয়ভাবে টিচারের মোবাইলে <b>Welcome SMS ও Email</b> চলে যাবে)। <b>Student</b> এবং <b>Guardian</b> অ্যাকাউন্ট ও ছবি স্টুডেন্ট ম্যানেজমেন্ট প্যানেল থেকে যুক্ত হয় এবং নিচে তাদের শুধুমাত্র <b>Password</b> পরিবর্তন করা যাবে।
+      </div>
+
+      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Teacher Profile Photo (ImgBB Upload)</label>
+      <input type="file" id="uTPhoto" accept="image/*" onchange="handleTeacherPhotoPreview(this, 'add')">
+      <div id="uTPhotoPreviewBox" class="preview-box">
+        <img id="uTPhotoPreviewImg" src="" alt="Teacher Photo" style="border-radius:50%;">
+        <div class="preview-info" id="uTPhotoPreviewMeta">Photo ready</div>
+        <button type="button" class="btn-delete" onclick="clearTeacherPhoto('add')" title="Remove photo">
+          <i class="fas fa-times"></i>
+        </button>
       </div>
 
       <label>Teacher Phone Number (Login ID) *</label>
@@ -737,6 +747,20 @@ input:disabled {
 
       <!-- Editable Fields ONLY for Teacher -->
       <div id="teacherEditableFields" style="display:none;">
+        <div style="text-align:center; margin-top:8px; margin-bottom:10px;">
+          <img id="euCurrentTeacherPhoto" src="" alt="Teacher" style="width:74px; height:74px; border-radius:50%; object-fit:cover; border:3px solid var(--primary); display:none; margin:0 auto;">
+        </div>
+
+        <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Update Teacher Photo (Optional)</label>
+        <input type="file" id="euTPhoto" accept="image/*" onchange="handleTeacherPhotoPreview(this, 'edit')">
+        <div id="euTPhotoPreviewBox" class="preview-box">
+          <img id="euTPhotoPreviewImg" src="" alt="New Photo" style="border-radius:50%;">
+          <div class="preview-info" id="euTPhotoPreviewMeta">New photo ready</div>
+          <button type="button" class="btn-delete" onclick="clearTeacherPhoto('edit')" title="Remove photo">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
         <label>Teacher Login ID (Phone)</label>
         <input type="text" id="euTeacherIdDisplay" disabled>
 
@@ -748,9 +772,12 @@ input:disabled {
 
         <label>Machine ID</label>
         <input type="text" id="euMachineId" placeholder="Machine ID">
+
+        <label style="color:#b45309;"><i class="fas fa-id-card"></i> Update RFID Card (Optional)</label>
+        <input type="text" id="euCardNumber" placeholder="Scan or Enter RFID Card Number" style="border-color: var(--gold); background:#fffbeb;">
       </div>
 
-      <!-- Password Field (Editable for Everyone) -->
+      <!-- Password Field (Editable for Everyone with Admin Special Power) -->
       <label style="color:var(--primary); font-size:14px;">
         <i class="fas fa-lock"></i> New Login Password (Min 6 Characters)
       </label>
@@ -758,7 +785,7 @@ input:disabled {
       <small id="passSyncNote" style="display:block; margin-top:6px; color:#64748b; font-size:11px; line-height:1.4;"></small>
 
       <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="submitUserEdit()">
-        <i class="fas fa-check-circle"></i> Save & Update Password
+        <i class="fas fa-bolt"></i> Apply Admin Override & Save
       </button>
     </div>
   </div>
@@ -785,7 +812,11 @@ input:disabled {
 <script>
 // আপনার Google Apps Script Web App URL
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec";
-const SRMS_ADMIN_PASSKEY = "SRMS_V20_SECURE_ADMIN_KEY";
+const SRMS_ADMIN_PASSKEY = "SRMS_SUPER_ADMIN_OVERRIDE";
+
+// 🖼️ IMGBB OFFICIAL API CONFIGURATION
+const IMGBB_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
+const IMGBB_UPLOAD_URL = "https://api.imgbb.com/1/upload";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
@@ -801,6 +832,8 @@ const auth = firebase.auth();
 var isAuthReady = false;
 var globalUsersList = [];
 var preparedFilePayload = null;
+var preparedTeacherAddPhoto = null;
+var preparedTeacherEditPhoto = null;
 
 function changeLoaderText(text) {
   document.getElementById('loaderText').innerHTML = text;
@@ -815,56 +848,40 @@ function showLoader(show, text = "PROCESSING...") {
 }
 
 // ============================================================================
-// 🔐 AUTHENTICATION CHECK & FALLBACK MODAL
+// 🛑 PURE SECURITY & TOKEN CHECKING GATE (NO LOGIN FORM ON FRONTEND)
 // ============================================================================
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   .then(() => {
     auth.onAuthStateChanged(function(user) {
       if (user) {
         isAuthReady = true;
-        document.getElementById('adminLoginModal').style.display = 'none';
         showLoader(false);
         document.getElementById('appContainer').style.display = 'block';
       } else {
-        showLoader(false);
-        document.getElementById('adminLoginModal').style.display = 'flex';
+        showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
+        setTimeout(() => {
+          var currentDomain = window.location.protocol + "//" + window.location.host;
+          window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
+        }, 1000);
       }
     });
   })
   .catch(err => {
     console.error("Auth Persistence Error:", err);
-    showLoader(false);
-    document.getElementById('adminLoginModal').style.display = 'flex';
   });
 
-async function performAdminLogin() {
-  var email = document.getElementById('admEmail').value.trim();
-  var pass = document.getElementById('admPass').value.trim();
-  if (!email || !pass) {
-    return Swal.fire("Warning", "Please enter Admin Email & Password.", "warning");
-  }
-  showLoader(true, "VERIFYING ADMIN CREDENTIALS...");
-  try {
-    await auth.signInWithEmailAndPassword(email, pass);
-  } catch (err) {
-    showLoader(false);
-    Swal.fire("Login Failed", err.message, "error");
-  }
-}
-
-function redirectToMainLogin() {
-  var currentDomain = window.location.protocol + "//" + window.location.host;
-  window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
-}
-
 // ============================================================================
-// 📡 SECURE API CALL TO GOOGLE APPS SCRIPT BACKEND
+// 📡 FAST SECURE API CALL WITH ADMIN SPECIAL POWER OVERRIDE
 // ============================================================================
 async function apiCall(actionName, payloadData = {}) {
-  if (!auth.currentUser) {
-    throw new Error("Admin session expired! Please login again.");
+  let token = "";
+  if (auth.currentUser) {
+    try {
+      token = await auth.currentUser.getIdToken(false);
+    } catch (tErr) {
+      token = await auth.currentUser.getIdToken(true);
+    }
   }
-  let token = await auth.currentUser.getIdToken(true);
   let payload = {
     action: actionName,
     token: token,
@@ -902,7 +919,7 @@ function updateTitleLabel(sel) {
 }
 
 function switchTab(id, btn) {
-  if (!isAuthReady) return Swal.fire("Wait", "Please complete Admin Sign-In first.", "info");
+  if (!isAuthReady) return alert("Security checking in progress... Please wait.");
   document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
@@ -913,7 +930,7 @@ function switchTab(id, btn) {
 }
 
 // ============================================================================
-// 🖼️ SMART IMAGE COMPRESSOR & LIVE PREVIEW (SOLVES UPLOAD FAILURE)
+// 🖼️ IMGBB API V1 UPLOAD + LIVE PREVIEW (POSTS & TEACHER PHOTOS)
 // ============================================================================
 function clearSelectedFile() {
   document.getElementById('upFile').value = "";
@@ -931,16 +948,15 @@ function handleFilePreview(input) {
   var previewImg = document.getElementById('previewImg');
   var previewMeta = document.getElementById('previewMeta');
 
-  // যদি ছবি হয়, তবে এইচডি কোয়ালিটি বজায় রেখে অটো-অপ্টিমাইজ করা হবে যাতে দ্রুত আপলোড হয়
   if (file.type.startsWith("image/")) {
-    previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Optimizing HD photo...`;
+    previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Preparing image for ImgBB...`;
     previewBox.style.display = "flex";
 
     var reader = new FileReader();
     reader.onload = function(e) {
       var img = new Image();
       img.onload = function() {
-        var maxDim = 1600;
+        var maxDim = 1800;
         var w = img.width;
         var h = img.height;
         if (w > maxDim || h > maxDim) {
@@ -958,23 +974,23 @@ function handleFilePreview(input) {
         var ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, w, h);
 
-        var dataUrl = canvas.toDataURL('image/jpeg', 0.86);
+        var dataUrl = canvas.toDataURL('image/jpeg', 0.90);
         previewImg.src = dataUrl;
         var kbSize = Math.round((dataUrl.length * 0.75) / 1024);
         var cleanName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
 
         preparedFilePayload = {
+          isImage: true,
           fileData: dataUrl.split(',')[1],
           mimeType: 'image/jpeg',
           fileName: cleanName
         };
-        previewMeta.innerHTML = `<b>${cleanName}</b><br>✅ HD Ready (${w}×${h}px • ~${kbSize} KB)`;
+        previewMeta.innerHTML = `<b>${cleanName}</b><br>✅ ImgBB Ready (${w}×${h}px • ~${kbSize} KB)`;
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   } else {
-    // PDF বা Document ফাইলের জন্য
     previewImg.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
     previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Reading document...`;
     previewBox.style.display = "flex";
@@ -983,6 +999,7 @@ function handleFilePreview(input) {
     reader.onload = function(e) {
       var kbSize = Math.round(file.size / 1024);
       preparedFilePayload = {
+        isImage: false,
         fileData: e.target.result.split(',')[1],
         mimeType: file.type || 'application/octet-stream',
         fileName: file.name
@@ -991,6 +1008,103 @@ function handleFilePreview(input) {
     };
     reader.readAsDataURL(file);
   }
+}
+
+// Teacher Photo Preview & Compression (Add & Edit)
+function clearTeacherPhoto(mode) {
+  if (mode === 'add') {
+    document.getElementById('uTPhoto').value = "";
+    document.getElementById('uTPhotoPreviewBox').style.display = "none";
+    preparedTeacherAddPhoto = null;
+  } else {
+    document.getElementById('euTPhoto').value = "";
+    document.getElementById('euTPhotoPreviewBox').style.display = "none";
+    preparedTeacherEditPhoto = null;
+  }
+}
+
+function handleTeacherPhotoPreview(input, mode) {
+  if (!input.files || input.files.length === 0) {
+    clearTeacherPhoto(mode);
+    return;
+  }
+  var file = input.files[0];
+  var boxId = mode === 'add' ? 'uTPhotoPreviewBox' : 'euTPhotoPreviewBox';
+  var imgId = mode === 'add' ? 'uTPhotoPreviewImg' : 'euTPhotoPreviewImg';
+  var metaId = mode === 'add' ? 'uTPhotoPreviewMeta' : 'euTPhotoPreviewMeta';
+
+  var previewBox = document.getElementById(boxId);
+  var previewImg = document.getElementById(imgId);
+  var previewMeta = document.getElementById(metaId);
+
+  previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Optimizing Teacher Photo...`;
+  previewBox.style.display = "flex";
+
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var img = new Image();
+    img.onload = function() {
+      var maxDim = 800;
+      var w = img.width;
+      var h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+      var canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      var dataUrl = canvas.toDataURL('image/jpeg', 0.90);
+      previewImg.src = dataUrl;
+      var kbSize = Math.round((dataUrl.length * 0.75) / 1024);
+      var cleanName = "Teacher_" + new Date().getTime() + ".jpg";
+
+      var payloadObj = {
+        fileData: dataUrl.split(',')[1],
+        fileName: cleanName
+      };
+      if (mode === 'add') preparedTeacherAddPhoto = payloadObj;
+      else preparedTeacherEditPhoto = payloadObj;
+
+      previewMeta.innerHTML = `<b>Teacher Photo Ready</b><br>✅ ImgBB Ready (${w}×${h}px • ~${kbSize} KB)`;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// সরাসরি ImgBB API v1-এ POST মেথডে ছবি আপলোড করার ফাংশন
+async function uploadToImgBBDirect(base64Image, fileName) {
+  var formData = new FormData();
+  formData.append("key", IMGBB_API_KEY);
+  formData.append("image", base64Image);
+  if (fileName) {
+    var cleanName = fileName.replace(/\.[^/.]+$/, "");
+    formData.append("name", cleanName);
+  }
+
+  var response = await fetch(IMGBB_UPLOAD_URL, {
+    method: "POST",
+    body: formData
+  });
+  var json = await response.json();
+  if (json && json.success && json.data) {
+    return {
+      url: json.data.url || json.data.display_url,
+      thumbUrl: (json.data.thumb && json.data.thumb.url) ? json.data.thumb.url : json.data.url,
+      deleteUrl: json.data.delete_url || "",
+      imgbbId: json.data.id || ""
+    };
+  }
+  throw new Error((json && json.error && json.error.message) ? json.error.message : "ImgBB Direct Upload Failed");
 }
 
 async function submitUpload() {
@@ -1011,19 +1125,37 @@ async function submitUpload() {
     externalUrl: link
   };
 
-  if (preparedFilePayload) {
-    data.fileData = preparedFilePayload.fileData;
-    data.mimeType = preparedFilePayload.mimeType;
-    data.fileName = preparedFilePayload.fileName;
-  }
-
-  showLoader(true, "PUBLISHING CONTENT...<br><span style='font-size:11px; color:#64748b;'>Uploading to Drive & Firestore</span>");
   try {
+    if (preparedFilePayload) {
+      if (preparedFilePayload.isImage) {
+        showLoader(true, "UPLOADING PHOTO TO IMGBB...<br><span style='font-size:11px; color:#64748b;'>Sending to api.imgbb.com</span>");
+        try {
+          let imgbbResult = await uploadToImgBBDirect(preparedFilePayload.fileData, preparedFilePayload.fileName);
+          data.externalUrl = imgbbResult.url;
+          data.fileUrl = imgbbResult.url;
+          data.fileType = "Image";
+          data.thumbUrl = imgbbResult.thumbUrl;
+          data.imgbbId = imgbbResult.imgbbId;
+          data.imgbbDeleteUrl = imgbbResult.deleteUrl;
+        } catch (directErr) {
+          console.warn("Direct ImgBB upload fallback to backend:", directErr);
+          data.fileData = preparedFilePayload.fileData;
+          data.mimeType = preparedFilePayload.mimeType;
+          data.fileName = preparedFilePayload.fileName;
+        }
+      } else {
+        data.fileData = preparedFilePayload.fileData;
+        data.mimeType = preparedFilePayload.mimeType;
+        data.fileName = preparedFilePayload.fileName;
+      }
+    }
+
+    showLoader(true, "PUBLISHING & SENDING PUSH...<br><span style='font-size:11px; color:#64748b;'>Saving to Firestore & Triggering OneSignal</span>");
     let res = await apiCall('uploadData', { data: data });
     showLoader(false);
     Swal.fire({
       title: "Published!",
-      text: res.msg || "Content published successfully!",
+      text: res.msg || "Content published & Push Notification sent!",
       icon: "success",
       confirmButtonColor: "#005f40"
     });
@@ -1046,14 +1178,14 @@ function pubHead() {
   }
   Swal.fire({
     title: "Publish Headline?",
-    text: "This will instantly appear as a scrolling notice on the website.",
+    text: "This will instantly appear as a scrolling notice and send a Push Notification.",
     icon: "question",
     showCancelButton: true,
     confirmButtonColor: "#d97706",
     confirmButtonText: "Yes, Publish!"
   }).then(async (result) => {
     if (result.isConfirmed) {
-      showLoader(true, "PUBLISHING HEADLINE...");
+      showLoader(true, "PUBLISHING HEADLINE & PUSH...");
       try {
         let res = await apiCall('addHeadline', { text: t });
         showLoader(false);
@@ -1092,8 +1224,22 @@ function delPost(docId) {
 }
 
 // ============================================================================
-// 👥 USERS & GUARDIANS MANAGEMENT (STRICT PASSWORD-ONLY EDIT FOR STUDENT/GUARDIAN)
+// 👥 USERS & GUARDIANS MANAGEMENT (FAST PARALLEL LOAD + PHOTOS + ADMIN POWER)
 // ============================================================================
+function extractUserPhoto(f) {
+  if (!f) return "";
+  return (
+    f.photoUrl ||
+    f.photo ||
+    f.imageUrl ||
+    f.image ||
+    f.imgUrl ||
+    f.profilePic ||
+    f.avatar ||
+    ""
+  ).toString().trim();
+}
+
 async function addUser() {
   var passVal = document.getElementById('uPass').value.trim() || "123456";
   if (passVal.length < 6) {
@@ -1107,15 +1253,26 @@ async function addUser() {
     id: document.getElementById('uTPhone').value.trim(),
     machineId: document.getElementById('uTMachineId').value.trim(),
     name: document.getElementById('uTName').value.trim(),
-    email: document.getElementById('uTEmail').value.trim()
+    email: document.getElementById('uTEmail').value.trim(),
+    photoUrl: ""
   };
 
   if (!d.id || !d.name) {
     return Swal.fire("Warning", "Teacher Name & Phone Number (Login ID) are required!", "warning");
   }
 
-  showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing with Firebase Auth & Machine</span>");
   try {
+    if (preparedTeacherAddPhoto) {
+      showLoader(true, "UPLOADING TEACHER PHOTO TO IMGBB...");
+      try {
+        let imgRes = await uploadToImgBBDirect(preparedTeacherAddPhoto.fileData, preparedTeacherAddPhoto.fileName);
+        d.photoUrl = imgRes.url;
+      } catch (e) {
+        d.photoData = preparedTeacherAddPhoto.fileData;
+      }
+    }
+
+    showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing Auth, Machine & Sending Welcome SMS</span>");
     let res = await apiCall('addUserDatabase', { info: d });
     showLoader(false);
     Swal.fire("Success!", res.msg || "Teacher account created!", "success");
@@ -1126,6 +1283,7 @@ async function addUser() {
     document.getElementById('uTEmail').value = "";
     document.getElementById('uPass').value = "";
     document.getElementById('uCardNumber').value = "";
+    clearTeacherPhoto('add');
 
     loadUsers();
   } catch (err) {
@@ -1136,31 +1294,39 @@ async function addUser() {
 
 async function loadUsers() {
   if (!isAuthReady) return;
-  showLoader(true, "LOADING USERS & GUARDIANS...<br><span style='font-size:11px; color:#64748b;'>Fetching live records from Firestore</span>");
+  showLoader(true, "LOADING USERS & PHOTOS...<br><span style='font-size:11px; color:#64748b;'>Fast Parallel Sync from Firestore</span>");
   try {
     let users = [];
 
-    // ১. Teachers লোড করা
-    let tSnap = await db.collection('Teachers').get();
+    // ⚡ প্যারালাল লোডিং (Teachers ও Students একসাথে লোড হবে — দ্বিগুণ দ্রুত)
+    let [tSnap, sSnap] = await Promise.all([
+      db.collection('Teachers').get(),
+      db.collection('Students').get()
+    ]);
+
+    // ১. Teachers লোড করা (ছবিসহ)
     tSnap.forEach(doc => {
       let f = doc.data();
       let name = f.name || "N/A";
       let pass = f.pass || "123456";
       let phoneId = f.phone || "";
+      let tPhoto = extractUserPhoto(f);
+
       users.push({
         type: "Teacher",
         id: phoneId,
         machineId: f.machineID || "",
+        cardNumber: f.cardNumber || "",
         name: name,
         email: f.email || "",
         pass: pass,
+        photoUrl: tPhoto,
         row: doc.id,
         infoHtml: `Name: <b>${name}</b> | Email: ${f.email || "N/A"}<br>Password: <span style="color:#e11d48; font-weight:700;">${pass}</span>`
       });
     });
 
-    // ২. Students এবং Guardians উভয় কার্ড তৈরি করা
-    let sSnap = await db.collection('Students').get();
+    // ২. Students এবং Guardians উভয় কার্ড তৈরি করা (ছবিসহ)
     sSnap.forEach(doc => {
       let f = doc.data();
       let sid = (f.studentID || "").toString().trim();
@@ -1171,6 +1337,8 @@ async function loadUsers() {
       let sRoll = f.roll || "N/A";
       let sPhone = (f.phone || "").toString().trim();
       let pass = f.pass || "123456";
+      let sPhoto = extractUserPhoto(f);
+      let gPhoto = (f.guardianPhoto || f.fatherPhoto || sPhoto || "").toString().trim();
 
       // Student Login Entry
       users.push({
@@ -1184,11 +1352,12 @@ async function loadUsers() {
         phone: sPhone,
         email: f.email || "",
         pass: pass,
+        photoUrl: sPhoto,
         row: doc.id,
         infoHtml: `Student: <b>${sName}</b> (Class: ${sClass}, Roll: ${sRoll})<br>Guardian Phone: ${sPhone || "N/A"} | Pass: <span style="color:#e11d48; font-weight:700;">${pass}</span>`
       });
 
-      // Guardian Login Entry (অভিভাবকের মোবাইল নম্বর থাকলে আলাদা Guardian কার্ড যুক্ত হবে)
+      // Guardian Login Entry
       if (sPhone) {
         users.push({
           type: "Guardian",
@@ -1202,6 +1371,7 @@ async function loadUsers() {
           phone: sPhone,
           email: f.email || "",
           pass: pass,
+          photoUrl: gPhoto,
           row: doc.id,
           infoHtml: `Guardian Login ID: <b>${sPhone}</b><br>Student: <b>${sName}</b> (ID: ${sid} • Class: ${sClass})<br>Password: <span style="color:#e11d48; font-weight:700;">${pass}</span>`
         });
@@ -1239,9 +1409,9 @@ function renderUserList() {
         totalGuardians++;
       }
 
-      var icon, badgeBg, badgeClr, actionBtns;
+      var iconHtml, badgeBg, badgeClr, actionBtns;
       if (u.type === 'Teacher') {
-        icon = '<i class="fas fa-chalkboard-teacher" style="color:var(--primary); font-size:22px;"></i>';
+        iconHtml = '<i class="fas fa-chalkboard-teacher" style="color:var(--primary); font-size:22px;"></i>';
         badgeBg = 'var(--primary-light)';
         badgeClr = 'var(--primary)';
         actionBtns = `
@@ -1249,29 +1419,32 @@ function renderUserList() {
           <button class="btn-delete" onclick="deleteUser('Teacher', '${u.row}')" title="Remove Teacher"><i class="fas fa-trash"></i></button>
         `;
       } else if (u.type === 'Student') {
-        icon = '<i class="fas fa-user-graduate" style="color:var(--warn); font-size:22px;"></i>';
+        iconHtml = '<i class="fas fa-user-graduate" style="color:var(--warn); font-size:22px;"></i>';
         badgeBg = '#fef3c7';
         badgeClr = '#b45309';
-        // Student-এর শুধুমাত্র পাসওয়ার্ড পরিবর্তনের বাটন থাকবে (অন্য কোনো তথ্য এডিট বা ডিলিট হবে না)
         actionBtns = `
           <button class="btn-edit" onclick="openEditUser(${index})" title="Change Student Password"><i class="fas fa-key"></i> Change Pass</button>
         `;
       } else {
-        icon = '<i class="fas fa-user-shield" style="color:var(--guardian); font-size:22px;"></i>';
+        iconHtml = '<i class="fas fa-user-shield" style="color:var(--guardian); font-size:22px;"></i>';
         badgeBg = 'var(--guardian-light)';
         badgeClr = 'var(--guardian)';
-        // Guardian-এর শুধুমাত্র পাসওয়ার্ড পরিবর্তনের বাটন থাকবে
         actionBtns = `
           <button class="btn-edit" style="background:#f3e8ff; color:#7c3aed; border-color:#ddd6fe;" onclick="openEditUser(${index})" title="Change Guardian Password"><i class="fas fa-key"></i> Change Pass</button>
         `;
       }
 
+      var avatarContent = u.photoUrl
+        ? `<img src="${u.photoUrl}" alt="${u.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+           <span style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${iconHtml}</span>`
+        : iconHtml;
+
       var machineText = u.machineId ? ` <span style="color:#64748b; font-size:12px;">| <i class="fas fa-fingerprint"></i> ${u.machineId}</span>` : '';
 
       h += `<div class="list-item user-item" data-type="${u.type}" data-class="${u.classVal || ''}">
         <div style="display:flex; gap:14px; align-items:center;">
-          <div style="width:50px; height:50px; border-radius:14px; background:#f8fafc; display:flex; align-items:center; justify-content:center; border: 1.5px solid #e2e8f0; flex-shrink:0;">
-            ${icon}
+          <div class="user-avatar-wrap">
+            ${avatarContent}
           </div>
           <div>
             <span style="background:${badgeBg}; color:${badgeClr}; padding:3px 10px; border-radius:6px; font-size:10px; font-weight:800; text-transform:uppercase;">${u.type}</span>
@@ -1291,7 +1464,6 @@ function renderUserList() {
   }
   document.getElementById('userListDisplay').innerHTML = h;
 
-  // Statistics Render (Teachers, Students & Guardians)
   var statsHtml = `
     <div class="stats-grid">
       <div class="stat-box" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark));">
@@ -1362,6 +1534,7 @@ function openEditUser(index) {
   document.getElementById('euType').value = u.type;
   document.getElementById('euId').value = u.id;
   document.getElementById('euPass').value = u.pass;
+  clearTeacherPhoto('edit');
 
   var summaryBox = document.getElementById('studentGuardianReadOnlyBox');
   var teacherBox = document.getElementById('teacherEditableFields');
@@ -1373,28 +1546,43 @@ function openEditUser(index) {
     summaryBox.style.display = "none";
     teacherBox.style.display = "block";
 
+    var curImg = document.getElementById('euCurrentTeacherPhoto');
+    if (u.photoUrl) {
+      curImg.src = u.photoUrl;
+      curImg.style.display = "block";
+    } else {
+      curImg.style.display = "none";
+    }
+
     document.getElementById('euTeacherIdDisplay').value = u.id;
     document.getElementById('euName').value = u.name || "";
     document.getElementById('euEmail').value = u.email || "";
     document.getElementById('euMachineId').value = u.machineId || "";
-    passNote.innerText = "Updating will sync Teacher's Firestore profile and Firebase Auth login.";
+    document.getElementById('euCardNumber').value = u.cardNumber || "";
+    passNote.innerText = "Updating will sync Teacher's Firestore profile, ImgBB photo, Attendance Machine & Firebase Auth.";
   } else {
-    // Student এবং Guardian-এর ক্ষেত্রে পাসওয়ার্ড ব্যতীত অন্য কোনো তথ্য এডিট করার অপশন থাকবে না!
     modalTitle.innerHTML = `<i class="fas fa-key"></i> Change ${u.type} Password`;
     teacherBox.style.display = "none";
     summaryBox.style.display = "block";
 
+    var photoAvatarHtml = u.photoUrl
+      ? `<div style="text-align:center; margin-bottom:10px;">
+           <img src="${u.photoUrl}" alt="Profile" style="width:68px; height:68px; border-radius:50%; object-fit:cover; border:2.5px solid var(--primary); box-shadow:0 4px 10px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+         </div>`
+      : "";
+
     summaryBox.innerHTML = `
-      <div style="color:var(--primary); font-weight:800; margin-bottom:4px; border-bottom:1px solid #cbd5e1;">
+      ${photoAvatarHtml}
+      <div class="ro-row" style="color:var(--primary); font-weight:800; margin-bottom:4px; border-bottom:1px solid #cbd5e1;">
         <span><i class="fas fa-lock"></i> Read-Only Profile Info</span>
         <span>${u.type}</span>
       </div>
-      <div><span>Student Name:</span> <b>${u.studentName || u.name}</b></div>
-      <div><span>Student ID:</span> <b>${u.studentID}</b></div>
-      <div><span>Class & Roll:</span> <b>Class ${u.classVal || 'N/A'} (Roll: ${u.roll || 'N/A'})</b></div>
-      <div><span>Guardian Phone:</span> <b>${u.phone || 'N/A'}</b></div>
+      <div class="ro-row"><span>Student Name:</span> <b>${u.studentName || u.name}</b></div>
+      <div class="ro-row"><span>Student ID:</span> <b>${u.studentID}</b></div>
+      <div class="ro-row"><span>Class & Roll:</span> <b>Class ${u.classVal || 'N/A'} (Roll: ${u.roll || 'N/A'})</b></div>
+      <div class="ro-row"><span>Guardian Phone:</span> <b>${u.phone || 'N/A'}</b></div>
     `;
-    passNote.innerHTML = `ℹ️ স্টুডেন্ট এবং অভিভাবকের অন্যান্য তথ্য শুধুমাত্র Admission Panel থেকে পরিবর্তনযোগ্য। এখানে শুধু <b>Password</b> পরিবর্তন হবে।`;
+    passNote.innerHTML = `⚡ <b>Admin Special Power:</b> স্টুডেন্ট এবং অভিভাবকের অন্যান্য তথ্য এখানে অপরিবর্তনীয়। শুধুমাত্র নতুন <b>Password</b> সেট করলে তা সরাসরি কার্যকর হবে।`;
   }
 
   document.getElementById('editUserModal').style.display = "flex";
@@ -1418,18 +1606,28 @@ async function submitUserEdit() {
     pass: pass
   };
 
-  // শুধুমাত্র Teacher হলে অতিরিক্ত ফিল্ডগুলো পাঠানো হবে
-  if (type === 'Teacher') {
-    d.name = document.getElementById('euName').value.trim();
-    d.email = document.getElementById('euEmail').value.trim();
-    d.machineId = document.getElementById('euMachineId').value.trim();
-  }
-
-  showLoader(true, "UPDATING PASSWORD...<br><span style='font-size:11px; color:#64748b;'>Syncing with Firebase Auth & Database</span>");
   try {
+    if (type === 'Teacher') {
+      d.name = document.getElementById('euName').value.trim();
+      d.email = document.getElementById('euEmail').value.trim();
+      d.machineId = document.getElementById('euMachineId').value.trim();
+      d.cardNumber = document.getElementById('euCardNumber').value.trim();
+
+      if (preparedTeacherEditPhoto) {
+        showLoader(true, "UPLOADING NEW TEACHER PHOTO TO IMGBB...");
+        try {
+          let imgRes = await uploadToImgBBDirect(preparedTeacherEditPhoto.fileData, preparedTeacherEditPhoto.fileName);
+          d.photoUrl = imgRes.url;
+        } catch (e) {
+          d.photoData = preparedTeacherEditPhoto.fileData;
+        }
+      }
+    }
+
+    showLoader(true, "APPLYING ADMIN OVERRIDE...<br><span style='font-size:11px; color:#64748b;'>Updating Firebase Auth & Firestore</span>");
     let res = await apiCall('updateUserDatabase', { info: d });
     showLoader(false);
-    Swal.fire("Updated!", res.msg || "Password updated successfully!", "success");
+    Swal.fire("Success!", res.msg || "Updated successfully!", "success");
     closeModal('editUserModal');
     loadUsers();
   } catch (err) {
@@ -1444,7 +1642,7 @@ function deleteUser(type, docId) {
   }
   Swal.fire({
     title: 'Remove Teacher Account?',
-    text: "This will remove the teacher's login access and profile.",
+    text: "This will remove the teacher's login access, profile, and attendance machine card.",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#ef4444',
@@ -1483,6 +1681,7 @@ async function loadPosts() {
         desc: f.desc || "",
         fileType: f.fileType || "None",
         fileUrl: f.fileUrl || "",
+        thumbUrl: f.thumbUrl || f.fileUrl || "",
         docId: doc.id,
         time: parseInt(f.timestamp || 0, 10)
       });
@@ -1506,15 +1705,18 @@ async function loadPosts() {
 
     posts.forEach(r => {
       var thumbHtml = "";
-      if (r.fileType === "Image" && r.fileUrl) {
-        thumbHtml = `<img src="${r.fileUrl}" style="width:52px; height:52px; object-fit:cover; border-radius:10px; border:1px solid #cbd5e1; flex-shrink:0;" onerror="this.style.display='none'">`;
+      if (r.fileType === "Image" && (r.thumbUrl || r.fileUrl)) {
+        thumbHtml = `<img src="${r.thumbUrl || r.fileUrl}" style="width:52px; height:52px; object-fit:cover; border-radius:10px; border:1px solid #cbd5e1; flex-shrink:0;" onerror="this.style.display='none'">`;
       }
+      var serverBadge = (r.fileUrl && r.fileUrl.includes("ibb.co"))
+        ? `<span style="background:#dbeafe; color:#1d4ed8; padding:2px 7px; border-radius:5px; font-size:9.5px; font-weight:800; margin-left:5px;">ImgBB</span>`
+        : "";
       h += `<div class="list-item">
         <div style="display:flex; gap:12px; align-items:center; flex:1;">
           ${thumbHtml}
           <div>
             <span style="background:var(--primary-light); color:var(--primary); padding:4px 10px; border-radius:6px; font-size:10.5px; font-weight:800; text-transform:uppercase;">${r.targetPage}</span>
-            <span style="font-size:11px; color:#64748b; margin-left:6px; font-weight:600;">• ${r.fileType}</span>
+            <span style="font-size:11px; color:#64748b; margin-left:6px; font-weight:600;">• ${r.fileType}</span>${serverBadge}
             <b style="font-size:15px; color:#0f172a; display:block; margin:6px 0 4px 0;">${r.title}</b>
             <small style="color:#64748b; font-weight:600;"><i class="far fa-calendar-alt"></i> ${r.date}</small>
           </div>
