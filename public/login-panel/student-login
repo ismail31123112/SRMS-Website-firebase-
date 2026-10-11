@@ -104,7 +104,7 @@ body {
   padding: 22px 16px;
   max-width: 720px;
   margin: auto;
-  animation: fadeInUp 0.4s ease;
+  animation: fadeInUp 0.35s ease;
 }
 .container.active { display: block; }
 .card {
@@ -454,7 +454,7 @@ input:disabled {
   width: 100%;
   max-width: 440px;
   position: relative;
-  animation: zoomIn 0.3s ease;
+  animation: zoomIn 0.25s ease;
   box-shadow: 0 25px 50px rgba(0,0,0,0.25);
   border-top: 7px solid var(--primary);
   max-height: 90vh;
@@ -480,11 +480,11 @@ input:disabled {
   border: 5px solid #e2e8f0;
   border-top: 5px solid var(--primary);
   border-radius: 50%;
-  animation: spin 0.9s linear infinite;
+  animation: spin 0.8s linear infinite;
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .close {
   position: absolute;
   top: 16px;
@@ -520,7 +520,7 @@ input:disabled {
     <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="SRMS Logo">
     <div class="header-title-wrap">
       <h2>SRMS Manager</h2>
-      <span>IMGBB CLOUD EDITION</span>
+      <span>IMGBB + ONESIGNAL EDITION</span>
     </div>
     <button class="btn-back" onclick="window.close();" title="Back to Dashboard">
       <i class="fas fa-sign-out-alt"></i> Dashboard
@@ -532,7 +532,7 @@ input:disabled {
     <!-- Scrolling Headline Card -->
     <div class="card" style="border-left: 7px solid var(--warn); background: linear-gradient(145deg, #ffffff, #fffbeb);">
       <label style="margin-top:0; color: #b45309; font-weight:800; font-size: 14px; text-transform:uppercase;">
-        <i class="fas fa-bullhorn"></i> Scrolling Headline Notice
+        <i class="fas fa-bullhorn"></i> Scrolling Headline Notice (+ Push Notification)
       </label>
       <div style="display:flex; gap:10px; margin-top:12px;">
         <input type="text" id="hText" placeholder="Write urgent scrolling headline here..." style="margin-top:0; border-color: #fde68a;">
@@ -545,7 +545,7 @@ input:disabled {
     <!-- Website Content & ImgBB Photo Publisher -->
     <div class="card">
       <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:17px;">
-        <i class="fas fa-cloud-upload-alt"></i> Publish Website Content & Photos (ImgBB Server)
+        <i class="fas fa-cloud-upload-alt"></i> Publish Website Content & Photos (ImgBB + OneSignal Push)
       </h3>
 
       <label><i class="fas fa-bullseye" style="color:var(--primary); margin-right:5px;"></i> Target Page / Section</label>
@@ -609,7 +609,7 @@ input:disabled {
       <input type="url" id="upLink" placeholder="https://i.ibb.co/... or external link">
 
       <button class="btn-submit" onclick="submitUpload()">
-        <i class="fas fa-rocket" style="margin-right: 6px;"></i> Publish Content Now
+        <i class="fas fa-rocket" style="margin-right: 6px;"></i> Publish & Send Push Notification
       </button>
     </div>
   </div>
@@ -634,7 +634,7 @@ input:disabled {
         <i class="fas fa-chalkboard-teacher"></i> Setup Teacher Account
       </h3>
       <div class="policy-banner">
-        <i class="fas fa-info-circle"></i> <b>সিস্টেম পলিসি:</b> এখান থেকে শুধুমাত্র <b>Teacher Account</b> ও তার ছবি যুক্ত করা যাবে। <b>Student</b> এবং <b>Guardian</b> অ্যাকাউন্ট ও ছবি স্টুডেন্ট ম্যানেজমেন্ট প্যানেল থেকে যুক্ত হয় এবং নিচে তাদের শুধুমাত্র <b>Password</b> পরিবর্তন করা যাবে।
+        <i class="fas fa-info-circle"></i> <b>সিস্টেম পলিসি:</b> এখান থেকে শুধুমাত্র <b>Teacher Account</b> ও তার ছবি যুক্ত করা যাবে (স্বয়ংক্রিয়ভাবে টিচারের মোবাইলে <b>Welcome SMS ও Email</b> চলে যাবে)। <b>Student</b> এবং <b>Guardian</b> অ্যাকাউন্ট ও ছবি স্টুডেন্ট ম্যানেজমেন্ট প্যানেল থেকে যুক্ত হয় এবং নিচে তাদের শুধুমাত্র <b>Password</b> পরিবর্তন করা যাবে।
       </div>
 
       <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Teacher Profile Photo (ImgBB Upload)</label>
@@ -772,6 +772,9 @@ input:disabled {
 
         <label>Machine ID</label>
         <input type="text" id="euMachineId" placeholder="Machine ID">
+
+        <label style="color:#b45309;"><i class="fas fa-id-card"></i> Update RFID Card (Optional)</label>
+        <input type="text" id="euCardNumber" placeholder="Scan or Enter RFID Card Number" style="border-color: var(--gold); background:#fffbeb;">
       </div>
 
       <!-- Password Field (Editable for Everyone with Admin Special Power) -->
@@ -868,15 +871,15 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   });
 
 // ============================================================================
-// 📡 SECURE API CALL WITH ADMIN SPECIAL POWER OVERRIDE
+// 📡 FAST SECURE API CALL WITH ADMIN SPECIAL POWER OVERRIDE
 // ============================================================================
 async function apiCall(actionName, payloadData = {}) {
   let token = "";
   if (auth.currentUser) {
     try {
-      token = await auth.currentUser.getIdToken(true);
-    } catch (tErr) {
       token = await auth.currentUser.getIdToken(false);
+    } catch (tErr) {
+      token = await auth.currentUser.getIdToken(true);
     }
   }
   let payload = {
@@ -1129,6 +1132,7 @@ async function submitUpload() {
         try {
           let imgbbResult = await uploadToImgBBDirect(preparedFilePayload.fileData, preparedFilePayload.fileName);
           data.externalUrl = imgbbResult.url;
+          data.fileUrl = imgbbResult.url;
           data.fileType = "Image";
           data.thumbUrl = imgbbResult.thumbUrl;
           data.imgbbId = imgbbResult.imgbbId;
@@ -1146,12 +1150,12 @@ async function submitUpload() {
       }
     }
 
-    showLoader(true, "PUBLISHING CONTENT...<br><span style='font-size:11px; color:#64748b;'>Saving to Firestore Database</span>");
+    showLoader(true, "PUBLISHING & SENDING PUSH...<br><span style='font-size:11px; color:#64748b;'>Saving to Firestore & Triggering OneSignal</span>");
     let res = await apiCall('uploadData', { data: data });
     showLoader(false);
     Swal.fire({
       title: "Published!",
-      text: res.msg || "Content published successfully!",
+      text: res.msg || "Content published & Push Notification sent!",
       icon: "success",
       confirmButtonColor: "#005f40"
     });
@@ -1174,14 +1178,14 @@ function pubHead() {
   }
   Swal.fire({
     title: "Publish Headline?",
-    text: "This will instantly appear as a scrolling notice on the website.",
+    text: "This will instantly appear as a scrolling notice and send a Push Notification.",
     icon: "question",
     showCancelButton: true,
     confirmButtonColor: "#d97706",
     confirmButtonText: "Yes, Publish!"
   }).then(async (result) => {
     if (result.isConfirmed) {
-      showLoader(true, "PUBLISHING HEADLINE...");
+      showLoader(true, "PUBLISHING HEADLINE & PUSH...");
       try {
         let res = await apiCall('addHeadline', { text: t });
         showLoader(false);
@@ -1220,7 +1224,7 @@ function delPost(docId) {
 }
 
 // ============================================================================
-// 👥 USERS & GUARDIANS MANAGEMENT (WITH PHOTOS & ADMIN SPECIAL POWER)
+// 👥 USERS & GUARDIANS MANAGEMENT (FAST PARALLEL LOAD + PHOTOS + ADMIN POWER)
 // ============================================================================
 function extractUserPhoto(f) {
   if (!f) return "";
@@ -1268,7 +1272,7 @@ async function addUser() {
       }
     }
 
-    showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing with Firebase Auth & Machine</span>");
+    showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing Auth, Machine & Sending Welcome SMS</span>");
     let res = await apiCall('addUserDatabase', { info: d });
     showLoader(false);
     Swal.fire("Success!", res.msg || "Teacher account created!", "success");
@@ -1290,12 +1294,17 @@ async function addUser() {
 
 async function loadUsers() {
   if (!isAuthReady) return;
-  showLoader(true, "LOADING USERS & PHOTOS...<br><span style='font-size:11px; color:#64748b;'>Fetching live records from Firestore</span>");
+  showLoader(true, "LOADING USERS & PHOTOS...<br><span style='font-size:11px; color:#64748b;'>Fast Parallel Sync from Firestore</span>");
   try {
     let users = [];
 
+    // ⚡ প্যারালাল লোডিং (Teachers ও Students একসাথে লোড হবে — দ্বিগুণ দ্রুত)
+    let [tSnap, sSnap] = await Promise.all([
+      db.collection('Teachers').get(),
+      db.collection('Students').get()
+    ]);
+
     // ১. Teachers লোড করা (ছবিসহ)
-    let tSnap = await db.collection('Teachers').get();
     tSnap.forEach(doc => {
       let f = doc.data();
       let name = f.name || "N/A";
@@ -1307,6 +1316,7 @@ async function loadUsers() {
         type: "Teacher",
         id: phoneId,
         machineId: f.machineID || "",
+        cardNumber: f.cardNumber || "",
         name: name,
         email: f.email || "",
         pass: pass,
@@ -1317,7 +1327,6 @@ async function loadUsers() {
     });
 
     // ২. Students এবং Guardians উভয় কার্ড তৈরি করা (ছবিসহ)
-    let sSnap = await db.collection('Students').get();
     sSnap.forEach(doc => {
       let f = doc.data();
       let sid = (f.studentID || "").toString().trim();
@@ -1549,7 +1558,8 @@ function openEditUser(index) {
     document.getElementById('euName').value = u.name || "";
     document.getElementById('euEmail').value = u.email || "";
     document.getElementById('euMachineId').value = u.machineId || "";
-    passNote.innerText = "Updating will sync Teacher's Firestore profile, ImgBB photo, and Firebase Auth login.";
+    document.getElementById('euCardNumber').value = u.cardNumber || "";
+    passNote.innerText = "Updating will sync Teacher's Firestore profile, ImgBB photo, Attendance Machine & Firebase Auth.";
   } else {
     modalTitle.innerHTML = `<i class="fas fa-key"></i> Change ${u.type} Password`;
     teacherBox.style.display = "none";
@@ -1601,6 +1611,7 @@ async function submitUserEdit() {
       d.name = document.getElementById('euName').value.trim();
       d.email = document.getElementById('euEmail').value.trim();
       d.machineId = document.getElementById('euMachineId').value.trim();
+      d.cardNumber = document.getElementById('euCardNumber').value.trim();
 
       if (preparedTeacherEditPhoto) {
         showLoader(true, "UPLOADING NEW TEACHER PHOTO TO IMGBB...");
@@ -1631,7 +1642,7 @@ function deleteUser(type, docId) {
   }
   Swal.fire({
     title: 'Remove Teacher Account?',
-    text: "This will remove the teacher's login access and profile.",
+    text: "This will remove the teacher's login access, profile, and attendance machine card.",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#ef4444',
