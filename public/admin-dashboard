@@ -21,7 +21,7 @@
         try {
             let newWindow = window.open(targetUrl, '_blank');
             if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-                window.location.href = targetUrl; // Bypass Pop-up blocker
+                window.location.href = targetUrl;
             }
         } catch(e) {
             window.location.href = targetUrl;
@@ -30,16 +30,16 @@
     </script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
         
         :root {
             --primary-color: #005f40; 
             --secondary-color: #004d33;
             --success-color: #1cc88a;
             --warning-color: #f6c23e;
-            --danger-color: #e74a3b;
+            --danger-color: #e11d48;
             --bg-gradient: linear-gradient(135deg, #e0f2f1 0%, #b2dfdb 100%);
-            --panel-bg: rgba(255, 255, 255, 0.95);
+            --panel-bg: rgba(255, 255, 255, 0.97);
         }
 
         body { 
@@ -50,8 +50,8 @@
             align-items: flex-start; 
             min-height: 100vh; 
             margin: 0; 
-            color: #333;
-            padding: 40px 0;
+            color: #1e293b;
+            padding: 35px 0;
             overflow-y: auto;
         }
 
@@ -59,35 +59,42 @@
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        @keyframes pulseLive {
+            0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5); }
+            70% { box-shadow: 0 0 0 12px rgba(225, 29, 72, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
+        }
 
         .container { 
             background: var(--panel-bg); 
-            padding: 35px; 
-            border-radius: 20px; 
+            padding: 35px 30px; 
+            border-radius: 22px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            width: 90%; 
-            max-width: 480px; 
+            width: 92%; 
+            max-width: 540px; 
             text-align: center; 
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-top: 5px solid var(--primary-color);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-top: 6px solid var(--primary-color);
             margin: 0 auto 25px auto;
+            box-sizing: border-box;
         }
 
-        .srms-logo { width: 70px; margin-bottom: 10px; }
-        h2 { color: #444; margin-bottom: 20px; font-weight: 600; font-size: 22px; }
+        .srms-logo { width: 65px; margin-bottom: 10px; }
+        h2 { color: #1e293b; margin: 0 0 18px 0; font-weight: 800; font-size: 22px; }
 
         .password-container { position: relative; margin-bottom: 15px; }
 
         input, select.input-field, textarea.input-field { 
-            width: 100%; padding: 12px 15px; margin-bottom: 12px;
-            border: 2px solid #eaeaea; border-radius: 10px; 
+            width: 100%; padding: 13px 15px; margin-bottom: 12px;
+            border: 2px solid #e2e8f0; border-radius: 12px; 
             box-sizing: border-box; font-size: 14px; outline: none; 
             font-family: 'Poppins', sans-serif; transition: 0.2s;
+            background: #f8fafc; font-weight: 500;
         }
         
         input:focus, select.input-field:focus, textarea.input-field:focus { 
-            border-color: var(--primary-color); box-shadow: 0 0 8px rgba(0, 95, 64, 0.2); 
+            border-color: var(--primary-color); background: #fff; box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1); 
         }
 
         .toggle-password {
@@ -98,35 +105,62 @@
 
         .btn { 
             background: var(--primary-color); color: white; border: none; 
-            padding: 12px; border-radius: 10px; cursor: pointer; width: 100%; 
-            font-size: 15px; font-weight: 600; transition: 0.3s; 
-            box-shadow: 0 4px 6px rgba(0, 95, 64, 0.2); margin-top: 8px;
+            padding: 13px; border-radius: 12px; cursor: pointer; width: 100%; 
+            font-size: 15px; font-weight: 700; transition: 0.3s; 
+            box-shadow: 0 4px 12px rgba(0, 95, 64, 0.2); margin-top: 8px;
+            font-family: inherit;
         }
         .btn:hover { background: var(--secondary-color); transform: translateY(-2px); }
         .btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
         
-        .btn-warning { background: var(--warning-color); color: #333; }
+        .btn-warning { background: var(--warning-color); color: #1e293b; }
         .btn-warning:hover { background: #f4b619; }
-        .btn-danger { background: var(--danger-color); }
-        .btn-danger:hover { background: #be2e21; }
+        .btn-danger { background: var(--danger-color); color: #fff; }
+        .btn-danger:hover { background: #be123c; }
 
         .btn-link { 
             background: white; display: flex; align-items: center; justify-content: center;
             text-decoration: none; margin: 10px 0; color: var(--primary-color); 
-            padding: 12px; border-radius: 10px; font-weight: 500; 
-            transition: 0.3s; border: 2px solid #eaeaea; font-size: 14px;
+            padding: 13px; border-radius: 12px; font-weight: 600; 
+            transition: 0.3s; border: 2px solid #e2e8f0; font-size: 14px;
             cursor: pointer; width: 100%; font-family: 'Poppins', sans-serif; box-sizing: border-box;
         }
         .btn-link i { margin-right: 10px; font-size: 16px; }
-        .btn-link:hover { background: #f8f9fc; border-color: var(--primary-color); transform: scale(1.02); }
+        .btn-link:hover { background: #f8f9fc; border-color: var(--primary-color); transform: translateY(-2px); }
         
         .hidden { display: none !important; }
         .show-section { display: block; animation: fadeInUp 0.4s ease-out forwards; }
 
         .spinner { display: none; margin-right: 8px; animation: spin 1s infinite linear; }
-        hr { border: 0; border-top: 1px dashed #ddd; margin: 15px 0; }
+        hr { border: 0; border-top: 1px dashed #cbd5e1; margin: 18px 0; }
         p.msg-text { margin-top: 10px; font-size: 13px; font-weight: 600; min-height: 1em; line-height: 1.5; }
         
+        /* 🎥 Embedded Live Studio Styles */
+        .live-badge-counter {
+            background: var(--danger-color); color: white; padding: 2px 9px;
+            border-radius: 20px; font-size: 11px; font-weight: 800; margin-left: 8px;
+            animation: pulseLive 2s infinite; display: none;
+        }
+        .live-session-card {
+            background: #f0fdf4; border: 2px solid #bbf7d0; border-radius: 14px;
+            padding: 16px; text-align: left; margin-bottom: 12px; position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .live-session-card h4 {
+            margin: 0 0 6px 0; color: #065f46; font-size: 15px; font-weight: 800;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .live-session-card p { margin: 3px 0; font-size: 13px; color: #334155; font-weight: 500; }
+        .live-card-actions { display: flex; gap: 10px; margin-top: 12px; }
+        .btn-join-live {
+            flex: 1; background: var(--primary-color); color: white; border: none;
+            padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12.5px;
+        }
+        .btn-end-live {
+            flex: 1; background: var(--danger-color); color: white; border: none;
+            padding: 10px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 12.5px;
+        }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         /* 🛑 SECURITY SHIELD LOADER */
@@ -144,38 +178,92 @@
 
     <div id="appBody" style="display: none; width: 100%; flex-direction: column; align-items: center;">
         
-        <!-- 🎛️ Dashboard Section -->
+        <!-- 🎛️ Main Dashboard Section -->
         <div class="container show-section" id="dashboard-section">
-            <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="SRMS Logo" class="srms-logo" style="width: 50px;">
+            <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="SRMS Logo" class="srms-logo" style="width: 55px;">
             <h2>Admin Dashboard</h2>
 
             <button onclick="openAppModule('student-management')" class="btn-link"><i class="fas fa-user-graduate"></i> Students Management</button>
             <button onclick="openAppModule('accounts-portal')" class="btn-link"><i class="fas fa-file-invoice-dollar"></i> Accounts Portal</button>
             
-            <!-- Updated Links with Relative Paths -->
             <button onclick="window.location.href='/website-management'" class="btn-link"><i class="fas fa-globe"></i> Website Management</button>
             <button onclick="window.location.href='/result-management'" class="btn-link"><i class="fas fa-poll-h"></i> Result Management</button>
 
             <button onclick="window.location.href='/attendance-management'" class="btn-link" style="background: #0f172a; color: white; border: none; margin: 10px 0;">
-            <i class="fas fa-school"></i> Smart Attendance Dashboard
+                <i class="fas fa-school"></i> Smart Attendance Dashboard
             </button>
 
-            <button onclick="openAppModule('live-classmeeting-panel')" class="btn-link" style="background: #fff5f5; border-color: var(--danger-color); color: var(--danger-color);">
-            <i class="fas fa-video"></i> Live Class / Meeting Panel
+            <!-- 🎥 Integrated Live Class & Meeting Hub (No Separate Page Needed!) -->
+            <button onclick="openLiveHubSection()" class="btn-link" style="background: #fff1f2; border-color: var(--danger-color); color: var(--danger-color); font-weight: 700;">
+                <i class="fas fa-video"></i> Live Class &amp; Meeting Hub
+                <span id="dashLiveCounter" class="live-badge-counter">0 LIVE</span>
             </button>
 
             <button onclick="showSection('messaging-section'); loadSpecificUsers(); return false;" class="btn-link" style="background: #e8f5e9; border-color: var(--primary-color);">
-            <i class="fas fa-paper-plane"></i> Email / SMS Broadcast
+                <i class="fas fa-paper-plane"></i> Email / SMS Broadcast
             </button>
 
             <hr>
             <button onclick="window.location.href = window.location.origin;" class="btn-link" style="color: #666; border-color: #ddd;">
-            <i class="fas fa-home"></i> Back to Main Website
+                <i class="fas fa-home"></i> Back to Main Website
             </button>
 
             <div style="display: flex; gap: 10px; margin-top: 15px;">
-            <button class="btn btn-warning" onclick="showChangePassword()"><i class="fas fa-key"></i> Pass</button>
-            <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <button class="btn btn-warning" onclick="showChangePassword()"><i class="fas fa-key"></i> Pass</button>
+                <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+        </div>
+
+        <!-- 🎥 INTEGRATED LIVE BROADCAST & MEETING HUB (ALL CATEGORIES FOR ADMIN) -->
+        <div class="container hidden" id="live-hub-section" style="border-top-color: var(--danger-color);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                <h2 style="margin:0; color:var(--danger-color); font-size:20px;"><i class="fas fa-satellite-dish"></i> Master Live Control Hub</h2>
+                <button onclick="showSection('dashboard-section')" style="background:#f1f5f9; border:none; padding:8px 14px; border-radius:8px; font-weight:700; cursor:pointer; color:#334155;">⬅ Back</button>
+            </div>
+
+            <div style="background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:12px; border-radius:10px; font-size:12.5px; text-align:left; margin-bottom:15px; line-height:1.5;">
+                <b>💡 অ্যাডমিন কন্ট্রোল:</b> আপনি এখান থেকে শিক্ষক, অভিভাবক, সম্পূর্ণ স্কুল কিংবা যেকোনো শ্রেণির লাইভ সেশন শুরু বা বন্ধ করতে পারবেন। একসাথে একাধিক ক্লাস/মিটিং সমান্তরালে চলতে পারবে এবং লাইভ শুরু করলেই সবার কাছে অফিশিয়াল <b>Push Notification</b> চলে যাবে।
+            </div>
+
+            <input type="text" id="adminLiveHost" value="Principal / Admin" placeholder="পরিচালকের নাম (যেমন: Principal / Admin)">
+            <input type="text" id="adminLiveTopic" placeholder="মিটিং বা ক্লাসের বিষয় (যেমন: জরুরি স্টাফ মিটিং / গণিত)">
+
+            <select id="adminLiveTarget" class="input-field" style="font-weight:700; color:var(--primary-color); border-color:#cbd5e1;">
+                <optgroup label="👑 Special Official Meetings (Admin Exclusive)">
+                    <option value="Teachers">👨‍🏫 Teachers' Live Meeting (সকল শিক্ষক)</option>
+                    <option value="Guardian">👪 Guardian Live Meeting (সকল অভিভাবক)</option>
+                    <option value="All">🏫 All School Live Meeting (সবার জন্য)</option>
+                </optgroup>
+                <optgroup label="📚 Primary & Junior Classes">
+                    <option value="Play">Class Play</option><option value="Nursery">Class Nursery</option><option value="KG">Class KG</option>
+                    <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option>
+                    <option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option>
+                </optgroup>
+                <optgroup label="🎓 Secondary Classes">
+                    <option value="9-Science">Class 9 (Science)</option><option value="9-Arts">Class 9 (Arts)</option><option value="9-Commerce">Class 9 (Commerce)</option>
+                    <option value="10-Science">Class 10 (Science)</option><option value="10-Arts">Class 10 (Arts)</option><option value="10-Commerce">Class 10 (Commerce)</option>
+                </optgroup>
+            </select>
+
+            <!-- Optional Image / Banner Upload via ImgBB -->
+            <div style="text-align:left; background:#f8fafc; padding:10px 14px; border-radius:10px; border:1px dashed #cbd5e1; margin-bottom:12px;">
+                <label style="font-size:11.5px; font-weight:700; color:#475569; display:block; margin-bottom:5px;">🖼️ লোগো বা ছবি পরিবর্তন (ঐচ্ছিক - ImgBB Auto Upload):</label>
+                <input type="file" id="adminAvatarFile" accept="image/*" onchange="uploadAvatarToImgBB(this, 'adminLivePic', 'adminImgStatus')" style="padding:6px; margin:0; font-size:12px; background:#fff;">
+                <input type="hidden" id="adminLivePic" value="https://i.postimg.cc/hGQQqrsb/20260117_231551.png">
+                <small id="adminImgStatus" style="font-size:11px; color:var(--primary-color); font-weight:600;"></small>
+            </div>
+
+            <button class="btn btn-danger" id="adminStartLiveBtn" onclick="startAdminLiveSession()" style="padding:15px; font-size:15px; letter-spacing:0.5px;">
+                <i class="fas fa-broadcast-tower"></i> START LIVE &amp; SEND PUSH NOTIFICATION 🚀
+            </button>
+
+            <hr>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h3 style="margin:0; font-size:15px; color:var(--primary-color); font-weight:800;">🟢 বর্তমানে চলমান সকল লাইভ সেশন</h3>
+                <button onclick="loadAllActiveLiveSessions()" style="background:#e2e8f0; border:none; padding:5px 12px; border-radius:6px; font-size:12px; font-weight:700; cursor:pointer;"><i class="fas fa-sync-alt"></i> Refresh</button>
+            </div>
+            <div id="adminActiveSessionsList">
+                <p style="font-size:13px; color:#64748b;">লোড হচ্ছে...</p>
             </div>
         </div>
 
@@ -183,33 +271,33 @@
         <div class="container hidden" id="messaging-section">
             <h2>Broadcast Message</h2>
             <select id="audienceType" class="input-field" onchange="handleAudienceChange()" style="font-weight: 600; color: var(--primary-color);">
-            <option value="Students">Send to Students</option>
-            <option value="Teachers">Send to Teachers</option>
+                <option value="Students">Send to Students</option>
+                <option value="Teachers">Send to Teachers</option>
             </select>
 
             <select id="recipientClass" class="input-field" onchange="loadSpecificUsers()" style="font-weight: 600;">
-            <option value="All">All Students (Entire School)</option>
-            <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
-            <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
-            <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
-            <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option>
-            <option value="10">Class 10</option>
+                <option value="All">All Students (Entire School)</option>
+                <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
+                <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option>
+                <option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option>
+                <option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option>
+                <option value="10">Class 10</option>
             </select>
 
             <select id="specificUser" class="input-field" style="border-color: #cbd5e1; background: #f8fafc;">
-            <option value="All">Loading list...</option>
+                <option value="All">Loading list...</option>
             </select>
             <select id="msgType" class="input-field">
-            <option value="Both">Send Both (Email & SMS)</option>
-            <option value="SMS">Send SMS Only</option>
-            <option value="Email">Send Email Only</option>
+                <option value="Both">Send Both (Email &amp; SMS)</option>
+                <option value="SMS">Send SMS Only</option>
+                <option value="Email">Send Email Only</option>
             </select>
             <textarea id="msgBody" class="input-field" placeholder="Type your formal notice/message here..." rows="4"></textarea>
             <button class="btn" onclick="sendBroadcast()" id="sendBtn" style="margin-top: 15px;">
-            <i class="fas fa-spinner spinner" id="sendSpinner"></i><span id="sendText">Start Broadcast</span>
+                <i class="fas fa-spinner spinner" id="sendSpinner"></i><span id="sendText">Start Broadcast</span>
             </button>
 
-            <button class="btn btn-danger" onclick="showSection('dashboard-section')" style="background: #aaa; margin-top: 10px;">Back to Dashboard</button>
+            <button class="btn btn-danger" onclick="showSection('dashboard-section')" style="background: #64748b; margin-top: 10px;">Back to Dashboard</button>
             <p id="send-msg" class="msg-text"></p>
         </div>
 
@@ -227,7 +315,7 @@
             <p id="success-msg" class="msg-text"></p>
         </div>
 
-    </div> <!-- End App Body -->
+    </div>
 
     <!-- 🌐 Firebase Client SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
@@ -248,32 +336,35 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // 🔒 Force Firebase Session Persistence
         auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
             console.error("Session persistence error:", error);
         });
 
-        // 🛑 🛑 🛑 IMPORTANT: Replace this with your Google Apps Script Backend URL!
+        // 🌐 Backend URLs
         const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
-        
+        const LIVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaayPCwfdZvXSXJPdzPspPmAeH72-NAvqGJIbuhwid3T28imRxNRypPI9m1bJQrfqLhg/exec';
+        const IMGBB_API_KEY = ''; // Optional: এখানে আপনার ImgBB API Key দিতে পারেন
+
         let cachedTeachers = [];
         let cachedStudents = [];
+
+        function sanitizeHTML(str) {
+            if (typeof str !== 'string') return str;
+            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
+        }
 
         // --- 🚀 SECURITY GATE: AUTO VERIFY OR KICK OUT ---
         window.onload = function() {
             auth.onAuthStateChanged((user) => {
-                if(user && user.email === "admin@srms.edu.bd") {
-                    // Admin verified! Unveil the Dashboard
+                if(user && (user.email === "admin@srms.edu.bd" || user.email === "srms2012.edu@gmail.com")) {
                     document.getElementById('loader').style.display = 'none';
                     document.getElementById('appBody').style.display = 'flex';
                     
-                    // Store safe tokens
                     user.getIdToken().then(token => sessionStorage.setItem('portal_token', token));
                     
-                    // Background data fetch
                     prefetchDataDirectly(); 
+                    loadAllActiveLiveSessions();
                 } else {
-                    // 🚫 UNAUTHORIZED! Kick back to Login Page
                     document.getElementById('loaderText').innerHTML = "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>";
                     let baseUrl = window.location.origin || (window.location.protocol + "//" + window.location.host);
                     window.location.replace(baseUrl + "/login-panel/accounting-and-management-department");
@@ -287,13 +378,198 @@
             if(target) { target.classList.remove('hidden'); target.classList.add('show-section'); }
         }
 
+        function openLiveHubSection() {
+            showSection('live-hub-section');
+            loadAllActiveLiveSessions();
+        }
+
+        // 🖼️ ImgBB API v1 Direct Upload Helper
+        async function uploadAvatarToImgBB(fileInput, targetHiddenId, statusId) {
+            const file = fileInput.files[0];
+            if (!file) return;
+            const statusEl = document.getElementById(statusId);
+
+            if (!IMGBB_API_KEY) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(targetHiddenId).value = e.target.result;
+                    statusEl.innerText = "✅ ছবি যুক্ত হয়েছে!";
+                };
+                reader.readAsDataURL(file);
+                return;
+            }
+
+            statusEl.innerText = "⏳ ImgBB-তে ছবি আপলোড হচ্ছে...";
+            const formData = new FormData();
+            formData.append("image", file);
+
+            try {
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                    method: "POST",
+                    body: formData
+                });
+                const json = await res.json();
+                if (json && json.success && json.data && json.data.display_url) {
+                    document.getElementById(targetHiddenId).value = json.data.display_url;
+                    statusEl.innerText = "✅ ছবি সফলভাবে আপলোড হয়েছে!";
+                } else {
+                    statusEl.innerText = "⚠️ আপলোড ব্যর্থ, ডিফল্ট লোগো ব্যবহৃত হবে।";
+                }
+            } catch (err) {
+                statusEl.innerText = "⚠️ নেটওয়ার্ক এরর, ডিফল্ট লোগো ব্যবহৃত হবে।";
+            }
+        }
+
+        // =========================================================================
+        // 🎥 ADMIN MASTER LIVE CONTROL (Multiple Simultaneous Sessions Supported)
+        // =========================================================================
+        function getTargetReadableName(code) {
+            const select = document.getElementById('adminLiveTarget');
+            const opt = Array.from(select.options).find(o => o.value === code);
+            return opt ? opt.text : ("Class " + code);
+        }
+
+        async function loadAllActiveLiveSessions() {
+            const listContainer = document.getElementById('adminActiveSessionsList');
+            const counterBadge = document.getElementById('dashLiveCounter');
+            listContainer.innerHTML = `<p style="font-size:13px; color:#b45309; font-weight:600;">⏳ চলমান সেশন চেক করা হচ্ছে...</p>`;
+
+            try {
+                const snap = await db.collection('LiveSessions').get();
+                let activeHtml = '';
+                let count = 0;
+
+                snap.forEach(doc => {
+                    const data = doc.data() || {};
+                    const docId = doc.id;
+                    if (String(data.status).toUpperCase() === "TRUE") {
+                        count++;
+                        const title = sanitizeHTML(data.title || "Live Session");
+                        const host = sanitizeHTML(data.host || "Admin / Teacher");
+                        const startTime = sanitizeHTML(data.startTime || "Running");
+                        const label = sanitizeHTML(getTargetReadableName(docId));
+
+                        activeHtml += `
+                        <div class="live-session-card">
+                            <h4>
+                                <span>🔴 ${label}</span>
+                                <span style="font-size:11px; background:#dcfce7; color:#166534; padding:3px 8px; border-radius:10px;">${startTime}</span>
+                            </h4>
+                            <p><b>বিষয়:</b> ${title}</p>
+                            <p><b>পরিচালনায়:</b> ${host}</p>
+                            <div class="live-card-actions">
+                                <button class="btn-join-live" onclick="joinLiveRoomAsAdmin('${docId}')"><i class="fas fa-sign-in-alt"></i> Join Room</button>
+                                <button class="btn-end-live" onclick="stopSpecificLiveSession('${docId}', '${title.replace(/'/g, "")}', this)"><i class="fas fa-stop-circle"></i> End Session</button>
+                            </div>
+                        </div>`;
+                    }
+                });
+
+                if (count > 0) {
+                    listContainer.innerHTML = activeHtml;
+                    counterBadge.style.display = 'inline-block';
+                    counterBadge.innerText = count + " LIVE";
+                } else {
+                    listContainer.innerHTML = `<p style="font-size:13px; color:#64748b; background:#f8fafc; padding:15px; border-radius:10px; border:1px dashed #cbd5e1;">বর্তমানে কোনো লাইভ ক্লাস বা মিটিং চলছে না।</p>`;
+                    counterBadge.style.display = 'none';
+                }
+            } catch (e) {
+                listContainer.innerHTML = `<p style="color:var(--danger-color); font-size:13px; font-weight:700;">সেশন লোড করতে সমস্যা হয়েছে!</p>`;
+            }
+        }
+
+        async function startAdminLiveSession() {
+            const target = document.getElementById('adminLiveTarget').value;
+            const hostName = document.getElementById('adminLiveHost').value.trim() || "Admin";
+            const topic = document.getElementById('adminLiveTopic').value.trim();
+            const pic = document.getElementById('adminLivePic').value;
+            const btn = document.getElementById('adminStartLiveBtn');
+
+            if (!topic) {
+                alert("⚠️ অনুগ্রহ করে মিটিং বা ক্লাসের বিষয় (Topic) লিখুন!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ব্রডকাস্ট শুরু হচ্ছে...`;
+
+            // 1. Open Jitsi Live Room in New Tab
+            const config = `#config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(hostName + ' (Admin)')}"&userInfo.avatarUrl="${encodeURIComponent(pic)}"&interfaceConfig.TOOLBAR_BUTTONS=["microphone","camera","desktop","chat","raisehand","mute-everyone","security","tileview","fullscreen","hangup","settings","recording","livestreaming"]`;
+            window.open(`https://meet.jit.si/SRMS-Live-${target}${config}`, '_blank');
+
+            const nowTime = new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' });
+
+            try {
+                // 2. Direct Instant Firestore Update (Multi-session safe)
+                await db.collection('LiveSessions').doc(target).set({
+                    status: "TRUE",
+                    title: topic,
+                    host: hostName,
+                    hostRole: "Admin",
+                    startTime: nowTime,
+                    updatedAt: Date.now()
+                }, { merge: true });
+
+                // 3. Trigger Backend for Official OneSignal Push Notification
+                fetch(LIVE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        action: "update",
+                        className: target,
+                        status: "TRUE",
+                        title: topic,
+                        host: hostName,
+                        hostRole: "Admin"
+                    })
+                }).catch(e => {});
+
+                document.getElementById('adminLiveTopic').value = '';
+                await loadAllActiveLiveSessions();
+            } catch (err) {
+                alert("ডাটাবেস আপডেটে সমস্যা হয়েছে: " + err.message);
+            }
+
+            btn.disabled = false;
+            btn.innerHTML = `<i class="fas fa-broadcast-tower"></i> START LIVE & SEND PUSH NOTIFICATION 🚀`;
+        }
+
+        function joinLiveRoomAsAdmin(target) {
+            const hostName = document.getElementById('adminLiveHost').value.trim() || "Admin";
+            const pic = document.getElementById('adminLivePic').value;
+            const config = `#config.prejoinPageEnabled=false&userInfo.displayName="${encodeURIComponent(hostName + ' (Admin)')}"&userInfo.avatarUrl="${encodeURIComponent(pic)}"`;
+            window.open(`https://meet.jit.si/SRMS-Live-${target}${config}`, '_blank');
+        }
+
+        async function stopSpecificLiveSession(target, title, btnEl) {
+            btnEl.disabled = true;
+            btnEl.innerText = "Ending...";
+            try {
+                await db.collection('LiveSessions').doc(target).set({
+                    status: "FALSE",
+                    title: title,
+                    updatedAt: Date.now()
+                }, { merge: true });
+
+                fetch(LIVE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({ action: "update", className: target, status: "FALSE", title: title })
+                }).catch(e => {});
+
+                await loadAllActiveLiveSessions();
+            } catch (e) {
+                btnEl.disabled = false;
+                btnEl.innerText = "End Session";
+            }
+        }
+
         function togglePasswordVisibility(inputId, icon) {
             const input = document.getElementById(inputId);
             if (input.type === "password") { input.type = "text"; icon.classList.replace('fa-eye', 'fa-eye-slash'); } 
             else { input.type = "password"; icon.classList.replace('fa-eye-slash', 'fa-eye'); }
         }
         
-        // --- 🚀 FULLY SECURE LOGOUT ---
         function logout() { 
             auth.signOut().then(() => {
                 sessionStorage.clear();
@@ -308,7 +584,6 @@
         
         function showChangePassword() { showSection('change-pass-section'); document.getElementById('success-msg').innerText = ""; }
         
-        // --- Password Update ---
         async function updatePassword() {
             const newPass = document.getElementById('new-password').value.trim();
             const msg = document.getElementById('success-msg');
@@ -324,10 +599,7 @@
                 const user = auth.currentUser;
                 if(!user) throw new Error("Not authenticated");
 
-                // Update Auth
                 await user.updatePassword(newPass);
-                
-                // Update Firestore DB directly
                 await db.collection('Admin').doc('Settings').set({ password: newPass }, { merge: true });
                 
                 msg.style.color = "var(--success-color)"; 
@@ -342,7 +614,6 @@
             document.getElementById('updateText').innerText = "Update Password";
         }
 
-        // --- 🚀 Direct Firebase Pre-fetching ---
         async function prefetchDataDirectly() {
             try {
                 const [tSnap, sSnap] = await Promise.all([
@@ -365,10 +636,9 @@
                 });
                 cachedStudents.sort((a,b) => a.roll - b.roll);
                 
-            } catch(e) { console.log("Prefetch error (Rules blocking?):", e); }
+            } catch(e) { console.log("Prefetch error:", e); }
         }
 
-        // --- Dynamic Dropdown ---
         window.handleAudienceChange = function() {
             const aud = document.getElementById('audienceType').value;
             if(aud === "Teachers") {
@@ -403,7 +673,6 @@
              }
         };
 
-        // --- 🚀 SECURE BROADCAST (Via Backend) ---
         window.sendBroadcast = async function() {
             const audienceType = document.getElementById('audienceType').value;
             const targetClass = document.getElementById('recipientClass').value;
