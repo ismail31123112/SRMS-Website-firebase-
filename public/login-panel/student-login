@@ -3,1733 +3,1072 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SRMS Manager (Final Edition)</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-<script>
-if (window.history.replaceState) {
-  var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-  window.history.replaceState({path: cleanUrl}, '', cleanUrl);
-}
-</script>
-
+<title>Student Premium Portal - SRMS</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-:root {
-  --primary: #005f40;
-  --primary-light: #ecfdf5;
-  --primary-dark: #003d29;
-  --bg: #f1f5f9;
-  --danger: #ef4444;
-  --warn: #f59e0b;
-  --edit: #2563eb;
-  --guardian: #7c3aed;
-  --guardian-light: #f3e8ff;
-  --gold: #f59e0b;
-  --surface: #ffffff;
-}
-* { box-sizing: border-box; }
-body {
-  font-family: 'Poppins', sans-serif;
-  background: var(--bg);
-  margin: 0;
-  padding-bottom: 105px;
-  color: #0f172a;
-}
+  /* === Global Premium Styles === */
+  :root {
+    --primary: #005f40;
+    --primary-dark: #003d29;
+    --accent: #bf953f;
+    --success: #059669;
+    --warning: #d97706;
+    --danger: #e11d48;
+    --danger-dark: #be123c;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+  }
+  body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; transition: 0.3s; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  
+  /* Animations */
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulseLoader { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 95, 64, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(0, 95, 64, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 95, 64, 0); } }
+  @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  .animate-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+  .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
 
-/* Header */
-.header {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(14px);
-  padding: 12px 22px;
-  box-shadow: 0 4px 25px rgba(0, 95, 64, 0.08);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  border-bottom: 1px solid rgba(0, 95, 64, 0.12);
-}
-.header img {
-  height: 44px;
-  width: 44px;
-  object-fit: cover;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  padding: 2px;
-  background: white;
-}
-.header-title-wrap h2 {
-  font-size: 16px;
-  color: var(--primary);
-  margin: 0;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-}
-.header-title-wrap span {
-  font-size: 10.5px;
-  background: var(--primary-light);
-  color: var(--primary);
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-weight: 700;
-}
-.btn-back {
-  margin-left: auto;
-  background: var(--surface);
-  color: var(--primary);
-  border: 1.5px solid #cbd5e1;
-  padding: 8px 16px;
-  border-radius: 30px;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.btn-back:hover {
-  background: var(--primary);
-  color: white;
-  border-color: var(--primary);
-  transform: translateY(-1px);
-}
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-/* Containers & Cards */
-.container {
-  display: none;
-  padding: 22px 16px;
-  max-width: 720px;
-  margin: auto;
-  animation: fadeInUp 0.35s ease;
-}
-.container.active { display: block; }
-.card {
-  background: var(--surface);
-  border-radius: 22px;
-  padding: 26px 22px;
-  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
-  margin-bottom: 24px;
-  border: 1px solid rgba(226, 232, 240, 0.9);
-  position: relative;
-}
+  /* === Premium Navbar === */
+  #main-navbar { display: none; }
+  .navbar { background: var(--card-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--accent); }
+  .nav-top-container { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; box-sizing: border-box; max-width: 1400px; margin: 0 auto; gap: 15px; }
+  .nav-brand { font-weight: 800; color: var(--primary); font-size: 18px; letter-spacing: 0.5px; text-transform: uppercase; flex: 1; }
+  .nav-menu { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+  .nav-link { font-weight: 600; font-size: 13px; color: var(--text-main); padding: 10px 20px; border-radius: 8px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
+  .nav-link.logout-btn { color: var(--danger); background: #fff1f2; }
+  .nav-link.logout-btn:hover { color: #fff; background: var(--danger); }
 
-/* Typography & Forms */
-label {
-  display: block;
-  font-size: 13px;
-  font-weight: 700;
-  color: #334155;
-  margin-top: 16px;
-  margin-bottom: 7px;
-}
-input, select, textarea {
-  width: 100%;
-  padding: 13px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 13px;
-  font-family: inherit;
-  font-size: 14px;
-  transition: 0.25s;
-  color: #0f172a;
-  background: #f8fafc;
-  font-weight: 500;
-}
-input[type="file"] {
-  padding: 10px;
-  background: #fff;
-  border: 2px dashed var(--primary);
-  cursor: pointer;
-}
-input:focus, select:focus, textarea:focus {
-  border-color: var(--primary);
-  background: #fff;
-  outline: none;
-  box-shadow: 0 0 0 4px rgba(0, 95, 64, 0.1);
-}
-input:disabled {
-  background: #f1f5f9 !important;
-  color: #64748b !important;
-  cursor: not-allowed;
-  border-color: #e2e8f0;
-}
+  /* === Premium Banner === */
+  #main-banner { display: none; }
+  .custom-banner { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 40px 5%; display: flex; align-items: center; justify-content: center; gap: 25px; text-align: left; position: relative; overflow: hidden; }
+  .custom-banner::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); z-index: 0; }
+  .banner-logo { width: 90px; height: 90px; background: #fff; border-radius: 50%; padding: 8px; border: 3px solid rgba(255,255,255,0.2); object-fit: contain; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1; }
+  .banner-text { z-index: 1; }
+  .banner-text h1 { margin: 0; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
+  .school-codes { background: rgba(255, 255, 255, 0.1); display: inline-block; padding: 6px 15px; border-radius: 20px; margin-top: 10px; font-size: 13px; font-weight: 500; color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); }
 
-/* Image Preview Box */
-.preview-box {
-  display: none;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 14px;
-  background: #f0fdf4;
-  border: 1.5px solid #bbf7d0;
-  align-items: center;
-  gap: 14px;
-}
-.preview-box img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 12px;
-  border: 2px solid var(--primary);
-  background: #fff;
-}
-.preview-info {
-  flex: 1;
-  font-size: 12px;
-  color: #166534;
-  font-weight: 600;
-}
+  /* === Login Section === */
+  #login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; position: relative; overflow: hidden; }
+  #login-container::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at top right, rgba(0,95,64,0.05) 0%, transparent 50%); z-index: -1; }
+  .login-card { background: var(--card-bg); padding: 45px 35px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(0,0,0,0.05); box-sizing: border-box; }
+  .login-logo { width: 85px; margin-bottom: 20px; }
+  .login-title { color: var(--primary); font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
+  .login-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 10px; font-weight: 500; }
+  .default-pass-note { font-size: 12px; color: var(--accent); font-weight: 600; margin-bottom: 25px; }
+  
+  input { width: 100%; padding: 15px 18px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 15px; transition: 0.3s; box-sizing: border-box; background: #f8fafc; color: var(--text-main); font-weight: 500; }
+  input:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(0,95,64,0.1); }
+  .login-btn { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 16px; margin-top: 15px; transition: all 0.3s ease; letter-spacing: 0.5px; }
+  .login-btn:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(0,95,64,0.3); }
+  .login-btn:active { transform: translateY(-1px); }
+  .login-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
+  
+  /* Forgot Password Link */
+  .forgot-pass-btn { display: inline-block; margin-top: 20px; color: var(--accent); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.3s; border-bottom: 2px solid transparent; }
+  .forgot-pass-btn:hover { border-color: var(--accent); color: var(--primary); }
 
-/* User Avatar in List */
-.user-avatar-wrap {
-  position: relative;
-  width: 56px;
-  height: 56px;
-  border-radius: 16px;
-  background: #f8fafc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #e2e8f0;
-  flex-shrink: 0;
-  overflow: hidden;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.04);
-}
-.user-avatar-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
+  /* === Premium Loader === */
+  #loader { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index: 10000; justify-content:center; align-items:center; flex-direction:column; backdrop-filter: blur(10px); }
+  .loader-img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 20px; animation: pulseLoader 2s infinite; border: 3px solid var(--primary); padding: 5px; background: #fff; }
+  .loader-text { font-size: 16px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; }
+  .loader-spinner { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #005f40; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
 
-/* Buttons */
-.btn-submit {
-  width: 100%;
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: white;
-  padding: 15px;
-  border: none;
-  border-radius: 15px;
-  font-weight: 800;
-  cursor: pointer;
-  margin-top: 22px;
-  transition: all 0.25s ease;
-  font-size: 14.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.8px;
-  box-shadow: 0 8px 22px rgba(0, 95, 64, 0.28);
-}
-.btn-submit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 95, 64, 0.38);
-}
-.btn-delete {
-  background: #fef2f2;
-  color: var(--danger);
-  border: 1px solid #fecaca;
-  padding: 9px 13px;
-  border-radius: 11px;
-  cursor: pointer;
-  font-size: 12.5px;
-  font-weight: 700;
-  transition: 0.25s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-}
-.btn-delete:hover {
-  background: var(--danger);
-  color: white;
-}
-.btn-edit {
-  background: #eff6ff;
-  color: var(--edit);
-  border: 1px solid #bfdbfe;
-  padding: 9px 14px;
-  border-radius: 11px;
-  cursor: pointer;
-  font-size: 12.5px;
-  font-weight: 700;
-  transition: 0.25s;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-}
-.btn-edit:hover {
-  background: var(--edit);
-  color: white;
-}
+  /* === Dashboard Layout === */
+  #dashboard-section { display: none; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
+  
+  /* Compact Header Card */
+  .header-card { background: var(--card-bg); padding: 18px 25px; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--primary); margin-bottom: 20px; }
+  
+  /* Scroll Cue Wrapper & Animation */
+  .scroll-cue-container { width: 100%; margin-bottom: 20px; text-align: center; }
+  .scroll-cue { display: inline-block; color: var(--danger); font-size: 14px; font-weight: 700; padding: 8px 20px; background: #fff1f2; border-radius: 20px; border: 1px solid #fecdd3; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.1); }
 
-/* Stats Grid */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 18px;
-}
-.stat-box {
-  padding: 18px 12px;
-  border-radius: 18px;
-  color: white;
-  text-align: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
-.stat-box b {
-  font-size: 26px;
-  font-weight: 900;
-  display: block;
-  line-height: 1.1;
-}
-.stat-box small {
-  font-size: 10.5px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  opacity: 0.92;
-}
+  #noticeBox { background: #fff1f2; color: var(--danger-dark); padding: 20px 25px; border-radius: 16px; border-left: 6px solid var(--danger); margin-bottom: 30px; display: none; box-shadow: 0 10px 25px rgba(225, 29, 72, 0.08); }
+  
+  .card { background: var(--card-bg); padding: 30px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
 
-/* Filter Bar */
-.filter-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
-  background: #f8fafc;
-  padding: 12px;
-  border-radius: 18px;
-  border: 1px solid #e2e8f0;
-}
-.search-wrapper {
-  position: relative;
-  flex: 1 1 220px;
-}
-.search-wrapper i {
-  position: absolute;
-  left: 15px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #94a3b8;
-  font-size: 14px;
-}
-.search-wrapper input {
-  padding-left: 40px;
-  margin: 0;
-  border-radius: 25px;
-  background: white;
-  height: 44px;
-}
-.filter-wrapper {
-  flex: 1 1 150px;
-}
-.filter-wrapper select {
-  margin: 0;
-  border-radius: 25px;
-  background: white;
-  height: 44px;
-  padding: 0 16px;
-  cursor: pointer;
-  font-weight: 700;
-  color: #334155;
-}
+  /* === Academic Resources / Buttons === */
+  .resource-section { background: var(--card-bg); padding: 35px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); margin-bottom: 40px; }
+  .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 25px; }
+  .l-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px 10px; border-radius: 16px; text-align: center; transition: all 0.3s ease; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .l-btn span:first-child { font-size: 26px; }
+  .l-btn span:last-child { font-size: 12px; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; }
+  .l-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,95,64,0.15); }
+  .l-btn:hover span:last-child { color: white; }
 
-/* List Items */
-.list-item {
-  padding: 18px;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 18px;
-  margin-bottom: 14px;
-  background: #fff;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  transition: 0.25s;
-}
-.list-item:hover {
-  box-shadow: 0 8px 25px rgba(0, 95, 64, 0.08);
-  border-color: #cbd5e1;
-}
+  /* === Digital Marksheet (Modal Style) === */
+  .digital-transcript { background: #0f172a; color: #f8fafc; border-radius: 24px; padding: 25px 20px; position: relative; }
+  .scroll-indicator { text-align: center; color: #cbd5e1; font-size: 12px; font-weight: 600; margin-bottom: 18px; animation: bounce 2s infinite; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; display: inline-block; width: 100%; box-sizing: border-box; }
+  .dt-header { border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 18px; text-align: center; }
+  
+  .dt-summary-box { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); padding: 20px 15px; border-radius: 18px; margin-bottom: 22px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.35); border: 1px solid rgba(255,255,255,0.12); }
+  
+  .dt-row { background: #1e293b; border-radius: 14px; padding: 14px 18px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 10px; border: 1px solid #334155; transition: 0.3s; }
+  .dt-row:hover { border-color: #38bdf8; box-shadow: 0 4px 15px rgba(56, 189, 248, 0.12); }
+  
+  .dt-row-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 8px; }
+  .dt-row-bottom { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 10px; width: 100%; }
+  
+  .sub-name { font-weight: 700; font-size: 15px; color: #38bdf8; }
+  .mark-group { background: rgba(15, 23, 42, 0.6); padding: 8px 10px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05); }
+  .mark-label { font-size: 10px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 3px; letter-spacing: 0.5px; }
+  .mark-val { font-size: 15px; font-weight: 800; color: #f8fafc; }
+  
+  .dt-warning-text { font-size: 10px; color: #64748b; text-align: center; margin-top: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
-/* Policy Notice Banner */
-.policy-banner {
-  background: #eff6ff;
-  border-left: 5px solid var(--edit);
-  padding: 12px 15px;
-  border-radius: 12px;
-  font-size: 12px;
-  color: #1e3a8a;
-  font-weight: 600;
-  margin-bottom: 18px;
-  line-height: 1.5;
-}
+  /* === Live Class Animation === */
+  @keyframes livePulseBtn { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); } 50% { transform: scale(1.03); box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
+  .live-active-btn { animation: livePulseBtn 2s infinite !important; background: var(--danger) !important; border-color: var(--danger-dark) !important; color: white !important; }
+  .live-active-btn span { color: white !important; }
 
-/* Read-only Summary Box inside Modal */
-.readonly-summary {
-  background: #f8fafc;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 14px;
-  padding: 14px 16px;
-  margin-top: 12px;
-  margin-bottom: 14px;
-  font-size: 13px;
-  line-height: 1.7;
-  color: #334155;
-}
-.readonly-summary .ro-row {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px dashed #e2e8f0;
-  padding: 4px 0;
-}
-.readonly-summary .ro-row:last-child {
-  border-bottom: none;
-}
+  /* === Modals === */
+  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
+  .modal-content { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 28px; padding: 40px; position: relative; animation: fadeInUp 0.4s ease; overflow-y: auto; max-height: 85vh; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
+  .close-btn { position: absolute; top: 20px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; line-height: 1; transition: 0.3s; }
+  .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
 
-/* Bottom Navigation */
-.bottom-nav {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-  background: rgba(255,255,255,0.96);
-  backdrop-filter: blur(15px);
-  display: flex;
-  box-shadow: 0 -5px 25px rgba(0, 95, 64, 0.08);
-  z-index: 100;
-  border-top: 1px solid #e2e8f0;
-  border-radius: 22px 22px 0 0;
-  padding: 4px 0;
-}
-.nav-item {
-  flex: 1;
-  text-align: center;
-  color: #94a3b8;
-  border: none;
-  background: none;
-  font-size: 11.5px;
-  padding: 10px 4px;
-  cursor: pointer;
-  transition: 0.3s;
-  font-weight: 700;
-}
-.nav-item i {
-  display: block;
-  font-size: 20px;
-  margin-bottom: 4px;
-  transition: 0.3s;
-}
-.nav-item.active {
-  color: var(--primary);
-  font-weight: 800;
-}
-.nav-item.active i {
-  transform: translateY(-3px) scale(1.1);
-  color: var(--primary);
-}
+  /* === Mobile Specific Styles === */
+  @media (max-width: 768px) {
+    .nav-brand { font-size: 13px; line-height: 1.4; word-wrap: break-word; }
+    .nav-link.logout-btn { padding: 8px 12px; font-size: 11px; white-space: nowrap; }
 
-/* Modal & Loader */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1000;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(15, 23, 42, 0.65);
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(5px);
-  padding: 15px;
-}
-.modal-content {
-  background-color: #fff;
-  margin: auto;
-  padding: 30px 24px;
-  border-radius: 24px;
-  width: 100%;
-  max-width: 440px;
-  position: relative;
-  animation: zoomIn 0.25s ease;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-  border-top: 7px solid var(--primary);
-  max-height: 90vh;
-  overflow-y: auto;
-}
-#loader {
-  display: flex;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255,255,255,0.95);
-  z-index: 9999;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(8px);
-}
-.spinner {
-  width: 54px;
-  height: 54px;
-  border: 5px solid #e2e8f0;
-  border-top: 5px solid var(--primary);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes zoomIn { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.close {
-  position: absolute;
-  top: 16px;
-  right: 20px;
-  color: #94a3b8;
-  font-size: 26px;
-  font-weight: bold;
-  cursor: pointer;
-  line-height: 1;
-}
-.close:hover { color: var(--danger); }
+    .custom-banner { flex-direction: column; text-align: center; padding: 30px 20px; }
+    .banner-text h1 { font-size: 22px; }
+    .login-card { padding: 40px 25px; width: 95%; }
+    .header-card { flex-direction: column; text-align: center; gap: 10px; padding: 15px; }
+    
+    .dt-summary-box { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+    .dt-row { padding: 12px 14px; }
 
-@media (max-width: 500px) {
-  .stats-grid { grid-template-columns: 1fr; }
-  .list-item { flex-direction: column; align-items: flex-start; }
-  .list-actions { width: 100%; display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
-}
+    .resource-section { padding: 25px 15px; }
+    .link-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+    .l-btn { padding: 15px 5px; gap: 8px; }
+    .l-btn span:first-child { font-size: 22px; }
+    .l-btn span:last-child { font-size: 10px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- 🛑 Security Gate UI (Token & Session Verification Only — No Login Form Here) -->
 <div id="loader">
-  <div class="spinner"></div>
-  <p id="loaderText" style="margin-top:18px; font-size:14px; font-weight:800; color:var(--primary); letter-spacing:0.8px; text-align:center;">
-    SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span>
-  </p>
+    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="loader-img" alt="Loading">
+    <div class="loader-text">Loading Secure Data...</div>
 </div>
 
-<!-- ================= MAIN APPLICATION ================= -->
-<div id="appContainer" style="display:none;">
-  <div class="header">
-    <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="SRMS Logo">
-    <div class="header-title-wrap">
-      <h2>SRMS Manager</h2>
-      <span>IMGBB + ONESIGNAL EDITION</span>
+<div id="login-container" class="animate-up">
+    <div class="login-card">
+        <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo" class="login-logo">
+        <h2 class="login-title">Student Portal</h2>
+        <div class="login-subtitle">Enter credentials to access your dashboard</div>
+        <div class="default-pass-note">Default Password is: 123456</div>
+        
+        <input type="text" id="stuID" placeholder="Enter Student ID" autocomplete="off">
+        <input type="password" id="stuPass" placeholder="Enter Password">
+        <button id="lBtn" class="login-btn" onclick="handleLogin()">SECURE LOGIN</button>
+        <div class="forgot-pass-btn" onclick="openForgotPassModal()">Forgot Password?</div>
+        <p id="err" style="color:var(--danger); font-size:13px; margin-top:15px; font-weight:700;"></p>
     </div>
-    <button class="btn-back" onclick="window.close();" title="Back to Dashboard">
-      <i class="fas fa-sign-out-alt"></i> Dashboard
-    </button>
+</div>
+
+<nav class="navbar" id="main-navbar">
+  <div class="nav-top-container">
+    <div class="nav-brand">Saidpur Residential Model School</div>
+    <ul class="nav-menu">
+      <li><a class="nav-link logout-btn" onclick="logout()">LOGOUT 🔒</a></li>
+    </ul>
   </div>
+</nav>
 
-  <!-- ================= 1. POST / UPLOAD TAB ================= -->
-  <div id="upload" class="container active">
-    <!-- Scrolling Headline Card -->
-    <div class="card" style="border-left: 7px solid var(--warn); background: linear-gradient(145deg, #ffffff, #fffbeb);">
-      <label style="margin-top:0; color: #b45309; font-weight:800; font-size: 14px; text-transform:uppercase;">
-        <i class="fas fa-bullhorn"></i> Scrolling Headline Notice (+ Push Notification)
-      </label>
-      <div style="display:flex; gap:10px; margin-top:12px;">
-        <input type="text" id="hText" placeholder="Write urgent scrolling headline here..." style="margin-top:0; border-color: #fde68a;">
-        <button onclick="pubHead()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:0 24px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);">
-          <i class="fas fa-paper-plane" style="font-size: 17px;"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Website Content & ImgBB Photo Publisher -->
-    <div class="card">
-      <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:17px;">
-        <i class="fas fa-cloud-upload-alt"></i> Publish Website Content & Photos (ImgBB + OneSignal Push)
-      </h3>
-
-      <label><i class="fas fa-bullseye" style="color:var(--primary); margin-right:5px;"></i> Target Page / Section</label>
-      <select id="upCat" onchange="updateTitleLabel(this)">
-        <optgroup label="General">
-          <option value="Notice">Notice Board</option>
-          <option value="HomeSlide">Home Slide Show</option>
-          <option value="HomeVideo">Home Video</option>
-          <option value="TeacherDashboard">Teacher Dashboard</option>
-        </optgroup>
-        <optgroup label="Website & Administration" id="adminOnlyUploads">
-          <option value="GoverningBody">Governing Body</option>
-          <option value="PresidentMessage">Message of President</option>
-          <option value="VPMessage">Message of Vice President</option>
-          <option value="HeadmasterMessage">Message of Headmaster</option>
-          <option value="Facilities">Facilities</option>
-          <option value="News">News</option>
-          <option value="Teachers">Teacher List</option>
-          <option value="Admission">Admission Info</option>
-          <option value="Routine">Routine</option>
-          <option value="Syllabus">Syllabus</option>
-          <option value="Exam">Exam Routine</option>
-          <option value="Gallery">Gallery</option>
-        </optgroup>
-        <optgroup label="Class Dashboards">
-          <option value="ClassPlay">Class Play</option>
-          <option value="ClassNursery">Class Nursery</option>
-          <option value="ClassKG">Class KG</option>
-          <option value="Class1">Class 1</option>
-          <option value="Class2">Class 2</option>
-          <option value="Class3">Class 3</option>
-          <option value="Class4">Class 4</option>
-          <option value="Class5">Class 5</option>
-          <option value="Class6">Class 6</option>
-          <option value="Class7">Class 7</option>
-          <option value="Class8">Class 8</option>
-          <option value="Class9">Class 9</option>
-          <option value="Class10">Class 10</option>
-        </optgroup>
-      </select>
-
-      <label id="titleLabel"><i class="fas fa-heading" style="color:var(--primary); margin-right:5px;"></i> Title for Notice Board</label>
-      <input type="text" id="upTitle" placeholder="Enter post title, caption, or name" required>
-
-      <label><i class="fas fa-align-left" style="color:var(--primary); margin-right:5px;"></i> Description / Message Body</label>
-      <textarea id="upDesc" rows="4" placeholder="Write description or full message here..."></textarea>
-
-      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Select Photo (Uploads to ImgBB Server) or PDF/Doc</label>
-      <input type="file" id="upFile" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="handleFilePreview(this)">
-
-      <!-- Live Photo/File Preview -->
-      <div id="filePreviewBox" class="preview-box">
-        <img id="previewImg" src="" alt="Preview">
-        <div class="preview-info" id="previewMeta">Ready to upload</div>
-        <button type="button" class="btn-delete" onclick="clearSelectedFile()" title="Remove file">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-
-      <label><i class="fas fa-link" style="color:var(--primary); margin-right:5px;"></i> Or Paste External Link (Optional)</label>
-      <input type="url" id="upLink" placeholder="https://i.ibb.co/... or external link">
-
-      <button class="btn-submit" onclick="submitUpload()">
-        <i class="fas fa-rocket" style="margin-right: 6px;"></i> Publish & Send Push Notification
-      </button>
-    </div>
-  </div>
-
-  <!-- ================= 2. USERS TAB ================= -->
-  <div id="users" class="container">
-    <!-- User Statistics Card (Teachers, Students & Guardians) -->
-    <div class="card">
-      <h3 style="margin-top:0; color:var(--primary); font-weight:800; text-transform: uppercase; font-size:16.5px;">
-        <i class="fas fa-chart-pie"></i> User & Guardian Statistics
-      </h3>
-      <div id="userStatsDisplay">
-        <div style="text-align:center; padding:15px; color:#64748b;">
-          <i class="fas fa-circle-notch fa-spin"></i> Loading statistics...
-        </div>
-      </div>
-    </div>
-
-    <!-- Setup Teacher Account ONLY (With Teacher Photo Upload) -->
-    <div class="card">
-      <h3 style="margin-top:0; color:var(--primary); font-weight:800; text-transform: uppercase; font-size:16.5px;">
-        <i class="fas fa-chalkboard-teacher"></i> Setup Teacher Account
-      </h3>
-      <div class="policy-banner">
-        <i class="fas fa-info-circle"></i> <b>সিস্টেম পলিসি:</b> এখান থেকে শুধুমাত্র <b>Teacher Account</b> ও তার ছবি যুক্ত করা যাবে (স্বয়ংক্রিয়ভাবে টিচারের মোবাইলে <b>Welcome SMS ও Email</b> চলে যাবে)। <b>Student</b> এবং <b>Guardian</b> অ্যাকাউন্ট ও ছবি স্টুডেন্ট ম্যানেজমেন্ট প্যানেল থেকে যুক্ত হয় এবং নিচে তাদের শুধুমাত্র <b>Password</b> পরিবর্তন করা যাবে।
-      </div>
-
-      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Teacher Profile Photo (ImgBB Upload)</label>
-      <input type="file" id="uTPhoto" accept="image/*" onchange="handleTeacherPhotoPreview(this, 'add')">
-      <div id="uTPhotoPreviewBox" class="preview-box">
-        <img id="uTPhotoPreviewImg" src="" alt="Teacher Photo" style="border-radius:50%;">
-        <div class="preview-info" id="uTPhotoPreviewMeta">Photo ready</div>
-        <button type="button" class="btn-delete" onclick="clearTeacherPhoto('add')" title="Remove photo">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-
-      <label>Teacher Phone Number (Login ID) *</label>
-      <input type="tel" id="uTPhone" placeholder="017XXXXXXXX">
-
-      <label>Machine / Biometric ID</label>
-      <input type="text" id="uTMachineId" placeholder="Blank = Same as Phone Number">
-
-      <label>Teacher Full Name *</label>
-      <input type="text" id="uTName" placeholder="Enter Teacher Full Name">
-
-      <label>Email Address (Optional)</label>
-      <input type="email" id="uTEmail" placeholder="teacher@email.com">
-
-      <label style="color:#b45309; font-weight:800;">
-        <i class="fas fa-id-card"></i> RFID Card Number <small style="color:#64748b;">(Type or Scan for Attendance Machine)</small>
-      </label>
-      <input type="text" id="uCardNumber" placeholder="Scan or Enter RFID Card Number" style="border-color: var(--gold); background:#fffbeb;">
-
-      <label>Login Password (Min 6 Characters)</label>
-      <input type="text" id="uPass" placeholder="Default: 123456">
-
-      <button class="btn-submit" id="accBtn" onclick="addUser()">
-        <i class="fas fa-user-plus" style="margin-right: 6px;"></i> Save Teacher Account
-      </button>
-    </div>
-
-    <!-- Manage All Logins (Teachers, Students, Guardians) -->
-    <div class="card">
-      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
-        <h3 style="margin:0; color:var(--primary); font-weight:800; text-transform: uppercase; font-size:16.5px;">
-          <i class="fas fa-users-cog"></i> Manage Logins (Teacher / Student / Guardian)
-        </h3>
-        <button onclick="loadUsers()" style="background:var(--primary-light); color:var(--primary); border:1px solid #a7f3d0; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer;">
-          <i class="fas fa-sync-alt"></i> Refresh
-        </button>
-      </div>
-
-      <div class="filter-container">
-        <div class="search-wrapper">
-          <i class="fas fa-search"></i>
-          <input type="text" id="searchUserList" placeholder="Search Name, Student ID, or Guardian Phone..." onkeyup="filterUsers()">
-        </div>
-        <div class="filter-wrapper">
-          <select id="filterClass" onchange="filterUsers()">
-            <option value="All">All Users (Everyone)</option>
-            <option value="Teacher">👨‍🏫 Teachers Only</option>
-            <option value="Student">🎓 Students Only</option>
-            <option value="Guardian">👪 Guardians Only</option>
-            <optgroup label="Filter by Class (Student & Guardian)">
-              <option value="Play">Class Play</option>
-              <option value="Nursery">Class Nursery</option>
-              <option value="KG">Class KG</option>
-              <option value="1">Class 1</option>
-              <option value="2">Class 2</option>
-              <option value="3">Class 3</option>
-              <option value="4">Class 4</option>
-              <option value="5">Class 5</option>
-              <option value="6">Class 6</option>
-              <option value="7">Class 7</option>
-              <option value="8">Class 8</option>
-              <option value="9">Class 9</option>
-              <option value="10">Class 10</option>
-            </optgroup>
-          </select>
-        </div>
-      </div>
-
-      <div id="userListDisplay">
-        <div style="text-align:center; padding:20px; color:#64748b;">
-          <i class="fas fa-circle-notch fa-spin"></i> Loading User List...
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= 3. MANAGE POSTS TAB ================= -->
-  <div id="manage" class="container">
-    <div class="card" id="postList">
-      <div style="text-align:center; padding:20px; color:#64748b;">
-        <i class="fas fa-circle-notch fa-spin"></i> Loading website posts...
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= EDIT MODAL (STRICT ROLE SEPARATION) ================= -->
-  <div id="editUserModal" class="modal">
-    <div class="modal-content" style="text-align:left;">
-      <span class="close" onclick="closeModal('editUserModal')">&times;</span>
-      <h3 id="modalTitle" style="text-align:center; color:var(--primary); margin-top:0; font-weight:800; font-size:18px;">
-        <i class="fas fa-key"></i> Change Password
-      </h3>
-
-      <input type="hidden" id="euRow">
-      <input type="hidden" id="euType">
-      <input type="hidden" id="euId">
-
-      <!-- Read-Only Summary for Student & Guardian (NO OTHER FIELDS EDITABLE) -->
-      <div id="studentGuardianReadOnlyBox" class="readonly-summary" style="display:none;"></div>
-
-      <!-- Editable Fields ONLY for Teacher -->
-      <div id="teacherEditableFields" style="display:none;">
-        <div style="text-align:center; margin-top:8px; margin-bottom:10px;">
-          <img id="euCurrentTeacherPhoto" src="" alt="Teacher" style="width:74px; height:74px; border-radius:50%; object-fit:cover; border:3px solid var(--primary); display:none; margin:0 auto;">
-        </div>
-
-        <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Update Teacher Photo (Optional)</label>
-        <input type="file" id="euTPhoto" accept="image/*" onchange="handleTeacherPhotoPreview(this, 'edit')">
-        <div id="euTPhotoPreviewBox" class="preview-box">
-          <img id="euTPhotoPreviewImg" src="" alt="New Photo" style="border-radius:50%;">
-          <div class="preview-info" id="euTPhotoPreviewMeta">New photo ready</div>
-          <button type="button" class="btn-delete" onclick="clearTeacherPhoto('edit')" title="Remove photo">
-            <i class="fas fa-times"></i>
-          </button>
-        </div>
-
-        <label>Teacher Login ID (Phone)</label>
-        <input type="text" id="euTeacherIdDisplay" disabled>
-
-        <label>Teacher Full Name</label>
-        <input type="text" id="euName" placeholder="Teacher Name">
-
-        <label>Email Address</label>
-        <input type="email" id="euEmail" placeholder="Teacher Email">
-
-        <label>Machine ID</label>
-        <input type="text" id="euMachineId" placeholder="Machine ID">
-
-        <label style="color:#b45309;"><i class="fas fa-id-card"></i> Update RFID Card (Optional)</label>
-        <input type="text" id="euCardNumber" placeholder="Scan or Enter RFID Card Number" style="border-color: var(--gold); background:#fffbeb;">
-      </div>
-
-      <!-- Password Field (Editable for Everyone with Admin Special Power) -->
-      <label style="color:var(--primary); font-size:14px;">
-        <i class="fas fa-lock"></i> New Login Password (Min 6 Characters)
-      </label>
-      <input type="text" id="euPass" placeholder="Enter new password (min 6 chars)" style="font-weight:700; border-color:var(--primary); background:#fff;">
-      <small id="passSyncNote" style="display:block; margin-top:6px; color:#64748b; font-size:11px; line-height:1.4;"></small>
-
-      <button class="btn-submit" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="submitUserEdit()">
-        <i class="fas fa-bolt"></i> Apply Admin Override & Save
-      </button>
-    </div>
-  </div>
-
-  <!-- Bottom Navigation -->
-  <div class="bottom-nav">
-    <button class="nav-item active" onclick="switchTab('upload', this)">
-      <i class="fas fa-plus-circle"></i>Post & Upload
-    </button>
-    <button class="nav-item" onclick="switchTab('users', this)">
-      <i class="fas fa-users"></i>Users & Guardians
-    </button>
-    <button class="nav-item" onclick="switchTab('manage', this)">
-      <i class="fas fa-tasks"></i>Manage Posts
-    </button>
+<div class="custom-banner" id="main-banner">
+  <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="banner-logo" alt="Logo">
+  <div class="banner-text">
+    <h1>Saidpur Residential Model School</h1>
+    <div class="school-codes">Smart Student Dashboard</div>
   </div>
 </div>
 
-<!-- ================= FIREBASE & FRONTEND LOGIC ================= -->
+<div id="dashboard-section">
+    <div class="scroll-cue-container animate-up delay-1">
+        <div class="scroll-cue">⬇️ Scroll down for more options ⬇️</div>
+    </div>
+
+    <div class="header-card animate-up delay-1">
+        <div>
+          <h3 id="uName" style="margin:0; color:var(--primary); font-size:20px; font-weight:800;">Assalamu Alaikum</h3>
+          <p id="uMeta" style="margin:4px 0 0 0; font-size:13px; color:var(--text-muted); font-weight:600;"></p>
+        </div>
+    </div>
+
+    <div id="noticeBox" class="animate-up delay-1">
+        <h4 style="margin:0; font-size:16px; display:flex; align-items:center; gap:8px;"><span>⚠️</span> IMPORTANT NOTICE</h4>
+        <p id="noticeText" style="margin:8px 0 0 0; font-size:14.5px; font-weight:600; line-height:1.5;"></p>
+    </div>
+
+    <div class="card animate-up delay-2" style="margin-bottom: 30px; border-left: 6px solid var(--accent);">
+        <h3 style="margin:0 0 15px 0; color:var(--primary); font-size:18px;">📚 Class Materials &amp; Content</h3>
+        <div id="matList" style="font-size:14.5px; color:#475569; max-height: 350px; overflow-y: auto; padding-right: 5px;"></div>
+    </div>
+
+    <div class="resource-section animate-up delay-3">
+        <h3 style="margin:0; color:var(--text-main); font-size:22px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">🏛️ Quick Resources</h3>
+        
+        <div class="link-grid">
+            <a onclick="viewResultModal();" class="l-btn"><span>🎓</span><span>Results</span></a>
+            <a onclick="openAttendanceModal();" class="l-btn"><span>📅</span><span>Attendance</span></a>
+            <a id="liveClassMainBtn" onclick="openLiveClassModal();" class="l-btn"><span>🎥</span><span>Live Class</span></a>
+            <a onclick="openFeesModal();" class="l-btn"><span>💳</span><span>Pay Fees</span></a>
+            <a href="/menu/academic/syllabus" target="_blank" class="l-btn"><span>📖</span><span>Syllabus</span></a>
+            <a href="/menu/academic/class-routine" target="_blank" class="l-btn"><span>🎯</span><span>Routine</span></a>
+            <a href="/menu/academic/exam-routine" target="_blank" class="l-btn"><span>📅</span><span>Exams</span></a>
+            <a href="/notice-board" target="_blank" class="l-btn"><span>📢</span><span>Notice</span></a>
+            <a href="/menu/gallery" target="_blank" class="l-btn"><span>🖼️</span><span>Gallery</span></a>
+            <a onclick="openSecurityModal();" class="l-btn"><span>🔐</span><span>Security</span></a>
+            <a href="/menu/contact-us" target="_blank" class="l-btn"><span>📞</span><span>Support</span></a>
+        </div>
+    </div>
+</div>
+
+<div id="forgotPassModal" class="modal-overlay">
+    <div class="modal-content" style="text-align: center;">
+        <span class="close-btn" onclick="closeModal('forgotPassModal')">×</span>
+        <h3 style="color:var(--primary); margin:0 0 5px 0; font-size:22px;">Reset Password</h3>
+        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Verify your email to reset security key</p>
+        
+        <div id="fpStep1">
+            <input type="text" id="fpID" placeholder="Enter your Student ID">
+            <button id="btnRequestOTP" class="login-btn" onclick="requestOTP()">SEND OTP TO EMAIL</button>
+        </div>
+        
+        <div id="fpStep2" style="display:none;">
+            <input type="text" id="fpOTP" placeholder="Enter 6-digit OTP">
+            <button class="login-btn" onclick="verifyOTP()">VERIFY OTP</button>
+        </div>
+        
+        <div id="fpStep3" style="display:none;">
+            <input type="password" id="fpNewPass" placeholder="Enter New Password (Min. 6 chars)">
+            <button id="btnSaveReset" class="login-btn" onclick="saveResetPassword()">SAVE NEW PASSWORD</button>
+        </div>
+        <p id="fpMsg" style="font-size:13px; font-weight:700; margin-top:15px;"></p>
+    </div>
+</div>
+
+<div id="feesModal" class="modal-overlay"><div class="modal-content"><span class="close-btn" onclick="closeModal('feesModal')">×</span><div id="feesModalBody"></div></div></div>
+<div id="liveClassModal" class="modal-overlay"><div class="modal-content"><span class="close-btn" onclick="closeModal('liveClassModal')">×</span><div id="liveClassModalBody"></div></div></div>
+
+<div id="resultModal" class="modal-overlay">
+    <div class="modal-content" style="max-width:680px; background: #0f172a; padding: 0;">
+        <span class="close-btn" onclick="closeModal('resultModal')" style="color:#fff; top:15px; right:20px; z-index:100;">×</span>
+        <div id="resultModalBody" style="padding:0;"></div>
+    </div>
+</div>
+
+<div id="attendanceModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 650px;">
+        <span class="close-btn" onclick="closeModal('attendanceModal')">×</span>
+        <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">📅 My Attendance Record</h3>
+        
+        <div style="margin-bottom: 15px;">
+            <select id="attMonthFilter" onchange="renderAttendanceTable()" style="width:100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
+                <option value="">Loading Months...</option>
+            </select>
+        </div>
+        
+        <div id="attLoader" style="text-align:center; color:var(--primary); font-weight:bold; display:none; padding:20px 0;">
+            <span class="loader-spinner"></span> Synchronizing Database...
+        </div>
+        
+        <div style="max-height: 400px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc;">
+            <table style="width:100%; border-collapse: collapse; font-size: 13px; text-align: left;">
+                <thead style="background: #e2e8f0; position: sticky; top: 0; z-index: 10;">
+                    <tr>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Date (Y-M-D)</th>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Status</th>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">IN Time</th>
+                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">OUT Time</th>
+                    </tr>
+                </thead>
+                <tbody id="modalAttTableBody" style="background: white;">
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;">
+        </div>
+    </div>
+</div>
+
+<div id="securityModal" class="modal-overlay">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeModal('securityModal')">×</span>
+        <h3 style="margin:0 0 15px 0; font-size:20px; color:var(--text-main); border-bottom:2px solid #f1f5f9; padding-bottom:15px;">🔐 Update Security Key</h3>
+        <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Protect your account by changing your password regularly.</p>
+        <input type="password" id="newPass" placeholder="Enter New Password (Min. 6 chars)">
+        <button class="login-btn" style="padding:14px; font-size:14px;" onclick="updatePassword()">SAVE NEW PASSWORD</button>
+        <p id="passMsg" style="font-size:13px; margin-top:10px; font-weight:700; text-align:center;"></p>
+    </div>
+</div>
+
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-// আপনার Google Apps Script Web App URL
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec";
-const SRMS_ADMIN_PASSKEY = "SRMS_SUPER_ADMIN_OVERRIDE";
+  // =====================================================================
+  // FIREBASE CONFIGURATION & INITIALIZATION
+  // =====================================================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+    authDomain: "srms-website-management.firebaseapp.com",
+    projectId: "srms-website-management",
+    storageBucket: "srms-website-management.firebasestorage.app",
+    messagingSenderId: "960037316778",
+    appId: "1:960037316778:web:d6f9b1f434572d9374c8d3",
+    measurementId: "G-4KB8S6YCV0"
+  };
 
-// 🖼️ IMGBB OFFICIAL API CONFIGURATION
-const IMGBB_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
-const IMGBB_UPLOAD_URL = "https://api.imgbb.com/1/upload";
+  if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+  const auth = firebase.auth();
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
-  authDomain: "srms-website-management.firebaseapp.com",
-  projectId: "srms-website-management"
-};
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-}
-const db = firebase.firestore();
-const auth = firebase.auth();
+  const FIREBASE_PROJECT_ID = firebaseConfig.projectId;
+  const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
+  
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXWc-JW1TpzHHgRp7viUvHW4pUm_lw600wOaHBIIT-_Hwn0K36bxbXjHcQLgtRfWvP/exec"; 
+  const FEE_PAY_SCRIPT = "https://script.google.com/macros/s/AKfycbzUkDxT8bO6HrMMkBOGr_ewCDaMQg7bZxvPr_8Omh3kDEqeX1T_JmL1v9JXMW2jwo88hw/exec";
+  
+  let std = null;
+  let markSheetHTML = "";
+  
+  // Variables for Security and Attendance
+  let resettingDocId = null; 
+  let resettingStudentID = null;
+  let allStudentAttendance = {}; 
+  let allHolidays = {};
 
-var isAuthReady = false;
-var globalUsersList = [];
-var preparedFilePayload = null;
-var preparedTeacherAddPhoto = null;
-var preparedTeacherEditPhoto = null;
-
-function changeLoaderText(text) {
-  document.getElementById('loaderText').innerHTML = text;
-}
-function showLoader(show, text = "PROCESSING...") {
-  if (show) {
-    changeLoaderText(text);
-    document.getElementById('loader').style.display = 'flex';
-  } else {
-    document.getElementById('loader').style.display = 'none';
+  function sanitizeHTML(str) {
+      if (typeof str !== 'string') return str;
+      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
   }
-}
 
-// ============================================================================
-// 🛑 PURE SECURITY & TOKEN CHECKING GATE (NO LOGIN FORM ON FRONTEND)
-// ============================================================================
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-  .then(() => {
+  // 🛡️ Crash-Proof JSON Parser
+  function safeJSONParse(str, fallback = null) {
+      if (!str || typeof str !== 'string' || str.trim() === "") return fallback;
+      try { return JSON.parse(str); } catch (e) { return fallback; }
+  }
+
+  // 🛡️ Non-stop Session & Auth Restoration on Page Reload
+  window.onload = function() {
+    const savedUser = sessionStorage.getItem('srms_student_session');
+    if (savedUser) {
+        std = safeJSONParse(savedUser, null);
+        if (std) showDashboardUI();
+    }
     auth.onAuthStateChanged(function(user) {
-      if (user) {
-        isAuthReady = true;
-        showLoader(false);
-        document.getElementById('appContainer').style.display = 'block';
-      } else {
-        showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
-        setTimeout(() => {
-          var currentDomain = window.location.protocol + "//" + window.location.host;
-          window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
-        }, 1000);
-      }
+        if (user && std) {
+            initDash();
+        }
     });
-  })
-  .catch(err => {
-    console.error("Auth Persistence Error:", err);
-  });
+  };
 
-// ============================================================================
-// 📡 FAST SECURE API CALL WITH ADMIN SPECIAL POWER OVERRIDE
-// ============================================================================
-async function apiCall(actionName, payloadData = {}) {
-  let token = "";
-  if (auth.currentUser) {
+  function loader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
+  function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+  // 🚀 Non-Stop Crash-Proof Login Flow
+  async function handleLogin() {
+    const id = sanitizeHTML(document.getElementById('stuID').value.trim());
+    let pass = document.getElementById('stuPass').value.trim();
+    const btn = document.getElementById('lBtn');
+    document.getElementById('err').innerText = "";
+    
+    if(!id || !pass) { document.getElementById('err').innerText = "Please provide both ID and Password."; return; }
+    if (pass.length > 0 && pass.length < 6) pass = pass.padEnd(6, '0');
+
+    btn.innerHTML = "<span class='loader-spinner'></span> Authenticating..."; btn.disabled = true;
     try {
-      token = await auth.currentUser.getIdToken(false);
-    } catch (tErr) {
-      token = await auth.currentUser.getIdToken(true);
-    }
-  }
-  let payload = {
-    action: actionName,
-    token: token,
-    adminKey: SRMS_ADMIN_PASSKEY,
-    ...payloadData
-  };
+        const email = `${id}@srms.edu.bd`;
+        
+        await auth.signInWithEmailAndPassword(email, pass);
+        const token = await auth.currentUser.getIdToken(true);
 
-  let res = await fetch(SCRIPT_URL, {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
-  });
-  let text = await res.text();
-  if (text.includes("<html") || text.includes("<!DOCTYPE")) {
-    throw new Error("Deployment Access Error! Make sure Apps Script Web App is deployed with 'Who has access: Anyone'.");
-  }
-
-  let data;
-  try {
-    data = JSON.parse(text);
-  } catch (e) {
-    throw new Error("Invalid JSON response from server.");
-  }
-
-  if (data.error) throw new Error(data.error);
-  if (data.status === "error") throw new Error(data.message || data.msg);
-
-  return data;
-}
-
-function updateTitleLabel(sel) {
-  document.getElementById('titleLabel').innerHTML =
-    `<i class="fas fa-heading" style="color:var(--primary); margin-right:5px;"></i> Title for ` +
-    sel.options[sel.selectedIndex].text.split('(')[0];
-}
-
-function switchTab(id, btn) {
-  if (!isAuthReady) return alert("Security checking in progress... Please wait.");
-  document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-
-  if (id === 'manage') loadPosts();
-  if (id === 'users') loadUsers();
-}
-
-// ============================================================================
-// 🖼️ IMGBB API V1 UPLOAD + LIVE PREVIEW (POSTS & TEACHER PHOTOS)
-// ============================================================================
-function clearSelectedFile() {
-  document.getElementById('upFile').value = "";
-  document.getElementById('filePreviewBox').style.display = "none";
-  preparedFilePayload = null;
-}
-
-function handleFilePreview(input) {
-  if (!input.files || input.files.length === 0) {
-    clearSelectedFile();
-    return;
-  }
-  var file = input.files[0];
-  var previewBox = document.getElementById('filePreviewBox');
-  var previewImg = document.getElementById('previewImg');
-  var previewMeta = document.getElementById('previewMeta');
-
-  if (file.type.startsWith("image/")) {
-    previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Preparing image for ImgBB...`;
-    previewBox.style.display = "flex";
-
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var img = new Image();
-      img.onload = function() {
-        var maxDim = 1800;
-        var w = img.width;
-        var h = img.height;
-        if (w > maxDim || h > maxDim) {
-          if (w > h) {
-            h = Math.round((h * maxDim) / w);
-            w = maxDim;
-          } else {
-            w = Math.round((w * maxDim) / h);
-            h = maxDim;
-          }
-        }
-        var canvas = document.createElement('canvas');
-        canvas.width = w;
-        canvas.height = h;
-        var ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, w, h);
-
-        var dataUrl = canvas.toDataURL('image/jpeg', 0.90);
-        previewImg.src = dataUrl;
-        var kbSize = Math.round((dataUrl.length * 0.75) / 1024);
-        var cleanName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
-
-        preparedFilePayload = {
-          isImage: true,
-          fileData: dataUrl.split(',')[1],
-          mimeType: 'image/jpeg',
-          fileName: cleanName
-        };
-        previewMeta.innerHTML = `<b>${cleanName}</b><br>✅ ImgBB Ready (${w}×${h}px • ~${kbSize} KB)`;
-      };
-      img.src = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    previewImg.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-    previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Reading document...`;
-    previewBox.style.display = "flex";
-
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var kbSize = Math.round(file.size / 1024);
-      preparedFilePayload = {
-        isImage: false,
-        fileData: e.target.result.split(',')[1],
-        mimeType: file.type || 'application/octet-stream',
-        fileName: file.name
-      };
-      previewMeta.innerHTML = `<b>${file.name}</b><br>✅ Document Ready (${kbSize} KB)`;
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-// Teacher Photo Preview & Compression (Add & Edit)
-function clearTeacherPhoto(mode) {
-  if (mode === 'add') {
-    document.getElementById('uTPhoto').value = "";
-    document.getElementById('uTPhotoPreviewBox').style.display = "none";
-    preparedTeacherAddPhoto = null;
-  } else {
-    document.getElementById('euTPhoto').value = "";
-    document.getElementById('euTPhotoPreviewBox').style.display = "none";
-    preparedTeacherEditPhoto = null;
-  }
-}
-
-function handleTeacherPhotoPreview(input, mode) {
-  if (!input.files || input.files.length === 0) {
-    clearTeacherPhoto(mode);
-    return;
-  }
-  var file = input.files[0];
-  var boxId = mode === 'add' ? 'uTPhotoPreviewBox' : 'euTPhotoPreviewBox';
-  var imgId = mode === 'add' ? 'uTPhotoPreviewImg' : 'euTPhotoPreviewImg';
-  var metaId = mode === 'add' ? 'uTPhotoPreviewMeta' : 'euTPhotoPreviewMeta';
-
-  var previewBox = document.getElementById(boxId);
-  var previewImg = document.getElementById(imgId);
-  var previewMeta = document.getElementById(metaId);
-
-  previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Optimizing Teacher Photo...`;
-  previewBox.style.display = "flex";
-
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var img = new Image();
-    img.onload = function() {
-      var maxDim = 800;
-      var w = img.width;
-      var h = img.height;
-      if (w > maxDim || h > maxDim) {
-        if (w > h) {
-          h = Math.round((h * maxDim) / w);
-          w = maxDim;
-        } else {
-          w = Math.round((w * maxDim) / h);
-          h = maxDim;
-        }
-      }
-      var canvas = document.createElement('canvas');
-      canvas.width = w;
-      canvas.height = h;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, w, h);
-
-      var dataUrl = canvas.toDataURL('image/jpeg', 0.90);
-      previewImg.src = dataUrl;
-      var kbSize = Math.round((dataUrl.length * 0.75) / 1024);
-      var cleanName = "Teacher_" + new Date().getTime() + ".jpg";
-
-      var payloadObj = {
-        fileData: dataUrl.split(',')[1],
-        fileName: cleanName
-      };
-      if (mode === 'add') preparedTeacherAddPhoto = payloadObj;
-      else preparedTeacherEditPhoto = payloadObj;
-
-      previewMeta.innerHTML = `<b>Teacher Photo Ready</b><br>✅ ImgBB Ready (${w}×${h}px • ~${kbSize} KB)`;
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-// সরাসরি ImgBB API v1-এ POST মেথডে ছবি আপলোড করার ফাংশন
-async function uploadToImgBBDirect(base64Image, fileName) {
-  var formData = new FormData();
-  formData.append("key", IMGBB_API_KEY);
-  formData.append("image", base64Image);
-  if (fileName) {
-    var cleanName = fileName.replace(/\.[^/.]+$/, "");
-    formData.append("name", cleanName);
-  }
-
-  var response = await fetch(IMGBB_UPLOAD_URL, {
-    method: "POST",
-    body: formData
-  });
-  var json = await response.json();
-  if (json && json.success && json.data) {
-    return {
-      url: json.data.url || json.data.display_url,
-      thumbUrl: (json.data.thumb && json.data.thumb.url) ? json.data.thumb.url : json.data.url,
-      deleteUrl: json.data.delete_url || "",
-      imgbbId: json.data.id || ""
-    };
-  }
-  throw new Error((json && json.error && json.error.message) ? json.error.message : "ImgBB Direct Upload Failed");
-}
-
-async function submitUpload() {
-  var title = document.getElementById('upTitle').value.trim();
-  if (!title) {
-    Swal.fire("Warning", "Please enter a title!", "warning");
-    return;
-  }
-
-  var cat = document.getElementById('upCat').value;
-  var desc = document.getElementById('upDesc').value.trim();
-  var link = document.getElementById('upLink').value.trim();
-
-  let data = {
-    targetPage: cat,
-    title: title,
-    desc: desc,
-    externalUrl: link
-  };
-
-  try {
-    if (preparedFilePayload) {
-      if (preparedFilePayload.isImage) {
-        showLoader(true, "UPLOADING PHOTO TO IMGBB...<br><span style='font-size:11px; color:#64748b;'>Sending to api.imgbb.com</span>");
-        try {
-          let imgbbResult = await uploadToImgBBDirect(preparedFilePayload.fileData, preparedFilePayload.fileName);
-          data.externalUrl = imgbbResult.url;
-          data.fileUrl = imgbbResult.url;
-          data.fileType = "Image";
-          data.thumbUrl = imgbbResult.thumbUrl;
-          data.imgbbId = imgbbResult.imgbbId;
-          data.imgbbDeleteUrl = imgbbResult.deleteUrl;
-        } catch (directErr) {
-          console.warn("Direct ImgBB upload fallback to backend:", directErr);
-          data.fileData = preparedFilePayload.fileData;
-          data.mimeType = preparedFilePayload.mimeType;
-          data.fileName = preparedFilePayload.fileName;
-        }
-      } else {
-        data.fileData = preparedFilePayload.fileData;
-        data.mimeType = preparedFilePayload.mimeType;
-        data.fileName = preparedFilePayload.fileName;
-      }
-    }
-
-    showLoader(true, "PUBLISHING & SENDING PUSH...<br><span style='font-size:11px; color:#64748b;'>Saving to Firestore & Triggering OneSignal</span>");
-    let res = await apiCall('uploadData', { data: data });
-    showLoader(false);
-    Swal.fire({
-      title: "Published!",
-      text: res.msg || "Content published & Push Notification sent!",
-      icon: "success",
-      confirmButtonColor: "#005f40"
-    });
-    document.getElementById('upTitle').value = "";
-    document.getElementById('upDesc').value = "";
-    document.getElementById('upLink').value = "";
-    clearSelectedFile();
-    if (document.getElementById('manage').classList.contains('active')) loadPosts();
-  } catch (err) {
-    showLoader(false);
-    Swal.fire("Upload Failed", err.message, "error");
-  }
-}
-
-function pubHead() {
-  var t = document.getElementById('hText').value.trim();
-  if (!t) {
-    Swal.fire("Empty!", "Please write a headline first.", "warning");
-    return;
-  }
-  Swal.fire({
-    title: "Publish Headline?",
-    text: "This will instantly appear as a scrolling notice and send a Push Notification.",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonColor: "#d97706",
-    confirmButtonText: "Yes, Publish!"
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      showLoader(true, "PUBLISHING HEADLINE & PUSH...");
-      try {
-        let res = await apiCall('addHeadline', { text: t });
-        showLoader(false);
-        Swal.fire("Published!", res.msg || "Headline published!", "success");
-        document.getElementById('hText').value = "";
-      } catch (err) {
-        showLoader(false);
-        Swal.fire("Error", err.message, "error");
-      }
-    }
-  });
-}
-
-function delPost(docId) {
-  Swal.fire({
-    title: 'Delete this post?',
-    text: "It will be permanently removed from the website!",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#ef4444',
-    confirmButtonText: 'Yes, delete it!'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      showLoader(true, "DELETING POST...");
-      try {
-        let res = await apiCall('deletePost', { docId: docId });
-        showLoader(false);
-        Swal.fire("Deleted!", res.msg || "Post removed.", "success");
-        loadPosts();
-      } catch (err) {
-        showLoader(false);
-        Swal.fire("Error", err.message, "error");
-      }
-    }
-  });
-}
-
-// ============================================================================
-// 👥 USERS & GUARDIANS MANAGEMENT (FAST PARALLEL LOAD + PHOTOS + ADMIN POWER)
-// ============================================================================
-function extractUserPhoto(f) {
-  if (!f) return "";
-  return (
-    f.photoUrl ||
-    f.photo ||
-    f.imageUrl ||
-    f.image ||
-    f.imgUrl ||
-    f.profilePic ||
-    f.avatar ||
-    ""
-  ).toString().trim();
-}
-
-async function addUser() {
-  var passVal = document.getElementById('uPass').value.trim() || "123456";
-  if (passVal.length < 6) {
-    return Swal.fire("Weak Password", "Password must be at least 6 characters long!", "warning");
-  }
-
-  var d = {
-    type: "Teacher",
-    pass: passVal,
-    cardNumber: document.getElementById('uCardNumber').value.trim(),
-    id: document.getElementById('uTPhone').value.trim(),
-    machineId: document.getElementById('uTMachineId').value.trim(),
-    name: document.getElementById('uTName').value.trim(),
-    email: document.getElementById('uTEmail').value.trim(),
-    photoUrl: ""
-  };
-
-  if (!d.id || !d.name) {
-    return Swal.fire("Warning", "Teacher Name & Phone Number (Login ID) are required!", "warning");
-  }
-
-  try {
-    if (preparedTeacherAddPhoto) {
-      showLoader(true, "UPLOADING TEACHER PHOTO TO IMGBB...");
-      try {
-        let imgRes = await uploadToImgBBDirect(preparedTeacherAddPhoto.fileData, preparedTeacherAddPhoto.fileName);
-        d.photoUrl = imgRes.url;
-      } catch (e) {
-        d.photoData = preparedTeacherAddPhoto.fileData;
-      }
-    }
-
-    showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>Syncing Auth, Machine & Sending Welcome SMS</span>");
-    let res = await apiCall('addUserDatabase', { info: d });
-    showLoader(false);
-    Swal.fire("Success!", res.msg || "Teacher account created!", "success");
-
-    document.getElementById('uTMachineId').value = "";
-    document.getElementById('uTPhone').value = "";
-    document.getElementById('uTName').value = "";
-    document.getElementById('uTEmail').value = "";
-    document.getElementById('uPass').value = "";
-    document.getElementById('uCardNumber').value = "";
-    clearTeacherPhoto('add');
-
-    loadUsers();
-  } catch (err) {
-    showLoader(false);
-    Swal.fire("Error", err.message, "error");
-  }
-}
-
-async function loadUsers() {
-  if (!isAuthReady) return;
-  showLoader(true, "LOADING USERS & PHOTOS...<br><span style='font-size:11px; color:#64748b;'>Fast Parallel Sync from Firestore</span>");
-  try {
-    let users = [];
-
-    // ⚡ প্যারালাল লোডিং (Teachers ও Students একসাথে লোড হবে — দ্বিগুণ দ্রুত)
-    let [tSnap, sSnap] = await Promise.all([
-      db.collection('Teachers').get(),
-      db.collection('Students').get()
-    ]);
-
-    // ১. Teachers লোড করা (ছবিসহ)
-    tSnap.forEach(doc => {
-      let f = doc.data();
-      let name = f.name || "N/A";
-      let pass = f.pass || "123456";
-      let phoneId = f.phone || "";
-      let tPhoto = extractUserPhoto(f);
-
-      users.push({
-        type: "Teacher",
-        id: phoneId,
-        machineId: f.machineID || "",
-        cardNumber: f.cardNumber || "",
-        name: name,
-        email: f.email || "",
-        pass: pass,
-        photoUrl: tPhoto,
-        row: doc.id,
-        infoHtml: `Name: <b>${name}</b> | Email: ${f.email || "N/A"}<br>Password: <span style="color:#e11d48; font-weight:700;">${pass}</span>`
-      });
-    });
-
-    // ২. Students এবং Guardians উভয় কার্ড তৈরি করা (ছবিসহ)
-    sSnap.forEach(doc => {
-      let f = doc.data();
-      let sid = (f.studentID || "").toString().trim();
-      if (!sid) return;
-
-      let sName = f.name || "Student";
-      let sClass = f.class || "N/A";
-      let sRoll = f.roll || "N/A";
-      let sPhone = (f.phone || "").toString().trim();
-      let pass = f.pass || "123456";
-      let sPhoto = extractUserPhoto(f);
-      let gPhoto = (f.guardianPhoto || f.fatherPhoto || sPhoto || "").toString().trim();
-
-      // Student Login Entry
-      users.push({
-        type: "Student",
-        id: sid,
-        studentID: sid,
-        machineId: f.machineID || "",
-        name: sName,
-        classVal: sClass,
-        roll: sRoll,
-        phone: sPhone,
-        email: f.email || "",
-        pass: pass,
-        photoUrl: sPhoto,
-        row: doc.id,
-        infoHtml: `Student: <b>${sName}</b> (Class: ${sClass}, Roll: ${sRoll})<br>Guardian Phone: ${sPhone || "N/A"} | Pass: <span style="color:#e11d48; font-weight:700;">${pass}</span>`
-      });
-
-      // Guardian Login Entry
-      if (sPhone) {
-        users.push({
-          type: "Guardian",
-          id: sPhone,
-          studentID: sid,
-          machineId: "",
-          name: "Guardian of " + sName,
-          studentName: sName,
-          classVal: sClass,
-          roll: sRoll,
-          phone: sPhone,
-          email: f.email || "",
-          pass: pass,
-          photoUrl: gPhoto,
-          row: doc.id,
-          infoHtml: `Guardian Login ID: <b>${sPhone}</b><br>Student: <b>${sName}</b> (ID: ${sid} • Class: ${sClass})<br>Password: <span style="color:#e11d48; font-weight:700;">${pass}</span>`
+        const queryUrl = `${FIREBASE_DB_BASE}:runQuery`;
+        const reqBody = { structuredQuery: { from: [{ collectionId: "Students" }], where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: id } } }, limit: 1 } };
+        
+        const res = await fetch(queryUrl, { 
+            method: "POST", 
+            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
+            body: JSON.stringify(reqBody) 
         });
-      }
-    });
+        const data = await res.json();
+        
+        if (data && data[0] && data[0].document) {
+            const doc = data[0].document;
+            const studentFields = doc.fields || {};
+            const stdDocId = doc.name.split('/').pop();
 
-    showLoader(false);
-    globalUsersList = users;
-    renderUserList();
-  } catch (err) {
-    showLoader(false);
-    document.getElementById('userListDisplay').innerHTML =
-      `<p style="color:red; text-align:center;">Failed to load users: ${err.message}</p>`;
-  }
-}
-
-function renderUserList() {
-  var h = "";
-  var totalTeachers = 0;
-  var totalStudents = 0;
-  var totalGuardians = 0;
-  var classCounts = {};
-
-  if (globalUsersList.length === 0) {
-    h = "<p style='text-align:center; color:#94a3b8;'>No users found in database.</p>";
-  } else {
-    globalUsersList.forEach((u, index) => {
-      if (u.type === 'Teacher') {
-        totalTeachers++;
-      } else if (u.type === 'Student') {
-        totalStudents++;
-        var cls = u.classVal || "Unknown";
-        classCounts[cls] = (classCounts[cls] || 0) + 1;
-      } else if (u.type === 'Guardian') {
-        totalGuardians++;
-      }
-
-      var iconHtml, badgeBg, badgeClr, actionBtns;
-      if (u.type === 'Teacher') {
-        iconHtml = '<i class="fas fa-chalkboard-teacher" style="color:var(--primary); font-size:22px;"></i>';
-        badgeBg = 'var(--primary-light)';
-        badgeClr = 'var(--primary)';
-        actionBtns = `
-          <button class="btn-edit" onclick="openEditUser(${index})" title="Edit Teacher"><i class="fas fa-edit"></i> Edit</button>
-          <button class="btn-delete" onclick="deleteUser('Teacher', '${u.row}')" title="Remove Teacher"><i class="fas fa-trash"></i></button>
-        `;
-      } else if (u.type === 'Student') {
-        iconHtml = '<i class="fas fa-user-graduate" style="color:var(--warn); font-size:22px;"></i>';
-        badgeBg = '#fef3c7';
-        badgeClr = '#b45309';
-        actionBtns = `
-          <button class="btn-edit" onclick="openEditUser(${index})" title="Change Student Password"><i class="fas fa-key"></i> Change Pass</button>
-        `;
-      } else {
-        iconHtml = '<i class="fas fa-user-shield" style="color:var(--guardian); font-size:22px;"></i>';
-        badgeBg = 'var(--guardian-light)';
-        badgeClr = 'var(--guardian)';
-        actionBtns = `
-          <button class="btn-edit" style="background:#f3e8ff; color:#7c3aed; border-color:#ddd6fe;" onclick="openEditUser(${index})" title="Change Guardian Password"><i class="fas fa-key"></i> Change Pass</button>
-        `;
-      }
-
-      var avatarContent = u.photoUrl
-        ? `<img src="${u.photoUrl}" alt="${u.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-           <span style="display:none; align-items:center; justify-content:center; width:100%; height:100%;">${iconHtml}</span>`
-        : iconHtml;
-
-      var machineText = u.machineId ? ` <span style="color:#64748b; font-size:12px;">| <i class="fas fa-fingerprint"></i> ${u.machineId}</span>` : '';
-
-      h += `<div class="list-item user-item" data-type="${u.type}" data-class="${u.classVal || ''}">
-        <div style="display:flex; gap:14px; align-items:center;">
-          <div class="user-avatar-wrap">
-            ${avatarContent}
-          </div>
-          <div>
-            <span style="background:${badgeBg}; color:${badgeClr}; padding:3px 10px; border-radius:6px; font-size:10px; font-weight:800; text-transform:uppercase;">${u.type}</span>
-            <div style="font-size:14.5px; font-weight:800; color:#0f172a; margin-top:5px;">
-              ID: ${u.id}${machineText}
-            </div>
-            <div style="font-size:12px; color:#475569; margin-top:2px; line-height:1.45;">
-              ${u.infoHtml}
-            </div>
-          </div>
-        </div>
-        <div class="list-actions" style="display:flex; gap:8px; flex-shrink:0;">
-          ${actionBtns}
-        </div>
-      </div>`;
-    });
-  }
-  document.getElementById('userListDisplay').innerHTML = h;
-
-  var statsHtml = `
-    <div class="stats-grid">
-      <div class="stat-box" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark));">
-        <b>${totalTeachers}</b>
-        <small>Teachers</small>
-      </div>
-      <div class="stat-box" style="background:linear-gradient(135deg, #d97706, #92400e);">
-        <b>${totalStudents}</b>
-        <small>Students</small>
-      </div>
-      <div class="stat-box" style="background:linear-gradient(135deg, #7c3aed, #5b21b6);">
-        <b>${totalGuardians}</b>
-        <small>Guardians</small>
-      </div>
-    </div>
-  `;
-
-  if (totalStudents > 0) {
-    statsHtml += `<div style="background:#f8fafc; padding:14px; border-radius:15px; border:1px solid #e2e8f0;">
-      <b style="color:var(--primary-dark); font-size:12.5px; text-transform:uppercase;"><i class="fas fa-layer-group"></i> Class-wise Students:</b>
-      <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">`;
-    for (var cls in classCounts) {
-      statsHtml += `<span style="background:#fff; color:#334155; padding:6px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:12px; font-weight:700;">
-        Class ${cls}: <b style="color:var(--primary); margin-left:4px;">${classCounts[cls]}</b>
-      </span>`;
-    }
-    statsHtml += `</div></div>`;
-  }
-  document.getElementById('userStatsDisplay').innerHTML = statsHtml;
-  filterUsers();
-}
-
-function filterUsers() {
-  var textFilter = document.getElementById('searchUserList').value.toLowerCase().trim();
-  var classFilter = document.getElementById('filterClass').value;
-  var items = document.querySelectorAll('.user-item');
-
-  items.forEach(item => {
-    var text = item.innerText.toLowerCase();
-    var type = item.getAttribute('data-type');
-    var cls = (item.getAttribute('data-class') || '').toLowerCase().replace('class ', '').trim();
-    var targetCls = classFilter.toLowerCase().replace('class ', '').trim();
-
-    var textMatch = !textFilter || text.includes(textFilter);
-    var filterMatch = true;
-
-    if (classFilter === 'Teacher') {
-      filterMatch = (type === 'Teacher');
-    } else if (classFilter === 'Student') {
-      filterMatch = (type === 'Student');
-    } else if (classFilter === 'Guardian') {
-      filterMatch = (type === 'Guardian');
-    } else if (classFilter !== 'All') {
-      filterMatch = ((type === 'Student' || type === 'Guardian') && cls === targetCls);
-    }
-
-    item.style.display = (textMatch && filterMatch) ? "flex" : "none";
-  });
-}
-
-function closeModal(id) {
-  document.getElementById(id).style.display = "none";
-}
-
-function openEditUser(index) {
-  var u = globalUsersList[index];
-  document.getElementById('euRow').value = u.row;
-  document.getElementById('euType').value = u.type;
-  document.getElementById('euId').value = u.id;
-  document.getElementById('euPass').value = u.pass;
-  clearTeacherPhoto('edit');
-
-  var summaryBox = document.getElementById('studentGuardianReadOnlyBox');
-  var teacherBox = document.getElementById('teacherEditableFields');
-  var modalTitle = document.getElementById('modalTitle');
-  var passNote = document.getElementById('passSyncNote');
-
-  if (u.type === 'Teacher') {
-    modalTitle.innerHTML = `<i class="fas fa-user-edit"></i> Edit Teacher Account`;
-    summaryBox.style.display = "none";
-    teacherBox.style.display = "block";
-
-    var curImg = document.getElementById('euCurrentTeacherPhoto');
-    if (u.photoUrl) {
-      curImg.src = u.photoUrl;
-      curImg.style.display = "block";
-    } else {
-      curImg.style.display = "none";
-    }
-
-    document.getElementById('euTeacherIdDisplay').value = u.id;
-    document.getElementById('euName').value = u.name || "";
-    document.getElementById('euEmail').value = u.email || "";
-    document.getElementById('euMachineId').value = u.machineId || "";
-    document.getElementById('euCardNumber').value = u.cardNumber || "";
-    passNote.innerText = "Updating will sync Teacher's Firestore profile, ImgBB photo, Attendance Machine & Firebase Auth.";
-  } else {
-    modalTitle.innerHTML = `<i class="fas fa-key"></i> Change ${u.type} Password`;
-    teacherBox.style.display = "none";
-    summaryBox.style.display = "block";
-
-    var photoAvatarHtml = u.photoUrl
-      ? `<div style="text-align:center; margin-bottom:10px;">
-           <img src="${u.photoUrl}" alt="Profile" style="width:68px; height:68px; border-radius:50%; object-fit:cover; border:2.5px solid var(--primary); box-shadow:0 4px 10px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
-         </div>`
-      : "";
-
-    summaryBox.innerHTML = `
-      ${photoAvatarHtml}
-      <div class="ro-row" style="color:var(--primary); font-weight:800; margin-bottom:4px; border-bottom:1px solid #cbd5e1;">
-        <span><i class="fas fa-lock"></i> Read-Only Profile Info</span>
-        <span>${u.type}</span>
-      </div>
-      <div class="ro-row"><span>Student Name:</span> <b>${u.studentName || u.name}</b></div>
-      <div class="ro-row"><span>Student ID:</span> <b>${u.studentID}</b></div>
-      <div class="ro-row"><span>Class & Roll:</span> <b>Class ${u.classVal || 'N/A'} (Roll: ${u.roll || 'N/A'})</b></div>
-      <div class="ro-row"><span>Guardian Phone:</span> <b>${u.phone || 'N/A'}</b></div>
-    `;
-    passNote.innerHTML = `⚡ <b>Admin Special Power:</b> স্টুডেন্ট এবং অভিভাবকের অন্যান্য তথ্য এখানে অপরিবর্তনীয়। শুধুমাত্র নতুন <b>Password</b> সেট করলে তা সরাসরি কার্যকর হবে।`;
-  }
-
-  document.getElementById('editUserModal').style.display = "flex";
-}
-
-async function submitUserEdit() {
-  var row = document.getElementById('euRow').value;
-  var type = document.getElementById('euType').value;
-  var id = document.getElementById('euId').value;
-  var pass = document.getElementById('euPass').value.trim();
-
-  if (!pass || pass.length < 6) {
-    Swal.fire("Invalid Password", "Password must be at least 6 characters long!", "warning");
-    return;
-  }
-
-  var d = {
-    row: row,
-    type: type,
-    id: id,
-    pass: pass
-  };
-
-  try {
-    if (type === 'Teacher') {
-      d.name = document.getElementById('euName').value.trim();
-      d.email = document.getElementById('euEmail').value.trim();
-      d.machineId = document.getElementById('euMachineId').value.trim();
-      d.cardNumber = document.getElementById('euCardNumber').value.trim();
-
-      if (preparedTeacherEditPhoto) {
-        showLoader(true, "UPLOADING NEW TEACHER PHOTO TO IMGBB...");
-        try {
-          let imgRes = await uploadToImgBBDirect(preparedTeacherEditPhoto.fileData, preparedTeacherEditPhoto.fileName);
-          d.photoUrl = imgRes.url;
-        } catch (e) {
-          d.photoData = preparedTeacherEditPhoto.fileData;
+            std = { 
+                id: sanitizeHTML(studentFields.studentID?.stringValue || ""),
+                name: sanitizeHTML(studentFields.name?.stringValue || "Student"),
+                class: sanitizeHTML(studentFields.class?.stringValue || ""),
+                roll: sanitizeHTML(studentFields.roll?.stringValue || ""),
+                group: sanitizeHTML(studentFields.group?.stringValue || ""),
+                phone: sanitizeHTML(studentFields.phone?.stringValue || ""),
+                email: sanitizeHTML(studentFields.email?.stringValue || ""),
+                schoolFeeDue: sanitizeHTML(studentFields.schoolFeeDue?.stringValue || "0"),
+                schoolFeeStatus: sanitizeHTML(studentFields.schoolFeeStatus?.stringValue || ""),
+                hostelFeeDue: sanitizeHTML(studentFields.hostelFeeDue?.stringValue || "0"),
+                hostelFeeStatus: sanitizeHTML(studentFields.hostelFeeStatus?.stringValue || ""),
+                customFees: safeJSONParse(studentFields.customFees?.stringValue, []),
+                resultMarks: safeJSONParse(studentFields.resultMarks?.stringValue, null),
+                resultStatus: sanitizeHTML(studentFields.resultStatus?.stringValue || "")
+            };
+            sessionStorage.setItem('srms_student_session', JSON.stringify(std));
+            sessionStorage.setItem('srms_student_docId', stdDocId);
+            
+            document.getElementById('stuPass').value = '';
+            showDashboardUI();
+            initDash();
+        } else { 
+            document.getElementById('err').innerText = "Student record not found in Database!"; 
         }
-      }
+    } catch (e) { 
+        console.error("Login Error:", e);
+        document.getElementById('err').innerText = "Invalid ID or Password!";
     }
-
-    showLoader(true, "APPLYING ADMIN OVERRIDE...<br><span style='font-size:11px; color:#64748b;'>Updating Firebase Auth & Firestore</span>");
-    let res = await apiCall('updateUserDatabase', { info: d });
-    showLoader(false);
-    Swal.fire("Success!", res.msg || "Updated successfully!", "success");
-    closeModal('editUserModal');
-    loadUsers();
-  } catch (err) {
-    showLoader(false);
-    Swal.fire("Update Failed", err.message, "error");
+    btn.innerHTML = "SECURE LOGIN"; btn.disabled = false;
   }
-}
 
-function deleteUser(type, docId) {
-  if (type !== 'Teacher') {
-    return Swal.fire("Not Allowed", "Student & Guardian accounts cannot be deleted from here.", "info");
+  function showDashboardUI() {
+    document.getElementById('login-container').style.display = "none";
+    document.getElementById('main-navbar').style.display = "flex";
+    document.getElementById('main-banner').style.display = "flex";
+    document.getElementById('dashboard-section').style.display = "block";
   }
-  Swal.fire({
-    title: 'Remove Teacher Account?',
-    text: "This will remove the teacher's login access, profile, and attendance machine card.",
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonColor: '#ef4444',
-    confirmButtonText: 'Yes, remove!'
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      showLoader(true, "REMOVING TEACHER...");
+
+  function logout() {
+    if(auth) auth.signOut();
+    sessionStorage.removeItem('srms_student_session');
+    sessionStorage.removeItem('srms_student_docId');
+    std = null;
+    markSheetHTML = "";
+    allStudentAttendance = {}; 
+    allHolidays = {};
+    document.getElementById('stuID').value = '';
+    document.getElementById('stuPass').value = '';
+    document.getElementById('err').innerText = '';
+    
+    document.getElementById('main-navbar').style.display = "none";
+    document.getElementById('main-banner').style.display = "none";
+    document.getElementById('dashboard-section').style.display = "none";
+    document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
+    
+    document.getElementById('login-container').style.display = "flex";
+  }
+
+  // ==========================================
+  // FORGOT PASSWORD LOGIC 
+  // ==========================================
+  function openForgotPassModal() {
+    document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
+    document.getElementById('fpID').value = ''; document.getElementById('fpOTP').value = ''; document.getElementById('fpNewPass').value = ''; document.getElementById('fpMsg').innerText = '';
+    document.getElementById('forgotPassModal').style.display = 'flex';
+  }
+
+  async function requestOTP() {
+    const id = sanitizeHTML(document.getElementById('fpID').value.trim());
+    if(!id) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Please enter Student ID.</span>`; return; }
+    const btn = document.getElementById('btnRequestOTP');
+    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SENDING..."; btn.disabled = true;
+    
+    try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "sendOTP", id: id }) });
+        const data = await res.json();
+        
+        if(data.status === "success") {
+            resettingStudentID = id; resettingDocId = data.docId; 
+            document.getElementById('fpStep1').style.display = 'none'; document.getElementById('fpStep2').style.display = 'block';
+            let msg = data.email ? `OTP sent to ${sanitizeHTML(data.email)}` : "OTP Sent Successfully!";
+            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;"><b>${msg}</b></span>`;
+        } else {
+            let eMsg = data.message || "Error finding student.";
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`;
+        }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; }
+    btn.innerHTML = "SEND OTP TO EMAIL"; btn.disabled = false;
+  }
+
+  async function verifyOTP() {
+    const entered = sanitizeHTML(document.getElementById('fpOTP').value.trim());
+    if(!entered) return;
+
+    const btns = document.getElementById('fpStep2').getElementsByTagName('button');
+    const verifyBtn = btns[0];
+    verifyBtn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> VERIFYING..."; verifyBtn.disabled = true;
+
+    try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "verifyOTP", id: resettingStudentID, otp: entered }) });
+        const data = await res.json();
+        
+        if(data.status === "success") {
+            document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'block';
+            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ OTP Verified! You can now set a new password.</span>`;
+        } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`; }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Verification Failed. Network Error!</span>`; }
+    
+    verifyBtn.innerHTML = "VERIFY OTP"; verifyBtn.disabled = false;
+  }
+
+  async function saveResetPassword() {
+    const newPass = document.getElementById('fpNewPass').value.trim();
+    if(newPass.length < 6) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Password must be at least 6 characters.</span>`; return; }
+    
+    const btn = document.getElementById('btnSaveReset'); btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SAVING..."; btn.disabled = true;
+
+    try {
+        const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass }) });
+        const data = await res.json();
+        
+        if(data.status === "success") {
+            document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful!</div><button class="login-btn" onclick="closeModal('forgotPassModal')">CLOSE</button>`;
+            document.getElementById('fpMsg').innerText = '';
+        } else {
+            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`;
+            btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false;
+        }
+    } catch(e) { 
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; 
+        btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; 
+    }
+  }
+
+  // =====================================================================
+  // DASHBOARD INITIALIZATION & ADVANCED RESULT PARSER
+  // =====================================================================
+  async function initDash() { 
+    if (!std) return;
+    document.getElementById('uName').innerText = "Hello, " + std.name;
+    document.getElementById('uMeta').innerText = `ID: ${std.id} | Class: ${std.class}${std.group ? ` (${std.group})` : ''} | Roll: ${std.roll}`;
+    
+    try {
+        if (!auth.currentUser) return;
+        const token = await auth.currentUser.getIdToken();
+        const headers = { "Authorization": "Bearer " + token };
+
+        fetch(`${FIREBASE_DB_BASE}/Warnings?pageSize=1000`, { headers }).then(r=>r.json()).then(data=>{
+            if(data.documents) {
+                let warn = data.documents.find(d => d.fields && d.fields.studentID && d.fields.studentID.stringValue === std.id);
+                if(warn) {
+                    document.getElementById('noticeBox').style.display="block";
+                    document.getElementById('noticeText').innerText = warn.fields.message.stringValue;
+                }
+            }
+        }).catch(e=>{});
+
+        if(std.resultMarks && Array.isArray(std.resultMarks) && std.resultMarks.length > 0) {
+            let rawCls = String(std.class).trim();
+            let headerClsName = (rawCls === "Play" || rawCls === "Nursery" || rawCls === "KG" || rawCls.toLowerCase().startsWith("class")) ? rawCls : "Class " + rawCls;
+            if(std.group && std.group !== "None" && std.group !== "N/A") headerClsName += " " + std.group;
+            let hDocName = headerClsName.replace(/\s+/g, '_');
+
+            fetch(`${FIREBASE_DB_BASE}/ClassHeaders/${hDocName}`, { headers }).then(r=>r.json()).then(data=>{
+                if(data.fields && data.fields.headers) {
+                    let parsedHeaders = safeJSONParse(data.fields.headers.stringValue, []);
+                    if (parsedHeaders.length > 0) renderResults(parsedHeaders, std.resultMarks);
+                }
+            }).catch(e=>{});
+        }
+
+        fetchMat(headers);
+        checkLiveClassForButton(headers);
+    } catch(err) { console.log("Token Sync Error on Dashboard:", err); }
+  }
+
+  async function fetchMat(headers) {
+      const box = document.getElementById('matList');
+      box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading resources...</div>";
+      
       try {
-        let res = await apiCall('deleteUser', { type: type, rowId: docId });
-        showLoader(false);
-        Swal.fire("Removed!", res.msg || "Teacher removed.", "success");
-        loadUsers();
-      } catch (err) {
-        showLoader(false);
-        Swal.fire("Error", err.message, "error");
-      }
-    }
-  });
-}
+          const res = await fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=1000`, { headers });
+          const data = await res.json();
+          box.innerHTML = ""; let count = 0;
+          
+          if(data.documents) {
+              let posts = data.documents.map(d => d.fields).sort((a,b) => {
+                  let tA = a.timestamp ? parseInt(a.timestamp.integerValue) : 0;
+                  let tB = b.timestamp ? parseInt(b.timestamp.integerValue) : 0;
+                  return tB - tA;
+              });
 
-// ============================================================================
-// 📋 WEBSITE POSTS MANAGER
-// ============================================================================
-async function loadPosts() {
-  if (!isAuthReady) return;
-  showLoader(true, "LOADING POSTS...");
-  try {
-    let snap = await db.collection('WebsitePosts').get();
-    let posts = [];
-    snap.forEach(doc => {
-      let f = doc.data();
-      posts.push({
-        date: f.date || "",
-        targetPage: f.targetPage || "",
-        title: f.title || "",
-        desc: f.desc || "",
-        fileType: f.fileType || "None",
-        fileUrl: f.fileUrl || "",
-        thumbUrl: f.thumbUrl || f.fileUrl || "",
-        docId: doc.id,
-        time: parseInt(f.timestamp || 0, 10)
-      });
-    });
-
-    posts.sort((a, b) => b.time - a.time);
-    showLoader(false);
-
-    var h = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-      <h3 style="margin:0; color:var(--primary); font-weight:800; text-transform:uppercase; font-size:17px;">
-        <i class="fas fa-list-ul"></i> Website Posts (${posts.length})
-      </h3>
-      <button onclick="loadPosts()" style="background:var(--primary-light); color:var(--primary); border:1px solid #a7f3d0; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer;">
-        <i class="fas fa-sync-alt"></i> Refresh
-      </button>
-    </div>`;
-
-    if (posts.length === 0) {
-      h += "<p style='text-align:center; color:#94a3b8; padding:20px; font-weight:600;'>No posts available.</p>";
-    }
-
-    posts.forEach(r => {
-      var thumbHtml = "";
-      if (r.fileType === "Image" && (r.thumbUrl || r.fileUrl)) {
-        thumbHtml = `<img src="${r.thumbUrl || r.fileUrl}" style="width:52px; height:52px; object-fit:cover; border-radius:10px; border:1px solid #cbd5e1; flex-shrink:0;" onerror="this.style.display='none'">`;
-      }
-      var serverBadge = (r.fileUrl && r.fileUrl.includes("ibb.co"))
-        ? `<span style="background:#dbeafe; color:#1d4ed8; padding:2px 7px; border-radius:5px; font-size:9.5px; font-weight:800; margin-left:5px;">ImgBB</span>`
-        : "";
-      h += `<div class="list-item">
-        <div style="display:flex; gap:12px; align-items:center; flex:1;">
-          ${thumbHtml}
-          <div>
-            <span style="background:var(--primary-light); color:var(--primary); padding:4px 10px; border-radius:6px; font-size:10.5px; font-weight:800; text-transform:uppercase;">${r.targetPage}</span>
-            <span style="font-size:11px; color:#64748b; margin-left:6px; font-weight:600;">• ${r.fileType}</span>${serverBadge}
-            <b style="font-size:15px; color:#0f172a; display:block; margin:6px 0 4px 0;">${r.title}</b>
-            <small style="color:#64748b; font-weight:600;"><i class="far fa-calendar-alt"></i> ${r.date}</small>
-          </div>
-        </div>
-        <button class="btn-delete" onclick="delPost('${r.docId}')"><i class="fas fa-trash"></i> Delete</button>
-      </div>`;
-    });
-    document.getElementById('postList').innerHTML = h;
-  } catch (err) {
-    showLoader(false);
-    document.getElementById('postList').innerHTML = "<p style='color:red; text-align:center;'>Failed to load posts.</p>";
+              posts.forEach(f => {
+                  let target = f.targetPage ? f.targetPage.stringValue : "";
+                  if(target === "Class" + std.class) {
+                      count++;
+                      let title = sanitizeHTML(f.title ? f.title.stringValue : 'Document');
+                      let date = sanitizeHTML(f.date ? f.date.stringValue : '');
+                      let link = f.fileUrl ? f.fileUrl.stringValue : '#';
+                      if(!link || link === "None") link = "#";
+                      
+                      box.innerHTML += `<div style="background:white; padding:15px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
+                                          <div>
+                                            <div style="font-weight:700; color:#1e293b; font-size:14px;">${title}</div>
+                                            <div style="font-size:11px; color:#64748b; margin-top:3px;">📅 ${date}</div>
+                                          </div>
+                                          <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--primary); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap;">VIEW</a>
+                                        </div>`;
+                  }
+              });
+          }
+          if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'>No class materials available.</div>";
+      } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
-}
+
+  // 💡 Smart Subject & Multi-Exam Parser
+  function parsePortalHeaders(headers) {
+      let firstEmpty = headers.indexOf("");
+      if(firstEmpty === -1) firstEmpty = headers.length;
+      let subjects = {};
+      let c = 3;
+      while(c < firstEmpty && c < headers.length) {
+          let startC = c;
+          let hStr = String(headers[c] || "");
+          if (hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name")) {
+              let optSubName = hStr.replace(/Opt Name/i, "").trim();
+              if(!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
+              let j = c + 1;
+              while(j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
+                  if(String(headers[j]).includes(" - Main")) subjects[optSubName].mains.push(j);
+                  else subjects[optSubName].tests.push(j);
+                  j++;
+              }
+              c = j;
+          } else {
+              let subName = hStr.split(" - ")[0].trim();
+              if(!subjects[subName]) subjects[subName] = { isOpt: false, tests: [], mains: [] };
+              let j = c;
+              while(j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
+                  if(String(headers[j]).includes(" - Main")) subjects[subName].mains.push(j);
+                  else subjects[subName].tests.push(j);
+                  j++;
+              }
+              c = j;
+          }
+          if (c === startC) c++;
+      }
+      return { subjects, firstEmpty };
+  }
+
+  // 💡 Digital Marksheet Renderer (Summary at TOP + Class 9/10 CQ, MCQ, Prac Split)
+  function renderResults(h, d) {
+      let parsed = parsePortalHeaders(h);
+      let firstEmpty = parsed.firstEmpty;
+      if (firstEmpty !== -1 && d[firstEmpty + 2]) {
+          let totalAvg = sanitizeHTML(d[firstEmpty+1] || "0.00");
+          let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00");
+          let grade = sanitizeHTML(d[firstEmpty+3] || "F");
+          let pos = sanitizeHTML(d[firstEmpty+4] || "-");
+          let failReason = sanitizeHTML(d[firstEmpty+5] || "None");
+          let year = sanitizeHTML(d[firstEmpty+6] || d[firstEmpty+5] || new Date().getFullYear().toString());
+          if (year === failReason) year = new Date().getFullYear().toString();
+
+          let isNineTen = String(std.class).includes("9") || String(std.class).includes("10");
+          let subHtml = "";
+
+          Object.keys(parsed.subjects).forEach(subName => {
+              let sub = parsed.subjects[subName];
+              let displaySubName = sub.isOpt ? sanitizeHTML(d[sub.nameCol] || subName) + ` <span style="font-size:11px; color:#94a3b8; font-weight:normal;">(Optional)</span>` : sanitizeHTML(subName);
+              
+              let tVals = [];
+              sub.tests.forEach(col => {
+                  let v = String(d[col] || "").trim();
+                  if(v !== "") tVals.push(sanitizeHTML(v));
+              });
+              
+              let mVals = [];
+              let cqs = [], mcqs = [], pracs = [];
+              let hasPlusInMain = false;
+
+              sub.mains.forEach(col => {
+                  let v = String(d[col] || "").trim();
+                  if(v !== "") {
+                      mVals.push(sanitizeHTML(v));
+                      if (v.includes("+")) {
+                          hasPlusInMain = true;
+                          let parts = v.split("+").map(p => sanitizeHTML(p.trim()));
+                          if (parts[0]) cqs.push(parts[0]);
+                          if (parts[1]) mcqs.push(parts[1]);
+                          if (parts[2]) pracs.push(parts[2]);
+                      } else {
+                          cqs.push(sanitizeHTML(v));
+                      }
+                  }
+              });
+
+              if(tVals.length > 0 || mVals.length > 0) {
+                  if (isNineTen || hasPlusInMain) {
+                      subHtml += `<div class="dt-row">
+                                    <div class="dt-row-top">
+                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                    </div>
+                                    <div class="dt-row-bottom">
+                                        <div class="mark-group"><div class="mark-label">Test</div><div class="mark-val" style="color:#94a3b8;">${tVals.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">CQ</div><div class="mark-val" style="color:#38bdf8;">${cqs.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">MCQ</div><div class="mark-val" style="color:#fbbf24;">${mcqs.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">Prac</div><div class="mark-val" style="color:#34d399;">${pracs.join(", ") || "-"}</div></div>
+                                    </div>
+                                  </div>`;
+                  } else {
+                      subHtml += `<div class="dt-row">
+                                    <div class="dt-row-top">
+                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                    </div>
+                                    <div class="dt-row-bottom">
+                                        <div class="mark-group"><div class="mark-label">Test Marks</div><div class="mark-val" style="color:#94a3b8;">${tVals.join(", ") || "-"}</div></div>
+                                        <div class="mark-group"><div class="mark-label">Main Exam</div><div class="mark-val" style="color:${sub.isOpt ? '#10b981' : '#38bdf8'};">${mVals.join(", ") || "-"}</div></div>
+                                    </div>
+                                  </div>`;
+                  }
+              }
+          });
+
+          let failBanner = (failReason && failReason !== "None") ? `<div style="text-align:center; color:#fecdd3; background:rgba(225,29,72,0.2); border:1px solid rgba(225,29,72,0.4); padding:10px; border-radius:12px; font-size:12px; font-weight:700; margin-bottom:18px;">⚠️ Remarks: Failed in ${failReason}</div>` : "";
+
+          markSheetHTML = `
+            <div class="digital-transcript">
+              <div class="scroll-indicator">⬇️ Scroll down for subject-wise marks ⬇️</div>
+              <div class="dt-header">
+                  <h2 style="margin:0; color:#38bdf8; font-size:20px; font-weight:800; letter-spacing:1px;">DIGITAL TRANSCRIPT HUB</h2>
+                  <p style="margin:5px 0 0 0; color:#94a3b8; font-size:12px;">Real-time Secure Academic Record • Session: ${year}</p>
+              </div>
+              
+              <div style="padding:12px 15px; background:rgba(255,255,255,0.04); border-radius:12px; margin-bottom:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:13px; border:1px solid #334155;">
+                  <span><span style="color:#94a3b8;">ID:</span> <b style="color:#fff;">${std.id}</b></span>
+                  <span><span style="color:#94a3b8;">Class:</span> <b style="color:#fff;">${std.class}${std.group ? ' ('+std.group+')' : ''}</b></span>
+                  <span><span style="color:#94a3b8;">Roll:</span> <b style="color:#fff;">${std.roll}</b></span>
+              </div>
+
+              <!-- 🌟 FINAL RESULT SUMMARY AT THE TOP 🌟 -->
+              <div class="dt-summary-box">
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">GPA</p><h2 style="margin:0; font-size:24px; color:#fff; font-weight:900;">${gpa}</h2></div>
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Grade</p><h2 style="margin:0; font-size:24px; color:${grade==='F'?'#fda4af':'#4ade80'}; font-weight:900;">${grade}</h2></div>
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Rank</p><h2 style="margin:0; font-size:24px; color:#fbbf24; font-weight:900;">${pos}</h2></div>
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Total Avg</p><h2 style="margin:0; font-size:22px; color:#38bdf8; font-weight:900;">${totalAvg}</h2></div>
+              </div>
+              ${failBanner}
+
+              <div style="margin-bottom:20px;">${subHtml}</div>
+              <div class="dt-warning-text">⚠️ THIS IS A DIGITAL PREVIEW • NOT FOR OFFICIAL USE</div>
+            </div>`;
+      }
+  }
+
+  // =====================================================================
+  // DETAILED ATTENDANCE LOGIC (HOLIDAYS + ABSENT TRACKING)
+  // =====================================================================
+  function openAttendanceModal() { 
+      document.getElementById('attendanceModal').style.display = 'flex'; 
+      fetchDetailedAttendance();
+  }
+
+  async function fetchDetailedAttendance() {
+      document.getElementById('attLoader').style.display = 'block';
+      document.getElementById('modalAttTableBody').innerHTML = '';
+      
+      try {
+          const token = await auth.currentUser.getIdToken();
+          const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
+          
+          const attReq = { 
+              structuredQuery: { 
+                  from: [{ collectionId: "AttendanceHistory" }], 
+                  where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: std.id } } },
+                  limit: 2000
+              } 
+          };
+          
+          const [attRes, holRes] = await Promise.all([
+              fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(attReq) }),
+              fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`, { headers })
+          ]);
+          
+          const attData = await attRes.json();
+          const holData = await holRes.json();
+          
+          allStudentAttendance = {}; 
+          if (attData && attData.length > 0 && attData[0].document) {
+              attData.forEach(item => {
+                  if(item.document && item.document.fields) {
+                      let f = item.document.fields;
+                      let pDate = sanitizeHTML(f.pureDate?.stringValue || ""); 
+                      let timeStr = sanitizeHTML(f.time?.stringValue || "");
+                      let type = sanitizeHTML(f.type?.stringValue || ""); 
+                      
+                      if(pDate) {
+                          if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; }
+                          if(type === "IN") allStudentAttendance[pDate].in = timeStr;
+                          if(type === "OUT") allStudentAttendance[pDate].out = timeStr;
+                      }
+                  }
+              });
+          }
+
+          allHolidays = {};
+          if(holData && holData.documents) {
+              holData.documents.forEach(doc => {
+                  let f = doc.fields;
+                  let pDate = f.date?.stringValue;
+                  let reason = f.reason?.stringValue || "Holiday";
+                  if(pDate) allHolidays[pDate] = reason;
+              });
+          }
+
+          populateAttendanceMonths();
+      } catch(e) {
+          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
+      }
+      document.getElementById('attLoader').style.display = 'none';
+  }
+
+  function populateAttendanceMonths() {
+      let select = document.getElementById('attMonthFilter');
+      select.innerHTML = "";
+      
+      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+      const now = new Date(bdTime);
+      
+      let months = [];
+      for(let i=0; i<12; i++) {
+          let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+          let mStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0');
+          months.push(mStr);
+      }
+      
+      months.forEach(m => {
+          let dateObj = new Date(m + "-01");
+          let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+          select.innerHTML += `<option value='${m}'>${monthName}</option>`;
+      });
+      
+      renderAttendanceTable(months[0]);
+  }
+
+  function renderAttendanceTable(selectedMonth = null) {
+      if(!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
+      let tbody = document.getElementById('modalAttTableBody');
+      let summaryBox = document.getElementById('modalAttSummary');
+      
+      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+      const today = new Date(bdTime);
+      
+      let dateParts = selectedMonth.split('-');
+      let sYear = parseInt(dateParts[0]);
+      let sMonth = parseInt(dateParts[1]);
+      
+      let daysInMonth = new Date(sYear, sMonth, 0).getDate();
+      let daysToLoop = daysInMonth;
+      
+      if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
+           summaryBox.style.display = 'none';
+           return;
+      }
+      
+      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) {
+           daysToLoop = today.getDate();
+      }
+
+      let presentCount = 0; let absentCount = 0; let holidayCount = 0;
+      let html = "";
+      
+      for(let d = daysToLoop; d >= 1; d--) {
+           let dStr = String(d).padStart(2, '0');
+           let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
+           
+           let statusHtml = ""; let inTime = "-"; let outTime = "-"; let bgRow = "";
+           
+           if(allHolidays[fullDate]) {
+               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`;
+               holidayCount++;
+               bgRow = "background: #fffbeb;";
+           } else if (allStudentAttendance[fullDate]) {
+               let rec = allStudentAttendance[fullDate];
+               inTime = rec.in; outTime = rec.out;
+               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`;
+               presentCount++;
+           } else {
+               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`;
+               absentCount++;
+               bgRow = "background: #fff1f2;";
+           }
+           
+           html += `
+            <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s; ${bgRow}">
+                <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td>
+                <td style="padding: 12px 15px;">${statusHtml}</td>
+                <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td>
+                <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td>
+            </tr>`;
+      }
+      
+      if(html === "") {
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>';
+           summaryBox.style.display = 'none';
+      } else {
+           tbody.innerHTML = html;
+           summaryBox.style.display = 'flex';
+           summaryBox.innerHTML = `
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small>
+                <span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span>
+            </span>
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small>
+                <span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span>
+            </span>
+            <span style="display:flex; flex-direction:column; align-items:center;">
+                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small>
+                <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
+            </span>
+        `;
+      }
+  }
+
+  function openSecurityModal() { document.getElementById('newPass').value = ""; document.getElementById('passMsg').innerText = ""; document.getElementById('securityModal').style.display = 'flex'; }
+  
+  function viewResultModal() {
+    if(!markSheetHTML) return alert("Result data is not available or not calculated yet.");
+    document.getElementById('resultModal').style.display = 'flex';
+    document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
+  }
+
+  // 🚀 UPDATE PASSWORD WHILE LOGGED IN
+  async function updatePassword() {
+    const p = document.getElementById('newPass').value; 
+    const msgBox = document.getElementById('passMsg');
+    
+    if(!p || p.length < 6) { msgBox.style.color="var(--danger)"; msgBox.innerText="Password must be at least 6 characters."; return; }
+    let docId = sessionStorage.getItem('srms_student_docId');
+    if(!docId) return;
+
+    msgBox.style.color = "var(--primary)"; msgBox.innerText = "Updating...";
+    try { 
+        const res = await fetch(SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "updatePassword", docId: docId, newPass: p })
+        });
+        const data = await res.json();
+        
+        if(data.status === "success") {
+            msgBox.style.color = "#059669"; 
+            msgBox.innerText = `✅ ${sanitizeHTML(data.message || "Password Changed Successfully!")}`; 
+            document.getElementById('newPass').value = "";
+        } else {
+            msgBox.style.color = "var(--danger)"; 
+            msgBox.innerText = sanitizeHTML(data.message || "Error updating password.");
+        }
+    } catch(e) { msgBox.style.color="var(--danger)"; msgBox.innerText = "Error! Please check your network and try again."; }
+  }
+
+  async function checkLiveClassForButton(headers) {
+    let sClass = std.class;
+    if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
+    try {
+        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/${sClass}`, { headers });
+        if(response.ok) {
+            const data = await response.json();
+            if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
+                document.getElementById('liveClassMainBtn').classList.add('live-active-btn');
+                document.getElementById('liveClassMainBtn').innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE NOW</span>";
+            }
+        }
+    } catch (e) {}
+  }
+
+  async function openLiveClassModal() {
+    document.getElementById('liveClassModal').style.display = 'flex';
+    const body = document.getElementById('liveClassModalBody');
+    body.innerHTML = `<div style="text-align:center; font-weight:bold; color:var(--primary);">⏳ Checking Live Session...</div>`;
+    let sClass = std.class;
+    if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
+    
+    try {
+        const token = await auth.currentUser.getIdToken();
+        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/${sClass}`, { headers: { "Authorization": "Bearer " + token } });
+        if(response.ok) {
+            const data = await response.json();
+            if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
+                let title = sanitizeHTML(data.fields.title ? data.fields.title.stringValue : "Class Running");
+                body.innerHTML = `<div style="text-align:center;"><div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;">🔴 LIVE BROADCAST</div><h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Secure ID: ${std.id}</p><button class="login-btn" onclick="joinLiveClass('${sClass}', '${std.name}', '${std.roll}')">JOIN SESSION NOW</button></div>`;
+                return;
+            }
+        }
+        body.innerHTML = `<div style="text-align:center; padding:20px;"><p style="color:var(--text-muted); font-weight:600; font-size:15px;">No active live sessions for your class.</p></div>`;
+    } catch (e) { body.innerHTML = `<p style="color:red; text-align:center;">API Sync Failed.</p>`; }
+  }
+
+  function joinLiveClass(room, name, roll) {
+    const config = `#config.startWithAudioMuted=true&config.startWithVideoMuted=true&config.prejoinPageEnabled=false&userInfo.displayName="${name} (${roll})"`;
+    window.open(`https://meet.jit.si/SRMS-Live-${room}${config}`, '_blank');
+    closeModal('liveClassModal');
+  }
+
+  function openFeesModal() {
+    document.getElementById('feesModal').style.display = 'flex';
+    let total = 0; let pendingCount = 0; let html = `<h3 style="margin:0 0 20px 0; color:var(--primary); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">Billing Hub</h3><div style="background:#f8fafc; padding:20px; border-radius:16px; border:1px solid #e2e8f0;">`;
+    
+    let genAmt = parseFloat(std.schoolFeeDue) || 0; let genSts = (std.schoolFeeStatus || "").toLowerCase();
+    if(genAmt > 0 && genSts !== "paid") { 
+        if(genSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
+        else { total += genAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:var(--primary);">${genAmt} Tk</b></div>`; }
+    }
+
+    let hosAmt = parseFloat(std.hostelFeeDue) || 0; let hosSts = (std.hostelFeeStatus || "").toLowerCase();
+    if(hosAmt > 0 && hosSts !== "paid") { 
+        if(hosSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
+        else { total += hosAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:var(--primary);">${hosAmt} Tk</b></div>`; }
+    }
+
+    if(std.customFees && std.customFees.length > 0) {
+        std.customFees.forEach(cf => { 
+            let cAmt = parseFloat(cf.amount) || 0; let cSts = (cf.status || "").toLowerCase();
+            if(cAmt > 0 && cSts !== "paid") { 
+                if(cSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
+                else { total += cAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:var(--primary);">${cAmt} Tk</b></div>`; }
+            }
+        });
+    }
+    html += `</div>`;
+    
+    if(total > 0) {
+        html += `<div style="margin-top:25px; text-align:center; background:#fff1f2; padding:20px; border-radius:16px;"><p style="margin:0 0 5px 0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Payable Amount</p><h2 style="margin:0; color:var(--danger); font-size:32px;">${total} Tk</h2></div><div style="margin-top:20px;"><label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mobile Number (For Payment)</label><input type="text" id="feesPhone" value="${sanitizeHTML(std.phone) || ''}" placeholder="Enter Bkash/Nagad Number"></div><p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center; margin-top:12px; line-height:1.4;">⚠️ Note: If your transaction shows "Pending" in gateway, please do NOT pay again. We will verify manually.</p><button id="btnPayNow" class="login-btn" style="background:var(--danger); font-size:15px;" onclick="generatePaymentLink()">PROCEED TO SECURE PAYMENT</button><a id="feesPayLink" href="#" target="_blank" class="login-btn" style="display:none; background:#059669; font-size:15px; text-align:center;">✅ CLICK HERE TO PAY</a><div id="feesMsg" style="margin-top:15px; font-size:13px; font-weight:bold; text-align:center;"></div>`;
+    } else if (pendingCount > 0) {
+        html += `<div style="text-align:center; color:#d97706; font-weight:700; padding:30px; background:#fef3c7; border-radius:16px; margin-top:20px; border:1px solid #fde68a;">⏳ Your payment is currently under Pending Review. We will update it soon.</div>`;
+    } else { 
+        html += `<div style="text-align:center; color:#059669; font-weight:700; padding:30px; background:#f0fdf4; border-radius:16px; margin-top:20px; border:1px solid #a7f3d0;">✅ All Fees Already Paid. Thank You!</div>`; 
+    }
+    document.getElementById('feesModalBody').innerHTML = html; 
+  }
+
+  function generatePaymentLink() {
+    const phone = sanitizeHTML(document.getElementById("feesPhone").value.trim());
+    if (phone.length < 11) { document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>⚠️ সঠিক মোবাইল নম্বর দিন।</span>"; return; }
+    
+    const btn = document.getElementById("btnPayNow"); btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> Connecting Server..."; btn.disabled = true;
+    const url = FEE_PAY_SCRIPT + "?action=create_payment&student_id=" + encodeURIComponent(std.id) + "&phone=" + encodeURIComponent(phone) + "&email=" + encodeURIComponent(std.email || '');
+    
+    fetch(url).then(r => r.json()).then(data => {
+        if (data.payment_url) { 
+            btn.style.display = "none"; const linkBtn = document.getElementById("feesPayLink"); linkBtn.style.display = "block"; linkBtn.href = sanitizeHTML(data.payment_url); document.getElementById("feesMsg").innerHTML = "";
+        } else { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Payment generation failed.</span>"; }
+    }).catch(e => { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; });
+  }
 </script>
 </body>
 </html>
