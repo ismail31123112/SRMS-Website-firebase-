@@ -90,23 +90,26 @@
   .adm-img-box { margin: 18px 0; border-radius: 10px; overflow: hidden; border: 1px solid #eee; background: #fff; }
   .adm-img { width: 100%; max-height: 480px; object-fit: contain; display: block; cursor: pointer; }
   .btn-group { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 20px; }
-  .btn-apply { display: inline-flex; align-items: center; gap: 8px; background: #ff9800; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; transition: 0.3s; border: none; cursor: pointer; }
+  .btn-apply { display: inline-flex; align-items: center; gap: 8px; background: #ff9800; color: white; padding: 12px 25px; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 14px; transition: 0.3s; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; }
   .btn-online { background: #005f40; }
   .btn-apply:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
   .loader { text-align: center; padding: 40px; color: #005f40; font-weight: 600; }
 
-  /* On-Page Online Admission Form Card */
-  .online-form-card { background: #ffffff; border-radius: 16px; padding: 35px; box-shadow: 0 15px 35px rgba(0, 95, 64, 0.1); border-top: 6px solid #005f40; }
-  .online-form-header { text-align: center; margin-bottom: 28px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 18px; }
+  /* On-Page Online Admission Form Card (Hidden by default until user clicks Apply Online) */
+  .online-form-card { display: none; background: #ffffff; border-radius: 16px; padding: 35px; box-shadow: 0 15px 35px rgba(0, 95, 64, 0.12); border-top: 6px solid #005f40; position: relative; animation: fadeInUp 0.5s ease-out forwards; }
+  .online-form-header { text-align: center; margin-bottom: 28px; border-bottom: 2px dashed #e2e8f0; padding-bottom: 18px; position: relative; }
   .online-form-header h2 { margin: 0 0 8px 0; color: #005f40; font-size: 24px; font-weight: 800; text-transform: uppercase; }
   .online-form-header p { margin: 0; color: #64748b; font-size: 14px; }
+  .close-form-btn { position: absolute; top: 0; right: 0; background: #ffebee; color: #d32f2f; border: 1px solid #ffcdd2; padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+  .close-form-btn:hover { background: #d32f2f; color: #fff; }
   .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .form-group { margin-bottom: 16px; }
   .form-group.full-width { grid-column: 1 / -1; }
   .form-group label { display: block; font-weight: 700; font-size: 13px; color: #1e293b; margin-bottom: 6px; }
   .adm-input { width: 100%; padding: 12px 15px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: #f8fafc; font-size: 14px; font-family: 'Poppins', sans-serif; color: #333; box-sizing: border-box; transition: 0.3s; }
   .adm-input:focus { border-color: #005f40; background: #fff; outline: none; box-shadow: 0 0 0 3px rgba(0, 95, 64, 0.12); }
-  .adm-submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #005f40, #003d29); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 8px 20px rgba(0, 95, 64, 0.25); }
+  .group-highlight { background: #f0fdf4; border-color: #005f40; }
+  .adm-submit-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #005f40, #003d29); color: #fff; border: none; border-radius: 10px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; cursor: pointer; transition: 0.3s; margin-top: 10px; box-shadow: 0 8px 20px rgba(0, 95, 64, 0.25); font-family: 'Poppins', sans-serif; }
   .adm-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(0, 95, 64, 0.35); }
   .adm-submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
@@ -137,6 +140,7 @@
   @media (max-width: 650px) {
     .form-grid { grid-template-columns: 1fr; gap: 0; }
     .admission-card, .online-form-card { padding: 22px; }
+    .close-form-btn { position: static; display: inline-block; margin-bottom: 10px; }
   }
 </style>
 </head>
@@ -221,7 +225,7 @@
     </div>
   </div>
 
-  <!-- 2. On-Page Direct Online Admission Form (Submits via Complain/Contact Web App URL) -->
+  <!-- 2. On-Page Direct Online Admission Form (Opens when clicking "Apply Online" button) -->
   <div class="online-form-card" id="online-admission-section">
     <div id="adm-success" style="display:none; text-align:center; padding:30px 20px; background:#e8f5e9; border:2px solid #a5d6a7; border-radius:12px; margin-bottom:20px;">
       <div style="font-size:42px; margin-bottom:10px;">🎉</div>
@@ -233,6 +237,7 @@
     </div>
 
     <div class="online-form-header" id="adm-form-header">
+      <button type="button" class="close-form-btn" onclick="closeAdmissionForm()">✕ Close</button>
       <h2>📝 Online Admission Application Form</h2>
       <p>Fill out the form below to apply directly for admission at Saidpur Residential Model School (SRMS)</p>
     </div>
@@ -252,7 +257,7 @@
 
         <div class="form-group">
           <label>Applying for Class (কোন শ্রেণিতে ভর্তি হতে ইচ্ছুক) *</label>
-          <select id="stu_class" name="applying_class" required class="adm-input">
+          <select id="stu_class" name="applying_class" required class="adm-input" onchange="handleClassChange()">
             <option value="">-- Select Class --</option>
             <option value="Play">Play</option>
             <option value="Nursery">Nursery</option>
@@ -267,6 +272,17 @@
             <option value="Class 8">Class 8</option>
             <option value="Class 9">Class 9</option>
             <option value="Class 10">Class 10</option>
+          </select>
+        </div>
+
+        <!-- Dynamic Group / Department Field (Appears ONLY when Class 9 or Class 10 is selected) -->
+        <div class="form-group full-width" id="group_field_wrapper" style="display:none;">
+          <label style="color:#005f40;">📌 Select Group / Department (বিভাগ নির্বাচন করুন - ৯ম ও ১০ম শ্রেণির জন্য) *</label>
+          <select id="stu_group" name="student_group" class="adm-input group-highlight">
+            <option value="">-- Select Group (বিভাগ নির্বাচন করুন) --</option>
+            <option value="Science (বিজ্ঞান)">Science (বিজ্ঞান)</option>
+            <option value="Humanities / Arts (মানবিক)">Humanities / Arts (মানবিক)</option>
+            <option value="Business Studies / Commerce (ব্যবসায় শিক্ষা)">Business Studies / Commerce (ব্যবসায় শিক্ষা)</option>
           </select>
         </div>
 
@@ -395,14 +411,40 @@
     }
   });
 
-  function scrollToAdmissionForm() {
-    const formEl = document.getElementById('online-admission-section');
-    if (formEl) {
-      formEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // Open Online Admission Form on Button Click
+  function openAdmissionForm() {
+    const formSection = document.getElementById('online-admission-section');
+    if (formSection) {
+      formSection.style.display = 'block';
+      formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
       setTimeout(() => {
         const nameInput = document.getElementById('stu_name');
-        if (nameInput) nameInput.focus();
+        if (nameInput && formSection.style.display !== 'none') nameInput.focus();
       }, 500);
+    }
+  }
+
+  function closeAdmissionForm() {
+    const formSection = document.getElementById('online-admission-section');
+    if (formSection) {
+      formSection.style.display = 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  // Show/Hide Group (Department) when Class 9 or Class 10 is selected
+  function handleClassChange() {
+    const selectedClass = document.getElementById('stu_class').value;
+    const groupWrapper = document.getElementById('group_field_wrapper');
+    const groupSelect = document.getElementById('stu_group');
+
+    if (selectedClass === 'Class 9' || selectedClass === 'Class 10') {
+      groupWrapper.style.display = 'block';
+      groupSelect.required = true;
+    } else {
+      groupWrapper.style.display = 'none';
+      groupSelect.required = false;
+      groupSelect.value = '';
     }
   }
 
@@ -452,7 +494,7 @@
               downloadBtn = `<a href="${dlUrl}" target="_blank" rel="noopener noreferrer" class="btn-apply">⬇ Download Form (PDF)</a>`;
             }
 
-            let onlineBtn = `<button type="button" onclick="scrollToAdmissionForm()" class="btn-apply btn-online">📝 Apply Online Below</button>`;
+            let onlineBtn = `<button type="button" onclick="openAdmissionForm()" class="btn-apply btn-online">📝 Apply Online</button>`;
             
             contentArea.innerHTML += `
               <div class="info-box">
@@ -468,9 +510,9 @@
       if(!found) {
         contentArea.innerHTML = `
           <div class="info-box" style="text-align:center; color: #555;">
-            <p style="font-size: 16px; margin-bottom: 15px;">Admission is open! Fill out the Online Admission Form below to apply directly.</p>
+            <p style="font-size: 16px; margin-bottom: 18px;">Currently, no admission circular is published. Click the button below to apply online directly.</p>
             <div class="btn-group" style="justify-content: center; margin-top: 0;">
-              <button type="button" onclick="scrollToAdmissionForm()" class="btn-apply btn-online">📝 Go to Online Application Form ⬇</button>
+              <button type="button" onclick="openAdmissionForm()" class="btn-apply btn-online">📝 Apply Online Now</button>
             </div>
           </div>`;
       }
@@ -486,6 +528,7 @@
   function resetAdmissionForm() {
     const form = document.getElementById('admission-form');
     form.reset();
+    handleClassChange();
     form.style.display = "block";
     document.getElementById('adm-form-header').style.display = "block";
     document.getElementById('adm-success').style.display = "none";
@@ -507,6 +550,7 @@
 
       const stuName = document.getElementById('stu_name').value.trim();
       const stuClass = document.getElementById('stu_class').value.trim();
+      const stuGroup = document.getElementById('stu_group').value.trim();
       const stuCat = document.getElementById('stu_category').value.trim();
       const stuDob = document.getElementById('stu_dob').value.trim();
       const stuFather = document.getElementById('stu_father').value.trim();
@@ -516,14 +560,24 @@
       const stuAddr = document.getElementById('stu_address').value.trim();
       const stuNote = document.getElementById('stu_note').value.trim() || "N/A";
 
+      const isHighSchool = (stuClass === "Class 9" || stuClass === "Class 10");
+      if (isHighSchool && !stuGroup) {
+        alert("অনুগ্রহ করে ৯ম/১০ম শ্রেণির জন্য বিভাগ (Group/Department) নির্বাচন করুন।");
+        return;
+      }
+
+      const classWithGroup = (isHighSchool && stuGroup) ? `${stuClass} (${stuGroup})` : stuClass;
+      const groupLine = (isHighSchool && stuGroup) ? `📚 Group / Department: ${stuGroup}\n` : "";
+
       // Populate fields so the Web App sends a complete, structured Admission Email
-      document.getElementById('hidden_sender_name').value = `🎓 ADMISSION APPLICATION: ${stuName} (${stuClass})`;
+      document.getElementById('hidden_sender_name').value = `🎓 ADMISSION APPLICATION: ${stuName} - ${classWithGroup}`;
       document.getElementById('hidden_mobile_number').value = stuPhone;
       document.getElementById('hidden_message_body').value =
         `📌 NEW ONLINE ADMISSION APPLICATION (SRMS)\n` +
         `--------------------------------------------\n` +
         `👤 Student Name: ${stuName}\n` +
         `🏫 Applying Class: ${stuClass}\n` +
+        groupLine +
         `🏠 Category: ${stuCat}\n` +
         `🎂 Date of Birth: ${stuDob}\n` +
         `👨 Father's Name: ${stuFather}\n` +
