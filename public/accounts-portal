@@ -61,7 +61,7 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
 
 #success-msg { display: none; text-align: center; color: #16a34a; font-weight: 900; font-size: 20px; margin: 20px 0; background: #dcfce7; padding: 15px; border-radius: 12px; border: 1px solid #bbf7d0; }
 
-.custom-fee-item input { border: 2px solid #8b5cf6 !important; background: #fff; }
+.custom-fee-item input, .adv-custom-fee-item input { border: 2px solid #8b5cf6 !important; background: #fff; }
 
 /* Dynamic Category & Cashbook Badges */
 .badge-custom-cat { background: #f3e8ff; color: var(--purple); padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; border: 1px solid #ddd6fe; display: inline-block; }
@@ -246,7 +246,7 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
           <option value="Add">1. Create / Add New Fees (Bulk by Class &amp; Database Category)</option>
           <option value="Edit">2. Edit / Override Existing Fees</option>
           <option value="FineSetup">3. Setup Fines &amp; Late Fees (Automated)</option>
-          <option value="AdmissionSetup">4. Setup Advance Admission &amp; Session Fees (Class &amp; Category-Wise)</option>
+          <option value="AdmissionSetup">4. Setup Advance Admission Fees (Class, Category &amp; Custom Advance Fees)</option>
           <option value="Reset">5. Factory Reset (Clear All Dues)</option>
         </select>
       </div>
@@ -286,7 +286,7 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
             <label style="font-size:12px; font-weight:800; color:#334155; margin:0 0 4px 0; display:block;"><i class="fas fa-coins"></i> Select Fee Type</label>
             <select id="bType" onchange="toggleCustomUI()" style="height: 50px; margin:0; font-weight:700; color:var(--main);">
               <option value="General">School Fees</option>
-              <option value="Session">Session Fees</option>
+              <option value="Session">Session Fees (Class Update Indicator)</option>
               <option value="Custom">Custom Fees (Write Your Own)</option>
             </select>
           </div>
@@ -340,12 +340,12 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
         </div>
       </div>
 
-      <!-- Zone 4: Category-Wise Advance Admission & Session Fee Setup -->
+      <!-- Zone 4: Category-Wise Advance Admission Fee Setup (With Custom Advance Fees & NO Session Fee) -->
       <div id="admissionSetupZone" style="display:none; margin-top:15px;">
         <div style="background:#f0fdfa; border:2px dashed #14b8a6; padding:25px; border-radius:16px;">
-          <h3 style="color:#0f766e; margin-top:0; font-weight:900;"><i class="fas fa-user-plus"></i> Class &amp; Category-Wise Advance Admission &amp; Session Fee Setup</h3>
+          <h3 style="color:#0f766e; margin-top:0; font-weight:900;"><i class="fas fa-user-plus"></i> Class &amp; Category-Wise Advance Admission Fee Setup</h3>
           <p style="font-size:13px; color:#475569; margin-bottom:15px; line-height:1.6;">
-            এখানে ক্লাস এবং ডাটাবেসে সেট করা যেকোনো <b>Student Category</b> অনুযায়ী আলাদা <b>School Fee</b>, <b>Admission Fee</b> (নতুন ভর্তির জন্য) এবং <b>Session Fee</b> (ক্লাস প্রমোশন/আপডেটের জন্য) সেট করুন।
+            নতুন ভর্তির জন্য এখানে ক্লাস এবং ডাটাবেসের <b>Student Category</b> অনুযায়ী <b>Advance School Fee</b>, <b>Admission Fee</b> এবং প্রয়োজনে যেকোনো <b>Custom Advance Fee</b> (যেমন: <i>Advance Hostel Fee, Day-Care Fee, ID Card Fee</i> ইত্যাদি) সেট করুন।
           </p>
           
           <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:15px;">
@@ -366,11 +366,11 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
             </div>
           </div>
 
-          <div id="advCurrentSavedStatus" style="margin:8px 0 12px 0; font-size:12.5px; color:#0f766e; font-weight:700; background:#ccfbf1; padding:8px 14px; border-radius:10px; display:inline-block;">
-            Checking saved fees...
+          <div id="advCurrentSavedStatus" style="margin:8px 0 12px 0; font-size:12.5px; color:#0f766e; font-weight:700; background:#ccfbf1; padding:10px 14px; border-radius:10px; display:block;">
+            Checking saved admission fees...
           </div>
 
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px;">
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:15px;">
             <div>
               <label style="font-weight:700; color:#0f766e;">Advance School Fee (TK):</label>
               <input type="number" id="advSchoolFee" placeholder="e.g. 1000">
@@ -379,13 +379,20 @@ th { background: #f8fafc; position: sticky; top: 0; font-weight: 800; color: #1e
               <label style="font-weight:700; color:#0f766e;">Admission Fee (TK):</label>
               <input type="number" id="advAdmFee" placeholder="e.g. 2000">
             </div>
-            <div>
-              <label style="font-weight:700; color:#0f766e;">Session Fee (TK):</label>
-              <input type="number" id="advSessionFee" placeholder="e.g. 1500">
-            </div>
+          </div>
+
+          <!-- 💡 Custom Advance Fees Builder (e.g. Advance Hostel Fee, Day-Care Fee, etc.) -->
+          <div style="margin-top:15px; padding:18px; background:#faf5ff; border-radius:14px; border:2px dashed #c084fc;">
+            <label style="font-weight:800; color:#7e22ce; display:block; margin-bottom:10px;">
+              <i class="fas fa-plus-circle"></i> Custom Advance Admission Fees (Optional — e.g. Advance Hostel Fee, Day-Care Fee):
+            </label>
+            <div id="advCustomFeeList"></div>
+            <button type="button" onclick="addAdvCustomFeeRow('', '')" style="background:#8b5cf6; color:white; border:none; padding:9px 16px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:6px; box-shadow: 0 4px 10px rgba(139,92,246,0.25);">
+              + Add Custom Advance Fee
+            </button>
           </div>
           
-          <button onclick="saveAdvanceFees()" class="btn" style="background:linear-gradient(135deg, #0d9488, #0f766e); color:white; margin-top:20px; box-shadow: 0 6px 20px rgba(13,148,136,0.3);"><i class="fas fa-save"></i> Save Category-Wise Admission &amp; Session Fees</button>
+          <button onclick="saveAdvanceFees()" class="btn" style="background:linear-gradient(135deg, #0d9488, #0f766e); color:white; margin-top:20px; box-shadow: 0 6px 20px rgba(13,148,136,0.3);"><i class="fas fa-save"></i> Save Category-Wise Advance Admission Fees</button>
         </div>
       </div>
 
@@ -743,15 +750,28 @@ async function saveFineSettings() {
 }
 
 // ============================================================================
-// 💳 CATEGORY-WISE ADVANCE ADMISSION & SESSION FEE SETUP + LIVE PREVIEW
+// 💳 CATEGORY-WISE ADVANCE ADMISSION FEE SETUP (WITH CUSTOM ADVANCE FEES)
 // ============================================================================
+function addAdvCustomFeeRow(feeName = "", feeAmt = "") {
+  let safeName = (feeName || "").toString().replace(/"/g, "&quot;");
+  let safeAmt = (feeAmt !== undefined && feeAmt !== null) ? feeAmt : "";
+  let html = `
+  <div class="adv-custom-fee-item" style="display:flex; gap:10px; margin-bottom:10px;">
+    <input type="text" class="adv-c-fee-name" placeholder="Custom Advance Fee Name (e.g. Advance Hostel Fee, Day-Care Fee)" value="${safeName}" style="margin:0; flex:1.5;">
+    <input type="number" class="adv-c-fee-amt" placeholder="Amount (TK)" value="${safeAmt}" style="margin:0; flex:1;">
+    <button type="button" class="btn" style="background:#ef4444; color:white; width:auto; padding:10px 16px; margin:0;" onclick="this.parentElement.remove()"><i class="fas fa-times"></i></button>
+  </div>`;
+  document.getElementById('advCustomFeeList').insertAdjacentHTML('beforeend', html);
+}
+
 async function loadSavedAdvanceFeePreview() {
   let cls = document.getElementById('advClass').value;
   let cat = document.getElementById('advCategory').value || "All";
   let statusEl = document.getElementById('advCurrentSavedStatus');
+  let customContainer = document.getElementById('advCustomFeeList');
   if (!cls || !statusEl) return;
 
-  statusEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Checking saved fees for Class ${cls} (${cat})...`;
+  statusEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Checking saved admission fees for Class ${cls} (${cat})...`;
 
   try {
     const [catDoc, mainDoc] = await Promise.all([
@@ -762,13 +782,15 @@ async function loadSavedAdvanceFeePreview() {
     ]);
 
     let found = false;
-    let s = 0, a = 0, ses = 0;
+    let s = 0, a = 0, customArr = [];
 
     if (catDoc && catDoc.exists) {
       let d = catDoc.data();
       s = parseFloat(d.schoolFee) || 0;
       a = parseFloat(d.admissionFee) || 0;
-      ses = d.sessionFee !== undefined ? (parseFloat(d.sessionFee) || 0) : a;
+      if (d.customAdvanceFeesJSON) {
+        try { customArr = JSON.parse(d.customAdvanceFeesJSON) || []; } catch (e) { customArr = []; }
+      }
       found = true;
     } else if (mainDoc && mainDoc.exists) {
       let d = mainDoc.data();
@@ -778,7 +800,7 @@ async function loadSavedAdvanceFeePreview() {
           if (map[cat]) {
             s = parseFloat(map[cat].schoolFee) || 0;
             a = parseFloat(map[cat].admissionFee) || 0;
-            ses = map[cat].sessionFee !== undefined ? (parseFloat(map[cat].sessionFee) || 0) : a;
+            customArr = Array.isArray(map[cat].customAdvanceFees) ? map[cat].customAdvanceFees : [];
             found = true;
           }
         } catch (err) {}
@@ -786,21 +808,28 @@ async function loadSavedAdvanceFeePreview() {
       if (!found && cat === "All") {
         s = parseFloat(d.schoolFee) || 0;
         a = parseFloat(d.admissionFee) || 0;
-        ses = d.sessionFee !== undefined ? (parseFloat(d.sessionFee) || 0) : a;
+        if (d.customAdvanceFeesJSON) {
+          try { customArr = JSON.parse(d.customAdvanceFeesJSON) || []; } catch (e) { customArr = []; }
+        }
         found = true;
       }
     }
 
+    customContainer.innerHTML = "";
     if (found) {
       document.getElementById('advSchoolFee').value = s;
       document.getElementById('advAdmFee').value = a;
-      document.getElementById('advSessionFee').value = ses;
-      statusEl.innerHTML = `✅ Saved for <b>Class ${cls} (${cat})</b> &rarr; School Fee: <b>${s} TK</b> | Admission Fee: <b>${a} TK</b> | Session Fee: <b>${ses} TK</b>`;
+      if (customArr.length > 0) {
+        customArr.forEach(cf => addAdvCustomFeeRow(cf.name, cf.amount));
+      }
+      let customSummary = customArr.length > 0
+        ? (" | " + customArr.map(c => `${c.name}: <b>${c.amount} TK</b>`).join(" | "))
+        : "";
+      statusEl.innerHTML = `✅ Saved for <b>Class ${cls} (${cat})</b> &rarr; School Fee: <b>${s} TK</b> | Admission Fee: <b>${a} TK</b>${customSummary}`;
     } else {
       document.getElementById('advSchoolFee').value = "";
       document.getElementById('advAdmFee').value = "";
-      document.getElementById('advSessionFee').value = "";
-      statusEl.innerHTML = `ℹ️ No custom fee saved yet for <b>Class ${cls} (${cat})</b>. Enter amounts below and click Save.`;
+      statusEl.innerHTML = `ℹ️ No advance admission fee saved yet for <b>Class ${cls} (${cat})</b>. Enter amounts below and click Save.`;
     }
   } catch (e) {
     statusEl.innerHTML = `⚠️ Could not check existing fees.`;
@@ -812,22 +841,31 @@ async function saveAdvanceFees() {
   let cat = document.getElementById('advCategory').value || "All";
   let sFee = document.getElementById('advSchoolFee').value || 0;
   let aFee = document.getElementById('advAdmFee').value || 0;
-  let sesFee = document.getElementById('advSessionFee').value || 0;
+
+  let customAdvArr = [];
+  document.querySelectorAll('.adv-custom-fee-item').forEach(row => {
+    let n = row.querySelector('.adv-c-fee-name').value.trim();
+    let amt = parseFloat(row.querySelector('.adv-c-fee-amt').value) || 0;
+    if (n && amt > 0) {
+      customAdvArr.push({ name: n, amount: amt });
+    }
+  });
+
   showLoading();
-  showLoaderText("SAVING ADMISSION & SESSION FEES...");
+  showLoaderText("SAVING ADVANCE ADMISSION FEES...");
   try {
     await apiCall('saveAdvanceFees', {
       cls: cls,
       category: cat,
       schoolFee: sFee,
       admissionFee: aFee,
-      sessionFee: sesFee
+      customAdvanceFeesJSON: JSON.stringify(customAdvArr)
     });
     hideLoading();
     loadSavedAdvanceFeePreview();
     Swal.fire(
       "Saved Successfully!",
-      `Advance fees for Class ${cls} (${cat === 'All' ? 'All Categories Default' : cat}) saved!`,
+      `Advance admission fees for Class ${cls} (${cat === 'All' ? 'All Categories Default' : cat}) saved!`,
       "success"
     );
   } catch (e) {
