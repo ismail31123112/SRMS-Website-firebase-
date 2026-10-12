@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Teacher Premium Portal - SRMS</title>
+<title>Saidpur Residential Model School — Official Teacher Portal</title>
+<link rel="icon" href="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  /* === Global Premium Styles === */
   :root {
     --primary: #005f40;
     --primary-dark: #003d29;
@@ -21,147 +21,580 @@
     --text-main: #1e293b;
     --text-muted: #64748b;
   }
-  body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-main); overflow-x: hidden; }
-  a { text-decoration: none; color: inherit; transition: 0.3s; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { text-decoration: none; color: inherit; transition: 0.25s; }
   ul { list-style: none; margin: 0; padding: 0; }
-  
-  /* Animations */
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-8px); } 60% { transform: translateY(-4px); } }
+
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-7px); } 60% { transform: translateY(-4px); } }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   @keyframes livePulseAlert { 0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.45); } 70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
-  .animate-up { animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+  .animate-up { animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-  /* Custom Scrollbar */
   ::-webkit-scrollbar { width: 8px; }
   ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-  /* === Premium Navbar === */
-  #main-navbar { display: none; background: var(--card-bg); box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--accent); }
-  .nav-top-container { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; max-width: 1400px; margin: 0 auto; box-sizing: border-box; width: 100%; }
-  .nav-brand { font-weight: 800; color: var(--primary); font-size: 20px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
-  .nav-link { font-weight: 700; font-size: 13px; color: var(--danger); background: #fff1f2; padding: 10px 20px; border-radius: 8px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-  .nav-link:hover { color: #fff; background: var(--danger); box-shadow: 0 5px 15px rgba(225, 29, 72, 0.3); }
+  /* === Official Navbar === */
+  #main-navbar {
+    display: none;
+    background: var(--card-bg);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    border-bottom: 3px solid var(--accent);
+  }
+  .nav-top-container {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .nav-brand {
+    font-weight: 800;
+    color: var(--primary);
+    font-size: 19px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-link {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--danger);
+    background: #fff1f2;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.25s;
+    border: 1px solid #fecdd3;
+  }
+  .nav-link:hover {
+    color: #fff;
+    background: var(--danger);
+    box-shadow: 0 5px 15px rgba(225, 29, 72, 0.25);
+  }
 
-  /* === Premium Banner === */
-  #main-banner { display: none; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 40px 5%; align-items: center; justify-content: center; gap: 25px; text-align: left; position: relative; overflow: hidden; }
-  .custom-banner::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); z-index: 0; }
-  .banner-logo { width: 90px; height: 90px; background: #fff; border-radius: 50%; padding: 8px; border: 3px solid rgba(255,255,255,0.2); object-fit: contain; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1; }
+  /* === Official Banner === */
+  #main-banner {
+    display: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 36px 5%;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+  .custom-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+    z-index: 0;
+  }
+  .banner-logo {
+    width: 86px;
+    height: 86px;
+    background: #fff;
+    border-radius: 50%;
+    padding: 7px;
+    border: 3px solid rgba(255,255,255,0.25);
+    object-fit: contain;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
   .banner-text { z-index: 1; }
-  .banner-text h1 { margin: 0; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
-  .school-codes { background: rgba(255, 255, 255, 0.1); display: inline-block; padding: 6px 15px; border-radius: 20px; margin-top: 10px; font-size: 13px; font-weight: 500; color: #fcf6ba; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); }
+  .banner-text h1 {
+    margin: 0;
+    font-size: 25px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.3px;
+  }
+  .school-codes {
+    background: rgba(255, 255, 255, 0.12);
+    display: inline-block;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #fcf6ba;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(5px);
+  }
 
   /* === Login Section === */
-  #login-sec { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; position: relative; overflow: hidden; }
-  #login-sec::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at top right, rgba(0,95,64,0.05) 0%, transparent 50%); z-index: -1; }
-  .login-card { background: var(--card-bg); padding: 50px 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(0,0,0,0.05); box-sizing: border-box; }
-  .login-logo { width: 85px; margin-bottom: 20px; }
-  .login-title { color: var(--primary); font-size: 24px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
-  .login-subtitle { color: var(--text-muted); font-size: 14px; margin-bottom: 30px; font-weight: 500; }
+  #login-sec {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+  }
+  #login-sec::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at top right, rgba(0,95,64,0.06) 0%, transparent 50%);
+    z-index: -1;
+  }
+  .login-card {
+    background: var(--card-bg);
+    padding: 46px 38px;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 440px;
+    text-align: center;
+    border: 1px solid rgba(0,0,0,0.05);
+    border-top: 6px solid var(--primary);
+  }
+  .login-logo { width: 84px; height: 84px; object-fit: contain; margin-bottom: 16px; }
+  .login-title { color: var(--primary); font-size: 23px; font-weight: 800; text-transform: uppercase; margin: 0 0 5px 0; }
+  .login-subtitle { color: var(--text-muted); font-size: 13.5px; margin-bottom: 26px; font-weight: 500; }
 
-  /* === General Form Styles === */
-  input, select, textarea { width: 100%; padding: 15px 18px; margin: 10px 0; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 15px; transition: 0.3s; box-sizing: border-box; background: #f8fafc; color: var(--text-main); font-weight: 500; }
-  input:focus, select:focus, textarea:focus { border-color: var(--primary); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(0,95,64,0.1); }
-  .btn-p { width: 100%; padding: 16px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 15px; margin-top: 15px; transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 0.5px; }
-  .btn-p:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(0,95,64,0.3); }
-  .btn-p:active { transform: translateY(-1px); }
-  .btn-p:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
-  .btn-success { background: #059669; } .btn-success:hover { background: #047857; }
-  
-  .forgot-link { display: inline-block; margin-top: 20px; color: var(--accent); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.3s; border-bottom: 2px solid transparent; }
+  /* === Form Elements === */
+  input, select, textarea {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 9px 0;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 14.5px;
+    transition: 0.2s;
+    background: #f8fafc;
+    color: var(--text-main);
+    font-weight: 500;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--primary);
+    outline: none;
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(0,95,64,0.1);
+  }
+  .btn-p {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14.5px;
+    margin-top: 14px;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .btn-p:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px -5px rgba(0,95,64,0.3);
+  }
+  .btn-p:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  .btn-success { background: linear-gradient(135deg, #059669, #047857); }
+
+  .forgot-link {
+    display: inline-block;
+    margin-top: 18px;
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: 0.2s;
+    border-bottom: 2px solid transparent;
+  }
   .forgot-link:hover { border-color: var(--accent); color: var(--primary); }
-  
-  .loader-spinner { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #fff; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
 
-  /* === Dashboard Section === */
-  .container { max-width: 1000px; margin: 0 auto; padding: 40px 5%; display: none; }
-  
-  .scroll-cue-container { width: 100%; margin-bottom: 30px; text-align: center; }
-  .scroll-cue { display: inline-block; color: var(--danger); font-size: 15px; font-weight: 700; padding: 10px 25px; background: #fff1f2; border-radius: 20px; border: 1px solid #fecdd3; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.1); }
+  .loader-spinner {
+    border: 3px solid rgba(255,255,255,0.3);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 0.75s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
 
-  /* 📸 Welcome Card + Teacher Profile Avatar System */
-  .welcome-card { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 30px; border-radius: 22px; margin-bottom: 35px; border-left: 8px solid var(--accent); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 15px 35px rgba(0,95,64,0.22); flex-wrap: wrap; gap: 20px; }
+  /* === Dashboard Container === */
+  .container { max-width: 1000px; margin: 0 auto; padding: 35px 5%; display: none; }
+
+  .scroll-cue-container { width: 100%; margin-bottom: 26px; text-align: center; }
+  .scroll-cue {
+    display: inline-block;
+    color: var(--primary);
+    font-size: 14px;
+    font-weight: 700;
+    padding: 9px 22px;
+    background: #ecfdf5;
+    border-radius: 20px;
+    border: 1px solid #a7f3d0;
+    animation: bounce 2.2s infinite;
+  }
+
+  /* 📸 Welcome Card & Teacher Avatar */
+  .welcome-card {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    padding: 28px 30px;
+    border-radius: 22px;
+    margin-bottom: 32px;
+    border-left: 8px solid var(--accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 15px 35px rgba(0,95,64,0.2);
+    flex-wrap: wrap;
+    gap: 20px;
+  }
   .teacher-profile-wrap { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-  .teacher-avatar-box { position: relative; width: 88px; height: 88px; border-radius: 50%; border: 3.5px solid var(--accent); padding: 3px; background: rgba(255,255,255,0.15); box-shadow: 0 8px 25px rgba(0,0,0,0.25); flex-shrink: 0; }
-  .teacher-avatar-box img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; background: #fff; display: block; }
-  .change-photo-badge { position: absolute; bottom: -2px; right: -2px; background: var(--accent); color: #fff; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: 0.25s; font-size: 13px; }
-  .change-photo-badge:hover { transform: scale(1.12); background: #a67c2e; }
-  .welcome-card h2 { margin: 0; font-size: 25px; font-weight: 800; }
-  .welcome-card p { margin: 5px 0 0 0; opacity: 0.92; font-weight: 500; font-size: 14px; }
+  .teacher-avatar-box {
+    position: relative;
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    border: 3.5px solid var(--accent);
+    padding: 3px;
+    background: rgba(255,255,255,0.15);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.22);
+    flex-shrink: 0;
+  }
+  .teacher-avatar-box img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #fff;
+    display: block;
+  }
+  .change-photo-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: var(--accent);
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: 0.2s;
+    font-size: 13px;
+  }
+  .change-photo-badge:hover { transform: scale(1.1); background: #a67c2e; }
+  .welcome-card h2 { margin: 0; font-size: 23px; font-weight: 800; }
+  .welcome-card p { margin: 5px 0 0 0; opacity: 0.92; font-weight: 500; font-size: 13.5px; }
   .welcome-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-  .btn-gold { background: var(--accent); padding: 12px 22px; border: none; color: white; border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.3s; font-size: 14px; box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3); display: inline-flex; align-items: center; gap: 7px; }
+  .btn-gold {
+    background: var(--accent);
+    padding: 11px 20px;
+    border: none;
+    color: white;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: 0.2s;
+    font-size: 13.5px;
+    box-shadow: 0 5px 15px rgba(191, 149, 63, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
   .btn-gold:hover { background: #a67c2e; transform: translateY(-2px); }
-  .btn-outline-light { background: rgba(255,255,255,0.14); border: 1.5px solid rgba(255,255,255,0.35); padding: 11px 18px; color: #fff; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 13.5px; transition: 0.25s; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-outline-light {
+    background: rgba(255,255,255,0.14);
+    border: 1.5px solid rgba(255,255,255,0.35);
+    padding: 11px 18px;
+    color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 13.5px;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
   .btn-outline-light:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
 
-  .section-title { font-weight: 800; color: var(--text-main); margin: 40px 0 15px; font-size: 18px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
-  .card { background: var(--card-bg); border-radius: 20px; padding: 35px; margin-bottom: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
+  .section-title {
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 36px 0 14px;
+    font-size: 17.5px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 10px;
+  }
+  .card {
+    background: var(--card-bg);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 26px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+    border: 1px solid #e2e8f0;
+  }
 
-  .action-btn-large { width: 100%; padding: 20px; font-size: 16px; border-radius: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; border: none; color: white; cursor: pointer; font-weight: 700; transition: all 0.3s ease; text-transform: uppercase; }
-  .action-btn-large:hover { transform: translateY(-3px); box-shadow: 0 15px 25px -5px rgba(0,0,0,0.2); }
+  .action-btn-large {
+    width: 100%;
+    padding: 18px;
+    font-size: 15.5px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.25s ease;
+    text-transform: uppercase;
+  }
+  .action-btn-large:hover { transform: translateY(-2px); box-shadow: 0 12px 22px -5px rgba(0,0,0,0.2); }
 
-  /* 🎥 Embedded Live Classroom & Meeting Styles */
+  /* 🎥 Live Classroom & Meeting Styles */
   .admin-live-meeting-banner {
     background: linear-gradient(135deg, #be123c, #e11d48);
-    color: white; border-radius: 18px; padding: 22px 25px; margin-bottom: 22px;
-    display: none; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
-    animation: livePulseAlert 2s infinite; border: 2px solid #fecdd3;
+    color: white;
+    border-radius: 18px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    animation: livePulseAlert 2s infinite;
+    border: 2px solid #fecdd3;
   }
   .live-class-item {
-    background: #f0fdf4; border: 2px solid #bbf7d0; padding: 18px 20px; border-radius: 16px;
-    margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    background: #f0fdf4;
+    border: 2px solid #bbf7d0;
+    padding: 16px 20px;
+    border-radius: 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
   }
-  .live-class-item p { margin: 3px 0; font-size: 14px; color: #065f46; }
+  .live-class-item p { margin: 3px 0; font-size: 13.5px; color: #065f46; }
   .btn-stop-live {
-    background: var(--danger); color: white; border: none; padding: 10px 18px;
-    border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.3s;
+    background: var(--danger);
+    color: white;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: 0.2s;
   }
   .btn-stop-live:hover { background: var(--danger-dark); }
   .btn-rejoin-live {
-    background: var(--primary); color: white; border: none; padding: 10px 18px;
-    border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 13px; transition: 0.3s;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 9px 16px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 12.5px;
+    transition: 0.2s;
   }
 
   /* File Upload Preview Box */
   .file-preview-box {
-    display: none; margin-top: 12px; padding: 12px 15px; border-radius: 14px;
-    background: #f0fdf4; border: 1.5px solid #bbf7d0; align-items: center; gap: 14px;
+    display: none;
+    margin-top: 12px;
+    padding: 12px 15px;
+    border-radius: 14px;
+    background: #f0fdf4;
+    border: 1.5px solid #bbf7d0;
+    align-items: center;
+    gap: 14px;
   }
-  .file-preview-box img { width: 58px; height: 58px; object-fit: cover; border-radius: 10px; border: 2px solid var(--primary); background: #fff; }
+  .file-preview-box img {
+    width: 56px;
+    height: 56px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid var(--primary);
+    background: #fff;
+  }
   .file-preview-meta { flex: 1; font-size: 12.5px; color: #065f46; font-weight: 600; }
 
   /* Board Items */
-  .notice-item { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px; border-radius: 16px; margin-bottom: 15px; border-left: 6px solid var(--accent); transition: 0.3s; }
-  .notice-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.05); transform: translateX(5px); }
-  .item-box { background: #fff; border: 1px solid #e2e8f0; padding: 22px 25px; border-radius: 16px; margin-bottom: 15px; position: relative; border-left: 6px solid var(--primary); transition: 0.3s; display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; }
-  .item-box:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
-  .del-btn { color: var(--danger); cursor: pointer; font-size: 12.5px; border: 2px solid #fecdd3; padding: 8px 16px; border-radius: 10px; font-weight: 700; background: #fff1f2; transition: 0.3s; display: inline-flex; align-items: center; gap: 6px; }
+  .notice-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 18px 20px;
+    border-radius: 16px;
+    margin-bottom: 14px;
+    border-left: 6px solid var(--accent);
+    transition: 0.2s;
+  }
+  .notice-item:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.04); }
+  .item-box {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    padding: 20px 22px;
+    border-radius: 16px;
+    margin-bottom: 14px;
+    position: relative;
+    border-left: 6px solid var(--primary);
+    transition: 0.2s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  .item-box:hover { box-shadow: 0 8px 20px rgba(0,0,0,0.04); }
+  .del-btn {
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 12.5px;
+    border: 1.5px solid #fecdd3;
+    padding: 8px 15px;
+    border-radius: 10px;
+    font-weight: 700;
+    background: #fff1f2;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
   .del-btn:hover { background: var(--danger); color: white; border-color: var(--danger); }
-  .readonly-badge { background: #f1f5f9; color: #64748b; padding: 7px 14px; border-radius: 10px; font-size: 11.5px; font-weight: 800; border: 1px solid #e2e8f0; display: inline-flex; align-items: center; gap: 5px; }
-  .tag { background: #ecfdf5; color: var(--primary); padding: 5px 12px; border-radius: 6px; font-size: 11.5px; font-weight: 800; display: inline-block; margin-bottom: 6px; text-transform: uppercase; }
+  .readonly-badge {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 7px 13px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: 1px solid #e2e8f0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .tag {
+    background: #ecfdf5;
+    color: var(--primary);
+    padding: 4px 11px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+  }
 
   /* Modals */
-  .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
-  .modal-box { background: var(--card-bg); padding: 40px; border-radius: 28px; text-align: center; width: 100%; max-width: 480px; box-shadow: 0 25px 50px rgba(0,0,0,0.2); animation: fadeInUp 0.4s ease; border-top: 8px solid var(--accent); position: relative; max-height: 90vh; overflow-y: auto;}
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(15, 23, 42, 0.8);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(6px);
+    padding: 18px;
+  }
+  .modal-box {
+    background: var(--card-bg);
+    padding: 34px 28px;
+    border-radius: 24px;
+    text-align: center;
+    width: 100%;
+    max-width: 470px;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.22);
+    animation: fadeInUp 0.25s ease;
+    border-top: 7px solid var(--accent);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
   .modal-box.danger-modal { border-top-color: var(--danger); }
-  .close-modal-btn { background: #f1f5f9; color: #333; border: none; padding: 14px; border-radius: 12px; cursor: pointer; font-weight: 700; width: 100%; transition: 0.3s; margin-top: 10px; font-size: 15px; }
+  .close-modal-btn {
+    background: #f1f5f9;
+    color: #334155;
+    border: none;
+    padding: 13px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    width: 100%;
+    transition: 0.2s;
+    margin-top: 10px;
+    font-size: 14.5px;
+  }
   .close-modal-btn:hover { background: #e2e8f0; }
-  .premium-footer { display: none; background: #0f172a; color: #f8fafc; padding: 50px 5% 30px; margin-top: 60px; text-align: center; border-top: 5px solid var(--primary); }
+
+  .premium-footer {
+    display: none;
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 45px 5% 28px;
+    margin-top: 55px;
+    text-align: center;
+    border-top: 5px solid var(--primary);
+  }
 
   @media (max-width: 768px) {
-    .nav-brand { font-size: 16px; }
-    .custom-banner { flex-direction: column; text-align: center; padding: 30px 20px; }
-    .banner-text h1 { font-size: 22px; }
-    .login-card { padding: 40px 25px; border-radius: 20px; }
-    .container { padding: 30px 20px; }
-    .welcome-card { flex-direction: column; text-align: center; padding: 28px 20px; }
+    .nav-brand { font-size: 15px; }
+    .custom-banner { flex-direction: column; text-align: center; padding: 28px 18px; }
+    .banner-text h1 { font-size: 21px; }
+    .login-card { padding: 36px 24px; border-radius: 20px; }
+    .container { padding: 25px 16px; }
+    .welcome-card { flex-direction: column; text-align: center; padding: 24px 18px; }
     .teacher-profile-wrap { flex-direction: column; justify-content: center; text-align: center; }
-    .welcome-card h2 { font-size: 21px; }
+    .welcome-card h2 { font-size: 20px; }
     .welcome-actions { width: 100%; justify-content: center; }
     .btn-gold, .btn-outline-light { width: 100%; justify-content: center; }
-    .card { padding: 25px 20px; }
+    .card { padding: 22px 18px; }
     .item-box { flex-direction: column; align-items: flex-start; }
   }
 </style>
@@ -171,10 +604,10 @@
 <nav class="navbar" id="main-navbar">
   <div class="nav-top-container">
     <div class="nav-brand">
-      <img id="navTeacherThumb" src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Avatar" style="width:36px; height:36px; border-radius:50%; object-fit:cover; border:2px solid var(--accent);">
+      <img id="navTeacherThumb" src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Avatar" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid var(--accent); background:#fff;">
       <span>SRMS Teacher Portal</span>
     </div>
-    <a onclick="logout()" class="nav-link"><i class="fas fa-lock"></i> Logout</a>
+    <a onclick="logout()" class="nav-link"><i class="fas fa-sign-out-alt"></i> লগআউট</a>
   </div>
 </nav>
 
@@ -182,296 +615,303 @@
   <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" class="banner-logo" alt="Logo">
   <div class="banner-text">
     <h1>Saidpur Residential Model School</h1>
-    <div class="school-codes">Smart Teacher Dashboard</div>
+    <div class="school-codes">অফিশিয়াল শিক্ষক ড্যাশবোর্ড ও একাডেমিক পোর্টাল</div>
   </div>
 </div>
 
+<!-- ================= LOGIN SECTION ================= -->
 <div id="login-sec" class="animate-up">
-    <div class="login-card">
-        <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Logo" class="login-logo">
-        <h2 class="login-title">Teacher Login</h2>
-        <div class="login-subtitle">Access your academic dashboard</div>
-        <input type="tel" id="lPh" placeholder="Mobile Number (e.g. 017...)">
-        <input type="password" id="lPs" placeholder="Password">
-        <button class="btn-p" id="lBtn" onclick="login()">Secure Login ➔</button>
-        <div class="forgot-link" onclick="openForgotModal()">Forgot Password?</div>
-        <p id="err" style="color:var(--danger); font-size:13px; margin-top:15px; font-weight:700;"></p>
-    </div>
+  <div class="login-card">
+    <img src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Logo" class="login-logo">
+    <h2 class="login-title">Teacher Portal</h2>
+    <div class="login-subtitle">সৈয়দপুর রেসিডেন্সিয়াল মডেল স্কুল — শিক্ষক লগইন</div>
+    <input type="tel" id="lPh" placeholder="মোবাইল নম্বর (যেমন: 017XXXXXXXX)" onkeydown="if(event.key==='Enter') document.getElementById('lPs').focus()">
+    <input type="password" id="lPs" placeholder="পাসওয়ার্ড" onkeydown="if(event.key==='Enter') login()">
+    <button class="btn-p" id="lBtn" onclick="login()">লগইন করুন ➔</button>
+    <div class="forgot-link" onclick="openForgotModal()">পাসওয়ার্ড ভুলে গেছেন?</div>
+    <p id="err" style="color:var(--danger); font-size:13px; margin-top:15px; font-weight:700;"></p>
+  </div>
 </div>
 
+<!-- ================= DASHBOARD SECTION ================= -->
 <div id="dash-sec" class="container animate-up">
-    <div class="scroll-cue-container">
-        <div class="scroll-cue">⬇️ Scroll down for more options ⬇️</div>
-    </div>
+  <div class="scroll-cue-container">
+    <div class="scroll-cue">⬇️ নিচের একাডেমিক অপশনগুলো দেখুন ⬇️</div>
+  </div>
 
-    <!-- 📸 Welcome Card with Teacher Profile Photo & Instant Change Option -->
-    <div class="welcome-card">
-      <div class="teacher-profile-wrap">
-        <div class="teacher-avatar-box" title="Change Profile Picture">
-          <img id="teacherProfileAvatar" src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Teacher Photo" onerror="this.src='https://i.postimg.cc/hGQQqrsb/20260117_231551.png'">
-          <label for="teacherPhotoInput" class="change-photo-badge" title="Change Photo">
-            <i class="fas fa-camera"></i>
-          </label>
-          <input type="file" id="teacherPhotoInput" accept="image/*" style="display:none;" onchange="changeTeacherProfilePhoto(this)">
-        </div>
-        <div>
-          <h2 id="tGreet" style="margin:0;">Assalamu Alaikum</h2>
-          <p id="tPhoneSub">Academic Management Portal</p>
-          <small id="photoSyncStatus" style="display:block; margin-top:4px; color:#fde68a; font-weight:700; font-size:12px;"></small>
-        </div>
+  <!-- 📸 Welcome Card with Teacher Profile Photo & Instant Change Option -->
+  <div class="welcome-card">
+    <div class="teacher-profile-wrap">
+      <div class="teacher-avatar-box" title="প্রোফাইল ছবি পরিবর্তন করুন">
+        <img id="teacherProfileAvatar" src="https://i.postimg.cc/hGQQqrsb/20260117_231551.png" alt="Teacher Photo" onerror="this.src='https://i.postimg.cc/hGQQqrsb/20260117_231551.png'">
+        <label for="teacherPhotoInput" class="change-photo-badge" title="ছবি পরিবর্তন করুন">
+          <i class="fas fa-camera"></i>
+        </label>
+        <input type="file" id="teacherPhotoInput" accept="image/*" style="display:none;" onchange="changeTeacherProfilePhoto(this)">
       </div>
-      <div class="welcome-actions">
-        <button class="btn-outline-light" onclick="document.getElementById('teacherPhotoInput').click()">
-          <i class="fas fa-camera"></i> Change Photo
-        </button>
-        <button class="btn-gold" onclick="togglePass()">
-          <i class="fas fa-key"></i> Change Key
-        </button>
+      <div>
+        <h2 id="tGreet" style="margin:0;">আসসালামু আলাইকুম</h2>
+        <p id="tPhoneSub">অফিশিয়াল একাডেমিক পোর্টাল</p>
+        <small id="photoSyncStatus" style="display:block; margin-top:4px; color:#fde68a; font-weight:700; font-size:12px;"></small>
       </div>
     </div>
+    <div class="welcome-actions">
+      <button class="btn-outline-light" onclick="document.getElementById('teacherPhotoInput').click()">
+        <i class="fas fa-camera"></i> ছবি পরিবর্তন
+      </button>
+      <button class="btn-gold" onclick="togglePass()">
+        <i class="fas fa-key"></i> পাসওয়ার্ড পরিবর্তন
+      </button>
+    </div>
+  </div>
 
-    <!-- 🔐 Direct Password Change Box -->
-    <div id="passBox" class="card" style="display:none; border-top: 5px solid var(--accent);">
-      <h3 style="margin-top:0; color:var(--text-main);"><i class="fas fa-lock" style="color:var(--accent);"></i> সরাসরি পাসওয়ার্ড পরিবর্তন করুন</h3>
-      <p style="font-size:13px; color:var(--text-muted); margin-top:0;">নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন। সেভ করার সাথে সাথেই আপনার পাসওয়ার্ড পরিবর্তন হয়ে যাবে।</p>
-      <input type="text" id="newPass" placeholder="নতুন পাসওয়ার্ড লিখুন (কমপক্ষে ৬ অক্ষর)">
-      <button id="passBtn" class="btn-p" style="background:var(--accent);" onclick="changePass()">
-        <i class="fas fa-check-circle"></i> Save New Password Directly
+  <!-- 🔐 Direct Password Change Box -->
+  <div id="passBox" class="card" style="display:none; border-top: 5px solid var(--accent);">
+    <h3 style="margin-top:0; color:var(--text-main);"><i class="fas fa-lock" style="color:var(--accent);"></i> নতুন পাসওয়ার্ড সেট করুন</h3>
+    <p style="font-size:13px; color:var(--text-muted); margin-top:0;">নতুন পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন। সংরক্ষণ করার সাথে সাথেই আপনার পাসওয়ার্ড আপডেট হয়ে যাবে।</p>
+    <input type="text" id="newPass" placeholder="নতুন পাসওয়ার্ড লিখুন (কমপক্ষে ৬ অক্ষর)">
+    <button id="passBtn" class="btn-p" style="background:var(--accent);" onclick="changePass()">
+      <i class="fas fa-check-circle"></i> পাসওয়ার্ড সংরক্ষণ করুন
+    </button>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- 🎥 INTEGRATED LIVE CLASSROOM & TEACHERS' MEETING HUB -->
+  <!-- ========================================================================= -->
+  <div class="section-title"><i class="fas fa-video" style="color:var(--primary);"></i> লাইভ ক্লাসরুম ও মিটিং স্টুডিও</div>
+  <div class="card" style="border-top: 6px solid var(--accent);">
+    
+    <!-- 🔴 Admin's Live Meeting Alert Banner -->
+    <div id="teacherMeetingAlertBox" class="admin-live-meeting-banner">
+      <div>
+        <div style="font-size:11px; font-weight:800; background:rgba(255,255,255,0.2); display:inline-block; padding:3px 10px; border-radius:20px; margin-bottom:5px;">🔴 অফিশিয়াল লাইভ মিটিং চলছে</div>
+        <h3 id="teacherMeetingTitle" style="margin:0; font-size:19px; font-weight:800;">শিক্ষকদের অফিশিয়াল মিটিং</h3>
+        <p id="teacherMeetingHost" style="margin:4px 0 0 0; font-size:13px; opacity:0.95;">পরিচালনায়: কর্তৃপক্ষ</p>
+      </div>
+      <button id="joinAdminMeetingBtn" style="background:#fff; color:var(--danger); border:none; padding:12px 22px; border-radius:12px; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.2);">
+        🎥 মিটিংয়ে যুক্ত হোন
       </button>
     </div>
 
-    <!-- ========================================================================= -->
-    <!-- 🎥 INTEGRATED LIVE CLASSROOM & TEACHERS' MEETING HUB -->
-    <!-- ========================================================================= -->
-    <div class="section-title">🎥 Live Classroom &amp; Meeting Studio</div>
-    <div class="card" style="border-top: 6px solid var(--accent);">
-        
-        <!-- 🔴 Admin's Live Meeting Alert Banner -->
-        <div id="teacherMeetingAlertBox" class="admin-live-meeting-banner">
-            <div>
-                <div style="font-size:11px; font-weight:800; background:rgba(255,255,255,0.2); display:inline-block; padding:3px 10px; border-radius:20px; margin-bottom:5px;">🔴 ADMIN LIVE BROADCAST RUNNING</div>
-                <h3 id="teacherMeetingTitle" style="margin:0; font-size:19px; font-weight:800;">Teachers' Official Meeting</h3>
-                <p id="teacherMeetingHost" style="margin:4px 0 0 0; font-size:13px; opacity:0.95;">Hosted by: Principal / Admin</p>
-            </div>
-            <button id="joinAdminMeetingBtn" style="background:#fff; color:var(--danger); border:none; padding:12px 22px; border-radius:12px; font-weight:800; font-size:14px; cursor:pointer; box-shadow:0 8px 20px rgba(0,0,0,0.2);">
-                🎥 JOIN MEETING NOW
-            </button>
-        </div>
-
-        <div style="background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:12px 15px; border-radius:12px; font-size:13px; margin-bottom:18px; line-height:1.6;">
-            <b>💡 নির্দেশনা:</b> আপনি নিচের ফর্ম থেকে যেকোনো শ্রেণির <b>Student Live Class</b> শুরু করতে পারবেন এবং ক্লাস শুরু হলেই শিক্ষার্থীদের কাছে স্বয়ংক্রিয়ভাবে অফিশিয়াল <b>Push Notification</b> চলে যাবে। আর কর্তৃপক্ষ কোনো <b>Teachers' Meeting</b> শুরু করলে উপরে লাল বাটনে ক্লিক করে সরাসরি জয়েন করতে পারবেন।
-        </div>
-
-        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
-            <div>
-                <label style="font-size:12px; font-weight:700; color:var(--text-muted);">শিক্ষকের নাম (Host Name)</label>
-                <input type="text" id="tLiveName" placeholder="শিক্ষকের নাম" style="margin-top:4px;">
-            </div>
-            <div>
-                <label style="font-size:12px; font-weight:700; color:var(--text-muted);">ক্লাস নির্বাচন করুন (Students Only)</label>
-                <select id="tLiveClass" style="margin-top:4px; font-weight:700; color:var(--primary);">
-                    <optgroup label="Primary & Junior Classes">
-                        <option value="Play">Class Play</option><option value="Nursery">Class Nursery</option><option value="KG">Class KG</option>
-                        <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option>
-                        <option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option>
-                    </optgroup>
-                    <optgroup label="Secondary Classes">
-                        <option value="9-Science">Class 9 (Science)</option><option value="9-Arts">Class 9 (Arts)</option><option value="9-Commerce">Class 9 (Commerce)</option>
-                        <option value="10-Science">Class 10 (Science)</option><option value="10-Arts">Class 10 (Arts)</option><option value="10-Commerce">Class 10 (Commerce)</option>
-                    </optgroup>
-                </select>
-            </div>
-        </div>
-
-        <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:block; margin-top:6px;">পাঠের বিষয় ও অধ্যায় (Subject &amp; Topic)</label>
-        <input type="text" id="tLiveSub" placeholder="যেমন: গণিত - অধ্যায় ৩ (বীজগণিত)" style="margin-top:4px;">
-        <input type="hidden" id="tLivePic" value="https://i.postimg.cc/hGQQqrsb/20260117_231551.png">
-
-        <button class="btn-p" id="tStartLiveBtn" onclick="startTeacherStudentLiveClass()" style="background:linear-gradient(135deg, #b45309, #d97706); font-size:15px;">
-            <i class="fas fa-video"></i> START STUDENT LIVE CLASS 🚀
-        </button>
-
-        <!-- Active Student Live Classes List -->
-        <div style="margin-top:25px; border-top:2px dashed #e2e8f0; padding-top:18px;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                <h4 style="margin:0; color:var(--primary); font-size:15px; font-weight:800;">🟢 বর্তমানে চলমান স্টুডেন্ট লাইভ ক্লাসসমূহ</h4>
-                <button onclick="loadTeacherLiveHubSessions()" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;"><i class="fas fa-sync-alt"></i> চেক করুন</button>
-            </div>
-            <div id="teacherActiveClassesContainer">
-                <p style="font-size:13px; color:var(--text-muted);">সেশন চেক করা হচ্ছে...</p>
-            </div>
-        </div>
+    <div style="background:#fffbeb; border:1px solid #fde68a; color:#b45309; padding:12px 15px; border-radius:12px; font-size:13px; margin-bottom:18px; line-height:1.6;">
+      <b>💡 নির্দেশনা:</b> নিচের ফর্ম থেকে যেকোনো শ্রেণির <b>লাইভ ক্লাস</b> শুরু করতে পারবেন এবং ক্লাস শুরু হলেই শিক্ষার্থীদের কাছে স্বয়ংক্রিয়ভাবে নোটিফিকেশন চলে যাবে। আর কর্তৃপক্ষ কোনো <b>টিচার্স মিটিং</b> শুরু করলে উপরে লাল ব্যানারে ক্লিক করে সরাসরি যুক্ত হতে পারবেন।
     </div>
 
-    <div class="section-title">📢 Official Notice Board (For Teachers)</div>
-    <div class="card" id="notice-board"><p style="text-align:center; color:var(--text-muted); font-weight:600;">⌛ Syncing notices...</p></div>
-    
-    <div class="section-title">⚠️ Disciplinary Warning System</div>
-    <div class="card">
-        <select id="wCls" onchange="loadStudentsForWarn()">
-            <option value="">Select Class...</option>
-            <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option>
-            <option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
-            <option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option>
-            <option value="9">9</option><option value="10">10</option>
-        </select>
-        <div id="wStuBox" style="margin-top:10px;"></div>
-        <textarea id="wMsg" rows="3" placeholder="Write warning/notice message here..."></textarea>
-        <button class="btn-p" style="background:var(--danger);" id="wBtn" onclick="sendWarning()"><i class="fas fa-exclamation-triangle"></i> Send Warning Directly</button>
-    </div>
-
-    <!-- 🚀 Academic Content Publishing (Strictly Class Categories ONLY + ImgBB + PDF + Push) -->
-    <div class="section-title">📤 Academic Content Publishing (Class Dashboards Only)</div>
-    <div class="card">
-      <label style="font-size:13px; font-weight:700; color:var(--primary); display:block;">🎯 ক্লাস নির্বাচন করুন (Class Play - Class 10)</label>
-      <select id="uCls">
-          <option value="">Select Target Class...</option>
-          <option value="ClassPlay">Class Play</option>
-          <option value="ClassNursery">Class Nursery</option>
-          <option value="ClassKG">Class KG</option>
-          <option value="Class1">Class 1</option>
-          <option value="Class2">Class 2</option>
-          <option value="Class3">Class 3</option>
-          <option value="Class4">Class 4</option>
-          <option value="Class5">Class 5</option>
-          <option value="Class6">Class 6</option>
-          <option value="Class7">Class 7</option>
-          <option value="Class8">Class 8</option>
-          <option value="Class9">Class 9</option>
-          <option value="Class10">Class 10</option>
-      </select>
-
-      <label style="font-size:13px; font-weight:700; color:var(--text-main); display:block; margin-top:8px;">📝 শিরোনাম / বিষয় (Title / Subject)</label>
-      <input type="text" id="uTtl" placeholder="যেমন: গণিত বাড়ির কাজ - অধ্যায় ৩">
-
-      <label style="font-size:13px; font-weight:700; color:var(--text-main); display:block; margin-top:8px;">📄 বিস্তারিত নির্দেশনা (Description)</label>
-      <textarea id="uDsc" rows="3" placeholder="শিক্ষার্থীদের জন্য বিস্তারিত নির্দেশনা লিখুন..."></textarea>
-      
-      <!-- 📸 Photo (ImgBB) or PDF/Document (Google Drive) Upload -->
-      <div style="background:#f8fafc; padding:14px 16px; border-radius:14px; border:2px dashed var(--primary); margin-top:10px;">
-          <label style="font-size:13px; font-weight:700; color:var(--primary); display:block; margin-bottom:6px;">
-            <i class="fas fa-camera"></i> ছবি (ImgBB Server) অথবা PDF/Doc ফাইল সিলেক্ট করুন:
-          </label>
-          <input type="file" id="uFileInput" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="handleAcademicFileSelect(this)" style="margin:0; padding:9px; background:#fff; font-size:13px; cursor:pointer;">
-          
-          <div id="uFilePreviewBox" class="file-preview-box">
-            <img id="uFilePreviewImg" src="" alt="Preview">
-            <div class="file-preview-meta" id="uFilePreviewMeta">Ready</div>
-            <button type="button" onclick="clearAcademicFile()" style="background:#fff1f2; color:var(--danger); border:1px solid #fecdd3; padding:7px 12px; border-radius:8px; cursor:pointer; font-weight:700;">
-              <i class="fas fa-times"></i>
-            </button>
-          </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+      <div>
+        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">শিক্ষকের নাম</label>
+        <input type="text" id="tLiveName" placeholder="শিক্ষকের নাম" style="margin-top:4px;">
       </div>
-
-      <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-top:12px;">🔗 অথবা বাহ্যিক লিংক দিন (Optional External Link)</label>
-      <input type="url" id="uUrl" placeholder="https://...">
-
-      <button class="btn-p" id="uBtn" onclick="upload()"><i class="fas fa-rocket"></i> Publish to Class &amp; Send Push Notification</button>
+      <div>
+        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">শ্রেণি নির্বাচন করুন</label>
+        <select id="tLiveClass" style="margin-top:4px; font-weight:700; color:var(--primary);">
+          <optgroup label="Primary & Junior Classes">
+            <option value="Play">Class Play</option><option value="Nursery">Class Nursery</option><option value="KG">Class KG</option>
+            <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option>
+            <option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option>
+          </optgroup>
+          <optgroup label="Secondary Classes">
+            <option value="9-Science">Class 9 (Science)</option><option value="9-Arts">Class 9 (Arts)</option><option value="9-Commerce">Class 9 (Commerce)</option>
+            <option value="10-Science">Class 10 (Science)</option><option value="10-Arts">Class 10 (Arts)</option><option value="10-Commerce">Class 10 (Commerce)</option>
+          </optgroup>
+        </select>
+      </div>
     </div>
 
-    <div class="section-title">📊 My Attendance Record</div>
-    <div class="card" style="padding: 30px;">
-        <p style="color:var(--text-muted); font-size:15px; font-weight:500; margin-bottom:20px; line-height:1.6;">সম্মানিত শিক্ষক, আপনার প্রতিদিনের উপস্থিতির বিস্তারিত তথ্য দেখতে নিচের বাটনে ক্লিক করুন।</p>
-        <button class="btn-p" style="background:var(--primary);" onclick="openTeacherAttendanceModal()"><i class="fas fa-calendar-check"></i> View My Detailed Attendance</button>
+    <label style="font-size:12px; font-weight:700; color:var(--text-muted); display:block; margin-top:6px;">পাঠের বিষয় ও অধ্যায় (Subject &amp; Topic)</label>
+    <input type="text" id="tLiveSub" placeholder="যেমন: গণিত - অধ্যায় ৩ (বীজগণিত)" style="margin-top:4px;">
+    <input type="hidden" id="tLivePic" value="https://i.postimg.cc/hGQQqrsb/20260117_231551.png">
+
+    <button class="btn-p" id="tStartLiveBtn" onclick="startTeacherStudentLiveClass()" style="background:linear-gradient(135deg, #b45309, #d97706); font-size:15px;">
+      <i class="fas fa-video"></i> লাইভ ক্লাস শুরু করুন
+    </button>
+
+    <!-- Active Student Live Classes List -->
+    <div style="margin-top:25px; border-top:2px dashed #e2e8f0; padding-top:18px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h4 style="margin:0; color:var(--primary); font-size:15px; font-weight:800;">🟢 বর্তমানে চলমান লাইভ ক্লাসসমূহ</h4>
+        <button onclick="loadTeacherLiveHubSessions()" style="background:#f1f5f9; border:1px solid #cbd5e1; padding:6px 14px; border-radius:8px; font-size:12px; font-weight:700; cursor:pointer;"><i class="fas fa-sync-alt"></i> রিফ্রেশ</button>
+      </div>
+      <div id="teacherActiveClassesContainer">
+        <p style="font-size:13px; color:var(--text-muted);">সেশন যাচাই করা হচ্ছে...</p>
+      </div>
     </div>
-    
-    <!-- 🚀 ডাইনামিক রেজাল্ট ম্যানেজমেন্ট লিংক -->
-    <div class="section-title">📈 Result Processing</div>
-    <div class="card" style="padding: 20px;">
-        <a href="/result-management" target="_blank" style="text-decoration:none;">
-            <button class="action-btn-large" style="background:#0288D1;"><i class="fas fa-poll-h"></i> Open Result Manager</button>
-        </a>
+  </div>
+
+  <!-- 📢 Official Notice Board (For Teachers) -->
+  <div class="section-title"><i class="fas fa-bullhorn" style="color:var(--primary);"></i> অফিশিয়াল নোটিশ বোর্ড (শিক্ষকদের জন্য)</div>
+  <div class="card" id="notice-board"><p style="text-align:center; color:var(--text-muted); font-weight:600;">নোটিশ লোড হচ্ছে...</p></div>
+
+  <!-- ⚠️ Disciplinary Warning System -->
+  <div class="section-title"><i class="fas fa-exclamation-circle" style="color:var(--danger);"></i> শিক্ষার্থী সতর্কবার্তা প্রেরণ (Disciplinary Notice)</div>
+  <div class="card">
+    <label style="font-size:12.5px; font-weight:700; color:var(--text-muted);">শ্রেণি নির্বাচন করুন</label>
+    <select id="wCls" onchange="loadStudentsForWarn()">
+      <option value="">শ্রেণি নির্বাচন করুন...</option>
+      <option value="Play">Class Play</option><option value="Nursery">Class Nursery</option><option value="KG">Class KG</option>
+      <option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option>
+      <option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option>
+      <option value="9">Class 9</option><option value="10">Class 10</option>
+    </select>
+    <div id="wStuBox" style="margin-top:8px;"></div>
+    <textarea id="wMsg" rows="3" placeholder="শিক্ষার্থী বা অভিভাবকের উদ্দেশ্যে সতর্কবার্তা বা পরামর্শ লিখুন..."></textarea>
+    <button class="btn-p" style="background:linear-gradient(135deg, var(--danger), var(--danger-dark));" id="wBtn" onclick="sendWarning()">
+      <i class="fas fa-paper-plane"></i> সতর্কবার্তা পাঠান
+    </button>
+  </div>
+
+  <!-- 🚀 Academic Content Publishing (Strictly Class Categories ONLY) -->
+  <div class="section-title"><i class="fas fa-book-open" style="color:var(--primary);"></i> শ্রেণিভিত্তিক শিক্ষা উপকরণ ও বাড়ির কাজ প্রকাশ</div>
+  <div class="card">
+    <label style="font-size:13px; font-weight:700; color:var(--primary); display:block;">🎯 শ্রেণি নির্বাচন করুন (Class Play - Class 10)</label>
+    <select id="uCls">
+      <option value="">শ্রেণি নির্বাচন করুন...</option>
+      <option value="ClassPlay">Class Play</option>
+      <option value="ClassNursery">Class Nursery</option>
+      <option value="ClassKG">Class KG</option>
+      <option value="Class1">Class 1</option>
+      <option value="Class2">Class 2</option>
+      <option value="Class3">Class 3</option>
+      <option value="Class4">Class 4</option>
+      <option value="Class5">Class 5</option>
+      <option value="Class6">Class 6</option>
+      <option value="Class7">Class 7</option>
+      <option value="Class8">Class 8</option>
+      <option value="Class9">Class 9</option>
+      <option value="Class10">Class 10</option>
+    </select>
+
+    <label style="font-size:13px; font-weight:700; color:var(--text-main); display:block; margin-top:8px;">📝 শিরোনাম / বিষয় (Title / Subject)</label>
+    <input type="text" id="uTtl" placeholder="যেমন: গণিত বাড়ির কাজ - অধ্যায় ৩">
+
+    <label style="font-size:13px; font-weight:700; color:var(--text-main); display:block; margin-top:8px;">📄 বিস্তারিত নির্দেশনা (Description)</label>
+    <textarea id="uDsc" rows="3" placeholder="শিক্ষার্থীদের জন্য বিস্তারিত নির্দেশনা লিখুন..."></textarea>
+
+    <div style="background:#f8fafc; padding:14px 16px; border-radius:14px; border:2px dashed var(--primary); margin-top:10px;">
+      <label style="font-size:13px; font-weight:700; color:var(--primary); display:block; margin-bottom:6px;">
+        <i class="fas fa-paperclip"></i> ছবি অথবা পিডিএফ/ডকুমেন্ট ফাইল সংযুক্ত করুন (ঐচ্ছিক):
+      </label>
+      <input type="file" id="uFileInput" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="handleAcademicFileSelect(this)" style="margin:0; padding:9px; background:#fff; font-size:13px; cursor:pointer;">
+
+      <div id="uFilePreviewBox" class="file-preview-box">
+        <img id="uFilePreviewImg" src="" alt="Preview">
+        <div class="file-preview-meta" id="uFilePreviewMeta">ফাইল প্রস্তুত</div>
+        <button type="button" onclick="clearAcademicFile()" style="background:#fff1f2; color:var(--danger); border:1px solid #fecdd3; padding:7px 12px; border-radius:8px; cursor:pointer; font-weight:700;">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
     </div>
 
-    <div class="section-title">🛠️ Manage Class Content &amp; Warnings</div>
-    <div id="manageBox"></div>
+    <label style="font-size:13px; font-weight:700; color:var(--text-muted); display:block; margin-top:12px;">🔗 অথবা ওয়েব লিংক যুক্ত করুন (ঐচ্ছিক)</label>
+    <input type="url" id="uUrl" placeholder="https://...">
+
+    <button class="btn-p" id="uBtn" onclick="upload()"><i class="fas fa-check-circle"></i> ক্লাস ড্যাশবোর্ডে প্রকাশ করুন</button>
+  </div>
+
+  <!-- 📊 My Attendance Record (Strictly View-Only, No Print Option) -->
+  <div class="section-title"><i class="fas fa-user-check" style="color:var(--primary);"></i> আমার উপস্থিতির বিবরণী</div>
+  <div class="card" style="padding: 28px;">
+    <p style="color:var(--text-muted); font-size:14.5px; font-weight:500; margin:0 0 18px 0; line-height:1.6;">সম্মানিত শিক্ষক, আপনার মাসভিত্তিক ও প্রতিদিনের উপস্থিতির বিস্তারিত তথ্য দেখতে নিচের বাটনে ক্লিক করুন।</p>
+    <button class="btn-p" style="margin-top:0;" onclick="openTeacherAttendanceModal()"><i class="fas fa-calendar-check"></i> উপস্থিতির বিবরণী দেখুন</button>
+  </div>
+
+  <!-- 📈 Result Processing -->
+  <div class="section-title"><i class="fas fa-poll-h" style="color:#0288D1;"></i> ফলাফল ব্যবস্থাপনা (Result Management)</div>
+  <div class="card" style="padding: 20px;">
+    <a href="/result-management" target="_blank" style="text-decoration:none;">
+      <button class="action-btn-large" style="background:linear-gradient(135deg, #0284c7, #0369a1);"><i class="fas fa-award"></i> রেজাল্ট ম্যানেজমেন্ট প্যানেল ওপেন করুন</button>
+    </a>
+  </div>
+
+  <!-- 🛠️ Manage Class Content & Warnings -->
+  <div class="section-title"><i class="fas fa-layer-group" style="color:var(--primary);"></i> প্রকাশিত ক্লাস কন্টেন্ট ও সতর্কবার্তা তালিকা</div>
+  <div id="manageBox"></div>
 </div>
 
-<!-- Modals -->
+<!-- ================= MODALS ================= -->
+<!-- Forgot Password Modal -->
 <div id="forgotModal" class="modal-overlay">
   <div class="modal-box">
-    <h3 style="margin-top:0; color:var(--primary); font-size:24px;">Reset Password</h3>
-    <p style="color:var(--text-muted); font-size:14px; margin-bottom:25px;">Verify your identity to reset security key</p>
+    <h3 style="margin-top:0; color:var(--primary); font-size:22px;">পাসওয়ার্ড পুনরুদ্ধার</h3>
+    <p style="color:var(--text-muted); font-size:13.5px; margin-bottom:22px;">আপনার নিবন্ধিত মোবাইল নম্বর দিয়ে ভেরিফিকেশন সম্পন্ন করুন</p>
     <div id="fpStep1">
-      <input type="tel" id="fpPhone" placeholder="Registered Mobile Number">
-      <div style="display:flex; gap:15px; margin-top:15px;">
-        <button class="btn-p" style="background:var(--accent); margin:0;" onclick="requestOTP('sms')"><i class="fas fa-sms"></i> SMS OTP</button>
-        <button class="btn-p" style="background:var(--primary); margin:0;" onclick="requestOTP('email')"><i class="fas fa-envelope"></i> Email OTP</button>
+      <input type="tel" id="fpPhone" placeholder="নিবন্ধিত মোবাইল নম্বর (017XXXXXXXX)">
+      <div style="display:flex; gap:12px; margin-top:14px;">
+        <button class="btn-p" style="background:var(--accent); margin:0;" onclick="requestOTP('sms')"><i class="fas fa-sms"></i> SMS কোড</button>
+        <button class="btn-p" style="background:var(--primary); margin:0;" onclick="requestOTP('email')"><i class="fas fa-envelope"></i> Email কোড</button>
       </div>
     </div>
     <div id="fpStep2" style="display:none;">
-      <input type="text" id="fpOTP" placeholder="Enter 6-digit OTP Code">
-      <button class="btn-p btn-success" onclick="verifyOTP()">Verify Code</button>
+      <input type="text" id="fpOTP" placeholder="৬ সংখ্যার ভেরিফিকেশন কোড লিখুন">
+      <button class="btn-p btn-success" onclick="verifyOTP()">কোড যাচাই করুন</button>
     </div>
     <div id="fpStep3" style="display:none;">
-      <input type="password" id="fpNewPass" placeholder="New Password (Min. 6 chars)">
-      <button class="btn-p" onclick="saveNewPassword()">Save Password</button>
+      <input type="password" id="fpNewPass" placeholder="নতুন পাসওয়ার্ড দিন (কমপক্ষে ৬ অক্ষর)">
+      <button class="btn-p" onclick="saveNewPassword()">নতুন পাসওয়ার্ড সংরক্ষণ করুন</button>
     </div>
-    <p id="fpMsg" style="font-size:14px; font-weight:700; margin-top:15px;"></p>
-    <button class="close-modal-btn" onclick="closeForgotModal()">Cancel</button>
+    <p id="fpMsg" style="font-size:13.5px; font-weight:700; margin-top:15px;"></p>
+    <button class="close-modal-btn" onclick="closeForgotModal()">বন্ধ করুন</button>
   </div>
 </div>
 
+<!-- Delete Confirmation Modal -->
 <div id="delModal" class="modal-overlay">
   <div class="modal-box danger-modal">
-    <h3 style="color:var(--danger); margin-top:0; font-size:22px;"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h3>
-    <p style="font-size:15px; color:#475569; font-weight:500;">আপনি কি নিশ্চিত? ডিলিট করলে এটি ওয়েবসাইট, ডাটাবেস এবং সার্ভার (ImgBB / Drive) থেকে চিরতরে মুছে যাবে।</p>
-    <button id="modalLink" class="btn-p" style="background:var(--danger); margin-top:20px;">Yes, Delete Permanently</button>
-    <button class="close-modal-btn" onclick="closeDeleteModal()">Cancel</button>
+    <h3 style="color:var(--danger); margin-top:0; font-size:21px;"><i class="fas fa-exclamation-triangle"></i> মুছে ফেলার নিশ্চিতকরণ</h3>
+    <p style="font-size:14.5px; color:#475569; font-weight:500;">আপনি কি নিশ্চিতভাবে এই পোস্টটি মুছে ফেলতে চান? মুছে ফেললে এটি ড্যাশবোর্ড থেকে স্থায়ীভাবে সরে যাবে।</p>
+    <button id="modalLink" class="btn-p" style="background:var(--danger); margin-top:18px;">হ্যাঁ, মুছে ফেলুন</button>
+    <button class="close-modal-btn" onclick="closeDeleteModal()">বাতিল করুন</button>
   </div>
 </div>
 
+<!-- 📅 View-Only Attendance Modal (NO Print Button) -->
 <div id="attendanceModal" class="modal-overlay">
-    <div class="modal-box" style="max-width: 650px; padding: 30px;">
-        <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px; text-align:left;">📅 My Attendance Logs</h3>
-        
-        <div style="margin-bottom: 15px;">
-            <select id="attMonthFilter" onchange="renderTeacherAttendanceTable()" style="width:100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
-                <option value="">Loading Months...</option>
-            </select>
-        </div>
-        
-        <div id="attLoader" style="text-align:center; color:var(--primary); font-weight:bold; display:none; padding:20px 0;">
-            <span class="loader-spinner" style="border-top-color:var(--primary);"></span> Synchronizing Database...
-        </div>
+  <div class="modal-box" style="max-width: 650px; padding: 28px;">
+    <h3 style="margin:0 0 18px 0; color:var(--text-main); font-size:19px; border-bottom:2px solid #f1f5f9; padding-bottom:12px; text-align:left;">
+      📅 আমার উপস্থিতির লগ (শুধুমাত্র দেখার জন্য)
+    </h3>
 
-        <div id="modalYearlySummary" style="margin-bottom:15px; font-weight:700; color:#fff; padding:15px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius:12px; text-align:center; box-shadow: 0 5px 15px rgba(0,95,64,0.2); display: none;">
-        </div>
-        
-        <div style="max-height: 350px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; text-align:left;">
-            <table style="width:100%; border-collapse: collapse; font-size: 13px;">
-                <thead style="background: #e2e8f0; position: sticky; top: 0; z-index: 10;">
-                    <tr>
-                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Date (Y-M-D)</th>
-                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">Status</th>
-                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">IN Time</th>
-                        <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">OUT Time</th>
-                    </tr>
-                </thead>
-                <tbody id="modalAttTableBody" style="background: white;">
-                </tbody>
-            </table>
-        </div>
-        
-        <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;">
-        </div>
-        <button class="close-modal-btn" onclick="closeModal('attendanceModal')" style="margin-top:20px;">Close Logs</button>
+    <div style="margin-bottom: 14px;">
+      <select id="attMonthFilter" onchange="renderTeacherAttendanceTable()" style="width:100%; padding: 12px; border-radius: 10px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
+        <option value="">মাস লোড হচ্ছে...</option>
+      </select>
     </div>
+
+    <div id="attLoader" style="text-align:center; color:var(--primary); font-weight:bold; display:none; padding:20px 0;">
+      <span class="loader-spinner" style="border-top-color:var(--primary);"></span> উপস্থিতির তথ্য লোড হচ্ছে...
+    </div>
+
+    <div id="modalYearlySummary" style="margin-bottom:15px; font-weight:700; color:#fff; padding:14px; background:linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius:12px; text-align:center; display: none;"></div>
+
+    <div style="max-height: 350px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #f8fafc; text-align:left;">
+      <table style="width:100%; border-collapse: collapse; font-size: 13px;">
+        <thead style="background: #e2e8f0; position: sticky; top: 0; z-index: 10;">
+          <tr>
+            <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">তারিখ</th>
+            <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">স্ট্যাটাস</th>
+            <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">প্রবেশ (IN)</th>
+            <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">প্রস্থান (OUT)</th>
+          </tr>
+        </thead>
+        <tbody id="modalAttTableBody" style="background: white;"></tbody>
+      </table>
+    </div>
+
+    <div id="modalAttSummary" style="margin-top:18px; font-weight:800; color:var(--primary); padding:14px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;"></div>
+    <button class="close-modal-btn" onclick="closeModal('attendanceModal')" style="margin-top:18px;">বন্ধ করুন</button>
+  </div>
 </div>
 
 <footer class="premium-footer" id="main-footer">
-  <h3 style="margin:0 0 5px 0; color:#fff; font-size:18px;">SRMS</h3>
-  <p style="margin:0; opacity:0.7; font-size:14px;">Saidpur Residential Model School<br>Saidpur, Nilphamari.</p>
-  <p style="margin:20px 0 0 0; font-size:12px; color:#64748b; border-top:1px solid #1e293b; padding-top:15px;">© 2026 SRMS. Secure Academic Portal.</p>
+  <h3 style="margin:0 0 5px 0; color:#fff; font-size:18px;">Saidpur Residential Model School</h3>
+  <p style="margin:0; opacity:0.75; font-size:13.5px;">সুলতান নগর, সৈয়দপুর, নীলফামারী।</p>
+  <p style="margin:18px 0 0 0; font-size:12px; color:#94a3b8; border-top:1px solid #1e293b; padding-top:15px;">© 2026 Saidpur Residential Model School • Official Teacher Portal</p>
 </footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
-  // =====================================================================
-  // CONFIGURATION: FIREBASE, TEACHER BACKEND & IMGBB API V1
-  // =====================================================================
   const firebaseConfig = {
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
     authDomain: "srms-website-management.firebaseapp.com",
@@ -483,23 +923,17 @@
 
   if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
   const auth = firebase.auth();
-  
-  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch((error) => {
-      console.error("Session persistence error:", error);
-  });
-  
+
+  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
-  
-  // 🔗 আপনার Teacher Login Backend URL (Website Management-এর ব্যাকএন্ড এখানে ব্যবহৃত হচ্ছে না)
-  const TEACHER_BACKEND_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec"; 
+  const TEACHER_BACKEND_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec";
   const LIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxaayPCwfdZvXSXJPdzPspPmAeH72-NAvqGJIbuhwid3T28imRxNRypPI9m1bJQrfqLhg/exec";
-  
-  // 🖼️ অফিশিয়াল ImgBB API Key
-  const IMGBB_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
-  const IMGBB_UPLOAD_URL = "https://api.imgbb.com/1/upload";
+
+  const MEDIA_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
+  const MEDIA_UPLOAD_URL = "https://api.imgbb.com/1/upload";
   const DEFAULT_AVATAR = "https://i.postimg.cc/hGQQqrsb/20260117_231551.png";
 
-  // শুধুমাত্র ক্লাস ক্যাটাগরি লিস্ট (শিক্ষকদের জন্য অনুমোদিত)
   const ALLOWED_CLASS_TARGETS = [
     "ClassPlay", "ClassNursery", "ClassKG",
     "Class1", "Class2", "Class3", "Class4", "Class5",
@@ -511,9 +945,10 @@
   let tTeacherPhoto = DEFAULT_AVATAR;
   let exactDbPhone = "";
   let resetPhone = null;
-  
+
   let globalPostsCache = [];
   let globalWarnsCache = [];
+  let classStudentsCache = null;
   let preparedAcademicFile = null;
   let isUploadingPost = false;
 
@@ -521,8 +956,8 @@
   let allHolidays = {};
 
   function sanitizeHTML(str) {
-      if (typeof str !== 'string') return str;
-      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
+    if (typeof str !== 'string') return str;
+    return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
   }
 
   function cleanPhoneCoreJS(p) {
@@ -540,7 +975,6 @@
 
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 📡 Teacher Backend API Caller
   async function teacherApiCall(actionName, payloadObj = {}) {
     let token = "";
     if (auth.currentUser) {
@@ -559,19 +993,18 @@
     });
     const text = await res.text();
     let data = JSON.parse(text);
-    if (data.status === "error") throw new Error(data.message || data.msg || "Request failed");
+    if (data.status === "error") throw new Error(data.message || data.msg || "অনুরোধ সম্পন্ন হয়নি");
     return data;
   }
 
-  // 🖼️ Direct ImgBB Upload Helper (Turbo 1-Second Upload)
-  async function uploadBase64ToImgBB(base64Data, fileName) {
+  async function uploadMediaDirect(base64Data, fileName) {
     const formData = new FormData();
-    formData.append("key", IMGBB_API_KEY);
+    formData.append("key", MEDIA_API_KEY);
     formData.append("image", base64Data);
     if (fileName) {
       formData.append("name", fileName.replace(/\.[^/.]+$/, ""));
     }
-    const res = await fetch(IMGBB_UPLOAD_URL, { method: "POST", body: formData });
+    const res = await fetch(MEDIA_UPLOAD_URL, { method: "POST", body: formData });
     const json = await res.json();
     if (json && json.success && json.data) {
       return {
@@ -581,25 +1014,24 @@
         imgbbId: json.data.id || ""
       };
     }
-    throw new Error("ImgBB Upload Failed");
+    throw new Error("Media upload failed");
   }
 
-  // 🔒 Non-stop Auto-login & Auth Restoration
   window.onload = function() {
     const savedPhone = sessionStorage.getItem("srms_phone");
     const savedName = sessionStorage.getItem("srms_name");
     const savedExact = sessionStorage.getItem("srms_exact_phone");
     const savedPhoto = sessionStorage.getItem("srms_teacher_photo");
-    
-    if(savedPhone && savedName) {
+
+    if (savedPhone && savedName) {
       tPhone = savedPhone;
       tTeacherName = savedName;
       exactDbPhone = savedExact || normalizePhone11JS(savedPhone);
       tTeacherPhoto = savedPhoto || DEFAULT_AVATAR;
       showDashboardUI(savedName, tTeacherPhoto);
     } else {
-       document.getElementById('dash-sec').style.display = 'none';
-       document.getElementById('login-sec').style.display = 'flex';
+      document.getElementById('dash-sec').style.display = 'none';
+      document.getElementById('login-sec').style.display = 'flex';
     }
 
     auth.onAuthStateChanged(function(user) {
@@ -612,90 +1044,137 @@
   };
 
   function logout() {
-    try { if(auth) auth.signOut(); } catch(e) {}
+    try { if (auth) auth.signOut(); } catch (e) {}
     sessionStorage.clear();
-    
+
     document.getElementById('dash-sec').style.display = 'none';
     document.getElementById('main-navbar').style.display = 'none';
     document.getElementById('main-banner').style.display = 'none';
     document.getElementById('main-footer').style.display = 'none';
-    
+
     document.getElementById('lPh').value = '';
     document.getElementById('lPs').value = '';
     document.getElementById('err').innerText = '';
     document.getElementById('login-sec').style.display = 'flex';
   }
 
+  // ⚡ ০.২ সেকেন্ডে ইনস্ট্যান্ট লগইন (ডিরেক্ট আইডি + ইনডেক্সড কুয়েরি)
   async function login() {
     let p = sanitizeHTML(document.getElementById('lPh').value.trim());
     let s = document.getElementById('lPs').value.trim();
     const b = document.getElementById('lBtn');
     const err = document.getElementById('err');
-    
+
     err.innerText = "";
-    if(!p || !s) { err.innerText = "Please fill in all fields!"; return; }
-    
+    if (!p || !s) { err.innerText = "অনুগ্রহ করে মোবাইল নম্বর এবং পাসওয়ার্ড দিন!"; return; }
+
     if (s.length > 0 && s.length < 6) s = s.padEnd(6, '0');
-    
-    b.innerHTML = '<span class="loader-spinner"></span> Authenticating...'; b.disabled = true;
-    
+
+    b.innerHTML = '<span class="loader-spinner"></span> যাচাই করা হচ্ছে...';
+    b.disabled = true;
+
     let ph = cleanPhoneCoreJS(p);
+    let norm11 = "0" + ph;
 
     try {
       let emailToTry = `0${ph}@srms.edu.bd`;
       try {
-          await auth.signInWithEmailAndPassword(emailToTry, s);
-      } catch(e1) {
-          emailToTry = `${ph}@srms.edu.bd`;
-          await auth.signInWithEmailAndPassword(emailToTry, s);
+        await auth.signInWithEmailAndPassword(emailToTry, s);
+      } catch (e1) {
+        emailToTry = `${ph}@srms.edu.bd`;
+        await auth.signInWithEmailAndPassword(emailToTry, s);
       }
 
-      const token = await auth.currentUser.getIdToken(true);
-      const res = await fetch(`${FIREBASE_DB_BASE}/Teachers?pageSize=1000`, {
-          headers: { "Authorization": "Bearer " + token }
-      });
-      const data = await res.json();
-      
-      let foundName = "Teacher", teacherDocId = null, dbPhoneToSave = "0" + ph, foundPhoto = DEFAULT_AVATAR;
+      const token = await auth.currentUser.getIdToken(false);
+      const headers = { "Authorization": "Bearer " + token, "Content-Type": "application/json" };
 
-      if(data.documents) {
-        for(let d of data.documents) {
-            let f = d.fields || {};
-            let dbPhone = f.phone ? f.phone.stringValue : "";
-            if(cleanPhoneCoreJS(dbPhone) === ph) {
-                foundName = f.name ? f.name.stringValue : "Teacher";
-                teacherDocId = d.name.split('/').pop(); 
-                dbPhoneToSave = dbPhone;
-                foundPhoto = (f.photoUrl && f.photoUrl.stringValue) ? f.photoUrl.stringValue : ((f.photo && f.photo.stringValue) ? f.photo.stringValue : DEFAULT_AVATAR);
-                break;
+      const directDocId = "T_" + norm11;
+      const queryPayload = {
+        structuredQuery: {
+          from: [{ collectionId: "Teachers" }],
+          where: {
+            fieldFilter: {
+              field: { fieldPath: "phone" },
+              op: "IN",
+              value: {
+                arrayValue: {
+                  values: [
+                    { stringValue: norm11 },
+                    { stringValue: ph },
+                    { stringValue: "+88" + norm11 }
+                  ]
+                }
+              }
             }
+          },
+          limit: 1
+        }
+      };
+
+      const [directRes, queryRes] = await Promise.all([
+        fetch(`${FIREBASE_DB_BASE}/Teachers/${directDocId}`, { headers }).catch(() => null),
+        fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(queryPayload) }).catch(() => null)
+      ]);
+
+      let matchedDoc = null;
+      if (directRes && directRes.status === 200) {
+        matchedDoc = await directRes.json();
+      } else if (queryRes && queryRes.status === 200) {
+        const qArr = await queryRes.json();
+        if (qArr && qArr[0] && qArr[0].document) matchedDoc = qArr[0].document;
+      }
+
+      if (!matchedDoc) {
+        const allRes = await fetch(`${FIREBASE_DB_BASE}/Teachers?pageSize=500`, { headers });
+        const allData = await allRes.json();
+        if (allData.documents) {
+          matchedDoc = allData.documents.find(d => cleanPhoneCoreJS(d.fields?.phone?.stringValue || "") === ph) || null;
         }
       }
-          
+
+      let foundName = "Teacher", teacherDocId = directDocId, dbPhoneToSave = norm11, foundPhoto = DEFAULT_AVATAR;
+
+      if (matchedDoc && matchedDoc.fields) {
+        const f = matchedDoc.fields;
+        const roleType = f.roleType ? f.roleType.stringValue : "Teacher";
+        const portalAccess = f.portalAccess ? f.portalAccess.stringValue : "Allowed";
+        if (roleType === "Staff" || portalAccess === "Blocked") {
+          await auth.signOut();
+          err.innerText = "এই অ্যাকাউন্টটি শুধুমাত্র অফিশিয়াল স্টাফদের জন্য; শিক্ষক পোর্টালে লগইন অনুমোদিত নয়।";
+          b.innerHTML = "লগইন করুন ➔";
+          b.disabled = false;
+          return;
+        }
+        foundName = f.name ? f.name.stringValue : "Teacher";
+        teacherDocId = matchedDoc.name.split('/').pop();
+        dbPhoneToSave = f.phone ? f.phone.stringValue : norm11;
+        foundPhoto = (f.photoUrl && f.photoUrl.stringValue) ? f.photoUrl.stringValue : ((f.photo && f.photo.stringValue) ? f.photo.stringValue : DEFAULT_AVATAR);
+      }
+
       tPhone = ph;
       tTeacherName = foundName;
       exactDbPhone = dbPhoneToSave;
       tTeacherPhoto = foundPhoto || DEFAULT_AVATAR;
-      
+
       sessionStorage.setItem("srms_phone", ph);
       sessionStorage.setItem("srms_exact_phone", dbPhoneToSave);
       sessionStorage.setItem("srms_name", foundName);
       sessionStorage.setItem("srms_active_pass", s);
       sessionStorage.setItem("srms_teacher_photo", tTeacherPhoto);
-      if(teacherDocId) sessionStorage.setItem("srms_teacher_id", teacherDocId); 
-      
+      if (teacherDocId) sessionStorage.setItem("srms_teacher_id", teacherDocId);
+
       const teacherRoles = ["teacher_dashboard", "special_page_access"];
       sessionStorage.setItem("srms_user_roles", JSON.stringify(teacherRoles));
       sessionStorage.setItem("srms_active_session", "true");
-      
+
       document.getElementById('lPs').value = '';
       showDashboardUI(foundName, tTeacherPhoto);
       loadBoard();
       loadTeacherLiveHubSessions();
-      
-    } catch(e) { 
-        err.innerText = "Teacher account not found or invalid password!"; 
-        b.innerHTML = "Secure Login ➔"; b.disabled = false; 
+    } catch (e) {
+      err.innerText = "মোবাইল নম্বর অথবা পাসওয়ার্ড সঠিক নয়!";
+      b.innerHTML = "লগইন করুন ➔";
+      b.disabled = false;
     }
   }
 
@@ -726,8 +1205,8 @@
   }
 
   function showDashboardUI(name, photoUrl) {
-    document.getElementById('tGreet').innerText = `Assalamu Alaikum, ${name} Sir`;
-    document.getElementById('tPhoneSub').innerText = `Login ID: ${normalizePhone11JS(tPhone)} • Academic Management Portal`;
+    document.getElementById('tGreet').innerText = `আসসালামু আলাইকুম, ${name}`;
+    document.getElementById('tPhoneSub').innerText = `লগইন আইডি: ${normalizePhone11JS(tPhone)} • অফিশিয়াল শিক্ষক পোর্টাল`;
     document.getElementById('tLiveName').value = name;
     applyTeacherPhotoToUI(photoUrl || tTeacherPhoto);
     document.getElementById('login-sec').style.display = 'none';
@@ -735,17 +1214,19 @@
     document.getElementById('main-banner').style.display = 'flex';
     document.getElementById('dash-sec').style.display = 'block';
     document.getElementById('main-footer').style.display = 'block';
-    document.getElementById('lBtn').innerHTML = "Secure Login ➔"; document.getElementById('lBtn').disabled = false;
+    document.getElementById('lBtn').innerHTML = "লগইন করুন ➔";
+    document.getElementById('lBtn').disabled = false;
   }
 
   // =========================================================================
-  // 📸 TEACHER PROFILE PHOTO CHANGE SYSTEM (IMGBB + FIRESTORE INSTANT SYNC)
+  // 📸 TEACHER PROFILE PHOTO CHANGE SYSTEM (INSTANT PREVIEW + SYNC)
   // =========================================================================
   function changeTeacherProfilePhoto(input) {
     if (!input.files || input.files.length === 0) return;
     const file = input.files[0];
     const statusEl = document.getElementById('photoSyncStatus');
-    statusEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ছবি অপটিমাইজ ও আপলোড হচ্ছে...`;
+    statusEl.style.color = "#fde68a";
+    statusEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> প্রোফাইল ছবি আপডেট হচ্ছে...`;
 
     const reader = new FileReader();
     reader.onload = function(e) {
@@ -766,17 +1247,15 @@
         const dataUrl = canvas.toDataURL('image/jpeg', 0.86);
         const base64Raw = dataUrl.split(',')[1];
 
-        // সাথে সাথে স্ক্রিনে প্রিভিউ দেখানো
         document.getElementById('teacherProfileAvatar').src = dataUrl;
+        document.getElementById('navTeacherThumb').src = dataUrl;
 
         try {
           let newPhotoUrl = "";
           try {
-            const imgbbRes = await uploadBase64ToImgBB(base64Raw, "Teacher_" + normalizePhone11JS(tPhone));
-            newPhotoUrl = imgbbRes.url;
-          } catch (directErr) {
-            // যদি ব্রাউজার থেকে ব্লক হয়, ব্যাকএন্ড নিজেই আপলোড করবে
-          }
+            const upRes = await uploadMediaDirect(base64Raw, "Teacher_" + normalizePhone11JS(tPhone));
+            newPhotoUrl = upRes.url;
+          } catch (directErr) {}
 
           const docId = sessionStorage.getItem("srms_teacher_id") || "";
           const apiRes = await teacherApiCall("updateTeacherPhoto", {
@@ -789,11 +1268,11 @@
           const finalUrl = apiRes.photoUrl || newPhotoUrl;
           applyTeacherPhotoToUI(finalUrl);
           statusEl.style.color = "#a7f3d0";
-          statusEl.innerHTML = `✅ প্রোফাইল ছবি সফলভাবে আপডেট হয়েছে!`;
-          setTimeout(() => { statusEl.innerHTML = ""; }, 4000);
+          statusEl.innerHTML = `✅ প্রোফাইল ছবি সফলভাবে সংরক্ষিত হয়েছে!`;
+          setTimeout(() => { statusEl.innerHTML = ""; }, 3500);
         } catch (err) {
           statusEl.style.color = "#fecdd3";
-          statusEl.innerHTML = `❌ ছবি সেভ করতে সমস্যা হয়েছে: ${err.message}`;
+          statusEl.innerHTML = `❌ ছবি আপডেট ব্যর্থ হয়েছে: ${err.message}`;
         }
       };
       img.src = e.target.result;
@@ -813,7 +1292,6 @@
   async function loadTeacherLiveHubSessions() {
     const container = document.getElementById('teacherActiveClassesContainer');
     const meetingBanner = document.getElementById('teacherMeetingAlertBox');
-    container.innerHTML = `<p style="font-size:13px; color:#b45309; font-weight:600;">⏳ লাইভ সেশন সিঙ্ক হচ্ছে...</p>`;
 
     try {
       const res = await fetch(`${FIREBASE_DB_BASE}/LiveSessions?pageSize=100`);
@@ -831,7 +1309,7 @@
         if (status === "TRUE") {
           const title = f.title ? f.title.stringValue : "Live Session";
           const host = f.host ? f.host.stringValue : "Educator";
-          const startTime = f.startTime ? f.startTime.stringValue : "Running";
+          const startTime = f.startTime ? f.startTime.stringValue : "চলমান";
 
           if (docName === "Teachers" || docName === "All") {
             activeAdminMeeting = { room: docName, title: title, host: host, startTime: startTime };
@@ -845,8 +1323,8 @@
                   <p style="font-size:12px; color:#475569;"><b>শিক্ষক:</b> ${sanitizeHTML(host)}</p>
                 </div>
                 <div style="display:flex; gap:8px;">
-                  <button class="btn-rejoin-live" onclick="joinStudentLiveClassAsTeacher('${docName}')"><i class="fas fa-video"></i> Join</button>
-                  <button class="btn-stop-live" onclick="endStudentLiveClassByTeacher('${docName}', '${sanitizeHTML(title).replace(/'/g, "")}', this)">🔴 End Class</button>
+                  <button class="btn-rejoin-live" onclick="joinStudentLiveClassAsTeacher('${docName}')"><i class="fas fa-video"></i> যুক্ত হোন</button>
+                  <button class="btn-stop-live" onclick="endStudentLiveClassByTeacher('${docName}', '${sanitizeHTML(title).replace(/'/g, "")}', this)">🔴 ক্লাস শেষ করুন</button>
                 </div>
               </div>`;
           }
@@ -864,13 +1342,9 @@
         meetingBanner.style.display = "none";
       }
 
-      if (studentClassesHtml !== "") {
-        container.innerHTML = studentClassesHtml;
-      } else {
-        container.innerHTML = `<p style="font-size:13px; color:#64748b; background:#f8fafc; padding:14px; border-radius:12px; border:1px dashed #cbd5e1; margin:0;">বর্তমানে কোনো শ্রেণির লাইভ ক্লাস চলছে না।</p>`;
-      }
+      container.innerHTML = studentClassesHtml || `<p style="font-size:13px; color:#64748b; background:#f8fafc; padding:14px; border-radius:12px; border:1px dashed #cbd5e1; margin:0;">বর্তমানে কোনো শ্রেণির লাইভ ক্লাস চলছে না।</p>`;
     } catch (e) {
-      container.innerHTML = `<p style="color:var(--danger); font-size:13px; font-weight:700;">সেশন লোড করতে সমস্যা হয়েছে।</p>`;
+      container.innerHTML = `<p style="color:var(--danger); font-size:13px; font-weight:700;">লাইভ সেশন লোড করা যায়নি।</p>`;
     }
   }
 
@@ -901,7 +1375,7 @@
     }
 
     if (sClass === "Teachers" || sClass === "Guardian" || sClass === "All") {
-      alert("শুধুমাত্র অ্যাডমিন এই মিটিং শুরু করতে পারবেন।");
+      alert("শুধুমাত্র কর্তৃপক্ষ এই মিটিং শুরু করতে পারবেন।");
       return;
     }
 
@@ -952,14 +1426,14 @@
           host: name,
           hostRole: "Teacher"
         })
-      }).catch(e => {});
+      }).catch(() => {});
 
       document.getElementById('tLiveSub').value = '';
-      setTimeout(loadTeacherLiveHubSessions, 900);
+      setTimeout(loadTeacherLiveHubSessions, 700);
     } catch (e) {}
 
     btn.disabled = false;
-    btn.innerHTML = `<i class="fas fa-video"></i> START STUDENT LIVE CLASS 🚀`;
+    btn.innerHTML = `<i class="fas fa-video"></i> লাইভ ক্লাস শুরু করুন`;
   }
 
   async function endStudentLiveClassByTeacher(sClass, sub, btnElement) {
@@ -987,127 +1461,134 @@
         method: 'POST',
         mode: 'no-cors',
         body: JSON.stringify({ action: "update", className: sClass, status: "FALSE", title: sub })
-      }).catch(e => {});
+      }).catch(() => {});
 
-      setTimeout(loadTeacherLiveHubSessions, 800);
+      setTimeout(loadTeacherLiveHubSessions, 600);
     } catch (e) {
       btnElement.disabled = false;
-      btnElement.innerHTML = `🔴 End Class`;
+      btnElement.innerHTML = `🔴 ক্লাস শেষ করুন`;
     }
   }
 
-  // ==========================================
-  // FORGOT PASSWORD LOGIC (OTP)
-  // ==========================================
+  // =========================================================================
+  // 🔑 FORGOT PASSWORD LOGIC (OTP)
+  // =========================================================================
   function openForgotModal() {
-    document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
-    document.getElementById('fpPhone').value = ''; document.getElementById('fpOTP').value = ''; document.getElementById('fpNewPass').value = ''; document.getElementById('fpMsg').innerText = '';
+    document.getElementById('fpStep1').style.display = 'block';
+    document.getElementById('fpStep2').style.display = 'none';
+    document.getElementById('fpStep3').style.display = 'none';
+    document.getElementById('fpPhone').value = '';
+    document.getElementById('fpOTP').value = '';
+    document.getElementById('fpNewPass').value = '';
+    document.getElementById('fpMsg').innerText = '';
     document.getElementById('forgotModal').style.display = 'flex';
   }
   function closeForgotModal() { document.getElementById('forgotModal').style.display = 'none'; }
 
   async function requestOTP(method) {
     let p = document.getElementById('fpPhone').value.trim();
-    if(!p) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Please enter mobile number.</span>"; return; }
-    resetPhone = cleanPhoneCoreJS(p); 
-    document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Sending Request...";
-    
+    if (!p) {
+      document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>অনুগ্রহ করে মোবাইল নম্বর দিন।</span>";
+      return;
+    }
+    resetPhone = cleanPhoneCoreJS(p);
+    document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> ভেরিফিকেশন কোড পাঠানো হচ্ছে...";
+
     try {
-      const response = await fetch(TEACHER_BACKEND_URL, { 
-          method: "POST", 
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "sendOTP", phone: resetPhone, method: method }) 
+      const response = await fetch(TEACHER_BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "sendOTP", phone: resetPhone, method: method })
       });
-      
-      const textData = await response.text(); 
-      let data;
-      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error!</span>`; return; }
-      
-      if(data.status === "success") {
-        document.getElementById('fpStep1').style.display = 'none'; 
+      const data = await response.json();
+
+      if (data.status === "success") {
+        document.getElementById('fpStep1').style.display = 'none';
         document.getElementById('fpStep2').style.display = 'block';
-        let sMsg = data.msg ? data.msg : (data.message ? data.message : "OTP Sent Successfully!");
+        let sMsg = data.msg || data.message || "ভেরিফিকেশন কোড পাঠানো হয়েছে!";
         document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">${sanitizeHTML(sMsg)}</span>`;
-      } else { 
-        let eMsg = data.message ? data.message : (data.msg ? data.msg : "Error sending OTP.");
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`; 
+      } else {
+        let eMsg = data.message || data.msg || "কোড পাঠানো যায়নি।";
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`;
       }
-    } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error! Check connection.</span>"; }
+    } catch (e) {
+      document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>নেটওয়ার্ক ত্রুটি! আবার চেষ্টা করুন।</span>";
+    }
   }
 
   async function verifyOTP() {
     const input = document.getElementById('fpOTP').value.trim();
-    if(!input) return;
+    if (!input) return;
 
-    const btns = document.getElementById('fpStep2').getElementsByTagName('button');
-    const verifyBtn = btns[0];
-    verifyBtn.innerHTML = '<span class="loader-spinner"></span> Verifying...';
+    const verifyBtn = document.getElementById('fpStep2').querySelector('button');
+    verifyBtn.innerHTML = '<span class="loader-spinner"></span> যাচাই হচ্ছে...';
     verifyBtn.disabled = true;
 
     try {
-        const response = await fetch(TEACHER_BACKEND_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify({ action: "verifyOTP", phone: resetPhone, otp: input })
-        });
-        const data = await response.json();
+      const response = await fetch(TEACHER_BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "verifyOTP", phone: resetPhone, otp: input })
+      });
+      const data = await response.json();
 
-        if(data.status === "success") {
-            document.getElementById('fpStep2').style.display = 'none'; 
-            document.getElementById('fpStep3').style.display = 'block';
-            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ OTP Verified! Enter a new password.</span>`;
-        } else {
-            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`;
-        }
+      if (data.status === "success") {
+        document.getElementById('fpStep2').style.display = 'none';
+        document.getElementById('fpStep3').style.display = 'block';
+        document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ কোড যাচাই সম্পন্ন হয়েছে! নতুন পাসওয়ার্ড দিন।</span>`;
+      } else {
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`;
+      }
     } catch (e) {
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Verification Failed.</span>`;
+      document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">নেটওয়ার্ক ত্রুটি!</span>`;
     }
-    
-    verifyBtn.innerHTML = "Verify Code";
+
+    verifyBtn.innerHTML = "কোড যাচাই করুন";
     verifyBtn.disabled = false;
   }
 
   async function saveNewPassword() {
     const np = document.getElementById('fpNewPass').value.trim();
-    if(np.length < 6) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Password must be at least 6 characters.</span>"; return; }
-    document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Saving to Server...";
-    
+    if (np.length < 6) {
+      document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে।</span>";
+      return;
+    }
+    document.getElementById('fpMsg').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> সংরক্ষণ করা হচ্ছে...";
+
     try {
-      const response = await fetch(TEACHER_BACKEND_URL, { 
-          method: "POST", 
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: "resetPass", phone: resetPhone, newPass: np }) 
+      const response = await fetch(TEACHER_BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "resetPass", phone: resetPhone, newPass: np })
       });
-      
-      const textData = await response.text(); 
-      let data;
-      try { data = JSON.parse(textData); } catch (parseError) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Server Error!</span>`; return; }
-      
-      if(data.status === "success") {
-          document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful!</div>`;
-          document.getElementById('fpMsg').innerText = "";
-      } else { 
-          let eMsg = data.message ? data.message : "Account sync error!";
-          document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`; 
+      const data = await response.json();
+
+      if (data.status === "success") {
+        document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:17px; margin-bottom:15px;">✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!</div>`;
+        document.getElementById('fpMsg').innerText = "";
+      } else {
+        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message || "ত্রুটি হয়েছে!")}</span>`;
       }
-    } catch(e) { document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; }
+    } catch (e) {
+      document.getElementById('fpMsg').innerHTML = "<span style='color:var(--danger);'>নেটওয়ার্ক ত্রুটি!</span>";
+    }
   }
 
   // =========================================================================
-  // 🔐 DIRECT 1-SECOND PASSWORD CHANGE (FIRESTORE + FIREBASE AUTH VIA BACKEND)
+  // 🔐 DIRECT PASSWORD CHANGE (INSTANT FEEDBACK)
   // =========================================================================
   function togglePass() {
     const b = document.getElementById('passBox');
     b.style.display = b.style.display === 'none' ? 'block' : 'none';
   }
-  
+
   async function changePass() {
     let p = document.getElementById('newPass').value.trim();
     const btn = document.getElementById('passBtn');
-    if(!p || p.length < 6) return alert("⚠️ পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
+    if (!p || p.length < 6) return alert("⚠️ পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
 
     const docId = sessionStorage.getItem("srms_teacher_id") || "";
-    btn.innerHTML = '<span class="loader-spinner"></span> Updating Directly...';
+    btn.innerHTML = '<span class="loader-spinner"></span> সংরক্ষণ হচ্ছে...';
     btn.disabled = true;
 
     try {
@@ -1117,13 +1598,13 @@
         newPass: p
       });
       sessionStorage.setItem("srms_active_pass", p);
-      alert(res.msg || "✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!");
       document.getElementById('newPass').value = "";
       document.getElementById('passBox').style.display = 'none';
-    } catch(e) {
+      alert(res.msg || "✅ পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!");
+    } catch (e) {
       alert("❌ পাসওয়ার্ড পরিবর্তন ব্যর্থ হয়েছে: " + e.message);
     }
-    btn.innerHTML = '<i class="fas fa-check-circle"></i> Save New Password Directly';
+    btn.innerHTML = '<i class="fas fa-check-circle"></i> পাসওয়ার্ড সংরক্ষণ করুন';
     btn.disabled = false;
   }
 
@@ -1132,19 +1613,19 @@
   // =========================================================================
   async function loadBoard() {
     if (!auth.currentUser) return;
-    const nBox = document.getElementById('notice-board'), mBox = document.getElementById('manageBox');
+    const mBox = document.getElementById('manageBox');
     if (globalPostsCache.length === 0) {
-      mBox.innerHTML = "<p style='text-align:center; color:#64748b; font-weight:600;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Fetching secure data...</p>";
+      mBox.innerHTML = "<p style='text-align:center; color:#64748b; font-weight:600;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> তথ্য লোড হচ্ছে...</p>";
     }
     try {
       const token = await auth.currentUser.getIdToken();
       const headers = { "Authorization": "Bearer " + token };
-      const [pRes, wRes] = await Promise.all([ 
-          fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=1000`, { headers }).catch(()=>({json:()=>({documents:[]})})), 
-          fetch(`${FIREBASE_DB_BASE}/Warnings?pageSize=1000`, { headers }).catch(()=>({json:()=>({documents:[]})})) 
+      const [pRes, wRes] = await Promise.all([
+        fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=500`, { headers }).catch(() => ({ json: () => ({ documents: [] }) })),
+        fetch(`${FIREBASE_DB_BASE}/Warnings?pageSize=500`, { headers }).catch(() => ({ json: () => ({ documents: [] }) }))
       ]);
       const postsData = await pRes.json(), warnsData = await wRes.json();
-      
+
       let posts = (postsData.documents || []).map(d => {
         let f = d.fields || {};
         return {
@@ -1179,8 +1660,8 @@
       globalPostsCache = posts;
       globalWarnsCache = warns;
       renderBoardUI();
-    } catch(e) {
-      mBox.innerHTML = "<p style='text-align:center; color:var(--danger);'>Network link failed.</p>";
+    } catch (e) {
+      mBox.innerHTML = "<p style='text-align:center; color:var(--danger);'>তথ্য লোড করা যায়নি।</p>";
     }
   }
 
@@ -1189,41 +1670,40 @@
     const mBox = document.getElementById('manageBox');
     const myCorePhone = cleanPhoneCoreJS(tPhone);
 
-    // 1. Official Notice Board for Teachers (Read-Only from Admin)
-    let nH = "";
+    // 1. Official Notice Board for Teachers
+    let nArr = [];
     globalPostsCache.forEach(p => {
       if (p.target === "TeacherDashboard") {
         let linkBtn = p.fileUrl ? `<div style="margin-top:8px;"><a href="${sanitizeHTML(p.fileUrl)}" target="_blank" style="color:var(--primary); font-size:12.5px; font-weight:700;"><i class="fas fa-external-link-alt"></i> সংযুক্ত ফাইল দেখুন</a></div>` : "";
-        nH += `<div class="notice-item">
+        nArr.push(`<div class="notice-item">
           <b style="color:var(--primary); font-size:12px;"><i class="far fa-calendar-alt"></i> ${sanitizeHTML(p.date)}</b>
           <p style="margin:5px 0 0 0; font-size:15px; font-weight:700; color:var(--text-main);">${sanitizeHTML(p.title)}</p>
           ${p.desc ? `<p style="margin:4px 0 0 0; font-size:13.5px; color:#475569;">${sanitizeHTML(p.desc)}</p>` : ""}
           ${linkBtn}
-        </div>`;
+        </div>`);
       }
     });
-    nBox.innerHTML = nH || "<p style='text-align:center; color:#64748b;'>No current notices.</p>";
+    nBox.innerHTML = nArr.join('') || "<p style='text-align:center; color:#64748b;'>বর্তমানে কোনো নতুন নোটিশ নেই।</p>";
 
-    // 2. Manage Class Content & Warnings (Teachers see Class Posts; can ONLY delete their own)
-    let mH = "";
+    // 2. Manage Class Content & Warnings
+    let mArr = [];
     globalWarnsCache.forEach(w => {
       let isMyWarn = !w.teacherPhone || cleanPhoneCoreJS(w.teacherPhone) === myCorePhone;
       let actionHtml = isMyWarn
-        ? `<button class="del-btn" onclick="openDeleteModal('${w.id}', 'warn')"><i class="fas fa-trash"></i> DELETE</button>`
-        : `<span class="readonly-badge"><i class="fas fa-eye"></i> VIEW ONLY</span>`;
+        ? `<button class="del-btn" onclick="openDeleteModal('${w.id}', 'warn')"><i class="fas fa-trash"></i> মুছে ফেলুন</button>`
+        : `<span class="readonly-badge"><i class="fas fa-eye"></i> শুধুমাত্র দেখার জন্য</span>`;
 
-      mH += `<div class="item-box" style="border-left-color:var(--danger);">
+      mArr.push(`<div class="item-box" style="border-left-color:var(--danger);">
         <div>
-          <span class="tag" style="background:#fff1f2; color:var(--danger);">⚠️ WARNING</span>
-          <p style="margin:4px 0 0 0; font-weight:700; font-size:14.5px;">Student: ${sanitizeHTML(w.name)}</p>
+          <span class="tag" style="background:#fff1f2; color:var(--danger);">⚠️ সতর্কবার্তা</span>
+          <p style="margin:4px 0 0 0; font-weight:700; font-size:14.5px;">শিক্ষার্থী: ${sanitizeHTML(w.name)}</p>
           ${w.message ? `<small style="color:#64748b;">${sanitizeHTML(w.message)}</small>` : ""}
         </div>
         <div>${actionHtml}</div>
-      </div>`;
+      </div>`);
     });
 
     globalPostsCache.forEach(p => {
-      // শুধুমাত্র ক্লাস ক্যাটাগরির পোস্টগুলোই এখানে দেখানো হবে
       if (p.rowId && ALLOWED_CLASS_TARGETS.indexOf(p.target) !== -1) {
         let postOwnerCore = cleanPhoneCoreJS(p.uploader);
         let isOwner = (postOwnerCore !== "" && postOwnerCore === myCorePhone);
@@ -1235,145 +1715,174 @@
           thumbHtml = `<div style="width:54px; height:54px; border-radius:10px; background:#fef2f2; border:1px solid #fecaca; display:flex; align-items:center; justify-content:center; color:var(--danger); font-size:22px; flex-shrink:0;"><i class="fas fa-file-pdf"></i></div>`;
         }
 
-        let serverBadge = (p.fileUrl && p.fileUrl.includes("ibb.co"))
-          ? `<span style="background:#dbeafe; color:#1d4ed8; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">ImgBB</span>`
-          : (p.fileUrl && p.fileUrl.includes("drive.google.com"))
-          ? `<span style="background:#fef3c7; color:#b45309; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">Drive PDF</span>`
+        let mediaBadge = p.fileType === "Image"
+          ? `<span style="background:#dbeafe; color:#1d4ed8; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">ছবি সংযুক্ত</span>`
+          : (p.fileType === "PDF" || p.fileType === "Document")
+          ? `<span style="background:#fef3c7; color:#b45309; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">ডকুমেন্ট সংযুক্ত</span>`
           : "";
 
         let ownerBadge = isOwner
-          ? `<span style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">আমার পোস্ট</span>`
+          ? `<span style="background:#dcfce7; color:#15803d; padding:3px 8px; border-radius:5px; font-size:10px; font-weight:800; margin-left:6px;">আমার প্রকাশিত</span>`
           : (p.uploaderName ? `<span style="font-size:11px; color:#64748b; margin-left:6px;">• ${sanitizeHTML(p.uploaderName)}</span>` : "");
 
         let btnHtml = isOwner
-          ? `<button class="del-btn" onclick="openDeleteModal('${p.rowId}', 'post')"><i class="fas fa-trash"></i> DELETE</button>`
-          : `<span class="readonly-badge" title="শুধুমাত্র নিজের করা পোস্ট ডিলিট করা যাবে"><i class="fas fa-lock"></i> READ ONLY</span>`;
+          ? `<button class="del-btn" onclick="openDeleteModal('${p.rowId}', 'post')"><i class="fas fa-trash"></i> মুছে ফেলুন</button>`
+          : `<span class="readonly-badge" title="শুধুমাত্র নিজের প্রকাশিত পোস্ট মুছে ফেলা যাবে"><i class="fas fa-lock"></i> শুধুমাত্র দেখার জন্য</span>`;
 
         let viewLink = p.fileUrl
-          ? `<a href="${sanitizeHTML(p.fileUrl)}" target="_blank" style="font-size:12px; color:var(--primary); font-weight:700; display:inline-block; margin-top:4px;"><i class="fas fa-external-link-alt"></i> ফাইল/ছবি দেখুন</a>`
+          ? `<a href="${sanitizeHTML(p.fileUrl)}" target="_blank" style="font-size:12px; color:var(--primary); font-weight:700; display:inline-block; margin-top:4px;"><i class="fas fa-external-link-alt"></i> সংযুক্ত ফাইল দেখুন</a>`
           : "";
 
-        mH += `<div class="item-box">
+        mArr.push(`<div class="item-box">
           <div style="display:flex; gap:14px; align-items:center; flex:1;">
             ${thumbHtml}
             <div>
-              <span class="tag">${sanitizeHTML(p.target)}</span>${serverBadge}${ownerBadge}
+              <span class="tag">${sanitizeHTML(p.target)}</span>${mediaBadge}${ownerBadge}
               <p style="margin:4px 0 2px 0; font-weight:700; font-size:15px; color:var(--text-main);">${sanitizeHTML(p.title)}</p>
               <small style="color:#64748b; font-weight:600;"><i class="far fa-calendar-alt"></i> ${sanitizeHTML(p.date)}</small>
               ${viewLink ? `<br>${viewLink}` : ""}
             </div>
           </div>
           <div>${btnHtml}</div>
-        </div>`;
+        </div>`);
       }
     });
 
-    mBox.innerHTML = mH || "<p style='text-align:center; color:#64748b;'>No class posts found on board.</p>";
+    mBox.innerHTML = mArr.join('') || "<p style='text-align:center; color:#64748b;'>কোনো প্রকাশিত কন্টেন্ট পাওয়া যায়নি।</p>";
   }
 
   // =========================================================================
-  // 🗑️ 0.1s INSTANT DELETE (ONLY OWN POSTS + SERVER FILE CLEANUP)
+  // 🗑️ 0.05s INSTANT DELETE (ONLY OWN POSTS)
   // =========================================================================
   function openDeleteModal(id, type) {
     const modal = document.getElementById('delModal'), link = document.getElementById('modalLink');
     link.onclick = async function() {
-        closeDeleteModal();
+      closeDeleteModal();
 
-        if (type === 'warn') {
-          globalWarnsCache = globalWarnsCache.filter(w => w.id !== id);
-          renderBoardUI();
-          try {
-            const token = await auth.currentUser.getIdToken();
-            await fetch(`${FIREBASE_DB_BASE}/Warnings/${id}`, {
-              method: "DELETE",
-              headers: { "Authorization": "Bearer " + token }
-            });
-          } catch (e) {}
-          return;
-        }
-
-        // Post Deletion (Strict Ownership Check)
-        const targetPost = globalPostsCache.find(p => p.rowId === id);
-        if (!targetPost) return;
-
-        const myCorePhone = cleanPhoneCoreJS(tPhone);
-        if (cleanPhoneCoreJS(targetPost.uploader) !== myCorePhone) {
-          alert("⛔ আপনি শুধুমাত্র আপনার নিজের করা পোস্ট ডিলিট করতে পারবেন!");
-          return;
-        }
-
-        // ০.১ সেকেন্ডে স্ক্রিন থেকে মুছে ফেলা (Optimistic Instant UI)
-        globalPostsCache = globalPostsCache.filter(p => p.rowId !== id);
+      if (type === 'warn') {
+        globalWarnsCache = globalWarnsCache.filter(w => w.id !== id);
         renderBoardUI();
-
         try {
-          await teacherApiCall("teacherDeletePost", {
-            docId: id,
-            teacherPhone: exactDbPhone || normalizePhone11JS(tPhone),
-            meta: {
-              fileUrl: targetPost.fileUrl || "",
-              fileType: targetPost.fileType || "",
-              driveFileId: targetPost.driveFileId || "",
-              imgbbDeleteUrl: targetPost.imgbbDeleteUrl || "",
-              imgbbId: targetPost.imgbbId || ""
-            }
+          const token = await auth.currentUser.getIdToken();
+          await fetch(`${FIREBASE_DB_BASE}/Warnings/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + token }
           });
-        } catch (err) {
-          alert("⚠️ ডিলিট করতে সমস্যা হয়েছে: " + err.message);
-          loadBoard();
-        }
+        } catch (e) {}
+        return;
+      }
+
+      const targetPost = globalPostsCache.find(p => p.rowId === id);
+      if (!targetPost) return;
+
+      const myCorePhone = cleanPhoneCoreJS(tPhone);
+      if (cleanPhoneCoreJS(targetPost.uploader) !== myCorePhone) {
+        alert("⛔ আপনি শুধুমাত্র আপনার নিজের প্রকাশিত পোস্ট মুছে ফেলতে পারবেন!");
+        return;
+      }
+
+      globalPostsCache = globalPostsCache.filter(p => p.rowId !== id);
+      renderBoardUI();
+
+      try {
+        await teacherApiCall("teacherDeletePost", {
+          docId: id,
+          teacherPhone: exactDbPhone || normalizePhone11JS(tPhone),
+          meta: {
+            fileUrl: targetPost.fileUrl || "",
+            fileType: targetPost.fileType || "",
+            driveFileId: targetPost.driveFileId || "",
+            imgbbDeleteUrl: targetPost.imgbbDeleteUrl || "",
+            imgbbId: targetPost.imgbbId || ""
+          }
+        });
+      } catch (err) {
+        alert("⚠️ মুছে ফেলতে সমস্যা হয়েছে: " + err.message);
+        loadBoard();
+      }
     };
     modal.style.display = 'flex';
   }
   function closeDeleteModal() { document.getElementById('delModal').style.display = 'none'; }
 
   // =========================================================================
-  // ⚠️ DISCIPLINARY WARNING SYSTEM
+  // ⚠️ DISCIPLINARY WARNING SYSTEM (WITH CACHED STUDENT DIRECTORY)
   // =========================================================================
   async function loadStudentsForWarn() {
-      const cls = document.getElementById('wCls').value; if(!cls) return;
-      document.getElementById('wStuBox').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading Data...";
-      try {
-          const token = await auth.currentUser.getIdToken();
-          const res = await fetch(`${FIREBASE_DB_BASE}/Students?pageSize=1000`, { headers: { "Authorization": "Bearer " + token } }); 
-          const data = await res.json();
-          let students = [];
-          if(data.documents) {
-             data.documents.forEach(d => {
-                let f = d.fields || {};
-                if(f.class && f.class.stringValue === cls) { students.push({ id: f.studentID ? f.studentID.stringValue : d.name.split('/').pop(), roll: f.roll ? f.roll.stringValue : "0", name: f.name ? f.name.stringValue : "Unknown" }); }
-             });
-          }
-          students.sort((a,b) => parseInt(a.roll) - parseInt(b.roll));
-          let html = `<select id="wStuId" style="border-color:var(--danger);"><option value="">Select Student...</option>`;
-          students.forEach(s => html += `<option value="${s.id}" data-name="${s.name}">Roll ${s.roll} - ${s.name}</option>`);
-          document.getElementById('wStuBox').innerHTML = html + `</select>`;
-      } catch(e) { document.getElementById('wStuBox').innerHTML = "<span style='color:var(--danger);'>Sync error.</span>"; }
+    const cls = document.getElementById('wCls').value;
+    if (!cls) {
+      document.getElementById('wStuBox').innerHTML = "";
+      return;
+    }
+    document.getElementById('wStuBox').innerHTML = "<span class='loader-spinner' style='border-top-color:var(--primary);'></span> শিক্ষার্থীর তালিকা লোড হচ্ছে...";
+    try {
+      if (!classStudentsCache) {
+        const token = await auth.currentUser.getIdToken();
+        const res = await fetch(`${FIREBASE_DB_BASE}/Students?pageSize=1000`, { headers: { "Authorization": "Bearer " + token } });
+        const data = await res.json();
+        classStudentsCache = (data.documents || []).map(d => {
+          let f = d.fields || {};
+          return {
+            id: f.studentID ? f.studentID.stringValue : d.name.split('/').pop(),
+            cls: f.class ? f.class.stringValue : "",
+            roll: f.roll ? f.roll.stringValue : "0",
+            name: f.name ? f.name.stringValue : "Unknown"
+          };
+        });
+      }
+      let students = classStudentsCache.filter(s => s.cls === cls);
+      students.sort((a, b) => (parseInt(a.roll) || 9999) - (parseInt(b.roll) || 9999));
+      let html = `<select id="wStuId" style="border-color:var(--danger);"><option value="">শিক্ষার্থী নির্বাচন করুন...</option>`;
+      students.forEach(s => { html += `<option value="${s.id}" data-name="${sanitizeHTML(s.name)}">রোল ${s.roll} — ${sanitizeHTML(s.name)}</option>`; });
+      document.getElementById('wStuBox').innerHTML = html + `</select>`;
+    } catch (e) {
+      document.getElementById('wStuBox').innerHTML = "<span style='color:var(--danger);'>তালিকা লোড করা যায়নি।</span>";
+    }
   }
 
   async function sendWarning() {
-      const selectBox = document.getElementById('wStuId');
-      const sid = selectBox ? selectBox.value : null; 
-      const sName = selectBox && selectBox.selectedIndex > 0 ? selectBox.options[selectBox.selectedIndex].getAttribute('data-name') : "Student";
-      const msg = document.getElementById('wMsg').value.trim(); const btn = document.getElementById('wBtn');
-      
-      if(!sid || !msg) return alert("Select student and write a message.");
-      btn.innerHTML = '<span class="loader-spinner"></span> Transmitting...'; btn.disabled = true;
-      
-      const normPhone = normalizePhone11JS(tPhone);
-      const payload = { fields: { studentID: { stringValue: sid }, name: { stringValue: sName }, message: { stringValue: msg }, teacherPhone: { stringValue: normPhone }, timestamp: { stringValue: Date.now().toString() } } };
-      try {
-          const token = await auth.currentUser.getIdToken();
-          await fetch(`${FIREBASE_DB_BASE}/Warnings`, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, body: JSON.stringify(payload) });
-          alert("✅ Warning dispatched to student portal!"); 
-          document.getElementById('wMsg').value = ""; 
-          loadBoard(); 
-      } catch(e) { alert("Transmission failed."); }
-      btn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Send Warning Directly'; btn.disabled = false;
+    const selectBox = document.getElementById('wStuId');
+    const sid = selectBox ? selectBox.value : null;
+    const sName = selectBox && selectBox.selectedIndex > 0 ? selectBox.options[selectBox.selectedIndex].getAttribute('data-name') : "Student";
+    const msg = document.getElementById('wMsg').value.trim();
+    const btn = document.getElementById('wBtn');
+
+    if (!sid || !msg) return alert("অনুগ্রহ করে শিক্ষার্থী নির্বাচন করুন এবং সতর্কবার্তা লিখুন।");
+    btn.innerHTML = '<span class="loader-spinner"></span> পাঠানো হচ্ছে...';
+    btn.disabled = true;
+
+    const normPhone = normalizePhone11JS(tPhone);
+    const payload = {
+      fields: {
+        studentID: { stringValue: sid },
+        name: { stringValue: sName },
+        message: { stringValue: msg },
+        teacherPhone: { stringValue: normPhone },
+        timestamp: { stringValue: Date.now().toString() }
+      }
+    };
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const res = await fetch(`${FIREBASE_DB_BASE}/Warnings`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+        body: JSON.stringify(payload)
+      });
+      const saved = await res.json();
+      const newId = saved.name ? saved.name.split('/').pop() : ("W_" + Date.now());
+      globalWarnsCache.unshift({ id: newId, name: sName, message: msg, teacherPhone: normPhone });
+      renderBoardUI();
+      document.getElementById('wMsg').value = "";
+      alert("✅ সতর্কবার্তা সফলভাবে শিক্ষার্থীর পোর্টালে পাঠানো হয়েছে!");
+    } catch (e) {
+      alert("সতর্কবার্তা পাঠানো যায়নি।");
+    }
+    btn.innerHTML = '<i class="fas fa-paper-plane"></i> সতর্কবার্তা পাঠান';
+    btn.disabled = false;
   }
 
   // =========================================================================
-  // 🚀 ACADEMIC CONTENT PUBLISHING (IMGBB + DRIVE PDF + ONESIGNAL PUSH)
+  // 🚀 ACADEMIC CONTENT PUBLISHING (BACKGROUND PRE-UPLOAD FOR 0.2s SPEED)
   // =========================================================================
   function clearAcademicFile() {
     document.getElementById('uFileInput').value = "";
@@ -1392,7 +1901,7 @@
     const metaEl = document.getElementById('uFilePreviewMeta');
 
     if (file.type.startsWith("image/")) {
-      metaEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ছবিটি অপটিমাইজ হচ্ছে...`;
+      metaEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ছবিটি প্রস্তুত করা হচ্ছে...`;
       box.style.display = "flex";
 
       const reader = new FileReader();
@@ -1415,14 +1924,26 @@
           imgEl.src = dataUrl;
           const kbSize = Math.round((dataUrl.length * 0.75) / 1024);
           const cleanName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+          const rawB64 = dataUrl.split(',')[1];
 
-          preparedAcademicFile = {
+          const fileObj = {
             isImage: true,
-            fileData: dataUrl.split(',')[1],
+            fileData: rawB64,
             mimeType: 'image/jpeg',
-            fileName: cleanName
+            fileName: cleanName,
+            uploadedResult: null,
+            uploadPromise: null
           };
-          metaEl.innerHTML = `<b>${sanitizeHTML(cleanName)}</b><br>⚡ ImgBB Ready (${w}×${h}px • ~${kbSize} KB)`;
+
+          // ব্যাকগ্রাউন্ডে সাথে সাথে প্রি-আপলোড শুরু
+          fileObj.uploadPromise = uploadMediaDirect(rawB64, cleanName).then(res => {
+            fileObj.uploadedResult = res;
+            metaEl.innerHTML = `<b>${sanitizeHTML(cleanName)}</b><br>✅ প্রকাশের জন্য সম্পূর্ণ প্রস্তুত (~${kbSize} KB)`;
+            return res;
+          }).catch(() => null);
+
+          preparedAcademicFile = fileObj;
+          metaEl.innerHTML = `<b>${sanitizeHTML(cleanName)}</b><br>⏳ ব্যাকগ্রাউন্ডে প্রস্তুত হচ্ছে (~${kbSize} KB)...`;
         };
         img.src = e.target.result;
       };
@@ -1441,7 +1962,7 @@
           mimeType: file.type || 'application/octet-stream',
           fileName: file.name
         };
-        metaEl.innerHTML = `<b>${sanitizeHTML(file.name)}</b><br>✅ Document Ready (${kbSize} KB)`;
+        metaEl.innerHTML = `<b>${sanitizeHTML(file.name)}</b><br>✅ ডকুমেন্ট প্রস্তুত (${kbSize} KB)`;
       };
       reader.readAsDataURL(file);
     }
@@ -1455,14 +1976,14 @@
     const dsc = document.getElementById('uDsc').value.trim();
     const url = document.getElementById('uUrl').value.trim();
 
-    if (!cls || !ttl) return alert("⚠️ অনুগ্রহ করে ক্লাস এবং শিরোনাম (Title) নির্বাচন করুন!");
+    if (!cls || !ttl) return alert("⚠️ অনুগ্রহ করে শ্রেণি এবং শিরোনাম লিখুন!");
     if (ALLOWED_CLASS_TARGETS.indexOf(cls) === -1) {
-      return alert("⛔ শুধুমাত্র ক্লাস ক্যাটাগরিতে (Class Play - Class 10) পোস্ট করা যাবে!");
+      return alert("⛔ শুধুমাত্র নির্ধারিত ক্লাস ড্যাশবোর্ডে (Class Play - Class 10) শিক্ষা উপকরণ প্রকাশ করা যাবে!");
     }
 
     isUploadingPost = true;
     btn.disabled = true;
-    btn.innerHTML = '<span class="loader-spinner"></span> Publishing & Sending Push...';
+    btn.innerHTML = '<span class="loader-spinner"></span> প্রকাশিত হচ্ছে...';
 
     const uploaderNorm = normalizePhone11JS(tPhone);
     let postData = {
@@ -1478,29 +1999,29 @@
     try {
       if (preparedAcademicFile) {
         if (preparedAcademicFile.isImage) {
-          btn.innerHTML = '<span class="loader-spinner"></span> Uploading Photo to ImgBB...';
-          try {
-            const imgbbRes = await uploadBase64ToImgBB(preparedAcademicFile.fileData, preparedAcademicFile.fileName);
-            postData.fileUrl = imgbbRes.url;
-            postData.externalUrl = imgbbRes.url;
-            postData.thumbUrl = imgbbRes.thumbUrl;
-            postData.imgbbId = imgbbRes.imgbbId;
-            postData.imgbbDeleteUrl = imgbbRes.deleteUrl;
+          let upRes = preparedAcademicFile.uploadedResult;
+          if (!upRes && preparedAcademicFile.uploadPromise) {
+            upRes = await preparedAcademicFile.uploadPromise;
+          }
+          if (upRes && upRes.url) {
+            postData.fileUrl = upRes.url;
+            postData.externalUrl = upRes.url;
+            postData.thumbUrl = upRes.thumbUrl;
+            postData.imgbbId = upRes.imgbbId;
+            postData.imgbbDeleteUrl = upRes.deleteUrl;
             postData.fileType = "Image";
-          } catch (directErr) {
+          } else {
             postData.fileData = preparedAcademicFile.fileData;
             postData.mimeType = preparedAcademicFile.mimeType;
             postData.fileName = preparedAcademicFile.fileName;
           }
         } else {
-          btn.innerHTML = '<span class="loader-spinner"></span> Uploading Document...';
           postData.fileData = preparedAcademicFile.fileData;
           postData.mimeType = preparedAcademicFile.mimeType;
           postData.fileName = preparedAcademicFile.fileName;
         }
       }
 
-      btn.innerHTML = '<span class="loader-spinner"></span> Saving & Sending Push...';
       const res = await teacherApiCall("teacherUploadPost", { data: postData });
 
       if (res.docId) {
@@ -1525,223 +2046,239 @@
         loadBoard();
       }
 
-      alert(res.msg || "✅ কন্টেন্ট সফলভাবে পাবলিশ হয়েছে!");
       document.getElementById('uCls').value = "";
       document.getElementById('uTtl').value = "";
       document.getElementById('uDsc').value = "";
       document.getElementById('uUrl').value = "";
       clearAcademicFile();
+      alert(res.msg || "✅ শিক্ষা উপকরণটি সফলভাবে প্রকাশিত হয়েছে!");
     } catch (e) {
-      alert("❌ পাবলিশ করতে সমস্যা হয়েছে: " + e.message);
+      alert("❌ প্রকাশ করতে সমস্যা হয়েছে: " + e.message);
     } finally {
       isUploadingPost = false;
       btn.disabled = false;
-      btn.innerHTML = '<i class="fas fa-rocket"></i> Publish to Class & Send Push Notification';
+      btn.innerHTML = '<i class="fas fa-check-circle"></i> ক্লাস ড্যাশবোর্ডে প্রকাশ করুন';
     }
   }
 
   // =========================================================================
-  // 📅 TEACHER DETAILED ATTENDANCE MODAL
+  // 📅 TEACHER DETAILED ATTENDANCE MODAL (VIEW-ONLY, NO PRINT OPTION)
   // =========================================================================
   function openTeacherAttendanceModal() {
-      document.getElementById('attendanceModal').style.display = 'flex';
-      fetchTeacherDetailedAttendance();
+    document.getElementById('attendanceModal').style.display = 'flex';
+    fetchTeacherDetailedAttendance();
   }
 
   async function fetchTeacherDetailedAttendance() {
-      document.getElementById('attLoader').style.display = 'block';
-      document.getElementById('modalAttTableBody').innerHTML = '';
-      
-      try {
-          const token = await auth.currentUser.getIdToken();
-          const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
-          
-          const attReq = { 
-              structuredQuery: { 
-                  from: [{ collectionId: "AttendanceHistory" }], 
-                  where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: exactDbPhone } } },
-                  limit: 2000
-              } 
-          };
-          
-          const [attRes, holRes] = await Promise.all([
-              fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(attReq) }),
-              fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`, { headers })
-          ]);
-          
-          const attData = await attRes.json();
-          const holData = await holRes.json();
-          
-          allTeacherAttendance = {}; 
-          if (attData && attData.length > 0 && attData[0].document) {
-              attData.forEach(item => {
-                  if(item.document && item.document.fields) {
-                      let f = item.document.fields;
-                      let pDate = sanitizeHTML(f.pureDate?.stringValue || ""); 
-                      let timeStr = sanitizeHTML(f.time?.stringValue || "");
-                      let type = sanitizeHTML(f.type?.stringValue || ""); 
-                      
-                      if(pDate) {
-                          if(!allTeacherAttendance[pDate]) { allTeacherAttendance[pDate] = { in: "-", out: "-" }; }
-                          if(type === "IN") allTeacherAttendance[pDate].in = timeStr;
-                          if(type === "OUT") allTeacherAttendance[pDate].out = timeStr;
-                      }
-                  }
-              });
-          }
+    document.getElementById('attLoader').style.display = 'block';
+    document.getElementById('modalAttTableBody').innerHTML = '';
 
-          allHolidays = {};
-          if(holData && holData.documents) {
-              holData.documents.forEach(doc => {
-                  let f = doc.fields;
-                  let pDate = f.date?.stringValue;
-                  let reason = f.reason?.stringValue || "Holiday";
-                  if(pDate) allHolidays[pDate] = reason;
-              });
-          }
+    try {
+      const token = await auth.currentUser.getIdToken();
+      const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
 
-          populateTeacherAttendanceMonths();
-      } catch(e) {
-          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
+      const attReq = {
+        structuredQuery: {
+          from: [{ collectionId: "AttendanceHistory" }],
+          where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: exactDbPhone } } },
+          limit: 2000
+        }
+      };
+
+      const [attRes, holRes] = await Promise.all([
+        fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(attReq) }),
+        fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`, { headers })
+      ]);
+
+      const attData = await attRes.json();
+      const holData = await holRes.json();
+
+      allTeacherAttendance = {};
+      if (attData && attData.length > 0 && attData[0].document) {
+        attData.forEach(item => {
+          if (item.document && item.document.fields) {
+            let f = item.document.fields;
+            let pDate = sanitizeHTML(f.pureDate?.stringValue || "");
+            let timeStr = sanitizeHTML(f.time?.stringValue || "");
+            let type = sanitizeHTML(f.type?.stringValue || "");
+
+            if (pDate) {
+              if (!allTeacherAttendance[pDate]) { allTeacherAttendance[pDate] = { in: "-", out: "-", isLeave: false, leaveReason: "" }; }
+              if (type === "IN") allTeacherAttendance[pDate].in = timeStr;
+              else if (type === "OUT") allTeacherAttendance[pDate].out = timeStr;
+              else if (type === "LEAVE") {
+                allTeacherAttendance[pDate].isLeave = true;
+                allTeacherAttendance[pDate].leaveReason = timeStr || "Approved Leave";
+              }
+            }
+          }
+        });
       }
-      document.getElementById('attLoader').style.display = 'none';
+
+      allHolidays = {};
+      if (holData && holData.documents) {
+        holData.documents.forEach(doc => {
+          let f = doc.fields;
+          let pDate = f.date?.stringValue;
+          let reason = f.reason?.stringValue || "Holiday";
+          if (pDate) allHolidays[pDate] = reason;
+        });
+      }
+
+      populateTeacherAttendanceMonths();
+    } catch (e) {
+      document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">উপস্থিতির তথ্য লোড করা যায়নি।</td></tr>';
+    }
+    document.getElementById('attLoader').style.display = 'none';
   }
 
   function populateTeacherAttendanceMonths() {
-      let select = document.getElementById('attMonthFilter');
-      select.innerHTML = "";
-      
-      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-      const now = new Date(bdTime);
-      
-      let months = [];
-      for(let i=0; i<12; i++) {
-          let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-          let mStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0');
-          months.push(mStr);
-      }
-      
-      months.forEach(m => {
-          let dateObj = new Date(m + "-01");
-          let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
-          select.innerHTML += `<option value='${m}'>${monthName}</option>`;
-      });
-      
-      renderTeacherAttendanceTable(months[0]);
+    let select = document.getElementById('attMonthFilter');
+    select.innerHTML = "";
+
+    const bdTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
+    const now = new Date(bdTime);
+
+    let months = [];
+    for (let i = 0; i < 12; i++) {
+      let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      let mStr = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, '0');
+      months.push(mStr);
+    }
+
+    months.forEach(m => {
+      let dateObj = new Date(m + "-01");
+      let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
+      select.innerHTML += `<option value='${m}'>${monthName}</option>`;
+    });
+
+    renderTeacherAttendanceTable(months[0]);
   }
 
   function renderTeacherAttendanceTable(selectedMonth = null) {
-      if(!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
-      let tbody = document.getElementById('modalAttTableBody');
-      let summaryBox = document.getElementById('modalAttSummary');
-      let yearlySummaryBox = document.getElementById('modalYearlySummary');
-      
-      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-      const today = new Date(bdTime);
-      
-      let dateParts = selectedMonth.split('-');
-      let sYear = parseInt(dateParts[0]);
-      let sMonth = parseInt(dateParts[1]);
-      
-      let daysInMonth = new Date(sYear, sMonth, 0).getDate();
-      let daysToLoop = daysInMonth;
-      
-      if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
-           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
-           summaryBox.style.display = 'none';
-           yearlySummaryBox.style.display = 'none';
-           return;
-      }
-      
-      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) {
-           daysToLoop = today.getDate();
+    if (!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
+    let tbody = document.getElementById('modalAttTableBody');
+    let summaryBox = document.getElementById('modalAttSummary');
+    let yearlySummaryBox = document.getElementById('modalYearlySummary');
+
+    const bdTime = new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" });
+    const today = new Date(bdTime);
+
+    let dateParts = selectedMonth.split('-');
+    let sYear = parseInt(dateParts[0], 10);
+    let sMonth = parseInt(dateParts[1], 10);
+
+    let daysInMonth = new Date(sYear, sMonth, 0).getDate();
+    let daysToLoop = daysInMonth;
+
+    if (sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">ভবিষ্যতের মাসের কোনো রেকর্ড নেই।</td></tr>';
+      summaryBox.style.display = 'none';
+      yearlySummaryBox.style.display = 'none';
+      return;
+    }
+
+    if (sYear === today.getFullYear() && sMonth === today.getMonth() + 1) {
+      daysToLoop = today.getDate();
+    }
+
+    let isYearFinished = (sYear < today.getFullYear());
+    if (!isYearFinished) {
+      yearlySummaryBox.style.display = 'none';
+      yearlySummaryBox.innerHTML = '';
+    } else {
+      let yearlyPresentCount = 0;
+      let yearlyAbsentCount = 0;
+
+      for (let m = 1; m <= 12; m++) {
+        let mStr = sYear + "-" + String(m).padStart(2, '0');
+        let mPresent = 0;
+        let mHoliday = 0;
+        let daysInM = new Date(sYear, m, 0).getDate();
+
+        for (let d = 1; d <= daysInM; d++) {
+          let dStr = String(d).padStart(2, '0');
+          let fDate = `${mStr}-${dStr}`;
+          if (allTeacherAttendance[fDate]) mPresent++;
+          else if (allHolidays[fDate]) mHoliday++;
+        }
+
+        yearlyPresentCount += mPresent;
+        let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4);
+        let mAbsent = Math.max(0, workingDaysInM - mPresent);
+        yearlyAbsentCount += mAbsent;
       }
 
-      let isYearFinished = (sYear < today.getFullYear());
-      if (!isYearFinished) {
-          yearlySummaryBox.style.display = 'none';
-          yearlySummaryBox.innerHTML = '';
+      yearlySummaryBox.style.display = 'block';
+      yearlySummaryBox.innerHTML = `বার্ষিক সারসংক্ষেপ (<span style="color:var(--accent);">${sYear}</span>): <span style="font-size: 17px;">${yearlyPresentCount} দিন উপস্থিত</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:17px;">~${yearlyAbsentCount} দিন অনুপস্থিত</span>`;
+    }
+
+    let presentCount = 0;
+    let absentCount = 0;
+    let holidayCount = 0;
+    let rowsArr = [];
+
+    for (let d = daysToLoop; d >= 1; d--) {
+      let dStr = String(d).padStart(2, '0');
+      let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
+
+      let statusHtml = "";
+      let inTime = "-";
+      let outTime = "-";
+      let bgRow = "";
+
+      if (allHolidays[fullDate]) {
+        statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`;
+        holidayCount++;
+        bgRow = "background: #fffbeb;";
+      } else if (allTeacherAttendance[fullDate]) {
+        let rec = allTeacherAttendance[fullDate];
+        if (rec.isLeave) {
+          statusHtml = `<span style="color:#4f46e5; font-weight:800; font-size:12px;">🟣 ছুটি (${sanitizeHTML(rec.leaveReason)})</span>`;
+          holidayCount++;
+          bgRow = "background: #eef2ff;";
+        } else {
+          inTime = rec.in;
+          outTime = rec.out;
+          statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ উপস্থিত</span>`;
+          presentCount++;
+        }
       } else {
-          let yearlyPresentCount = 0;
-          let yearlyAbsentCount = 0;
-
-          for(let m = 1; m <= 12; m++) {
-              let mStr = sYear + "-" + String(m).padStart(2, '0');
-              let mPresent = 0;
-              let mHoliday = 0;
-              let daysInM = new Date(sYear, m, 0).getDate();
-
-              for(let d=1; d<=daysInM; d++) {
-                  let dStr = String(d).padStart(2, '0');
-                  let fDate = `${mStr}-${dStr}`;
-                  if(allTeacherAttendance[fDate]) mPresent++;
-                  else if(allHolidays[fDate]) mHoliday++;
-              }
-
-              yearlyPresentCount += mPresent;
-              let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4); 
-              let mAbsent = Math.max(0, workingDaysInM - mPresent);
-              yearlyAbsentCount += mAbsent;
-          }
-
-          yearlySummaryBox.style.display = 'block';
-          yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${sYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
+        statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ অনুপস্থিত</span>`;
+        absentCount++;
+        bgRow = "background: #fff1f2;";
       }
 
-      let presentCount = 0; let absentCount = 0; let holidayCount = 0;
-      let html = "";
-      
-      for(let d = daysToLoop; d >= 1; d--) {
-           let dStr = String(d).padStart(2, '0');
-           let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
-           
-           let statusHtml = ""; let inTime = "-"; let outTime = "-"; let bgRow = "";
-           
-           if(allHolidays[fullDate]) {
-               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`;
-               holidayCount++;
-               bgRow = "background: #fffbeb;";
-           } else if (allTeacherAttendance[fullDate]) {
-               let rec = allTeacherAttendance[fullDate];
-               inTime = rec.in; outTime = rec.out;
-               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`;
-               presentCount++;
-           } else {
-               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`;
-               absentCount++;
-               bgRow = "background: #fff1f2;";
-           }
-           
-           html += `
-            <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s; ${bgRow}">
-                <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td>
-                <td style="padding: 12px 15px;">${statusHtml}</td>
-                <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td>
-                <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td>
-            </tr>`;
-      }
-      
-      if(html === "") {
-           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>';
-           summaryBox.style.display = 'none';
-      } else {
-           tbody.innerHTML = html;
-           summaryBox.style.display = 'flex';
-           summaryBox.innerHTML = `
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small>
-                <span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span>
-            </span>
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small>
-                <span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span>
-            </span>
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small>
-                <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
-            </span>
-        `;
-      }
+      rowsArr.push(`
+        <tr style="border-bottom: 1px solid #f1f5f9; ${bgRow}">
+          <td style="padding: 12px 14px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td>
+          <td style="padding: 12px 14px;">${statusHtml}</td>
+          <td style="padding: 12px 14px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td>
+          <td style="padding: 12px 14px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td>
+        </tr>`);
+    }
+
+    if (rowsArr.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">উপস্থিতির কোনো রেকর্ড পাওয়া যায়নি।</td></tr>';
+      summaryBox.style.display = 'none';
+    } else {
+      tbody.innerHTML = rowsArr.join('');
+      summaryBox.style.display = 'flex';
+      summaryBox.innerHTML = `
+        <span style="display:flex; flex-direction:column; align-items:center;">
+          <small style="color:#64748b; font-size:11px; text-transform:uppercase;">উপস্থিত</small>
+          <span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span>
+        </span>
+        <span style="display:flex; flex-direction:column; align-items:center;">
+          <small style="color:#64748b; font-size:11px; text-transform:uppercase;">অনুপস্থিত</small>
+          <span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span>
+        </span>
+        <span style="display:flex; flex-direction:column; align-items:center;">
+          <small style="color:#64748b; font-size:11px; text-transform:uppercase;">ছুটি / বন্ধ</small>
+          <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
+        </span>
+      `;
+    }
   }
 </script>
 </body>
