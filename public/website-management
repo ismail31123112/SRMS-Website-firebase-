@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SRMS Manager (Ultra-Fast Final Edition)</title>
+<title>SRMS — Official Administration Portal</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -11,7 +11,7 @@
 <script>
 if (window.history.replaceState) {
   var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
-  window.history.replaceState({path: cleanUrl}, '', cleanUrl);
+  window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
 }
 </script>
 
@@ -36,14 +36,15 @@ body {
   margin: 0;
   padding-bottom: 105px;
   color: #0f172a;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Header */
 .header {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(14px);
   padding: 12px 22px;
-  box-shadow: 0 4px 25px rgba(0, 95, 64, 0.08);
+  box-shadow: 0 4px 25px rgba(0, 95, 64, 0.07);
   display: flex;
   align-items: center;
   gap: 12px;
@@ -66,13 +67,13 @@ body {
   color: var(--primary);
   margin: 0;
   font-weight: 800;
-  letter-spacing: 0.3px;
+  letter-spacing: 0.2px;
 }
 .header-title-wrap span {
   font-size: 10.5px;
   background: var(--primary-light);
   color: var(--primary);
-  padding: 2px 8px;
+  padding: 2px 9px;
   border-radius: 20px;
   font-weight: 700;
 }
@@ -86,7 +87,7 @@ body {
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -102,16 +103,16 @@ body {
 .container {
   display: none;
   padding: 22px 16px;
-  max-width: 720px;
+  max-width: 740px;
   margin: auto;
-  animation: fadeInUp 0.2s ease;
+  animation: fadeInUp 0.18s ease;
 }
 .container.active { display: block; }
 .card {
   background: var(--surface);
   border-radius: 22px;
   padding: 26px 22px;
-  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.04);
   margin-bottom: 24px;
   border: 1px solid rgba(226, 232, 240, 0.9);
   position: relative;
@@ -133,7 +134,7 @@ input, select, textarea {
   border-radius: 13px;
   font-family: inherit;
   font-size: 14px;
-  transition: 0.2s;
+  transition: 0.18s;
   color: #0f172a;
   background: #f8fafc;
   font-weight: 500;
@@ -157,7 +158,7 @@ input:disabled {
   border-color: #e2e8f0;
 }
 
-/* Image Preview Box */
+/* Preview Box */
 .preview-box {
   display: none;
   margin-top: 12px;
@@ -169,8 +170,8 @@ input:disabled {
   gap: 14px;
 }
 .preview-box img {
-  width: 64px;
-  height: 64px;
+  width: 60px;
+  height: 60px;
   object-fit: cover;
   border-radius: 12px;
   border: 2px solid var(--primary);
@@ -219,12 +220,12 @@ input:disabled {
   transition: all 0.2s ease;
   font-size: 14.5px;
   text-transform: uppercase;
-  letter-spacing: 0.8px;
-  box-shadow: 0 8px 22px rgba(0, 95, 64, 0.28);
+  letter-spacing: 0.6px;
+  box-shadow: 0 8px 22px rgba(0, 95, 64, 0.25);
 }
 .btn-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(0, 95, 64, 0.38);
+  box-shadow: 0 12px 28px rgba(0, 95, 64, 0.35);
 }
 .btn-submit:disabled {
   opacity: 0.65;
@@ -239,7 +240,7 @@ input:disabled {
   cursor: pointer;
   font-size: 12.5px;
   font-weight: 700;
-  transition: 0.2s;
+  transition: 0.18s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -258,7 +259,7 @@ input:disabled {
   cursor: pointer;
   font-size: 12.5px;
   font-weight: 700;
-  transition: 0.2s;
+  transition: 0.18s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -352,24 +353,24 @@ input:disabled {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  transition: 0.2s;
+  transition: 0.18s;
 }
 .list-item:hover {
-  box-shadow: 0 8px 25px rgba(0, 95, 64, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 95, 64, 0.07);
   border-color: #cbd5e1;
 }
 
-/* Policy Notice Banner */
+/* Notice Banner */
 .policy-banner {
-  background: #eff6ff;
-  border-left: 5px solid var(--edit);
+  background: #f8fafc;
+  border-left: 4px solid var(--primary);
   padding: 12px 15px;
   border-radius: 12px;
   font-size: 12px;
-  color: #1e3a8a;
+  color: #334155;
   font-weight: 600;
   margin-bottom: 18px;
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 /* Read-only Summary Box inside Modal */
@@ -399,7 +400,7 @@ input:disabled {
   position: fixed;
   bottom: 0;
   width: 100%;
-  background: rgba(255,255,255,0.96);
+  background: rgba(255,255,255,0.97);
   backdrop-filter: blur(15px);
   display: flex;
   box-shadow: 0 -5px 25px rgba(0, 95, 64, 0.08);
@@ -417,21 +418,21 @@ input:disabled {
   font-size: 11.5px;
   padding: 10px 4px;
   cursor: pointer;
-  transition: 0.25s;
+  transition: 0.2s;
   font-weight: 700;
 }
 .nav-item i {
   display: block;
   font-size: 20px;
   margin-bottom: 4px;
-  transition: 0.25s;
+  transition: 0.2s;
 }
 .nav-item.active {
   color: var(--primary);
   font-weight: 800;
 }
 .nav-item.active i {
-  transform: translateY(-3px) scale(1.1);
+  transform: translateY(-2px);
   color: var(--primary);
 }
 
@@ -444,24 +445,24 @@ input:disabled {
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(15, 23, 42, 0.65);
+  background-color: rgba(15, 23, 42, 0.6);
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(4px);
   padding: 15px;
 }
 .modal-content {
   background-color: #fff;
   margin: auto;
-  padding: 30px 24px;
+  padding: 28px 24px;
   border-radius: 24px;
   width: 100%;
-  max-width: 440px;
+  max-width: 450px;
   position: relative;
-  animation: zoomIn 0.2s ease;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.25);
-  border-top: 7px solid var(--primary);
-  max-height: 90vh;
+  animation: zoomIn 0.16s ease;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.22);
+  border-top: 6px solid var(--primary);
+  max-height: 92vh;
   overflow-y: auto;
 }
 #loader {
@@ -471,24 +472,24 @@ input:disabled {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255,255,255,0.92);
+  background: rgba(255,255,255,0.9);
   z-index: 9999;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(6px);
+  backdrop-filter: blur(5px);
 }
 .spinner {
-  width: 52px;
-  height: 52px;
-  border: 5px solid #e2e8f0;
-  border-top: 5px solid var(--primary);
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e2e8f0;
+  border-top: 4px solid var(--primary);
   border-radius: 50%;
-  animation: spin 0.7s linear infinite;
+  animation: spin 0.65s linear infinite;
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes zoomIn { from { transform: scale(0.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes zoomIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 .close {
   position: absolute;
   top: 16px;
@@ -510,11 +511,11 @@ input:disabled {
 </head>
 <body>
 
-<!-- 🛑 Security Gate UI (Token & Session Verification Only — No Login Form Here) -->
+<!-- Session Verification Loader -->
 <div id="loader">
   <div class="spinner"></div>
-  <p id="loaderText" style="margin-top:18px; font-size:14px; font-weight:800; color:var(--primary); letter-spacing:0.8px; text-align:center;">
-    SECURITY CHECK...<br><span style="font-size:11px; color:#64748b;">Verifying Admin Session</span>
+  <p id="loaderText" style="margin-top:16px; font-size:14px; font-weight:700; color:var(--primary); text-align:center;">
+    অ্যাডমিন প্যানেল লোড হচ্ছে...<br><span style="font-size:11.5px; color:#64748b; font-weight:500;">অনুগ্রহ করে অপেক্ষা করুন</span>
   </p>
 </div>
 
@@ -523,36 +524,36 @@ input:disabled {
   <div class="header">
     <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="SRMS Logo">
     <div class="header-title-wrap">
-      <h2>SRMS Manager</h2>
-      <span>ULTRA-FAST FINAL EDITION</span>
+      <h2>Saidpur Residential Model School</h2>
+      <span>Official Administration Portal</span>
     </div>
     <button class="btn-back" onclick="window.close();" title="Back to Dashboard">
-      <i class="fas fa-sign-out-alt"></i> Dashboard
+      <i class="fas fa-arrow-left"></i> Dashboard
     </button>
   </div>
 
-  <!-- ================= 1. POST / UPLOAD TAB ================= -->
+  <!-- ================= 1. POST & UPLOAD TAB ================= -->
   <div id="upload" class="container active">
     <!-- Scrolling Headline Card -->
-    <div class="card" style="border-left: 7px solid var(--warn); background: linear-gradient(145deg, #ffffff, #fffbeb);">
-      <label style="margin-top:0; color: #b45309; font-weight:800; font-size: 14px; text-transform:uppercase;">
-        <i class="fas fa-bullhorn"></i> Scrolling Headline Notice (+ Push Notification)
+    <div class="card" style="border-left: 6px solid var(--warn); background: linear-gradient(145deg, #ffffff, #fffbeb);">
+      <label style="margin-top:0; color: #b45309; font-weight:800; font-size: 13.5px; text-transform:uppercase;">
+        <i class="fas fa-bullhorn"></i> জরুরি স্ক্রলিং হেডলাইন (Scrolling Notice)
       </label>
-      <div style="display:flex; gap:10px; margin-top:12px;">
-        <input type="text" id="hText" placeholder="Write urgent scrolling headline here..." style="margin-top:0; border-color: #fde68a;">
-        <button id="headBtn" onclick="pubHead()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:0 24px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);">
-          <i class="fas fa-paper-plane" style="font-size: 17px;"></i>
+      <div style="display:flex; gap:10px; margin-top:10px;">
+        <input type="text" id="hText" placeholder="ওয়েবসাইটের স্ক্রলিং হেডলাইন এখানে লিখুন..." style="margin-top:0; border-color: #fde68a;">
+        <button id="headBtn" onclick="pubHead()" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:white; border:none; padding:0 24px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);">
+          <i class="fas fa-paper-plane" style="font-size: 16px;"></i>
         </button>
       </div>
     </div>
 
-    <!-- Website Content & ImgBB Photo Publisher -->
+    <!-- Website Content Publisher -->
     <div class="card">
       <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:17px;">
-        <i class="fas fa-bolt"></i> Publish Website Content & Photos (ImgBB + OneSignal Push)
+        <i class="fas fa-file-signature"></i> ওয়েবসাইটে নতুন কন্টেন্ট ও বিজ্ঞপ্তি প্রকাশ
       </h3>
 
-      <label><i class="fas fa-bullseye" style="color:var(--primary); margin-right:5px;"></i> Target Page / Section</label>
+      <label><i class="fas fa-layer-group" style="color:var(--primary); margin-right:5px;"></i> নির্ধারিত পেজ / সেকশন নির্বাচন করুন</label>
       <select id="upCat" onchange="updateTitleLabel(this)">
         <optgroup label="General">
           <option value="Notice">Notice Board</option>
@@ -566,13 +567,13 @@ input:disabled {
           <option value="VPMessage">Message of Vice President</option>
           <option value="HeadmasterMessage">Message of Headmaster</option>
           <option value="Facilities">Facilities</option>
-          <option value="News">News</option>
+          <option value="News">News & Events</option>
           <option value="Teachers">Teacher List</option>
           <option value="Admission">Admission Info</option>
-          <option value="Routine">Routine</option>
+          <option value="Routine">Class Routine</option>
           <option value="Syllabus">Syllabus</option>
           <option value="Exam">Exam Routine</option>
-          <option value="Gallery">Gallery</option>
+          <option value="Gallery">Photo Gallery</option>
         </optgroup>
         <optgroup label="Class Dashboards">
           <option value="ClassPlay">Class Play</option>
@@ -591,114 +592,114 @@ input:disabled {
         </optgroup>
       </select>
 
-      <label id="titleLabel"><i class="fas fa-heading" style="color:var(--primary); margin-right:5px;"></i> Title for Notice Board</label>
-      <input type="text" id="upTitle" placeholder="Enter post title, caption, or name" required>
+      <label id="titleLabel"><i class="fas fa-heading" style="color:var(--primary); margin-right:5px;"></i> শিরোনাম (Notice Board)</label>
+      <input type="text" id="upTitle" placeholder="বিজ্ঞপ্তির শিরোনাম বা ক্যাপশন লিখুন" required>
 
-      <label><i class="fas fa-align-left" style="color:var(--primary); margin-right:5px;"></i> Description / Message Body</label>
-      <textarea id="upDesc" rows="4" placeholder="Write description or full message here..."></textarea>
+      <label><i class="fas fa-align-left" style="color:var(--primary); margin-right:5px;"></i> বিস্তারিত বিবরণ (ঐচ্ছিক)</label>
+      <textarea id="upDesc" rows="4" placeholder="বিস্তারিত তথ্য বা বার্তা এখানে লিখুন..."></textarea>
 
-      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Select Photo (Uploads to ImgBB Server) or PDF/Doc</label>
+      <label><i class="fas fa-paperclip" style="color:var(--primary); margin-right:5px;"></i> ছবি অথবা ফাইল সংযুক্ত করুন (Image / PDF / Doc)</label>
       <input type="file" id="upFile" accept="image/*,application/pdf,.doc,.docx,.xls,.xlsx" onchange="handleFilePreview(this)">
 
-      <!-- Live Photo/File Preview -->
+      <!-- Live File Preview -->
       <div id="filePreviewBox" class="preview-box">
         <img id="previewImg" src="" alt="Preview">
-        <div class="preview-info" id="previewMeta">Ready to upload</div>
-        <button type="button" class="btn-delete" onclick="clearSelectedFile()" title="Remove file">
+        <div class="preview-info" id="previewMeta">ফাইল প্রস্তুত হচ্ছে...</div>
+        <button type="button" class="btn-delete" onclick="clearSelectedFile()" title="বাতিল করুন">
           <i class="fas fa-times"></i>
         </button>
       </div>
 
-      <label><i class="fas fa-link" style="color:var(--primary); margin-right:5px;"></i> Or Paste External Link (Optional)</label>
-      <input type="url" id="upLink" placeholder="https://i.ibb.co/... or external link">
+      <label><i class="fas fa-link" style="color:var(--primary); margin-right:5px;"></i> ওয়েব লিংক / ভিডিও লিংক (ঐচ্ছিক)</label>
+      <input type="url" id="upLink" placeholder="https://...">
 
       <button class="btn-submit" id="pubPostBtn" onclick="submitUpload()">
-        <i class="fas fa-rocket" style="margin-right: 6px;"></i> Publish & Send Push Notification
+        <i class="fas fa-check-circle" style="margin-right: 6px;"></i> ওয়েবসাইটে প্রকাশ করুন
       </button>
     </div>
   </div>
 
-  <!-- ================= 2. USERS TAB ================= -->
+  <!-- ================= 2. USERS & GUARDIANS TAB ================= -->
   <div id="users" class="container">
-    <!-- User Statistics Card (Teachers, Students & Guardians) -->
+    <!-- User Statistics Card -->
     <div class="card">
-      <h3 style="margin-top:0; color:var(--primary); font-weight:800; text-transform: uppercase; font-size:16.5px;">
-        <i class="fas fa-chart-pie"></i> User & Guardian Statistics
+      <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:16.5px;">
+        <i class="fas fa-chart-pie"></i> পোর্টাল ব্যবহারকারীর পরিসংখ্যান
       </h3>
       <div id="userStatsDisplay">
         <div style="text-align:center; padding:15px; color:#64748b;">
-          <i class="fas fa-circle-notch fa-spin"></i> Loading statistics...
+          <i class="fas fa-circle-notch fa-spin"></i> পরিসংখ্যান লোড হচ্ছে...
         </div>
       </div>
     </div>
 
-    <!-- Setup Teacher Account ONLY (With Teacher Photo Upload) -->
+    <!-- Setup Teacher Account -->
     <div class="card">
-      <h3 style="margin-top:0; color:var(--primary); font-weight:800; text-transform: uppercase; font-size:16.5px;">
-        <i class="fas fa-chalkboard-teacher"></i> Setup Teacher Account
+      <h3 style="margin-top:0; color:var(--primary); font-weight:800; font-size:16.5px;">
+        <i class="fas fa-user-tie"></i> নতুন শিক্ষক অ্যাকাউন্ট নিবন্ধন
       </h3>
       <div class="policy-banner">
-        <i class="fas fa-info-circle"></i> <b>সিস্টেম পলিসি:</b> এখান থেকে শুধুমাত্র <b>Teacher Account</b> ও তার ছবি যুক্ত করা যাবে (স্বয়ংক্রিয়ভাবে টিচারের মোবাইলে <b>Welcome SMS ও Email</b> চলে যাবে)। <b>Student</b> এবং <b>Guardian</b> অ্যাকাউন্ট ও ছবি স্টুডেন্ট ম্যানেজমেন্ট প্যানেল থেকে যুক্ত হয় এবং নিচে তাদের শুধুমাত্র <b>Password</b> পরিবর্তন করা যাবে।
+        <i class="fas fa-info-circle" style="color:var(--primary);"></i> এখান থেকে সম্মানিত শিক্ষকদের পোর্টাল অ্যাকাউন্ট তৈরি ও পরিচালনা করা যাবে। শিক্ষার্থী এবং অভিভাবকদের অ্যাকাউন্ট ভর্তি প্যানেল থেকে স্বয়ংক্রিয়ভাবে তৈরি হয় এবং নিচের তালিকা থেকে তাদের পাসওয়ার্ড পরিবর্তন করা যাবে।
       </div>
 
-      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Teacher Profile Photo (ImgBB Upload)</label>
+      <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> শিক্ষকের প্রোফাইল ছবি</label>
       <input type="file" id="uTPhoto" accept="image/*" onchange="handleTeacherPhotoPreview(this, 'add')">
       <div id="uTPhotoPreviewBox" class="preview-box">
         <img id="uTPhotoPreviewImg" src="" alt="Teacher Photo" style="border-radius:50%;">
-        <div class="preview-info" id="uTPhotoPreviewMeta">Photo ready</div>
-        <button type="button" class="btn-delete" onclick="clearTeacherPhoto('add')" title="Remove photo">
+        <div class="preview-info" id="uTPhotoPreviewMeta">ছবি প্রস্তুত</div>
+        <button type="button" class="btn-delete" onclick="clearTeacherPhoto('add')" title="ছবি সরান">
           <i class="fas fa-times"></i>
         </button>
       </div>
 
-      <label>Teacher Phone Number (Login ID) *</label>
+      <label>শিক্ষকের মোবাইল নম্বর (Login ID) *</label>
       <input type="tel" id="uTPhone" placeholder="017XXXXXXXX">
 
-      <label>Machine / Biometric ID</label>
-      <input type="text" id="uTMachineId" placeholder="Blank = Same as Phone Number">
+      <label>অ্যাটেনডেন্স মেশিন আইডি (ঐচ্ছিক)</label>
+      <input type="text" id="uTMachineId" placeholder="খালি রাখলে মোবাইল নম্বরই ব্যবহৃত হবে">
 
-      <label>Teacher Full Name *</label>
-      <input type="text" id="uTName" placeholder="Enter Teacher Full Name">
+      <label>শিক্ষকের পূর্ণ নাম *</label>
+      <input type="text" id="uTName" placeholder="শিক্ষকের নাম লিখুন">
 
-      <label>Email Address (Optional)</label>
-      <input type="email" id="uTEmail" placeholder="teacher@email.com">
+      <label>ইমেইল অ্যাড্রেস (ঐচ্ছিক)</label>
+      <input type="email" id="uTEmail" placeholder="teacher@example.com">
 
       <label style="color:#b45309; font-weight:800;">
-        <i class="fas fa-id-card"></i> RFID Card Number <small style="color:#64748b;">(Type or Scan for Attendance Machine)</small>
+        <i class="fas fa-id-card"></i> অ্যাটেনডেন্স কার্ড নম্বর (RFID Card)
       </label>
-      <input type="text" id="uCardNumber" placeholder="Scan or Enter RFID Card Number" style="border-color: var(--gold); background:#fffbeb;">
+      <input type="text" id="uCardNumber" placeholder="কার্ড স্ক্যান করুন অথবা নম্বর লিখুন" style="border-color: var(--gold); background:#fffbeb;">
 
-      <label>Login Password (Min 6 Characters)</label>
-      <input type="text" id="uPass" placeholder="Default: 123456">
+      <label>লগইন পাসওয়ার্ড (সর্বনিম্ন ৬ অক্ষর)</label>
+      <input type="text" id="uPass" placeholder="ডিফল্ট: 123456">
 
       <button class="btn-submit" id="accBtn" onclick="addUser()">
-        <i class="fas fa-user-plus" style="margin-right: 6px;"></i> Save Teacher Account
+        <i class="fas fa-user-plus" style="margin-right: 6px;"></i> শিক্ষক অ্যাকাউন্ট সংরক্ষণ করুন
       </button>
     </div>
 
-    <!-- Manage All Logins (Teachers, Students, Guardians) -->
+    <!-- Manage All Logins -->
     <div class="card">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:14px;">
-        <h3 style="margin:0; color:var(--primary); font-weight:800; text-transform: uppercase; font-size:16.5px;">
-          <i class="fas fa-users-cog"></i> Manage Logins (Teacher / Student / Guardian)
+        <h3 style="margin:0; color:var(--primary); font-weight:800; font-size:16.5px;">
+          <i class="fas fa-users-cog"></i> অ্যাকাউন্ট ও পাসওয়ার্ড ব্যবস্থাপনা
         </h3>
-        <button onclick="loadUsers(true)" style="background:var(--primary-light); color:var(--primary); border:1px solid #a7f3d0; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer;">
-          <i class="fas fa-sync-alt"></i> Refresh
+        <button onclick="loadUsers(true, false)" style="background:var(--primary-light); color:var(--primary); border:1px solid #a7f3d0; padding:6px 13px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer;">
+          <i class="fas fa-sync-alt"></i> রিফ্রেশ
         </button>
       </div>
 
       <div class="filter-container">
         <div class="search-wrapper">
           <i class="fas fa-search"></i>
-          <input type="text" id="searchUserList" placeholder="Search Name, Student ID, or Guardian Phone..." onkeyup="filterUsers()">
+          <input type="text" id="searchUserList" placeholder="নাম, স্টুডেন্ট আইডি বা মোবাইল নম্বর দিয়ে খুঁজুন..." oninput="scheduleFilterUsers()">
         </div>
         <div class="filter-wrapper">
           <select id="filterClass" onchange="filterUsers()">
-            <option value="All">All Users (Everyone)</option>
-            <option value="Teacher">👨‍🏫 Teachers Only</option>
-            <option value="Student">🎓 Students Only</option>
-            <option value="Guardian">👪 Guardians Only</option>
-            <optgroup label="Filter by Class (Student & Guardian)">
+            <option value="All">সকল ব্যবহারকারী (All)</option>
+            <option value="Teacher">👨‍🏫 শুধুমাত্র শিক্ষক (Teachers)</option>
+            <option value="Student">🎓 শুধুমাত্র শিক্ষার্থী (Students)</option>
+            <option value="Guardian">👪 শুধুমাত্র অভিভাবক (Guardians)</option>
+            <optgroup label="শ্রেণি অনুযায়ী ফিল্টার">
               <option value="Play">Class Play</option>
               <option value="Nursery">Class Nursery</option>
               <option value="KG">Class KG</option>
@@ -719,7 +720,7 @@ input:disabled {
 
       <div id="userListDisplay">
         <div style="text-align:center; padding:20px; color:#64748b;">
-          <i class="fas fa-circle-notch fa-spin"></i> Loading User List...
+          <i class="fas fa-circle-notch fa-spin"></i> তালিকা লোড হচ্ছে...
         </div>
       </div>
     </div>
@@ -729,68 +730,70 @@ input:disabled {
   <div id="manage" class="container">
     <div class="card" id="postList">
       <div style="text-align:center; padding:20px; color:#64748b;">
-        <i class="fas fa-circle-notch fa-spin"></i> Loading website posts...
+        <i class="fas fa-circle-notch fa-spin"></i> প্রকাশিত পোস্টসমূহ লোড হচ্ছে...
       </div>
     </div>
   </div>
 
-  <!-- ================= EDIT MODAL (STRICT ROLE SEPARATION) ================= -->
+  <!-- ================= EDIT MODAL (FULL TEACHER EDIT INCLUDING PHONE NUMBER) ================= -->
   <div id="editUserModal" class="modal">
     <div class="modal-content" style="text-align:left;">
       <span class="close" onclick="closeModal('editUserModal')">&times;</span>
-      <h3 id="modalTitle" style="text-align:center; color:var(--primary); margin-top:0; font-weight:800; font-size:18px;">
-        <i class="fas fa-key"></i> Change Password
+      <h3 id="modalTitle" style="text-align:center; color:var(--primary); margin-top:0; font-weight:800; font-size:17.5px;">
+        <i class="fas fa-user-edit"></i> তথ্য ও পাসওয়ার্ড পরিবর্তন
       </h3>
 
       <input type="hidden" id="euIndex">
       <input type="hidden" id="euRow">
       <input type="hidden" id="euType">
-      <input type="hidden" id="euId">
+      <input type="hidden" id="euOldId">
+      <input type="hidden" id="euOldEmail">
+      <input type="hidden" id="euOldCard">
 
-      <!-- Read-Only Summary for Student & Guardian (NO OTHER FIELDS EDITABLE) -->
+      <!-- Read-Only Summary for Student & Guardian -->
       <div id="studentGuardianReadOnlyBox" class="readonly-summary" style="display:none;"></div>
 
-      <!-- Editable Fields ONLY for Teacher -->
+      <!-- Editable Fields for Teacher (Including Phone Number / Login ID) -->
       <div id="teacherEditableFields" style="display:none;">
-        <div style="text-align:center; margin-top:8px; margin-bottom:10px;">
-          <img id="euCurrentTeacherPhoto" src="" alt="Teacher" style="width:74px; height:74px; border-radius:50%; object-fit:cover; border:3px solid var(--primary); display:none; margin:0 auto;">
+        <div style="text-align:center; margin-top:6px; margin-bottom:10px;">
+          <img id="euCurrentTeacherPhoto" src="" alt="Teacher" style="width:72px; height:72px; border-radius:50%; object-fit:cover; border:2.5px solid var(--primary); display:none; margin:0 auto;">
         </div>
 
-        <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> Update Teacher Photo (Optional)</label>
+        <label><i class="fas fa-camera" style="color:var(--primary); margin-right:5px;"></i> নতুন ছবি যুক্ত করুন (ঐচ্ছিক)</label>
         <input type="file" id="euTPhoto" accept="image/*" onchange="handleTeacherPhotoPreview(this, 'edit')">
         <div id="euTPhotoPreviewBox" class="preview-box">
           <img id="euTPhotoPreviewImg" src="" alt="New Photo" style="border-radius:50%;">
-          <div class="preview-info" id="euTPhotoPreviewMeta">New photo ready</div>
-          <button type="button" class="btn-delete" onclick="clearTeacherPhoto('edit')" title="Remove photo">
+          <div class="preview-info" id="euTPhotoPreviewMeta">নতুন ছবি প্রস্তুত</div>
+          <button type="button" class="btn-delete" onclick="clearTeacherPhoto('edit')" title="বাতিল করুন">
             <i class="fas fa-times"></i>
           </button>
         </div>
 
-        <label>Teacher Login ID (Phone)</label>
-        <input type="text" id="euTeacherIdDisplay" disabled>
+        <label>শিক্ষকের মোবাইল নম্বর (Login ID) *</label>
+        <input type="tel" id="euPhone" placeholder="017XXXXXXXX" style="font-weight:700; color:#0f172a;">
 
-        <label>Teacher Full Name</label>
-        <input type="text" id="euName" placeholder="Teacher Name">
+        <label>শিক্ষকের পূর্ণ নাম *</label>
+        <input type="text" id="euName" placeholder="শিক্ষকের নাম">
 
-        <label>Email Address</label>
-        <input type="email" id="euEmail" placeholder="Teacher Email">
+        <label>ইমেইল অ্যাড্রেস</label>
+        <input type="email" id="euEmail" placeholder="teacher@example.com">
 
-        <label>Machine ID</label>
-        <input type="text" id="euMachineId" placeholder="Machine ID">
+        <label>অ্যাটেনডেন্স মেশিন আইডি</label>
+        <input type="text" id="euMachineId" placeholder="মেশিন আইডি">
 
-        <label style="color:#b45309;"><i class="fas fa-id-card"></i> Update RFID Card (Optional)</label>
-        <input type="text" id="euCardNumber" placeholder="Scan or Enter RFID Card Number" style="border-color: var(--gold); background:#fffbeb;">
+        <label style="color:#b45309;"><i class="fas fa-id-card"></i> অ্যাটেনডেন্স কার্ড নম্বর (RFID Card)</label>
+        <input type="text" id="euCardNumber" placeholder="কার্ড নম্বর" style="border-color: var(--gold); background:#fffbeb;">
       </div>
 
-      <!-- Password Field (Editable for Everyone with Admin Special Power) -->
-      <label style="color:var(--primary); font-size:14px;">
-        <i class="fas fa-lock"></i> New Login Password (Min 6 Characters)
+      <!-- Password Field -->
+      <label style="color:var(--primary); font-size:13.5px;">
+        <i class="fas fa-key"></i> লগইন পাসওয়ার্ড (সর্বনিম্ন ৬ অক্ষর) *
       </label>
-      <input type="text" id="euPass" placeholder="Enter new password (min 6 chars)" style="font-weight:700; border-color:var(--primary); background:#fff;">
-      <small id="passSyncNote" style="display:block; margin-top:6px; color:#64748b; font-size:11px; line-height:1.4;"></small>
+      <input type="text" id="euPass" placeholder="নতুন পাসওয়ার্ড লিখুন" style="font-weight:700; border-color:var(--primary); background:#fff;">
+      <small id="passSyncNote" style="display:block; margin-top:6px; color:#64748b; font-size:11.5px; line-height:1.45;"></small>
 
       <button class="btn-submit" id="saveUserEditBtn" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="submitUserEdit()">
-        <i class="fas fa-bolt"></i> Apply Admin Override & Save
+        <i class="fas fa-save" style="margin-right:6px;"></i> পরিবর্তন সংরক্ষণ করুন
       </button>
     </div>
   </div>
@@ -798,30 +801,28 @@ input:disabled {
   <!-- Bottom Navigation -->
   <div class="bottom-nav">
     <button class="nav-item active" onclick="switchTab('upload', this)">
-      <i class="fas fa-plus-circle"></i>Post & Upload
+      <i class="fas fa-plus-circle"></i>কন্টেন্ট প্রকাশ
     </button>
     <button class="nav-item" onclick="switchTab('users', this)">
-      <i class="fas fa-users"></i>Users & Guardians
+      <i class="fas fa-users"></i>ব্যবহারকারী ও পাসওয়ার্ড
     </button>
     <button class="nav-item" onclick="switchTab('manage', this)">
-      <i class="fas fa-tasks"></i>Manage Posts
+      <i class="fas fa-tasks"></i>প্রকাশিত পোস্ট
     </button>
   </div>
 </div>
 
-<!-- ================= FIREBASE & FRONTEND LOGIC ================= -->
+<!-- ================= FIREBASE & APPLICATION SCRIPT ================= -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-// আপনার Google Apps Script Web App URL
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec";
 const SRMS_ADMIN_PASSKEY = "SRMS_SUPER_ADMIN_OVERRIDE";
 
-// 🖼️ IMGBB OFFICIAL API CONFIGURATION
-const IMGBB_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
-const IMGBB_UPLOAD_URL = "https://api.imgbb.com/1/upload";
+const MEDIA_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
+const MEDIA_UPLOAD_URL = "https://api.imgbb.com/1/upload";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
@@ -839,16 +840,27 @@ var globalUsersList = [];
 var globalPostsList = [];
 var usersLoadedOnce = false;
 var postsLoadedOnce = false;
+
 var preparedFilePayload = null;
 var preparedTeacherAddPhoto = null;
 var preparedTeacherEditPhoto = null;
+
 var isSubmittingUser = false;
 var isSubmittingPost = false;
+var filterDebounceTimer = null;
+
+const Toast = Swal.mixin({
+  toast: true,
+  position: 'top-end',
+  showConfirmButton: false,
+  timer: 2200,
+  timerProgressBar: true
+});
 
 function changeLoaderText(text) {
   document.getElementById('loaderText').innerHTML = text;
 }
-function showLoader(show, text = "PROCESSING...") {
+function showLoader(show, text = "প্রক্রিয়াকরণ চলছে...") {
   if (show) {
     changeLoaderText(text);
     document.getElementById('loader').style.display = 'flex';
@@ -858,7 +870,7 @@ function showLoader(show, text = "PROCESSING...") {
 }
 
 // ============================================================================
-// 🛑 PURE SECURITY & TOKEN CHECKING GATE + BACKGROUND PREFETCH
+// 🔐 SESSION VERIFICATION & BACKGROUND PREFETCH
 // ============================================================================
 auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
   .then(() => {
@@ -870,22 +882,22 @@ auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
         setTimeout(() => {
           loadPosts(false, true);
           loadUsers(false, true);
-        }, 120);
+        }, 80);
       } else {
-        showLoader(true, "UNAUTHORIZED ACCESS!<br><span style='font-size:11px; color:#ef4444;'>Redirecting to Login...</span>");
+        showLoader(true, "অনুমোদনহীন অ্যাক্সেস!<br><span style='font-size:11.5px; color:#ef4444;'>লগইন পেজে নিয়ে যাওয়া হচ্ছে...</span>");
         setTimeout(() => {
           var currentDomain = window.location.protocol + "//" + window.location.host;
           window.location.replace(currentDomain + "/login-panel/accounting-and-management-department");
-        }, 1000);
+        }, 900);
       }
     });
   })
   .catch(err => {
-    console.error("Auth Persistence Error:", err);
+    console.error("Session Error:", err);
   });
 
 // ============================================================================
-// 📡 CLEAN SINGLE-SHOT API ENGINE (NO DUPLICATE RETRY BUGS)
+// 📡 FAST API COMMUNICATION ENGINE
 // ============================================================================
 async function apiCall(actionName, payloadData = {}) {
   let token = "";
@@ -911,7 +923,7 @@ async function apiCall(actionName, payloadData = {}) {
   });
   let text = await res.text();
   if (text.includes("<html") || text.includes("<!DOCTYPE")) {
-    throw new Error("Deployment Access Error! Make sure Apps Script Web App is deployed with 'Who has access: Anyone'.");
+    throw new Error("সার্ভার সংযোগে ত্রুটি হয়েছে। অনুগ্রহ করে পেজটি রিফ্রেশ করে আবার চেষ্টা করুন।");
   }
 
   let data = JSON.parse(text);
@@ -922,11 +934,10 @@ async function apiCall(actionName, payloadData = {}) {
 
 function updateTitleLabel(sel) {
   document.getElementById('titleLabel').innerHTML =
-    `<i class="fas fa-heading" style="color:var(--primary); margin-right:5px;"></i> Title for ` +
-    sel.options[sel.selectedIndex].text.split('(')[0];
+    `<i class="fas fa-heading" style="color:var(--primary); margin-right:5px;"></i> শিরোনাম (` +
+    sel.options[sel.selectedIndex].text.split('(')[0].trim() + `)`;
 }
 
-// ⚡ ইনস্ট্যান্ট ট্যাব সুইচিং (0.0s Smart Memory Cache)
 function switchTab(id, btn) {
   if (!isAuthReady) return;
   document.querySelectorAll('.container').forEach(c => c.classList.remove('active'));
@@ -953,14 +964,40 @@ function switchTab(id, btn) {
 }
 
 // ============================================================================
-// 🖼️ TURBO IMGBB API V1 UPLOAD + LIVE PREVIEW (1280px SMART HD OPTIMIZER)
+// ⚡ INSTANT BACKGROUND PRE-UPLOAD ENGINE (ZERO WAIT ON SUBMIT)
 // ============================================================================
+async function uploadToMediaHostDirect(base64Image, fileName) {
+  var formData = new FormData();
+  formData.append("key", MEDIA_API_KEY);
+  formData.append("image", base64Image);
+  if (fileName) {
+    var cleanName = fileName.replace(/\.[^/.]+$/, "");
+    formData.append("name", cleanName);
+  }
+
+  var response = await fetch(MEDIA_UPLOAD_URL, {
+    method: "POST",
+    body: formData
+  });
+  var json = await response.json();
+  if (json && json.success && json.data) {
+    return {
+      url: json.data.url || json.data.display_url,
+      thumbUrl: (json.data.thumb && json.data.thumb.url) ? json.data.thumb.url : json.data.url,
+      deleteUrl: json.data.delete_url || "",
+      imgbbId: json.data.id || ""
+    };
+  }
+  throw new Error("Media upload failed");
+}
+
 function clearSelectedFile() {
   document.getElementById('upFile').value = "";
   document.getElementById('filePreviewBox').style.display = "none";
   preparedFilePayload = null;
 }
 
+// ছবি সিলেক্ট করার সাথে সাথেই ব্যাকগ্রাউন্ডে আপলোড হয়ে থাকবে, যাতে পাবলিশ বাটনে চাপার সাথে সাথেই কাজ শেষ হয়
 function handleFilePreview(input) {
   if (!input.files || input.files.length === 0) {
     clearSelectedFile();
@@ -972,7 +1009,7 @@ function handleFilePreview(input) {
   var previewMeta = document.getElementById('previewMeta');
 
   if (file.type.startsWith("image/")) {
-    previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Optimizing image for Turbo Upload...`;
+    previewMeta.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ছবি প্রস্তুত হচ্ছে...`;
     previewBox.style.display = "flex";
 
     var reader = new FileReader();
@@ -999,23 +1036,39 @@ function handleFilePreview(input) {
 
         var dataUrl = canvas.toDataURL('image/jpeg', 0.85);
         previewImg.src = dataUrl;
-        var kbSize = Math.round((dataUrl.length * 0.75) / 1024);
         var cleanName = file.name.replace(/\.[^/.]+$/, "") + ".jpg";
+        var rawBase64 = dataUrl.split(',')[1];
 
-        preparedFilePayload = {
+        var payloadObj = {
           isImage: true,
-          fileData: dataUrl.split(',')[1],
+          fileData: rawBase64,
           mimeType: 'image/jpeg',
-          fileName: cleanName
+          fileName: cleanName,
+          uploadedResult: null,
+          uploadPromise: null
         };
-        previewMeta.innerHTML = `<b>${cleanName}</b><br>⚡ Turbo Ready (${w}×${h}px • ~${kbSize} KB)`;
+
+        // সিলেক্ট করার সাথে সাথেই ব্যাকগ্রাউন্ডে প্রি-আপলোড শুরু
+        payloadObj.uploadPromise = uploadToMediaHostDirect(rawBase64, cleanName)
+          .then(res => {
+            payloadObj.uploadedResult = res;
+            previewMeta.innerHTML = `<b>${cleanName}</b><br><span style="color:#15803d;"><i class="fas fa-check-circle"></i> প্রকাশের জন্য সম্পূর্ণ প্রস্তুত</span>`;
+            return res;
+          })
+          .catch(() => {
+            previewMeta.innerHTML = `<b>${cleanName}</b><br>প্রকাশের জন্য প্রস্তুত`;
+            return null;
+          });
+
+        preparedFilePayload = payloadObj;
+        previewMeta.innerHTML = `<b>${cleanName}</b><br><i class="fas fa-sync fa-spin"></i> ব্যাকগ্রাউন্ডে সংযুক্ত হচ্ছে...`;
       };
       img.src = e.target.result;
     };
     reader.readAsDataURL(file);
   } else {
     previewImg.src = "https://cdn-icons-png.flaticon.com/512/337/337946.png";
-    previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Reading document...`;
+    previewMeta.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ডকুমেন্ট লোড হচ্ছে...`;
     previewBox.style.display = "flex";
 
     var reader = new FileReader();
@@ -1027,7 +1080,7 @@ function handleFilePreview(input) {
         mimeType: file.type || 'application/octet-stream',
         fileName: file.name
       };
-      previewMeta.innerHTML = `<b>${file.name}</b><br>✅ Document Ready (${kbSize} KB)`;
+      previewMeta.innerHTML = `<b>${file.name}</b><br><i class="fas fa-check-circle"></i> ডকুমেন্ট প্রস্তুত (${kbSize} KB)`;
     };
     reader.readAsDataURL(file);
   }
@@ -1059,7 +1112,7 @@ function handleTeacherPhotoPreview(input, mode) {
   var previewImg = document.getElementById(imgId);
   var previewMeta = document.getElementById(metaId);
 
-  previewMeta.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Optimizing Teacher Photo...`;
+  previewMeta.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> ছবি প্রস্তুত হচ্ছে...`;
   previewBox.style.display = "flex";
 
   var reader = new FileReader();
@@ -1086,53 +1139,45 @@ function handleTeacherPhotoPreview(input, mode) {
 
       var dataUrl = canvas.toDataURL('image/jpeg', 0.85);
       previewImg.src = dataUrl;
-      var kbSize = Math.round((dataUrl.length * 0.75) / 1024);
       var cleanName = "Teacher_" + new Date().getTime() + ".jpg";
+      var rawBase64 = dataUrl.split(',')[1];
 
       var payloadObj = {
-        fileData: dataUrl.split(',')[1],
-        fileName: cleanName
+        fileData: rawBase64,
+        fileName: cleanName,
+        uploadedResult: null,
+        uploadPromise: null
       };
+
+      payloadObj.uploadPromise = uploadToMediaHostDirect(rawBase64, cleanName)
+        .then(res => {
+          payloadObj.uploadedResult = res;
+          previewMeta.innerHTML = `<b>প্রোফাইল ছবি সংযুক্ত</b><br><span style="color:#15803d;"><i class="fas fa-check-circle"></i> সম্পূর্ণ প্রস্তুত</span>`;
+          return res;
+        })
+        .catch(() => {
+          previewMeta.innerHTML = `<b>প্রোফাইল ছবি প্রস্তুত</b>`;
+          return null;
+        });
+
       if (mode === 'add') preparedTeacherAddPhoto = payloadObj;
       else preparedTeacherEditPhoto = payloadObj;
 
-      previewMeta.innerHTML = `<b>Teacher Photo Ready</b><br>⚡ Ready (${w}×${h}px • ~${kbSize} KB)`;
+      previewMeta.innerHTML = `<b>প্রোফাইল ছবি</b><br><i class="fas fa-sync fa-spin"></i> সংযুক্ত হচ্ছে...`;
     };
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
 
-async function uploadToImgBBDirect(base64Image, fileName) {
-  var formData = new FormData();
-  formData.append("key", IMGBB_API_KEY);
-  formData.append("image", base64Image);
-  if (fileName) {
-    var cleanName = fileName.replace(/\.[^/.]+$/, "");
-    formData.append("name", cleanName);
-  }
-
-  var response = await fetch(IMGBB_UPLOAD_URL, {
-    method: "POST",
-    body: formData
-  });
-  var json = await response.json();
-  if (json && json.success && json.data) {
-    return {
-      url: json.data.url || json.data.display_url,
-      thumbUrl: (json.data.thumb && json.data.thumb.url) ? json.data.thumb.url : json.data.url,
-      deleteUrl: json.data.delete_url || "",
-      imgbbId: json.data.id || ""
-    };
-  }
-  throw new Error((json && json.error && json.error.message) ? json.error.message : "ImgBB Direct Upload Failed");
-}
-
+// ============================================================================
+// 🚀 INSTANT CONTENT & HEADLINE PUBLISHER
+// ============================================================================
 async function submitUpload() {
   if (isSubmittingPost) return;
   var title = document.getElementById('upTitle').value.trim();
   if (!title) {
-    Swal.fire("Warning", "Please enter a title!", "warning");
+    Swal.fire("শিরোনাম প্রয়োজন", "অনুগ্রহ করে বিজ্ঞপ্তি বা কন্টেন্টের শিরোনাম লিখুন।", "warning");
     return;
   }
 
@@ -1143,28 +1188,37 @@ async function submitUpload() {
   var cat = document.getElementById('upCat').value;
   var desc = document.getElementById('upDesc').value.trim();
   var link = document.getElementById('upLink').value.trim();
+  var nowTs = Date.now();
+  var dateStr = new Date().toLocaleDateString('en-GB').replace(/\//g, '-');
+  var clientDocId = "POST_" + nowTs;
 
   let data = {
-    reqId: "REQ_" + Date.now(),
+    reqId: "REQ_" + nowTs,
+    clientDocId: clientDocId,
     targetPage: cat,
     title: title,
     desc: desc,
-    externalUrl: link
+    externalUrl: link,
+    date: dateStr,
+    timestamp: nowTs
   };
 
   try {
     if (preparedFilePayload) {
       if (preparedFilePayload.isImage) {
-        showLoader(true, "UPLOADING PHOTO TO IMGBB...<br><span style='font-size:11px; color:#64748b;'>Turbo Upload in Progress</span>");
-        try {
-          let imgbbResult = await uploadToImgBBDirect(preparedFilePayload.fileData, preparedFilePayload.fileName);
-          data.externalUrl = imgbbResult.url;
-          data.fileUrl = imgbbResult.url;
+        let upRes = preparedFilePayload.uploadedResult;
+        if (!upRes && preparedFilePayload.uploadPromise) {
+          showLoader(true, "ছবি সংযুক্ত হচ্ছে...");
+          upRes = await preparedFilePayload.uploadPromise;
+        }
+        if (upRes && upRes.url) {
+          data.externalUrl = upRes.url;
+          data.fileUrl = upRes.url;
           data.fileType = "Image";
-          data.thumbUrl = imgbbResult.thumbUrl;
-          data.imgbbId = imgbbResult.imgbbId;
-          data.imgbbDeleteUrl = imgbbResult.deleteUrl;
-        } catch (directErr) {
+          data.thumbUrl = upRes.thumbUrl;
+          data.imgbbId = upRes.imgbbId;
+          data.imgbbDeleteUrl = upRes.deleteUrl;
+        } else {
           data.fileData = preparedFilePayload.fileData;
           data.mimeType = preparedFilePayload.mimeType;
           data.fileName = preparedFilePayload.fileName;
@@ -1176,128 +1230,166 @@ async function submitUpload() {
       }
     }
 
-    showLoader(true, "PUBLISHING & SENDING PUSH...<br><span style='font-size:11px; color:#64748b;'>Parallel Database Save + Push Notification</span>");
-    let res = await apiCall('uploadData', { data: data });
-    showLoader(false);
+    // যদি ফাইলটি ছবি বা সাধারণ টেক্সট/লিংক হয়, তবে ক্লায়েন্ট থেকেই সাথে সাথে ডাটাবেসে সেভ ও ইউআই আপডেট করে দেওয়া হবে (০.২ সেকেন্ডে সম্পন্ন!)
+    if (!data.fileData) {
+      var finalFileType = data.fileType || (link ? "Link" : "None");
+      var finalFileUrl = data.fileUrl || link || "";
+      var finalThumb = data.thumbUrl || finalFileUrl;
 
-    if (res.docId) {
+      await db.collection('WebsitePosts').doc(clientDocId).set({
+        title: title,
+        desc: desc,
+        targetPage: cat,
+        fileUrl: finalFileUrl,
+        fileType: finalFileType,
+        thumbUrl: finalThumb,
+        imgbbId: data.imgbbId || "",
+        imgbbDeleteUrl: data.imgbbDeleteUrl || "",
+        driveFileId: "",
+        date: dateStr,
+        timestamp: nowTs,
+        notificationSent: "Delivered"
+      });
+
+      data.skipFirestoreWrite = true;
+      showLoader(false);
+
       globalPostsList.unshift({
-        docId: res.docId,
-        date: res.date || new Date().toLocaleDateString('en-GB').replace(/\//g, '-'),
+        docId: clientDocId,
+        date: dateStr,
         targetPage: cat,
         title: title,
         desc: desc,
-        fileType: res.fileType || data.fileType || (link ? "Link" : "None"),
-        fileUrl: res.fileUrl || data.fileUrl || link || "",
-        thumbUrl: res.thumbUrl || data.thumbUrl || res.fileUrl || "",
-        imgbbId: res.imgbbId || data.imgbbId || "",
-        imgbbDeleteUrl: res.imgbbDeleteUrl || data.imgbbDeleteUrl || "",
-        driveFileId: res.driveFileId || "",
-        time: res.timestamp || Date.now()
+        fileType: finalFileType,
+        fileUrl: finalFileUrl,
+        thumbUrl: finalThumb,
+        imgbbId: data.imgbbId || "",
+        imgbbDeleteUrl: data.imgbbDeleteUrl || "",
+        driveFileId: "",
+        time: nowTs
       });
       renderPostsList();
-    } else {
-      loadPosts(false, true);
-    }
 
-    Swal.fire({
-      title: "Published!",
-      text: res.msg || "Content published & Push Notification sent!",
-      icon: "success",
-      confirmButtonColor: "#005f40"
-    });
-    document.getElementById('upTitle').value = "";
-    document.getElementById('upDesc').value = "";
-    document.getElementById('upLink').value = "";
-    clearSelectedFile();
+      document.getElementById('upTitle').value = "";
+      document.getElementById('upDesc').value = "";
+      document.getElementById('upLink').value = "";
+      clearSelectedFile();
+
+      Toast.fire({
+        icon: 'success',
+        title: 'সফলভাবে ওয়েবসাইটে প্রকাশিত হয়েছে!'
+      });
+
+      // ব্যাকগ্রাউন্ডে পুশ নোটিফিকেশন প্রেরণ (ইউজারকে বিন্দুমাত্র অপেক্ষা করানো হবে না)
+      apiCall('uploadData', { data: data }).catch(() => {});
+    } else {
+      // শুধুমাত্র বড় PDF বা Word ডকুমেন্ট হলে ব্যাকএন্ডের মাধ্যমে আপলোড হবে
+      showLoader(true, "ডকুমেন্ট আপলোড ও প্রকাশ করা হচ্ছে...");
+      let res = await apiCall('uploadData', { data: data });
+      showLoader(false);
+
+      globalPostsList.unshift({
+        docId: res.docId || clientDocId,
+        date: res.date || dateStr,
+        targetPage: cat,
+        title: title,
+        desc: desc,
+        fileType: res.fileType || "File",
+        fileUrl: res.fileUrl || "",
+        thumbUrl: res.thumbUrl || "",
+        imgbbId: res.imgbbId || "",
+        imgbbDeleteUrl: res.imgbbDeleteUrl || "",
+        driveFileId: res.driveFileId || "",
+        time: res.timestamp || nowTs
+      });
+      renderPostsList();
+
+      document.getElementById('upTitle').value = "";
+      document.getElementById('upDesc').value = "";
+      document.getElementById('upLink').value = "";
+      clearSelectedFile();
+
+      Toast.fire({
+        icon: 'success',
+        title: 'ডকুমেন্ট সফলভাবে প্রকাশিত হয়েছে!'
+      });
+    }
   } catch (err) {
     showLoader(false);
-    Swal.fire("Upload Failed", err.message, "error");
+    Swal.fire("প্রকাশ করা যায়নি", err.message, "error");
   } finally {
     isSubmittingPost = false;
     if (btn) btn.disabled = false;
   }
 }
 
-function pubHead() {
+async function pubHead() {
   var t = document.getElementById('hText').value.trim();
   if (!t) {
-    Swal.fire("Empty!", "Please write a headline first.", "warning");
+    Swal.fire("হেডলাইন খালি!", "অনুগ্রহ করে স্ক্রলিং হেডলাইনটি লিখুন।", "warning");
     return;
   }
-  Swal.fire({
-    title: "Publish Headline?",
-    text: "This will instantly appear as a scrolling notice and send a Push Notification.",
-    icon: "question",
-    showCancelButton: true,
-    confirmButtonColor: "#d97706",
-    confirmButtonText: "Yes, Publish!"
-  }).then(async (result) => {
-    if (result.isConfirmed) {
-      showLoader(true, "PUBLISHING HEADLINE & PUSH...");
-      try {
-        let res = await apiCall('addHeadline', { text: t });
-        showLoader(false);
-        Swal.fire("Published!", res.msg || "Headline published!", "success");
-        document.getElementById('hText').value = "";
-      } catch (err) {
-        showLoader(false);
-        Swal.fire("Error", err.message, "error");
-      }
-    }
-  });
+  var btn = document.getElementById('headBtn');
+  if (btn) btn.disabled = true;
+
+  try {
+    document.getElementById('hText').value = "";
+    Toast.fire({
+      icon: 'success',
+      title: 'স্ক্রলিং হেডলাইন আপডেট করা হয়েছে!'
+    });
+
+    // সাথে সাথে ডাটাবেসে আপডেট এবং ব্যাকগ্রাউন্ডে পুশ প্রেরণ
+    db.collection('Website').doc('Headline').set({ text: t }, { merge: true }).catch(() => {});
+    await apiCall('addHeadline', { text: t });
+  } catch (err) {
+    Swal.fire("ত্রুটি", err.message, "error");
+  } finally {
+    if (btn) btn.disabled = false;
+  }
 }
 
-// ============================================================================
-// 🗑️ INSTANT 0.1s OPTIMISTIC DELETE FOR POSTS (DATABASE + IMGBB + DRIVE)
-// ============================================================================
 function delPost(docId) {
   var postObj = globalPostsList.find(p => p.docId === docId) || {};
 
   Swal.fire({
-    title: 'Delete this post?',
-    text: "It will be instantly removed from Website, Database & Server!",
+    title: 'পোস্টটি মুছে ফেলতে চান?',
+    text: "ওয়েবসাইট থেকে এই পোস্টটি স্থায়ীভাবে মুছে যাবে।",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#ef4444',
-    confirmButtonText: 'Yes, delete it!'
+    cancelButtonText: 'বাতিল',
+    confirmButtonText: 'হ্যাঁ, মুছে ফেলুন'
   }).then(async (result) => {
     if (result.isConfirmed) {
       globalPostsList = globalPostsList.filter(p => p.docId !== docId);
       renderPostsList();
 
-      Swal.fire({
-        title: "Deleted!",
-        text: "🗑️ Post & Server File Removed Instantly!",
-        icon: "success",
-        timer: 1300,
-        showConfirmButton: false
+      Toast.fire({
+        icon: 'success',
+        title: 'পোস্টটি মুছে ফেলা হয়েছে'
       });
 
       try {
         db.collection('WebsitePosts').doc(docId).delete().catch(() => {});
       } catch (e) {}
 
-      try {
-        await apiCall('deletePost', {
-          docId: docId,
-          meta: {
-            fileUrl: postObj.fileUrl || "",
-            fileType: postObj.fileType || "",
-            driveFileId: postObj.driveFileId || "",
-            imgbbDeleteUrl: postObj.imgbbDeleteUrl || "",
-            imgbbId: postObj.imgbbId || ""
-          }
-        });
-      } catch (err) {
-        console.warn("Background post cleanup completed:", err);
-      }
+      apiCall('deletePost', {
+        docId: docId,
+        meta: {
+          fileUrl: postObj.fileUrl || "",
+          fileType: postObj.fileType || "",
+          driveFileId: postObj.driveFileId || "",
+          imgbbDeleteUrl: postObj.imgbbDeleteUrl || "",
+          imgbbId: postObj.imgbbId || ""
+        }
+      }).catch(() => {});
     }
   });
 }
 
 // ============================================================================
-// 👥 USERS & GUARDIANS MANAGEMENT (ZERO DUPLICATES + 0.1s INSTANT REMOVE)
+// 👥 USERS & GUARDIANS MANAGEMENT (INSTANT SAVE & FULL TEACHER EDIT)
 // ============================================================================
 function extractUserPhoto(f) {
   if (!f) return "";
@@ -1329,7 +1421,7 @@ async function addUser() {
 
   var passVal = document.getElementById('uPass').value.trim() || "123456";
   if (passVal.length < 6) {
-    return Swal.fire("Weak Password", "Password must be at least 6 characters long!", "warning");
+    return Swal.fire("পাসওয়ার্ড ত্রুটি", "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!", "warning");
   }
 
   var rawPhone = document.getElementById('uTPhone').value.trim();
@@ -1337,11 +1429,11 @@ async function addUser() {
   var nameVal = document.getElementById('uTName').value.trim();
 
   if (!cleanPhone || !nameVal) {
-    return Swal.fire("Warning", "Teacher Name & Phone Number (Login ID) are required!", "warning");
+    return Swal.fire("তথ্য অসম্পূর্ণ", "শিক্ষকের নাম এবং মোবাইল নম্বর (Login ID) প্রদান করা আবশ্যক!", "warning");
   }
 
-  // যদি একই ফোন নম্বরের টিচার আগে থেকেই লিস্টে থাকে, তবে ডুপ্লিকেট না বানিয়ে সেটিই আপডেট করবে
   var existingTeacher = globalUsersList.find(u => u.type === 'Teacher' && (normalizePhoneFrontend(u.id) === cleanPhone || u.id === rawPhone));
+  var targetRowId = existingTeacher ? existingTeacher.row : ("T_" + cleanPhone.replace(/[^a-zA-Z0-9_-]/g, ""));
 
   var d = {
     type: "Teacher",
@@ -1352,7 +1444,7 @@ async function addUser() {
     name: nameVal,
     email: document.getElementById('uTEmail').value.trim(),
     photoUrl: existingTeacher ? (existingTeacher.photoUrl || "") : "",
-    existingRowId: existingTeacher ? existingTeacher.row : ""
+    existingRowId: targetRowId
   };
 
   isSubmittingUser = true;
@@ -1361,23 +1453,25 @@ async function addUser() {
 
   try {
     if (preparedTeacherAddPhoto) {
-      showLoader(true, "UPLOADING TEACHER PHOTO TO IMGBB...");
-      try {
-        let imgRes = await uploadToImgBBDirect(preparedTeacherAddPhoto.fileData, preparedTeacherAddPhoto.fileName);
-        d.photoUrl = imgRes.url;
-      } catch (e) {
+      let upRes = preparedTeacherAddPhoto.uploadedResult;
+      if (!upRes && preparedTeacherAddPhoto.uploadPromise) {
+        showLoader(true, "শিক্ষকের ছবি সংযুক্ত হচ্ছে...");
+        upRes = await preparedTeacherAddPhoto.uploadPromise;
+      }
+      if (upRes && upRes.url) {
+        d.photoUrl = upRes.url;
+      } else {
         d.photoData = preparedTeacherAddPhoto.fileData;
       }
     }
 
-    showLoader(true, "SAVING TEACHER ACCOUNT...<br><span style='font-size:11px; color:#64748b;'>1-Step Parallel Sync (Firestore + Auth + SMS + Machine)</span>");
+    showLoader(true, "শিক্ষকের অ্যাকাউন্ট সংরক্ষণ করা হচ্ছে...");
     let res = await apiCall('addUserDatabase', { info: d });
     showLoader(false);
 
-    var finalRowId = res.rowId || d.existingRowId || ("T_" + cleanPhone);
+    var finalRowId = res.rowId || targetRowId;
     var finalPhoto = res.photoUrl || d.photoUrl || "";
 
-    // মেমোরি লিস্টে সাথে সাথে আপডেট বা যুক্ত করা (কোনো ডুপ্লিকেট ছাড়াই)
     globalUsersList = globalUsersList.filter(u => !(u.type === 'Teacher' && (u.row === finalRowId || normalizePhoneFrontend(u.id) === cleanPhone)));
     globalUsersList.unshift({
       type: "Teacher",
@@ -1393,7 +1487,10 @@ async function addUser() {
     });
     renderUserList();
 
-    Swal.fire("Success!", res.msg || "Teacher account created!", "success");
+    Toast.fire({
+      icon: 'success',
+      title: 'শিক্ষকের অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে!'
+    });
 
     document.getElementById('uTMachineId').value = "";
     document.getElementById('uTPhone').value = "";
@@ -1404,7 +1501,7 @@ async function addUser() {
     clearTeacherPhoto('add');
   } catch (err) {
     showLoader(false);
-    Swal.fire("Error", err.message, "error");
+    Swal.fire("সংরক্ষণ ব্যর্থ", err.message, "error");
   } finally {
     isSubmittingUser = false;
     if (btn) btn.disabled = false;
@@ -1414,7 +1511,7 @@ async function addUser() {
 async function loadUsers(showSpinner = true, silent = false) {
   if (!isAuthReady) return;
   if (showSpinner && !silent) {
-    showLoader(true, "LOADING USERS & PHOTOS...<br><span style='font-size:11px; color:#64748b;'>Fast Parallel Sync from Firestore</span>");
+    showLoader(true, "ব্যবহারকারীর তালিকা লোড হচ্ছে...");
   }
   try {
     let users = [];
@@ -1502,7 +1599,7 @@ async function loadUsers(showSpinner = true, silent = false) {
     if (showSpinner && !silent) showLoader(false);
     if (!usersLoadedOnce) {
       document.getElementById('userListDisplay').innerHTML =
-        `<p style="color:red; text-align:center;">Failed to load users: ${err.message}</p>`;
+        `<p style="color:red; text-align:center;">তালিকা লোড করা যায়নি: ${err.message}</p>`;
     }
   }
 }
@@ -1515,7 +1612,7 @@ function renderUserList() {
   var classCounts = {};
 
   if (globalUsersList.length === 0) {
-    h = "<p style='text-align:center; color:#94a3b8;'>No users found in database.</p>";
+    h = "<p style='text-align:center; color:#94a3b8;'>কোনো ব্যবহারকারীর তথ্য পাওয়া যায়নি।</p>";
   } else {
     globalUsersList.forEach((u, index) => {
       if (u.type === 'Teacher') {
@@ -1534,22 +1631,22 @@ function renderUserList() {
         badgeBg = 'var(--primary-light)';
         badgeClr = 'var(--primary)';
         actionBtns = `
-          <button class="btn-edit" onclick="openEditUser(${index})" title="Edit Teacher"><i class="fas fa-edit"></i> Edit</button>
-          <button class="btn-delete" onclick="deleteUser('Teacher', '${u.row}')" title="Remove Teacher"><i class="fas fa-trash"></i></button>
+          <button class="btn-edit" onclick="openEditUser(${index})" title="প্রোফাইল ও পাসওয়ার্ড এডিট"><i class="fas fa-edit"></i> Edit</button>
+          <button class="btn-delete" onclick="deleteUser('Teacher', '${u.row}')" title="অ্যাকাউন্ট মুছুন"><i class="fas fa-trash"></i></button>
         `;
       } else if (u.type === 'Student') {
         iconHtml = '<i class="fas fa-user-graduate" style="color:var(--warn); font-size:22px;"></i>';
         badgeBg = '#fef3c7';
         badgeClr = '#b45309';
         actionBtns = `
-          <button class="btn-edit" onclick="openEditUser(${index})" title="Change Student Password"><i class="fas fa-key"></i> Change Pass</button>
+          <button class="btn-edit" onclick="openEditUser(${index})" title="পাসওয়ার্ড পরিবর্তন"><i class="fas fa-key"></i> Password</button>
         `;
       } else {
         iconHtml = '<i class="fas fa-user-shield" style="color:var(--guardian); font-size:22px;"></i>';
         badgeBg = 'var(--guardian-light)';
         badgeClr = 'var(--guardian)';
         actionBtns = `
-          <button class="btn-edit" style="background:#f3e8ff; color:#7c3aed; border-color:#ddd6fe;" onclick="openEditUser(${index})" title="Change Guardian Password"><i class="fas fa-key"></i> Change Pass</button>
+          <button class="btn-edit" style="background:#f3e8ff; color:#7c3aed; border-color:#ddd6fe;" onclick="openEditUser(${index})" title="পাসওয়ার্ড পরিবর্তন"><i class="fas fa-key"></i> Password</button>
         `;
       }
 
@@ -1559,8 +1656,9 @@ function renderUserList() {
         : iconHtml;
 
       var machineText = u.machineId ? ` <span style="color:#64748b; font-size:12px;">| <i class="fas fa-fingerprint"></i> ${u.machineId}</span>` : '';
+      var searchKey = `${u.id} ${u.name} ${u.studentName || ''} ${u.phone || ''} ${u.email || ''} ${u.machineId || ''}`.toLowerCase();
 
-      h += `<div class="list-item user-item" data-type="${u.type}" data-class="${u.classVal || ''}">
+      h += `<div class="list-item user-item" data-type="${u.type}" data-class="${u.classVal || ''}" data-search="${searchKey.replace(/"/g, '')}">
         <div style="display:flex; gap:14px; align-items:center;">
           <div class="user-avatar-wrap">
             ${avatarContent}
@@ -1568,7 +1666,7 @@ function renderUserList() {
           <div>
             <span style="background:${badgeBg}; color:${badgeClr}; padding:3px 10px; border-radius:6px; font-size:10px; font-weight:800; text-transform:uppercase;">${u.type}</span>
             <div style="font-size:14.5px; font-weight:800; color:#0f172a; margin-top:5px;">
-              ID: ${u.id}${machineText}
+              Login ID: ${u.id}${machineText}
             </div>
             <div style="font-size:12px; color:#475569; margin-top:2px; line-height:1.45;">
               ${u.infoHtml}
@@ -1602,7 +1700,7 @@ function renderUserList() {
 
   if (totalStudents > 0) {
     statsHtml += `<div style="background:#f8fafc; padding:14px; border-radius:15px; border:1px solid #e2e8f0;">
-      <b style="color:var(--primary-dark); font-size:12.5px; text-transform:uppercase;"><i class="fas fa-layer-group"></i> Class-wise Students:</b>
+      <b style="color:var(--primary-dark); font-size:12.5px;"><i class="fas fa-layer-group"></i> শ্রেণিভিত্তিক শিক্ষার্থী সংখ্যা:</b>
       <div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;">`;
     for (var cls in classCounts) {
       statsHtml += `<span style="background:#fff; color:#334155; padding:6px 12px; border-radius:10px; border:1px solid #cbd5e1; font-size:12px; font-weight:700;">
@@ -1615,18 +1713,23 @@ function renderUserList() {
   filterUsers();
 }
 
+function scheduleFilterUsers() {
+  if (filterDebounceTimer) clearTimeout(filterDebounceTimer);
+  filterDebounceTimer = setTimeout(filterUsers, 60);
+}
+
 function filterUsers() {
   var textFilter = document.getElementById('searchUserList').value.toLowerCase().trim();
   var classFilter = document.getElementById('filterClass').value;
   var items = document.querySelectorAll('.user-item');
 
   items.forEach(item => {
-    var text = item.innerText.toLowerCase();
+    var searchData = item.getAttribute('data-search') || '';
     var type = item.getAttribute('data-type');
     var cls = (item.getAttribute('data-class') || '').toLowerCase().replace('class ', '').trim();
     var targetCls = classFilter.toLowerCase().replace('class ', '').trim();
 
-    var textMatch = !textFilter || text.includes(textFilter);
+    var textMatch = !textFilter || searchData.includes(textFilter);
     var filterMatch = true;
 
     if (classFilter === 'Teacher') {
@@ -1647,13 +1750,20 @@ function closeModal(id) {
   document.getElementById(id).style.display = "none";
 }
 
+// ============================================================================
+// ✏️ TEACHER FULL EDIT (WITH PHONE NUMBER) & STUDENT/GUARDIAN PASSWORD EDIT
+// ============================================================================
 function openEditUser(index) {
   var u = globalUsersList[index];
+  if (!u) return;
+
   document.getElementById('euIndex').value = index;
   document.getElementById('euRow').value = u.row;
   document.getElementById('euType').value = u.type;
-  document.getElementById('euId').value = u.id;
-  document.getElementById('euPass').value = u.pass;
+  document.getElementById('euOldId').value = u.id || "";
+  document.getElementById('euOldEmail').value = u.email || "";
+  document.getElementById('euOldCard').value = u.cardNumber || "";
+  document.getElementById('euPass').value = u.pass || "123456";
   clearTeacherPhoto('edit');
 
   var summaryBox = document.getElementById('studentGuardianReadOnlyBox');
@@ -1662,7 +1772,7 @@ function openEditUser(index) {
   var passNote = document.getElementById('passSyncNote');
 
   if (u.type === 'Teacher') {
-    modalTitle.innerHTML = `<i class="fas fa-user-edit"></i> Edit Teacher Account`;
+    modalTitle.innerHTML = `<i class="fas fa-user-edit"></i> শিক্ষকের প্রোফাইল ও লগইন তথ্য এডিট`;
     summaryBox.style.display = "none";
     teacherBox.style.display = "block";
 
@@ -1674,35 +1784,35 @@ function openEditUser(index) {
       curImg.style.display = "none";
     }
 
-    document.getElementById('euTeacherIdDisplay').value = u.id;
+    document.getElementById('euPhone').value = u.id || "";
     document.getElementById('euName').value = u.name || "";
     document.getElementById('euEmail').value = u.email || "";
     document.getElementById('euMachineId').value = u.machineId || "";
     document.getElementById('euCardNumber').value = u.cardNumber || "";
-    passNote.innerText = "Updating will sync Teacher's Firestore profile, ImgBB photo, Attendance Machine & Firebase Auth.";
+    passNote.innerText = "শিক্ষকের মোবাইল নম্বর (Login ID), নাম, ইমেইল, কার্ড নম্বর বা পাসওয়ার্ড পরিবর্তন করলে তা সাথে সাথে লগইন পোর্টালে কার্যকর হবে।";
   } else {
-    modalTitle.innerHTML = `<i class="fas fa-key"></i> Change ${u.type} Password`;
+    modalTitle.innerHTML = `<i class="fas fa-key"></i> পাসওয়ার্ড পরিবর্তন (${u.type})`;
     teacherBox.style.display = "none";
     summaryBox.style.display = "block";
 
     var photoAvatarHtml = u.photoUrl
       ? `<div style="text-align:center; margin-bottom:10px;">
-           <img src="${u.photoUrl}" alt="Profile" style="width:68px; height:68px; border-radius:50%; object-fit:cover; border:2.5px solid var(--primary); box-shadow:0 4px 10px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
+           <img src="${u.photoUrl}" alt="Profile" style="width:66px; height:66px; border-radius:50%; object-fit:cover; border:2.5px solid var(--primary); box-shadow:0 4px 10px rgba(0,0,0,0.08);" onerror="this.style.display='none'">
          </div>`
       : "";
 
     summaryBox.innerHTML = `
       ${photoAvatarHtml}
       <div class="ro-row" style="color:var(--primary); font-weight:800; margin-bottom:4px; border-bottom:1px solid #cbd5e1;">
-        <span><i class="fas fa-lock"></i> Read-Only Profile Info</span>
+        <span><i class="fas fa-id-badge"></i> প্রোফাইল তথ্য</span>
         <span>${u.type}</span>
       </div>
-      <div class="ro-row"><span>Student Name:</span> <b>${u.studentName || u.name}</b></div>
-      <div class="ro-row"><span>Student ID:</span> <b>${u.studentID}</b></div>
-      <div class="ro-row"><span>Class & Roll:</span> <b>Class ${u.classVal || 'N/A'} (Roll: ${u.roll || 'N/A'})</b></div>
-      <div class="ro-row"><span>Guardian Phone:</span> <b>${u.phone || 'N/A'}</b></div>
+      <div class="ro-row"><span>শিক্ষার্থীর নাম:</span> <b>${u.studentName || u.name}</b></div>
+      <div class="ro-row"><span>স্টুডেন্ট আইডি:</span> <b>${u.studentID}</b></div>
+      <div class="ro-row"><span>শ্রেণি ও রোল:</span> <b>Class ${u.classVal || 'N/A'} (Roll: ${u.roll || 'N/A'})</b></div>
+      <div class="ro-row"><span>অভিভাবকের মোবাইল:</span> <b>${u.phone || 'N/A'}</b></div>
     `;
-    passNote.innerHTML = `⚡ <b>Admin Special Power:</b> স্টুডেন্ট এবং অভিভাবকের অন্যান্য তথ্য এখানে অপরিবর্তনীয়। শুধুমাত্র নতুন <b>Password</b> সেট করলে তা সরাসরি ১ সেকেন্ডে কার্যকর হবে।`;
+    passNote.innerHTML = `নতুন পাসওয়ার্ড সংরক্ষণ করলে তা সাথে সাথে শিক্ষার্থী ও অভিভাবক পোর্টালে কার্যকর হবে।`;
   }
 
   document.getElementById('editUserModal').style.display = "flex";
@@ -1713,11 +1823,13 @@ async function submitUserEdit() {
   var u = globalUsersList[index] || {};
   var row = document.getElementById('euRow').value;
   var type = document.getElementById('euType').value;
-  var id = document.getElementById('euId').value;
+  var oldId = document.getElementById('euOldId').value;
+  var oldEmail = document.getElementById('euOldEmail').value;
+  var oldCard = document.getElementById('euOldCard').value;
   var pass = document.getElementById('euPass').value.trim();
 
   if (!pass || pass.length < 6) {
-    Swal.fire("Invalid Password", "Password must be at least 6 characters long!", "warning");
+    Swal.fire("পাসওয়ার্ড ত্রুটি", "পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!", "warning");
     return;
   }
 
@@ -1727,7 +1839,10 @@ async function submitUserEdit() {
   var d = {
     row: row,
     type: type,
-    id: id,
+    id: oldId,
+    oldId: oldId,
+    oldEmail: oldEmail,
+    oldCardNumber: oldCard,
     pass: pass,
     studentID: u.studentID || "",
     phone: u.phone || "",
@@ -1736,36 +1851,53 @@ async function submitUserEdit() {
 
   try {
     if (type === 'Teacher') {
-      d.name = document.getElementById('euName').value.trim();
+      var rawNewPhone = document.getElementById('euPhone').value.trim();
+      var cleanNewPhone = normalizePhoneFrontend(rawNewPhone) || rawNewPhone;
+      var newName = document.getElementById('euName').value.trim();
+
+      if (!cleanNewPhone || !newName) {
+        if (btn) btn.disabled = false;
+        return Swal.fire("তথ্য প্রয়োজন", "শিক্ষকের মোবাইল নম্বর (Login ID) এবং নাম খালি রাখা যাবে না!", "warning");
+      }
+
+      d.id = cleanNewPhone;
+      d.name = newName;
       d.email = document.getElementById('euEmail').value.trim();
-      d.machineId = document.getElementById('euMachineId').value.trim();
+      var inputMachine = document.getElementById('euMachineId').value.trim();
+      if (!inputMachine || (oldId !== cleanNewPhone && inputMachine === oldId)) {
+        d.machineId = cleanNewPhone;
+      } else {
+        d.machineId = inputMachine;
+      }
       d.cardNumber = document.getElementById('euCardNumber').value.trim();
 
       if (preparedTeacherEditPhoto) {
-        showLoader(true, "UPLOADING NEW TEACHER PHOTO TO IMGBB...");
-        try {
-          let imgRes = await uploadToImgBBDirect(preparedTeacherEditPhoto.fileData, preparedTeacherEditPhoto.fileName);
-          d.photoUrl = imgRes.url;
-        } catch (e) {
+        let upRes = preparedTeacherEditPhoto.uploadedResult;
+        if (!upRes && preparedTeacherEditPhoto.uploadPromise) {
+          showLoader(true, "নতুন ছবি সংযুক্ত হচ্ছে...");
+          upRes = await preparedTeacherEditPhoto.uploadPromise;
+        }
+        if (upRes && upRes.url) {
+          d.photoUrl = upRes.url;
+        } else {
           d.photoData = preparedTeacherEditPhoto.fileData;
         }
       }
     }
 
-    showLoader(true, "APPLYING ADMIN OVERRIDE...<br><span style='font-size:11px; color:#64748b;'>Parallel Sync in Progress</span>");
-    let res = await apiCall('updateUserDatabase', { info: d });
-    showLoader(false);
+    // সাথে সাথে মোডাল বন্ধ করে ইউআই আপডেট (যাতে ইউজারকে অপেক্ষা করতে না হয়)
     closeModal('editUserModal');
 
     globalUsersList.forEach(item => {
       if (item.row === row) {
         item.pass = pass;
         if (type === 'Teacher') {
+          item.id = d.id;
           item.name = d.name;
           item.email = d.email;
           item.machineId = d.machineId;
           item.cardNumber = d.cardNumber;
-          if (res.photoUrl || d.photoUrl) item.photoUrl = res.photoUrl || d.photoUrl;
+          if (d.photoUrl) item.photoUrl = d.photoUrl;
           item.infoHtml = `Name: <b>${item.name}</b> | Email: ${item.email || "N/A"}<br>Password: <span style="color:#e11d48; font-weight:700;">${pass}</span>`;
         } else if (item.type === 'Student') {
           item.infoHtml = `Student: <b>${item.name}</b> (Class: ${item.classVal}, Roll: ${item.roll})<br>Guardian Phone: ${item.phone || "N/A"} | Pass: <span style="color:#e11d48; font-weight:700;">${pass}</span>`;
@@ -1776,74 +1908,77 @@ async function submitUserEdit() {
     });
     renderUserList();
 
-    Swal.fire("Success!", res.msg || "Updated successfully!", "success");
+    Toast.fire({
+      icon: 'success',
+      title: type === 'Teacher' ? 'শিক্ষকের তথ্য ও পাসওয়ার্ড আপডেট হয়েছে!' : 'পাসওয়ার্ড সফলভাবে পরিবর্তন হয়েছে!'
+    });
+
+    // ব্যাকগ্রাউন্ডে সার্ভার ও লগইন সিস্টেম সিঙ্ক
+    let res = await apiCall('updateUserDatabase', { info: d });
+    if (res && res.photoUrl && type === 'Teacher') {
+      globalUsersList.forEach(item => {
+        if (item.row === row) item.photoUrl = res.photoUrl;
+      });
+      renderUserList();
+    }
   } catch (err) {
     showLoader(false);
-    Swal.fire("Update Failed", err.message, "error");
+    Swal.fire("আপডেট ব্যর্থ", err.message, "error");
+    loadUsers(false, true);
   } finally {
     if (btn) btn.disabled = false;
   }
 }
 
-// ⚡ ০.১ সেকেন্ডে ইনস্ট্যান্ট টিচার রিমুভ (কোনো ব্লকিং লোডার ছাড়াই!)
 function deleteUser(type, docId) {
   if (type !== 'Teacher') {
-    return Swal.fire("Not Allowed", "Student & Guardian accounts cannot be deleted from here.", "info");
+    return Swal.fire("অনুমোদিত নয়", "শিক্ষার্থী ও অভিভাবকের অ্যাকাউন্ট এখান থেকে মুছে ফেলা যাবে না।", "info");
   }
 
   var teacherObj = globalUsersList.find(u => u.type === 'Teacher' && u.row === docId) || {};
 
   Swal.fire({
-    title: 'Remove Teacher Account?',
-    text: "This will instantly remove the teacher's login access, profile, and attendance machine card.",
+    title: 'শিক্ষকের অ্যাকাউন্ট মুছে ফেলতে চান?',
+    text: "এটি শিক্ষকের লগইন অ্যাক্সেস এবং প্রোফাইল স্থায়ীভাবে মুছে ফেলবে।",
     icon: 'warning',
     showCancelButton: true,
     confirmButtonColor: '#ef4444',
-    confirmButtonText: 'Yes, remove!'
+    cancelButtonText: 'বাতিল',
+    confirmButtonText: 'হ্যাঁ, মুছে ফেলুন'
   }).then(async (result) => {
     if (result.isConfirmed) {
-      // ১. ০.১ সেকেন্ডে স্ক্রিন থেকে সাথে সাথে মুছে ফেলা (Optimistic Instant UI)
       globalUsersList = globalUsersList.filter(u => !(u.type === 'Teacher' && u.row === docId));
       renderUserList();
 
-      Swal.fire({
-        title: "Removed!",
-        text: "🗑️ Teacher account removed instantly!",
-        icon: "success",
-        timer: 1300,
-        showConfirmButton: false
+      Toast.fire({
+        icon: 'success',
+        title: 'শিক্ষকের অ্যাকাউন্ট মুছে ফেলা হয়েছে'
       });
 
-      // ২. সাথে সাথে ক্লায়েন্ট SDK দিয়ে Firestore ডকুমেন্ট মুছে ফেলা
       try {
         db.collection('Teachers').doc(docId).delete().catch(() => {});
       } catch (e) {}
 
-      // ৩. ব্যাকগ্রাউন্ডে প্যারালালভাবে Auth ও Attendance Machine থেকে মুছে ফেলা
-      try {
-        await apiCall('deleteUser', {
-          type: type,
-          rowId: docId,
-          meta: {
-            id: teacherObj.id || "",
-            machineId: teacherObj.machineId || teacherObj.id || "",
-            email: teacherObj.email || ""
-          }
-        });
-      } catch (err) {
-        console.warn("Background teacher cleanup completed:", err);
-      }
+      apiCall('deleteUser', {
+        type: type,
+        rowId: docId,
+        meta: {
+          id: teacherObj.id || "",
+          machineId: teacherObj.machineId || teacherObj.id || "",
+          email: teacherObj.email || ""
+        }
+      }).catch(() => {});
     }
   });
 }
 
 // ============================================================================
-// 📋 WEBSITE POSTS MANAGER (INSTANT CACHE + METADATA TRACKING)
+// 📋 PUBLISHED CONTENT MANAGER
 // ============================================================================
 async function loadPosts(showSpinner = true, silent = false) {
   if (!isAuthReady) return;
   if (showSpinner && !silent) {
-    showLoader(true, "LOADING POSTS...");
+    showLoader(true, "প্রকাশিত পোস্ট লোড হচ্ছে...");
   }
   try {
     let snap = await db.collection('WebsitePosts').get();
@@ -1875,23 +2010,23 @@ async function loadPosts(showSpinner = true, silent = false) {
   } catch (err) {
     if (showSpinner && !silent) showLoader(false);
     if (!postsLoadedOnce) {
-      document.getElementById('postList').innerHTML = "<p style='color:red; text-align:center;'>Failed to load posts.</p>";
+      document.getElementById('postList').innerHTML = "<p style='color:red; text-align:center;'>পোস্ট লোড করা যায়নি।</p>";
     }
   }
 }
 
 function renderPostsList() {
   var h = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-    <h3 style="margin:0; color:var(--primary); font-weight:800; text-transform:uppercase; font-size:17px;">
-      <i class="fas fa-list-ul"></i> Website Posts (${globalPostsList.length})
+    <h3 style="margin:0; color:var(--primary); font-weight:800; font-size:17px;">
+      <i class="fas fa-list-ul"></i> ওয়েবসাইটে প্রকাশিত পোস্টসমূহ (${globalPostsList.length})
     </h3>
-    <button onclick="loadPosts(true, false)" style="background:var(--primary-light); color:var(--primary); border:1px solid #a7f3d0; padding:6px 12px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer;">
-      <i class="fas fa-sync-alt"></i> Refresh
+    <button onclick="loadPosts(true, false)" style="background:var(--primary-light); color:var(--primary); border:1px solid #a7f3d0; padding:6px 13px; border-radius:20px; font-size:12px; font-weight:700; cursor:pointer;">
+      <i class="fas fa-sync-alt"></i> রিফ্রেশ
     </button>
   </div>`;
 
   if (globalPostsList.length === 0) {
-    h += "<p style='text-align:center; color:#94a3b8; padding:20px; font-weight:600;'>No posts available.</p>";
+    h += "<p style='text-align:center; color:#94a3b8; padding:20px; font-weight:600;'>কোনো প্রকাশিত পোস্ট নেই।</p>";
   }
 
   globalPostsList.forEach(r => {
@@ -1901,22 +2036,17 @@ function renderPostsList() {
     } else if (r.fileType === "PDF" || r.fileType === "Document") {
       thumbHtml = `<div style="width:52px; height:52px; border-radius:10px; background:#fef2f2; border:1px solid #fecaca; display:flex; align-items:center; justify-content:center; color:#ef4444; font-size:22px; flex-shrink:0;"><i class="fas fa-file-pdf"></i></div>`;
     }
-    var serverBadge = (r.fileUrl && r.fileUrl.includes("ibb.co"))
-      ? `<span style="background:#dbeafe; color:#1d4ed8; padding:2px 7px; border-radius:5px; font-size:9.5px; font-weight:800; margin-left:5px;">ImgBB</span>`
-      : (r.fileUrl && r.fileUrl.includes("drive.google.com"))
-      ? `<span style="background:#fef3c7; color:#b45309; padding:2px 7px; border-radius:5px; font-size:9.5px; font-weight:800; margin-left:5px;">Drive PDF</span>`
-      : "";
     h += `<div class="list-item">
       <div style="display:flex; gap:12px; align-items:center; flex:1;">
         ${thumbHtml}
         <div>
           <span style="background:var(--primary-light); color:var(--primary); padding:4px 10px; border-radius:6px; font-size:10.5px; font-weight:800; text-transform:uppercase;">${r.targetPage}</span>
-          <span style="font-size:11px; color:#64748b; margin-left:6px; font-weight:600;">• ${r.fileType}</span>${serverBadge}
+          <span style="font-size:11px; color:#64748b; margin-left:6px; font-weight:600;">• ${r.fileType}</span>
           <b style="font-size:15px; color:#0f172a; display:block; margin:6px 0 4px 0;">${r.title}</b>
           <small style="color:#64748b; font-weight:600;"><i class="far fa-calendar-alt"></i> ${r.date}</small>
         </div>
       </div>
-      <button class="btn-delete" onclick="delPost('${r.docId}')"><i class="fas fa-trash"></i> Delete</button>
+      <button class="btn-delete" onclick="delPost('${r.docId}')"><i class="fas fa-trash"></i> মুছুন</button>
     </div>`;
   });
   document.getElementById('postList').innerHTML = h;
