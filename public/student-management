@@ -110,298 +110,298 @@ input:focus, select:focus, textarea:focus { border-color: var(--primary); outlin
 </div>
 
 <div id="appContainer" style="display: none;">
-    <div class="header">
-        <h2>
-          <img src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" alt="SRMS">
-          <span>SRMS ERP DB V19</span>
-        </h2>
-        <button class="btn-back" onclick="window.close();"><i class="fas fa-sign-out-alt"></i> Dashboard</button>
-    </div>
+  <div class="header">
+    <h2>
+      <img src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" alt="SRMS">
+      <span>SRMS ERP DB V19</span>
+    </h2>
+    <button class="btn-back" onclick="window.close();"><i class="fas fa-sign-out-alt"></i> Dashboard</button>
+  </div>
 
-    <!-- ================= 1. ADMIT TAB ================= -->
-    <div id="admitTab" class="container active">
-        <div class="card">
-            <h3 class="card-title"><i class="fas fa-user-plus"></i> New Student Admission</h3>
-            
-            <div class="form-section">
-                <h4><i class="fas fa-id-card"></i> Personal Information &amp; Photo</h4>
+  <!-- ================= 1. ADMIT TAB ================= -->
+  <div id="admitTab" class="container active">
+    <div class="card">
+      <h3 class="card-title"><i class="fas fa-user-plus"></i> New Student Admission</h3>
+      
+      <div class="form-section">
+        <h4><i class="fas fa-id-card"></i> Personal Information &amp; Photo</h4>
 
-                <!-- 📸 Student Photo Upload (ImgBB Server) -->
-                <div style="margin-bottom: 15px;">
-                    <label style="color:var(--primary);"><i class="fas fa-camera"></i> Student Profile Photo (Auto-Uploads to ImgBB Server)</label>
-                    <input type="file" id="sPhotoInput" accept="image/*" onchange="handleStudentPhotoSelect(this, 'admit')">
-                    <div id="sPhotoPreviewBox" class="photo-preview-box">
-                        <img id="sPhotoPreviewImg" src="" alt="Student Preview">
-                        <div class="photo-preview-meta" id="sPhotoPreviewMeta">Photo ready</div>
-                        <button type="button" class="btn-clear-photo" onclick="clearStudentPhoto('admit')"><i class="fas fa-times"></i> Remove</button>
-                    </div>
-                </div>
-
-                <div class="flex-row">
-                    <div class="flex-col"><label>Full Name *</label><input type="text" id="sName" placeholder="Student's Full Name"></div>
-                    <div class="flex-col"><label>Date of Birth</label><input type="date" id="sDob"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Gender</label><select id="sGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
-                    <div class="flex-col"><label>Religion</label><select id="sReligion"><option value="">Select</option><option value="Islam">Islam</option><option value="Hinduism">Hinduism</option><option value="Christianity">Christianity</option><option value="Buddhism">Buddhism</option></select></div>
-                    <div class="flex-col"><label>Blood Group</label><select id="sBloodGroup"><option value="">Select</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option></select></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Birth Certificate / NID</label><input type="text" id="sBirthCert" placeholder="Registration No"></div>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h4><i class="fas fa-graduation-cap"></i> Academic &amp; Category Information</h4>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Class *</label>
-                        <select id="sClass" onchange="fetchFeesForClass('sClass', 'sCategory', 'admitFeeGrid'); toggleGroup('sClass', 'sGroupDiv');">
-                            <option value="">Select Class</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
-                        </select>
-                    </div>
-                    <div class="flex-col"><label>Section</label><select id="sSection"><option value="">Select Section</option></select></div>
-                    <div class="flex-col"><label>Roll *</label><input type="number" id="sRoll" placeholder="Roll No."></div>
-                </div>
-                <div class="flex-row">
-                    <div id="sGroupDiv" class="flex-col" style="display:none;"><label>Group (Class 9-10)</label><select id="sGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select></div>
-                    <div class="flex-col">
-                        <label style="color:var(--purple);"><i class="fas fa-tags"></i> Student Category * <small style="text-transform:none; color:#64748b;">(From Database)</small></label>
-                        <select id="sCategory" onchange="fetchFeesForClass('sClass', 'sCategory', 'admitFeeGrid')" style="border-color:var(--purple); font-weight:700; color:var(--purple);">
-                            <option value="">Loading Categories from DB...</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Admission Date</label><input type="date" id="sAdmissionDate"></div>
-                    <div class="flex-col"><label>Previous School (If any)</label><input type="text" id="sPrevSchool" placeholder="School Name"></div>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <h4><i class="fas fa-users"></i> Guardian &amp; Contact Information</h4>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Father's Name</label><input type="text" id="sFatherName" placeholder="Father's Name"></div>
-                    <div class="flex-col"><label>Mother's Name</label><input type="text" id="sMotherName" placeholder="Mother's Name"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Primary Phone Number *</label><input type="tel" id="sPhone" placeholder="017XXXXXXXX (For SMS/Portal)"></div>
-                    <div class="flex-col"><label>Guardian Email (For Portal &amp; Notices)</label><input type="email" id="sEmail" placeholder="guardian@email.com"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Alternative Phone</label><input type="tel" id="sGuardianPhone" placeholder="01XXXXXXXXX"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Present Address</label><textarea id="sAddress" rows="2" placeholder="Full Present Address"></textarea></div>
-                    <div class="flex-col"><label>Permanent Address</label><textarea id="sPermanentAddress" rows="2" placeholder="Full Permanent Address"></textarea></div>
-                </div>
-            </div>
-
-            <div class="form-section" style="border-color: #8b5cf6;">
-                <h4 style="color:#7e22ce;"><i class="fas fa-microchip"></i> System &amp; ID Card</h4>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Machine Card Number (RFID)</label><input type="text" id="sCardNumber" placeholder="Enter RFID Card No"></div>
-                </div>
-            </div>
-
-            <!-- 💡 AUTO FETCHED ADMISSION FEES ZONE (CATEGORY-AWARE) -->
-            <div id="admitFeeZone" style="display:none; background:#f0fdf4; padding:20px; border-radius:16px; border:2px dashed var(--primary); margin-bottom:20px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:15px;">
-                    <h4 style="margin:0; color:#005f40; font-size:16px;"><i class="fas fa-file-invoice-dollar"></i> Initial Admission Fees</h4>
-                    <span id="admitFeeCategoryBadge" style="background:var(--purple); color:#fff; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:800;">Category</span>
-                </div>
-                <div id="admitFeeGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px;"></div>
-            </div>
-
-            <button class="btn-submit" id="admitSubmitBtn" onclick="saveStudent()"><i class="fas fa-rocket"></i> Submit Admission &amp; Collect Fees</button>
+        <!-- 📸 Student Photo Upload (ImgBB Server) -->
+        <div style="margin-bottom: 15px;">
+          <label style="color:var(--primary);"><i class="fas fa-camera"></i> Student Profile Photo (Auto-Uploads to ImgBB Server)</label>
+          <input type="file" id="sPhotoInput" accept="image/*" onchange="handleStudentPhotoSelect(this, 'admit')">
+          <div id="sPhotoPreviewBox" class="photo-preview-box">
+            <img id="sPhotoPreviewImg" src="" alt="Student Preview">
+            <div class="photo-preview-meta" id="sPhotoPreviewMeta">Photo ready</div>
+            <button type="button" class="btn-clear-photo" onclick="clearStudentPhoto('admit')"><i class="fas fa-times"></i> Remove</button>
+          </div>
         </div>
-    </div>
 
-    <!-- ================= 2. VIEW TAB ================= -->
-    <div id="viewTab" class="container">
-        <h3 style="margin-top:0; color:#475569;"><i class="fas fa-chart-pie"></i> School Demographics</h3>
-        <div id="statsDashboard" class="stats-grid"></div>
-
-        <div class="card">
-            <div class="flex-row" style="margin-bottom:15px;">
-                <select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Classes</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option></select>
-                <select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Sections</option></select>
-                <select id="filterCategory" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Categories</option></select>
-                
-                <button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:14px 20px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3); min-width:130px; font-weight:700;"><i class="fas fa-print"></i> Print List</button>
-            </div>
-            <div style="position: relative;"><i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i><input type="text" id="stuSearch" placeholder="Search Name, ID, Phone, Email, Roll, Category..." onkeyup="filterStudents()" style="padding-left: 45px; border-radius: 30px; font-size: 15px;"></div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Full Name *</label><input type="text" id="sName" placeholder="Student's Full Name"></div>
+          <div class="flex-col"><label>Date of Birth</label><input type="date" id="sDob"></div>
         </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Gender</label><select id="sGender"><option value="">Select</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
+          <div class="flex-col"><label>Religion</label><select id="sReligion"><option value="">Select</option><option value="Islam">Islam</option><option value="Hinduism">Hinduism</option><option value="Christianity">Christianity</option><option value="Buddhism">Buddhism</option></select></div>
+          <div class="flex-col"><label>Blood Group</label><select id="sBloodGroup"><option value="">Select</option><option value="A+">A+</option><option value="A-">A-</option><option value="B+">B+</option><option value="B-">B-</option><option value="AB+">AB+</option><option value="AB-">AB-</option><option value="O+">O+</option><option value="O-">O-</option></select></div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Birth Certificate / NID</label><input type="text" id="sBirthCert" placeholder="Registration No"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4><i class="fas fa-graduation-cap"></i> Academic &amp; Category Information</h4>
+        <div class="flex-row">
+          <div class="flex-col"><label>Class *</label>
+            <select id="sClass" onchange="fetchAdmissionFeesForAdmit(); toggleGroup('sClass', 'sGroupDiv');">
+              <option value="">Select Class</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
+            </select>
+          </div>
+          <div class="flex-col"><label>Section</label><select id="sSection"><option value="">Select Section</option></select></div>
+          <div class="flex-col"><label>Roll *</label><input type="number" id="sRoll" placeholder="Roll No."></div>
+        </div>
+        <div class="flex-row">
+          <div id="sGroupDiv" class="flex-col" style="display:none;"><label>Group (Class 9-10)</label><select id="sGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select></div>
+          <div class="flex-col">
+            <label style="color:var(--purple);"><i class="fas fa-tags"></i> Student Category * <small style="text-transform:none; color:#64748b;">(From Database)</small></label>
+            <select id="sCategory" onchange="fetchAdmissionFeesForAdmit()" style="border-color:var(--purple); font-weight:700; color:var(--purple);">
+              <option value="">Loading Categories from DB...</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Admission Date</label><input type="date" id="sAdmissionDate"></div>
+          <div class="flex-col"><label>Previous School (If any)</label><input type="text" id="sPrevSchool" placeholder="School Name"></div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h4><i class="fas fa-users"></i> Guardian &amp; Contact Information</h4>
+        <div class="flex-row">
+          <div class="flex-col"><label>Father's Name</label><input type="text" id="sFatherName" placeholder="Father's Name"></div>
+          <div class="flex-col"><label>Mother's Name</label><input type="text" id="sMotherName" placeholder="Mother's Name"></div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Primary Phone Number *</label><input type="tel" id="sPhone" placeholder="017XXXXXXXX (For SMS/Portal)"></div>
+          <div class="flex-col"><label>Guardian Email (For Portal &amp; Notices)</label><input type="email" id="sEmail" placeholder="guardian@email.com"></div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Alternative Phone</label><input type="tel" id="sGuardianPhone" placeholder="01XXXXXXXXX"></div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Present Address</label><textarea id="sAddress" rows="2" placeholder="Full Present Address"></textarea></div>
+          <div class="flex-col"><label>Permanent Address</label><textarea id="sPermanentAddress" rows="2" placeholder="Full Permanent Address"></textarea></div>
+        </div>
+      </div>
+
+      <div class="form-section" style="border-color: #8b5cf6;">
+        <h4 style="color:#7e22ce;"><i class="fas fa-microchip"></i> System &amp; ID Card</h4>
+        <div class="flex-row">
+          <div class="flex-col"><label>Machine Card Number (RFID)</label><input type="text" id="sCardNumber" placeholder="Enter RFID Card No"></div>
+        </div>
+      </div>
+
+      <!-- 💡 AUTO FETCHED ADMISSION FEES ZONE (SCHOOL FEE + ADMISSION FEE + CUSTOM ADVANCE FEES) -->
+      <div id="admitFeeZone" style="display:none; background:#f0fdf4; padding:20px; border-radius:16px; border:2px dashed var(--primary); margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:15px;">
+          <h4 style="margin:0; color:#005f40; font-size:16px;"><i class="fas fa-file-invoice-dollar"></i> Initial Admission Fees (Auto-Loaded by Class &amp; Category)</h4>
+          <span id="admitFeeCategoryBadge" style="background:var(--purple); color:#fff; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:800;">Category</span>
+        </div>
+        <div id="admitFeeGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:15px;"></div>
+      </div>
+
+      <button class="btn-submit" id="admitSubmitBtn" onclick="saveStudent()"><i class="fas fa-rocket"></i> Submit Admission &amp; Collect Fees</button>
+    </div>
+  </div>
+
+  <!-- ================= 2. VIEW TAB ================= -->
+  <div id="viewTab" class="container">
+    <h3 style="margin-top:0; color:#475569;"><i class="fas fa-chart-pie"></i> School Demographics</h3>
+    <div id="statsDashboard" class="stats-grid"></div>
+
+    <div class="card">
+      <div class="flex-row" style="margin-bottom:15px;">
+        <select id="filterClass" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Classes</option><option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option></select>
+        <select id="filterSection" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Sections</option></select>
+        <select id="filterCategory" onchange="filterStudents()" style="flex:1; min-width:110px;"><option value="">All Categories</option></select>
         
-        <div id="studentListDisplay"></div>
+        <button onclick="printReport()" style="background:linear-gradient(135deg, var(--primary), var(--primary-dark)); color:white; border:none; padding:14px 20px; border-radius:12px; cursor:pointer; box-shadow: 0 4px 10px rgba(0, 95, 64, 0.3); min-width:130px; font-weight:700;"><i class="fas fa-print"></i> Print List</button>
+      </div>
+      <div style="position: relative;"><i class="fas fa-search" style="position:absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #94a3b8;"></i><input type="text" id="stuSearch" placeholder="Search Name, ID, Phone, Email, Roll, Category..." onkeyup="filterStudents()" style="padding-left: 45px; border-radius: 30px; font-size: 15px;"></div>
+    </div>
+    
+    <div id="studentListDisplay"></div>
+  </div>
+
+  <!-- ================= 3. SECTIONS & CUSTOM CATEGORIES TAB ================= -->
+  <div id="sectionTab" class="container">
+    <!-- Card 1: Custom Sections -->
+    <div class="card" style="border-top: 4px solid var(--primary);">
+      <h3 class="card-title"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
+      <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">Add sections here globally (saved in <code>Admin/Settings</code>). They automatically appear in all Admission, Filter, Edit &amp; Accounts forms.</p>
+      <div style="display:flex; gap:10px;">
+        <input type="text" id="newSecName" placeholder="Write Section Name (e.g., Padma, Section A, Boys)" style="flex:1; border-color:#a7f3d0; margin-top:0;">
+        <button onclick="addSection()" class="btn-submit" style="width:140px; margin-top:0; padding:10px; box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add Section</button>
+      </div>
+      <div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;"></div>
     </div>
 
-    <!-- ================= 3. SECTIONS & CUSTOM CATEGORIES TAB ================= -->
-    <div id="sectionTab" class="container">
-        <!-- Card 1: Custom Sections -->
-        <div class="card" style="border-top: 4px solid var(--primary);">
-            <h3 class="card-title"><i class="fas fa-layer-group"></i> Manage Custom Sections</h3>
-            <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">Add sections here globally (saved in <code>Admin/Settings</code>). They automatically appear in all Admission, Filter, Edit &amp; Accounts forms.</p>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="newSecName" placeholder="Write Section Name (e.g., Padma, Section A, Boys)" style="flex:1; border-color:#a7f3d0; margin-top:0;">
-                <button onclick="addSection()" class="btn-submit" style="width:140px; margin-top:0; padding:10px; box-shadow: 0 6px 15px rgba(0, 95, 64, 0.2);"><i class="fas fa-plus"></i> Add Section</button>
-            </div>
-            <div id="sectionListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #f0fdf4;"></div>
+    <!-- Card 2: Custom Student Categories (100% Database-Driven) -->
+    <div class="card" style="border-top: 4px solid var(--purple);">
+      <h3 class="card-title" style="color:var(--purple); border-bottom-color:#f3e8ff;">
+        <i class="fas fa-tags"></i> Manage Custom Student Categories
+      </h3>
+      <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">
+        এখানে আপনার পছন্দমতো যেকোনো <b>Category</b> তৈরি করুন। কোডে কোনো রেডিমেড ক্যাটাগরি রাখা হয়নি—আপনি এখানে যা সেট করবেন, সেটিই সরাসরি ডাটাবেস (<code>Admin/Settings</code>) থেকে <b>Admit Tab</b>, <b>Edit Modal</b> এবং <b>Accounts Portal</b>-এর সব ক্যাটাগরি মেনুতে চলে যাবে!
+      </p>
+      <div style="display:flex; gap:10px;">
+        <input type="text" id="newCatName" placeholder="Write Category Name (e.g., Residential, Day-Care, Night-Care, Civil...)" style="flex:1; border-color:#ddd6fe; margin-top:0;">
+        <button onclick="addCategory()" class="btn-submit" style="width:155px; margin-top:0; padding:10px; background:linear-gradient(135deg, var(--purple), #5b21b6); box-shadow: 0 6px 15px rgba(124, 58, 237, 0.25);"><i class="fas fa-plus"></i> Add Category</button>
+      </div>
+      <div id="categoryListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #faf5ff;"></div>
+    </div>
+  </div>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- 👁️ VIEW MODAL -->
+  <div id="viewModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('viewModal')">&times;</span>
+      <h3 style="color:var(--primary); margin-top:0; font-weight:900; border-bottom: 2px solid var(--light); padding-bottom:10px;"><i class="fas fa-user-circle"></i> Student Full Profile</h3>
+      
+      <div style="text-align:center; margin: 18px 0;">
+        <img id="viewStudentPhoto" src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" alt="Student Photo" style="width:115px; height:115px; border-radius:50%; object-fit:cover; border:4px solid var(--primary); box-shadow:0 8px 25px rgba(0,95,64,0.2); background:#fff;">
+        <h3 id="viewStudentNameTitle" style="margin:10px 0 4px 0; color:#0f172a; font-size:20px; font-weight:800;"></h3>
+        <span id="viewStudentCategoryBadge" style="background:var(--purple); color:#fff; padding:4px 14px; border-radius:20px; font-size:11.5px; font-weight:800;"></span>
+      </div>
+
+      <table class="info-table" id="viewTable"></table>
+      
+      <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeModal('viewModal')">Close View</button>
+    </div>
+  </div>
+
+  <!-- ✏️ EDIT MODAL -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal('editModal')">&times;</span>
+      <h3 style="color:var(--edit); margin-top:0; font-weight:900; border-bottom: 2px solid #e0e7ff; padding-bottom:10px;"><i class="fas fa-user-edit"></i> Edit Profile, Photo &amp; Class Update</h3>
+
+      <input type="hidden" id="eRowId">
+
+      <div class="form-section">
+        <!-- 📸 Current Photo & Update Photo Option -->
+        <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:15px; background:#fff; padding:14px; border-radius:14px; border:1px solid #e2e8f0;">
+          <img id="eCurrentPhoto" src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" alt="Current Photo" style="width:74px; height:74px; border-radius:50%; object-fit:cover; border:3px solid var(--edit); background:#fff;">
+          <div style="flex:1; min-width:200px;">
+            <label style="margin-top:0; color:var(--edit);"><i class="fas fa-camera"></i> Change Student Photo (ImgBB Upload)</label>
+            <input type="file" id="ePhotoInput" accept="image/*" onchange="handleStudentPhotoSelect(this, 'edit')" style="border-color:var(--edit); background:#eff6ff;">
+          </div>
+        </div>
+        <div id="ePhotoPreviewBox" class="photo-preview-box" style="background:#eff6ff; border-color:#bfdbfe; margin-bottom:15px;">
+          <img id="ePhotoPreviewImg" src="" alt="New Photo Preview" style="border-color:var(--edit);">
+          <div class="photo-preview-meta" id="ePhotoPreviewMeta" style="color:#1e40af;">New photo ready</div>
+          <button type="button" class="btn-clear-photo" onclick="clearStudentPhoto('edit')"><i class="fas fa-times"></i> Cancel</button>
         </div>
 
-        <!-- Card 2: Custom Student Categories (100% Database-Driven) -->
-        <div class="card" style="border-top: 4px solid var(--purple);">
-            <h3 class="card-title" style="color:var(--purple); border-bottom-color:#f3e8ff;">
-                <i class="fas fa-tags"></i> Manage Custom Student Categories
-            </h3>
-            <p style="font-size:13px; color:#64748b; font-weight:600; margin-bottom: 20px;">
-                এখানে আপনার পছন্দমতো যেকোনো <b>Category</b> তৈরি করুন। কোডে কোনো রেডিমেড ক্যাটাগরি রাখা হয়নি—আপনি এখানে যা সেট করবেন, সেটিই সরাসরি ডাটাবেস (<code>Admin/Settings</code>) থেকে <b>Admit Tab</b>, <b>Edit Modal</b> এবং <b>Accounts Portal</b>-এর সব ক্যাটাগরি মেনুতে চলে যাবে!
-            </p>
-            <div style="display:flex; gap:10px;">
-                <input type="text" id="newCatName" placeholder="Write Category Name (e.g., Residential, Day-Care, Night-Care, Civil...)" style="flex:1; border-color:#ddd6fe; margin-top:0;">
-                <button onclick="addCategory()" class="btn-submit" style="width:155px; margin-top:0; padding:10px; background:linear-gradient(135deg, var(--purple), #5b21b6); box-shadow: 0 6px 15px rgba(124, 58, 237, 0.25);"><i class="fas fa-plus"></i> Add Category</button>
-            </div>
-            <div id="categoryListDisplay" style="margin-top:25px; border: 1px solid #e2e8f0; border-radius: 16px; padding: 15px; background: #faf5ff;"></div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Student ID (Read Only)</label><input type="text" id="eId" readonly style="background:#f1f5f9; color:#94a3b8; border:none;"></div>
+          <div class="flex-col"><label>Full Name</label><input type="text" id="eName"></div>
         </div>
-    </div>
-
-    <!-- ================= MODALS ================= -->
-
-    <!-- 👁️ VIEW MODAL -->
-    <div id="viewModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('viewModal')">&times;</span>
-            <h3 style="color:var(--primary); margin-top:0; font-weight:900; border-bottom: 2px solid var(--light); padding-bottom:10px;"><i class="fas fa-user-circle"></i> Student Full Profile</h3>
-            
-            <div style="text-align:center; margin: 18px 0;">
-                <img id="viewStudentPhoto" src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" alt="Student Photo" style="width:115px; height:115px; border-radius:50%; object-fit:cover; border:4px solid var(--primary); box-shadow:0 8px 25px rgba(0,95,64,0.2); background:#fff;">
-                <h3 id="viewStudentNameTitle" style="margin:10px 0 4px 0; color:#0f172a; font-size:20px; font-weight:800;"></h3>
-                <span id="viewStudentCategoryBadge" style="background:var(--purple); color:#fff; padding:4px 14px; border-radius:20px; font-size:11.5px; font-weight:800;"></span>
-            </div>
-
-            <table class="info-table" id="viewTable"></table>
-            
-            <button class="btn-submit" style="background:#64748b; margin-top:20px;" onclick="closeModal('viewModal')">Close View</button>
+        <div class="flex-row">
+          <div class="flex-col"><label>Class</label>
+            <select id="eClass" onchange="onEditClassChange(); toggleGroup('eClass', 'eGroupDiv');">
+              <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
+            </select>
+          </div>
+          <div class="flex-col"><label>Section</label><select id="eSection"><option value="">Select</option></select></div>
+          <div class="flex-col"><label>Roll</label><input type="number" id="eRoll"></div>
         </div>
-    </div>
-
-    <!-- ✏️ EDIT MODAL -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('editModal')">&times;</span>
-            <h3 style="color:var(--edit); margin-top:0; font-weight:900; border-bottom: 2px solid #e0e7ff; padding-bottom:10px;"><i class="fas fa-user-edit"></i> Edit Profile, Photo &amp; Academic Update</h3>
-
-            <input type="hidden" id="eRowId">
-
-            <div class="form-section">
-                <!-- 📸 Current Photo & Update Photo Option -->
-                <div style="display:flex; align-items:center; gap:18px; flex-wrap:wrap; margin-bottom:15px; background:#fff; padding:14px; border-radius:14px; border:1px solid #e2e8f0;">
-                    <img id="eCurrentPhoto" src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" alt="Current Photo" style="width:74px; height:74px; border-radius:50%; object-fit:cover; border:3px solid var(--edit); background:#fff;">
-                    <div style="flex:1; min-width:200px;">
-                        <label style="margin-top:0; color:var(--edit);"><i class="fas fa-camera"></i> Change Student Photo (ImgBB Upload)</label>
-                        <input type="file" id="ePhotoInput" accept="image/*" onchange="handleStudentPhotoSelect(this, 'edit')" style="border-color:var(--edit); background:#eff6ff;">
-                    </div>
-                </div>
-                <div id="ePhotoPreviewBox" class="photo-preview-box" style="background:#eff6ff; border-color:#bfdbfe; margin-bottom:15px;">
-                    <img id="ePhotoPreviewImg" src="" alt="New Photo Preview" style="border-color:var(--edit);">
-                    <div class="photo-preview-meta" id="ePhotoPreviewMeta" style="color:#1e40af;">New photo ready</div>
-                    <button type="button" class="btn-clear-photo" onclick="clearStudentPhoto('edit')"><i class="fas fa-times"></i> Cancel</button>
-                </div>
-
-                <div class="flex-row">
-                    <div class="flex-col"><label>Student ID (Read Only)</label><input type="text" id="eId" readonly style="background:#f1f5f9; color:#94a3b8; border:none;"></div>
-                    <div class="flex-col"><label>Full Name</label><input type="text" id="eName"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Class</label>
-                        <select id="eClass" onchange="onEditClassChange(); toggleGroup('eClass', 'eGroupDiv');">
-                            <option value="Play">Play</option><option value="Nursery">Nursery</option><option value="KG">KG</option><option value="1">Class 1</option><option value="2">Class 2</option><option value="3">Class 3</option><option value="4">Class 4</option><option value="5">Class 5</option><option value="6">Class 6</option><option value="7">Class 7</option><option value="8">Class 8</option><option value="9">Class 9</option><option value="10">Class 10</option>
-                        </select>
-                    </div>
-                    <div class="flex-col"><label>Section</label><select id="eSection"><option value="">Select</option></select></div>
-                    <div class="flex-col"><label>Roll</label><input type="number" id="eRoll"></div>
-                </div>
-                <div class="flex-row">
-                    <div id="eGroupDiv" class="flex-col" style="display:none;"><label>Group (Class 9-10)</label><select id="eGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select></div>
-                    <div class="flex-col">
-                        <label style="color:var(--purple);"><i class="fas fa-tags"></i> Student Category</label>
-                        <select id="eCategory" onchange="onEditClassChange()" style="border-color:var(--purple); font-weight:700; color:var(--purple);"></select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <div class="flex-row">
-                    <div class="flex-col"><label>Date of Birth</label><input type="date" id="eDob"></div>
-                    <div class="flex-col"><label>Machine Card Number (RFID)</label><input type="text" id="eCardNumber" placeholder="RFID Card No"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Primary Phone</label><input type="tel" id="ePhone"></div>
-                    <div class="flex-col"><label>Email</label><input type="email" id="eEmail"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Father's Name</label><input type="text" id="eFatherName"></div>
-                    <div class="flex-col"><label>Mother's Name</label><input type="text" id="eMotherName"></div>
-                </div>
-                <div class="flex-row">
-                    <div class="flex-col"><label>Present Address</label><textarea id="eAddress" rows="2"></textarea></div>
-                    <div class="flex-col"><label>Permanent Address</label><textarea id="ePermanentAddress" rows="2"></textarea></div>
-                </div>
-            </div>
-
-            <!-- 💡 AUTO FETCHED SESSION/PROMOTION FEES ZONE (CATEGORY-AWARE) -->
-            <div id="editFeeZone" style="display:none; background:#eff6ff; padding:20px; border-radius:16px; border:2px dashed #3b82f6; margin-bottom:20px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:15px;">
-                    <h4 style="margin:0; color:#1d4ed8; font-size:16px;"><i class="fas fa-level-up-alt"></i> New Session / Promotion Fees</h4>
-                    <span id="editFeeCategoryBadge" style="background:var(--purple); color:#fff; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:800;">Category</span>
-                </div>
-                <div id="editFeeGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:15px;"></div>
-            </div>
-
-            <button class="btn-submit" id="editSubmitBtn" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="updateStudent()"><i class="fas fa-sync"></i> Save Updates &amp; Collect</button>
+        <div class="flex-row">
+          <div id="eGroupDiv" class="flex-col" style="display:none;"><label>Group (Class 9-10)</label><select id="eGroup"><option value="">Select</option><option value="Science">Science</option><option value="Arts">Arts</option><option value="Commerce">Commerce</option></select></div>
+          <div class="flex-col">
+            <label style="color:var(--purple);"><i class="fas fa-tags"></i> Student Category</label>
+            <select id="eCategory" onchange="onEditClassChange()" style="border-color:var(--purple); font-weight:700; color:var(--purple);"></select>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- 🧾 RECEIPT MODAL -->
-    <div id="receiptModal" class="modal" style="z-index:9999;">
-        <div class="modal-content" style="text-align:center;">
-            <h2 style="color:#16a34a; font-size:28px; margin:0;"><i class="fas fa-check-circle"></i> Success!</h2>
-            <p id="receiptMsg" style="font-weight:600; color:#334155; margin-top:10px;">Student Data Saved &amp; Fees Collected.</p>
-            <button class="btn-submit" onclick="printGeneratedReceipt()"><i class="fas fa-print"></i> Print Official Receipt</button>
-            <button class="btn-submit" style="background:#64748b; margin-top:10px;" onclick="closeModal('receiptModal')">Close</button>
+      <div class="form-section">
+        <div class="flex-row">
+          <div class="flex-col"><label>Date of Birth</label><input type="date" id="eDob"></div>
+          <div class="flex-col"><label>Machine Card Number (RFID)</label><input type="text" id="eCardNumber" placeholder="RFID Card No"></div>
         </div>
-    </div>
-
-    <!-- ================= PRINT AREAS (Hidden from UI) ================= -->
-    <div id="printAreaList" style="display:none;">
-        <div style="text-align:center; border-bottom:3px solid #005f40; margin-bottom:15px; padding-bottom: 10px;">
-            <img src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" style="height: 65px; border-radius: 50%; margin-bottom: 5px;">
-            <h2 style="margin:0; color:#005f40; font-family:'Times New Roman', serif; text-transform:uppercase; font-size: 22px; font-weight: 900;">Saidpur Residential Model School</h2>
-            <p id="printTitle" style="margin:5px 0; font-weight:bold; font-size:14px; color:#475569; font-family:sans-serif; letter-spacing: 0.5px;"></p>
+        <div class="flex-row">
+          <div class="flex-col"><label>Primary Phone</label><input type="tel" id="ePhone"></div>
+          <div class="flex-col"><label>Email</label><input type="email" id="eEmail"></div>
         </div>
-        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
-            <thead>
-                <tr style="background:#f1f5f9;">
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">ID</th>
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Name</th>
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Father</th>
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Class</th>
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Sec</th>
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Roll</th>
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Category</th>
-                    <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Phone</th>
-                </tr>
-            </thead>
-            <tbody id="printTableBody"></tbody>
-        </table>
-    </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Father's Name</label><input type="text" id="eFatherName"></div>
+          <div class="flex-col"><label>Mother's Name</label><input type="text" id="eMotherName"></div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Present Address</label><textarea id="eAddress" rows="2"></textarea></div>
+          <div class="flex-col"><label>Permanent Address</label><textarea id="ePermanentAddress" rows="2"></textarea></div>
+        </div>
+      </div>
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
-        <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
-        <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-sliders-h"></i>Sections &amp; Categories</button>
+      <!-- 💡 SESSION FEE INDICATOR & ALL STUDENT FEES COLLECTION ZONE ON CLASS UPDATE -->
+      <div id="editFeeZone" style="display:none; background:#eff6ff; padding:20px; border-radius:16px; border:2px dashed #3b82f6; margin-bottom:20px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <h4 id="editFeeZoneTitle" style="margin:0; color:#1d4ed8; font-size:16px;"><i class="fas fa-level-up-alt"></i> Class Update / Promotion Fees Collection</h4>
+          <span id="editFeeCategoryBadge" style="background:var(--purple); color:#fff; padding:4px 12px; border-radius:20px; font-size:11px; font-weight:800;">Session Fee Active</span>
+        </div>
+        <div id="editFeeGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(210px, 1fr)); gap:15px;"></div>
+      </div>
+
+      <button class="btn-submit" id="editSubmitBtn" style="background:linear-gradient(135deg, var(--edit), #1d4ed8);" onclick="updateStudent()"><i class="fas fa-sync"></i> Save Updates &amp; Collect</button>
     </div>
-</div> 
+  </div>
+
+  <!-- 🧾 RECEIPT MODAL -->
+  <div id="receiptModal" class="modal" style="z-index:9999;">
+    <div class="modal-content" style="text-align:center;">
+      <h2 style="color:#16a34a; font-size:28px; margin:0;"><i class="fas fa-check-circle"></i> Success!</h2>
+      <p id="receiptMsg" style="font-weight:600; color:#334155; margin-top:10px;">Student Data Saved &amp; Fees Collected.</p>
+      <button class="btn-submit" onclick="printGeneratedReceipt()"><i class="fas fa-print"></i> Print Official Receipt</button>
+      <button class="btn-submit" style="background:#64748b; margin-top:10px;" onclick="closeModal('receiptModal')">Close</button>
+    </div>
+  </div>
+
+  <!-- ================= PRINT AREAS (Hidden from UI) ================= -->
+  <div id="printAreaList" style="display:none;">
+    <div style="text-align:center; border-bottom:3px solid #005f40; margin-bottom:15px; padding-bottom: 10px;">
+      <img src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" style="height: 65px; border-radius: 50%; margin-bottom: 5px;">
+      <h2 style="margin:0; color:#005f40; font-family:'Times New Roman', serif; text-transform:uppercase; font-size: 22px; font-weight: 900;">Saidpur Residential Model School</h2>
+      <p id="printTitle" style="margin:5px 0; font-weight:bold; font-size:14px; color:#475569; font-family:sans-serif; letter-spacing: 0.5px;"></p>
+    </div>
+    <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+      <thead>
+        <tr style="background:#f1f5f9;">
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">ID</th>
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Name</th>
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Father</th>
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Class</th>
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Sec</th>
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Roll</th>
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:center;">Category</th>
+          <th style="padding:8px; border:1px solid #cbd5e1; text-align:left;">Phone</th>
+        </tr>
+      </thead>
+      <tbody id="printTableBody"></tbody>
+    </table>
+  </div>
+
+  <!-- Bottom Navigation -->
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="switchTab('admitTab', this)"><i class="fas fa-user-plus"></i>Admit</button>
+    <button class="nav-item" onclick="switchTab('viewTab', this)"><i class="fas fa-users"></i>Students</button>
+    <button class="nav-item" onclick="switchTab('sectionTab', this)"><i class="fas fa-sliders-h"></i>Sections &amp; Categories</button>
+  </div>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
@@ -432,6 +432,7 @@ var globalCategories = [];
 var isAuthReady = false;
 var originalEditClass = "";
 var originalEditCategory = "";
+var currentEditingStudent = null;
 var currentReceiptData = null;
 
 var preparedAdmitPhoto = null;
@@ -791,29 +792,28 @@ async function deleteCategory(name) {
 }
 
 // ============================================================================
-// 💡 CATEGORY-AWARE AUTO FETCH FEES LOGIC (SCHOOL FEE + ADMISSION / SESSION FEE)
+// 💡 1. NEW ADMISSION FEE LOADER (SCHOOL FEE + ADMISSION FEE + CUSTOM ADVANCE FEES)
 // ============================================================================
-async function fetchFeesForClass(clsId, catId, gridId) {
-  let cls = document.getElementById(clsId).value;
-  let category = (catId && document.getElementById(catId)) ? (document.getElementById(catId).value || "All") : "All";
-  let zoneId = gridId === 'admitFeeGrid' ? 'admitFeeZone' : 'editFeeZone';
-  let badgeId = gridId === 'admitFeeGrid' ? 'admitFeeCategoryBadge' : 'editFeeCategoryBadge';
-  let isEditMode = (gridId === 'editFeeGrid');
+async function fetchAdmissionFeesForAdmit() {
+  let cls = document.getElementById('sClass').value;
+  let category = document.getElementById('sCategory').value || "All";
+  let zoneEl = document.getElementById('admitFeeZone');
+  let gridEl = document.getElementById('admitFeeGrid');
+  let badgeEl = document.getElementById('admitFeeCategoryBadge');
 
-  if (document.getElementById(badgeId)) {
-    document.getElementById(badgeId).innerText = `Category: ${category || 'Default'}`;
-  }
+  if (badgeEl) badgeEl.innerText = `Category: ${category || 'Default'}`;
 
   if (!cls) {
-    document.getElementById(zoneId).style.display = "none";
+    zoneEl.style.display = "none";
+    gridEl.innerHTML = "";
     return;
   }
 
-  document.getElementById(gridId).innerHTML = "<p style='grid-column: span 2; color:#64748b; font-weight:bold;'><i class='fas fa-spinner fa-spin'></i> Loading automated fees for Class " + cls + " (" + (category || "Default") + ")...</p>";
-  document.getElementById(zoneId).style.display = "block";
+  gridEl.innerHTML = `<p style="grid-column: 1 / -1; color:#64748b; font-weight:bold;"><i class="fas fa-spinner fa-spin"></i> Loading advance admission fees for Class ${cls} (${category || 'Default'})...</p>`;
+  zoneEl.style.display = "block";
 
   try {
-    let sFee = 0, secondFee = 0;
+    let sFee = 0, aFee = 0, customAdvList = [];
 
     const [catDoc, mainDoc] = await Promise.all([
       (category && category !== "All")
@@ -825,9 +825,10 @@ async function fetchFeesForClass(clsId, catId, gridId) {
     if (catDoc && catDoc.exists) {
       let cd = catDoc.data();
       sFee = parseFloat(cd.schoolFee) || 0;
-      secondFee = isEditMode
-        ? (cd.sessionFee !== undefined ? (parseFloat(cd.sessionFee) || 0) : (parseFloat(cd.admissionFee) || 0))
-        : (parseFloat(cd.admissionFee) || 0);
+      aFee = parseFloat(cd.admissionFee) || 0;
+      if (cd.customAdvanceFeesJSON) {
+        try { customAdvList = JSON.parse(cd.customAdvanceFeesJSON) || []; } catch (e) { customAdvList = []; }
+      }
     } else if (mainDoc && mainDoc.exists) {
       let d = mainDoc.data();
       let foundInMap = false;
@@ -836,65 +837,174 @@ async function fetchFeesForClass(clsId, catId, gridId) {
           let map = JSON.parse(d.categoryFeesJSON);
           if (map[category]) {
             sFee = parseFloat(map[category].schoolFee) || 0;
-            secondFee = isEditMode
-              ? (map[category].sessionFee !== undefined ? (parseFloat(map[category].sessionFee) || 0) : (parseFloat(map[category].admissionFee) || 0))
-              : (parseFloat(map[category].admissionFee) || 0);
+            aFee = parseFloat(map[category].admissionFee) || 0;
+            customAdvList = Array.isArray(map[category].customAdvanceFees) ? map[category].customAdvanceFees : [];
             foundInMap = true;
           }
         } catch (err) {}
       }
       if (!foundInMap) {
         sFee = parseFloat(d.schoolFee) || 0;
-        secondFee = isEditMode
-          ? (d.sessionFee !== undefined ? (parseFloat(d.sessionFee) || 0) : (parseFloat(d.admissionFee) || 0))
-          : (parseFloat(d.admissionFee) || 0);
+        aFee = parseFloat(d.admissionFee) || 0;
+        if (d.customAdvanceFeesJSON) {
+          try { customAdvList = JSON.parse(d.customAdvanceFeesJSON) || []; } catch (e) { customAdvList = []; }
+        }
       }
     }
 
     let html = "";
     if (sFee > 0) {
-      html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1px solid #cbd5e1;">
-        <label style="margin-top:0; color:#005f40;">School Fee (${sFee} TK)</label>
-        <input type="hidden" class="${gridId}-total" data-name="School Fee" value="${sFee}">
-        <input type="number" class="${gridId}-paid" style="border-color:#005f40; color:#005f40; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${sFee}">
+      html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1.5px solid #a7f3d0;">
+        <label style="margin-top:0; color:#005f40;">Advance School Fee (${sFee} TK)</label>
+        <input type="hidden" class="admitFeeGrid-total" data-name="School Fee" data-mode="add" value="${sFee}">
+        <input type="number" class="admitFeeGrid-paid" style="border-color:#005f40; color:#005f40; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${sFee}">
       </div>`;
     }
-    if (secondFee > 0) {
-      let labelName = isEditMode ? 'Session Fee' : 'Admission Fee';
-      html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1px solid #cbd5e1;">
-        <label style="margin-top:0; color:#7e22ce;">${labelName} (${secondFee} TK)</label>
-        <input type="hidden" class="${gridId}-total" data-name="${labelName}" value="${secondFee}">
-        <input type="number" class="${gridId}-paid" style="border-color:#8b5cf6; color:#8b5cf6; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${secondFee}">
+    if (aFee > 0) {
+      html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1.5px solid #cbd5e1;">
+        <label style="margin-top:0; color:#0f766e;">Admission Fee (${aFee} TK)</label>
+        <input type="hidden" class="admitFeeGrid-total" data-name="Admission Fee" data-mode="add" value="${aFee}">
+        <input type="number" class="admitFeeGrid-paid" style="border-color:#0f766e; color:#0f766e; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${aFee}">
       </div>`;
     }
 
+    customAdvList.forEach(cf => {
+      let cName = (cf.name || "").toString().trim();
+      let cAmt = parseFloat(cf.amount) || 0;
+      if (cName && cAmt > 0) {
+        let safeName = cName.replace(/"/g, "&quot;");
+        html += `<div style="background:#faf5ff; padding:15px; border-radius:12px; border:1.5px solid #d8b4fe;">
+          <label style="margin-top:0; color:#7e22ce;"><i class="fas fa-star"></i> ${cName} (${cAmt} TK)</label>
+          <input type="hidden" class="admitFeeGrid-total" data-name="${safeName}" data-mode="add" value="${cAmt}">
+          <input type="number" class="admitFeeGrid-paid" style="border-color:#8b5cf6; color:#8b5cf6; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${cAmt}">
+        </div>`;
+      }
+    });
+
     if (html === "") {
-      html = `<p style='grid-column: span 2; color:#ef4444; font-weight:bold;'>No advance fees configured for Class ${cls} (${category || 'Default'}) in Accounts Portal.</p>`;
+      html = `<p style="grid-column: 1 / -1; color:#ef4444; font-weight:bold; margin:0;">No advance admission fees configured for Class ${cls} (${category || 'Default'}) in Accounts Portal.</p>`;
     }
-    document.getElementById(gridId).innerHTML = html;
+    gridEl.innerHTML = html;
   } catch (e) {
-    document.getElementById(gridId).innerHTML = "<p style='color:red;'>Error loading fees.</p>";
+    gridEl.innerHTML = `<p style="color:red;">Error loading admission fees.</p>`;
   }
 }
 
+// ============================================================================
+// 💡 2. CLASS UPDATE / PROMOTION FEE LOADER (TRIGGERED BY SESSION FEE INDICATOR)
+// Loads ALL Due Fees of the Student (School Fee + Session Fee + Custom Fees)
+// ============================================================================
+function renderClassUpdateFeesForStudent() {
+  let zoneEl = document.getElementById('editFeeZone');
+  let gridEl = document.getElementById('editFeeGrid');
+  let badgeEl = document.getElementById('editFeeCategoryBadge');
+  let titleEl = document.getElementById('editFeeZoneTitle');
+
+  if (!currentEditingStudent) {
+    zoneEl.style.display = "none";
+    gridEl.innerHTML = "";
+    return;
+  }
+
+  let s = currentEditingStudent;
+  let sDue = (s.schoolFeeStatus !== "Paid") ? (parseFloat(s.schoolFeeDue) || 0) : 0;
+  let customArr = [];
+  if (s.customFees) {
+    try { customArr = JSON.parse(s.customFees) || []; } catch (e) { customArr = []; }
+  }
+  let activeCustomDues = customArr.filter(cf => cf.name && (parseFloat(cf.amount) || 0) > 0 && (cf.status || "").toLowerCase() !== "paid");
+  let hasSessionFeeIndicator = activeCustomDues.some(cf => cf.name.toLowerCase().includes("session") || cf.name.toLowerCase().includes("promotion"));
+
+  let currentCls = document.getElementById('eClass').value;
+  let currentCat = document.getElementById('eCategory').value || "";
+  let isClassOrCatChanged = (currentCls !== originalEditClass || currentCat !== originalEditCategory);
+
+  if (!isClassOrCatChanged && !hasSessionFeeIndicator) {
+    zoneEl.style.display = "none";
+    gridEl.innerHTML = "";
+    return;
+  }
+
+  zoneEl.style.display = "block";
+  if (hasSessionFeeIndicator) {
+    badgeEl.style.background = "#16a34a";
+    badgeEl.innerHTML = `<i class="fas fa-check-circle"></i> Session Fee Indicator Active`;
+    titleEl.innerHTML = `<i class="fas fa-level-up-alt"></i> Class Promotion — Collect All Student Fees`;
+  } else {
+    badgeEl.style.background = "#f59e0b";
+    badgeEl.innerHTML = `Pending Dues Check`;
+    titleEl.innerHTML = `<i class="fas fa-file-invoice-dollar"></i> Student Due Fees on Class / Category Update`;
+  }
+
+  let html = "";
+  if (sDue > 0) {
+    html += `<div style="background:#fff; padding:15px; border-radius:12px; border:1.5px solid #a7f3d0;">
+      <label style="margin-top:0; color:#005f40;"><i class="fas fa-graduation-cap"></i> School Fee Due (${sDue} TK)</label>
+      <input type="hidden" class="editFeeGrid-total" data-name="School Fee" data-mode="settle" value="${sDue}">
+      <input type="number" class="editFeeGrid-paid" style="border-color:#005f40; color:#005f40; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${sDue}">
+    </div>`;
+  }
+
+  activeCustomDues.forEach(cf => {
+    let cName = cf.name;
+    let cAmt = parseFloat(cf.amount) || 0;
+    let safeName = cName.replace(/"/g, "&quot;");
+    let isSession = cName.toLowerCase().includes("session") || cName.toLowerCase().includes("promotion");
+    let borderClr = isSession ? "#3b82f6" : "#d8b4fe";
+    let textClr = isSession ? "#1d4ed8" : "#7e22ce";
+
+    html += `<div style="background:#fff; padding:15px; border-radius:12px; border:2px solid ${borderClr};">
+      <label style="margin-top:0; color:${textClr};"><i class="fas ${isSession ? 'fa-award' : 'fa-star'}"></i> ${cName} (${cAmt} TK)</label>
+      <input type="hidden" class="editFeeGrid-total" data-name="${safeName}" data-col="${cf.colIdx || ''}" data-mode="settle" value="${cAmt}">
+      <input type="number" class="editFeeGrid-paid" style="border-color:${textClr}; color:${textClr}; font-weight:900; text-align:center; font-size:18px;" placeholder="Amount Paying" value="${cAmt}">
+    </div>`;
+  });
+
+  if (html === "") {
+    html = `<p style="grid-column: 1 / -1; color:#0f766e; font-weight:700; margin:0;">
+      ℹ️ No pending Session Fee or Due Fees found for this student. (Assign <b>Session Fees</b> &amp; other fees in <b>Accounts Portal &rarr; Setup Fees</b> to collect them during Class Promotion).
+    </p>`;
+  }
+
+  gridEl.innerHTML = html;
+}
+
 function getFeeData(gridId) {
-  let fees = { schoolFeeTotal: 0, schoolFeePaid: 0, admFeeTotal: 0, admFeePaid: 0, admFeeName: gridId === 'editFeeGrid' ? "Session Fee" : "Admission Fee" };
+  let fees = {
+    schoolFeeTotal: 0,
+    schoolFeePaid: 0,
+    schoolFeeMode: gridId === 'editFeeGrid' ? "settle" : "add",
+    customFeesList: []
+  };
   let totals = document.querySelectorAll(`.${gridId}-total`);
   let paids = document.querySelectorAll(`.${gridId}-paid`);
 
   for (let i = 0; i < totals.length; i++) {
     let name = totals[i].getAttribute('data-name');
+    let colIdx = totals[i].getAttribute('data-col') || "";
+    let mode = totals[i].getAttribute('data-mode') || (gridId === 'editFeeGrid' ? "settle" : "add");
     let t = parseFloat(totals[i].value) || 0;
     let p = parseFloat(paids[i].value) || 0;
 
-    if (name === "School Fee") { fees.schoolFeeTotal = t; fees.schoolFeePaid = p; }
-    else { fees.admFeeName = name; fees.admFeeTotal = t; fees.admFeePaid = p; }
+    if (name === "School Fee") {
+      fees.schoolFeeTotal = t;
+      fees.schoolFeePaid = p;
+      fees.schoolFeeMode = mode;
+    } else if (name && (t > 0 || p > 0)) {
+      fees.customFeesList.push({
+        name: name,
+        total: t,
+        paid: p,
+        colIdx: colIdx,
+        mode: mode
+      });
+    }
   }
   return fees;
 }
 
 // ============================================================================
-// 🚀 ADMIT STUDENT WITH PHOTO, DATABASE CATEGORY & FEES
+// 🚀 ADMIT STUDENT WITH PHOTO, DATABASE CATEGORY & ADVANCE FEES
 // ============================================================================
 async function saveStudent() {
   var cls = document.getElementById('sClass').value;
@@ -1133,11 +1243,12 @@ function openViewByRow(rid) {
   document.getElementById('viewModal').style.display = 'flex';
 }
 
-// ✏️ EDIT DATA FULLY (WITH PHOTO & DATABASE CATEGORY)
+// ✏️ EDIT DATA FULLY (WITH PHOTO, CATEGORY & SESSION FEE PROMOTION CHECK)
 function openEditByRow(rid) {
   if (!isAuthReady) return;
   var s = allData.find(item => item.rowId == rid);
   if (!s) return;
+  currentEditingStudent = s;
   let stuCat = (s.category || s.resStatus || "").toString().trim();
   originalEditClass = s.class;
   originalEditCategory = stuCat;
@@ -1170,20 +1281,12 @@ function openEditByRow(rid) {
   document.getElementById('eAddress').value = s.address || "";
   document.getElementById('ePermanentAddress').value = s.permanentAddress || "";
 
-  document.getElementById('editFeeZone').style.display = 'none';
-  document.getElementById('editFeeGrid').innerHTML = "";
+  renderClassUpdateFeesForStudent();
   document.getElementById('editModal').style.display = 'flex';
 }
 
 function onEditClassChange() {
-  let currentCls = document.getElementById('eClass').value;
-  let currentCat = document.getElementById('eCategory').value || "";
-  if (currentCls !== originalEditClass || currentCat !== originalEditCategory) {
-    fetchFeesForClass('eClass', 'eCategory', 'editFeeGrid');
-  } else {
-    document.getElementById('editFeeZone').style.display = 'none';
-    document.getElementById('editFeeGrid').innerHTML = "";
-  }
+  renderClassUpdateFeesForStudent();
 }
 
 async function updateStudent() {
@@ -1226,7 +1329,7 @@ async function updateStudent() {
       }
     }
 
-    showLoaderText("UPDATING PROFILE & FEES...<br><span style='font-size:11px; color:#64748b;'>Direct Write + Notifications Trigger</span>");
+    showLoaderText("UPDATING PROFILE & COLLECTING FEES...<br><span style='font-size:11px; color:#64748b;'>Direct Write + Notifications Trigger</span>");
     let res = await apiCall('updateStudentProfileDirect', { data: d });
     document.getElementById('loader').style.display = 'none';
 
