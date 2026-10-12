@@ -531,6 +531,39 @@
     text-transform: uppercase;
   }
 
+  /* 🕒 Shift & Punctuality Badges */
+  .role-shift-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .shift-pill {
+    background: rgba(255, 255, 255, 0.16);
+    border: 1px solid rgba(255, 255, 255, 0.28);
+    color: #fff;
+    padding: 4px 11px;
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .punc-badge {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 800;
+    margin-left: 4px;
+    text-transform: uppercase;
+  }
+  .punc-late { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
+  .punc-early { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
+  .punc-exempt { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
+  .punc-ontime { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+
   /* Modals */
   .modal-overlay {
     display: none;
@@ -652,6 +685,10 @@
       <div>
         <h2 id="tGreet" style="margin:0;">আসসালামু আলাইকুম</h2>
         <p id="tPhoneSub">অফিশিয়াল একাডেমিক পোর্টাল</p>
+        <div class="role-shift-badges" id="tRoleShiftBadges">
+          <span class="shift-pill" id="tCatDesigPill"><i class="fas fa-user-tie"></i> শিক্ষক</span>
+          <span class="shift-pill" id="tShiftTimePill"><i class="far fa-clock"></i> শিফট: লোড হচ্ছে...</span>
+        </div>
         <small id="photoSyncStatus" style="display:block; margin-top:4px; color:#fde68a; font-weight:700; font-size:12px;"></small>
       </div>
     </div>
@@ -866,10 +903,15 @@
 
 <!-- 📅 View-Only Attendance Modal (NO Print Button) -->
 <div id="attendanceModal" class="modal-overlay">
-  <div class="modal-box" style="max-width: 650px; padding: 28px;">
-    <h3 style="margin:0 0 18px 0; color:var(--text-main); font-size:19px; border-bottom:2px solid #f1f5f9; padding-bottom:12px; text-align:left;">
+  <div class="modal-box" style="max-width: 680px; padding: 28px;">
+    <h3 style="margin:0 0 12px 0; color:var(--text-main); font-size:19px; border-bottom:2px solid #f1f5f9; padding-bottom:12px; text-align:left;">
       📅 আমার উপস্থিতির লগ (শুধুমাত্র দেখার জন্য)
     </h3>
+
+    <div id="modalTeacherShiftInfo" style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:12px; padding:10px 14px; margin-bottom:14px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:12.5px; color:#065f46; font-weight:700; text-align:left;">
+      <span id="modalCatDesigText"><i class="fas fa-id-badge"></i> ক্যাটাগরি: শিক্ষক</span>
+      <span id="modalShiftTimeText"><i class="far fa-clock"></i> নির্ধারিত শিফট: 08:00 AM - 04:00 PM</span>
+    </div>
 
     <div style="margin-bottom: 14px;">
       <select id="attMonthFilter" onchange="renderTeacherAttendanceTable()" style="width:100%; padding: 12px; border-radius: 10px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
@@ -888,7 +930,7 @@
         <thead style="background: #e2e8f0; position: sticky; top: 0; z-index: 10;">
           <tr>
             <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">তারিখ</th>
-            <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">স্ট্যাটাস</th>
+            <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">স্ট্যাটাস ও সময়ানুবর্তিতা</th>
             <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">প্রবেশ (IN)</th>
             <th style="padding: 12px 14px; color:#475569; border-bottom: 2px solid #cbd5e1;">প্রস্থান (OUT)</th>
           </tr>
@@ -897,15 +939,16 @@
       </table>
     </div>
 
-    <div id="modalAttSummary" style="margin-top:18px; font-weight:800; color:var(--primary); padding:14px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;"></div>
+    <div id="modalAttSummary" style="margin-top:18px; font-weight:800; color:var(--primary); padding:14px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; flex-wrap: wrap; gap: 10px; border: 1px solid #bbf7d0;"></div>
     <button class="close-modal-btn" onclick="closeModal('attendanceModal')" style="margin-top:18px;">বন্ধ করুন</button>
   </div>
 </div>
 
 <footer class="premium-footer" id="main-footer">
-  <h3 style="margin:0 0 5px 0; color:#fff; font-size:18px;">Saidpur Residential Model School</h3>
-  <p style="margin:0; opacity:0.75; font-size:13.5px;">সুলতান নগর, সৈয়দপুর, নীলফামারী।</p>
-  <p style="margin:18px 0 0 0; font-size:12px; color:#94a3b8; border-top:1px solid #1e293b; padding-top:15px;">© 2026 Saidpur Residential Model School • Official Teacher Portal</p>
+  <h3 style="margin:0; color:#fff; font-size:18px; font-weight:800; letter-spacing:0.4px;">Saidpur Residential Model School</h3>
+  <p style="margin:14px 0 0 0; font-size:12.5px; color:#94a3b8; border-top:1px solid #1e293b; padding-top:14px;">
+    © <span id="footerCopyrightYear">2026</span> Saidpur Residential Model School • Official Teacher Portal
+  </p>
 </footer>
 
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
@@ -943,6 +986,11 @@
   let tPhone = "";
   let tTeacherName = "Teacher";
   let tTeacherPhoto = DEFAULT_AVATAR;
+  let tTeacherCategory = "Teacher";
+  let tTeacherDesignation = "Teacher";
+  let tCustomEntryTime = "";
+  let tCustomExitTime = "";
+  let tResolvedShiftText = "08:00 AM - 04:00 PM";
   let exactDbPhone = "";
   let resetPhone = null;
 
@@ -954,6 +1002,36 @@
 
   let allTeacherAttendance = {};
   let allHolidays = {};
+
+  function format24To12Hour(time24) {
+    if (!time24 || typeof time24 !== "string") return "";
+    let clean = time24.trim();
+    if (clean.toUpperCase().includes("AM") || clean.toUpperCase().includes("PM")) return clean;
+    let parts = clean.split(":");
+    if (parts.length < 2) return clean;
+    let h = parseInt(parts[0], 10);
+    let m = parts[1];
+    if (isNaN(h)) return clean;
+    let ampm = h >= 12 ? "PM" : "AM";
+    h = h % 12;
+    if (h === 0) h = 12;
+    return `${String(h).padStart(2, '0')}:${m} ${ampm}`;
+  }
+
+  function updateTeacherShiftBadgesUI() {
+    let catText = tTeacherCategory || "Teacher";
+    let desigText = (tTeacherDesignation && tTeacherDesignation !== catText) ? `${catText} (${tTeacherDesignation})` : catText;
+
+    let catPill = document.getElementById('tCatDesigPill');
+    let shiftPill = document.getElementById('tShiftTimePill');
+    if (catPill) catPill.innerHTML = `<i class="fas fa-user-tie"></i> ${sanitizeHTML(desigText)}`;
+    if (shiftPill) shiftPill.innerHTML = `<i class="far fa-clock"></i> ডিউটি শিফট: ${sanitizeHTML(tResolvedShiftText)}`;
+
+    let mCat = document.getElementById('modalCatDesigText');
+    let mShift = document.getElementById('modalShiftTimeText');
+    if (mCat) mCat.innerHTML = `<i class="fas fa-id-badge"></i> ক্যাটাগরি ও পদবি: ${sanitizeHTML(desigText)}`;
+    if (mShift) mShift.innerHTML = `<i class="far fa-clock"></i> নির্ধারিত শিফট: ${sanitizeHTML(tResolvedShiftText)}`;
+  }
 
   function sanitizeHTML(str) {
     if (typeof str !== 'string') return str;
@@ -1018,16 +1096,28 @@
   }
 
   window.onload = function() {
+    const yearEl = document.getElementById('footerCopyrightYear');
+    if (yearEl) {
+      const bdNow = new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Dhaka" }));
+      yearEl.innerText = bdNow.getFullYear();
+    }
+
     const savedPhone = sessionStorage.getItem("srms_phone");
     const savedName = sessionStorage.getItem("srms_name");
     const savedExact = sessionStorage.getItem("srms_exact_phone");
     const savedPhoto = sessionStorage.getItem("srms_teacher_photo");
+    const savedCat = sessionStorage.getItem("srms_teacher_cat");
+    const savedDesig = sessionStorage.getItem("srms_teacher_desig");
+    const savedShift = sessionStorage.getItem("srms_teacher_shift");
 
     if (savedPhone && savedName) {
       tPhone = savedPhone;
       tTeacherName = savedName;
       exactDbPhone = savedExact || normalizePhone11JS(savedPhone);
       tTeacherPhoto = savedPhoto || DEFAULT_AVATAR;
+      if (savedCat) tTeacherCategory = savedCat;
+      if (savedDesig) tTeacherDesignation = savedDesig;
+      if (savedShift) tResolvedShiftText = savedShift;
       showDashboardUI(savedName, tTeacherPhoto);
     } else {
       document.getElementById('dash-sec').style.display = 'none';
@@ -1133,6 +1223,7 @@
       }
 
       let foundName = "Teacher", teacherDocId = directDocId, dbPhoneToSave = norm11, foundPhoto = DEFAULT_AVATAR;
+      let foundCat = "Teacher", foundDesig = "Teacher", foundCustomIn = "", foundCustomOut = "";
 
       if (matchedDoc && matchedDoc.fields) {
         const f = matchedDoc.fields;
@@ -1149,18 +1240,28 @@
         teacherDocId = matchedDoc.name.split('/').pop();
         dbPhoneToSave = f.phone ? f.phone.stringValue : norm11;
         foundPhoto = (f.photoUrl && f.photoUrl.stringValue) ? f.photoUrl.stringValue : ((f.photo && f.photo.stringValue) ? f.photo.stringValue : DEFAULT_AVATAR);
+        foundCat = (f.staffCategory && f.staffCategory.stringValue) ? f.staffCategory.stringValue : "Teacher";
+        foundDesig = (f.designation && f.designation.stringValue) ? f.designation.stringValue : foundCat;
+        foundCustomIn = (f.customEntryTime && f.customEntryTime.stringValue) ? f.customEntryTime.stringValue : "";
+        foundCustomOut = (f.customExitTime && f.customExitTime.stringValue) ? f.customExitTime.stringValue : "";
       }
 
       tPhone = ph;
       tTeacherName = foundName;
       exactDbPhone = dbPhoneToSave;
       tTeacherPhoto = foundPhoto || DEFAULT_AVATAR;
+      tTeacherCategory = foundCat;
+      tTeacherDesignation = foundDesig;
+      tCustomEntryTime = foundCustomIn;
+      tCustomExitTime = foundCustomOut;
 
       sessionStorage.setItem("srms_phone", ph);
       sessionStorage.setItem("srms_exact_phone", dbPhoneToSave);
       sessionStorage.setItem("srms_name", foundName);
       sessionStorage.setItem("srms_active_pass", s);
       sessionStorage.setItem("srms_teacher_photo", tTeacherPhoto);
+      sessionStorage.setItem("srms_teacher_cat", tTeacherCategory);
+      sessionStorage.setItem("srms_teacher_desig", tTeacherDesignation);
       if (teacherDocId) sessionStorage.setItem("srms_teacher_id", teacherDocId);
 
       const teacherRoles = ["teacher_dashboard", "special_page_access"];
@@ -1169,6 +1270,7 @@
 
       document.getElementById('lPs').value = '';
       showDashboardUI(foundName, tTeacherPhoto);
+      syncTeacherProfileFromFirestore();
       loadBoard();
       loadTeacherLiveHubSessions();
     } catch (e) {
@@ -1191,16 +1293,45 @@
     if (!auth.currentUser || !tPhone) return;
     try {
       const token = await auth.currentUser.getIdToken();
+      const headers = { "Authorization": "Bearer " + token };
       const docId = sessionStorage.getItem("srms_teacher_id") || ("T_0" + cleanPhoneCoreJS(tPhone));
-      const res = await fetch(`${FIREBASE_DB_BASE}/Teachers/${docId}`, {
-        headers: { "Authorization": "Bearer " + token }
-      });
-      if (res.status === 200) {
-        const doc = await res.json();
+
+      const [tRes, setRes] = await Promise.all([
+        fetch(`${FIREBASE_DB_BASE}/Teachers/${docId}`, { headers }).catch(() => null),
+        fetch(`${FIREBASE_DB_BASE}/Admin/Settings`, { headers }).catch(() => null)
+      ]);
+
+      if (tRes && tRes.status === 200) {
+        const doc = await tRes.json();
         const f = doc.fields || {};
         const pic = (f.photoUrl && f.photoUrl.stringValue) ? f.photoUrl.stringValue : ((f.photo && f.photo.stringValue) ? f.photo.stringValue : "");
         if (pic) applyTeacherPhotoToUI(pic);
+        if (f.staffCategory && f.staffCategory.stringValue) tTeacherCategory = f.staffCategory.stringValue;
+        if (f.designation && f.designation.stringValue) tTeacherDesignation = f.designation.stringValue;
+        tCustomEntryTime = (f.customEntryTime && f.customEntryTime.stringValue) ? f.customEntryTime.stringValue : "";
+        tCustomExitTime = (f.customExitTime && f.customExitTime.stringValue) ? f.customExitTime.stringValue : "";
       }
+
+      let globalStaffIn = "08:00", globalStaffOut = "16:00", catTimings = {};
+      if (setRes && setRes.status === 200) {
+        const sDoc = await setRes.json();
+        const sf = sDoc.fields || {};
+        if (sf.staffEntryTime && sf.staffEntryTime.stringValue) globalStaffIn = sf.staffEntryTime.stringValue;
+        if (sf.staffExitTime && sf.staffExitTime.stringValue) globalStaffOut = sf.staffExitTime.stringValue;
+        if (sf.categoryTimingsJSON && sf.categoryTimingsJSON.stringValue) {
+          try { catTimings = JSON.parse(sf.categoryTimingsJSON.stringValue) || {}; } catch (e) {}
+        }
+      }
+
+      const catShift = catTimings[tTeacherCategory] || {};
+      const effIn = tCustomEntryTime || catShift.entryTime || globalStaffIn;
+      const effOut = tCustomExitTime || catShift.exitTime || globalStaffOut;
+      tResolvedShiftText = `${format24To12Hour(effIn)} - ${format24To12Hour(effOut)}`;
+
+      sessionStorage.setItem("srms_teacher_cat", tTeacherCategory);
+      sessionStorage.setItem("srms_teacher_desig", tTeacherDesignation);
+      sessionStorage.setItem("srms_teacher_shift", tResolvedShiftText);
+      updateTeacherShiftBadgesUI();
     } catch (e) {}
   }
 
@@ -1209,6 +1340,7 @@
     document.getElementById('tPhoneSub').innerText = `লগইন আইডি: ${normalizePhone11JS(tPhone)} • অফিশিয়াল শিক্ষক পোর্টাল`;
     document.getElementById('tLiveName').value = name;
     applyTeacherPhotoToUI(photoUrl || tTeacherPhoto);
+    updateTeacherShiftBadgesUI();
     document.getElementById('login-sec').style.display = 'none';
     document.getElementById('main-navbar').style.display = 'flex';
     document.getElementById('main-banner').style.display = 'flex';
@@ -2065,6 +2197,7 @@
   // 📅 TEACHER DETAILED ATTENDANCE MODAL (VIEW-ONLY, NO PRINT OPTION)
   // =========================================================================
   function openTeacherAttendanceModal() {
+    updateTeacherShiftBadgesUI();
     document.getElementById('attendanceModal').style.display = 'flex';
     fetchTeacherDetailedAttendance();
   }
@@ -2077,10 +2210,20 @@
       const token = await auth.currentUser.getIdToken();
       const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
 
+      const corePh = cleanPhoneCoreJS(tPhone);
+      const norm11 = normalizePhone11JS(tPhone);
+      const possibleIds = Array.from(new Set([exactDbPhone, norm11, corePh].filter(Boolean))).map(v => ({ stringValue: v }));
+
       const attReq = {
         structuredQuery: {
           from: [{ collectionId: "AttendanceHistory" }],
-          where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: exactDbPhone } } },
+          where: {
+            fieldFilter: {
+              field: { fieldPath: "studentID" },
+              op: "IN",
+              value: { arrayValue: { values: possibleIds } }
+            }
+          },
           limit: 2000
         }
       };
@@ -2101,12 +2244,26 @@
             let pDate = sanitizeHTML(f.pureDate?.stringValue || "");
             let timeStr = sanitizeHTML(f.time?.stringValue || "");
             let type = sanitizeHTML(f.type?.stringValue || "");
+            let punctuality = sanitizeHTML(f.punctuality?.stringValue || "On Time");
 
             if (pDate) {
-              if (!allTeacherAttendance[pDate]) { allTeacherAttendance[pDate] = { in: "-", out: "-", isLeave: false, leaveReason: "" }; }
-              if (type === "IN") allTeacherAttendance[pDate].in = timeStr;
-              else if (type === "OUT") allTeacherAttendance[pDate].out = timeStr;
-              else if (type === "LEAVE") {
+              if (!allTeacherAttendance[pDate]) {
+                allTeacherAttendance[pDate] = {
+                  in: "-",
+                  out: "-",
+                  inPunc: "",
+                  outPunc: "",
+                  isLeave: false,
+                  leaveReason: ""
+                };
+              }
+              if (type === "IN") {
+                allTeacherAttendance[pDate].in = timeStr;
+                allTeacherAttendance[pDate].inPunc = punctuality;
+              } else if (type === "OUT") {
+                allTeacherAttendance[pDate].out = timeStr;
+                allTeacherAttendance[pDate].outPunc = punctuality;
+              } else if (type === "LEAVE") {
                 allTeacherAttendance[pDate].isLeave = true;
                 allTeacherAttendance[pDate].leaveReason = timeStr || "Approved Leave";
               }
@@ -2216,6 +2373,7 @@
     let presentCount = 0;
     let absentCount = 0;
     let holidayCount = 0;
+    let lateEarlyCount = 0;
     let rowsArr = [];
 
     for (let d = daysToLoop; d >= 1; d--) {
@@ -2223,8 +2381,8 @@
       let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
 
       let statusHtml = "";
-      let inTime = "-";
-      let outTime = "-";
+      let inTimeHtml = "-";
+      let outTimeHtml = "-";
       let bgRow = "";
 
       if (allHolidays[fullDate]) {
@@ -2238,10 +2396,30 @@
           holidayCount++;
           bgRow = "background: #eef2ff;";
         } else {
-          inTime = rec.in;
-          outTime = rec.out;
-          statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ উপস্থিত</span>`;
           presentCount++;
+          let puncBadges = "";
+
+          if (rec.inPunc === "Late") {
+            puncBadges += `<span class="punc-badge punc-late">বিলম্ব (Late)</span>`;
+            lateEarlyCount++;
+          } else if (rec.inPunc === "Exempt") {
+            puncBadges += `<span class="punc-badge punc-exempt">অনুমোদিত (Exempt)</span>`;
+          }
+
+          if (rec.outPunc === "Early Exit") {
+            puncBadges += `<span class="punc-badge punc-early">আর্লি প্রস্থান (Early)</span>`;
+            lateEarlyCount++;
+          } else if (rec.outPunc === "Exempt" && rec.inPunc !== "Exempt") {
+            puncBadges += `<span class="punc-badge punc-exempt">অনুমোদিত (Exempt)</span>`;
+          }
+
+          if (!puncBadges && rec.in !== "-") {
+            puncBadges = `<span class="punc-badge punc-ontime">সময়মতো</span>`;
+          }
+
+          inTimeHtml = rec.in;
+          outTimeHtml = rec.out;
+          statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ উপস্থিত</span> ${puncBadges}`;
         }
       } else {
         statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ অনুপস্থিত</span>`;
@@ -2253,8 +2431,8 @@
         <tr style="border-bottom: 1px solid #f1f5f9; ${bgRow}">
           <td style="padding: 12px 14px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td>
           <td style="padding: 12px 14px;">${statusHtml}</td>
-          <td style="padding: 12px 14px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td>
-          <td style="padding: 12px 14px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td>
+          <td style="padding: 12px 14px; color:#059669; font-weight:700; font-size:12px;">${inTimeHtml}</td>
+          <td style="padding: 12px 14px; color:#e11d48; font-weight:700; font-size:12px;">${outTimeHtml}</td>
         </tr>`);
     }
 
@@ -2276,6 +2454,10 @@
         <span style="display:flex; flex-direction:column; align-items:center;">
           <small style="color:#64748b; font-size:11px; text-transform:uppercase;">ছুটি / বন্ধ</small>
           <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
+        </span>
+        <span style="display:flex; flex-direction:column; align-items:center;">
+          <small style="color:#64748b; font-size:11px; text-transform:uppercase;">বিলম্ব / আর্লি</small>
+          <span style="font-size:18px; color:#b45309; font-weight:900;">${lateEarlyCount}</span>
         </span>
       `;
     }
