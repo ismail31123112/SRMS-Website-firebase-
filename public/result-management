@@ -6,6 +6,7 @@
 <title>Saidpur Residential Model School — Official Result & Transcript Portal</title>
 <link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" type="image/jpeg">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
@@ -386,8 +387,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: space-between;
   overflow: hidden;
+  gap: 4px;
 }
 
 .school-header {
@@ -396,34 +398,34 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   justify-content: space-between;
   border-bottom: 2px solid #005f40;
   padding-bottom: 4px;
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   gap: 10px;
 }
-.school-logo { width: 52px; height: 52px; border-radius: 50%; object-fit: contain; border: 1.5px solid #005f40; padding: 2px; background: #fff; }
+.school-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: contain; border: 1.5px solid #005f40; padding: 2px; background: #fff; }
 .header-center { text-align: center; flex: 1; }
 .header-center h1 {
   margin: 0;
-  font-size: 19px;
+  font-size: 18.5px;
   text-transform: uppercase;
   color: #005f40;
   font-weight: 900;
   letter-spacing: 0.6px;
   font-family: 'Times New Roman', Times, serif;
 }
-.school-address { font-size: 10px; font-weight: 700; color: #334155; margin: 1px 0 0 0; }
+.school-address { font-size: 9.5px; font-weight: 700; color: #334155; margin: 1px 0 0 0; }
 .transcript-badge-wrap { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
 .transcript-title {
   background: #005f40 !important;
   color: white !important;
-  padding: 4px 12px;
+  padding: 3.5px 11px;
   border-radius: 15px;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
 }
 .grade-scale-mini {
-  font-size: 8px;
+  font-size: 7.8px;
   color: #1e293b;
   font-weight: 700;
   background: #f1f5f9 !important;
@@ -435,8 +437,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .student-info {
   width: 100%;
-  margin-bottom: 4px;
-  font-size: 10.5px;
+  margin-bottom: 3px;
+  font-size: 10px;
   font-weight: 700;
   border: 1px solid #94a3b8;
   border-radius: 5px;
@@ -447,13 +449,13 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .student-info td:last-child { border-right: none; }
 
 .legend-box {
-  font-size: 9px;
+  font-size: 8.5px;
   color: #005f40;
   background: #ecfdf5 !important;
   border: 1px dashed #005f40;
   padding: 2px 8px;
   border-radius: 4px;
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   display: flex;
   justify-content: space-between;
   font-weight: 700;
@@ -462,11 +464,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .marks-wrapper {
   display: flex;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   align-items: flex-start;
 }
-.marks-table { width: 100%; border-collapse: collapse; font-size: 10px; background: #fff; }
+.marks-table { width: 100%; border-collapse: collapse; font-size: 9.8px; background: #fff; }
 .marks-table th, .marks-table td {
   border: 1px solid #1e293b;
   padding: 3.5px 4px;
@@ -478,7 +480,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   background-color: #e2e8f0 !important;
   font-weight: 800;
   color: #0f172a;
-  font-size: 9px;
+  font-size: 8.8px;
   text-transform: uppercase;
 }
 .marks-table td.sub-name {
@@ -493,19 +495,114 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 .divider-col { border-right: 1.8px solid #000 !important; }
 
-/* Auto-Adaptive Dense Mode for Many Subjects / 6 Exams */
+/* Tier 1: Few Subjects (1-6 Subjects) Spacious Layout */
+.report-card.spacious-card .marks-table th,
+.report-card.spacious-card .marks-table td {
+  padding: 5.5px 6px;
+  font-size: 10.5px;
+}
+.report-card.spacious-card .marks-table td.sub-name { font-size: 10.5px; max-width: 220px; }
+
+/* Tier 3: Auto-Adaptive Dense Mode for Many Subjects (11+ Subjects / 6 Exams) */
 .report-card.dense-card .marks-table th,
 .report-card.dense-card .marks-table td {
-  padding: 2.2px 3px;
-  font-size: 9px;
+  padding: 2.3px 3px;
+  font-size: 8.8px;
 }
-.report-card.dense-card .marks-table td.sub-name { font-size: 9px; max-width: 120px; }
+.report-card.dense-card .marks-table td.sub-name { font-size: 8.8px; max-width: 118px; }
+
+/* Class Overview & QR Verification Panel inside Marksheet */
+.rc-overview-qr-strip {
+  display: grid;
+  grid-template-columns: 1.35fr 1.65fr 1fr;
+  gap: 8px;
+  align-items: stretch;
+  margin-top: auto;
+  padding-top: 3px;
+}
+.rc-ov-card {
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  background: #f8fafc !important;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.rc-ov-title {
+  font-size: 8.5px;
+  font-weight: 900;
+  color: #005f40;
+  text-transform: uppercase;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 2px;
+  margin-bottom: 3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rc-ov-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px 6px;
+  font-size: 8.5px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.rc-grade-pills {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  text-align: center;
+  font-size: 8px;
+  font-weight: 800;
+}
+.rc-grade-pill {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 1.5px 2px;
+}
+.rc-qr-card {
+  border: 1.5px solid #005f40;
+  border-radius: 6px;
+  background: #ecfdf5 !important;
+  padding: 3px 7px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.rc-qr-box {
+  width: 48px;
+  height: 48px;
+  background: #fff !important;
+  border: 1px solid #005f40;
+  border-radius: 4px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
+.rc-qr-meta { font-size: 8px; line-height: 1.25; color: #0f172a; font-weight: 700; }
+.rc-qr-badge {
+  display: inline-block;
+  background: #005f40 !important;
+  color: #fff !important;
+  font-size: 7.5px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
 
 .summary-box {
   border: 1.5px solid #005f40;
-  padding: 5px 12px;
+  padding: 4px 12px;
   width: 100%;
-  margin-top: 4px;
+  margin-top: 3px;
   border-radius: 6px;
   background: #f0fdf4 !important;
   display: flex;
@@ -516,14 +613,14 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 .summary-metrics {
   display: flex;
-  gap: 18px;
-  font-size: 12px;
+  gap: 16px;
+  font-size: 11.5px;
   font-weight: 800;
   color: #005f40;
   align-items: center;
 }
 .remark-text {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 800;
   color: #b91c1c;
   margin: 0;
@@ -535,59 +632,68 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 16px 15px 0 15px;
-  margin-top: 4px;
+  padding: 13px 15px 0 15px;
+  margin-top: 2px;
 }
 .signature {
   border-top: 1.5px solid #000;
   width: 175px;
   text-align: center;
-  padding-top: 4px;
+  padding-top: 3px;
   font-weight: 800;
-  font-size: 10.5px;
+  font-size: 10px;
   color: #000;
   text-transform: uppercase;
 }
 
-/* Tabulation Sheet Print Styles */
-.tabulation-print {
-  background: #fff;
-  padding: 8mm;
+/* Paginated Tabulation Sheet Print Cards (Guaranteed Fixed Signatures on Every Page) */
+.tab-page {
+  width: 281mm;
+  height: 192mm;
+  max-height: 192mm;
+  margin: 0 auto 15mm auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2.5px solid #005f40;
+  padding: 6mm 8mm;
   border-radius: 6px;
+  background: #ffffff;
   position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 .tab-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 9.5px;
+  font-size: 9px;
   text-align: center;
   table-layout: auto;
 }
 .tab-table th {
   background: #e2e8f0 !important;
-  padding: 6px 4px;
+  padding: 4.5px 3px;
   border: 1px solid #000;
   font-weight: 800;
   color: #000;
-  font-size: 9.5px;
+  font-size: 8.8px;
 }
 .tab-table td {
-  padding: 5px 4px;
+  padding: 4px 3px;
   border: 1px solid #000;
   vertical-align: middle;
-  font-size: 9px;
+  font-size: 8.4px;
   font-weight: 600;
   line-height: 1.25;
   color: #000;
 }
-.tab-table tr { page-break-inside: avoid; break-inside: avoid; }
-.tab-print-spacer td { height: 22mm; border: none !important; background: transparent !important; }
 .tab-fixed-signatures {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 12px 25px 0 25px;
-  margin-top: 15px;
+  padding: 12px 20px 0 20px;
+  margin-top: auto;
 }
 .tab-sig-box {
   border-top: 1.5px solid #000;
@@ -595,7 +701,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   text-align: center;
   padding-top: 4px;
   font-weight: 800;
-  font-size: 10.5px;
+  font-size: 10px;
   color: #000;
   text-transform: uppercase;
 }
@@ -617,7 +723,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
   @page { size: A4 landscape; margin: 7mm; }
 
-  .report-card {
+  .report-card, .tab-page {
     width: 100% !important;
     height: 194mm !important;
     max-height: 194mm !important;
@@ -628,22 +734,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
-  .report-card:last-child {
+  .report-card:last-child, .tab-page:last-child {
     page-break-after: auto !important;
     break-after: auto !important;
-  }
-
-  .tabulation-print { padding: 0 !important; box-shadow: none !important; }
-  .tab-table thead { display: table-header-group; }
-  .tab-table tfoot { display: table-footer-group; }
-  .tab-fixed-signatures {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 18mm;
-    background: #fff;
-    z-index: 100;
   }
 }
 </style>
@@ -860,13 +953,16 @@ function isOptHeader(h) {
 function parseHeaderFullMarksInfo(headerStr, defaultTotal) {
   let match = String(headerStr || "").match(/\(([^)]+)\)/);
   if (!match || !match[1]) {
-    return { parts: [defaultTotal], total: defaultTotal, hasBreakdown: false, raw: String(defaultTotal) };
+    return { parts: [defaultTotal, 0, 0], total: defaultTotal, hasBreakdown: false, raw: String(defaultTotal) };
   }
   let raw = match[1].trim();
-  let hasBreakdown = raw.includes("+");
-  let parts = raw.split('+').map(p => parseFloat(p) || 0);
-  let total = parts.reduce((a, b) => a + b, 0) || defaultTotal;
-  return { parts: parts, total: total, hasBreakdown: hasBreakdown, raw: raw };
+  let rawParts = raw.split('+').map(p => parseFloat(p) || 0);
+  let cq = rawParts[0] || 0;
+  let mcq = rawParts[1] || 0;
+  let prac = rawParts[2] || 0;
+  let total = (cq + mcq + prac) || defaultTotal;
+  let hasBreakdown = (mcq > 0 || prac > 0 || rawParts.length > 1);
+  return { parts: [cq, mcq, prac], total: total, hasBreakdown: hasBreakdown, raw: `${cq}+${mcq}+${prac}` };
 }
 
 function extractSubAndExam(headerText) {
@@ -1083,75 +1179,44 @@ function getGrade_JS(g) {
 function renderExamMarkInputBox(colIdx, examLabel, badgeType, fmInfo, existingValue) {
   let valStr = String(existingValue || "").trim();
   let partsObt = valStr !== "" ? valStr.split('+') : [];
-  let fParts = fmInfo.parts || [fmInfo.total];
-
-  let isSplit = fmInfo.hasBreakdown || fParts.length > 1 || valStr.includes("+");
-  let typeColor = badgeType === "Main" ? "#005f40" : "#0284c7";
-  let typeBg = badgeType === "Main" ? "#ecfdf5" : "#f0f9ff";
-
-  if (!isSplit) {
-    return `
-      <div style="flex: 1 1 200px; background:${typeBg}; border:1.5px solid #cbd5e1; border-radius:10px; padding:10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <span style="font-size:12px; font-weight:800; color:${typeColor};">${examLabel} (${badgeType})</span>
-          <span style="font-size:10.5px; font-weight:800; background:#fff; padding:2px 7px; border-radius:10px; border:1px solid #cbd5e1;">পূর্ণমান: ${fmInfo.total}</span>
-        </div>
-        <div class="part-grid-row">
-          <div class="part-box">
-            <label>প্রাপ্ত নম্বর (${fmInfo.total})</label>
-            <input type="number" step="any" id="edit-single-${colIdx}" data-mode="single" value="${valStr}" placeholder="0 - ${fmInfo.total}">
-          </div>
-        </div>
-      </div>
-    `;
-  }
+  let fParts = fmInfo.parts || [fmInfo.total, 0, 0];
 
   let cqMax = fParts[0] || 0;
   let mcqMax = fParts[1] || 0;
   let pracMax = fParts[2] || 0;
+  if (cqMax === 0 && mcqMax === 0 && pracMax === 0) cqMax = fmInfo.total;
 
   let cqVal = partsObt[0] !== undefined ? partsObt[0] : "";
   let mcqVal = partsObt[1] !== undefined ? partsObt[1] : "";
   let pracVal = partsObt[2] !== undefined ? partsObt[2] : "";
 
-  let boxesHtml = `
-    <div class="part-box">
-      <label>CQ / লিখিত (${cqMax})</label>
-      <input type="number" step="any" id="edit-cq-${colIdx}" value="${cqVal}" placeholder="Max ${cqMax}" oninput="updateSplitLiveSum(${colIdx})">
-    </div>
-  `;
-
-  if (mcqMax > 0 || fParts.length >= 2) {
-    boxesHtml += `
-      <div class="part-box">
-        <label>MCQ (${mcqMax})</label>
-        <input type="number" step="any" id="edit-mcq-${colIdx}" value="${mcqVal}" placeholder="${mcqMax > 0 ? 'Max ' + mcqMax : '0'}" ${mcqMax === 0 ? 'disabled style="background:#f1f5f9;"' : ''} oninput="updateSplitLiveSum(${colIdx})">
-      </div>
-    `;
-  }
-
-  if (pracMax > 0 || fParts.length >= 3) {
-    boxesHtml += `
-      <div class="part-box">
-        <label>Practical (${pracMax})</label>
-        <input type="number" step="any" id="edit-prac-${colIdx}" value="${pracVal}" placeholder="Max ${pracMax}" oninput="updateSplitLiveSum(${colIdx})">
-      </div>
-    `;
-  }
+  let typeColor = badgeType === "Main" ? "#005f40" : "#0284c7";
+  let typeBg = badgeType === "Main" ? "#ecfdf5" : "#f0f9ff";
 
   let initSum = (parseFloat(cqVal) || 0) + (parseFloat(mcqVal) || 0) + (parseFloat(pracVal) || 0);
   let initSumTxt = (cqVal !== "" || mcqVal !== "" || pracVal !== "") ? initSum : "-";
 
   return `
-    <div style="flex: 1 1 280px; background:${typeBg}; border:1.5px solid #cbd5e1; border-radius:10px; padding:10px;" data-split-col="${colIdx}" data-parts-len="${fParts.length}">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+    <div style="flex: 1 1 290px; background:${typeBg}; border:1.5px solid #cbd5e1; border-radius:10px; padding:10px;" data-split-col="${colIdx}">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; flex-wrap:wrap; gap:4px;">
         <span style="font-size:12px; font-weight:800; color:${typeColor};">${examLabel} (${badgeType})</span>
-        <span style="font-size:10.5px; font-weight:800; background:#fff; padding:2px 8px; border-radius:10px; border:1px solid #cbd5e1;">
-          পূর্ণমান: ${fmInfo.raw} = ${fmInfo.total} | মোট: <b id="live-sum-${colIdx}" style="color:var(--main);">${initSumTxt}</b>
+        <span style="font-size:10px; font-weight:800; background:#fff; padding:2px 8px; border-radius:10px; border:1px solid #cbd5e1;">
+          পূর্ণমান: ${fmInfo.total} (CQ:${cqMax} | MCQ:${mcqMax} | Prac:${pracMax}) • মোট: <b id="live-sum-${colIdx}" style="color:var(--main);">${initSumTxt}</b>
         </span>
       </div>
       <div class="part-grid-row">
-        ${boxesHtml}
+        <div class="part-box">
+          <label>CQ / লিখিত (${cqMax})</label>
+          <input type="number" step="any" min="0" max="${cqMax}" id="edit-cq-${colIdx}" data-max="${cqMax}" data-label="${examLabel} CQ" value="${cqVal}" placeholder="${cqMax > 0 ? '0 - ' + cqMax : 'N/A'}" ${cqMax === 0 ? 'disabled style="background:#f1f5f9; color:#94a3b8;"' : ''} oninput="updateSplitLiveSum(${colIdx})">
+        </div>
+        <div class="part-box">
+          <label>MCQ (${mcqMax})</label>
+          <input type="number" step="any" min="0" max="${mcqMax}" id="edit-mcq-${colIdx}" data-max="${mcqMax}" data-label="${examLabel} MCQ" value="${mcqVal}" placeholder="${mcqMax > 0 ? '0 - ' + mcqMax : 'N/A'}" ${mcqMax === 0 ? 'disabled style="background:#f1f5f9; color:#94a3b8;"' : ''} oninput="updateSplitLiveSum(${colIdx})">
+        </div>
+        <div class="part-box">
+          <label>Practical (${pracMax})</label>
+          <input type="number" step="any" min="0" max="${pracMax}" id="edit-prac-${colIdx}" data-max="${pracMax}" data-label="${examLabel} Practical" value="${pracVal}" placeholder="${pracMax > 0 ? '0 - ' + pracMax : 'N/A'}" ${pracMax === 0 ? 'disabled style="background:#f1f5f9; color:#94a3b8;"' : ''} oninput="updateSplitLiveSum(${colIdx})">
+        </div>
       </div>
     </div>
   `;
@@ -1164,9 +1229,9 @@ window.updateSplitLiveSum = function(colIdx) {
   let sumEl = document.getElementById(`live-sum-${colIdx}`);
   if (!sumEl) return;
 
-  let v1 = cqEl ? cqEl.value.trim() : "";
+  let v1 = (cqEl && !cqEl.disabled) ? cqEl.value.trim() : "";
   let v2 = (mcqEl && !mcqEl.disabled) ? mcqEl.value.trim() : "";
-  let v3 = pracEl ? pracEl.value.trim() : "";
+  let v3 = (pracEl && !pracEl.disabled) ? pracEl.value.trim() : "";
 
   if (v1 === "" && v2 === "" && v3 === "") {
     sumEl.innerText = "-";
@@ -1179,12 +1244,11 @@ window.updateSplitLiveSum = function(colIdx) {
 async function openDataEntryForm(rowIndex) {
   var rowData = appData[rowIndex];
   var parsed = parseSubjectHeaders(cachedHeaders);
-  var firstEmpty = parsed.firstEmpty;
 
   var html = '<div style="text-align:left; max-height:72vh; overflow-y:auto; padding:8px; background:#f1f5f9; border-radius:12px;">';
   html += '<div style="background:#fff; padding:12px 15px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">';
   html += `<div><b style="color:var(--main); font-size:15px;"><i class="fa-solid fa-user-graduate"></i> ${rowData[1] || ''}</b> <span style="font-size:12px; color:#475569; margin-left:8px;">(ID: <b>${rowData[0] || ''}</b> | রোল: <b>${rowData[2] || ''}</b>)</span></div>`;
-  html += '<span style="font-size:11px; color:#dc2626; font-weight:700;">* পরীক্ষায় অনুপস্থিত থাকলে ঘর খালি রাখুন</span>';
+  html += '<span style="font-size:11px; color:#dc2626; font-weight:700;">* পরীক্ষায় অনুপস্থিত থাকলে সব ঘর খালি রাখুন</span>';
   html += '</div>';
 
   if (Object.keys(parsed.subjects).length === 0) {
@@ -1218,55 +1282,66 @@ async function openDataEntryForm(rowIndex) {
 
   const { value: formValues } = await swalPro.fire({
     title: 'শিক্ষার্থীর নম্বর ইনপুট (CQ / MCQ / Practical)',
-    width: '820px',
+    width: '860px',
     html: html,
     showCancelButton: true,
     cancelButtonText: '<i class="fas fa-times"></i> বাতিল',
     confirmButtonText: '<i class="fa-solid fa-check-circle"></i> নম্বর সংরক্ষণ করুন',
     preConfirm: () => {
       var newData = [...appData[rowIndex]];
-      Object.keys(parsed.subjects).forEach(subName => {
+      for (let subName of Object.keys(parsed.subjects)) {
         let sub = parsed.subjects[subName];
         if (sub.isOpt) {
           let optInp = document.getElementById(`edit-optname-${sub.nameCol}`);
           if (optInp) newData[sub.nameCol] = optInp.value.trim();
         }
         let allEx = sub.tests.concat(sub.mains);
-        allEx.forEach(ex => {
+        for (let ex of allEx) {
           let col = ex.col;
-          let singleEl = document.getElementById(`edit-single-${col}`);
-          if (singleEl) {
-            newData[col] = singleEl.value.trim();
+          let cqEl = document.getElementById(`edit-cq-${col}`);
+          let mcqEl = document.getElementById(`edit-mcq-${col}`);
+          let pracEl = document.getElementById(`edit-prac-${col}`);
+
+          let v1 = (cqEl && !cqEl.disabled) ? cqEl.value.trim() : "";
+          let v2 = (mcqEl && !mcqEl.disabled) ? mcqEl.value.trim() : "";
+          let v3 = (pracEl && !pracEl.disabled) ? pracEl.value.trim() : "";
+
+          let cqMax = ex.fm.parts[0] || 0;
+          let mcqMax = ex.fm.parts[1] || 0;
+          let pracMax = ex.fm.parts[2] || 0;
+
+          if (v1 !== "" && parseFloat(v1) > cqMax) {
+            Swal.showValidationMessage(`${subName} (${ex.name}): CQ নম্বর পূর্ণমানের (${cqMax}) চেয়ে বেশি হতে পারে না!`);
+            return false;
+          }
+          if (v2 !== "" && parseFloat(v2) > mcqMax) {
+            Swal.showValidationMessage(`${subName} (${ex.name}): MCQ নম্বর পূর্ণমানের (${mcqMax}) চেয়ে বেশি হতে পারে না!`);
+            return false;
+          }
+          if (v3 !== "" && parseFloat(v3) > pracMax) {
+            Swal.showValidationMessage(`${subName} (${ex.name}): Practical নম্বর পূর্ণমানের (${pracMax}) চেয়ে বেশি হতে পারে না!`);
+            return false;
+          }
+
+          if (v1 === "" && v2 === "" && v3 === "") {
+            newData[col] = "";
           } else {
-            let cqEl = document.getElementById(`edit-cq-${col}`);
-            let mcqEl = document.getElementById(`edit-mcq-${col}`);
-            let pracEl = document.getElementById(`edit-prac-${col}`);
-
-            let v1 = cqEl ? cqEl.value.trim() : "";
-            let v2 = (mcqEl && !mcqEl.disabled) ? mcqEl.value.trim() : "";
-            let v3 = pracEl ? pracEl.value.trim() : "";
-
-            if (v1 === "" && v2 === "" && v3 === "") {
-              newData[col] = "";
+            let cNum = v1 !== "" ? v1 : "0";
+            let mNum = v2 !== "" ? v2 : "0";
+            let pNum = v3 !== "" ? v3 : "0";
+            if (mcqMax > 0 || pracMax > 0) {
+              newData[col] = `${cNum}+${mNum}+${pNum}`;
             } else {
-              let cNum = v1 !== "" ? v1 : "0";
-              let mNum = v2 !== "" ? v2 : "0";
-              let pNum = v3 !== "" ? v3 : "0";
-              if (pracEl && (ex.fm.parts.length >= 3 || v3 !== "")) {
-                newData[col] = `${cNum}+${mNum}+${pNum}`;
-              } else {
-                newData[col] = `${cNum}+${mNum}`;
-              }
+              newData[col] = `${cNum}`;
             }
           }
-        });
-      });
+        }
+      }
       return newData;
     }
   });
 
   if (formValues) {
-    // 0.05s Instant Optimistic Update on Screen
     appData[rowIndex] = formValues;
     renderStudentCards();
 
@@ -1398,15 +1473,10 @@ async function addNewSubjectPopup() {
           let cq = parseFloat(document.getElementById(`add-cq-${i}`).value) || 0;
           let mcq = parseFloat(document.getElementById(`add-mcq-${i}`).value) || 0;
           let prac = parseFloat(document.getElementById(`add-prac-${i}`).value) || 0;
-
-          let marksStr = "";
-          if (prac > 0) {
-            marksStr = `${cq}+${mcq}+${prac}`;
-          } else if (mcq > 0) {
-            marksStr = `${cq}+${mcq}`;
-          } else {
-            marksStr = String(cq > 0 ? cq : (ex.type === "Main" ? 100 : 50));
+          if (cq === 0 && mcq === 0 && prac === 0) {
+            cq = (ex.type === "Main") ? 100 : 50;
           }
+          let marksStr = `${cq}+${mcq}+${prac}`;
           selected.push({ name: ex.name, type: ex.type, marks: marksStr });
         }
       });
@@ -1567,16 +1637,16 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWe
       totalTFull += t.fm.total;
       if (vStr !== "") {
         hasTest = true;
+        let sumT = 0;
         if (vStr.includes("+")) {
           let obtParts = vStr.split('+').map(p => parseFloat(p) || 0);
-          let sumT = obtParts.reduce((a, b) => a + b, 0);
-          tCalc += sumT;
-          tMarks.push(sumT);
+          sumT = obtParts.reduce((a, b) => a + b, 0);
         } else {
-          let num = parseFloat(vStr) || 0;
-          tCalc += num;
-          tMarks.push(num);
+          sumT = parseFloat(vStr) || 0;
         }
+        if (sumT > t.fm.total) sumT = t.fm.total;
+        tCalc += sumT;
+        tMarks.push(sumT);
       }
     }
   });
@@ -1587,24 +1657,38 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWe
       totalMFull += m.fm.total;
       if (vStr !== "") {
         hasMain = true;
-        let fullParts = m.fm.parts;
-        if (vStr.includes("+") || fullParts.length > 1) {
+        let fullParts = m.fm.parts; // [cqMax, mcqMax, pracMax]
+        let hasMultiParts = (fullParts[1] > 0 || fullParts[2] > 0 || vStr.includes("+"));
+
+        if (hasMultiParts) {
           let obtParts = vStr.split('+').map(p => parseFloat(p) || 0);
-          mCalc += obtParts.reduce((a, b) => a + b, 0);
+          let cqObt = obtParts[0] || 0;
+          let mcqObt = obtParts[1] || 0;
+          let pracObt = obtParts[2] || 0;
 
-          let p = vStr.split("+");
-          cqs.push(p[0] !== undefined && p[0] !== "" ? p[0] : "0");
-          mcqs.push((fullParts.length > 1 && fullParts[1] > 0) ? (p[1] || "0") : "-");
-          pracs.push((fullParts.length > 2 && fullParts[2] > 0) ? (p[2] || "0") : "-");
+          if (fullParts[0] > 0 && cqObt > fullParts[0]) cqObt = fullParts[0];
+          if (fullParts[1] > 0 && mcqObt > fullParts[1]) mcqObt = fullParts[1];
+          if (fullParts[2] > 0 && pracObt > fullParts[2]) pracObt = fullParts[2];
 
-          if (fullParts.length > 0 && fullParts[0] > 0 && (obtParts[0] || 0) < Math.ceil(fullParts[0] * passRatio)) isSubFail = true;
-          else if (fullParts.length > 1 && fullParts[1] > 0 && (obtParts[1] || 0) < Math.ceil(fullParts[1] * passRatio)) isSubFail = true;
-          else if (fullParts.length > 2 && fullParts[2] > 0 && (obtParts[2] || 0) < Math.ceil(fullParts[2] * passRatio)) isSubFail = true;
+          let sumM = cqObt + mcqObt + pracObt;
+          if (sumM > m.fm.total) sumM = m.fm.total;
+          mCalc += sumM;
+
+          cqs.push(fullParts[0] > 0 ? cqObt : "-");
+          mcqs.push(fullParts[1] > 0 ? mcqObt : "-");
+          pracs.push(fullParts[2] > 0 ? pracObt : "-");
+
+          if (fullParts[0] > 0 && cqObt < Math.ceil(fullParts[0] * passRatio)) isSubFail = true;
+          else if (fullParts[1] > 0 && mcqObt < Math.ceil(fullParts[1] * passRatio)) isSubFail = true;
+          else if (fullParts[2] > 0 && pracObt < Math.ceil(fullParts[2] * passRatio)) isSubFail = true;
         } else {
-          mCalc += parseFloat(vStr) || 0;
-          cqs.push(vStr);
+          let singleM = parseFloat(vStr) || 0;
+          if (singleM > m.fm.total) singleM = m.fm.total;
+          mCalc += singleM;
+          cqs.push(singleM);
           mcqs.push("-");
           pracs.push("-");
+          if (singleM < Math.ceil(m.fm.total * passRatio)) isSubFail = true;
         }
       }
     }
@@ -1619,6 +1703,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWe
     } else if (hasTest && !hasMain && totalTFull > 0) {
       finalMark = Math.round((tCalc / totalTFull) * 100);
     }
+    if (finalMark > 100) finalMark = 100;
     if (!isSubFail && finalMark < Math.ceil(100 * passRatio)) isSubFail = true;
   }
 
@@ -1745,6 +1830,28 @@ async function openPrintMarksheetPopup() {
   if (selectedExam) { generateMarkSheets(selectedExam); }
 }
 
+function generateVerifyHash(id, cls, yr, gpa, grade, totalMarks) {
+  let raw = `SRMS|${id}|${cls}|${yr}|${gpa}|${grade}|${totalMarks}|2012`;
+  let h1 = 0x811c9dc5;
+  for (let i = 0; i < raw.length; i++) {
+    h1 ^= raw.charCodeAt(i);
+    h1 = Math.imul(h1, 0x01000193);
+  }
+  return ("00000000" + (h1 >>> 0).toString(16)).slice(-8).toUpperCase();
+}
+
+function createVerificationQrSvg(verifyUrl) {
+  try {
+    if (typeof qrcode === "function") {
+      let qr = qrcode(0, 'M');
+      qr.addData(verifyUrl);
+      qr.make();
+      return qr.createSvgTag({ cellSize: 2, margin: 0, scalable: true });
+    }
+  } catch (e) {}
+  return `<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(verifyUrl)}" style="width:100%;height:100%;" alt="QR">`;
+}
+
 function generateMarkSheets(examFilter) {
   var data = appData;
   var parsed = parseSubjectHeaders(cachedHeaders);
@@ -1760,6 +1867,114 @@ function generateMarkSheets(examFilter) {
   if (rawClassName.includes("Science")) { groupName = "Science"; baseClassName = rawClassName.replace(" Science", ""); }
   else if (rawClassName.includes("Arts")) { groupName = "Arts"; baseClassName = rawClassName.replace(" Arts", ""); }
   else if (rawClassName.includes("Commerce")) { groupName = "Commerce"; baseClassName = rawClassName.replace(" Commerce", ""); }
+
+  // 1. Pre-compute Class Overview Statistics across all evaluated students
+  let classStats = {
+    totalStudents: 0,
+    evaluatedStudents: 0,
+    passed: 0,
+    failed: 0,
+    highestMarks: 0,
+    gpaSum: 0,
+    grades: { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0 }
+  };
+
+  let studentEvaluations = [];
+
+  data.forEach(row => {
+    if (!row[0] && !row[1]) return;
+    classStats.totalStudents++;
+
+    let subRows = [];
+    let filterTotalMarks = 0;
+    let filterTotalRegularGP = 0;
+    let filterOptExtraGP = 0;
+    let filterRegularSubCount = 0;
+    let filterTotalSubCount = 0;
+    let filterIsFail = false;
+    let failedSubNames = [];
+
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let actualSubName = sub.isOpt
+        ? (row[sub.nameCol] || subName) + " <span style='font-size:8.5px; font-weight:700; color:#b45309;'>(4th)</span>"
+        : subName;
+
+      let ev = evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWeight, mainWeight);
+      if (ev.attended) {
+        if (ev.isSubFail && !sub.isOpt) {
+          filterIsFail = true;
+          failedSubNames.push(subName);
+        }
+        if (sub.isOpt && !ev.isSubFail && ev.subGP > 2.00) {
+          filterOptExtraGP += (ev.subGP - 2.00);
+        } else if (!sub.isOpt) {
+          filterTotalRegularGP += ev.isSubFail ? 0 : ev.subGP;
+          filterRegularSubCount++;
+        }
+        filterTotalMarks += ev.finalMark;
+        filterTotalSubCount++;
+        subRows.push({ actualSubName, ev });
+      }
+    });
+
+    if (filterTotalSubCount === 0) return;
+    let savedGrade = row[firstEmpty + 3];
+    if (savedGrade === "Incomplete") return;
+
+    let liveGPA = "0.00";
+    let liveGrade = "F";
+    if (filterRegularSubCount > 0) {
+      if (filterIsFail) {
+        liveGPA = "0.00";
+        liveGrade = "F";
+      } else {
+        let combinedGP = filterTotalRegularGP + filterOptExtraGP;
+        let rawGPA = combinedGP / filterRegularSubCount;
+        if (rawGPA > 5.00) rawGPA = 5.00;
+        liveGPA = rawGPA.toFixed(2);
+        liveGrade = getGrade_JS(parseFloat(liveGPA));
+      }
+    }
+
+    let liveAvg = (filterTotalMarks / filterTotalSubCount).toFixed(2);
+    let savedPos = row[firstEmpty + 4] || "N/A";
+    let dispPos = (examFilter === "All" && !filterIsFail) ? savedPos : "N/A";
+
+    classStats.evaluatedStudents++;
+    if (liveGrade === "F") {
+      classStats.failed++;
+      classStats.grades['F']++;
+    } else {
+      classStats.passed++;
+      if (classStats.grades[liveGrade] !== undefined) classStats.grades[liveGrade]++;
+    }
+    if (filterTotalMarks > classStats.highestMarks) classStats.highestMarks = filterTotalMarks;
+    classStats.gpaSum += parseFloat(liveGPA) || 0;
+
+    studentEvaluations.push({
+      row,
+      subRows,
+      filterTotalMarks,
+      liveAvg,
+      liveGPA,
+      liveGrade,
+      dispPos,
+      failedSubNames
+    });
+  });
+
+  if (studentEvaluations.length === 0) {
+    swalPro.fire('লক্ষ্য করুন', 'প্রিন্ট করার মতো কোনো সম্পূর্ণ ফলাফল পাওয়া যায়নি।', 'warning');
+    return;
+  }
+
+  let classPassRate = classStats.evaluatedStudents > 0
+    ? ((classStats.passed / classStats.evaluatedStudents) * 100).toFixed(1)
+    : "0.0";
+  let classAvgGPA = classStats.evaluatedStudents > 0
+    ? (classStats.gpaSum / classStats.evaluatedStudents).toFixed(2)
+    : "0.00";
 
   var theadHtml = `
     <tr>
@@ -1789,111 +2004,84 @@ function generateMarkSheets(examFilter) {
     </div>`;
 
   let cardsArr = [];
-  let printCount = 0;
 
-  data.forEach(row => {
-    if (!row[0] && !row[1]) return;
-    var grade = row[firstEmpty + 3];
-    if (grade === "Incomplete") return;
-    printCount++;
-
+  studentEvaluations.forEach(item => {
+    var row = item.row;
     var id = row[0];
     var name = row[1];
     var roll = row[2];
-    var totalAvg = row[firstEmpty + 1];
-    var gpa = row[firstEmpty + 2];
-    var pos = row[firstEmpty + 4];
-    var failReason = row[firstEmpty + 5];
-    if (!gpa || gpa === "") { gpa = "0.00"; grade = "F"; totalAvg = "0.00"; pos = "N/A"; }
+    var dispGPA = item.liveGPA;
+    var dispGrade = item.liveGrade;
+    var dispAvg = item.liveAvg;
+    var dispPos = item.dispPos;
+    var filterTotalMarks = item.filterTotalMarks;
 
-    var rowsHtmlArray = [];
-    var filterTotalMarks = 0;
-    var filterTotalRegularGP = 0;
-    var filterOptExtraGP = 0;
-    var filterRegularSubCount = 0;
-    var filterTotalSubCount = 0;
-    var filterIsFail = false;
+    var rowsHtmlArray = item.subRows.map(sr => {
+      let ev = sr.ev;
+      let testStr = ev.tMarks.length > 0 ? ev.tMarks.join(" / ") : "-";
+      let cqDisp = ev.cqs.length > 0 ? ev.cqs.join(" / ") : "-";
+      let mcqDisp = ev.mcqs.length > 0 ? ev.mcqs.join(" / ") : "-";
+      let pracDisp = ev.pracs.length > 0 ? ev.pracs.join(" / ") : "-";
 
-    Object.keys(parsed.subjects).forEach(subName => {
-      let sub = parsed.subjects[subName];
-      let actualSubName = sub.isOpt
-        ? (row[sub.nameCol] || subName) + " <span style='font-size:8.5px; font-weight:700; color:#b45309;'>(4th)</span>"
-        : subName;
-
-      let ev = evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWeight, mainWeight);
-      if (ev.attended) {
-        if (ev.isSubFail && !sub.isOpt) filterIsFail = true;
-        if (sub.isOpt && !ev.isSubFail && ev.subGP > 2.00) {
-          filterOptExtraGP += (ev.subGP - 2.00);
-        } else if (!sub.isOpt) {
-          filterTotalRegularGP += ev.isSubFail ? 0 : ev.subGP;
-          filterRegularSubCount++;
-        }
-        filterTotalMarks += ev.finalMark;
-        filterTotalSubCount++;
-
-        let testStr = ev.tMarks.length > 0 ? ev.tMarks.join(" / ") : "-";
-        let cqDisp = ev.cqs.length > 0 ? ev.cqs.join(" / ") : "-";
-        let mcqDisp = ev.mcqs.length > 0 ? ev.mcqs.join(" / ") : "-";
-        let pracDisp = ev.pracs.length > 0 ? ev.pracs.join(" / ") : "-";
-
-        rowsHtmlArray.push(`<tr>
-          <td class="sub-name">${actualSubName}</td>
-          <td class="divider-col" style="white-space:nowrap;"><b>${testStr}</b></td>
-          <td style="white-space:nowrap;">${cqDisp}</td>
-          <td style="white-space:nowrap;">${mcqDisp}</td>
-          <td class="divider-col" style="white-space:nowrap;">${pracDisp}</td>
-          <td><b>${ev.finalMark}</b></td>
-          <td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td>
-          <td><strong>${ev.subGP.toFixed(2)}</strong></td>
-        </tr>`);
-      }
+      return `<tr>
+        <td class="sub-name">${sr.actualSubName}</td>
+        <td class="divider-col" style="white-space:nowrap;"><b>${testStr}</b></td>
+        <td style="white-space:nowrap;">${cqDisp}</td>
+        <td style="white-space:nowrap;">${mcqDisp}</td>
+        <td class="divider-col" style="white-space:nowrap;">${pracDisp}</td>
+        <td><b>${ev.finalMark}</b></td>
+        <td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td>
+        <td><strong>${ev.subGP.toFixed(2)}</strong></td>
+      </tr>`;
     });
 
-    let dispGPA = gpa, dispGrade = grade, dispAvg = totalAvg, dispPos = pos;
-    if (examFilter !== "All") {
-      if (filterRegularSubCount > 0) {
-        if (filterIsFail) { dispGPA = "0.00"; dispGrade = "F"; }
-        else {
-          let combinedGP = filterTotalRegularGP + filterOptExtraGP;
-          let rawGPA = combinedGP / filterRegularSubCount;
-          if (rawGPA > 5.00) rawGPA = 5.00;
-          dispGPA = rawGPA.toFixed(2);
-          dispGrade = getGrade_JS(parseFloat(dispGPA));
-        }
-      } else { dispGPA = "0.00"; dispGrade = "N/A"; }
-      dispAvg = filterTotalSubCount > 0 ? (filterTotalMarks / filterTotalSubCount).toFixed(2) : "0.00";
-      dispPos = "N/A";
-    }
-
     var teacherRemark = "";
-    if (dispGrade === "F") teacherRemark = `Failed in: ${failReason && failReason !== "None" ? failReason : "Subject(s)"} — Needs Special Care`;
-    else if (dispGrade === "A+") teacherRemark = "Outstanding Performance! Keep it up.";
+    if (dispGrade === "F") {
+      let failStr = item.failedSubNames.length > 0 ? item.failedSubNames.join(", ") : "Subject(s)";
+      teacherRemark = `Failed in: ${failStr} — Needs Special Care`;
+    } else if (dispGrade === "A+") teacherRemark = "Outstanding Performance! Keep it up.";
     else if (dispGrade === "A") teacherRemark = "Very Good Result! Strive for A+.";
-    else if (dispGrade === "A-") teacherRemark = "Good Performance.";
+    else if (dispGrade === "A-") teacherRemark = "Good Academic Performance.";
     else if (dispGrade === "B") teacherRemark = "Satisfactory Result.";
     else teacherRemark = "Needs More Effort & Regular Study.";
 
-    let isDense = rowsHtmlArray.length > 10 || activeTests.length > 2 || activeMains.length > 2;
+    // Dynamic 3-Tier Layout Selection based on Subject Count
+    let subCount = rowsHtmlArray.length;
+    let tierClass = "";
     var finalTableHtml = "";
 
-    if (rowsHtmlArray.length === 0) {
-      finalTableHtml = `<table class="marks-table"><thead>${theadHtml}</thead><tbody><tr><td colspan="8" style="padding:15px; color:#dc2626;">কোনো বিষয়ের নম্বর পাওয়া যায়নি!</td></tr></tbody></table>`;
-    } else if (rowsHtmlArray.length > 6) {
-      var half = Math.ceil(rowsHtmlArray.length / 2);
-      var col1 = rowsHtmlArray.slice(0, half).join("");
-      var col2 = rowsHtmlArray.slice(half).join("");
+    if (subCount <= 6) {
+      // Tier 1: Few subjects (1 to 6) -> Full-width spacious table
+      tierClass = "spacious-card";
+      finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.join("")}</tbody></table></div>`;
+    } else if (subCount <= 10) {
+      // Tier 2: Medium subjects (7 to 10) -> Balanced 2-column table
+      tierClass = "";
+      var half = Math.ceil(subCount / 2);
       finalTableHtml = `
         <div class="marks-wrapper">
-          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${col1}</tbody></table>
-          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${col2}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(0, half).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(half).join("")}</tbody></table>
         </div>`;
     } else {
-      finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.join("")}</tbody></table></div>`;
+      // Tier 3: Many subjects (11+) -> Compact 2-column table
+      tierClass = "dense-card";
+      var half2 = Math.ceil(subCount / 2);
+      finalTableHtml = `
+        <div class="marks-wrapper">
+          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(0, half2).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(half2).join("")}</tbody></table>
+        </div>`;
     }
 
+    // Build Security Verification Hash & QR Code URL
+    let vHash = generateVerifyHash(id, rawClassName, year, dispGPA, dispGrade, filterTotalMarks);
+    let verifyCode = `SRMS-${year}-${vHash}`;
+    let verifyUrl = `https://srms2012.edu.bd/verify-result?id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&cls=${encodeURIComponent(rawClassName)}&roll=${encodeURIComponent(roll)}&yr=${encodeURIComponent(year)}&exam=${encodeURIComponent(examFilter === "All" ? "Final" : examFilter)}&marks=${filterTotalMarks}&gpa=${dispGPA}&grade=${encodeURIComponent(dispGrade)}&merit=${encodeURIComponent(dispPos)}&v=${vHash}`;
+    let qrSvgHtml = createVerificationQrSvg(verifyUrl);
+
     cardsArr.push(`
-      <div class="report-card ${isDense ? 'dense-card' : ''}">
+      <div class="report-card ${tierClass}">
         <div class="rc-watermark">SRMS OFFICIAL</div>
 
         <div class="rc-top-section">
@@ -1911,9 +2099,9 @@ function generateMarkSheets(examFilter) {
 
           <table class="student-info">
             <tr>
-              <td width="34%">Student Name: <b style="color:#005f40; font-size:11.5px; text-transform:uppercase;">${name}</b></td>
-              <td width="22%">Student ID: <b>${id}</b></td>
-              <td width="22%">Class: <b>${baseClassName}</b> (${groupName})</td>
+              <td width="34%">Student Name: <b style="color:#005f40; font-size:11px; text-transform:uppercase;">${name}</b></td>
+              <td width="20%">Student ID: <b>${id}</b></td>
+              <td width="24%">Class: <b>${baseClassName}</b> (${groupName})</td>
               <td width="22%">Roll No: <b>${roll}</b> | Merit: <b>${dispPos}</b></td>
             </tr>
           </table>
@@ -1922,6 +2110,49 @@ function generateMarkSheets(examFilter) {
 
         <div class="rc-middle-section">
           ${finalTableHtml}
+
+          <!-- Class Performance Overview & QR Security Verification Strip -->
+          <div class="rc-overview-qr-strip">
+            <div class="rc-ov-card">
+              <div class="rc-ov-title">
+                <span><i class="fas fa-chart-pie"></i> Class Performance Overview (${rawClassName})</span>
+                <span>Session: ${year}</span>
+              </div>
+              <div class="rc-ov-grid">
+                <span>Examinees: <b>${classStats.evaluatedStudents}</b></span>
+                <span>Passed: <b style="color:#059669;">${classStats.passed}</b></span>
+                <span>Failed: <b style="color:#dc2626;">${classStats.failed}</b></span>
+                <span>Pass Rate: <b>${classPassRate}%</b></span>
+                <span>Class Highest: <b>${classStats.highestMarks}</b></span>
+                <span>Class Avg GPA: <b>${classAvgGPA}</b></span>
+              </div>
+            </div>
+
+            <div class="rc-ov-card">
+              <div class="rc-ov-title">
+                <span><i class="fas fa-award"></i> Class Grade Distribution Summary</span>
+                <span>Status: <b style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade === 'F' ? 'FAILED' : 'PASSED'}</b></span>
+              </div>
+              <div class="rc-grade-pills">
+                <div class="rc-grade-pill"><span style="color:#005f40;">A+</span><br><b>${classStats.grades['A+']}</b></div>
+                <div class="rc-grade-pill"><span style="color:#005f40;">A</span><br><b>${classStats.grades['A']}</b></div>
+                <div class="rc-grade-pill"><span style="color:#005f40;">A-</span><br><b>${classStats.grades['A-']}</b></div>
+                <div class="rc-grade-pill"><span>B</span><br><b>${classStats.grades['B']}</b></div>
+                <div class="rc-grade-pill"><span>C</span><br><b>${classStats.grades['C']}</b></div>
+                <div class="rc-grade-pill"><span>D</span><br><b>${classStats.grades['D']}</b></div>
+                <div class="rc-grade-pill"><span style="color:#dc2626;">F</span><br><b style="color:#dc2626;">${classStats.grades['F']}</b></div>
+              </div>
+            </div>
+
+            <div class="rc-qr-card">
+              <div class="rc-qr-box">${qrSvgHtml}</div>
+              <div class="rc-qr-meta">
+                <span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br>
+                <b>ID: ${verifyCode}</b><br>
+                <span style="color:#475569; font-size:7.4px;">Scan QR code to verify student transcript authenticity at <b>srms2012.edu.bd</b></span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="rc-bottom-section">
@@ -1929,8 +2160,8 @@ function generateMarkSheets(examFilter) {
             <div class="summary-metrics">
               <span>Total Marks: <b>${filterTotalMarks}</b></span>
               <span>Average: <b>${dispAvg}</b></span>
-              <span>GPA: <b style="font-size:15px;">${dispGPA}</b></span>
-              <span>Letter Grade: <b style="font-size:15px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</b></span>
+              <span>GPA: <b style="font-size:14.5px;">${dispGPA}</b></span>
+              <span>Letter Grade: <b style="font-size:14.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</b></span>
               <span>Merit Position: <b>${dispPos}</b></span>
             </div>
             <p class="remark-text">${teacherRemark}</p>
@@ -1945,11 +2176,6 @@ function generateMarkSheets(examFilter) {
       </div>
     `);
   });
-
-  if (printCount === 0) {
-    swalPro.fire('লক্ষ্য করুন', 'প্রিন্ট করার মতো কোনো সম্পূর্ণ ফলাফল পাওয়া যায়নি।', 'warning');
-    return;
-  }
 
   executePrint(cardsArr.join(''));
 }
@@ -1973,9 +2199,12 @@ async function printTabulation() {
   }
 
   var stats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0 };
+  var validRows = [];
+
   appData.forEach(row => {
     if (!row[0] && !row[1]) return;
     stats['Total']++;
+    validRows.push(row);
     var g = row[firstEmpty + 3];
     if (g === 'Incomplete') return;
     if (stats[g] !== undefined) stats[g]++;
@@ -1985,46 +2214,31 @@ async function printTabulation() {
   var passed = stats['Total'] - stats['F'];
   var passRate = stats['Total'] > 0 ? ((passed / stats['Total']) * 100).toFixed(2) : "0.00";
   var subKeys = Object.keys(parsed.subjects);
-  var totalCols = subKeys.length + 6;
 
-  var printHtml = `<div class="tabulation-print">
-    <div style="text-align:center; margin-bottom:10px; border-bottom:2px solid #005f40; padding-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
-      <img src="${SCHOOL_LOGO}" alt="Logo" style="height:50px; border-radius:50%;">
-      <div>
-        <h1 style="margin:0; font-size:20px; color:#005f40; text-transform:uppercase; font-weight:900;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
-        <p style="margin:2px 0 0 0; color:#334155; font-size:12px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p>
-      </div>
-      <div style="font-size:10.5px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:4px 10px; border-radius:8px; color:#005f40;">
-        Total: ${stats['Total']} | Pass: ${passed} (${passRate}%)
-      </div>
-    </div>
-
-    <table class="tab-table">
-      <thead>
-        <tr>
-          <th style="width:3.5%;">Roll</th>
-          <th style="width:13%; text-align:left; padding-left:5px;">Student Name &amp; ID</th>`;
-
+  // Build table header HTML
+  var theadHtml = `
+    <thead>
+      <tr>
+        <th style="width:3.5%;">Roll</th>
+        <th style="width:12.5%; text-align:left; padding-left:5px;">Student Name &amp; ID</th>`;
   subKeys.forEach(subName => {
     let sub = parsed.subjects[subName];
-    let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:8px; color:#b45309;">(4th)</span>` : subName;
-    printHtml += `<th>${htmlLabel}</th>`;
+    let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:7.5px; color:#b45309;">(4th Subject)</span>` : subName;
+    theadHtml += `<th>${htmlLabel}</th>`;
   });
+  theadHtml += `
+        <th style="width:4.5%;">Avg</th>
+        <th style="width:4.5%;">GPA</th>
+        <th style="width:4.5%;">Grade</th>
+        <th style="width:4.5%;">Merit</th>
+      </tr>
+    </thead>`;
 
-  printHtml += `
-          <th style="width:5%;">Avg</th>
-          <th style="width:5%;">GPA</th>
-          <th style="width:4.5%;">Grade</th>
-          <th style="width:5%;">Merit</th>
-        </tr>
-      </thead>
-      <tbody>`;
-
-  appData.forEach(row => {
-    if (!row[0] && !row[1]) return;
-    printHtml += `<tr>
+  // Build each student row HTML with full "Test:", "Main:", "Total:" labels
+  var bodyRowsHtml = validRows.map(row => {
+    let tr = `<tr>
       <td><b>${row[2] || '-'}</b></td>
-      <td style="text-align:left; padding-left:5px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:8.5px;">ID: ${row[0] || '-'}</span></td>`;
+      <td style="text-align:left; padding-left:5px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:8px;">ID: ${row[0] || '-'}</span></td>`;
 
     subKeys.forEach(subName => {
       let sub = parsed.subjects[subName];
@@ -2033,66 +2247,107 @@ async function printTabulation() {
       let mDisp = ev.hasMain ? ev.mCalc : "-";
       let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
 
-      printHtml += `<td>
-        <div style="font-size:8.5px; line-height:1.25;">
-          <span>T:${tDisp} | M:${mDisp}</span><br>
-          <strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#000'};">${totDisp}</strong>
+      tr += `<td>
+        <div style="font-size:8px; line-height:1.25; text-align:left; padding:0 2px;">
+          <span style="color:#334155;">Test: <b>${tDisp}</b></span><br>
+          <span style="color:#334155;">Main: <b>${mDisp}</b></span><br>
+          <strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">Total: ${totDisp}</strong>
         </div>
       </td>`;
     });
 
-    printHtml += `
+    tr += `
       <td><b>${row[firstEmpty + 1] || '-'}</b></td>
-      <td><strong style="font-size:10.5px;">${row[firstEmpty + 2] || '-'}</strong></td>
-      <td><strong style="font-size:10.5px; color:${row[firstEmpty + 3] === 'F' ? '#dc2626' : '#059669'};">${row[firstEmpty + 3] || '-'}</strong></td>
+      <td><strong style="font-size:10px;">${row[firstEmpty + 2] || '-'}</strong></td>
+      <td><strong style="font-size:10px; color:${row[firstEmpty + 3] === 'F' ? '#dc2626' : '#059669'};">${row[firstEmpty + 3] || '-'}</strong></td>
       <td><b>${row[firstEmpty + 4] || '-'}</b></td>
     </tr>`;
+    return tr;
   });
 
-  printHtml += `
-      </tbody>
-      <tfoot class="tab-print-spacer">
-        <tr><td colspan="${totalCols}"></td></tr>
-      </tfoot>
-    </table>
+  // Paginate rows into explicit A4 Landscape .tab-page containers (8 rows per page so signatures & summary never overflow)
+  const ROWS_PER_PAGE = 8;
+  var pagesArr = [];
+  for (let i = 0; i < bodyRowsHtml.length; i += ROWS_PER_PAGE) {
+    pagesArr.push(bodyRowsHtml.slice(i, i + ROWS_PER_PAGE));
+  }
+  if (pagesArr.length === 0) pagesArr.push([]);
 
-    <div style="margin-top:12px; border:1.5px solid #005f40; border-radius:6px; overflow:hidden; page-break-inside:avoid; break-inside:avoid; width:85%; margin-left:auto; margin-right:auto;">
-      <table style="width:100%; border-collapse:collapse; font-size:10.5px; text-align:center;">
+  var summaryTableHtml = `
+    <div style="margin-top:8px; border:1.5px solid #005f40; border-radius:6px; overflow:hidden; width:90%; margin-left:auto; margin-right:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:9.5px; text-align:center;">
         <tr style="font-weight:800; background:#e2e8f0; color:#005f40;">
-          <td style="border:1px solid #000; padding:4px;">Total Students</td>
-          <td style="border:1px solid #000; padding:4px;">Passed</td>
-          <td style="border:1px solid #000; padding:4px;">Failed</td>
-          <td style="border:1px solid #000; padding:4px;">Pass Rate</td>
-          <td style="border:1px solid #000; padding:4px;">A+</td>
-          <td style="border:1px solid #000; padding:4px;">A</td>
-          <td style="border:1px solid #000; padding:4px;">A-</td>
-          <td style="border:1px solid #000; padding:4px;">B</td>
-          <td style="border:1px solid #000; padding:4px;">C</td>
-          <td style="border:1px solid #000; padding:4px;">D</td>
+          <td style="border:1px solid #000; padding:3.5px;">Total Students</td>
+          <td style="border:1px solid #000; padding:3.5px;">Passed</td>
+          <td style="border:1px solid #000; padding:3.5px;">Failed</td>
+          <td style="border:1px solid #000; padding:3.5px;">Pass Rate</td>
+          <td style="border:1px solid #000; padding:3.5px;">A+</td>
+          <td style="border:1px solid #000; padding:3.5px;">A</td>
+          <td style="border:1px solid #000; padding:3.5px;">A-</td>
+          <td style="border:1px solid #000; padding:3.5px;">B</td>
+          <td style="border:1px solid #000; padding:3.5px;">C</td>
+          <td style="border:1px solid #000; padding:3.5px;">D</td>
         </tr>
         <tr style="font-weight:800; background:#fff;">
-          <td style="border:1px solid #000; padding:5px;">${stats['Total']}</td>
-          <td style="border:1px solid #000; padding:5px; color:#059669;">${passed}</td>
-          <td style="border:1px solid #000; padding:5px; color:#dc2626;">${stats['F']}</td>
-          <td style="border:1px solid #000; padding:5px;">${passRate}%</td>
-          <td style="border:1px solid #000; padding:5px;">${stats['A+']}</td>
-          <td style="border:1px solid #000; padding:5px;">${stats['A']}</td>
-          <td style="border:1px solid #000; padding:5px;">${stats['A-']}</td>
-          <td style="border:1px solid #000; padding:5px;">${stats['B']}</td>
-          <td style="border:1px solid #000; padding:5px;">${stats['C']}</td>
-          <td style="border:1px solid #000; padding:5px;">${stats['D']}</td>
+          <td style="border:1px solid #000; padding:4px;">${stats['Total']}</td>
+          <td style="border:1px solid #000; padding:4px; color:#059669;">${passed}</td>
+          <td style="border:1px solid #000; padding:4px; color:#dc2626;">${stats['F']}</td>
+          <td style="border:1px solid #000; padding:4px;">${passRate}%</td>
+          <td style="border:1px solid #000; padding:4px;">${stats['A+']}</td>
+          <td style="border:1px solid #000; padding:4px;">${stats['A']}</td>
+          <td style="border:1px solid #000; padding:4px;">${stats['A-']}</td>
+          <td style="border:1px solid #000; padding:4px;">${stats['B']}</td>
+          <td style="border:1px solid #000; padding:4px;">${stats['C']}</td>
+          <td style="border:1px solid #000; padding:4px;">${stats['D']}</td>
         </tr>
       </table>
-    </div>
+    </div>`;
 
-    <div class="tab-fixed-signatures">
-      <div class="tab-sig-box">Prepared &amp; Tabulated By</div>
-      <div class="tab-sig-box">Exam Controller</div>
-      <div class="tab-sig-box">Principal / Headmaster</div>
-    </div>
-  </div>`;
+  var totalPages = pagesArr.length;
+  var finalPagesHtml = pagesArr.map((pageRows, pageIdx) => {
+    var isLastPage = (pageIdx === totalPages - 1);
+    return `
+      <div class="tab-page">
+        <div>
+          <div style="text-align:center; margin-bottom:6px; border-bottom:2px solid #005f40; padding-bottom:5px; display:flex; align-items:center; justify-content:space-between;">
+            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:46px; width:46px; border-radius:50%; border:1.5px solid #005f40; padding:2px;">
+            <div>
+              <h1 style="margin:0; font-size:18.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+              <p style="margin:1px 0 0 0; color:#334155; font-size:11px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:10px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:3px 9px; border-radius:8px; color:#005f40;">
+                Total: ${stats['Total']} | Pass: ${passed} (${passRate}%)
+              </div>
+              <div style="font-size:8px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div>
+            </div>
+          </div>
 
-  executePrint(printHtml);
+          <div class="legend-box" style="margin-bottom:5px;">
+            <span><b>Abbreviations:</b> Test = Test Exam Marks (${testWeight}% Weight) | Main = Main Exam Marks (${mainWeight}% Weight) | Total = Final Score (100%) &amp; Letter Grade</span>
+            <span><b>Pass Rule:</b> ${Math.round(passRatio * 100)}% (Separate CQ, MCQ &amp; Practical)</span>
+          </div>
+
+          <table class="tab-table">
+            ${theadHtml}
+            <tbody>
+              ${pageRows.join('')}
+            </tbody>
+          </table>
+
+          ${isLastPage ? summaryTableHtml : ''}
+        </div>
+
+        <div class="tab-fixed-signatures">
+          <div class="tab-sig-box">Prepared &amp; Tabulated By</div>
+          <div class="tab-sig-box">Exam Controller</div>
+          <div class="tab-sig-box">Principal / Headmaster</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  executePrint(finalPagesHtml);
 }
 
 function publishResults() {
