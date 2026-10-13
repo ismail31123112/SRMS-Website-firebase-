@@ -425,7 +425,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 12px; /* Standard gap for clean layout */
+  gap: 12px; /* Increased gap to avoid cluttered look */
   margin: 5px 0;
   min-height: 0;
 }
@@ -507,7 +507,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   width: 100%;
   align-items: flex-start;
   min-height: 0;
-  margin-bottom: 12px; /* Force margin at bottom of marks wrapper */
+  margin-bottom: 12px;
 }
 .marks-table {
   width: 100%;
@@ -570,7 +570,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   grid-template-columns: 1.35fr 1.65fr 1.05fr;
   gap: 8px;
   align-items: stretch;
-  margin-top: 16px; /* Added proper gap */
+  margin-top: 16px;
   margin-bottom: 8px;
 }
 .rc-ov-card {
@@ -655,7 +655,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   border: 1.5px solid #005f40;
   padding: 6px 14px;
   width: 100%;
-  margin-top: 10px; /* Added gap */
+  margin-top: 10px;
   margin-bottom: 10px;
   border-radius: 6px;
   background: #f0fdf4 !important;
@@ -686,7 +686,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 15px 16px 0 16px; /* Increased top padding */
+  padding: 15px 16px 0 16px;
   margin-top: auto;
 }
 .signature {
@@ -1688,7 +1688,7 @@ async function manageGlobalExamsPopup() {
   let globalExams = [];
   try {
     globalExams = await fetchGlobalExamsFromDB();
-    window.cachedGlobalExams = globalExams; // Store globally for index-based referencing
+    window.cachedGlobalExams = globalExams;
     showLoader(false);
   } catch (e) {
     showLoader(false);
@@ -1702,7 +1702,6 @@ async function manageGlobalExamsPopup() {
     globalExams.forEach((ex, idx) => {
       let badgeClr = ex.type === "Main" ? "#005f40" : "#0284c7";
       let badgeBg = ex.type === "Main" ? "#ecfdf5" : "#f0f9ff";
-      
       listHtml += `
         <div class="mgr-list-item">
           <div>
@@ -1712,7 +1711,6 @@ async function manageGlobalExamsPopup() {
             </span>
           </div>
           <div class="mgr-actions">
-            <!-- Index-based safe passing to avoid string quoting issues -->
             <button type="button" style="background:#0284c7;" onclick="openEditGlobalExamModal(${idx})"><i class="fas fa-edit"></i> এডিট</button>
             <button type="button" style="background:#ef4444;" onclick="confirmDeleteGlobalExam(${idx})"><i class="fas fa-trash"></i> মুছুন</button>
           </div>
@@ -1776,7 +1774,7 @@ window.openEditGlobalExamModal = async function(idx) {
   const { value: edited } = await swalPro.fire({
     title: 'পরীক্ষার নাম ও ধরন এডিট করুন',
     html: `
-      <div style="text-align:left; font-size:11.5px; color:#047857; background:#ecfdf5; padding:8px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:10px;">
+      <div style="text-align:left; font-size:12px; color:#047857; background:#ecfdf5; padding:10px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:10px;">
         <i class="fas fa-info-circle"></i> এখানে পরীক্ষার নাম বা ধরন পরিবর্তন করলে সকল শ্রেণির বিষয়ে সংযুক্ত এই পরীক্ষার নাম স্বয়ংক্রিয়ভাবে আপডেট হয়ে যাবে।
       </div>
       <input id="editExN" class="swal2-input" value="${oldName.replace(/"/g, '&quot;')}" placeholder="পরীক্ষার নতুন নাম" style="width:92%; margin:6px auto;">
@@ -2018,7 +2016,7 @@ async function manageClassSubjectsPopup() {
     width: '680px',
     html: `
       <div style="text-align:left; font-size:12px; color:#475569; margin-bottom:10px;">
-        যেকোনো বিষয়ের নাম, ৪র্থ বিষয়ের স্ট্যাটাস, পূর্ণমান (CQ/MCQ/Practical) বা সংযুক্ত পরীক্ষা পরিবর্তন করতে <b>এডিট</b> বাটনে ক্লিক করুন (শিক্ষার্থীদের আগের কোনো নম্বর হারাবেলগ্ন)।
+        যেকোনো বিষয়ের নাম, ৪র্থ বিষয়ের স্ট্যাটাস, পূর্ণমান (CQ/MCQ/Practical) বা সংযুক্ত পরীক্ষা পরিবর্তন করতে <b>এডিট</b> বাটনে ক্লিক করুন (শিক্ষার্থীদের আগের কোনো নম্বর হারাবে না)।
       </div>
       ${listHtml}
     `,
@@ -2119,7 +2117,7 @@ window.editSubjectPopup = async function(subName) {
     preConfirm: () => {
       let newName = document.getElementById('editSubN').value.trim();
       if (!newName) {
-        Swal.showValidationMessage('বিষয়ের নাম খালি রাখা যাবে বাধা!');
+        Swal.showValidationMessage('বিষয়ের নাম খালি রাখা যাবে না!');
         return false;
       }
       let selected = [];
@@ -2425,7 +2423,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWe
       totalMFull += m.fm.total;
       if (vStr !== "") {
         hasMain = true;
-        let fullParts = m.fm.parts; 
+        let fullParts = m.fm.parts; // [cqMax, mcqMax, pracMax]
         let hasMultiParts = (fullParts[1] > 0 || fullParts[2] > 0 || vStr.includes("+"));
 
         if (hasMultiParts) {
@@ -2557,7 +2555,7 @@ function viewSingleResult(rowIndex) {
   swalPro.fire({ title: 'একাডেমিক ফলাফল বিবরণী', width: '650px', html: html, confirmButtonText: 'বন্ধ করুন' });
 }
 
-var currentPrintMode = "marksheet"; // "marksheet" | "tabulation"
+var currentPrintMode = "marksheet"; 
 
 function setPrintPageOrientation(orientation) {
   let styleEl = document.getElementById('dynamicPrintPageStyle');
