@@ -425,8 +425,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 5px;
-  margin: 3px 0;
+  gap: 12px; /* Standard gap for clean layout */
+  margin: 5px 0;
   min-height: 0;
 }
 
@@ -503,10 +503,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   flex: 1;
   display: flex;
   justify-content: space-between;
-  gap: 7px;
+  gap: 10px;
   width: 100%;
-  align-items: stretch;
+  align-items: flex-start;
   min-height: 0;
+  margin-bottom: 12px; /* Force margin at bottom of marks wrapper */
 }
 .marks-table {
   width: 100%;
@@ -569,6 +570,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   grid-template-columns: 1.35fr 1.65fr 1.05fr;
   gap: 8px;
   align-items: stretch;
+  margin-top: 16px; /* Added proper gap */
+  margin-bottom: 8px;
 }
 .rc-ov-card {
   border: 1px solid #94a3b8;
@@ -650,9 +653,10 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .summary-box {
   border: 1.5px solid #005f40;
-  padding: 5px 12px;
+  padding: 6px 14px;
   width: 100%;
-  margin-top: 2px;
+  margin-top: 10px; /* Added gap */
+  margin-bottom: 10px;
   border-radius: 6px;
   background: #f0fdf4 !important;
   display: flex;
@@ -682,8 +686,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 13px 16px 0 16px;
-  margin-top: 2px;
+  padding: 15px 16px 0 16px; /* Increased top padding */
+  margin-top: auto;
 }
 .signature {
   border-top: 1.5px solid #000;
@@ -1013,6 +1017,7 @@ const auth = firebase.auth();
 var SERVER_TOKEN = "<?= serverToken ?>";
 var appData = [];
 var cachedHeaders = [];
+window.cachedGlobalExams = []; // Global store for secure index-based referencing
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
 var isAuthReady = false;
 
@@ -1069,10 +1074,12 @@ function initYearDropdown() {
   }
 }
 
+// Ensure auth persistence
 try {
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
 } catch (e) {}
 
+// Non-blocking Auth State check for instant loading
 auth.onAuthStateChanged(async (user) => {
   let hasTokenInUrl = SERVER_TOKEN && SERVER_TOKEN.trim() !== "" && SERVER_TOKEN.indexOf("serverToken") === -1;
 
@@ -1681,6 +1688,7 @@ async function manageGlobalExamsPopup() {
   let globalExams = [];
   try {
     globalExams = await fetchGlobalExamsFromDB();
+    window.cachedGlobalExams = globalExams; // Store globally for index-based referencing
     showLoader(false);
   } catch (e) {
     showLoader(false);
@@ -1694,7 +1702,7 @@ async function manageGlobalExamsPopup() {
     globalExams.forEach((ex, idx) => {
       let badgeClr = ex.type === "Main" ? "#005f40" : "#0284c7";
       let badgeBg = ex.type === "Main" ? "#ecfdf5" : "#f0f9ff";
-      let safeName = ex.name.replace(/'/g, "\\'");
+      
       listHtml += `
         <div class="mgr-list-item">
           <div>
@@ -1704,8 +1712,9 @@ async function manageGlobalExamsPopup() {
             </span>
           </div>
           <div class="mgr-actions">
-            <button type="button" style="background:#0284c7;" onclick="openEditGlobalExamModal('${safeName}', '${ex.type}')"><i class="fas fa-edit"></i> এডিট</button>
-            <button type="button" style="background:#ef4444;" onclick="confirmDeleteGlobalExam('${safeName}')"><i class="fas fa-trash"></i> মুছুন</button>
+            <!-- Index-based safe passing to avoid string quoting issues -->
+            <button type="button" style="background:#0284c7;" onclick="openEditGlobalExamModal(${idx})"><i class="fas fa-edit"></i> এডিট</button>
+            <button type="button" style="background:#ef4444;" onclick="confirmDeleteGlobalExam(${idx})"><i class="fas fa-trash"></i> মুছুন</button>
           </div>
         </div>`;
     });
@@ -1758,14 +1767,19 @@ async function manageGlobalExamsPopup() {
   }
 }
 
-window.openEditGlobalExamModal = async function(oldName, oldType) {
+window.openEditGlobalExamModal = async function(idx) {
+  let exam = window.cachedGlobalExams[idx];
+  if(!exam) return;
+  let oldName = exam.name;
+  let oldType = exam.type;
+
   const { value: edited } = await swalPro.fire({
     title: 'পরীক্ষার নাম ও ধরন এডিট করুন',
     html: `
-      <div style="text-align:left; font-size:12px; color:#047857; background:#ecfdf5; padding:10px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:10px;">
+      <div style="text-align:left; font-size:11.5px; color:#047857; background:#ecfdf5; padding:8px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:10px;">
         <i class="fas fa-info-circle"></i> এখানে পরীক্ষার নাম বা ধরন পরিবর্তন করলে সকল শ্রেণির বিষয়ে সংযুক্ত এই পরীক্ষার নাম স্বয়ংক্রিয়ভাবে আপডেট হয়ে যাবে।
       </div>
-      <input id="editExN" class="swal2-input" value="${oldName}" placeholder="পরীক্ষার নতুন নাম" style="width:92%; margin:6px auto;">
+      <input id="editExN" class="swal2-input" value="${oldName.replace(/"/g, '&quot;')}" placeholder="পরীক্ষার নতুন নাম" style="width:92%; margin:6px auto;">
       <select id="editExT" class="swal2-input" style="width:92%; height:44px; margin:8px auto; font-weight:700; color:var(--main);">
         <option value="Test" ${oldType === 'Test' ? 'selected' : ''}>Test Exam (মাসিক / টিউটোরিয়াল পরীক্ষা)</option>
         <option value="Main" ${oldType === 'Main' ? 'selected' : ''}>Main Exam (সাময়িক / বার্ষিক পরীক্ষা)</option>
@@ -1802,7 +1816,11 @@ window.openEditGlobalExamModal = async function(oldName, oldType) {
   }
 };
 
-window.confirmDeleteGlobalExam = async function(examName) {
+window.confirmDeleteGlobalExam = async function(idx) {
+  let exam = window.cachedGlobalExams[idx];
+  if(!exam) return;
+  let examName = exam.name;
+
   let confirmRes = await swalPro.fire({
     title: `'${examName}' মুছে ফেলবেন?`,
     text: "পরীক্ষাটি গ্লোবাল তালিকা থেকে মুছে যাবে।",
@@ -2000,7 +2018,7 @@ async function manageClassSubjectsPopup() {
     width: '680px',
     html: `
       <div style="text-align:left; font-size:12px; color:#475569; margin-bottom:10px;">
-        যেকোনো বিষয়ের নাম, ৪র্থ বিষয়ের স্ট্যাটাস, পূর্ণমান (CQ/MCQ/Practical) বা সংযুক্ত পরীক্ষা পরিবর্তন করতে <b>এডিট</b> বাটনে ক্লিক করুন (শিক্ষার্থীদের আগের কোনো নম্বর হারাবে না)।
+        যেকোনো বিষয়ের নাম, ৪র্থ বিষয়ের স্ট্যাটাস, পূর্ণমান (CQ/MCQ/Practical) বা সংযুক্ত পরীক্ষা পরিবর্তন করতে <b>এডিট</b> বাটনে ক্লিক করুন (শিক্ষার্থীদের আগের কোনো নম্বর হারাবেলগ্ন)।
       </div>
       ${listHtml}
     `,
@@ -2407,7 +2425,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWe
       totalMFull += m.fm.total;
       if (vStr !== "") {
         hasMain = true;
-        let fullParts = m.fm.parts; // [cqMax, mcqMax, pracMax]
+        let fullParts = m.fm.parts; 
         let hasMultiParts = (fullParts[1] > 0 || fullParts[2] > 0 || vStr.includes("+"));
 
         if (hasMultiParts) {
@@ -2539,7 +2557,7 @@ function viewSingleResult(rowIndex) {
   swalPro.fire({ title: 'একাডেমিক ফলাফল বিবরণী', width: '650px', html: html, confirmButtonText: 'বন্ধ করুন' });
 }
 
-var currentPrintMode = "marksheet";
+var currentPrintMode = "marksheet"; // "marksheet" | "tabulation"
 
 function setPrintPageOrientation(orientation) {
   let styleEl = document.getElementById('dynamicPrintPageStyle');
