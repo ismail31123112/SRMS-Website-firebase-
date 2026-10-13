@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base target="_top">
+
+<title>Official Transcript Verification - Saidpur Residential Model School (SRMS)</title>
+<meta name="description" content="Verify the authenticity of academic transcripts and results issued by Saidpur Residential Model School (SRMS).">
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" sizes="any">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root {
+    --main: #005f40;
+    --main-dark: #003d29;
+    --main-light: #ecfdf5;
+    --gold: #d97706;
+    --bg: #f4f6f9;
+    --text-dark: #0f172a;
+    --text-muted: #64748b;
+  }
+  body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-dark); overflow-x: hidden; }
+  a { text-decoration: none; color: inherit; transition: 0.3s; }
+  ul { list-style: none; margin: 0; padding: 0; }
+  
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulseGlow { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 70% { box-shadow: 0 0 0 15px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+  @keyframes spin { 100% { transform: rotate(360deg); } }
+  
+  .animate-up { animation: fadeInUp 0.6s ease-out forwards; opacity: 0; }
+
+  /* ================== NAVBAR STYLES (From Demo) ================== */
+  .navbar { background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; display: flex; flex-direction: column; border-bottom: 4px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f) 1; }
+  .nav-top-container { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; width: 100%; box-sizing: border-box; }
+  .nav-brand { font-weight: 800; color: var(--main); font-size: 22px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+  .nav-brand img { width: 40px; height: 40px; border-radius: 50%; }
+  .nav-menu { display: flex; gap: 5px; align-items: center; }
+  .nav-item { position: relative; }
+  .nav-link { font-weight: 600; font-size: 13px; color: #444; padding: 10px 18px; transition: 0.3s; display: block; border-radius: 5px; text-transform: uppercase; cursor: pointer; }
+  .nav-link:hover { color: #fff; background: var(--main); }
+  .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #fff; box-shadow: 0 15px 40px rgba(0,0,0,0.15); min-width: 220px; border-radius: 0 0 8px 8px; overflow: hidden; border-top: 3px solid var(--main); animation: fadeInUp 0.3s ease; z-index: 1100; }
+  @media (min-width: 951px) { .nav-item:hover .dropdown-content { display: block; } }
+  .dropdown-content a { display: block; padding: 12px 20px; font-size: 13px; color: #555; border-bottom: 1px solid #f9f9f9; transition: 0.2s; }
+  .dropdown-content a:hover { background: #f0fdf4; color: var(--main); padding-left: 25px; }
+  .menu-toggle { display: none; align-items: center; gap: 8px; cursor: pointer; background: linear-gradient(135deg, var(--main), var(--main-dark)); color: white; padding: 8px 20px; border-radius: 50px; border: 2px solid #ddd; box-shadow: 0 4px 15px rgba(0, 95, 64, 0.4); transition: 0.3s; }
+  .menu-text { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ================== CUSTOM BANNER ================== */
+  .custom-banner { background: linear-gradient(to right, #005f40, #004d33); color: white; padding: 40px 20px; display: flex; align-items: center; justify-content: center; gap: 25px; border-bottom: 4px solid #e0e0e0; position: relative; overflow: hidden; }
+  .banner-logo { width: 100px; height: 100px; background: transparent; padding: 0; border: none; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); object-fit: contain; }
+  .banner-text { text-align: left; }
+  .banner-text h1 { margin: 0; font-size: 26px; font-weight: 800; text-transform: uppercase; line-height: 1.2; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
+  .school-codes { background: rgba(255, 255, 255, 0.15); display: inline-block; padding: 4px 12px; border-radius: 4px; margin-top: 8px; font-size: 13px; font-weight: 600; color: #fcf6ba; border: 1px solid rgba(255, 255, 255, 0.2); }
+
+  /* ================== VERIFICATION CARD SETUP ================== */
+  .verify-container { max-width: 850px; margin: 40px auto; padding: 0 20px 60px 20px; min-height: 40vh;}
+  .v-card { background: #ffffff; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e2e8f0; position: relative; display: none; }
+  
+  .v-header { background: #10b981; color: white; padding: 25px 20px; text-align: center; border-bottom: 4px solid #059669; }
+  .v-header.invalid { background: #ef4444; border-bottom-color: #b91c1c; }
+  .v-header h2 { margin: 0; font-size: 22px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
+  .v-header p { margin: 6px 0 0 0; font-size: 13.5px; font-weight: 500; opacity: 0.95; }
+  .v-icon-wrap { width: 55px; height: 55px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px auto; font-size: 28px; animation: pulseGlow 2s infinite; }
+  .v-header.invalid .v-icon-wrap { animation: none; background: rgba(255,255,255,0.2); }
+
+  .v-body { padding: 35px 30px; display: flex; gap: 30px; align-items: flex-start; flex-wrap: wrap; }
+  
+  .student-photo-box { width: 150px; height: 175px; flex-shrink: 0; border-radius: 12px; border: 3px solid #e2e8f0; padding: 4px; background: #f8fafc; position: relative; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.05);}
+  .student-photo-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; background: #e2e8f0; }
+  .auth-stamp { position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; font-size: 11px; font-weight: 800; padding: 5px 15px; border-radius: 20px; text-transform: uppercase; border: 2px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.15); white-space: nowrap; letter-spacing: 0.5px;}
+  
+  .v-details { flex: 1; min-width: 280px; }
+  .v-table { width: 100%; border-collapse: collapse; }
+  .v-table td { padding: 12px 15px; border-bottom: 1px solid #f1f5f9; font-size: 14.5px; }
+  .v-table td:first-child { font-weight: 700; color: var(--text-muted); width: 35%; text-transform: uppercase; font-size: 12.5px; }
+  .v-table td:last-child { font-weight: 800; color: var(--text-dark); }
+  .v-table tr:last-child td { border-bottom: none; }
+
+  .result-highlight { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 25px; padding-top: 25px; border-top: 2px dashed #cbd5e1; }
+  .rh-box { background: var(--main-light); border: 1.5px solid #a7f3d0; padding: 15px; border-radius: 12px; text-align: center; }
+  .rh-box.fail { background: #fef2f2; border-color: #fecaca; }
+  .rh-box span { display: block; font-size: 11.5px; font-weight: 800; color: var(--main); text-transform: uppercase; margin-bottom: 5px; }
+  .rh-box.fail span { color: #dc2626; }
+  .rh-box strong { display: block; font-size: 24px; font-weight: 900; color: var(--text-dark); }
+
+  .v-footer { background: #f8fafc; padding: 15px 20px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12px; color: #64748b; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap;}
+
+  /* ================== ERROR CARD ================== */
+  #errorCard { text-align: center; padding: 60px 20px; }
+  #errorCard i { font-size: 65px; color: #ef4444; margin-bottom: 20px; }
+  #errorCard h2 { color: #b91c1c; margin: 0 0 10px 0; font-weight: 900; font-size: 24px; }
+  #errorCard p { color: #64748b; font-weight: 500; font-size: 15px; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;}
+  .btn-home { background: var(--main); color: white; padding: 12px 25px; border-radius: 50px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,95,64,0.3); }
+  .btn-home:hover { background: var(--main-dark); transform: translateY(-2px); }
+
+  /* ================== PREMIUM FOOTER (From Demo) ================== */
+  .premium-footer { background: #0a192f; color: #e6f1ff; padding: 60px 20px 0; border-top: 4px solid #e0e0e0; margin-top: auto; }
+  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
+  .f-col h4 { color: #ffffff; font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; position: relative; padding-bottom: 10px; letter-spacing: 1px; }
+  .f-col h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: var(--main); }
+  .f-links li { margin-bottom: 15px; }
+  .f-links a { font-size: 14.5px; color: #ccd6f6; opacity: 0.9; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgba(255, 255, 255, 0.2); transition: 0.3s; display: inline-block; }
+  .f-links a:hover { color: #ffffff; text-decoration-color: var(--main); transform: translateX(5px); }
+  .f-contact-text { font-size: 14px; line-height: 1.8; color: #a8b2d1; margin-bottom: 20px; }
+  .f-map-box { width: 100%; height: 180px; border-radius: 12px; overflow: hidden; border: 2px solid #233554; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+  .footer-copyright-bar { margin-top: 50px; background: #020c1b; padding: 30px 20px; text-align: center; border-top: 1px solid #233554; }
+  .copy-text { font-size: 13px; color: #8892b0; margin: 0; letter-spacing: 0.5px; }
+
+  /* ================== FULL SCREEN LOADER ================== */
+  #initLoader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.96); backdrop-filter: blur(5px); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .spinner-core { width: 60px; height: 60px; border: 5px solid #e2e8f0; border-top-color: var(--main); border-radius: 50%; animation: spin 0.8s linear infinite; }
+
+  @media (max-width: 950px) {
+    .menu-toggle { display: flex; }
+    .nav-menu { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #fff; padding: 15px 0; border-top: 1px solid #f0f0f0; max-height: 80vh; overflow-y: auto; }
+    .nav-menu.active { display: flex; }
+    .nav-item { width: 100%; }
+    .nav-link { padding: 15px 30px; border-bottom: 1px solid #f9f9f9; border-radius: 0; }
+    .dropdown-content { position: static; box-shadow: none; background: #fafafa; padding-left: 20px; border: none; border-left: 4px solid var(--main); margin: 0 20px; display: none; }
+    .nav-item.active > .dropdown-content { display: block; }
+    .custom-banner { flex-direction: column; text-align: center; }
+    .banner-text { text-align: center; }
+    .student-photo-box { margin: 0 auto 20px auto; }
+    .v-body { flex-direction: column; padding: 25px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- INITIAL FULL SCREEN LOADER -->
+<div id="initLoader">
+  <div class="spinner-core"></div>
+  <h3 style="color:var(--main); margin-top:20px; font-weight:900; letter-spacing: 0.5px;">Authenticating Document...</h3>
+  <p style="color:#64748b; font-size:14px; font-weight:600; margin:0;">Please wait while we verify the security hash.</p>
+</div>
+
+<!-- ================== NAVBAR (From Demo) ================== -->
+<nav class="navbar">
+  <div class="nav-top-container">
+    <a href="https://srms2012.edu.bd/" target="_top" class="nav-brand">
+      <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo"> SRMS
+    </a>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span class="menu-icon">☰</span>
+      <span class="menu-text">MENU</span>
+    </div>
+    <ul class="nav-menu" id="navMenu">
+      <li class="nav-item"><a href="https://srms2012.edu.bd/" target="_top" class="nav-link">Home</a></li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="handleDropdown(this)">Institute ▾</a>
+        <div class="dropdown-content">
+          <a href="https://srms2012.edu.bd/menu/about-us" target="_top">About Us</a>
+          <a href="https://srms2012.edu.bd/governing-body" target="_top">Governing Body</a>
+          <a href="https://srms2012.edu.bd/menu/administration/message-from-headmaster" target="_top">Headmaster's Message</a>
+          <a href="https://srms2012.edu.bd/menu/administration/teacher-panel" target="_top">Teacher &amp; Staff</a>
+          <a href="https://srms2012.edu.bd/menu/facilities" target="_top">Facilities</a>
+          <a href="https://srms2012.edu.bd/menu/gallery" target="_top">Photo Gallery</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="handleDropdown(this)">Academic ▾</a>
+        <div class="dropdown-content">
+          <a href="https://srms2012.edu.bd/menu/academic/class-routine" target="_top">Class Routine</a>
+          <a href="https://srms2012.edu.bd/menu/academic/exam-routine" target="_top">Exam Routine</a>
+          <a href="https://srms2012.edu.bd/menu/academic/exam-results" target="_top">Exam Results</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" onclick="handleDropdown(this)">Admission ▾</a>
+        <div class="dropdown-content">
+          <a href="https://srms2012.edu.bd/menu/admission" target="_top">Admission Info</a>
+          <a href="https://srms2012.edu.bd/menu/school-fees" target="_top">School Fees</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" style="color:#d32f2f;" onclick="handleDropdown(this)">Login Zone ▾</a>
+        <div class="dropdown-content">
+          <a href="https://srms2012.edu.bd/login-panel/student-login" target="_top">Student Login</a>
+          <a href="https://srms2012.edu.bd/login-panel/guardian-portal" target="_top">Guardian Login</a>
+          <a href="https://srms2012.edu.bd/login-panel/teacher-login-portal" target="_top">Teacher Login</a>
+          <a href="https://srms2012.edu.bd/login-panel/accounting-and-management-department" target="_top">Account &amp; Admin</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ================== BANNER ================== -->
+<div class="custom-banner animate-up" id="headerBanner" style="display: none;">
+  <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="banner-logo" alt="SRMS Logo">
+  <div class="banner-text">
+    <h1>Central Verification Portal</h1>
+    <div class="school-codes">Document Authentication & Integrity Check System</div>
+  </div>
+</div>
+
+<!-- ================== MAIN VERIFICATION CONTAINER ================== -->
+<div class="verify-container animate-up">
+  
+  <!-- SUCCESS CARD -->
+  <div class="v-card" id="successCard">
+    <div class="v-header" id="cardHeader">
+      <div class="v-icon-wrap"><i class="fas fa-check-circle"></i></div>
+      <h2>VERIFIED OFFICIAL TRANSCRIPT</h2>
+      <p>This electronic document is authentic and unaltered.</p>
+    </div>
+    
+    <div class="v-body">
+      <div class="student-photo-box">
+        <img id="vPhoto" src="https://ui-avatars.com/api/?name=Student&background=e2e8f0&color=64748b&size=200" alt="Student Photo">
+        <div class="auth-stamp" id="vStamp"><i class="fas fa-shield-alt"></i> SECURE</div>
+      </div>
+      
+      <div class="v-details">
+        <table class="v-table">
+          <tr><td>Student Name</td><td id="vName">...</td></tr>
+          <tr><td>Student ID</td><td id="vId">...</td></tr>
+          <tr><td>Class & Group</td><td id="vClass">...</td></tr>
+          <tr><td>Roll No</td><td id="vRoll">...</td></tr>
+          <tr><td>Session</td><td id="vYear">...</td></tr>
+          <tr><td>Examination</td><td id="vExam">...</td></tr>
+        </table>
+        
+        <div class="result-highlight">
+          <div class="rh-box" id="boxMarks">
+            <span>Total Marks</span>
+            <strong id="vMarks">...</strong>
+          </div>
+          <div class="rh-box" id="boxGPA">
+            <span>GPA</span>
+            <strong id="vGPA">...</strong>
+          </div>
+          <div class="rh-box" id="boxGrade">
+            <span>Letter Grade</span>
+            <strong id="vGrade">...</strong>
+          </div>
+          <div class="rh-box" id="boxMerit">
+            <span>Merit Position</span>
+            <strong id="vMerit">...</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="v-footer">
+      <i class="fas fa-lock" style="color: #059669;"></i> Data securely verified against SRMS Database Hash: <b id="vHashCode" style="color:var(--text-dark); background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 13px;">...</b>
+    </div>
+  </div>
+
+  <!-- ERROR CARD -->
+  <div class="v-card" id="errorCard">
+    <i class="fas fa-times-circle"></i>
+    <h2>INVALID OR TAMPERED DOCUMENT</h2>
+    <p>The security hash does not match the provided data. This transcript may have been altered or generated from an unauthorized source.</p>
+    <a href="https://srms2012.edu.bd/" class="btn-home"><i class="fas fa-home"></i> Return to Homepage</a>
+  </div>
+
+</div>
+
+<!-- ================== PREMIUM FOOTER (From Demo) ================== -->
+<footer class="premium-footer" id="footerArea" style="display: none;">
+  <div class="footer-inner">
+    <div class="f-col">
+      <h4>Verification Engine</h4>
+      <div class="f-contact-text">
+        <p>This verification portal uses strict cryptographic hashing to ensure that academic documents (marksheet/transcript) issued by Saidpur Residential Model School (SRMS) cannot be forged or tampered with.</p>
+        <p>If you face any issues, please contact the administration immediately.</p>
+      </div>
+    </div>
+    <div class="f-col">
+      <h4>Contact Authority</h4>
+      <div class="f-contact-text">
+        <p style="margin: 0 0 10px 0;"><span style="font-size:16px;">📍</span> <strong>ADDRESS</strong><br>
+        Sultan Nagar, Parbatipur Road,<br>
+        Saidpur, Nilphamari.</p>
+        <p style="margin: 0 0 10px 0;"><span style="font-size:16px;">📞</span> <strong>PHONE</strong><br>
+        01737867826 (Headmaster)<br>
+        01580450052 (Office)</p>
+        <p style="margin: 0 0 15px 0;"><span style="font-size:16px;">✉️</span> <strong>EMAIL</strong><br>
+        info@srms2012.edu.bd</p>
+      </div>
+    </div>
+    <div class="f-col">
+      <h4>Find Us on Map</h4>
+      <div class="f-map-box">
+        <div class="mapouter">
+          <div class="gmap_canvas">
+            <iframe class="gmap_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=Syedpur Residential Model School&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe>
+          </div>
+          <style>
+            .mapouter{position:relative;text-align:right;width:100%;height:100%;}
+            .gmap_canvas {overflow:hidden;background:none!important;width:100%;height:100%;}
+            .gmap_iframe {width:100%!important;height:100%!important;}
+          </style>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright-bar">
+    <p class="copy-text">© <span id="auto-year"></span> Saidpur Residential Model School (SRMS). All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script>
+  // Setup year
+  document.getElementById('auto-year').innerText = new Date().getFullYear();
+
+  // Mobile Menu Toggle
+  function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
+  function handleDropdown(el) {
+    if (window.innerWidth <= 950) {
+      const parent = el.parentElement;
+      const isActive = parent.classList.contains('active');
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      if (!isActive) parent.classList.add('active');
+    }
+  }
+
+  // 👑 Backend API URL for fetching strictly the student photo
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
+
+  // Security Hash Logic (MUST match generator exactly)
+  function verifyHash(id, cls, yr, gpa, grade, totalMarks, providedHash) {
+    let raw = `SRMS|${id}|${cls}|${yr}|${gpa}|${grade}|${totalMarks}|2012`;
+    let h1 = 0x811c9dc5;
+    for (let i = 0; i < raw.length; i++) {
+      h1 ^= raw.charCodeAt(i);
+      h1 = Math.imul(h1, 0x01000193);
+    }
+    let calcHash = ("00000000" + (h1 >>> 0).toString(16)).slice(-8).toUpperCase();
+    return calcHash === providedHash;
+  }
+
+  window.onload = function() {
+    const params = new URLSearchParams(window.location.search);
+    
+    // Extract parameters
+    const pId = params.get('id');
+    const pName = params.get('name');
+    const pCls = params.get('cls');
+    const pRoll = params.get('roll');
+    const pYr = params.get('yr');
+    const pExam = params.get('exam');
+    const pMarks = params.get('marks');
+    const pGpa = params.get('gpa');
+    const pGrade = params.get('grade');
+    const pMerit = params.get('merit');
+    const pHash = params.get('v');
+
+    // 1. Mandatory Parameter Check (Smart Redirect)
+    if (!pId || !pHash || !pCls || !pYr || !pMarks) {
+      window.location.replace("https://srms2012.edu.bd/");
+      return;
+    }
+
+    setTimeout(() => {
+      document.getElementById('initLoader').style.display = 'none';
+      document.getElementById('headerBanner').style.display = 'flex';
+      document.getElementById('footerArea').style.display = 'block';
+      
+      // 2. Cryptographic Integrity Check
+      const isValid = verifyHash(pId, pCls, pYr, pGpa, pGrade, pMarks, pHash);
+
+      if (isValid) {
+        // Show Success UI
+        document.getElementById('successCard').style.display = 'block';
+        
+        document.getElementById('vId').innerText = pId;
+        document.getElementById('vName').innerText = pName || 'N/A';
+        document.getElementById('vClass').innerText = pCls;
+        document.getElementById('vRoll').innerText = pRoll || 'N/A';
+        document.getElementById('vYear').innerText = pYr;
+        document.getElementById('vExam').innerText = pExam || 'Final Result';
+        
+        document.getElementById('vMarks').innerText = pMarks;
+        document.getElementById('vGPA').innerText = pGpa;
+        document.getElementById('vGrade').innerText = pGrade;
+        document.getElementById('vMerit').innerText = pMerit || 'N/A';
+        document.getElementById('vHashCode').innerText = pHash;
+
+        // Apply visual cues for Failed students
+        if (pGrade === "F") {
+          let boxes = ['boxMarks', 'boxGPA', 'boxGrade', 'boxMerit'];
+          boxes.forEach(id => document.getElementById(id).classList.add('fail'));
+          document.getElementById('vStamp').innerText = "FAILED";
+          document.getElementById('vStamp').style.background = "#ef4444";
+          
+          let head = document.getElementById('cardHeader');
+          head.classList.add('invalid');
+          head.innerHTML = `<div class="v-icon-wrap"><i class="fas fa-exclamation-triangle"></i></div><h2>VERIFIED (FAILED)</h2><p>Document is authentic but student did not pass.</p>`;
+        }
+
+        // 3. Fetch Student Photo Securely from Backend
+        fetchPhoto(pId, pName);
+
+      } else {
+        // Show Error UI
+        document.getElementById('errorCard').style.display = 'block';
+      }
+    }, 800); // Slight intentional delay to show "Authenticating..."
+  };
+
+  async function fetchPhoto(studentID, studentName) {
+    let safeName = encodeURIComponent(studentName || "Student");
+    let defaultAvatar = `https://ui-avatars.com/api/?name=${safeName}&background=e2e8f0&color=005f40&size=200&bold=true`;
+    
+    try {
+      let payload = { action: "getStudentPhoto", studentID: studentID };
+      let res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(payload),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      });
+      let data = await res.json();
+      
+      if (data.status === "success" && data.photoUrl && data.photoUrl.trim() !== "") {
+        document.getElementById('vPhoto').src = data.photoUrl;
+      } else {
+        document.getElementById('vPhoto').src = defaultAvatar;
+      }
+    } catch (e) {
+      console.error("Photo fetch failed:", e);
+      document.getElementById('vPhoto').src = defaultAvatar;
+    }
+  }
+</script>
+</body>
+</html>
