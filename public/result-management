@@ -392,7 +392,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .report-card {
   width: 285mm;
   height: 192mm;
-  min-height: 192mm;
   max-height: 192mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
@@ -677,7 +676,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   text-transform: uppercase;
 }
 
-/* Fixed Signature Row at Bottom of Every Marksheet */
 .footer {
   display: flex;
   justify-content: space-between;
@@ -696,11 +694,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   text-transform: uppercase;
 }
 
-/* Tabulation Sheet Page Frame (Both Landscape & Portrait Locked) */
 .tab-page {
   width: 285mm;
   height: 192mm;
-  min-height: 192mm;
   max-height: 192mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
@@ -895,7 +891,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   </div>
 </div>
 
-<!-- ================== PRINT PREVIEW CONTAINER ================== -->
 <div id="print-area">
   <div class="print-toolbar no-print">
     <button onclick="closePrintView()" style="background:#ef4444;"><i class="fas fa-arrow-left"></i> ড্যাশবোর্ডে ফিরে যান</button>
@@ -1490,7 +1485,7 @@ async function openDataEntryForm(rowIndex) {
           let pracMax = ex.fm.parts[2] || 0;
 
           if (v1 !== "" && parseFloat(v1) > cqMax) {
-            Swal.showValidationMessage(`${subName} (${ex.name}): CQ নম্বর পূর্ণমানের (${cqMax}) চেয়ে বেশি হতে পারে না!`);
+            Swal.showValidationMessage(`${subName} (${ex.name}): CQ নম্বর পূর্ণমানের (${cqMax}) চেয়ে বেশি হতে পারেবিধা না!`);
             return false;
           }
           if (v2 !== "" && parseFloat(v2) > mcqMax) {
@@ -2026,12 +2021,10 @@ window.editSubjectPopup = async function(subName) {
     return swalPro.fire('ত্রুটি', e.message, 'error');
   }
 
-  // ওই বিষয়ে বর্তমানে যে পরীক্ষাগুলো যুক্ত আছে তা ম্যাপ করা
   let existingExamMap = {};
   sub.tests.forEach(t => { existingExamMap[t.name] = { type: "Test", fm: t.fm }; });
   sub.mains.forEach(m => { existingExamMap[m.name] = { type: "Main", fm: m.fm }; });
 
-  // যদি গ্লোবাল লিস্টে না থাকা কোনো পরীক্ষা আগে থেকে বিষয়ে থাকে, তাও তালিকায় রাখা
   let combinedExams = [...globalExams];
   Object.keys(existingExamMap).forEach(exN => {
     if (!combinedExams.some(g => g.name === exN)) {
@@ -2104,7 +2097,7 @@ window.editSubjectPopup = async function(subName) {
     preConfirm: () => {
       let newName = document.getElementById('editSubN').value.trim();
       if (!newName) {
-        Swal.showValidationMessage('বিষয়ের নাম খালি রাখা যাবে না!');
+        Swal.showValidationMessage('বিষয়ের নাম খালি রাখা যাবে বাধা!');
         return false;
       }
       let selected = [];
@@ -2410,7 +2403,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWe
       totalMFull += m.fm.total;
       if (vStr !== "") {
         hasMain = true;
-        let fullParts = m.fm.parts; // [cqMax, mcqMax, pracMax]
+        let fullParts = m.fm.parts; 
         let hasMultiParts = (fullParts[1] > 0 || fullParts[2] > 0 || vStr.includes("+"));
 
         if (hasMultiParts) {
@@ -2542,7 +2535,7 @@ function viewSingleResult(rowIndex) {
   swalPro.fire({ title: 'একাডেমিক ফলাফল বিবরণী', width: '650px', html: html, confirmButtonText: 'বন্ধ করুন' });
 }
 
-var currentPrintMode = "marksheet"; // "marksheet" | "tabulation"
+var currentPrintMode = "marksheet";
 
 function setPrintPageOrientation(orientation) {
   let styleEl = document.getElementById('dynamicPrintPageStyle');
