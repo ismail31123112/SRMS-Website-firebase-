@@ -379,27 +379,28 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 .print-toolbar button { font-size: 13.5px; padding: 10px 20px; border-radius: 10px; }
 #print-content {
-  width: 283mm;
+  width: 285mm;
   margin: 0 auto;
   background: transparent;
   box-sizing: border-box;
 }
 #print-content.portrait-preview {
-  width: 196mm;
+  width: 198mm;
 }
 
 /* Marksheet Screen Preview Card */
 .report-card {
-  width: 283mm;
-  height: 190mm;
-  max-height: 190mm;
+  width: 285mm;
+  height: 192mm;
+  min-height: 192mm;
+  max-height: 192mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border: 3px double #005f40;
-  padding: 5.5mm 7mm;
+  padding: 5mm 6.5mm;
   border-radius: 6px;
   background: #ffffff;
   position: relative;
@@ -424,7 +425,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 6px;
+  gap: 5px;
   margin: 3px 0;
   min-height: 0;
 }
@@ -502,7 +503,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   flex: 1;
   display: flex;
   justify-content: space-between;
-  gap: 8px;
+  gap: 7px;
   width: 100%;
   align-items: stretch;
   min-height: 0;
@@ -511,29 +512,29 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   width: 100%;
   height: 100%;
   border-collapse: collapse;
-  font-size: 9.8px;
+  font-size: 9.5px;
   background: rgba(255, 255, 255, 0.92);
   table-layout: auto;
 }
 .marks-table th, .marks-table td {
   border: 1px solid #1e293b;
-  padding: 4px 3px;
+  padding: 3.5px 3px;
   text-align: center;
   vertical-align: middle;
-  line-height: 1.2;
+  line-height: 1.18;
   white-space: nowrap;
 }
 .marks-table th {
   background-color: #e2e8f0 !important;
   font-weight: 800;
   color: #0f172a;
-  font-size: 8.6px;
+  font-size: 8.4px;
   text-transform: uppercase;
   height: auto;
 }
 .marks-table td.sub-name {
   text-align: left;
-  padding-left: 6px;
+  padding-left: 5px;
   padding-right: 4px;
   font-weight: 800;
   color: #0f172a;
@@ -544,22 +545,22 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 /* Tier 1: Few Subjects (1-6 Subjects) Spacious Full-Width Layout */
 .report-card.spacious-card .marks-table th,
 .report-card.spacious-card .marks-table td {
-  padding: 6px 8px;
-  font-size: 11px;
+  padding: 5.5px 7px;
+  font-size: 10.8px;
 }
 
 /* Tier 2: Standard Subjects (7-12 Subjects, up to 6 rows per column) */
 .report-card.standard-card .marks-table th,
 .report-card.standard-card .marks-table td {
-  padding: 4.5px 3.5px;
-  font-size: 9.6px;
+  padding: 4px 3px;
+  font-size: 9.3px;
 }
 
 /* Tier 3: Dense Subjects (13+ Subjects) */
 .report-card.dense-card .marks-table th,
 .report-card.dense-card .marks-table td {
-  padding: 2.8px 2.5px;
-  font-size: 8.6px;
+  padding: 2.5px 2px;
+  font-size: 8.4px;
 }
 
 /* Class Overview & QR Verification Panel inside Marksheet */
@@ -681,7 +682,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 14px 16px 0 16px;
+  padding: 13px 16px 0 16px;
   margin-top: 2px;
 }
 .signature {
@@ -695,10 +696,12 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   text-transform: uppercase;
 }
 
+/* Tabulation Sheet Page Frame (Both Landscape & Portrait Locked) */
 .tab-page {
-  width: 283mm;
-  height: 190mm;
-  max-height: 190mm;
+  width: 285mm;
+  height: 192mm;
+  min-height: 192mm;
+  max-height: 192mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
   display: flex;
@@ -712,11 +715,13 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
-#print-content.portrait-preview .tab-page {
-  width: 196mm;
-  height: 281mm;
-  max-height: 281mm;
-  padding: 4.5mm 4mm;
+#print-content.portrait-preview .tab-page,
+.tab-page.portrait-page {
+  width: 198mm;
+  height: 283mm;
+  min-height: 283mm;
+  max-height: 283mm;
+  padding: 5mm 4mm;
 }
 .tab-top-wrap {
   flex: 1;
@@ -751,19 +756,28 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   color: #000;
   overflow: hidden;
 }
-#print-content.portrait-preview .tab-table th { font-size: 6.6px; padding: 2.5px 1px; }
-#print-content.portrait-preview .tab-table td { font-size: 6.5px; padding: 2.5px 1px; }
+#print-content.portrait-preview .tab-table th,
+.tab-page.portrait-page .tab-table th {
+  font-size: 6.5px;
+  padding: 3px 1px;
+}
+#print-content.portrait-preview .tab-table td,
+.tab-page.portrait-page .tab-table td {
+  font-size: 6.4px;
+  padding: 3.5px 1px;
+}
 
 .tab-cell-lines {
-  font-size: 7.3px;
+  font-size: 7.2px;
   line-height: 1.18;
   text-align: left;
   padding: 0 1px;
   white-space: nowrap;
 }
-#print-content.portrait-preview .tab-cell-lines {
-  font-size: 6px;
-  line-height: 1.14;
+#print-content.portrait-preview .tab-cell-lines,
+.tab-page.portrait-page .tab-cell-lines {
+  font-size: 5.9px;
+  line-height: 1.16;
   padding: 0;
 }
 
@@ -771,7 +785,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 10px 14px 0 14px;
+  padding: 12px 14px 2px 14px;
   margin-top: auto;
   flex-shrink: 0;
   page-break-inside: avoid;
@@ -781,13 +795,14 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   border-top: 1.5px solid #000;
   width: 160px;
   text-align: center;
-  padding-top: 3px;
+  padding-top: 3.5px;
   font-weight: 800;
   font-size: 9.2px;
   color: #000;
   text-transform: uppercase;
 }
-#print-content.portrait-preview .tab-sig-box {
+#print-content.portrait-preview .tab-sig-box,
+.tab-page.portrait-page .tab-sig-box {
   width: 135px;
   font-size: 8.5px;
 }
@@ -809,8 +824,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .report-card {
     width: 100% !important;
-    height: 190mm !important;
-    max-height: 190mm !important;
+    height: 196mm !important;
+    min-height: 196mm !important;
+    max-height: 196mm !important;
     margin: 0 !important;
     box-shadow: none !important;
     page-break-after: always !important;
@@ -821,8 +837,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
   .tab-page {
     width: 100% !important;
-    height: 190mm !important;
-    max-height: 190mm !important;
+    height: 196mm !important;
+    min-height: 196mm !important;
+    max-height: 196mm !important;
     margin: 0 !important;
     box-shadow: none !important;
     page-break-after: always !important;
@@ -831,14 +848,20 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     break-inside: avoid !important;
   }
 
-  /* When Portrait button is used OR user selects Portrait in Browser Print Dialog */
-  #print-content.portrait-preview .tab-page {
+  /* Explicit Millimeter Height Lock for Portrait Tabulation so Signatures Stay Fixed at the Very Bottom */
+  #print-content.portrait-preview .tab-page,
+  .tab-page.portrait-page {
     width: 100% !important;
-    height: 281mm !important;
-    max-height: 281mm !important;
+    height: 284mm !important;
+    min-height: 284mm !important;
+    max-height: 284mm !important;
+    padding: 5mm 4mm !important;
   }
 
-  .report-card:last-child, .tab-page:last-child {
+  .report-card:last-child,
+  .tab-page:last-child,
+  #print-content.portrait-preview .tab-page:last-child,
+  .tab-page.portrait-page:last-child {
     page-break-after: auto !important;
     break-after: auto !important;
   }
@@ -847,18 +870,19 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 @media print and (orientation: portrait) {
   .tab-page {
     width: 100% !important;
-    height: 281mm !important;
-    max-height: 281mm !important;
-    padding: 4mm 3.5mm !important;
+    height: 284mm !important;
+    min-height: 284mm !important;
+    max-height: 284mm !important;
+    padding: 5mm 4mm !important;
   }
-  .tab-table th { font-size: 6.6px !important; padding: 2.5px 1px !important; }
-  .tab-table td { font-size: 6.5px !important; padding: 2.5px 1px !important; }
-  .tab-cell-lines { font-size: 6px !important; line-height: 1.14 !important; padding: 0 !important; }
+  .tab-table th { font-size: 6.5px !important; padding: 3px 1px !important; }
+  .tab-table td { font-size: 6.4px !important; padding: 3.5px 1px !important; }
+  .tab-cell-lines { font-size: 5.9px !important; line-height: 1.16 !important; padding: 0 !important; }
   .tab-sig-box { width: 135px !important; font-size: 8.5px !important; }
 }
 </style>
 <style id="dynamicPrintPageStyle">
-  @media print { @page { size: A4 landscape; margin: 6mm; } }
+  @media print { @page { size: A4 landscape; margin: 5mm; } }
 </style>
 </head>
 <body class="main-padding" id="mainBody">
@@ -2132,6 +2156,20 @@ window.confirmDeleteSubjectByCol = async function(colIndex, subName) {
   }
 };
 
+window.onBulkLinkExamChange = function(selEl) {
+  let opt = selEl.options[selEl.selectedIndex];
+  if (!opt) return;
+  let exType = opt.getAttribute('data-type') || 'Test';
+  let defCq = (exType === 'Main') ? 100 : 50;
+  let cqInp = document.getElementById('add-cq-999');
+  let mcqInp = document.getElementById('add-mcq-999');
+  let pracInp = document.getElementById('add-prac-999');
+  if (cqInp && (!mcqInp || !mcqInp.value) && (!pracInp || !pracInp.value)) {
+    cqInp.value = defCq;
+    updateSubAddLiveFull(999);
+  }
+};
+
 async function linkExamToSubjectsPopup() {
   var cls = document.getElementById("classSelector").value;
   if (!cls) return swalPro.fire('লক্ষ্য করুন', 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', 'warning');
@@ -2156,8 +2194,8 @@ async function linkExamToSubjectsPopup() {
     return swalPro.fire('কোনো পরীক্ষা নেই', 'অনুগ্রহ করে প্রথমে "পরীক্ষা ব্যবস্থাপনা" বাটনে ক্লিক করে নতুন পরীক্ষা তৈরি করুন।', 'warning');
   }
 
-  let examOptionsHtml = globalExams.map((ex, i) => `<option value="${i}">${ex.name} (${ex.type})</option>`).join('');
-  let subChecksHtml = subNames.map((sName, idx) => {
+  let examOptionsHtml = globalExams.map((ex, i) => `<option value="${i}" data-type="${ex.type}">${ex.name} (${ex.type})</option>`).join('');
+  let subChecksHtml = subNames.map((sName) => {
     let sub = parsed.subjects[sName];
     let hasPending = sub.tests.length === 0 && sub.mains.length === 0;
     return `
@@ -2178,7 +2216,7 @@ async function linkExamToSubjectsPopup() {
     html: `
       <div style="text-align:left;">
         <label style="font-size:12px; font-weight:800; color:#334155;">১. পরীক্ষা নির্বাচন করুন:</label>
-        <select id="bulkLinkExIdx" class="swal2-input" style="width:100%; height:42px; margin:6px 0 12px 0; font-weight:800; color:var(--main);">
+        <select id="bulkLinkExIdx" onchange="onBulkLinkExamChange(this)" class="swal2-input" style="width:100%; height:42px; margin:6px 0 12px 0; font-weight:800; color:var(--main);">
           ${examOptionsHtml}
         </select>
 
@@ -2501,12 +2539,22 @@ function setPrintPageOrientation(orientation) {
   let styleEl = document.getElementById('dynamicPrintPageStyle');
   let contentEl = document.getElementById('print-content');
   if (orientation === 'portrait') {
-    styleEl.innerHTML = `@media print { @page { size: A4 portrait; margin: 6mm; } }`;
+    styleEl.innerHTML = `@media print { @page { size: A4 portrait; margin: 5mm; } }`;
     contentEl.classList.add('portrait-preview');
   } else {
-    styleEl.innerHTML = `@media print { @page { size: A4 landscape; margin: 6mm; } }`;
+    styleEl.innerHTML = `@media print { @page { size: A4 landscape; margin: 5mm; } }`;
     contentEl.classList.remove('portrait-preview');
   }
+}
+
+function triggerPrintWithOrientation(orientation) {
+  if (currentPrintMode === "tabulation") {
+    buildTabulationPagesForOrientation(orientation);
+  } else {
+    setPrintPageOrientation('landscape');
+  }
+  setTimeout(() => { window.print(); }, 250);
+}
 }
 
 function triggerPrintWithOrientation(orientation) {
@@ -3022,9 +3070,8 @@ function buildTabulationPagesForOrientation(orientation) {
     </tr>`;
     return tr;
   });
-
-  // Portrait mode fits 12 rows per page comfortably; Landscape mode fits 7 rows per page so summary + signatures never clip
-  var rowsPerPage = (orientation === 'portrait') ? 12 : 7;
+  // Portrait mode fits 11 rows per page comfortably; Landscape mode fits 7 rows per page so summary + signatures never clip
+  var rowsPerPage = (orientation === 'portrait') ? 11 : 7;
   var pagesArr = [];
   for (let i = 0; i < bodyRowsHtml.length; i += rowsPerPage) {
     pagesArr.push(bodyRowsHtml.slice(i, i + rowsPerPage));
@@ -3032,7 +3079,7 @@ function buildTabulationPagesForOrientation(orientation) {
   if (pagesArr.length === 0) pagesArr.push([]);
 
   var summaryTableHtml = `
-    <div style="margin-top:5px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:94%; margin-left:auto; margin-right:auto; page-break-inside:avoid;">
+    <div style="margin-top:6px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:96%; margin-left:auto; margin-right:auto; page-break-inside:avoid;">
       <table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;">
         <tr style="font-weight:800; background:#e2e8f0; color:#005f40;">
           <td style="border:1px solid #000; padding:2.5px;">Total Students</td>
@@ -3062,10 +3109,11 @@ function buildTabulationPagesForOrientation(orientation) {
     </div>`;
 
   var totalPages = pagesArr.length;
+  var pageOrientClass = (orientation === 'portrait') ? 'portrait-page' : 'landscape-page';
   var finalPagesHtml = pagesArr.map((pageRows, pageIdx) => {
     var isLastPage = (pageIdx === totalPages - 1);
     return `
-      <div class="tab-page">
+      <div class="tab-page ${pageOrientClass}">
         <div class="tab-top-wrap">
           <div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;">
             <img src="${SCHOOL_LOGO}" alt="Logo" style="height:40px; width:40px; border-radius:50%; border:1.5px solid #005f40; padding:1.5px;">
