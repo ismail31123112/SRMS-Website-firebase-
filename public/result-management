@@ -379,27 +379,27 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 .print-toolbar button { font-size: 13.5px; padding: 10px 20px; border-radius: 10px; }
 #print-content {
-  width: 281mm;
+  width: 283mm;
   margin: 0 auto;
   background: transparent;
   box-sizing: border-box;
 }
 #print-content.portrait-preview {
-  width: 194mm;
+  width: 196mm;
 }
 
 /* Marksheet Screen Preview Card */
 .report-card {
-  width: 281mm;
-  height: 192mm;
-  max-height: 192mm;
+  width: 283mm;
+  height: 190mm;
+  max-height: 190mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border: 3px double #005f40;
-  padding: 5.5mm 7.5mm;
+  padding: 5.5mm 7mm;
   border-radius: 6px;
   background: #ffffff;
   position: relative;
@@ -408,11 +408,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 .rc-watermark {
   position: absolute;
-  top: 52%; left: 50%;
-  transform: translate(-50%, -50%) rotate(-25deg);
-  font-size: 72px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-24deg);
+  font-size: 74px;
   font-weight: 900;
-  color: rgba(0, 95, 64, 0.035);
+  color: rgba(0, 95, 64, 0.038);
   pointer-events: none;
   white-space: nowrap;
   z-index: 0;
@@ -424,44 +424,45 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  overflow: hidden;
-  gap: 4px;
+  gap: 6px;
+  margin: 3px 0;
+  min-height: 0;
 }
 
 .school-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid #005f40;
-  padding-bottom: 4px;
-  margin-bottom: 4px;
+  border-bottom: 2.5px solid #005f40;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
   gap: 10px;
 }
-.school-logo { width: 50px; height: 50px; border-radius: 50%; object-fit: contain; border: 1.5px solid #005f40; padding: 2px; background: #fff; }
+.school-logo { width: 52px; height: 52px; border-radius: 50%; object-fit: contain; border: 1.5px solid #005f40; padding: 2px; background: #fff; }
 .header-center { text-align: center; flex: 1; }
 .header-center h1 {
   margin: 0;
-  font-size: 18.5px;
+  font-size: 19px;
   text-transform: uppercase;
   color: #005f40;
   font-weight: 900;
   letter-spacing: 0.6px;
   font-family: 'Times New Roman', Times, serif;
 }
-.school-address { font-size: 9.5px; font-weight: 700; color: #334155; margin: 1px 0 0 0; }
+.school-address { font-size: 9.8px; font-weight: 700; color: #334155; margin: 2px 0 0 0; }
 .transcript-badge-wrap { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
 .transcript-title {
   background: #005f40 !important;
   color: white !important;
-  padding: 3.5px 11px;
+  padding: 4px 12px;
   border-radius: 15px;
-  font-size: 9.5px;
+  font-size: 9.8px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.4px;
 }
 .grade-scale-mini {
-  font-size: 7.8px;
+  font-size: 8px;
   color: #1e293b;
   font-weight: 700;
   background: #f1f5f9 !important;
@@ -473,52 +474,54 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .student-info {
   width: 100%;
-  margin-bottom: 3px;
-  font-size: 10px;
+  margin-bottom: 4px;
+  font-size: 10.5px;
   font-weight: 700;
   border: 1px solid #94a3b8;
   border-radius: 5px;
   background: #f8fafc !important;
   border-collapse: collapse;
 }
-.student-info td { padding: 3.5px 8px; border-right: 1px dashed #cbd5e1; }
+.student-info td { padding: 4px 9px; border-right: 1px dashed #cbd5e1; }
 .student-info td:last-child { border-right: none; }
 
 .legend-box {
-  font-size: 8.5px;
+  font-size: 8.8px;
   color: #005f40;
   background: #ecfdf5 !important;
   border: 1px dashed #005f40;
-  padding: 2.5px 8px;
+  padding: 3px 9px;
   border-radius: 4px;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   display: flex;
   justify-content: space-between;
   font-weight: 700;
 }
 
 .marks-wrapper {
+  flex: 1;
   display: flex;
   justify-content: space-between;
   gap: 8px;
   width: 100%;
   align-items: stretch;
+  min-height: 0;
 }
 .marks-table {
   width: 100%;
+  height: 100%;
   border-collapse: collapse;
-  font-size: 10px;
-  background: #fff;
-  table-layout: fixed;
+  font-size: 9.8px;
+  background: rgba(255, 255, 255, 0.92);
+  table-layout: auto;
 }
 .marks-table th, .marks-table td {
   border: 1px solid #1e293b;
-  padding: 4.5px 3px;
+  padding: 4px 3px;
   text-align: center;
   vertical-align: middle;
   line-height: 1.2;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .marks-table th {
   background-color: #e2e8f0 !important;
@@ -526,10 +529,12 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   color: #0f172a;
   font-size: 8.6px;
   text-transform: uppercase;
+  height: auto;
 }
 .marks-table td.sub-name {
   text-align: left;
   padding-left: 6px;
+  padding-right: 4px;
   font-weight: 800;
   color: #0f172a;
   white-space: nowrap;
@@ -539,50 +544,28 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 /* Tier 1: Few Subjects (1-6 Subjects) Spacious Full-Width Layout */
 .report-card.spacious-card .marks-table th,
 .report-card.spacious-card .marks-table td {
-  padding: 6px 6px;
-  font-size: 10.8px;
+  padding: 6px 8px;
+  font-size: 11px;
 }
 
 /* Tier 2: Standard Subjects (7-12 Subjects, up to 6 rows per column) */
 .report-card.standard-card .marks-table th,
 .report-card.standard-card .marks-table td {
-  padding: 5.2px 3.5px;
-  font-size: 10px;
+  padding: 4.5px 3.5px;
+  font-size: 9.6px;
 }
 
 /* Tier 3: Dense Subjects (13+ Subjects) */
 .report-card.dense-card .marks-table th,
 .report-card.dense-card .marks-table td {
   padding: 2.8px 2.5px;
-  font-size: 8.8px;
+  font-size: 8.6px;
 }
-
-/* Academic Evaluation Bar (Fills Middle Space Naturally) */
-.rc-eval-strip {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
-  background: #f1f5f9 !important;
-  border: 1px solid #94a3b8;
-  border-radius: 5px;
-  padding: 4px 10px;
-  font-size: 9px;
-  font-weight: 700;
-  color: #0f172a;
-}
-.rc-eval-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-right: 1px dashed #cbd5e1;
-  padding-right: 8px;
-}
-.rc-eval-item:last-child { border-right: none; padding-right: 0; }
 
 /* Class Overview & QR Verification Panel inside Marksheet */
 .rc-overview-qr-strip {
   display: grid;
-  grid-template-columns: 1.35fr 1.65fr 1fr;
+  grid-template-columns: 1.35fr 1.65fr 1.05fr;
   gap: 8px;
   align-items: stretch;
 }
@@ -590,19 +573,19 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   border: 1px solid #94a3b8;
   border-radius: 6px;
   background: #f8fafc !important;
-  padding: 4.5px 8px;
+  padding: 5px 9px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 .rc-ov-title {
-  font-size: 8.5px;
+  font-size: 8.6px;
   font-weight: 900;
   color: #005f40;
   text-transform: uppercase;
   border-bottom: 1px solid #cbd5e1;
-  padding-bottom: 2px;
-  margin-bottom: 3px;
+  padding-bottom: 2.5px;
+  margin-bottom: 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -610,37 +593,37 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .rc-ov-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3px 6px;
-  font-size: 8.5px;
+  gap: 3.5px 6px;
+  font-size: 8.8px;
   font-weight: 700;
   color: #1e293b;
 }
 .rc-grade-pills {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  gap: 3.5px;
   text-align: center;
-  font-size: 8px;
+  font-size: 8.2px;
   font-weight: 800;
 }
 .rc-grade-pill {
   background: #ffffff !important;
   border: 1px solid #cbd5e1;
   border-radius: 4px;
-  padding: 1.5px 2px;
+  padding: 2px 2px;
 }
 .rc-qr-card {
   border: 1.5px solid #005f40;
   border-radius: 6px;
   background: #ecfdf5 !important;
-  padding: 3.5px 7px;
+  padding: 4px 8px;
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 .rc-qr-box {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
   background: #fff !important;
   border: 1px solid #005f40;
   border-radius: 4px;
@@ -651,14 +634,14 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   flex-shrink: 0;
 }
 .rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
-.rc-qr-meta { font-size: 8px; line-height: 1.25; color: #0f172a; font-weight: 700; }
+.rc-qr-meta { font-size: 8px; line-height: 1.3; color: #0f172a; font-weight: 700; }
 .rc-qr-badge {
   display: inline-block;
   background: #005f40 !important;
   color: #fff !important;
   font-size: 7.5px;
   font-weight: 800;
-  padding: 1px 5px;
+  padding: 1.5px 6px;
   border-radius: 3px;
   margin-bottom: 2px;
   text-transform: uppercase;
@@ -666,7 +649,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .summary-box {
   border: 1.5px solid #005f40;
-  padding: 4.5px 12px;
+  padding: 5px 12px;
   width: 100%;
   margin-top: 2px;
   border-radius: 6px;
@@ -698,14 +681,14 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 12px 15px 0 15px;
+  padding: 14px 16px 0 16px;
   margin-top: 2px;
 }
 .signature {
   border-top: 1.5px solid #000;
   width: 175px;
   text-align: center;
-  padding-top: 3px;
+  padding-top: 3.5px;
   font-weight: 800;
   font-size: 10px;
   color: #000;
@@ -713,16 +696,16 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 .tab-page {
-  width: 281mm;
-  height: 192mm;
-  max-height: 192mm;
+  width: 283mm;
+  height: 190mm;
+  max-height: 190mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   border: 2.5px solid #005f40;
-  padding: 5mm 6mm;
+  padding: 4.5mm 5.5mm;
   border-radius: 6px;
   background: #ffffff;
   position: relative;
@@ -730,70 +713,83 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 #print-content.portrait-preview .tab-page {
-  width: 194mm;
-  height: 278mm;
-  max-height: 278mm;
-  padding: 5mm 4.5mm;
+  width: 196mm;
+  height: 281mm;
+  max-height: 281mm;
+  padding: 4.5mm 4mm;
+}
+.tab-top-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 .tab-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 8.5px;
+  font-size: 8.2px;
   text-align: center;
   table-layout: fixed;
 }
 .tab-table th {
   background: #e2e8f0 !important;
-  padding: 4px 2px;
+  padding: 3.5px 1.5px;
   border: 1px solid #000;
   font-weight: 800;
   color: #000;
-  font-size: 8px;
+  font-size: 7.8px;
   word-wrap: break-word;
+  line-height: 1.15;
 }
 .tab-table td {
-  padding: 3.5px 2px;
+  padding: 2.8px 1.5px;
   border: 1px solid #000;
   vertical-align: middle;
-  font-size: 8px;
+  font-size: 7.8px;
   font-weight: 600;
-  line-height: 1.22;
+  line-height: 1.18;
   color: #000;
   overflow: hidden;
 }
-#print-content.portrait-preview .tab-table th { font-size: 7px; padding: 3px 1.5px; }
-#print-content.portrait-preview .tab-table td { font-size: 7px; padding: 3px 1.5px; }
+#print-content.portrait-preview .tab-table th { font-size: 6.6px; padding: 2.5px 1px; }
+#print-content.portrait-preview .tab-table td { font-size: 6.5px; padding: 2.5px 1px; }
 
 .tab-cell-lines {
-  font-size: 7.6px;
-  line-height: 1.22;
+  font-size: 7.3px;
+  line-height: 1.18;
   text-align: left;
-  padding: 0 1.5px;
+  padding: 0 1px;
   white-space: nowrap;
 }
 #print-content.portrait-preview .tab-cell-lines {
-  font-size: 6.6px;
-  padding: 0 1px;
+  font-size: 6px;
+  line-height: 1.14;
+  padding: 0;
 }
 
 .tab-fixed-signatures {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 12px 16px 0 16px;
+  padding: 10px 14px 0 14px;
   margin-top: auto;
+  flex-shrink: 0;
   page-break-inside: avoid;
   break-inside: avoid;
 }
 .tab-sig-box {
   border-top: 1.5px solid #000;
-  width: 165px;
+  width: 160px;
   text-align: center;
-  padding-top: 3.5px;
+  padding-top: 3px;
   font-weight: 800;
-  font-size: 9.5px;
+  font-size: 9.2px;
   color: #000;
   text-transform: uppercase;
+}
+#print-content.portrait-preview .tab-sig-box {
+  width: 135px;
+  font-size: 8.5px;
 }
 
 @media print {
@@ -811,10 +807,10 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   #print-area { display: block !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
   #print-content, #print-content.portrait-preview { width: 100% !important; margin: 0 !important; padding: 0 !important; }
 
-  .report-card, .tab-page {
+  .report-card {
     width: 100% !important;
-    height: 192mm !important;
-    max-height: 192mm !important;
+    height: 190mm !important;
+    max-height: 190mm !important;
     margin: 0 !important;
     box-shadow: none !important;
     page-break-after: always !important;
@@ -822,19 +818,47 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
+
+  .tab-page {
+    width: 100% !important;
+    height: 190mm !important;
+    max-height: 190mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* When Portrait button is used OR user selects Portrait in Browser Print Dialog */
   #print-content.portrait-preview .tab-page {
     width: 100% !important;
-    height: 279mm !important;
-    max-height: 279mm !important;
+    height: 281mm !important;
+    max-height: 281mm !important;
   }
+
   .report-card:last-child, .tab-page:last-child {
     page-break-after: auto !important;
     break-after: auto !important;
   }
 }
+
+@media print and (orientation: portrait) {
+  .tab-page {
+    width: 100% !important;
+    height: 281mm !important;
+    max-height: 281mm !important;
+    padding: 4mm 3.5mm !important;
+  }
+  .tab-table th { font-size: 6.6px !important; padding: 2.5px 1px !important; }
+  .tab-table td { font-size: 6.5px !important; padding: 2.5px 1px !important; }
+  .tab-cell-lines { font-size: 6px !important; line-height: 1.14 !important; padding: 0 !important; }
+  .tab-sig-box { width: 135px !important; font-size: 8.5px !important; }
+}
 </style>
 <style id="dynamicPrintPageStyle">
-  @media print { @page { size: A4 landscape; margin: 7mm; } }
+  @media print { @page { size: A4 landscape; margin: 6mm; } }
 </style>
 </head>
 <body class="main-padding" id="mainBody">
@@ -2480,7 +2504,7 @@ function setPrintPageOrientation(orientation) {
     styleEl.innerHTML = `@media print { @page { size: A4 portrait; margin: 6mm; } }`;
     contentEl.classList.add('portrait-preview');
   } else {
-    styleEl.innerHTML = `@media print { @page { size: A4 landscape; margin: 7mm; } }`;
+    styleEl.innerHTML = `@media print { @page { size: A4 landscape; margin: 6mm; } }`;
     contentEl.classList.remove('portrait-preview');
   }
 }
@@ -2687,33 +2711,20 @@ function generateMarkSheets(examFilter) {
     ? (classStats.gpaSum / classStats.evaluatedStudents).toFixed(2)
     : "0.00";
 
-  var colGroupHtml = `
-    <colgroup>
-      <col style="width:24%;">
-      <col style="width:14%;">
-      <col style="width:11%;">
-      <col style="width:11%;">
-      <col style="width:11%;">
-      <col style="width:11%;">
-      <col style="width:9%;">
-      <col style="width:9%;">
-    </colgroup>`;
-
   var theadHtml = `
-    ${colGroupHtml}
     <thead>
       <tr>
-        <th rowspan="2">Subject</th>
-        <th rowspan="2" class="divider-col">Test<br>Marks</th>
-        <th colspan="3" class="divider-col">Main Exam Breakdown</th>
-        <th rowspan="2">Final<br>(100%)</th>
-        <th rowspan="2">Grade</th>
-        <th rowspan="2">GP</th>
+        <th rowspan="2" style="width:20%;">Subject</th>
+        <th rowspan="2" class="divider-col" style="width:13%;">Test<br>Marks</th>
+        <th colspan="3" class="divider-col" style="width:41%;">Main Exam Breakdown</th>
+        <th rowspan="2" style="width:9%;">Final<br>(100%)</th>
+        <th rowspan="2" style="width:8.5%;">Grade</th>
+        <th rowspan="2" style="width:8.5%;">GP</th>
       </tr>
       <tr>
-        <th>CQ</th>
-        <th>MCQ</th>
-        <th class="divider-col">Prac</th>
+        <th style="width:14%;">CQ</th>
+        <th style="width:13.5%;">MCQ</th>
+        <th class="divider-col" style="width:13.5%;">Prac</th>
       </tr>
     </thead>`;
 
@@ -2742,7 +2753,6 @@ function generateMarkSheets(examFilter) {
     var dispAvg = item.liveAvg;
     var dispPos = item.dispPos;
     var filterTotalMarks = item.filterTotalMarks;
-    var maxPossibleMarks = item.filterTotalSubCount * 100;
 
     var rowsHtmlArray = item.subRows.map(sr => {
       let ev = sr.ev;
@@ -2753,10 +2763,10 @@ function generateMarkSheets(examFilter) {
 
       return `<tr>
         <td class="sub-name">${sr.actualSubName}</td>
-        <td class="divider-col" style="white-space:nowrap;"><b>${testStr}</b></td>
-        <td style="white-space:nowrap;">${cqDisp}</td>
-        <td style="white-space:nowrap;">${mcqDisp}</td>
-        <td class="divider-col" style="white-space:nowrap;">${pracDisp}</td>
+        <td class="divider-col"><b>${testStr}</b></td>
+        <td>${cqDisp}</td>
+        <td>${mcqDisp}</td>
+        <td class="divider-col">${pracDisp}</td>
         <td><b>${ev.finalMark}</b></td>
         <td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td>
         <td><strong>${ev.subGP.toFixed(2)}</strong></td>
@@ -2824,10 +2834,11 @@ function generateMarkSheets(examFilter) {
 
           <table class="student-info">
             <tr>
-              <td width="34%">Student Name: <b style="color:#005f40; font-size:11px; text-transform:uppercase;">${name}</b></td>
-              <td width="20%">Student ID: <b>${id}</b></td>
-              <td width="24%">Class: <b>${baseClassName}</b> (${groupName})</td>
-              <td width="22%">Roll No: <b>${roll}</b> | Merit: <b>${dispPos}</b></td>
+              <td width="30%">Student Name: <b style="color:#005f40; font-size:11px; text-transform:uppercase;">${name}</b></td>
+              <td width="18%">Student ID: <b>${id}</b></td>
+              <td width="22%">Class: <b>${baseClassName}</b> (${groupName})</td>
+              <td width="15%">Roll No: <b>${roll}</b></td>
+              <td width="15%">Issued: <b>${issueDateStr}</b></td>
             </tr>
           </table>
           ${legendHtml}
@@ -2835,14 +2846,6 @@ function generateMarkSheets(examFilter) {
 
         <div class="rc-middle-section">
           ${finalTableHtml}
-
-          <!-- Academic Evaluation & Verification Strip -->
-          <div class="rc-eval-strip">
-            <div class="rc-eval-item"><span>Marks Obtained:</span> <b>${filterTotalMarks} / ${maxPossibleMarks} (${dispAvg}%)</b></div>
-            <div class="rc-eval-item"><span>Result Status:</span> <b style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade === 'F' ? 'FAILED (NEEDS CARE)' : 'PASSED / PROMOTED'}</b></div>
-            <div class="rc-eval-item"><span>Academic Conduct:</span> <b style="color:#005f40;">Good &amp; Regular</b></div>
-            <div class="rc-eval-item"><span>Issue Date:</span> <b>${issueDateStr}</b></div>
-          </div>
 
           <!-- Class Performance Overview & QR Security Verification Strip -->
           <div class="rc-overview-qr-strip">
@@ -2864,7 +2867,7 @@ function generateMarkSheets(examFilter) {
             <div class="rc-ov-card">
               <div class="rc-ov-title">
                 <span><i class="fas fa-award"></i> Class Grade Distribution Summary</span>
-                <span>Subjects Taken: <b>${subCount}</b></span>
+                <span style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">Status: ${dispGrade === 'F' ? 'FAILED' : 'PASSED'}</span>
               </div>
               <div class="rc-grade-pills">
                 <div class="rc-grade-pill"><span style="color:#005f40;">A+</span><br><b>${classStats.grades['A+']}</b></div>
@@ -2913,14 +2916,28 @@ function generateMarkSheets(examFilter) {
   executePrint(cardsArr.join(''), "marksheet", "landscape");
 }
 
-function printTabulation() {
+async function printTabulation() {
   if (appData.length === 0) {
     swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
     return;
   }
+  const { value: chosenOrient } = await swalPro.fire({
+    title: 'ট্যাবুলেশন শিট প্রিন্ট মোড নির্বাচন করুন',
+    input: 'select',
+    inputOptions: {
+      'landscape': 'A4 Landscape (আড়াআড়ি — অধিক বিষয়ের জন্য উত্তম)',
+      'portrait': 'A4 Portrait (লম্বালম্বি — পেজের নিচে ফিক্সড সিগনেচারসহ)'
+    },
+    inputValue: 'landscape',
+    showCancelButton: true,
+    cancelButtonText: 'বাতিল',
+    confirmButtonText: '<i class="fa-solid fa-print"></i> প্রিভিউ ও প্রিন্ট করুন'
+  });
+
+  if (!chosenOrient) return;
   recalculateClassStatsInMemory();
-  buildTabulationPagesForOrientation('landscape');
-  executePrint(document.getElementById('print-content').innerHTML, "tabulation", "landscape");
+  buildTabulationPagesForOrientation(chosenOrient);
+  executePrint(document.getElementById('print-content').innerHTML, "tabulation", chosenOrient);
 }
 
 function buildTabulationPagesForOrientation(orientation) {
@@ -2958,17 +2975,17 @@ function buildTabulationPagesForOrientation(orientation) {
     <thead>
       <tr>
         <th style="width:3.2%;">Roll</th>
-        <th style="width:11.5%; text-align:left; padding-left:4px;">Student Name &amp; ID</th>`;
+        <th style="width:11%; text-align:left; padding-left:3px;">Student Name &amp; ID</th>`;
   subKeys.forEach(subName => {
     let sub = parsed.subjects[subName];
-    let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:6.8px; color:#b45309;">(4th)</span>` : subName;
+    let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:6.5px; color:#b45309;">(4th)</span>` : subName;
     theadHtml += `<th>${htmlLabel}</th>`;
   });
   theadHtml += `
-        <th style="width:4.2%;">Avg</th>
-        <th style="width:4.2%;">GPA</th>
-        <th style="width:4.2%;">Grade</th>
-        <th style="width:4.2%;">Merit</th>
+        <th style="width:4%;">Avg</th>
+        <th style="width:4%;">GPA</th>
+        <th style="width:4%;">Grade</th>
+        <th style="width:4%;">Merit</th>
       </tr>
     </thead>`;
 
@@ -2979,7 +2996,7 @@ function buildTabulationPagesForOrientation(orientation) {
 
     let tr = `<tr>
       <td><b>${row[2] || '-'}</b></td>
-      <td style="text-align:left; padding-left:4px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:7.5px;">ID: ${row[0] || '-'}</span></td>`;
+      <td style="text-align:left; padding-left:3px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:7px;">ID: ${row[0] || '-'}</span></td>`;
 
     subKeys.forEach(subName => {
       let sub = parsed.subjects[subName];
@@ -2999,15 +3016,15 @@ function buildTabulationPagesForOrientation(orientation) {
 
     tr += `
       <td><b>${row[firstEmpty + 1] || '-'}</b></td>
-      <td><strong style="font-size:9px;">${row[firstEmpty + 2] || '-'}</strong></td>
-      <td><strong style="font-size:9px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</strong></td>
+      <td><strong style="font-size:8.5px;">${row[firstEmpty + 2] || '-'}</strong></td>
+      <td><strong style="font-size:8.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</strong></td>
       <td><b>${dispPos}</b></td>
     </tr>`;
     return tr;
   });
 
-  // Portrait mode has taller height (14 rows per page), Landscape mode fits 8 rows per page comfortably
-  var rowsPerPage = (orientation === 'portrait') ? 14 : 8;
+  // Portrait mode fits 12 rows per page comfortably; Landscape mode fits 7 rows per page so summary + signatures never clip
+  var rowsPerPage = (orientation === 'portrait') ? 12 : 7;
   var pagesArr = [];
   for (let i = 0; i < bodyRowsHtml.length; i += rowsPerPage) {
     pagesArr.push(bodyRowsHtml.slice(i, i + rowsPerPage));
@@ -3015,31 +3032,31 @@ function buildTabulationPagesForOrientation(orientation) {
   if (pagesArr.length === 0) pagesArr.push([]);
 
   var summaryTableHtml = `
-    <div style="margin-top:6px; border:1.5px solid #005f40; border-radius:6px; overflow:hidden; width:92%; margin-left:auto; margin-right:auto;">
-      <table style="width:100%; border-collapse:collapse; font-size:8.8px; text-align:center;">
+    <div style="margin-top:5px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:94%; margin-left:auto; margin-right:auto; page-break-inside:avoid;">
+      <table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;">
         <tr style="font-weight:800; background:#e2e8f0; color:#005f40;">
-          <td style="border:1px solid #000; padding:3px;">Total Students</td>
-          <td style="border:1px solid #000; padding:3px;">Passed</td>
-          <td style="border:1px solid #000; padding:3px;">Failed</td>
-          <td style="border:1px solid #000; padding:3px;">Pass Rate</td>
-          <td style="border:1px solid #000; padding:3px;">A+</td>
-          <td style="border:1px solid #000; padding:3px;">A</td>
-          <td style="border:1px solid #000; padding:3px;">A-</td>
-          <td style="border:1px solid #000; padding:3px;">B</td>
-          <td style="border:1px solid #000; padding:3px;">C</td>
-          <td style="border:1px solid #000; padding:3px;">D</td>
+          <td style="border:1px solid #000; padding:2.5px;">Total Students</td>
+          <td style="border:1px solid #000; padding:2.5px;">Passed</td>
+          <td style="border:1px solid #000; padding:2.5px;">Failed</td>
+          <td style="border:1px solid #000; padding:2.5px;">Pass Rate</td>
+          <td style="border:1px solid #000; padding:2.5px;">A+</td>
+          <td style="border:1px solid #000; padding:2.5px;">A</td>
+          <td style="border:1px solid #000; padding:2.5px;">A-</td>
+          <td style="border:1px solid #000; padding:2.5px;">B</td>
+          <td style="border:1px solid #000; padding:2.5px;">C</td>
+          <td style="border:1px solid #000; padding:2.5px;">D</td>
         </tr>
         <tr style="font-weight:800; background:#fff;">
-          <td style="border:1px solid #000; padding:3.5px;">${stats['Total']}</td>
-          <td style="border:1px solid #000; padding:3.5px; color:#059669;">${passed}</td>
-          <td style="border:1px solid #000; padding:3.5px; color:#dc2626;">${stats['F']}</td>
-          <td style="border:1px solid #000; padding:3.5px;">${passRate}%</td>
-          <td style="border:1px solid #000; padding:3.5px;">${stats['A+']}</td>
-          <td style="border:1px solid #000; padding:3.5px;">${stats['A']}</td>
-          <td style="border:1px solid #000; padding:3.5px;">${stats['A-']}</td>
-          <td style="border:1px solid #000; padding:3.5px;">${stats['B']}</td>
-          <td style="border:1px solid #000; padding:3.5px;">${stats['C']}</td>
-          <td style="border:1px solid #000; padding:3.5px;">${stats['D']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['Total']}</td>
+          <td style="border:1px solid #000; padding:3px; color:#059669;">${passed}</td>
+          <td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td>
+          <td style="border:1px solid #000; padding:3px;">${passRate}%</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['A+']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['A']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['A-']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['B']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['C']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['D']}</td>
         </tr>
       </table>
     </div>`;
@@ -3049,22 +3066,22 @@ function buildTabulationPagesForOrientation(orientation) {
     var isLastPage = (pageIdx === totalPages - 1);
     return `
       <div class="tab-page">
-        <div>
-          <div style="text-align:center; margin-bottom:5px; border-bottom:2px solid #005f40; padding-bottom:4px; display:flex; align-items:center; justify-content:space-between;">
-            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:42px; width:42px; border-radius:50%; border:1.5px solid #005f40; padding:2px;">
+        <div class="tab-top-wrap">
+          <div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;">
+            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:40px; width:40px; border-radius:50%; border:1.5px solid #005f40; padding:1.5px;">
             <div>
-              <h1 style="margin:0; font-size:17.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
-              <p style="margin:1px 0 0 0; color:#334155; font-size:10px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p>
+              <h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+              <p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:9.5px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2.5px 8px; border-radius:8px; color:#005f40;">
+              <div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">
                 Total: ${stats['Total']} | Pass: ${passed} (${passRate}%)
               </div>
-              <div style="font-size:7.8px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div>
+              <div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div>
             </div>
           </div>
 
-          <div class="legend-box" style="margin-bottom:4px;">
+          <div class="legend-box" style="margin-bottom:3px; font-size:8px; padding:2px 6px;">
             <span><b>Abbreviations:</b> Test = Test Exam Marks (${testWeight}% Weight) | Main = Main Exam Marks (${mainWeight}% Weight) | Total = Final Score (100%) &amp; Letter Grade</span>
             <span><b>Pass Rule:</b> ${Math.round(passRatio * 100)}% (Separate CQ, MCQ &amp; Practical)</span>
           </div>
