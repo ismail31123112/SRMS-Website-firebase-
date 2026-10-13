@@ -171,12 +171,44 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-reset { background: linear-gradient(135deg, #ef4444, #b91c1c); }
 .btn-tool { background: linear-gradient(135deg, #475569, #1e293b); }
 .btn-add-sub { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+.btn-edit-sub { background: linear-gradient(135deg, #0284c7, #0369a1); }
+.btn-link-ex { background: linear-gradient(135deg, #0d9488, #0f766e); }
 .btn-calc { background: linear-gradient(135deg, #2563eb, #1d4ed8); font-weight: 800; }
 .btn-print { background: linear-gradient(135deg, #0f172a, #1e293b); }
 .btn-report { background: linear-gradient(135deg, #d97706, #b45309); }
 .btn-publish { background: linear-gradient(135deg, #059669, #047857); font-weight: 800; }
 .btn-back { background: #f1f5f9; color: var(--text-dark); border: 1.5px solid #cbd5e1; }
 .btn-back:hover { background: var(--main); color: #fff; border-color: var(--main); }
+
+.mgr-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.mgr-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+.mgr-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mgr-actions button {
+  padding: 6px 11px;
+  font-size: 11.5px;
+  border-radius: 8px;
+}
 
 #feature-panel {
   display: none;
@@ -328,7 +360,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 /* ============================================================================
-   🖨️ ENTERPRISE PRINT PREVIEW & A4 LANDSCAPE TRANSCRIPT / TABULATION ENGINE
+   🖨️ ENTERPRISE PRINT PREVIEW & A4 LANDSCAPE / PORTRAIT ENGINE
 ============================================================================ */
 #print-area { display: none; background: #475569; min-height: 100vh; padding: 20px 0; }
 .print-toolbar {
@@ -339,17 +371,21 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  flex-wrap: wrap;
   box-shadow: 0 4px 20px rgba(0,0,0,0.25);
   z-index: 1000;
   margin-bottom: 20px;
 }
-.print-toolbar button { font-size: 14px; padding: 11px 24px; border-radius: 10px; }
+.print-toolbar button { font-size: 13.5px; padding: 10px 20px; border-radius: 10px; }
 #print-content {
-  width: 297mm;
+  width: 281mm;
   margin: 0 auto;
   background: transparent;
   box-sizing: border-box;
+}
+#print-content.portrait-preview {
+  width: 194mm;
 }
 
 /* Marksheet Screen Preview Card */
@@ -363,7 +399,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   flex-direction: column;
   justify-content: space-between;
   border: 3px double #005f40;
-  padding: 6mm 8mm;
+  padding: 5.5mm 7.5mm;
   border-radius: 6px;
   background: #ffffff;
   position: relative;
@@ -445,7 +481,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   background: #f8fafc !important;
   border-collapse: collapse;
 }
-.student-info td { padding: 3px 8px; border-right: 1px dashed #cbd5e1; }
+.student-info td { padding: 3.5px 8px; border-right: 1px dashed #cbd5e1; }
 .student-info td:last-child { border-right: none; }
 
 .legend-box {
@@ -453,7 +489,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   color: #005f40;
   background: #ecfdf5 !important;
   border: 1px dashed #005f40;
-  padding: 2px 8px;
+  padding: 2.5px 8px;
   border-radius: 4px;
   margin-bottom: 3px;
   display: flex;
@@ -466,21 +502,29 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   justify-content: space-between;
   gap: 8px;
   width: 100%;
-  align-items: flex-start;
+  align-items: stretch;
 }
-.marks-table { width: 100%; border-collapse: collapse; font-size: 9.8px; background: #fff; }
+.marks-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10px;
+  background: #fff;
+  table-layout: fixed;
+}
 .marks-table th, .marks-table td {
   border: 1px solid #1e293b;
-  padding: 3.5px 4px;
+  padding: 4.5px 3px;
   text-align: center;
   vertical-align: middle;
-  line-height: 1.15;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .marks-table th {
   background-color: #e2e8f0 !important;
   font-weight: 800;
   color: #0f172a;
-  font-size: 8.8px;
+  font-size: 8.6px;
   text-transform: uppercase;
 }
 .marks-table td.sub-name {
@@ -489,27 +533,51 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   font-weight: 800;
   color: #0f172a;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 135px;
 }
 .divider-col { border-right: 1.8px solid #000 !important; }
 
-/* Tier 1: Few Subjects (1-6 Subjects) Spacious Layout */
+/* Tier 1: Few Subjects (1-6 Subjects) Spacious Full-Width Layout */
 .report-card.spacious-card .marks-table th,
 .report-card.spacious-card .marks-table td {
-  padding: 5.5px 6px;
-  font-size: 10.5px;
+  padding: 6px 6px;
+  font-size: 10.8px;
 }
-.report-card.spacious-card .marks-table td.sub-name { font-size: 10.5px; max-width: 220px; }
 
-/* Tier 3: Auto-Adaptive Dense Mode for Many Subjects (11+ Subjects / 6 Exams) */
+/* Tier 2: Standard Subjects (7-12 Subjects, up to 6 rows per column) */
+.report-card.standard-card .marks-table th,
+.report-card.standard-card .marks-table td {
+  padding: 5.2px 3.5px;
+  font-size: 10px;
+}
+
+/* Tier 3: Dense Subjects (13+ Subjects) */
 .report-card.dense-card .marks-table th,
 .report-card.dense-card .marks-table td {
-  padding: 2.3px 3px;
+  padding: 2.8px 2.5px;
   font-size: 8.8px;
 }
-.report-card.dense-card .marks-table td.sub-name { font-size: 8.8px; max-width: 118px; }
+
+/* Academic Evaluation Bar (Fills Middle Space Naturally) */
+.rc-eval-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background: #f1f5f9 !important;
+  border: 1px solid #94a3b8;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 9px;
+  font-weight: 700;
+  color: #0f172a;
+}
+.rc-eval-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-right: 1px dashed #cbd5e1;
+  padding-right: 8px;
+}
+.rc-eval-item:last-child { border-right: none; padding-right: 0; }
 
 /* Class Overview & QR Verification Panel inside Marksheet */
 .rc-overview-qr-strip {
@@ -517,14 +585,12 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   grid-template-columns: 1.35fr 1.65fr 1fr;
   gap: 8px;
   align-items: stretch;
-  margin-top: auto;
-  padding-top: 3px;
 }
 .rc-ov-card {
   border: 1px solid #94a3b8;
   border-radius: 6px;
   background: #f8fafc !important;
-  padding: 4px 8px;
+  padding: 4.5px 8px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -567,14 +633,14 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   border: 1.5px solid #005f40;
   border-radius: 6px;
   background: #ecfdf5 !important;
-  padding: 3px 7px;
+  padding: 3.5px 7px;
   display: flex;
   align-items: center;
   gap: 7px;
 }
 .rc-qr-box {
-  width: 48px;
-  height: 48px;
+  width: 50px;
+  height: 50px;
   background: #fff !important;
   border: 1px solid #005f40;
   border-radius: 4px;
@@ -600,9 +666,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .summary-box {
   border: 1.5px solid #005f40;
-  padding: 4px 12px;
+  padding: 4.5px 12px;
   width: 100%;
-  margin-top: 3px;
+  margin-top: 2px;
   border-radius: 6px;
   background: #f0fdf4 !important;
   display: flex;
@@ -632,7 +698,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 13px 15px 0 15px;
+  padding: 12px 15px 0 15px;
   margin-top: 2px;
 }
 .signature {
@@ -646,7 +712,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   text-transform: uppercase;
 }
 
-/* Paginated Tabulation Sheet Print Cards (Guaranteed Fixed Signatures on Every Page) */
 .tab-page {
   width: 281mm;
   height: 192mm;
@@ -657,51 +722,76 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   flex-direction: column;
   justify-content: space-between;
   border: 2.5px solid #005f40;
-  padding: 6mm 8mm;
+  padding: 5mm 6mm;
   border-radius: 6px;
   background: #ffffff;
   position: relative;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
+#print-content.portrait-preview .tab-page {
+  width: 194mm;
+  height: 278mm;
+  max-height: 278mm;
+  padding: 5mm 4.5mm;
+}
 .tab-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 9px;
+  font-size: 8.5px;
   text-align: center;
-  table-layout: auto;
+  table-layout: fixed;
 }
 .tab-table th {
   background: #e2e8f0 !important;
-  padding: 4.5px 3px;
+  padding: 4px 2px;
   border: 1px solid #000;
   font-weight: 800;
   color: #000;
-  font-size: 8.8px;
+  font-size: 8px;
+  word-wrap: break-word;
 }
 .tab-table td {
-  padding: 4px 3px;
+  padding: 3.5px 2px;
   border: 1px solid #000;
   vertical-align: middle;
-  font-size: 8.4px;
+  font-size: 8px;
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.22;
   color: #000;
+  overflow: hidden;
 }
+#print-content.portrait-preview .tab-table th { font-size: 7px; padding: 3px 1.5px; }
+#print-content.portrait-preview .tab-table td { font-size: 7px; padding: 3px 1.5px; }
+
+.tab-cell-lines {
+  font-size: 7.6px;
+  line-height: 1.22;
+  text-align: left;
+  padding: 0 1.5px;
+  white-space: nowrap;
+}
+#print-content.portrait-preview .tab-cell-lines {
+  font-size: 6.6px;
+  padding: 0 1px;
+}
+
 .tab-fixed-signatures {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  padding: 12px 20px 0 20px;
+  padding: 12px 16px 0 16px;
   margin-top: auto;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 .tab-sig-box {
   border-top: 1.5px solid #000;
-  width: 185px;
+  width: 165px;
   text-align: center;
-  padding-top: 4px;
+  padding-top: 3.5px;
   font-weight: 800;
-  font-size: 10px;
+  font-size: 9.5px;
   color: #000;
   text-transform: uppercase;
 }
@@ -710,7 +800,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   .app-header, #student-list-container, .loader-overlay, .swal2-container, .print-toolbar, .quick-search-bar {
     display: none !important;
   }
-  body {
+  html, body {
     background: white !important;
     margin: 0 !important;
     padding: 0 !important;
@@ -719,14 +809,12 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   }
   #appContainer { display: none !important; }
   #print-area { display: block !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
-  #print-content { width: 100% !important; margin: 0 !important; padding: 0 !important; }
-
-  @page { size: A4 landscape; margin: 7mm; }
+  #print-content, #print-content.portrait-preview { width: 100% !important; margin: 0 !important; padding: 0 !important; }
 
   .report-card, .tab-page {
     width: 100% !important;
-    height: 194mm !important;
-    max-height: 194mm !important;
+    height: 192mm !important;
+    max-height: 192mm !important;
     margin: 0 !important;
     box-shadow: none !important;
     page-break-after: always !important;
@@ -734,11 +822,19 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
+  #print-content.portrait-preview .tab-page {
+    width: 100% !important;
+    height: 279mm !important;
+    max-height: 279mm !important;
+  }
   .report-card:last-child, .tab-page:last-child {
     page-break-after: auto !important;
     break-after: auto !important;
   }
 }
+</style>
+<style id="dynamicPrintPageStyle">
+  @media print { @page { size: A4 landscape; margin: 7mm; } }
 </style>
 </head>
 <body class="main-padding" id="mainBody">
@@ -755,7 +851,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 <div id="print-area">
   <div class="print-toolbar no-print">
     <button onclick="closePrintView()" style="background:#ef4444;"><i class="fas fa-arrow-left"></i> ড্যাশবোর্ডে ফিরে যান</button>
-    <button onclick="window.print()" style="background:#2563eb;"><i class="fas fa-print"></i> প্রিন্ট করুন (A4 Landscape)</button>
+    <button onclick="triggerPrintWithOrientation('landscape')" style="background:#2563eb;"><i class="fas fa-print"></i> প্রিন্ট করুন (A4 Landscape)</button>
+    <button id="btnPrintPortrait" onclick="triggerPrintWithOrientation('portrait')" style="background:#059669; display:none;"><i class="fas fa-file-alt"></i> প্রিন্ট করুন (A4 Portrait)</button>
   </div>
   <div id="print-content"></div>
 </div>
@@ -819,9 +916,10 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
         <label style="font-size:12px;"><input type="number" id="genPass" value="33">%</label>
       </div>
 
-      <button class="btn-tool" onclick="addGlobalExamPopup()"><i class="fa-solid fa-calendar-plus"></i> + পরীক্ষা</button>
+      <button class="btn-tool" onclick="manageGlobalExamsPopup()"><i class="fa-solid fa-calendar-check"></i> পরীক্ষা ব্যবস্থাপনা (যুক্ত/এডিট)</button>
       <button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> + বিষয় যুক্ত করুন</button>
-      <button class="btn-reset" onclick="deleteSubjectPopup()"><i class="fa-solid fa-trash-can"></i> - বিষয় মুছুন</button>
+      <button class="btn-edit-sub" onclick="manageClassSubjectsPopup()"><i class="fa-solid fa-sliders"></i> বিষয় এডিট / মুছুন</button>
+      <button class="btn-link-ex" onclick="linkExamToSubjectsPopup()"><i class="fa-solid fa-link"></i> বিষয়ে পরীক্ষা যুক্ত করুন</button>
 
       <button class="btn-calc" onclick="calculateAllResults()"><i class="fa-solid fa-calculator"></i> ফলাফল ও মেধাক্রম হিসাব</button>
 
@@ -950,6 +1048,10 @@ function isOptHeader(h) {
   return h ? String(h).toLowerCase().includes("opt") && String(h).toLowerCase().includes("name") : false;
 }
 
+function isPendingExamHeader(h) {
+  return h ? String(h).indexOf("[Pending Exam]") !== -1 : false;
+}
+
 function parseHeaderFullMarksInfo(headerStr, defaultTotal) {
   let match = String(headerStr || "").match(/\(([^)]+)\)/);
   if (!match || !match[1]) {
@@ -976,7 +1078,7 @@ function extractSubAndExam(headerText) {
       type: parts[2].includes("Main") ? "Main" : "Test"
     };
   }
-  return { sub: clean, exam: "Exam", type: "Test" };
+  return { sub: parts[0].trim(), exam: "Exam", type: "Test" };
 }
 
 function parseSubjectHeaders(headers) {
@@ -989,39 +1091,51 @@ function parseSubjectHeaders(headers) {
   let c = 3;
   while (c < firstEmpty && c < headers.length) {
     let startC = c;
+    let hStr = String(headers[c] || "");
 
-    if (isOptHeader(headers[c])) {
-      let optSubName = headers[c].replace(" Opt Name", "").trim();
-      if (!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
+    if (isOptHeader(hStr)) {
+      let optSubName = hStr.replace(" Opt Name", "").trim();
+      if (!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, firstCol: c, pendingCols: [], tests: [], mains: [] };
 
       let j = c + 1;
-      while (j < firstEmpty && headers[j].startsWith(optSubName + " - ")) {
-        let info = extractSubAndExam(headers[j]);
-        let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
-        if (info.type === "Test") {
-          subjects[optSubName].tests.push({ col: j, name: info.exam, fm: fm });
-          if (!testSeq.includes(info.exam)) testSeq.push(info.exam);
+      while (j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
+        if (isPendingExamHeader(headers[j])) {
+          subjects[optSubName].pendingCols.push(j);
         } else {
-          subjects[optSubName].mains.push({ col: j, name: info.exam, fm: fm });
-          if (!mainSeq.includes(info.exam)) mainSeq.push(info.exam);
+          let info = extractSubAndExam(headers[j]);
+          let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
+          if (info.type === "Test") {
+            subjects[optSubName].tests.push({ col: j, name: info.exam, fm: fm });
+            if (!testSeq.includes(info.exam)) testSeq.push(info.exam);
+          } else {
+            subjects[optSubName].mains.push({ col: j, name: info.exam, fm: fm });
+            if (!mainSeq.includes(info.exam)) mainSeq.push(info.exam);
+          }
         }
         j++;
       }
       c = j;
-    } else {
-      let subName = headers[c].split(" - ")[0].trim();
-      if (!subjects[subName]) subjects[subName] = { isOpt: false, tests: [], mains: [] };
+    } else if (hStr.trim() !== "") {
+      let subName = hStr.split(" - ")[0].trim();
+      let isOptFlag = hStr.indexOf("[Opt]") !== -1;
+      if (!subjects[subName]) subjects[subName] = { isOpt: isOptFlag, firstCol: c, pendingCols: [], tests: [], mains: [] };
+      if (isOptFlag) subjects[subName].isOpt = true;
 
       let j = c;
-      while (j < firstEmpty && headers[j].startsWith(subName + " - ")) {
-        let info = extractSubAndExam(headers[j]);
-        let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
-        if (info.type === "Test") {
-          subjects[subName].tests.push({ col: j, name: info.exam, fm: fm });
-          if (!testSeq.includes(info.exam)) testSeq.push(info.exam);
+      while (j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
+        if (String(headers[j]).indexOf("[Opt]") !== -1) subjects[subName].isOpt = true;
+        if (isPendingExamHeader(headers[j])) {
+          subjects[subName].pendingCols.push(j);
         } else {
-          subjects[subName].mains.push({ col: j, name: info.exam, fm: fm });
-          if (!mainSeq.includes(info.exam)) mainSeq.push(info.exam);
+          let info = extractSubAndExam(headers[j]);
+          let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
+          if (info.type === "Test") {
+            subjects[subName].tests.push({ col: j, name: info.exam, fm: fm });
+            if (!testSeq.includes(info.exam)) testSeq.push(info.exam);
+          } else {
+            subjects[subName].mains.push({ col: j, name: info.exam, fm: fm });
+            if (!mainSeq.includes(info.exam)) mainSeq.push(info.exam);
+          }
         }
         j++;
       }
@@ -1269,12 +1383,20 @@ async function openDataEntryForm(rowIndex) {
       }
 
       html += '<div style="display:flex; gap:10px; flex-wrap:wrap;">';
-      sub.tests.forEach(t => {
-        html += renderExamMarkInputBox(t.col, t.name, "Test", t.fm, rowData[t.col]);
-      });
-      sub.mains.forEach(m => {
-        html += renderExamMarkInputBox(m.col, m.name, "Main", m.fm, rowData[m.col]);
-      });
+      if (sub.tests.length === 0 && sub.mains.length === 0) {
+        html += `
+          <div style="width:100%; background:#fff7ed; border:1px dashed #fb923c; color:#9a3412; padding:10px 14px; border-radius:8px; font-size:12px; font-weight:700; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <span><i class="fas fa-info-circle"></i> এই বিষয়ে এখনো কোনো পরীক্ষা যুক্ত করা হয়নি।</span>
+            <button type="button" onclick="Swal.close(); linkExamToSubjectsPopup();" style="background:#ea580c; color:#fff; padding:5px 12px; border-radius:6px; font-size:11px; border:none; cursor:pointer;">+ পরীক্ষা যুক্ত করুন</button>
+          </div>`;
+      } else {
+        sub.tests.forEach(t => {
+          html += renderExamMarkInputBox(t.col, t.name, "Test", t.fm, rowData[t.col]);
+        });
+        sub.mains.forEach(m => {
+          html += renderExamMarkInputBox(m.col, m.name, "Main", m.fm, rowData[m.col]);
+        });
+      }
       html += '</div></div>';
     });
   }
@@ -1343,17 +1465,18 @@ async function openDataEntryForm(rowIndex) {
 
   if (formValues) {
     appData[rowIndex] = formValues;
+    recalculateClassStatsInMemory();
     renderStudentCards();
 
     const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2200, timerProgressBar: true });
-    Toast.fire({ icon: 'success', title: 'নম্বর সংরক্ষিত হয়েছে!' });
+    Toast.fire({ icon: 'success', title: 'নম্বর ও মেধাক্রম সংরক্ষিত হয়েছে!' });
 
     try {
-      let rowDocId = formValues[cachedHeaders.length + 1];
-      let cleanMarksToSave = formValues.slice(0, cachedHeaders.length);
+      let rowDocId = appData[rowIndex][cachedHeaders.length + 1];
+      let cleanMarksToSave = appData[rowIndex].slice(0, cachedHeaders.length);
       await db.collection('Students').doc(rowDocId).update({
         resultMarks: JSON.stringify(cleanMarksToSave),
-        resultStatus: "Draft"
+        resultStatus: "Calculated"
       });
     } catch (err) {
       swalPro.fire('ত্রুটি', err.message, 'error');
@@ -1361,34 +1484,290 @@ async function openDataEntryForm(rowIndex) {
   }
 }
 
-async function addGlobalExamPopup() {
-  const { value: v } = await swalPro.fire({
-    title: 'নতুন পরীক্ষা যুক্ত করুন',
+function recalculateClassStatsInMemory() {
+  let parsed = parseSubjectHeaders(cachedHeaders);
+  let firstEmpty = parsed.firstEmpty;
+  if (firstEmpty === -1) return;
+
+  let passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
+  let testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
+  let mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+  let selectedYear = document.getElementById('yearSelector').value;
+
+  let validList = [];
+
+  appData.forEach((row, idx) => {
+    if (!row[0] && !row[1]) return;
+
+    let totalMarks = 0;
+    let totalRegularGP = 0;
+    let optExtraGP = 0;
+    let regularSubCount = 0;
+    let totalSubCount = 0;
+    let isFail = false;
+    let attendedExams = 0;
+    let incompleteTerm = false;
+    let failReasonsArray = [];
+
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let ev = evaluateStudentSubjectForFilter(row, sub, "All", passRatio, testWeight, mainWeight);
+
+      if (ev.hasTest && !ev.hasMain && sub.mains.length > 0) {
+        incompleteTerm = true;
+      }
+
+      if (ev.attended) {
+        attendedExams++;
+        if (ev.isSubFail && !sub.isOpt) {
+          isFail = true;
+          failReasonsArray.push(subName);
+        }
+        if (sub.isOpt && !ev.isSubFail && ev.subGP > 2.00) {
+          optExtraGP += (ev.subGP - 2.00);
+        } else if (!sub.isOpt) {
+          totalRegularGP += ev.isSubFail ? 0 : ev.subGP;
+          regularSubCount++;
+        }
+        totalMarks += ev.finalMark;
+        totalSubCount++;
+      }
+    });
+
+    if (attendedExams === 0) {
+      row[firstEmpty + 1] = "";
+      row[firstEmpty + 2] = "";
+      row[firstEmpty + 3] = "";
+      row[firstEmpty + 4] = "";
+      row[firstEmpty + 5] = "";
+      row[firstEmpty + 6] = "";
+    } else {
+      let finalGPA = 0.00;
+      let finalGrade = "F";
+      let grandTotalAvg = totalSubCount > 0 ? (totalMarks / totalSubCount).toFixed(2) : "0.00";
+
+      if (incompleteTerm) {
+        finalGPA = 0.00;
+        finalGrade = "Incomplete";
+        isFail = true;
+        failReasonsArray = ["Exams Incomplete"];
+      } else if (regularSubCount > 0) {
+        if (isFail) {
+          finalGPA = 0.00;
+          finalGrade = "F";
+        } else {
+          let combinedGP = totalRegularGP + optExtraGP;
+          finalGPA = combinedGP / regularSubCount;
+          if (finalGPA > 5.00) finalGPA = 5.00;
+          finalGrade = getGrade_JS(parseFloat(finalGPA));
+        }
+      }
+
+      row[firstEmpty + 1] = grandTotalAvg;
+      row[firstEmpty + 2] = regularSubCount > 0 ? parseFloat(finalGPA).toFixed(2) : "0.00";
+      row[firstEmpty + 3] = finalGrade;
+      row[firstEmpty + 5] = failReasonsArray.length > 0 ? failReasonsArray.join(", ") : "None";
+      row[firstEmpty + 6] = selectedYear;
+
+      validList.push({
+        idx: idx,
+        gpa: parseFloat(finalGPA) || 0,
+        totalMarks: totalMarks,
+        isFail: isFail,
+        attendedExams: attendedExams
+      });
+    }
+  });
+
+  validList.sort((a, b) => {
+    if (a.isFail && !b.isFail) return 1;
+    if (!a.isFail && b.isFail) return -1;
+    if (b.attendedExams !== a.attendedExams) return b.attendedExams - a.attendedExams;
+    if (b.gpa !== a.gpa) return b.gpa - a.gpa;
+    return b.totalMarks - a.totalMarks;
+  });
+
+  let currentRank = 1;
+  for (let i = 0; i < validList.length; i++) {
+    let st = validList[i];
+    let targetRow = appData[st.idx];
+    if (st.isFail) {
+      targetRow[firstEmpty + 4] = "N/A";
+    } else {
+      if (
+        i > 0 &&
+        validList[i].attendedExams === validList[i - 1].attendedExams &&
+        validList[i].gpa === validList[i - 1].gpa &&
+        validList[i].totalMarks === validList[i - 1].totalMarks &&
+        !validList[i - 1].isFail
+      ) {
+        targetRow[firstEmpty + 4] = appData[validList[i - 1].idx][firstEmpty + 4];
+      } else {
+        let s = ["th", "st", "nd", "rd"];
+        let v = currentRank % 100;
+        targetRow[firstEmpty + 4] = currentRank + (s[(v - 20) % 10] || s[v] || s[0]);
+      }
+      currentRank++;
+    }
+  }
+}
+
+async function fetchGlobalExamsFromDB() {
+  let setDoc = await db.collection('Admin').doc('Settings').get();
+  if (setDoc.exists && setDoc.data().globalExams) {
+    try { return JSON.parse(setDoc.data().globalExams) || []; } catch (e) { return []; }
+  }
+  return [];
+}
+
+async function manageGlobalExamsPopup() {
+  showLoader(true, "পরীক্ষার তালিকা লোড হচ্ছে...");
+  let globalExams = [];
+  try {
+    globalExams = await fetchGlobalExamsFromDB();
+    showLoader(false);
+  } catch (e) {
+    showLoader(false);
+    return swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+
+  let listHtml = "";
+  if (globalExams.length === 0) {
+    listHtml = `<div style="padding:18px; text-align:center; color:#64748b; font-weight:600; background:#fff; border-radius:10px; border:1px dashed #cbd5e1;">এখনো কোনো পরীক্ষা তৈরি করা হয়নি। নিচে নতুন পরীক্ষা তৈরি করুন।</div>`;
+  } else {
+    globalExams.forEach((ex, idx) => {
+      let badgeClr = ex.type === "Main" ? "#005f40" : "#0284c7";
+      let badgeBg = ex.type === "Main" ? "#ecfdf5" : "#f0f9ff";
+      let safeName = ex.name.replace(/'/g, "\\'");
+      listHtml += `
+        <div class="mgr-list-item">
+          <div>
+            <b style="font-size:14px; color:#0f172a;">${ex.name}</b>
+            <span class="mgr-badge" style="background:${badgeBg}; color:${badgeClr}; border:1px solid ${badgeClr}40; margin-left:6px;">
+              ${ex.type === "Main" ? "Main Exam (সাময়িক/বার্ষিক)" : "Test Exam (মাসিক/টিউটোরিয়াল)"}
+            </span>
+          </div>
+          <div class="mgr-actions">
+            <button type="button" style="background:#0284c7;" onclick="openEditGlobalExamModal('${safeName}', '${ex.type}')"><i class="fas fa-edit"></i> এডিট</button>
+            <button type="button" style="background:#ef4444;" onclick="confirmDeleteGlobalExam('${safeName}')"><i class="fas fa-trash"></i> মুছুন</button>
+          </div>
+        </div>`;
+    });
+  }
+
+  const { value: newEx } = await swalPro.fire({
+    title: 'পরীক্ষা ব্যবস্থাপনা (যুক্ত, এডিট ও মুছুন)',
+    width: '650px',
     html: `
-      <input id="exN" class="swal2-input" placeholder="পরীক্ষার নাম (যেমন: 1st Monthly, 1st Term)" style="width:90%;">
-      <select id="exT" class="swal2-input" style="width:90%; height:44px; margin-top:10px; font-weight:700; color:var(--main);">
-        <option value="Test">Test Exam (মাসিক / টিউটোরিয়াল পরীক্ষা)</option>
-        <option value="Main">Main Exam (সাময়িক / বার্ষিক পরীক্ষা)</option>
-      </select>
+      <div style="text-align:left; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:800; color:#475569; text-transform:uppercase; margin-bottom:6px;">বর্তমান পরীক্ষাসমূহ (${globalExams.length}):</div>
+        <div style="max-height:220px; overflow-y:auto; padding-right:4px;">${listHtml}</div>
+      </div>
+      <div style="background:#f0fdf4; border:1.5px solid #a7f3d0; border-radius:12px; padding:14px; text-align:left;">
+        <div style="font-size:13px; font-weight:800; color:var(--main); margin-bottom:8px;"><i class="fas fa-plus-circle"></i> নতুন পরীক্ষা তৈরি করুন:</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input id="exN" class="swal2-input" placeholder="পরীক্ষার নাম (যেমন: 1st Monthly, 1st Term)" style="flex:1.5; min-width:200px; margin:0; height:42px; font-size:13.5px;">
+          <select id="exT" class="swal2-input" style="flex:1; min-width:170px; margin:0; height:42px; font-weight:700; color:var(--main); font-size:13px;">
+            <option value="Test">Test Exam (মাসিক/টিউটোরিয়াল)</option>
+            <option value="Main">Main Exam (সাময়িক/বার্ষিক)</option>
+          </select>
+        </div>
+      </div>
     `,
     showCancelButton: true,
-    confirmButtonText: 'যুক্ত করুন',
+    confirmButtonText: '<i class="fas fa-plus"></i> নতুন পরীক্ষা যুক্ত করুন',
     cancelButtonText: 'বন্ধ করুন',
-    preConfirm: () => ({ name: document.getElementById('exN').value.trim(), type: document.getElementById('exT').value })
+    preConfirm: () => {
+      let name = document.getElementById('exN').value.trim();
+      let type = document.getElementById('exT').value;
+      if (!name) {
+        Swal.showValidationMessage('নতুন পরীক্ষার নাম লিখুন!');
+        return false;
+      }
+      return { name, type };
+    }
   });
-  if (v && v.name) {
-    showLoader(true, "পরীক্ষা যুক্ত করা হচ্ছে...");
+
+  if (newEx && newEx.name) {
+    showLoader(true, "নতুন পরীক্ষা যুক্ত করা হচ্ছে...");
     try {
-      let res = await apiCall('addGlobalExam', { examName: v.name, examType: v.type });
+      let res = await apiCall('addGlobalExam', { examName: newEx.name, examType: newEx.type });
       showLoader(false);
-      if (res.status === "success") swalPro.fire('সফল!', res.msg, 'success');
-      else swalPro.fire('ত্রুটি', res.message, 'error');
+      await swalPro.fire('সফল!', res.msg, 'success');
+      manageGlobalExamsPopup();
     } catch (e) {
       showLoader(false);
       swalPro.fire('ত্রুটি', e.message, 'error');
     }
   }
 }
+
+window.openEditGlobalExamModal = async function(oldName, oldType) {
+  const { value: edited } = await swalPro.fire({
+    title: 'পরীক্ষার নাম ও ধরন এডিট করুন',
+    html: `
+      <div style="text-align:left; font-size:12px; color:#047857; background:#ecfdf5; padding:10px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:10px;">
+        <i class="fas fa-info-circle"></i> এখানে পরীক্ষার নাম বা ধরন পরিবর্তন করলে সকল শ্রেণির বিষয়ে সংযুক্ত এই পরীক্ষার নাম স্বয়ংক্রিয়ভাবে আপডেট হয়ে যাবে।
+      </div>
+      <input id="editExN" class="swal2-input" value="${oldName}" placeholder="পরীক্ষার নতুন নাম" style="width:92%; margin:6px auto;">
+      <select id="editExT" class="swal2-input" style="width:92%; height:44px; margin:8px auto; font-weight:700; color:var(--main);">
+        <option value="Test" ${oldType === 'Test' ? 'selected' : ''}>Test Exam (মাসিক / টিউটোরিয়াল পরীক্ষা)</option>
+        <option value="Main" ${oldType === 'Main' ? 'selected' : ''}>Main Exam (সাময়িক / বার্ষিক পরীক্ষা)</option>
+      </select>
+    `,
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-save"></i> আপডেট সংরক্ষণ করুন',
+    cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let newName = document.getElementById('editExN').value.trim();
+      let newType = document.getElementById('editExT').value;
+      if (!newName) {
+        Swal.showValidationMessage('পরীক্ষার নাম খালি রাখা যাবে না!');
+        return false;
+      }
+      return { newName, newType };
+    }
+  });
+
+  if (edited) {
+    showLoader(true, "পরীক্ষার তথ্য ও ক্লাস হেডার আপডেট হচ্ছে...");
+    try {
+      let res = await apiCall('editGlobalExam', { oldName: oldName, newName: edited.newName, newType: edited.newType });
+      showLoader(false);
+      if (document.getElementById("classSelector").value) {
+        await loadData();
+      }
+      await swalPro.fire('আপডেট সম্পন্ন!', res.msg, 'success');
+      manageGlobalExamsPopup();
+    } catch (e) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', e.message, 'error');
+    }
+  }
+};
+
+window.confirmDeleteGlobalExam = async function(examName) {
+  let confirmRes = await swalPro.fire({
+    title: `'${examName}' মুছে ফেলবেন?`,
+    text: "পরীক্ষাটি গ্লোবাল তালিকা থেকে মুছে যাবে।",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'হ্যাঁ, মুছে ফেলুন',
+    cancelButtonText: 'বাতিল'
+  });
+  if (!confirmRes.isConfirmed) return;
+
+  showLoader(true, "পরীক্ষাটি মুছে ফেলা হচ্ছে...");
+  try {
+    let res = await apiCall('deleteGlobalExam', { examName: examName });
+    showLoader(false);
+    await swalPro.fire('মুছে ফেলা হয়েছে!', res.msg, 'success');
+    manageGlobalExamsPopup();
+  } catch (e) {
+    showLoader(false);
+    swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+};
 
 window.updateSubAddLiveFull = function(idx) {
   let cq = parseFloat(document.getElementById(`add-cq-${idx}`)?.value) || 0;
@@ -1405,54 +1784,66 @@ async function addNewSubjectPopup() {
   showLoader(true, "পরীক্ষার তালিকা লোড হচ্ছে...");
   let globalExams = [];
   try {
-    let setDoc = await db.collection('Admin').doc('Settings').get();
-    if (setDoc.exists && setDoc.data().globalExams) globalExams = JSON.parse(setDoc.data().globalExams);
+    globalExams = await fetchGlobalExamsFromDB();
     showLoader(false);
   } catch (e) {
     showLoader(false);
     return swalPro.fire('ত্রুটি', e.message, 'error');
   }
 
+  let examHtml = "";
   if (globalExams.length === 0) {
-    return swalPro.fire('কোনো পরীক্ষা নেই', 'অনুগ্রহ করে প্রথমে "+ পরীক্ষা" বাটনে ক্লিক করে পরীক্ষা তৈরি করুন।', 'warning');
-  }
-
-  let examHtml = `<div style="text-align:left; max-height:320px; overflow-y:auto; background:#f8fafc; padding:12px; border-radius:12px; border:1.5px solid #cbd5e1; margin-top:10px;">`;
-  globalExams.forEach((ex, i) => {
-    let defCq = (ex.type === "Main") ? 100 : 50;
-    examHtml += `
-      <div style="background:#fff; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:10px;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <label style="font-weight:800; color:#0f172a; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:7px;">
-            <input type="checkbox" id="chkEx-${i}" checked style="width:17px; height:17px; accent-color:var(--main);">
-            ${ex.name} <span style="font-size:11px; color:var(--main);">(${ex.type})</span>
+    examHtml = `
+      <div style="text-align:left; background:#fffbeb; border:1.5px dashed #f59e0b; padding:12px 14px; border-radius:12px; margin-top:10px; color:#92400e; font-size:12.5px; font-weight:600;">
+        <i class="fas fa-lightbulb"></i> এখনো কোনো গ্লোবাল পরীক্ষা তৈরি করা হয়নি। আপনি এখনই শুধু <b>বিষয়ের নাম</b> লিখে বিষয়টি যুক্ত করে রাখতে পারবেন এবং পরবর্তীতে যেকোনো সময় এতে পরীক্ষা যুক্ত করতে পারবেন!
+      </div>`;
+  } else {
+    examHtml = `
+      <div style="text-align:left; margin-top:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:12px; font-weight:800; color:#334155;">পরীক্ষা নির্বাচন করুন (ঐচ্ছিক — পরেও যুক্ত করা যাবে):</span>
+          <label style="font-size:11.5px; font-weight:800; color:var(--main); cursor:pointer;">
+            <input type="checkbox" checked onchange="document.querySelectorAll('.add-sub-ex-chk').forEach(c => c.checked = this.checked);"> সব নির্বাচন/বাতিল
           </label>
-          <span style="font-size:11px; font-weight:800; color:var(--main); background:#ecfdf5; padding:2px 8px; border-radius:10px;">
-            মোট পূর্ণমান: <b id="add-tot-${i}">${defCq}</b>
-          </span>
         </div>
-        <div class="part-grid-row" style="margin-top:8px;">
-          <div class="part-box">
-            <label>CQ / লিখিত পূর্ণমান</label>
-            <input type="number" id="add-cq-${i}" value="${defCq}" placeholder="যেমন: 70 বা 100" oninput="updateSubAddLiveFull(${i})">
+        <div style="max-height:280px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:12px; border:1.5px solid #cbd5e1;">`;
+
+    globalExams.forEach((ex, i) => {
+      let defCq = (ex.type === "Main") ? 100 : 50;
+      examHtml += `
+        <div style="background:#fff; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-weight:800; color:#0f172a; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:7px;">
+              <input type="checkbox" class="add-sub-ex-chk" id="chkEx-${i}" checked style="width:17px; height:17px; accent-color:var(--main);">
+              ${ex.name} <span style="font-size:11px; color:var(--main);">(${ex.type})</span>
+            </label>
+            <span style="font-size:11px; font-weight:800; color:var(--main); background:#ecfdf5; padding:2px 8px; border-radius:10px;">
+              মোট পূর্ণমান: <b id="add-tot-${i}">${defCq}</b>
+            </span>
           </div>
-          <div class="part-box">
-            <label>MCQ পূর্ণমান (ঐচ্ছিক)</label>
-            <input type="number" id="add-mcq-${i}" value="" placeholder="যেমন: 30 বা 0" oninput="updateSubAddLiveFull(${i})">
-          </div>
-          <div class="part-box">
-            <label>Practical (ঐচ্ছিক)</label>
-            <input type="number" id="add-prac-${i}" value="" placeholder="যেমন: 25 বা 0" oninput="updateSubAddLiveFull(${i})">
+          <div class="part-grid-row" style="margin-top:8px;">
+            <div class="part-box">
+              <label>CQ / লিখিত পূর্ণমান</label>
+              <input type="number" id="add-cq-${i}" value="${defCq}" placeholder="যেমন: 70 বা 100" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>MCQ পূর্ণমান (ঐচ্ছিক)</label>
+              <input type="number" id="add-mcq-${i}" value="" placeholder="যেমন: 30 বা 0" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>Practical (ঐচ্ছিক)</label>
+              <input type="number" id="add-prac-${i}" value="" placeholder="যেমন: 25 বা 0" oninput="updateSubAddLiveFull(${i})">
+            </div>
           </div>
         </div>
-      </div>
-    `;
-  });
-  examHtml += `</div>`;
+      `;
+    });
+    examHtml += `</div></div>`;
+  }
 
   const { value: v } = await swalPro.fire({
     title: 'নতুন বিষয় যুক্ত করুন (CQ / MCQ / Practical)',
-    width: '650px',
+    width: '660px',
     html: `
       <input id="subN" class="swal2-input" placeholder="বিষয়ের নাম লিখুন (যেমন: Bangla, Physics, Higher Math)" style="width:96%; margin:5px auto;">
       ${examHtml}
@@ -1464,12 +1855,18 @@ async function addNewSubjectPopup() {
       </div>
     `,
     showCancelButton: true,
-    confirmButtonText: '<i class="fas fa-plus-circle"></i> বিষয় যুক্ত করুন',
+    confirmButtonText: '<i class="fas fa-plus-circle"></i> বিষয় সংরক্ষণ করুন',
     cancelButtonText: 'বাতিল',
     preConfirm: () => {
+      let sName = document.getElementById('subN').value.trim();
+      if (!sName) {
+        Swal.showValidationMessage('অনুগ্রহ করে বিষয়ের নাম লিখুন!');
+        return false;
+      }
       let selected = [];
       globalExams.forEach((ex, i) => {
-        if (document.getElementById(`chkEx-${i}`).checked) {
+        let chk = document.getElementById(`chkEx-${i}`);
+        if (chk && chk.checked) {
           let cq = parseFloat(document.getElementById(`add-cq-${i}`).value) || 0;
           let mcq = parseFloat(document.getElementById(`add-mcq-${i}`).value) || 0;
           let prac = parseFloat(document.getElementById(`add-prac-${i}`).value) || 0;
@@ -1481,14 +1878,14 @@ async function addNewSubjectPopup() {
         }
       });
       return {
-        name: document.getElementById('subN').value.trim(),
+        name: sName,
         isOpt: document.getElementById('isOptCheck').checked,
         selectedExams: selected
       };
     }
   });
 
-  if (v && v.name && v.selectedExams.length > 0) {
+  if (v && v.name) {
     showLoader(true, "বিষয় যুক্ত করা হচ্ছে...");
     try {
       let res = await apiCall('addSubjectAdvanced', { className: cls, subjectData: v });
@@ -1503,50 +1900,335 @@ async function addNewSubjectPopup() {
       showLoader(false);
       swalPro.fire('ত্রুটি', err.message, 'error');
     }
-  } else if (v) {
-    swalPro.fire('লক্ষ্য করুন', 'বিষয়ের নাম এবং অন্তত একটি পরীক্ষা নির্বাচন করুন!', 'warning');
   }
 }
 
-async function deleteSubjectPopup() {
+async function manageClassSubjectsPopup() {
+  var cls = document.getElementById("classSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', 'warning');
+
   var parsed = parseSubjectHeaders(cachedHeaders);
-  if (Object.keys(parsed.subjects).length === 0) {
-    swalPro.fire('তথ্য', 'মুছে ফেলার মতো কোনো বিষয় নেই।', 'info');
-    return;
+  var subNames = Object.keys(parsed.subjects);
+  if (subNames.length === 0) {
+    return swalPro.fire('কোনো বিষয় নেই', 'এই শ্রেণিতে এখনো কোনো বিষয় যুক্ত করা হয়নি। প্রথমে "+ বিষয় যুক্ত করুন" বাটনে ক্লিক করুন।', 'info');
   }
 
-  var subOptions = {};
-  Object.keys(parsed.subjects).forEach(subName => {
-    let sub = parsed.subjects[subName];
-    let firstCol = sub.nameCol !== undefined ? sub.nameCol : (sub.tests[0] ? sub.tests[0].col : (sub.mains[0] ? sub.mains[0].col : 3));
-    subOptions[firstCol] = sub.isOpt ? `ঐচ্ছিক বিষয়: ${subName}` : subName;
+  let listHtml = `<div style="max-height:380px; overflow-y:auto; padding-right:4px;">`;
+  subNames.forEach(sName => {
+    let sub = parsed.subjects[sName];
+    let safeName = sName.replace(/'/g, "\\'");
+    let allEx = sub.tests.concat(sub.mains);
+    let exSummary = allEx.length > 0
+      ? allEx.map(e => `<span style="background:#f1f5f9; border:1px solid #cbd5e1; padding:2px 7px; border-radius:6px; font-size:10.5px; font-weight:700; color:#334155;">${e.name} (${e.fm.raw})</span>`).join(" ")
+      : `<span style="background:#fff7ed; border:1px dashed #fb923c; padding:2px 8px; border-radius:6px; font-size:10.5px; font-weight:800; color:#c2410c;">পরীক্ষা যুক্ত করা হয়নি (Pending)</span>`;
+
+    listHtml += `
+      <div class="mgr-list-item">
+        <div>
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:4px;">
+            <b style="font-size:14.5px; color:var(--main);"><i class="fas fa-book"></i> ${sName}</b>
+            ${sub.isOpt ? `<span class="mgr-badge" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a;">৪র্থ / ঐচ্ছিক বিষয়</span>` : `<span class="mgr-badge" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;">আবশ্যিক</span>`}
+          </div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">${exSummary}</div>
+        </div>
+        <div class="mgr-actions">
+          <button type="button" style="background:#0284c7;" onclick="Swal.close(); editSubjectPopup('${safeName}');"><i class="fas fa-edit"></i> এডিট</button>
+          <button type="button" style="background:#ef4444;" onclick="Swal.close(); confirmDeleteSubjectByCol(${sub.firstCol}, '${safeName}');"><i class="fas fa-trash"></i> মুছুন</button>
+        </div>
+      </div>`;
+  });
+  listHtml += `</div>`;
+
+  swalPro.fire({
+    title: `${cls} — বিষয় ব্যবস্থাপনা (এডিট ও মুছুন)`,
+    width: '680px',
+    html: `
+      <div style="text-align:left; font-size:12px; color:#475569; margin-bottom:10px;">
+        যেকোনো বিষয়ের নাম, ৪র্থ বিষয়ের স্ট্যাটাস, পূর্ণমান (CQ/MCQ/Practical) বা সংযুক্ত পরীক্ষা পরিবর্তন করতে <b>এডিট</b> বাটনে ক্লিক করুন (শিক্ষার্থীদের আগের কোনো নম্বর হারাবে না)।
+      </div>
+      ${listHtml}
+    `,
+    showConfirmButton: true,
+    confirmButtonText: 'বন্ধ করুন'
+  });
+}
+
+window.editSubjectPopup = async function(subName) {
+  var cls = document.getElementById("classSelector").value;
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  var sub = parsed.subjects[subName];
+  if (!sub) return swalPro.fire('ত্রুটি', 'বিষয়টি খুঁজে পাওয়া যায়নি!', 'error');
+
+  showLoader(true, "পরীক্ষার কাঠামো লোড হচ্ছে...");
+  let globalExams = [];
+  try {
+    globalExams = await fetchGlobalExamsFromDB();
+    showLoader(false);
+  } catch (e) {
+    showLoader(false);
+    return swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+
+  // ওই বিষয়ে বর্তমানে যে পরীক্ষাগুলো যুক্ত আছে তা ম্যাপ করা
+  let existingExamMap = {};
+  sub.tests.forEach(t => { existingExamMap[t.name] = { type: "Test", fm: t.fm }; });
+  sub.mains.forEach(m => { existingExamMap[m.name] = { type: "Main", fm: m.fm }; });
+
+  // যদি গ্লোবাল লিস্টে না থাকা কোনো পরীক্ষা আগে থেকে বিষয়ে থাকে, তাও তালিকায় রাখা
+  let combinedExams = [...globalExams];
+  Object.keys(existingExamMap).forEach(exN => {
+    if (!combinedExams.some(g => g.name === exN)) {
+      combinedExams.push({ name: exN, type: existingExamMap[exN].type });
+    }
   });
 
-  const { value: selectedCol } = await swalPro.fire({
-    title: 'বিষয় মুছে ফেলুন',
-    input: 'select',
-    inputOptions: subOptions,
-    inputPlaceholder: 'বিষয় নির্বাচন করুন...',
+  let examHtml = "";
+  if (combinedExams.length === 0) {
+    examHtml = `<div style="padding:12px; background:#fffbeb; border:1px dashed #f59e0b; border-radius:10px; font-size:12px; color:#92400e;">কোনো পরীক্ষা তৈরি করা নেই।</div>`;
+  } else {
+    examHtml = `<div style="text-align:left; max-height:290px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:12px; border:1.5px solid #cbd5e1; margin-top:10px;">`;
+    combinedExams.forEach((ex, i) => {
+      let linked = existingExamMap[ex.name];
+      let isChecked = !!linked;
+      let cqVal = linked ? (linked.fm.parts[0] || 0) : (ex.type === "Main" ? 100 : 50);
+      let mcqVal = linked ? (linked.fm.parts[1] || "") : "";
+      let pracVal = linked ? (linked.fm.parts[2] || "") : "";
+      let totVal = (parseFloat(cqVal) || 0) + (parseFloat(mcqVal) || 0) + (parseFloat(pracVal) || 0);
+
+      examHtml += `
+        <div style="background:#fff; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-weight:800; color:#0f172a; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:7px;">
+              <input type="checkbox" id="chkEx-${i}" ${isChecked ? 'checked' : ''} style="width:17px; height:17px; accent-color:var(--main);">
+              ${ex.name} <span style="font-size:11px; color:var(--main);">(${ex.type})</span>
+            </label>
+            <span style="font-size:11px; font-weight:800; color:var(--main); background:#ecfdf5; padding:2px 8px; border-radius:10px;">
+              মোট পূর্ণমান: <b id="add-tot-${i}">${totVal}</b>
+            </span>
+          </div>
+          <div class="part-grid-row" style="margin-top:8px;">
+            <div class="part-box">
+              <label>CQ / লিখিত পূর্ণমান</label>
+              <input type="number" id="add-cq-${i}" value="${cqVal}" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>MCQ পূর্ণমান</label>
+              <input type="number" id="add-mcq-${i}" value="${mcqVal}" placeholder="0" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>Practical পূর্ণমান</label>
+              <input type="number" id="add-prac-${i}" value="${pracVal}" placeholder="0" oninput="updateSubAddLiveFull(${i})">
+            </div>
+          </div>
+        </div>`;
+    });
+    examHtml += `</div>`;
+  }
+
+  const { value: updated } = await swalPro.fire({
+    title: `বিষয় এডিট করুন: ${subName}`,
+    width: '660px',
+    html: `
+      <div style="text-align:left; font-size:11.5px; color:#047857; background:#ecfdf5; padding:8px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:8px;">
+        <i class="fas fa-shield-alt"></i> বিষয়ের নাম বা পূর্ণমান পরিবর্তন করলে শিক্ষার্থীদের পূর্বের ইনপুট দেওয়া নম্বর স্বয়ংক্রিয়ভাবে অক্ষত থাকবে।
+      </div>
+      <input id="editSubN" class="swal2-input" value="${subName}" placeholder="বিষয়ের নাম" style="width:96%; margin:5px auto;">
+      ${examHtml}
+      <div style="margin-top: 12px; text-align: left; padding: 10px 14px; background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 10px;">
+        <label style="font-size:12.5px; font-weight:800; color:#065f46; cursor:pointer; display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" id="editIsOptCheck" ${sub.isOpt ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--main);">
+          এটি ৪র্থ / ঐচ্ছিক বিষয় (4th / Optional Subject)
+        </label>
+      </div>
+    `,
     showCancelButton: true,
-    confirmButtonText: 'মুছে ফেলুন',
+    confirmButtonText: '<i class="fas fa-save"></i> পরিবর্তন সংরক্ষণ করুন',
+    cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let newName = document.getElementById('editSubN').value.trim();
+      if (!newName) {
+        Swal.showValidationMessage('বিষয়ের নাম খালি রাখা যাবে না!');
+        return false;
+      }
+      let selected = [];
+      combinedExams.forEach((ex, i) => {
+        let chk = document.getElementById(`chkEx-${i}`);
+        if (chk && chk.checked) {
+          let cq = parseFloat(document.getElementById(`add-cq-${i}`).value) || 0;
+          let mcq = parseFloat(document.getElementById(`add-mcq-${i}`).value) || 0;
+          let prac = parseFloat(document.getElementById(`add-prac-${i}`).value) || 0;
+          if (cq === 0 && mcq === 0 && prac === 0) cq = (ex.type === "Main") ? 100 : 50;
+          selected.push({ name: ex.name, type: ex.type, marks: `${cq}+${mcq}+${prac}` });
+        }
+      });
+      return {
+        oldName: subName,
+        name: newName,
+        isOpt: document.getElementById('editIsOptCheck').checked,
+        selectedExams: selected
+      };
+    }
+  });
+
+  if (updated) {
+    showLoader(true, "বিষয়ের তথ্য ও কলাম আপডেট হচ্ছে...");
+    try {
+      let res = await apiCall('updateSubjectAdvanced', { className: cls, subjectData: updated });
+      showLoader(false);
+      await swalPro.fire('আপডেট সম্পন্ন!', res.msg, 'success');
+      loadData();
+    } catch (e) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', e.message, 'error');
+    }
+  }
+};
+
+window.confirmDeleteSubjectByCol = async function(colIndex, subName) {
+  var cls = document.getElementById("classSelector").value;
+  let confirmRes = await swalPro.fire({
+    title: `'${subName}' বিষয়টি মুছে ফেলবেন?`,
+    text: "এই বিষয় এবং এর সাথে সংশ্লিষ্ট পরীক্ষার কলামগুলো মুছে যাবে।",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'হ্যাঁ, মুছে ফেলুন',
     cancelButtonText: 'বাতিল'
   });
+  if (!confirmRes.isConfirmed) return;
 
-  if (selectedCol) {
-    var cls = document.getElementById("classSelector").value;
-    showLoader(true, "বিষয়টি মুছে ফেলা হচ্ছে...");
-    try {
-      let res = await apiCall('deleteSubjectColumn', { className: cls, colIndex: parseInt(selectedCol, 10) });
-      showLoader(false);
-      if (res.status === "success") {
-        swalPro.fire('সম্পন্ন!', res.msg, 'success');
-        loadData();
-      } else {
-        swalPro.fire('ত্রুটি', res.message, 'error');
+  showLoader(true, "বিষয়টি মুছে ফেলা হচ্ছে...");
+  try {
+    let res = await apiCall('deleteSubjectColumn', { className: cls, colIndex: parseInt(colIndex, 10) });
+    showLoader(false);
+    swalPro.fire('সম্পন্ন!', res.msg, 'success');
+    loadData();
+  } catch (err) {
+    showLoader(false);
+    swalPro.fire('ত্রুটি', err.message, 'error');
+  }
+};
+
+async function linkExamToSubjectsPopup() {
+  var cls = document.getElementById("classSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', 'warning');
+
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  var subNames = Object.keys(parsed.subjects);
+  if (subNames.length === 0) {
+    return swalPro.fire('কোনো বিষয় নেই', 'প্রথমে "+ বিষয় যুক্ত করুন" বাটনে ক্লিক করে অন্তত একটি বিষয় যুক্ত করুন।', 'info');
+  }
+
+  showLoader(true, "পরীক্ষার তালিকা লোড হচ্ছে...");
+  let globalExams = [];
+  try {
+    globalExams = await fetchGlobalExamsFromDB();
+    showLoader(false);
+  } catch (e) {
+    showLoader(false);
+    return swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+
+  if (globalExams.length === 0) {
+    return swalPro.fire('কোনো পরীক্ষা নেই', 'অনুগ্রহ করে প্রথমে "পরীক্ষা ব্যবস্থাপনা" বাটনে ক্লিক করে নতুন পরীক্ষা তৈরি করুন।', 'warning');
+  }
+
+  let examOptionsHtml = globalExams.map((ex, i) => `<option value="${i}">${ex.name} (${ex.type})</option>`).join('');
+  let subChecksHtml = subNames.map((sName, idx) => {
+    let sub = parsed.subjects[sName];
+    let hasPending = sub.tests.length === 0 && sub.mains.length === 0;
+    return `
+      <label style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:6px; cursor:pointer; font-size:13px; font-weight:700;">
+        <span>
+          <input type="checkbox" class="bulk-link-sub-chk" value="${sName}" checked style="width:16px; height:16px; accent-color:var(--main); margin-right:6px;">
+          ${sName} ${sub.isOpt ? '<small style="color:#b45309;">(4th)</small>' : ''}
+        </span>
+        ${hasPending ? '<span style="font-size:10px; background:#fff7ed; color:#c2410c; padding:2px 7px; border-radius:8px; border:1px solid #fdba74;">Pending Exam</span>' : ''}
+      </label>`;
+  }).join('');
+
+  let defCq = globalExams[0].type === "Main" ? 100 : 50;
+
+  const { value: linkPayload } = await swalPro.fire({
+    title: 'বিষয়সমূহে পরীক্ষা যুক্ত / আপডেট করুন',
+    width: '640px',
+    html: `
+      <div style="text-align:left;">
+        <label style="font-size:12px; font-weight:800; color:#334155;">১. পরীক্ষা নির্বাচন করুন:</label>
+        <select id="bulkLinkExIdx" class="swal2-input" style="width:100%; height:42px; margin:6px 0 12px 0; font-weight:800; color:var(--main);">
+          ${examOptionsHtml}
+        </select>
+
+        <div style="background:#f8fafc; padding:12px; border-radius:10px; border:1.5px solid #cbd5e1; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:#0f172a;">২. পূর্ণমান নির্ধারণ করুন (CQ / MCQ / Practical):</span>
+            <span style="font-size:11px; font-weight:800; color:var(--main); background:#ecfdf5; padding:2px 8px; border-radius:10px;">
+              মোট পূর্ণমান: <b id="add-tot-999">${defCq}</b>
+            </span>
+          </div>
+          <div class="part-grid-row">
+            <div class="part-box">
+              <label>CQ / লিখিত পূর্ণমান</label>
+              <input type="number" id="add-cq-999" value="${defCq}" oninput="updateSubAddLiveFull(999)">
+            </div>
+            <div class="part-box">
+              <label>MCQ পূর্ণমান</label>
+              <input type="number" id="add-mcq-999" value="" placeholder="0" oninput="updateSubAddLiveFull(999)">
+            </div>
+            <div class="part-box">
+              <label>Practical পূর্ণমান</label>
+              <input type="number" id="add-prac-999" value="" placeholder="0" oninput="updateSubAddLiveFull(999)">
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:12px; font-weight:800; color:#334155;">৩. কোন কোন বিষয়ে যুক্ত করবেন:</span>
+          <label style="font-size:11.5px; font-weight:800; color:var(--main); cursor:pointer;">
+            <input type="checkbox" checked onchange="document.querySelectorAll('.bulk-link-sub-chk').forEach(c => c.checked = this.checked);"> সব বিষয়
+          </label>
+        </div>
+        <div style="max-height:190px; overflow-y:auto; background:#f8fafc; padding:8px; border-radius:10px; border:1px solid #cbd5e1;">
+          ${subChecksHtml}
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-link"></i> নির্বাচিত বিষয়ে পরীক্ষা যুক্ত করুন',
+    cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let exIdx = parseInt(document.getElementById('bulkLinkExIdx').value, 10);
+      let chosenEx = globalExams[exIdx];
+      let cq = parseFloat(document.getElementById('add-cq-999').value) || 0;
+      let mcq = parseFloat(document.getElementById('add-mcq-999').value) || 0;
+      let prac = parseFloat(document.getElementById('add-prac-999').value) || 0;
+      if (cq === 0 && mcq === 0 && prac === 0) cq = chosenEx.type === "Main" ? 100 : 50;
+
+      let chosenSubs = [];
+      document.querySelectorAll('.bulk-link-sub-chk:checked').forEach(chk => chosenSubs.push(chk.value));
+      if (chosenSubs.length === 0) {
+        Swal.showValidationMessage('অন্তত একটি বিষয় নির্বাচন করুন!');
+        return false;
       }
-    } catch (err) {
+
+      return {
+        examName: chosenEx.name,
+        examType: chosenEx.type,
+        marks: `${cq}+${mcq}+${prac}`,
+        subjects: chosenSubs
+      };
+    }
+  });
+
+  if (linkPayload) {
+    showLoader(true, "নির্বাচিত বিষয়সমূহে পরীক্ষা যুক্ত করা হচ্ছে...");
+    try {
+      let res = await apiCall('linkExamToClassSubjects', { className: cls, examData: linkPayload });
       showLoader(false);
-      swalPro.fire('ত্রুটি', err.message, 'error');
+      await swalPro.fire('সফল!', res.msg, 'success');
+      loadData();
+    } catch (e) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', e.message, 'error');
     }
   }
 }
@@ -1789,7 +2471,34 @@ function viewSingleResult(rowIndex) {
   swalPro.fire({ title: 'একাডেমিক ফলাফল বিবরণী', width: '650px', html: html, confirmButtonText: 'বন্ধ করুন' });
 }
 
-function executePrint(htmlContent) {
+var currentPrintMode = "marksheet"; // "marksheet" | "tabulation"
+
+function setPrintPageOrientation(orientation) {
+  let styleEl = document.getElementById('dynamicPrintPageStyle');
+  let contentEl = document.getElementById('print-content');
+  if (orientation === 'portrait') {
+    styleEl.innerHTML = `@media print { @page { size: A4 portrait; margin: 6mm; } }`;
+    contentEl.classList.add('portrait-preview');
+  } else {
+    styleEl.innerHTML = `@media print { @page { size: A4 landscape; margin: 7mm; } }`;
+    contentEl.classList.remove('portrait-preview');
+  }
+}
+
+function triggerPrintWithOrientation(orientation) {
+  if (currentPrintMode === "tabulation") {
+    buildTabulationPagesForOrientation(orientation);
+  } else {
+    setPrintPageOrientation('landscape');
+  }
+  setTimeout(() => { window.print(); }, 200);
+}
+
+function executePrint(htmlContent, mode = "marksheet", defaultOrientation = "landscape") {
+  currentPrintMode = mode;
+  setPrintPageOrientation(defaultOrientation);
+  document.getElementById('btnPrintPortrait').style.display = (mode === "tabulation") ? "inline-flex" : "none";
+
   document.getElementById('appContainer').style.display = 'none';
   let printArea = document.getElementById('print-area');
   document.getElementById('print-content').innerHTML = htmlContent;
@@ -1853,6 +2562,7 @@ function createVerificationQrSvg(verifyUrl) {
 }
 
 function generateMarkSheets(examFilter) {
+  recalculateClassStatsInMemory();
   var data = appData;
   var parsed = parseSubjectHeaders(cachedHeaders);
   var firstEmpty = parsed.firstEmpty;
@@ -1956,6 +2666,7 @@ function generateMarkSheets(examFilter) {
       row,
       subRows,
       filterTotalMarks,
+      filterTotalSubCount,
       liveAvg,
       liveGPA,
       liveGrade,
@@ -1976,20 +2687,35 @@ function generateMarkSheets(examFilter) {
     ? (classStats.gpaSum / classStats.evaluatedStudents).toFixed(2)
     : "0.00";
 
+  var colGroupHtml = `
+    <colgroup>
+      <col style="width:24%;">
+      <col style="width:14%;">
+      <col style="width:11%;">
+      <col style="width:11%;">
+      <col style="width:11%;">
+      <col style="width:11%;">
+      <col style="width:9%;">
+      <col style="width:9%;">
+    </colgroup>`;
+
   var theadHtml = `
-    <tr>
-      <th rowspan="2" width="25%">Subject</th>
-      <th rowspan="2" width="14%" class="divider-col">Test<br>Marks</th>
-      <th colspan="3" width="31%" class="divider-col">Main Exam Breakdown</th>
-      <th rowspan="2" width="11%">Final<br>(100%)</th>
-      <th rowspan="2" width="9%">Grade</th>
-      <th rowspan="2" width="10%">GP</th>
-    </tr>
-    <tr>
-      <th>CQ</th>
-      <th>MCQ</th>
-      <th class="divider-col">Prac</th>
-    </tr>`;
+    ${colGroupHtml}
+    <thead>
+      <tr>
+        <th rowspan="2">Subject</th>
+        <th rowspan="2" class="divider-col">Test<br>Marks</th>
+        <th colspan="3" class="divider-col">Main Exam Breakdown</th>
+        <th rowspan="2">Final<br>(100%)</th>
+        <th rowspan="2">Grade</th>
+        <th rowspan="2">GP</th>
+      </tr>
+      <tr>
+        <th>CQ</th>
+        <th>MCQ</th>
+        <th class="divider-col">Prac</th>
+      </tr>
+    </thead>`;
 
   let activeTests = [];
   let activeMains = [];
@@ -2000,9 +2726,10 @@ function generateMarkSheets(examFilter) {
     <div class="legend-box">
       <span><b>Tests Included (${testWeight}%):</b> ${activeTests.join(" / ") || "N/A"}</span>
       <span><b>Main Exams (${mainWeight}%):</b> ${activeMains.join(" / ") || "N/A"}</span>
-      <span><b>Pass Rule:</b> ${Math.round(passRatio * 100)}% (Separate CQ, MCQ & Practical)</span>
+      <span><b>Pass Rule:</b> ${Math.round(passRatio * 100)}% (Separate CQ, MCQ &amp; Practical)</span>
     </div>`;
 
+  let issueDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   let cardsArr = [];
 
   studentEvaluations.forEach(item => {
@@ -2015,13 +2742,14 @@ function generateMarkSheets(examFilter) {
     var dispAvg = item.liveAvg;
     var dispPos = item.dispPos;
     var filterTotalMarks = item.filterTotalMarks;
+    var maxPossibleMarks = item.filterTotalSubCount * 100;
 
     var rowsHtmlArray = item.subRows.map(sr => {
       let ev = sr.ev;
-      let testStr = ev.tMarks.length > 0 ? ev.tMarks.join(" / ") : "-";
-      let cqDisp = ev.cqs.length > 0 ? ev.cqs.join(" / ") : "-";
-      let mcqDisp = ev.mcqs.length > 0 ? ev.mcqs.join(" / ") : "-";
-      let pracDisp = ev.pracs.length > 0 ? ev.pracs.join(" / ") : "-";
+      let testStr = ev.tMarks.length > 0 ? ev.tMarks.join("/") : "-";
+      let cqDisp = ev.cqs.length > 0 ? ev.cqs.join("/") : "-";
+      let mcqDisp = ev.mcqs.length > 0 ? ev.mcqs.join("/") : "-";
+      let pracDisp = ev.pracs.length > 0 ? ev.pracs.join("/") : "-";
 
       return `<tr>
         <td class="sub-name">${sr.actualSubName}</td>
@@ -2047,30 +2775,27 @@ function generateMarkSheets(examFilter) {
 
     // Dynamic 3-Tier Layout Selection based on Subject Count
     let subCount = rowsHtmlArray.length;
-    let tierClass = "";
+    let tierClass = "standard-card";
     var finalTableHtml = "";
 
     if (subCount <= 6) {
-      // Tier 1: Few subjects (1 to 6) -> Full-width spacious table
       tierClass = "spacious-card";
-      finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.join("")}</tbody></table></div>`;
-    } else if (subCount <= 10) {
-      // Tier 2: Medium subjects (7 to 10) -> Balanced 2-column table
-      tierClass = "";
+      finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;">${theadHtml}<tbody>${rowsHtmlArray.join("")}</tbody></table></div>`;
+    } else if (subCount <= 12) {
+      tierClass = "standard-card";
       var half = Math.ceil(subCount / 2);
       finalTableHtml = `
         <div class="marks-wrapper">
-          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(0, half).join("")}</tbody></table>
-          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(half).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half).join("")}</tbody></table>
         </div>`;
     } else {
-      // Tier 3: Many subjects (11+) -> Compact 2-column table
       tierClass = "dense-card";
       var half2 = Math.ceil(subCount / 2);
       finalTableHtml = `
         <div class="marks-wrapper">
-          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(0, half2).join("")}</tbody></table>
-          <table class="marks-table" style="width: 49.4%;"><thead>${theadHtml}</thead><tbody>${rowsHtmlArray.slice(half2).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half2).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half2).join("")}</tbody></table>
         </div>`;
     }
 
@@ -2111,6 +2836,14 @@ function generateMarkSheets(examFilter) {
         <div class="rc-middle-section">
           ${finalTableHtml}
 
+          <!-- Academic Evaluation & Verification Strip -->
+          <div class="rc-eval-strip">
+            <div class="rc-eval-item"><span>Marks Obtained:</span> <b>${filterTotalMarks} / ${maxPossibleMarks} (${dispAvg}%)</b></div>
+            <div class="rc-eval-item"><span>Result Status:</span> <b style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade === 'F' ? 'FAILED (NEEDS CARE)' : 'PASSED / PROMOTED'}</b></div>
+            <div class="rc-eval-item"><span>Academic Conduct:</span> <b style="color:#005f40;">Good &amp; Regular</b></div>
+            <div class="rc-eval-item"><span>Issue Date:</span> <b>${issueDateStr}</b></div>
+          </div>
+
           <!-- Class Performance Overview & QR Security Verification Strip -->
           <div class="rc-overview-qr-strip">
             <div class="rc-ov-card">
@@ -2131,7 +2864,7 @@ function generateMarkSheets(examFilter) {
             <div class="rc-ov-card">
               <div class="rc-ov-title">
                 <span><i class="fas fa-award"></i> Class Grade Distribution Summary</span>
-                <span>Status: <b style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade === 'F' ? 'FAILED' : 'PASSED'}</b></span>
+                <span>Subjects Taken: <b>${subCount}</b></span>
               </div>
               <div class="rc-grade-pills">
                 <div class="rc-grade-pill"><span style="color:#005f40;">A+</span><br><b>${classStats.grades['A+']}</b></div>
@@ -2177,14 +2910,22 @@ function generateMarkSheets(examFilter) {
     `);
   });
 
-  executePrint(cardsArr.join(''));
+  executePrint(cardsArr.join(''), "marksheet", "landscape");
 }
 
-async function printTabulation() {
+function printTabulation() {
   if (appData.length === 0) {
     swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
     return;
   }
+  recalculateClassStatsInMemory();
+  buildTabulationPagesForOrientation('landscape');
+  executePrint(document.getElementById('print-content').innerHTML, "tabulation", "landscape");
+}
+
+function buildTabulationPagesForOrientation(orientation) {
+  setPrintPageOrientation(orientation);
+
   var cls = document.getElementById("classSelector").value;
   var year = document.getElementById("yearSelector").value;
   var testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
@@ -2193,10 +2934,7 @@ async function printTabulation() {
 
   var parsed = parseSubjectHeaders(cachedHeaders);
   var firstEmpty = parsed.firstEmpty;
-  if (firstEmpty === -1) {
-    swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
-    return;
-  }
+  if (firstEmpty === -1) return;
 
   var stats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0 };
   var validRows = [];
@@ -2219,26 +2957,29 @@ async function printTabulation() {
   var theadHtml = `
     <thead>
       <tr>
-        <th style="width:3.5%;">Roll</th>
-        <th style="width:12.5%; text-align:left; padding-left:5px;">Student Name &amp; ID</th>`;
+        <th style="width:3.2%;">Roll</th>
+        <th style="width:11.5%; text-align:left; padding-left:4px;">Student Name &amp; ID</th>`;
   subKeys.forEach(subName => {
     let sub = parsed.subjects[subName];
-    let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:7.5px; color:#b45309;">(4th Subject)</span>` : subName;
+    let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:6.8px; color:#b45309;">(4th)</span>` : subName;
     theadHtml += `<th>${htmlLabel}</th>`;
   });
   theadHtml += `
-        <th style="width:4.5%;">Avg</th>
-        <th style="width:4.5%;">GPA</th>
-        <th style="width:4.5%;">Grade</th>
-        <th style="width:4.5%;">Merit</th>
+        <th style="width:4.2%;">Avg</th>
+        <th style="width:4.2%;">GPA</th>
+        <th style="width:4.2%;">Grade</th>
+        <th style="width:4.2%;">Merit</th>
       </tr>
     </thead>`;
 
-  // Build each student row HTML with full "Test:", "Main:", "Total:" labels
+  // Build each student row HTML with non-wrapping "Test:", "Main:", "Total:" labels
   var bodyRowsHtml = validRows.map(row => {
+    let dispGrade = row[firstEmpty + 3] || '-';
+    let dispPos = (dispGrade === 'F' || !row[firstEmpty + 2]) ? 'N/A' : (row[firstEmpty + 4] || '-');
+
     let tr = `<tr>
       <td><b>${row[2] || '-'}</b></td>
-      <td style="text-align:left; padding-left:5px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:8px;">ID: ${row[0] || '-'}</span></td>`;
+      <td style="text-align:left; padding-left:4px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:7.5px;">ID: ${row[0] || '-'}</span></td>`;
 
     subKeys.forEach(subName => {
       let sub = parsed.subjects[subName];
@@ -2248,7 +2989,7 @@ async function printTabulation() {
       let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
 
       tr += `<td>
-        <div style="font-size:8px; line-height:1.25; text-align:left; padding:0 2px;">
+        <div class="tab-cell-lines">
           <span style="color:#334155;">Test: <b>${tDisp}</b></span><br>
           <span style="color:#334155;">Main: <b>${mDisp}</b></span><br>
           <strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">Total: ${totDisp}</strong>
@@ -2258,47 +2999,47 @@ async function printTabulation() {
 
     tr += `
       <td><b>${row[firstEmpty + 1] || '-'}</b></td>
-      <td><strong style="font-size:10px;">${row[firstEmpty + 2] || '-'}</strong></td>
-      <td><strong style="font-size:10px; color:${row[firstEmpty + 3] === 'F' ? '#dc2626' : '#059669'};">${row[firstEmpty + 3] || '-'}</strong></td>
-      <td><b>${row[firstEmpty + 4] || '-'}</b></td>
+      <td><strong style="font-size:9px;">${row[firstEmpty + 2] || '-'}</strong></td>
+      <td><strong style="font-size:9px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</strong></td>
+      <td><b>${dispPos}</b></td>
     </tr>`;
     return tr;
   });
 
-  // Paginate rows into explicit A4 Landscape .tab-page containers (8 rows per page so signatures & summary never overflow)
-  const ROWS_PER_PAGE = 8;
+  // Portrait mode has taller height (14 rows per page), Landscape mode fits 8 rows per page comfortably
+  var rowsPerPage = (orientation === 'portrait') ? 14 : 8;
   var pagesArr = [];
-  for (let i = 0; i < bodyRowsHtml.length; i += ROWS_PER_PAGE) {
-    pagesArr.push(bodyRowsHtml.slice(i, i + ROWS_PER_PAGE));
+  for (let i = 0; i < bodyRowsHtml.length; i += rowsPerPage) {
+    pagesArr.push(bodyRowsHtml.slice(i, i + rowsPerPage));
   }
   if (pagesArr.length === 0) pagesArr.push([]);
 
   var summaryTableHtml = `
-    <div style="margin-top:8px; border:1.5px solid #005f40; border-radius:6px; overflow:hidden; width:90%; margin-left:auto; margin-right:auto;">
-      <table style="width:100%; border-collapse:collapse; font-size:9.5px; text-align:center;">
+    <div style="margin-top:6px; border:1.5px solid #005f40; border-radius:6px; overflow:hidden; width:92%; margin-left:auto; margin-right:auto;">
+      <table style="width:100%; border-collapse:collapse; font-size:8.8px; text-align:center;">
         <tr style="font-weight:800; background:#e2e8f0; color:#005f40;">
-          <td style="border:1px solid #000; padding:3.5px;">Total Students</td>
-          <td style="border:1px solid #000; padding:3.5px;">Passed</td>
-          <td style="border:1px solid #000; padding:3.5px;">Failed</td>
-          <td style="border:1px solid #000; padding:3.5px;">Pass Rate</td>
-          <td style="border:1px solid #000; padding:3.5px;">A+</td>
-          <td style="border:1px solid #000; padding:3.5px;">A</td>
-          <td style="border:1px solid #000; padding:3.5px;">A-</td>
-          <td style="border:1px solid #000; padding:3.5px;">B</td>
-          <td style="border:1px solid #000; padding:3.5px;">C</td>
-          <td style="border:1px solid #000; padding:3.5px;">D</td>
+          <td style="border:1px solid #000; padding:3px;">Total Students</td>
+          <td style="border:1px solid #000; padding:3px;">Passed</td>
+          <td style="border:1px solid #000; padding:3px;">Failed</td>
+          <td style="border:1px solid #000; padding:3px;">Pass Rate</td>
+          <td style="border:1px solid #000; padding:3px;">A+</td>
+          <td style="border:1px solid #000; padding:3px;">A</td>
+          <td style="border:1px solid #000; padding:3px;">A-</td>
+          <td style="border:1px solid #000; padding:3px;">B</td>
+          <td style="border:1px solid #000; padding:3px;">C</td>
+          <td style="border:1px solid #000; padding:3px;">D</td>
         </tr>
         <tr style="font-weight:800; background:#fff;">
-          <td style="border:1px solid #000; padding:4px;">${stats['Total']}</td>
-          <td style="border:1px solid #000; padding:4px; color:#059669;">${passed}</td>
-          <td style="border:1px solid #000; padding:4px; color:#dc2626;">${stats['F']}</td>
-          <td style="border:1px solid #000; padding:4px;">${passRate}%</td>
-          <td style="border:1px solid #000; padding:4px;">${stats['A+']}</td>
-          <td style="border:1px solid #000; padding:4px;">${stats['A']}</td>
-          <td style="border:1px solid #000; padding:4px;">${stats['A-']}</td>
-          <td style="border:1px solid #000; padding:4px;">${stats['B']}</td>
-          <td style="border:1px solid #000; padding:4px;">${stats['C']}</td>
-          <td style="border:1px solid #000; padding:4px;">${stats['D']}</td>
+          <td style="border:1px solid #000; padding:3.5px;">${stats['Total']}</td>
+          <td style="border:1px solid #000; padding:3.5px; color:#059669;">${passed}</td>
+          <td style="border:1px solid #000; padding:3.5px; color:#dc2626;">${stats['F']}</td>
+          <td style="border:1px solid #000; padding:3.5px;">${passRate}%</td>
+          <td style="border:1px solid #000; padding:3.5px;">${stats['A+']}</td>
+          <td style="border:1px solid #000; padding:3.5px;">${stats['A']}</td>
+          <td style="border:1px solid #000; padding:3.5px;">${stats['A-']}</td>
+          <td style="border:1px solid #000; padding:3.5px;">${stats['B']}</td>
+          <td style="border:1px solid #000; padding:3.5px;">${stats['C']}</td>
+          <td style="border:1px solid #000; padding:3.5px;">${stats['D']}</td>
         </tr>
       </table>
     </div>`;
@@ -2309,21 +3050,21 @@ async function printTabulation() {
     return `
       <div class="tab-page">
         <div>
-          <div style="text-align:center; margin-bottom:6px; border-bottom:2px solid #005f40; padding-bottom:5px; display:flex; align-items:center; justify-content:space-between;">
-            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:46px; width:46px; border-radius:50%; border:1.5px solid #005f40; padding:2px;">
+          <div style="text-align:center; margin-bottom:5px; border-bottom:2px solid #005f40; padding-bottom:4px; display:flex; align-items:center; justify-content:space-between;">
+            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:42px; width:42px; border-radius:50%; border:1.5px solid #005f40; padding:2px;">
             <div>
-              <h1 style="margin:0; font-size:18.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
-              <p style="margin:1px 0 0 0; color:#334155; font-size:11px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p>
+              <h1 style="margin:0; font-size:17.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+              <p style="margin:1px 0 0 0; color:#334155; font-size:10px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p>
             </div>
             <div style="text-align:right;">
-              <div style="font-size:10px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:3px 9px; border-radius:8px; color:#005f40;">
+              <div style="font-size:9.5px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2.5px 8px; border-radius:8px; color:#005f40;">
                 Total: ${stats['Total']} | Pass: ${passed} (${passRate}%)
               </div>
-              <div style="font-size:8px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div>
+              <div style="font-size:7.8px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div>
             </div>
           </div>
 
-          <div class="legend-box" style="margin-bottom:5px;">
+          <div class="legend-box" style="margin-bottom:4px;">
             <span><b>Abbreviations:</b> Test = Test Exam Marks (${testWeight}% Weight) | Main = Main Exam Marks (${mainWeight}% Weight) | Total = Final Score (100%) &amp; Letter Grade</span>
             <span><b>Pass Rule:</b> ${Math.round(passRatio * 100)}% (Separate CQ, MCQ &amp; Practical)</span>
           </div>
@@ -2347,7 +3088,7 @@ async function printTabulation() {
     `;
   }).join('');
 
-  executePrint(finalPagesHtml);
+  document.getElementById('print-content').innerHTML = finalPagesHtml;
 }
 
 function publishResults() {
