@@ -392,6 +392,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .report-card {
   width: 285mm;
   height: 192mm;
+  min-height: 192mm;
   max-height: 192mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
@@ -676,6 +677,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   text-transform: uppercase;
 }
 
+/* Fixed Signature Row at Bottom of Every Marksheet */
 .footer {
   display: flex;
   justify-content: space-between;
@@ -694,9 +696,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   text-transform: uppercase;
 }
 
+/* Tabulation Sheet Page Frame (Both Landscape & Portrait Locked) */
 .tab-page {
   width: 285mm;
   height: 192mm;
+  min-height: 192mm;
   max-height: 192mm;
   margin: 0 auto 15mm auto;
   box-sizing: border-box;
@@ -1485,7 +1489,7 @@ async function openDataEntryForm(rowIndex) {
           let pracMax = ex.fm.parts[2] || 0;
 
           if (v1 !== "" && parseFloat(v1) > cqMax) {
-            Swal.showValidationMessage(`${subName} (${ex.name}): CQ নম্বর পূর্ণমানের (${cqMax}) চেয়ে বেশি হতে পারেবিধা না!`);
+            Swal.showValidationMessage(`${subName} (${ex.name}): CQ নম্বর পূর্ণমানের (${cqMax}) চেয়ে বেশি হতে পারে না!`);
             return false;
           }
           if (v2 !== "" && parseFloat(v2) > mcqMax) {
@@ -2403,7 +2407,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWe
       totalMFull += m.fm.total;
       if (vStr !== "") {
         hasMain = true;
-        let fullParts = m.fm.parts; 
+        let fullParts = m.fm.parts; // [cqMax, mcqMax, pracMax]
         let hasMultiParts = (fullParts[1] > 0 || fullParts[2] > 0 || vStr.includes("+"));
 
         if (hasMultiParts) {
