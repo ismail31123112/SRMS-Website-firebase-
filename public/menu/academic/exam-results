@@ -1,438 +1,3223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<base target="_top">
-
-<title>Official Transcript Verification - Saidpur Residential Model School (SRMS)</title>
-<meta name="description" content="Verify the authenticity of academic transcripts and results issued by Saidpur Residential Model School (SRMS).">
-<meta name="robots" content="noindex, nofollow">
-
-<link rel="icon" href="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" sizes="any">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<title>Saidpur Residential Model School — Official Result & Transcript Portal</title>
+<link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" type="image/jpeg">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-<style>
-  /* ================== SRMS OFFICIAL STYLES ================== */
-  :root { --main: #005f40; --main-dark: #003d29; --bg: #f4f6f9; --text-dark: #0f172a; }
-  body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
-  a { text-decoration: none; color: inherit; transition: 0.3s; }
-  ul { list-style: none; margin: 0; padding: 0; }
-  
-  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-  .animate-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
-
-  /* ================== EXACT DEMO NAVBAR ================== */
-  .navbar { background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; display: flex; flex-direction: column; border-bottom: 4px solid; border-image: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #bf953f) 1; }
-  .nav-top-container { height: 70px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; width: 100%; box-sizing: border-box; }
-  .nav-brand { font-weight: 800; color: #005f40; font-size: 22px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; }
-  .nav-menu { display: flex; gap: 5px; align-items: center; }
-  .nav-item { position: relative; }
-  .nav-link { font-weight: 600; font-size: 13px; color: #444; padding: 10px 18px; transition: 0.3s; display: block; border-radius: 5px; text-transform: uppercase; cursor: pointer; }
-  .nav-link:hover { color: #fff; background: #005f40; }
-  .dropdown-content { display: none; position: absolute; top: 100%; left: 0; background: #fff; box-shadow: 0 15px 40px rgba(0,0,0,0.15); min-width: 220px; border-radius: 0 0 8px 8px; overflow: hidden; border-top: 3px solid #005f40; animation: fadeInUp 0.3s ease; z-index: 1100; }
-  @media (min-width: 951px) { .nav-item:hover .dropdown-content { display: block; } }
-  .dropdown-content a { display: block; padding: 12px 20px; font-size: 13px; color: #555; border-bottom: 1px solid #f9f9f9; transition: 0.2s; }
-  .dropdown-content a:hover { background: #f0fdf4; color: #005f40; padding-left: 25px; }
-  .menu-toggle { display: none; align-items: center; gap: 8px; cursor: pointer; background: linear-gradient(135deg, #005f40, #003d29); color: white; padding: 8px 20px; border-radius: 50px; border: 2px solid #ddd; box-shadow: 0 4px 15px rgba(0, 95, 64, 0.4); transition: 0.3s; }
-  .menu-text { font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
-
-  /* ================== EXACT DEMO BANNER ================== */
-  .custom-banner { background: linear-gradient(to right, #005f40, #004d33); color: white; padding: 40px 20px; display: flex; align-items: center; justify-content: center; gap: 25px; border-bottom: 4px solid #e0e0e0; position: relative; overflow: hidden; }
-  .banner-logo { width: 125px; height: 125px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3)); object-fit: contain; }
-  .banner-text { text-align: left; }
-  .banner-text h1 { margin: 0; font-size: 32px; font-weight: 800; text-transform: uppercase; line-height: 1.1; text-shadow: 2px 2px 5px rgba(0,0,0,0.3); }
-  .school-codes { background: rgba(255, 255, 255, 0.15); display: inline-block; padding: 4px 12px; border-radius: 4px; margin-top: 8px; font-size: 13px; font-weight: 600; color: #fcf6ba; border: 1px solid rgba(255, 255, 255, 0.2); }
-  .school-name { margin: 10px 0 0; font-size: 16.5px; font-weight: 500; color: #e0f2f1; opacity: 0.95; letter-spacing: 1px; }
-
-  /* ================== VERIFICATION ENGINE STYLES ================== */
-  .verify-wrapper { max-width: 900px; margin: 40px auto 40px auto; padding: 0 20px; min-height: 50vh; }
-  
-  #initLoader { text-align: center; padding: 80px 20px; }
-  .spinner-core { width: 60px; height: 60px; border: 5px solid #e2e8f0; border-top-color: var(--main); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
-  @keyframes spin { 100% { transform: rotate(360deg); } }
-
-  .v-card { background: #ffffff; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e2e8f0; position: relative; display: none; margin-bottom: 20px; }
-  
-  .v-header { background: #10b981; color: white; padding: 25px 20px; text-align: center; border-bottom: 4px solid #059669; }
-  .v-header.invalid { background: #ef4444; border-bottom-color: #b91c1c; }
-  .v-header h2 { margin: 0; font-size: 24px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 10px; }
-  .v-header p { margin: 8px 0 0 0; font-size: 14px; font-weight: 600; opacity: 0.95; }
-  .v-icon-wrap { width: 60px; height: 60px; background: rgba(255,255,255,0.25); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px auto; font-size: 30px; }
-  .official-domain-tag { display: inline-flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.15); padding: 4px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 700; margin-top: 10px; border: 1px solid rgba(255,255,255,0.3); }
-
-  .v-body { padding: 35px 30px; display: flex; gap: 35px; align-items: flex-start; flex-wrap: wrap; position: relative; z-index: 1;}
-  .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-20deg); font-size: 80px; font-weight: 900; color: rgba(0, 95, 64, 0.03); pointer-events: none; white-space: nowrap; z-index: -1; }
-  
-  .student-photo-box { width: 140px; height: 160px; flex-shrink: 0; border-radius: 12px; border: 3px solid #e2e8f0; padding: 4px; background: #f8fafc; position: relative; margin: 0 auto; box-shadow: 0 8px 20px rgba(0,0,0,0.05);}
-  .student-photo-box img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; background: #e2e8f0; }
-  
-  .v-details { flex: 1; min-width: 280px; }
-  .v-table-info { width: 100%; border-collapse: collapse; }
-  .v-table-info td { padding: 12px 15px; border-bottom: 1px dashed #e2e8f0; font-size: 14.5px; }
-  .v-table-info td:first-child { font-weight: 700; color: var(--text-muted); width: 35%; text-transform: uppercase; font-size: 12.5px; }
-  .v-table-info td:last-child { font-weight: 800; color: var(--text-dark); }
-  .v-table-info tr:last-child td { border-bottom: none; }
-
-  .result-highlight { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 25px; padding-top: 25px; border-top: 2px solid #e2e8f0; }
-  .rh-box { background: var(--main-light); border: 1.5px solid #a7f3d0; padding: 15px; border-radius: 12px; text-align: center; }
-  .rh-box.fail { background: #fef2f2; border-color: #fecaca; }
-  .rh-box span { display: block; font-size: 12px; font-weight: 800; color: var(--main); text-transform: uppercase; margin-bottom: 5px; }
-  .rh-box.fail span { color: #dc2626; }
-  .rh-box strong { display: block; font-size: 26px; font-weight: 900; color: var(--text-dark); }
-
-  /* Animated Scroll Indicator */
-  .scroll-indicator { text-align: center; color: var(--main); margin-top: 35px; padding-top: 20px; border-top: 1px dashed #cbd5e1; display: none; }
-  .mouse { width: 22px; height: 36px; border: 2px solid var(--main); border-radius: 15px; margin: 0 auto 8px; position: relative; }
-  .mouse::before { content: ''; position: absolute; top: 6px; left: 50%; transform: translateX(-50%); width: 4px; height: 6px; background: var(--main); border-radius: 2px; animation: scrollWheel 1.5s infinite; }
-  @keyframes scrollWheel { 0% { top: 6px; opacity: 1; } 100% { top: 18px; opacity: 0; } }
-  .scroll-indicator p { margin: 0; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-
-  /* Detailed Subject Marks Table */
-  .detailed-marks-section { margin-top: 30px; display: none; animation: fadeInUp 0.8s ease forwards; }
-  .detailed-marks-section h3 { margin: 0 0 15px 0; color: #0f172a; font-size: 18px; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; gap: 8px; justify-content: center; }
-  .marks-data-table { width: 100%; border-collapse: collapse; font-size: 13.5px; border-radius: 10px; overflow: hidden; border: 1px solid #cbd5e1; background: #fff; box-shadow: 0 5px 15px rgba(0,0,0,0.03); }
-  .marks-data-table th { background: #0f172a; color: white; font-weight: 700; text-transform: uppercase; padding: 14px; text-align: left; font-size: 12.5px; }
-  .marks-data-table th:nth-child(2), .marks-data-table th:nth-child(3) { text-align: center; }
-  .marks-data-table td { padding: 12px 14px; border-bottom: 1px solid #e2e8f0; font-weight: 600; color: #334155; }
-  .marks-data-table td:nth-child(2), .marks-data-table td:nth-child(3) { text-align: center; font-weight: 800; color: var(--text-dark); }
-  .marks-data-table tr:hover { background: #f8fafc; }
-
-  .v-footer { background: #f8fafc; padding: 15px 20px; text-align: center; border-top: 1px solid #e2e8f0; font-size: 12.5px; color: #64748b; font-weight: 600; }
-
-  /* Error Card */
-  #errorCard { text-align: center; padding: 60px 20px; }
-  #errorCard i.fa-shield-xmark { font-size: 70px; color: #ef4444; margin-bottom: 20px; }
-  #errorCard h2 { color: #b91c1c; margin: 0 0 10px 0; font-weight: 900; font-size: 24px; text-transform: uppercase; }
-  #errorCard p { color: #64748b; font-weight: 600; font-size: 15px; margin-bottom: 30px; max-width: 500px; margin-left: auto; margin-right: auto;}
-  .btn-home { background: var(--main); color: white; padding: 12px 25px; border-radius: 50px; font-weight: 700; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 5px 15px rgba(0,95,64,0.3); }
-
-  /* ================== EXACT DEMO PREMIUM FOOTER ================== */
-  .premium-footer { background: #0a192f; color: #e6f1ff; padding: 60px 20px 0; border-top: 4px solid #e0e0e0; display: none; }
-  .footer-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; }
-  .f-col h4 { color: #ffffff; font-size: 16px; font-weight: 800; text-transform: uppercase; margin-bottom: 25px; position: relative; padding-bottom: 10px; letter-spacing: 1px; }
-  .f-col h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: #005f40; }
-  .f-links li { margin-bottom: 15px; }
-  .f-links a { font-size: 14.5px; color: #ccd6f6; opacity: 0.9; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgba(255, 255, 255, 0.2); transition: 0.3s; display: inline-block; }
-  .f-links a:hover { color: #ffffff; text-decoration-color: #005f40; transform: translateX(5px); }
-  .f-contact-text { font-size: 14px; line-height: 1.8; color: #a8b2d1; margin-bottom: 20px; }
-  .f-map-box { width: 100%; height: 180px; border-radius: 12px; overflow: hidden; border: 2px solid #233554; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-  .footer-copyright-bar { margin-top: 50px; background: #020c1b; padding: 30px 20px; text-align: center; border-top: 1px solid #233554; }
-  .copy-text { font-size: 13px; color: #8892b0; margin: 0; letter-spacing: 0.5px; }
-
-  @media (max-width: 950px) {
-    .menu-toggle { display: flex; }
-    .nav-menu { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; width: 100%; background: #fff; padding: 15px 0; border-top: 1px solid #f0f0f0; max-height: 80vh; overflow-y: auto; }
-    .nav-menu.active { display: flex; }
-    .nav-item { width: 100%; }
-    .nav-link { padding: 15px 30px; border-bottom: 1px solid #f9f9f9; border-radius: 0; }
-    .dropdown-content { position: static; box-shadow: none; background: #fafafa; padding-left: 20px; border: none; border-left: 4px solid #005f40; margin: 0 20px; display: none; }
-    .nav-item.active > .dropdown-content { display: block; }
-    .student-photo-box { margin: 0 auto 20px auto; }
-    .v-body { flex-direction: column; padding: 25px 20px; }
-  }
-</style>
-</head>
-<body>
-
-<!-- DEMO NAVBAR -->
-<nav class="navbar" id="topNav" style="display: none;">
-  <div class="nav-top-container">
-    <a href="https://srms2012.edu.bd/" target="_top" class="nav-brand">SRMS</a>
-    <div class="menu-toggle" onclick="toggleMenu()">
-      <span class="menu-icon">☰</span>
-      <span class="menu-text">MENU</span>
-    </div>
-    <ul class="nav-menu" id="navMenu">
-      <li class="nav-item"><a href="https://srms2012.edu.bd/" target="_top" class="nav-link">Home</a></li>
-      <li class="nav-item">
-        <a class="nav-link" onclick="handleDropdown(this)">Institute ▾</a>
-        <div class="dropdown-content">
-          <a href="https://srms2012.edu.bd/menu/about-us" target="_top">About Us</a>
-          <a href="https://srms2012.edu.bd/governing-body" target="_top">Governing Body</a>
-          <a href="https://srms2012.edu.bd/menu/administration/message-from-headmaster" target="_top">Headmaster's Message</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" onclick="handleDropdown(this)">Academic ▾</a>
-        <div class="dropdown-content">
-          <a href="https://srms2012.edu.bd/menu/academic/class-routine" target="_top">Class Routine</a>
-          <a href="https://srms2012.edu.bd/menu/academic/exam-results" target="_top">Exam Results</a>
-        </div>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" style="color:#d32f2f;" onclick="handleDropdown(this)">Login Zone ▾</a>
-        <div class="dropdown-content">
-          <a href="https://srms2012.edu.bd/login-panel/student-login" target="_top">Student Login</a>
-          <a href="https://srms2012.edu.bd/login-panel/accounting-and-management-department" target="_top">Account &amp; Admin</a>
-        </div>
-      </li>
-      <li class="nav-item"><a href="https://srms2012.edu.bd/menu/contact-us" target="_top" class="nav-link">Contact</a></li>
-    </ul>
-  </div>
-</nav>
-
-<!-- DEMO BANNER -->
-<div class="custom-banner animate-up" id="headerBanner" style="display: none;">
-  <img src="https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png" class="banner-logo" alt="SRMS Logo">
-  <div class="banner-text">
-    <h1>Saidpur Residential Model School</h1>
-    <div class="school-codes">School Code: 481931 &#160; | &#160; EMIS Code: 00704061312</div>
-    <div class="school-name">Central Academic Verification Portal</div>
-  </div>
-</div>
-
-<!-- VERIFICATION WRAPPER -->
-<div class="verify-wrapper animate-up">
-  
-  <!-- Loader -->
-  <div id="initLoader">
-    <div class="spinner-core"></div>
-    <h3 style="color:var(--main); margin:0; font-weight:900; letter-spacing: 0.5px;">Authenticating Document...</h3>
-    <p style="color:#64748b; font-size:14px; font-weight:600; margin:8px 0 0 0;">Verifying cryptographic security hash via srms2012.edu.bd</p>
-  </div>
-
-  <!-- SUCCESS VERIFIED CARD -->
-  <div class="v-card" id="successCard">
-    <div class="v-header" id="cardHeader">
-      <div class="v-icon-wrap"><i class="fas fa-badge-check"></i></div>
-      <h2>OFFICIALLY VERIFIED RECORD</h2>
-      <p>This electronic transcript has been securely authenticated.</p>
-      <div class="official-domain-tag"><i class="fas fa-lock"></i> Secured by srms2012.edu.bd</div>
-    </div>
-    
-    <div class="v-body">
-      <div class="watermark">SRMS VERIFIED</div>
-      <div class="student-photo-box">
-        <img id="vPhoto" src="https://i.postimg.cc/k47tXhXX/default-avatar.png" alt="Student Photo">
-      </div>
-      
-      <div class="v-details">
-        <table class="v-table-info">
-          <tr><td>Student Name</td><td id="vName">...</td></tr>
-          <tr><td>Student ID</td><td id="vId">...</td></tr>
-          <tr><td>Class / Group</td><td id="vClass">...</td></tr>
-          <tr><td>Roll No</td><td id="vRoll">...</td></tr>
-          <tr><td>Session</td><td id="vYear">...</td></tr>
-          <tr><td>Examination</td><td id="vExam">...</td></tr>
-        </table>
-        
-        <div class="result-highlight">
-          <div class="rh-box" id="boxMarks">
-            <span>Total Marks</span>
-            <strong id="vMarks">...</strong>
-          </div>
-          <div class="rh-box" id="boxGPA">
-            <span>GPA</span>
-            <strong id="vGPA">...</strong>
-          </div>
-          <div class="rh-box" id="boxGrade">
-            <span>Letter Grade</span>
-            <strong id="vGrade">...</strong>
-          </div>
-          <div class="rh-box" id="boxMerit">
-            <span>Merit Position</span>
-            <strong id="vMerit">...</strong>
-          </div>
-        </div>
-
-        <!-- Scroll Indicator -->
-        <div class="scroll-indicator" id="scrollIndicator">
-          <div class="mouse"></div>
-          <p>Scroll down for detailed marks</p>
-        </div>
-
-        <!-- Detailed Marks Table -->
-        <div class="detailed-marks-section" id="marksSection">
-          <h3><i class="fas fa-list-check"></i> Subject-wise Detailed Marks</h3>
-          <table class="marks-data-table">
-            <thead>
-              <tr>
-                <th>Subject Name</th>
-                <th>Total Marks</th>
-                <th>Letter Grade</th>
-              </tr>
-            </thead>
-            <tbody id="marksTableBody">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-
-      </div>
-    </div>
-    
-    <div class="v-footer">
-      <i class="fas fa-server" style="color: #059669;"></i> Cryptographic Authentication Hash: <b id="vHashCode" style="color:var(--text-dark); background: #e2e8f0; padding: 2px 8px; border-radius: 4px; font-family: monospace; font-size: 13px;">...</b>
-    </div>
-  </div>
-
-  <!-- ERROR CARD -->
-  <div class="v-card" id="errorCard">
-    <i class="fas fa-shield-xmark"></i>
-    <h2>INVALID OR TAMPERED DOCUMENT</h2>
-    <p>The security hash does not match the provided data. This transcript has been altered or generated from an unauthorized source.</p>
-    <a href="https://srms2012.edu.bd/" class="btn-home"><i class="fas fa-home"></i> Return to Official Homepage</a>
-  </div>
-
-</div>
-
-<!-- DEMO PREMIUM FOOTER -->
-<footer class="premium-footer" id="footerArea">
-  <div class="footer-inner">
-    <div class="f-col">
-      <h4>Important Links</h4>
-      <ul class="f-links">
-        <li><a href="https://dinajpureducationboard.gov.bd/" target="_blank" rel="noopener noreferrer">Dinajpur Education Board</a></li>
-        <li><a href="https://banbeis.gov.bd/" target="_blank" rel="noopener noreferrer">BANBEIS</a></li>
-      </ul>
-    </div>
-    <div class="f-col">
-      <h4>Contact Information</h4>
-      <div class="f-contact-text">
-        <p style="margin: 0 0 10px 0;"><span style="font-size:16px;">📍</span> <strong>ADDRESS</strong><br>Sultan Nagar, Parbatipur Road,<br>Saidpur, Nilphamari.</p>
-        <p style="margin: 0 0 10px 0;"><span style="font-size:16px;">📞</span> <strong>PHONE</strong><br>01737867826 (Headmaster)</p>
-      </div>
-      <ul class="f-links">
-        <li><a href="https://srms2012.edu.bd/menu/contact-us" target="_top" style="font-weight: bold; color: #fcf6ba; text-decoration: underline; text-underline-offset: 4px;">Go to Details ➔</a></li>
-      </ul>
-    </div>
-    <div class="f-col">
-      <h4>Find Us on Map</h4>
-      <div class="f-map-box">
-        <div class="mapouter"><div class="gmap_canvas"><iframe class="gmap_iframe" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?width=600&height=400&hl=en&q=Syedpur Residential Model School&t=&z=14&ie=UTF8&iwloc=B&output=embed"></iframe></div><style>.mapouter{position:relative;text-align:right;width:100%;height:100%;}.gmap_canvas {overflow:hidden;background:none!important;width:100%;height:100%;}.gmap_iframe {width:100%!important;height:100%!important;}</style></div>
-      </div>
-    </div>
-  </div>
-  <div class="footer-copyright-bar">
-    <p class="copy-text">© <span id="auto-year"></span> Saidpur Residential Model School (SRMS). All Rights Reserved.</p>
-  </div>
-</footer>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 
 <script>
-  document.getElementById('auto-year').innerText = new Date().getFullYear();
+if (window.history.replaceState) {
+  var cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+  window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+}
+</script>
 
-  function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
-  function handleDropdown(el) {
-    if (window.innerWidth <= 950) {
-      const parent = el.parentElement;
-      const isActive = parent.classList.contains('active');
-      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-      if (!isActive) parent.classList.add('active');
-    }
+<style>
+:root {
+  --main: #005f40;
+  --main-dark: #003d29;
+  --main-light: #ecfdf5;
+  --gold: #d97706;
+  --bg: #f1f5f9;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --border: #cbd5e1;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: var(--bg);
+  margin: 0;
+  color: var(--text-dark);
+  -webkit-font-smoothing: antialiased;
+}
+.main-padding { padding: 20px; max-width: 1440px; margin: 0 auto; }
+
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* Loader */
+.loader-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.spinner {
+  width: 54px; height: 54px;
+  border: 5px solid #e2e8f0;
+  border-top: 5px solid var(--main);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  margin-bottom: 14px;
+}
+.loader-text {
+  font-weight: 800;
+  color: var(--main);
+  font-size: 15px;
+  letter-spacing: 0.6px;
+  text-align: center;
+}
+
+#appContainer { display: none; }
+
+.app-header {
+  background: #ffffff;
+  padding: 22px 26px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 95, 64, 0.07);
+  margin-bottom: 22px;
+  border-top: 6px solid var(--main);
+  border-bottom: 1px solid #e2e8f0;
+  animation: fadeInUp 0.3s ease-out forwards;
+}
+.header-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 12px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 14px;
+}
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.header-brand img {
+  height: 56px;
+  width: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--gold);
+  padding: 2px;
+  background: #fff;
+}
+.header-brand h2 {
+  margin: 0;
+  color: var(--main);
+  font-size: 21px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.header-brand p {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.control-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.weight-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: #f8fafc;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1.5px solid #cbd5e1;
+}
+.weight-controls input {
+  border: 1.5px solid #94a3b8;
+  border-radius: 8px;
+  padding: 6px;
+  font-weight: 800;
+  color: var(--main);
+  width: 52px;
+  text-align: center;
+  background: #fff;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+select, button {
+  padding: 11px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  border: 1.5px solid #cbd5e1;
+  outline: none;
+  transition: all 0.2s ease;
+  background: #fff;
+}
+select:focus { border-color: var(--main); box-shadow: 0 0 0 3px rgba(0, 95, 64, 0.12); }
+button {
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  color: white;
+}
+button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.14); }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-open { background: linear-gradient(135deg, var(--main), var(--main-dark)); }
+.btn-reset { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+.btn-tool { background: linear-gradient(135deg, #475569, #1e293b); }
+.btn-add-sub { background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+.btn-edit-sub { background: linear-gradient(135deg, #0284c7, #0369a1); }
+.btn-link-ex { background: linear-gradient(135deg, #0d9488, #0f766e); }
+.btn-calc { background: linear-gradient(135deg, #2563eb, #1d4ed8); font-weight: 800; }
+.btn-print { background: linear-gradient(135deg, #0f172a, #1e293b); }
+.btn-report { background: linear-gradient(135deg, #d97706, #b45309); }
+.btn-publish { background: linear-gradient(135deg, #059669, #047857); font-weight: 800; }
+.btn-back { background: #f1f5f9; color: var(--text-dark); border: 1.5px solid #cbd5e1; }
+.btn-back:hover { background: var(--main); color: #fff; border-color: var(--main); }
+
+.mgr-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  text-align: left;
+}
+.mgr-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+.mgr-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.mgr-actions button {
+  padding: 6px 11px;
+  font-size: 11.5px;
+  border-radius: 8px;
+}
+
+#feature-panel {
+  display: none;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  border-top: 1.5px dashed #cbd5e1;
+  padding-top: 16px;
+  margin-top: 14px;
+}
+
+.quick-search-bar {
+  display: none;
+  margin-top: 14px;
+  background: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.quick-search-bar input {
+  flex: 1;
+  min-width: 240px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #cbd5e1;
+  font-family: inherit;
+  font-size: 13.5px;
+  outline: none;
+}
+.quick-search-bar input:focus { border-color: var(--main); }
+
+#student-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+  animation: fadeInUp 0.35s ease;
+}
+.student-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+  border: 1.5px solid #e2e8f0;
+  overflow: hidden;
+  transition: 0.25s;
+  display: flex;
+  flex-direction: column;
+}
+.student-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 95, 64, 0.1);
+  border-color: #a7f3d0;
+}
+.card-header {
+  background: #f8fafc;
+  padding: 14px 18px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.card-header h4 {
+  margin: 0;
+  color: var(--main);
+  font-size: 15.5px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.roll-badge {
+  background: var(--main);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  flex-shrink: 0;
+}
+.card-body { padding: 16px 18px; flex-grow: 1; }
+.card-body p { margin: 0 0 10px 0; font-size: 12.5px; color: #475569; font-weight: 600; }
+.result-mini {
+  display: flex;
+  justify-content: space-between;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #065f46;
+}
+.result-mini.failed { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+.result-mini.incomp { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+.card-footer {
+  padding: 12px 18px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  display: flex;
+  gap: 10px;
+}
+.btn-edit-marks { background: linear-gradient(135deg, #0284c7, #0369a1); color: white; flex: 1; border-radius: 10px; padding: 10px; font-size: 13px; }
+.btn-view-result { background: linear-gradient(135deg, var(--main), var(--main-dark)); color: white; flex: 1; border-radius: 10px; padding: 10px; font-size: 13px; }
+
+.part-grid-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(95px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+.part-box {
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 9px;
+  padding: 6px 8px;
+  text-align: center;
+}
+.part-box label {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #334155;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+.part-box input {
+  width: 100%;
+  border: 1.5px solid #94a3b8;
+  border-radius: 6px;
+  padding: 6px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 13.5px;
+  color: var(--main);
+  outline: none;
+}
+.part-box input:focus { border-color: var(--main); background: #f0fdf4; }
+
+@media (max-width: 768px) {
+  .main-padding { padding: 10px; }
+  .control-group, #feature-panel { justify-content: center; }
+  button { flex: 1 1 45%; font-size: 12px; padding: 9px 10px; }
+  #student-list-container { grid-template-columns: 1fr; }
+}
+
+/* ============================================================================
+   🖨️ ENTERPRISE PRINT PREVIEW & A4 LANDSCAPE / PORTRAIT ENGINE
+============================================================================ */
+#print-area { display: none; background: #475569; min-height: 100vh; padding: 20px 0; }
+.print-toolbar {
+  position: sticky;
+  top: 0;
+  background: #0f172a;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  z-index: 1000;
+  margin-bottom: 20px;
+}
+.print-toolbar button { font-size: 13.5px; padding: 10px 20px; border-radius: 10px; }
+#print-content {
+  width: 285mm;
+  margin: 0 auto;
+  background: transparent;
+  box-sizing: border-box;
+}
+#print-content.portrait-preview {
+  width: 198mm;
+}
+
+/* Marksheet Screen Preview Card */
+.report-card {
+  width: 285mm;
+  height: 192mm;
+  min-height: 192mm;
+  max-height: 192mm;
+  margin: 0 auto 15mm auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 3px double #005f40;
+  padding: 5mm 6.5mm;
+  border-radius: 6px;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+.rc-watermark {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-24deg);
+  font-size: 74px;
+  font-weight: 900;
+  color: rgba(0, 95, 64, 0.038);
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 0;
+  letter-spacing: 6px;
+}
+.rc-top-section, .rc-middle-section, .rc-bottom-section { position: relative; z-index: 1; }
+.rc-middle-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 12px; /* Increased gap to avoid cluttered look */
+  margin: 5px 0;
+  min-height: 0;
+}
+
+.school-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2.5px solid #005f40;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  gap: 10px;
+}
+.school-logo { width: 52px; height: 52px; border-radius: 50%; object-fit: contain; border: 1.5px solid #005f40; padding: 2px; background: #fff; }
+.header-center { text-align: center; flex: 1; }
+.header-center h1 {
+  margin: 0;
+  font-size: 19px;
+  text-transform: uppercase;
+  color: #005f40;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  font-family: 'Times New Roman', Times, serif;
+}
+.school-address { font-size: 9.8px; font-weight: 700; color: #334155; margin: 2px 0 0 0; }
+.transcript-badge-wrap { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.transcript-title {
+  background: #005f40 !important;
+  color: white !important;
+  padding: 4px 12px;
+  border-radius: 15px;
+  font-size: 9.8px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.grade-scale-mini {
+  font-size: 8px;
+  color: #1e293b;
+  font-weight: 700;
+  background: #f1f5f9 !important;
+  border: 1px solid #cbd5e1;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.student-info {
+  width: 100%;
+  margin-bottom: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  border: 1px solid #94a3b8;
+  border-radius: 5px;
+  background: #f8fafc !important;
+  border-collapse: collapse;
+}
+.student-info td { padding: 4px 9px; border-right: 1px dashed #cbd5e1; }
+.student-info td:last-child { border-right: none; }
+
+.legend-box {
+  font-size: 8.8px;
+  color: #005f40;
+  background: #ecfdf5 !important;
+  border: 1px dashed #005f40;
+  padding: 3px 9px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+}
+
+.marks-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  align-items: flex-start;
+  min-height: 0;
+  margin-bottom: 12px;
+}
+.marks-table {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  font-size: 9.5px;
+  background: rgba(255, 255, 255, 0.92);
+  table-layout: auto;
+}
+.marks-table th, .marks-table td {
+  border: 1px solid #1e293b;
+  padding: 3.5px 3px;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 1.18;
+  white-space: nowrap;
+}
+.marks-table th {
+  background-color: #e2e8f0 !important;
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 8.4px;
+  text-transform: uppercase;
+  height: auto;
+}
+.marks-table td.sub-name {
+  text-align: left;
+  padding-left: 5px;
+  padding-right: 4px;
+  font-weight: 800;
+  color: #0f172a;
+  white-space: nowrap;
+}
+.divider-col { border-right: 1.8px solid #000 !important; }
+
+/* Tier 1: Few Subjects (1-6 Subjects) Spacious Full-Width Layout */
+.report-card.spacious-card .marks-table th,
+.report-card.spacious-card .marks-table td {
+  padding: 5.5px 7px;
+  font-size: 10.8px;
+}
+
+/* Tier 2: Standard Subjects (7-12 Subjects, up to 6 rows per column) */
+.report-card.standard-card .marks-table th,
+.report-card.standard-card .marks-table td {
+  padding: 4px 3px;
+  font-size: 9.3px;
+}
+
+/* Tier 3: Dense Subjects (13+ Subjects) */
+.report-card.dense-card .marks-table th,
+.report-card.dense-card .marks-table td {
+  padding: 2.5px 2px;
+  font-size: 8.4px;
+}
+
+/* Class Overview & QR Verification Panel inside Marksheet */
+.rc-overview-qr-strip {
+  display: grid;
+  grid-template-columns: 1.35fr 1.65fr 1.05fr;
+  gap: 8px;
+  align-items: stretch;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+.rc-ov-card {
+  border: 1px solid #94a3b8;
+  border-radius: 6px;
+  background: #f8fafc !important;
+  padding: 5px 9px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.rc-ov-title {
+  font-size: 8.6px;
+  font-weight: 900;
+  color: #005f40;
+  text-transform: uppercase;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 2.5px;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rc-ov-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3.5px 6px;
+  font-size: 8.8px;
+  font-weight: 700;
+  color: #1e293b;
+}
+.rc-grade-pills {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3.5px;
+  text-align: center;
+  font-size: 8.2px;
+  font-weight: 800;
+}
+.rc-grade-pill {
+  background: #ffffff !important;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  padding: 2px 2px;
+}
+.rc-qr-card {
+  border: 1.5px solid #005f40;
+  border-radius: 6px;
+  background: #ecfdf5 !important;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rc-qr-box {
+  width: 52px;
+  height: 52px;
+  background: #fff !important;
+  border: 1px solid #005f40;
+  border-radius: 4px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
+.rc-qr-meta { font-size: 8px; line-height: 1.3; color: #0f172a; font-weight: 700; }
+.rc-qr-badge {
+  display: inline-block;
+  background: #005f40 !important;
+  color: #fff !important;
+  font-size: 7.5px;
+  font-weight: 800;
+  padding: 1.5px 6px;
+  border-radius: 3px;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.summary-box {
+  border: 1.5px solid #005f40;
+  padding: 6px 14px;
+  width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  background: #f0fdf4 !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.summary-metrics {
+  display: flex;
+  gap: 16px;
+  font-size: 11.5px;
+  font-weight: 800;
+  color: #005f40;
+  align-items: center;
+}
+.remark-text {
+  font-size: 10px;
+  font-weight: 800;
+  color: #b91c1c;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Fixed Signature Row at Bottom of Every Marksheet */
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 15px 16px 0 16px;
+  margin-top: auto;
+}
+.signature {
+  border-top: 1.5px solid #000;
+  width: 175px;
+  text-align: center;
+  padding-top: 3.5px;
+  font-weight: 800;
+  font-size: 10px;
+  color: #000;
+  text-transform: uppercase;
+}
+
+/* Tabulation Sheet Page Frame (Both Landscape & Portrait Locked) */
+.tab-page {
+  width: 285mm;
+  height: 192mm;
+  min-height: 192mm;
+  max-height: 192mm;
+  margin: 0 auto 15mm auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border: 2.5px solid #005f40;
+  padding: 4.5mm 5.5mm;
+  border-radius: 6px;
+  background: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+#print-content.portrait-preview .tab-page,
+.tab-page.portrait-page {
+  width: 198mm;
+  height: 283mm;
+  min-height: 283mm;
+  max-height: 283mm;
+  padding: 5mm 4mm;
+}
+.tab-top-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.tab-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.2px;
+  text-align: center;
+  table-layout: fixed;
+}
+.tab-table th {
+  background: #e2e8f0 !important;
+  padding: 3.5px 1.5px;
+  border: 1px solid #000;
+  font-weight: 800;
+  color: #000;
+  font-size: 7.8px;
+  word-wrap: break-word;
+  line-height: 1.15;
+}
+.tab-table td {
+  padding: 2.8px 1.5px;
+  border: 1px solid #000;
+  vertical-align: middle;
+  font-size: 7.8px;
+  font-weight: 600;
+  line-height: 1.18;
+  color: #000;
+  overflow: hidden;
+}
+#print-content.portrait-preview .tab-table th,
+.tab-page.portrait-page .tab-table th {
+  font-size: 6.5px;
+  padding: 3px 1px;
+}
+#print-content.portrait-preview .tab-table td,
+.tab-page.portrait-page .tab-table td {
+  font-size: 6.4px;
+  padding: 3.5px 1px;
+}
+
+.tab-cell-lines {
+  font-size: 7.2px;
+  line-height: 1.18;
+  text-align: left;
+  padding: 0 1px;
+  white-space: nowrap;
+}
+#print-content.portrait-preview .tab-cell-lines,
+.tab-page.portrait-page .tab-cell-lines {
+  font-size: 5.9px;
+  line-height: 1.16;
+  padding: 0;
+}
+
+.tab-fixed-signatures {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 12px 14px 2px 14px;
+  margin-top: auto;
+  flex-shrink: 0;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+.tab-sig-box {
+  border-top: 1.5px solid #000;
+  width: 160px;
+  text-align: center;
+  padding-top: 3.5px;
+  font-weight: 800;
+  font-size: 9.2px;
+  color: #000;
+  text-transform: uppercase;
+}
+#print-content.portrait-preview .tab-sig-box,
+.tab-page.portrait-page .tab-sig-box {
+  width: 135px;
+  font-size: 8.5px;
+}
+
+@media print {
+  .app-header, #student-list-container, .loader-overlay, .swal2-container, .print-toolbar, .quick-search-bar {
+    display: none !important;
+  }
+  html, body {
+    background: white !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  #appContainer { display: none !important; }
+  #print-area { display: block !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
+  #print-content, #print-content.portrait-preview { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+
+  .report-card {
+    width: 100% !important;
+    height: 196mm !important;
+    min-height: 196mm !important;
+    max-height: 196mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
-  // Cryptographic Integrity Check (MUST match exactly with ERP Generator)
-  function verifyHash(id, cls, yr, gpa, grade, totalMarks, providedHash) {
-    let raw = `SRMS|${id}|${cls}|${yr}|${gpa}|${grade}|${totalMarks}|2012`;
-    let h1 = 0x811c9dc5;
-    for (let i = 0; i < raw.length; i++) {
-      h1 ^= raw.charCodeAt(i);
-      h1 = Math.imul(h1, 0x01000193);
-    }
-    let calcHash = ("00000000" + (h1 >>> 0).toString(16)).slice(-8).toUpperCase();
-    return calcHash === providedHash;
+  .tab-page {
+    width: 100% !important;
+    height: 196mm !important;
+    min-height: 196mm !important;
+    max-height: 196mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always !important;
+    break-after: page !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
   }
 
-  window.onload = function() {
-    const params = new URLSearchParams(window.location.search);
-    
-    const pId = params.get('id');
-    const pName = params.get('name');
-    const pCls = params.get('cls');
-    const pRoll = params.get('roll');
-    const pYr = params.get('yr');
-    const pExam = params.get('exam');
-    const pMarks = params.get('marks');
-    const pGpa = params.get('gpa');
-    const pGrade = params.get('grade');
-    const pMerit = params.get('merit');
-    const pHash = params.get('v');
-    const pSubData = params.get('sub'); // Encrypted subjects string
+  /* Explicit Millimeter Height Lock for Portrait Tabulation so Signatures Stay Fixed at the Very Bottom */
+  #print-content.portrait-preview .tab-page,
+  .tab-page.portrait-page {
+    width: 100% !important;
+    height: 284mm !important;
+    min-height: 284mm !important;
+    max-height: 284mm !important;
+    padding: 5mm 4mm !important;
+  }
 
-    // 1. Smart Redirect (If no parameters, go to home page immediately)
-    if (!pId || !pHash || !pCls || !pYr || !pMarks) {
-      window.location.replace("https://srms2012.edu.bd/");
-      return;
+  .report-card:last-child,
+  .tab-page:last-child,
+  #print-content.portrait-preview .tab-page:last-child,
+  .tab-page.portrait-page:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+}
+
+@media print and (orientation: portrait) {
+  .tab-page {
+    width: 100% !important;
+    height: 284mm !important;
+    min-height: 284mm !important;
+    max-height: 284mm !important;
+    padding: 5mm 4mm !important;
+  }
+  .tab-table th { font-size: 6.5px !important; padding: 3px 1px !important; }
+  .tab-table td { font-size: 6.4px !important; padding: 3.5px 1px !important; }
+  .tab-cell-lines { font-size: 5.9px !important; line-height: 1.16 !important; padding: 0 !important; }
+  .tab-sig-box { width: 135px !important; font-size: 8.5px !important; }
+}
+</style>
+<style id="dynamicPrintPageStyle">
+  @media print { @page { size: A4 landscape; margin: 5mm; } }
+</style>
+</head>
+<body class="main-padding" id="mainBody">
+
+<div class="loader-overlay" id="loader">
+  <div class="spinner"></div>
+  <div class="loader-text" id="loaderText">
+    সিস্টেম যাচাই করা হচ্ছে...<br>
+    <span style="font-size:11.5px; color:#64748b; font-weight: 500;">অনুগ্রহ করে অপেক্ষা করুন</span>
+  </div>
+</div>
+
+<div id="print-area">
+  <div class="print-toolbar no-print">
+    <button onclick="closePrintView()" style="background:#ef4444;"><i class="fas fa-arrow-left"></i> ড্যাশবোর্ডে ফিরে যান</button>
+    <button onclick="triggerPrintWithOrientation('landscape')" style="background:#2563eb;"><i class="fas fa-print"></i> প্রিন্ট করুন (A4 Landscape)</button>
+    <button id="btnPrintPortrait" onclick="triggerPrintWithOrientation('portrait')" style="background:#059669; display:none;"><i class="fas fa-file-alt"></i> প্রিন্ট করুন (A4 Portrait)</button>
+  </div>
+  <div id="print-content"></div>
+</div>
+
+<div id="appContainer">
+  <div class="app-header">
+    <div class="header-title">
+      <div class="header-brand">
+        <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="SRMS Logo">
+        <div>
+          <h2>Saidpur Residential Model School</h2>
+          <p>অফিশিয়াল রেজাল্ট প্রসেসিং ও একাডেমিক ট্রান্সক্রিপ্ট পোর্টাল</p>
+        </div>
+      </div>
+      <button class="btn-back" onclick="window.close();" title="ড্যাশবোর্ডে ফিরে যান"><i class="fas fa-sign-out-alt"></i> প্রস্থান</button>
+    </div>
+
+    <div class="control-group">
+      <select id="classSelector" style="min-width:210px; font-weight:800; color:var(--main);">
+        <option value="" disabled selected>শ্রেণি নির্বাচন করুন...</option>
+        <optgroup label="প্রাথমিক শাখা (Primary)">
+          <option value="Play">Play</option>
+          <option value="Nursery">Nursery</option>
+          <option value="KG">KG</option>
+          <option value="Class 1">Class 1</option>
+          <option value="Class 2">Class 2</option>
+          <option value="Class 3">Class 3</option>
+          <option value="Class 4">Class 4</option>
+          <option value="Class 5">Class 5</option>
+        </optgroup>
+        <optgroup label="নিম্ন মাধ্যমিক শাখা (Junior)">
+          <option value="Class 6">Class 6</option>
+          <option value="Class 7">Class 7</option>
+          <option value="Class 8">Class 8</option>
+        </optgroup>
+        <optgroup label="মাধ্যমিক শাখা (Secondary)">
+          <option value="Class 9 Science">Class 9 Science</option>
+          <option value="Class 9 Arts">Class 9 Arts</option>
+          <option value="Class 9 Commerce">Class 9 Commerce</option>
+          <option value="Class 10 Science">Class 10 Science</option>
+          <option value="Class 10 Arts">Class 10 Arts</option>
+          <option value="Class 10 Commerce">Class 10 Commerce</option>
+        </optgroup>
+      </select>
+      <button class="btn-open" onclick="loadData()"><i class="fa-solid fa-folder-open"></i> শিক্ষার্থীদের তথ্য লোড করুন</button>
+      <button class="btn-reset" onclick="setupSheetHeader()"><i class="fa-solid fa-rotate"></i> ফরম্যাট রিসেট</button>
+    </div>
+
+    <div id="feature-panel">
+      <select id="yearSelector" title="শিক্ষাবর্ষ"></select>
+
+      <div class="weight-controls">
+        <strong style="font-size:12px; color:var(--main);">নম্বর বণ্টন:</strong>
+        <label style="font-size:12px;">Test <input type="number" id="testWeight" value="25">%</label>
+        <strong style="font-size:13px;">+</strong>
+        <label style="font-size:12px;">Main <input type="number" id="mainWeight" value="75">%</label>
+      </div>
+
+      <div class="weight-controls" style="border-color:#10b981;">
+        <strong style="font-size:12px; color:#047857;">পাস নম্বর:</strong>
+        <label style="font-size:12px;"><input type="number" id="genPass" value="33">%</label>
+      </div>
+
+      <button class="btn-tool" onclick="manageGlobalExamsPopup()"><i class="fa-solid fa-calendar-check"></i> পরীক্ষা ব্যবস্থাপনা (যুক্ত/এডিট)</button>
+      <button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> + বিষয় যুক্ত করুন</button>
+      <button class="btn-edit-sub" onclick="manageClassSubjectsPopup()"><i class="fa-solid fa-sliders"></i> বিষয় এডিট / মুছুন</button>
+      <button class="btn-link-ex" onclick="linkExamToSubjectsPopup()"><i class="fa-solid fa-link"></i> বিষয়ে পরীক্ষা যুক্ত করুন</button>
+
+      <button class="btn-calc" onclick="calculateAllResults()"><i class="fa-solid fa-calculator"></i> ফলাফল ও মেধাক্রম হিসাব</button>
+
+      <button class="btn-print" onclick="printTabulation()"><i class="fa-solid fa-table"></i> ট্যাবুলেশন শিট</button>
+      <button class="btn-report" onclick="openPrintMarksheetPopup()"><i class="fa-solid fa-award"></i> মার্কশিট প্রিন্ট</button>
+
+      <div style="display:flex; align-items:center; gap:8px; background:#ecfdf5; padding:4px 12px; border-radius:12px; border:1.5px solid #10b981;">
+        <input type="checkbox" id="smsPublishChk" checked style="width:18px; height:18px; accent-color:#047857; cursor:pointer;">
+        <label for="smsPublishChk" style="font-weight:800; font-size:12px; color:#047857; cursor:pointer;">SMS প্রেরণ</label>
+        <button class="btn-publish" onclick="publishResults()"><i class="fa-solid fa-paper-plane"></i> ফলাফল প্রকাশ</button>
+      </div>
+    </div>
+
+    <div class="quick-search-bar" id="quickSearchBar">
+      <div style="display:flex; align-items:center; gap:8px; flex:1;">
+        <i class="fas fa-search" style="color:var(--main);"></i>
+        <input type="text" id="studentQuickSearch" placeholder="শিক্ষার্থীর নাম, আইডি বা রোল নম্বর দিয়ে খুঁজুন..." oninput="filterStudentCards()">
+      </div>
+      <div id="classSummaryPill" style="font-size:12.5px; font-weight:800; color:var(--main); background:#ecfdf5; padding:6px 14px; border-radius:20px; border:1px solid #a7f3d0;">
+        মোট শিক্ষার্থী: ০
+      </div>
+    </div>
+  </div>
+
+  <div id="student-list-container"></div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
+  authDomain: "srms-website-management.firebaseapp.com",
+  projectId: "srms-website-management"
+};
+if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+const db = firebase.firestore();
+const auth = firebase.auth();
+
+var SERVER_TOKEN = "<?= serverToken ?>";
+var appData = [];
+var cachedHeaders = [];
+window.cachedGlobalExams = []; // Global store for secure index-based referencing
+var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
+var isAuthReady = false;
+
+const swalPro = Swal.mixin({
+  customClass: { confirmButton: 'btn-open', cancelButton: 'btn-reset' },
+  buttonsStyling: false
+});
+
+function showLoader(show, text = "প্রসেসিং হচ্ছে...") {
+  if (show) {
+    document.getElementById('loaderText').innerHTML = text;
+    document.getElementById('loader').style.display = 'flex';
+  } else {
+    document.getElementById('loader').style.display = 'none';
+  }
+}
+
+async function apiCall(actionName, payloadData = {}) {
+  let token = "";
+  if (auth.currentUser) {
+    try { token = await auth.currentUser.getIdToken(false); } catch (e) {
+      try { token = await auth.currentUser.getIdToken(true); } catch (e2) {}
     }
+  } else if (SERVER_TOKEN && SERVER_TOKEN.indexOf("serverToken") === -1) {
+    token = SERVER_TOKEN;
+  }
 
-    setTimeout(() => {
-      document.getElementById('initLoader').style.display = 'none';
-      document.getElementById('topNav').style.display = 'flex';
-      document.getElementById('headerBanner').style.display = 'flex';
-      document.getElementById('footerArea').style.display = 'block';
-      
-      // 2. Hash Authentication
-      const isValid = verifyHash(pId, pCls, pYr, pGpa, pGrade, pMarks, pHash);
+  let payload = { action: actionName, token: token, ...payloadData };
+  let res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+  });
+  let text = await res.text();
+  if (text.includes("<html") || text.includes("<body")) {
+    throw new Error("সার্ভার সংযোগ ত্রুটি! অনুগ্রহ করে পুনরায় চেষ্টা করুন।");
+  }
+  let data = JSON.parse(text);
+  if (data.status === "error") throw new Error(data.message || data.error);
+  return data;
+}
 
-      if (isValid) {
-        // *** CLEAN URL FEATURE (Hide parameters) ***
-        window.history.replaceState({}, document.title, window.location.pathname);
+function initYearDropdown() {
+  var yrSelect = document.getElementById("yearSelector");
+  var currentYear = new Date().getFullYear();
+  if (yrSelect && yrSelect.options.length === 0) {
+    for (var i = 2024; i <= 2050; i++) {
+      var opt = document.createElement("option");
+      opt.value = i;
+      opt.text = "শিক্ষাবর্ষ: " + i;
+      if (i === currentYear) opt.selected = true;
+      yrSelect.appendChild(opt);
+    }
+  }
+}
 
-        document.getElementById('successCard').style.display = 'block';
-        
-        // Auto-generate avatar based on name
-        let safeName = encodeURIComponent(pName || "Student");
-        document.getElementById('vPhoto').src = `https://ui-avatars.com/api/?name=${safeName}&background=e2e8f0&color=005f40&size=200&bold=true`;
+// Ensure auth persistence
+try {
+  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+} catch (e) {}
 
-        // Fill Basic Data
-        document.getElementById('vId').innerText = pId;
-        document.getElementById('vName').innerText = pName || 'N/A';
-        document.getElementById('vClass').innerText = pCls;
-        document.getElementById('vRoll').innerText = pRoll || 'N/A';
-        document.getElementById('vYear').innerText = pYr;
-        document.getElementById('vExam').innerText = pExam || 'Final Result';
-        
-        document.getElementById('vMarks').innerText = pMarks;
-        document.getElementById('vGPA').innerText = pGpa;
-        document.getElementById('vGrade').innerText = pGrade;
-        document.getElementById('vMerit').innerText = pMerit || 'N/A';
-        document.getElementById('vHashCode').innerText = pHash;
+// Non-blocking Auth State check for instant loading
+auth.onAuthStateChanged(async (user) => {
+  let hasTokenInUrl = SERVER_TOKEN && SERVER_TOKEN.trim() !== "" && SERVER_TOKEN.indexOf("serverToken") === -1;
 
-        // If Failed
-        if (pGrade === "F") {
-          let boxes = ['boxMarks', 'boxGPA', 'boxGrade', 'boxMerit'];
-          boxes.forEach(id => document.getElementById(id).classList.add('fail'));
-          
-          let head = document.getElementById('cardHeader');
-          head.classList.add('invalid');
-          head.innerHTML = `<div class="v-icon-wrap"><i class="fas fa-exclamation-triangle"></i></div><h2>VERIFIED (FAILED)</h2><p>Document is authentic but the student did not pass.</p><div class="official-domain-tag"><i class="fas fa-lock"></i> Secured by srms2012.edu.bd</div>`;
+  if (user || hasTokenInUrl) {
+    let email = user ? (user.email || "").toLowerCase() : "";
+    let isAdmin = email === "admin@srms.edu.bd" || email === "srms2012.edu@gmail.com";
+    let isTeacher = email.endsWith("@srms.edu.bd");
+
+    if (isAdmin || isTeacher || hasTokenInUrl) {
+      isAuthReady = true;
+      initYearDropdown();
+      showLoader(false);
+      document.getElementById('appContainer').style.display = 'block';
+    } else {
+      kickOut();
+    }
+  } else {
+    kickOut();
+  }
+});
+
+function kickOut() {
+  showLoader(true, "অনুমোদনহীন অ্যাক্সেস!<br><span style='font-size:11px; color:#ef4444;'>লগইন পেজে নিয়ে যাওয়া হচ্ছে...</span>");
+  let redirectUrl = window.location.protocol + "//" + window.location.host + "/login-panel/accounting-and-management-department";
+  setTimeout(() => { window.location.replace(redirectUrl); }, 1000);
+}
+
+function isOptHeader(h) {
+  return h ? String(h).toLowerCase().includes("opt") && String(h).toLowerCase().includes("name") : false;
+}
+
+function isPendingExamHeader(h) {
+  return h ? String(h).indexOf("[Pending Exam]") !== -1 : false;
+}
+
+function parseHeaderFullMarksInfo(headerStr, defaultTotal) {
+  let match = String(headerStr || "").match(/\(([^)]+)\)/);
+  if (!match || !match[1]) {
+    return { parts: [defaultTotal, 0, 0], total: defaultTotal, hasBreakdown: false, raw: String(defaultTotal) };
+  }
+  let raw = match[1].trim();
+  let rawParts = raw.split('+').map(p => parseFloat(p) || 0);
+  let cq = rawParts[0] || 0;
+  let mcq = rawParts[1] || 0;
+  let prac = rawParts[2] || 0;
+  let total = (cq + mcq + prac) || defaultTotal;
+  let hasBreakdown = (mcq > 0 || prac > 0 || rawParts.length > 1);
+  return { parts: [cq, mcq, prac], total: total, hasBreakdown: hasBreakdown, raw: `${cq}+${mcq}+${prac}` };
+}
+
+function extractSubAndExam(headerText) {
+  if (!headerText) return { sub: "Unknown", exam: "Exam", type: "Test" };
+  var clean = String(headerText).replace(/\[.*\]/g, '').trim();
+  var parts = clean.split(" - ");
+  if (parts.length >= 3) {
+    return {
+      sub: parts[0].trim(),
+      exam: parts[1].trim(),
+      type: parts[2].includes("Main") ? "Main" : "Test"
+    };
+  }
+  return { sub: parts[0].trim(), exam: "Exam", type: "Test" };
+}
+
+function parseSubjectHeaders(headers) {
+  let firstEmpty = headers.indexOf("");
+  if (firstEmpty === -1) firstEmpty = headers.length;
+  let subjects = {};
+  let testSeq = [];
+  let mainSeq = [];
+
+  let c = 3;
+  while (c < firstEmpty && c < headers.length) {
+    let startC = c;
+    let hStr = String(headers[c] || "");
+
+    if (isOptHeader(hStr)) {
+      let optSubName = hStr.replace(" Opt Name", "").trim();
+      if (!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, firstCol: c, pendingCols: [], tests: [], mains: [] };
+
+      let j = c + 1;
+      while (j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
+        if (isPendingExamHeader(headers[j])) {
+          subjects[optSubName].pendingCols.push(j);
+        } else {
+          let info = extractSubAndExam(headers[j]);
+          let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
+          if (info.type === "Test") {
+            subjects[optSubName].tests.push({ col: j, name: info.exam, fm: fm });
+            if (!testSeq.includes(info.exam)) testSeq.push(info.exam);
+          } else {
+            subjects[optSubName].mains.push({ col: j, name: info.exam, fm: fm });
+            if (!mainSeq.includes(info.exam)) mainSeq.push(info.exam);
+          }
         }
-
-        // Fill Detailed Subjects Data from URL parameter
-        if (pSubData) {
-          document.getElementById('scrollIndicator').style.display = 'block';
-          document.getElementById('marksSection').style.display = 'block';
-          
-          let tbody = document.getElementById('marksTableBody');
-          // Expected Format: "Bangla_85_A+,English_76_A,Physics_90_A+"
-          let subjects = decodeURIComponent(pSubData).split(',');
-          let tableHtml = "";
-          
-          subjects.forEach(item => {
-            let parts = item.split('_');
-            if(parts.length >= 3) {
-              let sName = parts[0];
-              let sMark = parts[1];
-              let sGrade = parts[2];
-              let gColor = sGrade === 'F' ? '#dc2626' : '#059669';
-              
-              tableHtml += `<tr>
-                <td class="sub-name">${sName}</td>
-                <td>${sMark}</td>
-                <td style="color:${gColor};">${sGrade}</td>
-              </tr>`;
-            }
-          });
-          tbody.innerHTML = tableHtml;
-        }
-
-      } else {
-        document.getElementById('errorCard').style.display = 'block';
+        j++;
       }
-    }, 900); // UI authentication delay
+      c = j;
+    } else if (hStr.trim() !== "") {
+      let subName = hStr.split(" - ")[0].trim();
+      let isOptFlag = hStr.indexOf("[Opt]") !== -1;
+      if (!subjects[subName]) subjects[subName] = { isOpt: isOptFlag, firstCol: c, pendingCols: [], tests: [], mains: [] };
+      if (isOptFlag) subjects[subName].isOpt = true;
+
+      let j = c;
+      while (j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
+        if (String(headers[j]).indexOf("[Opt]") !== -1) subjects[subName].isOpt = true;
+        if (isPendingExamHeader(headers[j])) {
+          subjects[subName].pendingCols.push(j);
+        } else {
+          let info = extractSubAndExam(headers[j]);
+          let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
+          if (info.type === "Test") {
+            subjects[subName].tests.push({ col: j, name: info.exam, fm: fm });
+            if (!testSeq.includes(info.exam)) testSeq.push(info.exam);
+          } else {
+            subjects[subName].mains.push({ col: j, name: info.exam, fm: fm });
+            if (!mainSeq.includes(info.exam)) mainSeq.push(info.exam);
+          }
+        }
+        j++;
+      }
+      c = j;
+    }
+
+    if (c === startC) c++;
+  }
+  return { subjects, testSeq, mainSeq, firstEmpty };
+}
+
+async function loadData() {
+  if (!isAuthReady) return;
+  var className = document.getElementById("classSelector").value;
+  if (!className) {
+    swalPro.fire({ title: 'লক্ষ্য করুন', text: 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', icon: 'warning' });
+    return;
+  }
+
+  showLoader(true, "তথ্য লোড হচ্ছে...<br><span style='font-size:11px; color:#64748b;'>শিক্ষার্থী ও বিষয়ের তালিকা প্রস্তুত করা হচ্ছে</span>");
+  document.getElementById("feature-panel").style.display = "none";
+  document.getElementById("quickSearchBar").style.display = "none";
+  document.getElementById("student-list-container").innerHTML = "";
+
+  try {
+    let docName = className.replace(/\s+/g, '_');
+    let rawCls = className.trim();
+    let searchGroup = "";
+    if (rawCls.toLowerCase().includes("science")) { searchGroup = "Science"; rawCls = rawCls.replace(/Science/i, "").trim(); }
+    else if (rawCls.toLowerCase().includes("arts")) { searchGroup = "Arts"; rawCls = rawCls.replace(/Arts/i, "").trim(); }
+    else if (rawCls.toLowerCase().includes("commerce")) { searchGroup = "Commerce"; rawCls = rawCls.replace(/Commerce/i, "").trim(); }
+    let searchClass = rawCls.replace(/Class/i, "").trim();
+
+    const [headerDoc, snap] = await Promise.all([
+      db.collection('ClassHeaders').doc(docName).get(),
+      db.collection('Students').where('class', '==', searchClass).get()
+    ]);
+
+    cachedHeaders = (headerDoc.exists && headerDoc.data().headers)
+      ? JSON.parse(headerDoc.data().headers)
+      : ["ID", "Name", "Roll", "", "Total Avg", "GPA", "Grade", "Position", "Fail_Reason", "Year", "Pass_Marks_Rules"];
+
+    appData = [];
+    snap.forEach(doc => {
+      let f = doc.data();
+      let dbGroup = f.group ? String(f.group).trim() : "";
+      if (searchGroup === "" || dbGroup.toLowerCase() === searchGroup.toLowerCase()) {
+        let row = new Array(cachedHeaders.length + 2).fill("");
+        row[0] = f.studentID || "";
+        row[1] = f.name || "";
+        row[2] = f.roll || "";
+        if (f.resultMarks) {
+          try {
+            let marks = JSON.parse(f.resultMarks);
+            for (let i = 3; i < cachedHeaders.length; i++) {
+              if (marks[i] !== undefined) row[i] = marks[i];
+            }
+          } catch (e) {}
+        }
+        row[cachedHeaders.length] = f.phone || "";
+        row[cachedHeaders.length + 1] = doc.id;
+        appData.push(row);
+      }
+    });
+
+    appData.sort((a, b) => (parseInt(a[2]) || 9999) - (parseInt(b[2]) || 9999));
+    showLoader(false);
+    renderStudentCards();
+    document.getElementById("feature-panel").style.display = "flex";
+    document.getElementById("quickSearchBar").style.display = "flex";
+    document.getElementById("classSummaryPill").innerText = `মোট শিক্ষার্থী: ${appData.length}`;
+  } catch (err) {
+    showLoader(false);
+    swalPro.fire('ত্রুটি', err.message, 'error');
+  }
+}
+
+function renderStudentCards() {
+  var container = document.getElementById("student-list-container");
+  var firstEmpty = cachedHeaders.indexOf("");
+  if (appData.length === 0) {
+    container.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding: 45px; color:#94a3b8; background:#fff; border-radius:16px;"><i class="fa-solid fa-users-slash fa-3x"></i><br><h3 style="margin:12px 0 0 0;">এই শ্রেণিতে কোনো শিক্ষার্থী পাওয়া যায়নি</h3></div>';
+    return;
+  }
+
+  let cardsHtml = [];
+  appData.forEach((row, index) => {
+    if (!row[0] && !row[1]) return;
+    var id = row[0] || 'N/A';
+    var name = row[1] || 'Unknown Student';
+    var roll = row[2] || 'N/A';
+
+    var gpa = firstEmpty !== -1 ? (row[firstEmpty + 2] || '0.00') : 'N/A';
+    var grade = firstEmpty !== -1 ? (row[firstEmpty + 3] || '-') : 'N/A';
+    var pos = firstEmpty !== -1 ? (row[firstEmpty + 4] || '-') : '-';
+
+    var isFailed = (grade === 'F');
+    var isIncomp = (grade === 'Incomplete');
+    var resClass = 'result-mini';
+    if (isFailed) resClass += ' failed';
+    if (isIncomp) resClass += ' incomp';
+
+    cardsHtml.push(`
+      <div class="student-card" data-search="${String(name + ' ' + id + ' ' + roll).toLowerCase()}">
+        <div class="card-header">
+          <h4 title="${name}"><i class="fa-solid fa-user-graduate" style="color:var(--main); margin-right:5px;"></i>${name}</h4>
+          <span class="roll-badge">রোল: ${roll}</span>
+        </div>
+        <div class="card-body">
+          <p><i class="fa-solid fa-id-badge" style="color:#64748b; width:18px;"></i> <b>ID:</b> ${id} <span style="float:right; color:var(--main);"><b>মেধাক্রম:</b> ${pos}</span></p>
+          <div class="${resClass}">
+            <span>GPA: ${gpa}</span>
+            <span>Grade: ${grade}</span>
+          </div>
+        </div>
+        <div class="card-footer">
+          <button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> নম্বর ইনপুট</button>
+          <button class="btn-view-result" onclick="viewSingleResult(${index})"><i class="fa-solid fa-eye"></i> ফলাফল দেখুন</button>
+        </div>
+      </div>
+    `);
+  });
+  container.innerHTML = cardsHtml.join('');
+  filterStudentCards();
+}
+
+function filterStudentCards() {
+  let q = (document.getElementById('studentQuickSearch').value || "").toLowerCase().trim();
+  let cards = document.querySelectorAll('#student-list-container .student-card');
+  cards.forEach(c => {
+    let s = c.getAttribute('data-search') || "";
+    c.style.display = (!q || s.includes(q)) ? "flex" : "none";
+  });
+}
+
+function getGP_JS(p) {
+  if (p >= 80) return 5.00;
+  if (p >= 70) return 4.00;
+  if (p >= 60) return 3.50;
+  if (p >= 50) return 3.00;
+  if (p >= 40) return 2.00;
+  if (p >= 33) return 1.00;
+  return 0.00;
+}
+function getGrade_JS(g) {
+  if (g >= 5.00) return "A+";
+  if (g >= 4.00) return "A";
+  if (g >= 3.50) return "A-";
+  if (g >= 3.00) return "B";
+  if (g >= 2.00) return "C";
+  if (g >= 1.00) return "D";
+  return "F";
+}
+
+function renderExamMarkInputBox(colIdx, examLabel, badgeType, fmInfo, existingValue) {
+  let valStr = String(existingValue || "").trim();
+  let partsObt = valStr !== "" ? valStr.split('+') : [];
+  let fParts = fmInfo.parts || [fmInfo.total, 0, 0];
+
+  let cqMax = fParts[0] || 0;
+  let mcqMax = fParts[1] || 0;
+  let pracMax = fParts[2] || 0;
+  if (cqMax === 0 && mcqMax === 0 && pracMax === 0) cqMax = fmInfo.total;
+
+  let cqVal = partsObt[0] !== undefined ? partsObt[0] : "";
+  let mcqVal = partsObt[1] !== undefined ? partsObt[1] : "";
+  let pracVal = partsObt[2] !== undefined ? partsObt[2] : "";
+
+  let typeColor = badgeType === "Main" ? "#005f40" : "#0284c7";
+  let typeBg = badgeType === "Main" ? "#ecfdf5" : "#f0f9ff";
+
+  let initSum = (parseFloat(cqVal) || 0) + (parseFloat(mcqVal) || 0) + (parseFloat(pracVal) || 0);
+  let initSumTxt = (cqVal !== "" || mcqVal !== "" || pracVal !== "") ? initSum : "-";
+
+  return `
+    <div style="flex: 1 1 290px; background:${typeBg}; border:1.5px solid #cbd5e1; border-radius:10px; padding:10px;" data-split-col="${colIdx}">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px; flex-wrap:wrap; gap:4px;">
+        <span style="font-size:12px; font-weight:800; color:${typeColor};">${examLabel} (${badgeType})</span>
+        <span style="font-size:10px; font-weight:800; background:#fff; padding:2px 8px; border-radius:10px; border:1px solid #cbd5e1;">
+          পূর্ণমান: ${fmInfo.total} (CQ:${cqMax} | MCQ:${mcqMax} | Prac:${pracMax}) • মোট: <b id="live-sum-${colIdx}" style="color:var(--main);">${initSumTxt}</b>
+        </span>
+      </div>
+      <div class="part-grid-row">
+        <div class="part-box">
+          <label>CQ / লিখিত (${cqMax})</label>
+          <input type="number" step="any" min="0" max="${cqMax}" id="edit-cq-${colIdx}" data-max="${cqMax}" data-label="${examLabel} CQ" value="${cqVal}" placeholder="${cqMax > 0 ? '0 - ' + cqMax : 'N/A'}" ${cqMax === 0 ? 'disabled style="background:#f1f5f9; color:#94a3b8;"' : ''} oninput="updateSplitLiveSum(${colIdx})">
+        </div>
+        <div class="part-box">
+          <label>MCQ (${mcqMax})</label>
+          <input type="number" step="any" min="0" max="${mcqMax}" id="edit-mcq-${colIdx}" data-max="${mcqMax}" data-label="${examLabel} MCQ" value="${mcqVal}" placeholder="${mcqMax > 0 ? '0 - ' + mcqMax : 'N/A'}" ${mcqMax === 0 ? 'disabled style="background:#f1f5f9; color:#94a3b8;"' : ''} oninput="updateSplitLiveSum(${colIdx})">
+        </div>
+        <div class="part-box">
+          <label>Practical (${pracMax})</label>
+          <input type="number" step="any" min="0" max="${pracMax}" id="edit-prac-${colIdx}" data-max="${pracMax}" data-label="${examLabel} Practical" value="${pracVal}" placeholder="${pracMax > 0 ? '0 - ' + pracMax : 'N/A'}" ${pracMax === 0 ? 'disabled style="background:#f1f5f9; color:#94a3b8;"' : ''} oninput="updateSplitLiveSum(${colIdx})">
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+window.updateSplitLiveSum = function(colIdx) {
+  let cqEl = document.getElementById(`edit-cq-${colIdx}`);
+  let mcqEl = document.getElementById(`edit-mcq-${colIdx}`);
+  let pracEl = document.getElementById(`edit-prac-${colIdx}`);
+  let sumEl = document.getElementById(`live-sum-${colIdx}`);
+  if (!sumEl) return;
+
+  let v1 = (cqEl && !cqEl.disabled) ? cqEl.value.trim() : "";
+  let v2 = (mcqEl && !mcqEl.disabled) ? mcqEl.value.trim() : "";
+  let v3 = (pracEl && !pracEl.disabled) ? pracEl.value.trim() : "";
+
+  if (v1 === "" && v2 === "" && v3 === "") {
+    sumEl.innerText = "-";
+  } else {
+    let total = (parseFloat(v1) || 0) + (parseFloat(v2) || 0) + (parseFloat(v3) || 0);
+    sumEl.innerText = total;
+  }
+};
+
+async function openDataEntryForm(rowIndex) {
+  var rowData = appData[rowIndex];
+  var parsed = parseSubjectHeaders(cachedHeaders);
+
+  var html = '<div style="text-align:left; max-height:72vh; overflow-y:auto; padding:8px; background:#f1f5f9; border-radius:12px;">';
+  html += '<div style="background:#fff; padding:12px 15px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">';
+  html += `<div><b style="color:var(--main); font-size:15px;"><i class="fa-solid fa-user-graduate"></i> ${rowData[1] || ''}</b> <span style="font-size:12px; color:#475569; margin-left:8px;">(ID: <b>${rowData[0] || ''}</b> | রোল: <b>${rowData[2] || ''}</b>)</span></div>`;
+  html += '<span style="font-size:11px; color:#dc2626; font-weight:700;">* পরীক্ষায় অনুপস্থিত থাকলে সব ঘর খালি রাখুন</span>';
+  html += '</div>';
+
+  if (Object.keys(parsed.subjects).length === 0) {
+    html += '<div style="background:#fff; padding:25px; text-align:center; border-radius:10px; color:#dc2626; font-weight:800;">কোনো বিষয় যুক্ত করা হয়নি! প্রথমে "+ বিষয় যুক্ত করুন" বাটনে ক্লিক করে বিষয় যোগ করুন।</div>';
+  } else {
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      if (sub.isOpt) {
+        var optName = rowData[sub.nameCol] || '';
+        html += '<div style="background:#fffbeb; padding:14px; border-radius:12px; margin-bottom:12px; border:2px dashed #f59e0b;">';
+        html += '<div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;">';
+        html += `<label style="font-weight:800; color:#b45309; font-size:13.5px;"><i class="fa-solid fa-star"></i> ৪র্থ / ঐচ্ছিক বিষয় (${subName})</label>`;
+        html += `<input id="edit-optname-${sub.nameCol}" style="padding:7px 12px; border-radius:8px; border:1.5px solid #f59e0b; font-weight:800; color:#92400e; width:240px;" placeholder="বিষয়ের নাম (যেমন: Higher Math)" value="${optName}">`;
+        html += '</div>';
+      } else {
+        html += '<div style="background:#ffffff; padding:14px; border-radius:12px; margin-bottom:12px; border:1.5px solid #cbd5e1;">';
+        html += `<label style="font-weight:800; color:var(--main); font-size:14px; display:block; margin-bottom:8px; border-bottom:1px solid #f1f5f9; padding-bottom:5px;"><i class="fa-solid fa-book"></i> ${subName}</label>`;
+      }
+
+      html += '<div style="display:flex; gap:10px; flex-wrap:wrap;">';
+      if (sub.tests.length === 0 && sub.mains.length === 0) {
+        html += `
+          <div style="width:100%; background:#fff7ed; border:1px dashed #fb923c; color:#9a3412; padding:10px 14px; border-radius:8px; font-size:12px; font-weight:700; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+            <span><i class="fas fa-info-circle"></i> এই বিষয়ে এখনো কোনো পরীক্ষা যুক্ত করা হয়নি।</span>
+            <button type="button" onclick="Swal.close(); linkExamToSubjectsPopup();" style="background:#ea580c; color:#fff; padding:5px 12px; border-radius:6px; font-size:11px; border:none; cursor:pointer;">+ পরীক্ষা যুক্ত করুন</button>
+          </div>`;
+      } else {
+        sub.tests.forEach(t => {
+          html += renderExamMarkInputBox(t.col, t.name, "Test", t.fm, rowData[t.col]);
+        });
+        sub.mains.forEach(m => {
+          html += renderExamMarkInputBox(m.col, m.name, "Main", m.fm, rowData[m.col]);
+        });
+      }
+      html += '</div></div>';
+    });
+  }
+  html += '</div>';
+
+  const { value: formValues } = await swalPro.fire({
+    title: 'শিক্ষার্থীর নম্বর ইনপুট (CQ / MCQ / Practical)',
+    width: '860px',
+    html: html,
+    showCancelButton: true,
+    cancelButtonText: '<i class="fas fa-times"></i> বাতিল',
+    confirmButtonText: '<i class="fa-solid fa-check-circle"></i> নম্বর সংরক্ষণ করুন',
+    preConfirm: () => {
+      var newData = [...appData[rowIndex]];
+      for (let subName of Object.keys(parsed.subjects)) {
+        let sub = parsed.subjects[subName];
+        if (sub.isOpt) {
+          let optInp = document.getElementById(`edit-optname-${sub.nameCol}`);
+          if (optInp) newData[sub.nameCol] = optInp.value.trim();
+        }
+        let allEx = sub.tests.concat(sub.mains);
+        for (let ex of allEx) {
+          let col = ex.col;
+          let cqEl = document.getElementById(`edit-cq-${col}`);
+          let mcqEl = document.getElementById(`edit-mcq-${col}`);
+          let pracEl = document.getElementById(`edit-prac-${col}`);
+
+          let v1 = (cqEl && !cqEl.disabled) ? cqEl.value.trim() : "";
+          let v2 = (mcqEl && !mcqEl.disabled) ? mcqEl.value.trim() : "";
+          let v3 = (pracEl && !pracEl.disabled) ? pracEl.value.trim() : "";
+
+          let cqMax = ex.fm.parts[0] || 0;
+          let mcqMax = ex.fm.parts[1] || 0;
+          let pracMax = ex.fm.parts[2] || 0;
+
+          if (v1 !== "" && parseFloat(v1) > cqMax) {
+            Swal.showValidationMessage(`${subName} (${ex.name}): CQ নম্বর পূর্ণমানের (${cqMax}) চেয়ে বেশি হতে পারে না!`);
+            return false;
+          }
+          if (v2 !== "" && parseFloat(v2) > mcqMax) {
+            Swal.showValidationMessage(`${subName} (${ex.name}): MCQ নম্বর পূর্ণমানের (${mcqMax}) চেয়ে বেশি হতে পারে না!`);
+            return false;
+          }
+          if (v3 !== "" && parseFloat(v3) > pracMax) {
+            Swal.showValidationMessage(`${subName} (${ex.name}): Practical নম্বর পূর্ণমানের (${pracMax}) চেয়ে বেশি হতে পারে না!`);
+            return false;
+          }
+
+          if (v1 === "" && v2 === "" && v3 === "") {
+            newData[col] = "";
+          } else {
+            let cNum = v1 !== "" ? v1 : "0";
+            let mNum = v2 !== "" ? v2 : "0";
+            let pNum = v3 !== "" ? v3 : "0";
+            if (mcqMax > 0 || pracMax > 0) {
+              newData[col] = `${cNum}+${mNum}+${pNum}`;
+            } else {
+              newData[col] = `${cNum}`;
+            }
+          }
+        }
+      }
+      return newData;
+    }
+  });
+
+  if (formValues) {
+    appData[rowIndex] = formValues;
+    recalculateClassStatsInMemory();
+    renderStudentCards();
+
+    const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 2200, timerProgressBar: true });
+    Toast.fire({ icon: 'success', title: 'নম্বর ও মেধাক্রম সংরক্ষিত হয়েছে!' });
+
+    try {
+      let rowDocId = appData[rowIndex][cachedHeaders.length + 1];
+      let cleanMarksToSave = appData[rowIndex].slice(0, cachedHeaders.length);
+      await db.collection('Students').doc(rowDocId).update({
+        resultMarks: JSON.stringify(cleanMarksToSave),
+        resultStatus: "Calculated"
+      });
+    } catch (err) {
+      swalPro.fire('ত্রুটি', err.message, 'error');
+    }
+  }
+}
+
+function recalculateClassStatsInMemory() {
+  let parsed = parseSubjectHeaders(cachedHeaders);
+  let firstEmpty = parsed.firstEmpty;
+  if (firstEmpty === -1) return;
+
+  let passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
+  let testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
+  let mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+  let selectedYear = document.getElementById('yearSelector').value;
+
+  let validList = [];
+
+  appData.forEach((row, idx) => {
+    if (!row[0] && !row[1]) return;
+
+    let totalMarks = 0;
+    let totalRegularGP = 0;
+    let optExtraGP = 0;
+    let regularSubCount = 0;
+    let totalSubCount = 0;
+    let isFail = false;
+    let attendedExams = 0;
+    let incompleteTerm = false;
+    let failReasonsArray = [];
+
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let ev = evaluateStudentSubjectForFilter(row, sub, "All", passRatio, testWeight, mainWeight);
+
+      if (ev.hasTest && !ev.hasMain && sub.mains.length > 0) {
+        incompleteTerm = true;
+      }
+
+      if (ev.attended) {
+        attendedExams++;
+        if (ev.isSubFail && !sub.isOpt) {
+          isFail = true;
+          failReasonsArray.push(subName);
+        }
+        if (sub.isOpt && !ev.isSubFail && ev.subGP > 2.00) {
+          optExtraGP += (ev.subGP - 2.00);
+        } else if (!sub.isOpt) {
+          totalRegularGP += ev.isSubFail ? 0 : ev.subGP;
+          regularSubCount++;
+        }
+        totalMarks += ev.finalMark;
+        totalSubCount++;
+      }
+    });
+
+    if (attendedExams === 0) {
+      row[firstEmpty + 1] = "";
+      row[firstEmpty + 2] = "";
+      row[firstEmpty + 3] = "";
+      row[firstEmpty + 4] = "";
+      row[firstEmpty + 5] = "";
+      row[firstEmpty + 6] = "";
+    } else {
+      let finalGPA = 0.00;
+      let finalGrade = "F";
+      let grandTotalAvg = totalSubCount > 0 ? (totalMarks / totalSubCount).toFixed(2) : "0.00";
+
+      if (incompleteTerm) {
+        finalGPA = 0.00;
+        finalGrade = "Incomplete";
+        isFail = true;
+        failReasonsArray = ["Exams Incomplete"];
+      } else if (regularSubCount > 0) {
+        if (isFail) {
+          finalGPA = 0.00;
+          finalGrade = "F";
+        } else {
+          let combinedGP = totalRegularGP + optExtraGP;
+          finalGPA = combinedGP / regularSubCount;
+          if (finalGPA > 5.00) finalGPA = 5.00;
+          finalGrade = getGrade_JS(parseFloat(finalGPA));
+        }
+      }
+
+      row[firstEmpty + 1] = grandTotalAvg;
+      row[firstEmpty + 2] = regularSubCount > 0 ? parseFloat(finalGPA).toFixed(2) : "0.00";
+      row[firstEmpty + 3] = finalGrade;
+      row[firstEmpty + 5] = failReasonsArray.length > 0 ? failReasonsArray.join(", ") : "None";
+      row[firstEmpty + 6] = selectedYear;
+
+      validList.push({
+        idx: idx,
+        gpa: parseFloat(finalGPA) || 0,
+        totalMarks: totalMarks,
+        isFail: isFail,
+        attendedExams: attendedExams
+      });
+    }
+  });
+
+  validList.sort((a, b) => {
+    if (a.isFail && !b.isFail) return 1;
+    if (!a.isFail && b.isFail) return -1;
+    if (b.attendedExams !== a.attendedExams) return b.attendedExams - a.attendedExams;
+    if (b.gpa !== a.gpa) return b.gpa - a.gpa;
+    return b.totalMarks - a.totalMarks;
+  });
+
+  let currentRank = 1;
+  for (let i = 0; i < validList.length; i++) {
+    let st = validList[i];
+    let targetRow = appData[st.idx];
+    if (st.isFail) {
+      targetRow[firstEmpty + 4] = "N/A";
+    } else {
+      if (
+        i > 0 &&
+        validList[i].attendedExams === validList[i - 1].attendedExams &&
+        validList[i].gpa === validList[i - 1].gpa &&
+        validList[i].totalMarks === validList[i - 1].totalMarks &&
+        !validList[i - 1].isFail
+      ) {
+        targetRow[firstEmpty + 4] = appData[validList[i - 1].idx][firstEmpty + 4];
+      } else {
+        let s = ["th", "st", "nd", "rd"];
+        let v = currentRank % 100;
+        targetRow[firstEmpty + 4] = currentRank + (s[(v - 20) % 10] || s[v] || s[0]);
+      }
+      currentRank++;
+    }
+  }
+}
+
+async function fetchGlobalExamsFromDB() {
+  let setDoc = await db.collection('Admin').doc('Settings').get();
+  if (setDoc.exists && setDoc.data().globalExams) {
+    try { return JSON.parse(setDoc.data().globalExams) || []; } catch (e) { return []; }
+  }
+  return [];
+}
+
+async function manageGlobalExamsPopup() {
+  showLoader(true, "পরীক্ষার তালিকা লোড হচ্ছে...");
+  let globalExams = [];
+  try {
+    globalExams = await fetchGlobalExamsFromDB();
+    window.cachedGlobalExams = globalExams;
+    showLoader(false);
+  } catch (e) {
+    showLoader(false);
+    return swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+
+  let listHtml = "";
+  if (globalExams.length === 0) {
+    listHtml = `<div style="padding:18px; text-align:center; color:#64748b; font-weight:600; background:#fff; border-radius:10px; border:1px dashed #cbd5e1;">এখনো কোনো পরীক্ষা তৈরি করা হয়নি। নিচে নতুন পরীক্ষা তৈরি করুন।</div>`;
+  } else {
+    globalExams.forEach((ex, idx) => {
+      let badgeClr = ex.type === "Main" ? "#005f40" : "#0284c7";
+      let badgeBg = ex.type === "Main" ? "#ecfdf5" : "#f0f9ff";
+      listHtml += `
+        <div class="mgr-list-item">
+          <div>
+            <b style="font-size:14px; color:#0f172a;">${ex.name}</b>
+            <span class="mgr-badge" style="background:${badgeBg}; color:${badgeClr}; border:1px solid ${badgeClr}40; margin-left:6px;">
+              ${ex.type === "Main" ? "Main Exam (সাময়িক/বার্ষিক)" : "Test Exam (মাসিক/টিউটোরিয়াল)"}
+            </span>
+          </div>
+          <div class="mgr-actions">
+            <button type="button" style="background:#0284c7;" onclick="openEditGlobalExamModal(${idx})"><i class="fas fa-edit"></i> এডিট</button>
+            <button type="button" style="background:#ef4444;" onclick="confirmDeleteGlobalExam(${idx})"><i class="fas fa-trash"></i> মুছুন</button>
+          </div>
+        </div>`;
+    });
+  }
+
+  const { value: newEx } = await swalPro.fire({
+    title: 'পরীক্ষা ব্যবস্থাপনা (যুক্ত, এডিট ও মুছুন)',
+    width: '650px',
+    html: `
+      <div style="text-align:left; margin-bottom:14px;">
+        <div style="font-size:12px; font-weight:800; color:#475569; text-transform:uppercase; margin-bottom:6px;">বর্তমান পরীক্ষাসমূহ (${globalExams.length}):</div>
+        <div style="max-height:220px; overflow-y:auto; padding-right:4px;">${listHtml}</div>
+      </div>
+      <div style="background:#f0fdf4; border:1.5px solid #a7f3d0; border-radius:12px; padding:14px; text-align:left;">
+        <div style="font-size:13px; font-weight:800; color:var(--main); margin-bottom:8px;"><i class="fas fa-plus-circle"></i> নতুন পরীক্ষা তৈরি করুন:</div>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input id="exN" class="swal2-input" placeholder="পরীক্ষার নাম (যেমন: 1st Monthly, 1st Term)" style="flex:1.5; min-width:200px; margin:0; height:42px; font-size:13.5px;">
+          <select id="exT" class="swal2-input" style="flex:1; min-width:170px; margin:0; height:42px; font-weight:700; color:var(--main); font-size:13px;">
+            <option value="Test">Test Exam (মাসিক/টিউটোরিয়াল)</option>
+            <option value="Main">Main Exam (সাময়িক/বার্ষিক)</option>
+          </select>
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-plus"></i> নতুন পরীক্ষা যুক্ত করুন',
+    cancelButtonText: 'বন্ধ করুন',
+    preConfirm: () => {
+      let name = document.getElementById('exN').value.trim();
+      let type = document.getElementById('exT').value;
+      if (!name) {
+        Swal.showValidationMessage('নতুন পরীক্ষার নাম লিখুন!');
+        return false;
+      }
+      return { name, type };
+    }
+  });
+
+  if (newEx && newEx.name) {
+    showLoader(true, "নতুন পরীক্ষা যুক্ত করা হচ্ছে...");
+    try {
+      let res = await apiCall('addGlobalExam', { examName: newEx.name, examType: newEx.type });
+      showLoader(false);
+      await swalPro.fire('সফল!', res.msg, 'success');
+      manageGlobalExamsPopup();
+    } catch (e) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', e.message, 'error');
+    }
+  }
+}
+
+window.openEditGlobalExamModal = async function(idx) {
+  let exam = window.cachedGlobalExams[idx];
+  if(!exam) return;
+  let oldName = exam.name;
+  let oldType = exam.type;
+
+  const { value: edited } = await swalPro.fire({
+    title: 'পরীক্ষার নাম ও ধরন এডিট করুন',
+    html: `
+      <div style="text-align:left; font-size:12px; color:#047857; background:#ecfdf5; padding:10px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:10px;">
+        <i class="fas fa-info-circle"></i> এখানে পরীক্ষার নাম বা ধরন পরিবর্তন করলে সকল শ্রেণির বিষয়ে সংযুক্ত এই পরীক্ষার নাম স্বয়ংক্রিয়ভাবে আপডেট হয়ে যাবে।
+      </div>
+      <input id="editExN" class="swal2-input" value="${oldName.replace(/"/g, '&quot;')}" placeholder="পরীক্ষার নতুন নাম" style="width:92%; margin:6px auto;">
+      <select id="editExT" class="swal2-input" style="width:92%; height:44px; margin:8px auto; font-weight:700; color:var(--main);">
+        <option value="Test" ${oldType === 'Test' ? 'selected' : ''}>Test Exam (মাসিক / টিউটোরিয়াল পরীক্ষা)</option>
+        <option value="Main" ${oldType === 'Main' ? 'selected' : ''}>Main Exam (সাময়িক / বার্ষিক পরীক্ষা)</option>
+      </select>
+    `,
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-save"></i> আপডেট সংরক্ষণ করুন',
+    cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let newName = document.getElementById('editExN').value.trim();
+      let newType = document.getElementById('editExT').value;
+      if (!newName) {
+        Swal.showValidationMessage('পরীক্ষার নাম খালি রাখা যাবে না!');
+        return false;
+      }
+      return { newName, newType };
+    }
+  });
+
+  if (edited) {
+    showLoader(true, "পরীক্ষার তথ্য ও ক্লাস হেডার আপডেট হচ্ছে...");
+    try {
+      let res = await apiCall('editGlobalExam', { oldName: oldName, newName: edited.newName, newType: edited.newType });
+      showLoader(false);
+      if (document.getElementById("classSelector").value) {
+        await loadData();
+      }
+      await swalPro.fire('আপডেট সম্পন্ন!', res.msg, 'success');
+      manageGlobalExamsPopup();
+    } catch (e) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', e.message, 'error');
+    }
+  }
+};
+
+window.confirmDeleteGlobalExam = async function(idx) {
+  let exam = window.cachedGlobalExams[idx];
+  if(!exam) return;
+  let examName = exam.name;
+
+  let confirmRes = await swalPro.fire({
+    title: `'${examName}' মুছে ফেলবেন?`,
+    text: "পরীক্ষাটি গ্লোবাল তালিকা থেকে মুছে যাবে।",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'হ্যাঁ, মুছে ফেলুন',
+    cancelButtonText: 'বাতিল'
+  });
+  if (!confirmRes.isConfirmed) return;
+
+  showLoader(true, "পরীক্ষাটি মুছে ফেলা হচ্ছে...");
+  try {
+    let res = await apiCall('deleteGlobalExam', { examName: examName });
+    showLoader(false);
+    await swalPro.fire('মুছে ফেলা হয়েছে!', res.msg, 'success');
+    manageGlobalExamsPopup();
+  } catch (e) {
+    showLoader(false);
+    swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+};
+
+window.updateSubAddLiveFull = function(idx) {
+  let cq = parseFloat(document.getElementById(`add-cq-${idx}`)?.value) || 0;
+  let mcq = parseFloat(document.getElementById(`add-mcq-${idx}`)?.value) || 0;
+  let prac = parseFloat(document.getElementById(`add-prac-${idx}`)?.value) || 0;
+  let totEl = document.getElementById(`add-tot-${idx}`);
+  if (totEl) totEl.innerText = (cq + mcq + prac) || 0;
+};
+
+async function addNewSubjectPopup() {
+  var cls = document.getElementById("classSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', 'warning');
+
+  showLoader(true, "পরীক্ষার তালিকা লোড হচ্ছে...");
+  let globalExams = [];
+  try {
+    globalExams = await fetchGlobalExamsFromDB();
+    showLoader(false);
+  } catch (e) {
+    showLoader(false);
+    return swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+
+  let examHtml = "";
+  if (globalExams.length === 0) {
+    examHtml = `
+      <div style="text-align:left; background:#fffbeb; border:1.5px dashed #f59e0b; padding:12px 14px; border-radius:12px; margin-top:10px; color:#92400e; font-size:12.5px; font-weight:600;">
+        <i class="fas fa-lightbulb"></i> এখনো কোনো গ্লোবাল পরীক্ষা তৈরি করা হয়নি। আপনি এখনই শুধু <b>বিষয়ের নাম</b> লিখে বিষয়টি যুক্ত করে রাখতে পারবেন এবং পরবর্তীতে যেকোনো সময় এতে পরীক্ষা যুক্ত করতে পারবেন!
+      </div>`;
+  } else {
+    examHtml = `
+      <div style="text-align:left; margin-top:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:12px; font-weight:800; color:#334155;">পরীক্ষা নির্বাচন করুন (ঐচ্ছিক — পরেও যুক্ত করা যাবে):</span>
+          <label style="font-size:11.5px; font-weight:800; color:var(--main); cursor:pointer;">
+            <input type="checkbox" checked onchange="document.querySelectorAll('.add-sub-ex-chk').forEach(c => c.checked = this.checked);"> সব নির্বাচন/বাতিল
+          </label>
+        </div>
+        <div style="max-height:280px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:12px; border:1.5px solid #cbd5e1;">`;
+
+    globalExams.forEach((ex, i) => {
+      let defCq = (ex.type === "Main") ? 100 : 50;
+      examHtml += `
+        <div style="background:#fff; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-weight:800; color:#0f172a; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:7px;">
+              <input type="checkbox" class="add-sub-ex-chk" id="chkEx-${i}" checked style="width:17px; height:17px; accent-color:var(--main);">
+              ${ex.name} <span style="font-size:11px; color:var(--main);">(${ex.type})</span>
+            </label>
+            <span style="font-size:11px; font-weight:800; color:var(--main); background:#ecfdf5; padding:2px 8px; border-radius:10px;">
+              মোট পূর্ণমান: <b id="add-tot-${i}">${defCq}</b>
+            </span>
+          </div>
+          <div class="part-grid-row" style="margin-top:8px;">
+            <div class="part-box">
+              <label>CQ / লিখিত পূর্ণমান</label>
+              <input type="number" id="add-cq-${i}" value="${defCq}" placeholder="যেমন: 70 বা 100" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>MCQ পূর্ণমান (ঐচ্ছিক)</label>
+              <input type="number" id="add-mcq-${i}" value="" placeholder="যেমন: 30 বা 0" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>Practical (ঐচ্ছিক)</label>
+              <input type="number" id="add-prac-${i}" value="" placeholder="যেমন: 25 বা 0" oninput="updateSubAddLiveFull(${i})">
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    examHtml += `</div></div>`;
+  }
+
+  const { value: v } = await swalPro.fire({
+    title: 'নতুন বিষয় যুক্ত করুন (CQ / MCQ / Practical)',
+    width: '660px',
+    html: `
+      <input id="subN" class="swal2-input" placeholder="বিষয়ের নাম লিখুন (যেমন: Bangla, Physics, Higher Math)" style="width:96%; margin:5px auto;">
+      ${examHtml}
+      <div style="margin-top: 12px; text-align: left; padding: 10px 14px; background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 10px;">
+        <label style="font-size:12.5px; font-weight:800; color:#065f46; cursor:pointer; display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" id="isOptCheck" style="width:18px; height:18px; accent-color:var(--main);">
+          এটি ৪র্থ / ঐচ্ছিক বিষয় (4th / Optional Subject)
+        </label>
+      </div>
+    `,
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-plus-circle"></i> বিষয় সংরক্ষণ করুন',
+    cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let sName = document.getElementById('subN').value.trim();
+      if (!sName) {
+        Swal.showValidationMessage('অনুগ্রহ করে বিষয়ের নাম লিখুন!');
+        return false;
+      }
+      let selected = [];
+      globalExams.forEach((ex, i) => {
+        let chk = document.getElementById(`chkEx-${i}`);
+        if (chk && chk.checked) {
+          let cq = parseFloat(document.getElementById(`add-cq-${i}`).value) || 0;
+          let mcq = parseFloat(document.getElementById(`add-mcq-${i}`).value) || 0;
+          let prac = parseFloat(document.getElementById(`add-prac-${i}`).value) || 0;
+          if (cq === 0 && mcq === 0 && prac === 0) {
+            cq = (ex.type === "Main") ? 100 : 50;
+          }
+          let marksStr = `${cq}+${mcq}+${prac}`;
+          selected.push({ name: ex.name, type: ex.type, marks: marksStr });
+        }
+      });
+      return {
+        name: sName,
+        isOpt: document.getElementById('isOptCheck').checked,
+        selectedExams: selected
+      };
+    }
+  });
+
+  if (v && v.name) {
+    showLoader(true, "বিষয় যুক্ত করা হচ্ছে...");
+    try {
+      let res = await apiCall('addSubjectAdvanced', { className: cls, subjectData: v });
+      showLoader(false);
+      if (res.status === "success") {
+        swalPro.fire('সফল!', res.msg, 'success');
+        loadData();
+      } else {
+        swalPro.fire('ত্রুটি', res.message, 'error');
+      }
+    } catch (err) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', err.message, 'error');
+    }
+  }
+}
+
+async function manageClassSubjectsPopup() {
+  var cls = document.getElementById("classSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', 'warning');
+
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  var subNames = Object.keys(parsed.subjects);
+  if (subNames.length === 0) {
+    return swalPro.fire('কোনো বিষয় নেই', 'এই শ্রেণিতে এখনো কোনো বিষয় যুক্ত করা হয়নি। প্রথমে "+ বিষয় যুক্ত করুন" বাটনে ক্লিক করুন।', 'info');
+  }
+
+  let listHtml = `<div style="max-height:380px; overflow-y:auto; padding-right:4px;">`;
+  subNames.forEach(sName => {
+    let sub = parsed.subjects[sName];
+    let safeName = sName.replace(/'/g, "\\'");
+    let allEx = sub.tests.concat(sub.mains);
+    let exSummary = allEx.length > 0
+      ? allEx.map(e => `<span style="background:#f1f5f9; border:1px solid #cbd5e1; padding:2px 7px; border-radius:6px; font-size:10.5px; font-weight:700; color:#334155;">${e.name} (${e.fm.raw})</span>`).join(" ")
+      : `<span style="background:#fff7ed; border:1px dashed #fb923c; padding:2px 8px; border-radius:6px; font-size:10.5px; font-weight:800; color:#c2410c;">পরীক্ষা যুক্ত করা হয়নি (Pending)</span>`;
+
+    listHtml += `
+      <div class="mgr-list-item">
+        <div>
+          <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:4px;">
+            <b style="font-size:14.5px; color:var(--main);"><i class="fas fa-book"></i> ${sName}</b>
+            ${sub.isOpt ? `<span class="mgr-badge" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a;">৪র্থ / ঐচ্ছিক বিষয়</span>` : `<span class="mgr-badge" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;">আবশ্যিক</span>`}
+          </div>
+          <div style="display:flex; gap:4px; flex-wrap:wrap;">${exSummary}</div>
+        </div>
+        <div class="mgr-actions">
+          <button type="button" style="background:#0284c7;" onclick="Swal.close(); editSubjectPopup('${safeName}');"><i class="fas fa-edit"></i> এডিট</button>
+          <button type="button" style="background:#ef4444;" onclick="Swal.close(); confirmDeleteSubjectByCol(${sub.firstCol}, '${safeName}');"><i class="fas fa-trash"></i> মুছুন</button>
+        </div>
+      </div>`;
+  });
+  listHtml += `</div>`;
+
+  swalPro.fire({
+    title: `${cls} — বিষয় ব্যবস্থাপনা (এডিট ও মুছুন)`,
+    width: '680px',
+    html: `
+      <div style="text-align:left; font-size:12px; color:#475569; margin-bottom:10px;">
+        যেকোনো বিষয়ের নাম, ৪র্থ বিষয়ের স্ট্যাটাস, পূর্ণমান (CQ/MCQ/Practical) বা সংযুক্ত পরীক্ষা পরিবর্তন করতে <b>এডিট</b> বাটনে ক্লিক করুন (শিক্ষার্থীদের আগের কোনো নম্বর হারাবে না)।
+      </div>
+      ${listHtml}
+    `,
+    showConfirmButton: true,
+    confirmButtonText: 'বন্ধ করুন'
+  });
+}
+
+window.editSubjectPopup = async function(subName) {
+  var cls = document.getElementById("classSelector").value;
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  var sub = parsed.subjects[subName];
+  if (!sub) return swalPro.fire('ত্রুটি', 'বিষয়টি খুঁজে পাওয়া যায়নি!', 'error');
+
+  showLoader(true, "পরীক্ষার কাঠামো লোড হচ্ছে...");
+  let globalExams = [];
+  try {
+    globalExams = await fetchGlobalExamsFromDB();
+    showLoader(false);
+  } catch (e) {
+    showLoader(false);
+    return swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+
+  let existingExamMap = {};
+  sub.tests.forEach(t => { existingExamMap[t.name] = { type: "Test", fm: t.fm }; });
+  sub.mains.forEach(m => { existingExamMap[m.name] = { type: "Main", fm: m.fm }; });
+
+  let combinedExams = [...globalExams];
+  Object.keys(existingExamMap).forEach(exN => {
+    if (!combinedExams.some(g => g.name === exN)) {
+      combinedExams.push({ name: exN, type: existingExamMap[exN].type });
+    }
+  });
+
+  let examHtml = "";
+  if (combinedExams.length === 0) {
+    examHtml = `<div style="padding:12px; background:#fffbeb; border:1px dashed #f59e0b; border-radius:10px; font-size:12px; color:#92400e;">কোনো পরীক্ষা তৈরি করা নেই।</div>`;
+  } else {
+    examHtml = `<div style="text-align:left; max-height:290px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:12px; border:1.5px solid #cbd5e1; margin-top:10px;">`;
+    combinedExams.forEach((ex, i) => {
+      let linked = existingExamMap[ex.name];
+      let isChecked = !!linked;
+      let cqVal = linked ? (linked.fm.parts[0] || 0) : (ex.type === "Main" ? 100 : 50);
+      let mcqVal = linked ? (linked.fm.parts[1] || "") : "";
+      let pracVal = linked ? (linked.fm.parts[2] || "") : "";
+      let totVal = (parseFloat(cqVal) || 0) + (parseFloat(mcqVal) || 0) + (parseFloat(pracVal) || 0);
+
+      examHtml += `
+        <div style="background:#fff; padding:10px 12px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-weight:800; color:#0f172a; font-size:13px; cursor:pointer; display:flex; align-items:center; gap:7px;">
+              <input type="checkbox" id="chkEx-${i}" ${isChecked ? 'checked' : ''} style="width:17px; height:17px; accent-color:var(--main);">
+              ${ex.name} <span style="font-size:11px; color:var(--main);">(${ex.type})</span>
+            </label>
+            <span style="font-size:11px; font-weight:800; color:var(--main); background:#ecfdf5; padding:2px 8px; border-radius:10px;">
+              মোট পূর্ণমান: <b id="add-tot-${i}">${totVal}</b>
+            </span>
+          </div>
+          <div class="part-grid-row" style="margin-top:8px;">
+            <div class="part-box">
+              <label>CQ / লিখিত পূর্ণমান</label>
+              <input type="number" id="add-cq-${i}" value="${cqVal}" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>MCQ পূর্ণমান</label>
+              <input type="number" id="add-mcq-${i}" value="${mcqVal}" placeholder="0" oninput="updateSubAddLiveFull(${i})">
+            </div>
+            <div class="part-box">
+              <label>Practical পূর্ণমান</label>
+              <input type="number" id="add-prac-${i}" value="${pracVal}" placeholder="0" oninput="updateSubAddLiveFull(${i})">
+            </div>
+          </div>
+        </div>`;
+    });
+    examHtml += `</div>`;
+  }
+
+  const { value: updated } = await swalPro.fire({
+    title: `বিষয় এডিট করুন: ${subName}`,
+    width: '660px',
+    html: `
+      <div style="text-align:left; font-size:11.5px; color:#047857; background:#ecfdf5; padding:8px 12px; border-radius:8px; border:1px solid #a7f3d0; margin-bottom:8px;">
+        <i class="fas fa-shield-alt"></i> বিষয়ের নাম বা পূর্ণমান পরিবর্তন করলে শিক্ষার্থীদের পূর্বের ইনপুট দেওয়া নম্বর স্বয়ংক্রিয়ভাবে অক্ষত থাকবে।
+      </div>
+      <input id="editSubN" class="swal2-input" value="${subName}" placeholder="বিষয়ের নাম" style="width:96%; margin:5px auto;">
+      ${examHtml}
+      <div style="margin-top: 12px; text-align: left; padding: 10px 14px; background: #ecfdf5; border: 1.5px solid #a7f3d0; border-radius: 10px;">
+        <label style="font-size:12.5px; font-weight:800; color:#065f46; cursor:pointer; display:flex; align-items:center; gap:8px;">
+          <input type="checkbox" id="editIsOptCheck" ${sub.isOpt ? 'checked' : ''} style="width:18px; height:18px; accent-color:var(--main);">
+          এটি ৪র্থ / ঐচ্ছিক বিষয় (4th / Optional Subject)
+        </label>
+      </div>
+    `,
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-save"></i> পরিবর্তন সংরক্ষণ করুন',
+    cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let newName = document.getElementById('editSubN').value.trim();
+      if (!newName) {
+        Swal.showValidationMessage('বিষয়ের নাম খালি রাখা যাবে না!');
+        return false;
+      }
+      let selected = [];
+      combinedExams.forEach((ex, i) => {
+        let chk = document.getElementById(`chkEx-${i}`);
+        if (chk && chk.checked) {
+          let cq = parseFloat(document.getElementById(`add-cq-${i}`).value) || 0;
+          let mcq = parseFloat(document.getElementById(`add-mcq-${i}`).value) || 0;
+          let prac = parseFloat(document.getElementById(`add-prac-${i}`).value) || 0;
+          if (cq === 0 && mcq === 0 && prac === 0) cq = (ex.type === "Main") ? 100 : 50;
+          selected.push({ name: ex.name, type: ex.type, marks: `${cq}+${mcq}+${prac}` });
+        }
+      });
+      return {
+        oldName: subName,
+        name: newName,
+        isOpt: document.getElementById('editIsOptCheck').checked,
+        selectedExams: selected
+      };
+    }
+  });
+
+  if (updated) {
+    showLoader(true, "বিষয়ের তথ্য ও কলাম আপডেট হচ্ছে...");
+    try {
+      let res = await apiCall('updateSubjectAdvanced', { className: cls, subjectData: updated });
+      showLoader(false);
+      await swalPro.fire('আপডেট সম্পন্ন!', res.msg, 'success');
+      loadData();
+    } catch (e) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', e.message, 'error');
+    }
+  }
+};
+
+window.confirmDeleteSubjectByCol = async function(colIndex, subName) {
+  var cls = document.getElementById("classSelector").value;
+  let confirmRes = await swalPro.fire({
+    title: `'${subName}' বিষয়টি মুছে ফেলবেন?`,
+    text: "এই বিষয় এবং এর সাথে সংশ্লিষ্ট পরীক্ষার কলামগুলো মুছে যাবে।",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'হ্যাঁ, মুছে ফেলুন',
+    cancelButtonText: 'বাতিল'
+  });
+  if (!confirmRes.isConfirmed) return;
+
+  showLoader(true, "বিষয়টি মুছে ফেলা হচ্ছে...");
+  try {
+    let res = await apiCall('deleteSubjectColumn', { className: cls, colIndex: parseInt(colIndex, 10) });
+    showLoader(false);
+    swalPro.fire('সম্পন্ন!', res.msg, 'success');
+    loadData();
+  } catch (err) {
+    showLoader(false);
+    swalPro.fire('ত্রুটি', err.message, 'error');
+  }
+};
+
+window.onBulkLinkExamChange = function(selEl) {
+  let opt = selEl.options[selEl.selectedIndex];
+  if (!opt) return;
+  let exType = opt.getAttribute('data-type') || 'Test';
+  let defCq = (exType === 'Main') ? 100 : 50;
+  let cqInp = document.getElementById('add-cq-999');
+  let mcqInp = document.getElementById('add-mcq-999');
+  let pracInp = document.getElementById('add-prac-999');
+  if (cqInp && (!mcqInp || !mcqInp.value) && (!pracInp || !pracInp.value)) {
+    cqInp.value = defCq;
+    updateSubAddLiveFull(999);
+  }
+};
+
+async function linkExamToSubjectsPopup() {
+  var cls = document.getElementById("classSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', 'warning');
+
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  var subNames = Object.keys(parsed.subjects);
+  if (subNames.length === 0) {
+    return swalPro.fire('কোনো বিষয় নেই', 'প্রথমে "+ বিষয় যুক্ত করুন" বাটনে ক্লিক করে অন্তত একটি বিষয় যুক্ত করুন।', 'info');
+  }
+
+  showLoader(true, "পরীক্ষার তালিকা লোড হচ্ছে...");
+  let globalExams = [];
+  try {
+    globalExams = await fetchGlobalExamsFromDB();
+    showLoader(false);
+  } catch (e) {
+    showLoader(false);
+    return swalPro.fire('ত্রুটি', e.message, 'error');
+  }
+
+  if (globalExams.length === 0) {
+    return swalPro.fire('কোনো পরীক্ষা নেই', 'অনুগ্রহ করে প্রথমে "পরীক্ষা ব্যবস্থাপনা" বাটনে ক্লিক করে নতুন পরীক্ষা তৈরি করুন।', 'warning');
+  }
+
+  let examOptionsHtml = globalExams.map((ex, i) => `<option value="${i}" data-type="${ex.type}">${ex.name} (${ex.type})</option>`).join('');
+  let subChecksHtml = subNames.map((sName) => {
+    let sub = parsed.subjects[sName];
+    let hasPending = sub.tests.length === 0 && sub.mains.length === 0;
+    return `
+      <label style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:6px; cursor:pointer; font-size:13px; font-weight:700;">
+        <span>
+          <input type="checkbox" class="bulk-link-sub-chk" value="${sName}" checked style="width:16px; height:16px; accent-color:var(--main); margin-right:6px;">
+          ${sName} ${sub.isOpt ? '<small style="color:#b45309;">(4th)</small>' : ''}
+        </span>
+        ${hasPending ? '<span style="font-size:10px; background:#fff7ed; color:#c2410c; padding:2px 7px; border-radius:8px; border:1px solid #fdba74;">Pending Exam</span>' : ''}
+      </label>`;
+  }).join('');
+
+  let defCq = globalExams[0].type === "Main" ? 100 : 50;
+
+  const { value: linkPayload } = await swalPro.fire({
+    title: 'বিষয়সমূহে পরীক্ষা যুক্ত / আপডেট করুন',
+    width: '640px',
+    html: `
+      <div style="text-align:left;">
+        <label style="font-size:12px; font-weight:800; color:#334155;">১. পরীক্ষা নির্বাচন করুন:</label>
+        <select id="bulkLinkExIdx" onchange="onBulkLinkExamChange(this)" class="swal2-input" style="width:100%; height:42px; margin:6px 0 12px 0; font-weight:800; color:var(--main);">
+          ${examOptionsHtml}
+        </select>
+
+        <div style="background:#f8fafc; padding:12px; border-radius:10px; border:1.5px solid #cbd5e1; margin-bottom:12px;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+            <span style="font-size:12px; font-weight:800; color:#0f172a;">২. পূর্ণমান নির্ধারণ করুন (CQ / MCQ / Practical):</span>
+            <span style="font-size:11px; font-weight:800; color:var(--main); background:#ecfdf5; padding:2px 8px; border-radius:10px;">
+              মোট পূর্ণমান: <b id="add-tot-999">${defCq}</b>
+            </span>
+          </div>
+          <div class="part-grid-row">
+            <div class="part-box">
+              <label>CQ / লিখিত পূর্ণমান</label>
+              <input type="number" id="add-cq-999" value="${defCq}" oninput="updateSubAddLiveFull(999)">
+            </div>
+            <div class="part-box">
+              <label>MCQ পূর্ণমান</label>
+              <input type="number" id="add-mcq-999" value="" placeholder="0" oninput="updateSubAddLiveFull(999)">
+            </div>
+            <div class="part-box">
+              <label>Practical পূর্ণমান</label>
+              <input type="number" id="add-prac-999" value="" placeholder="0" oninput="updateSubAddLiveFull(999)">
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <span style="font-size:12px; font-weight:800; color:#334155;">৩. কোন কোন বিষয়ে যুক্ত করবেন:</span>
+          <label style="font-size:11.5px; font-weight:800; color:var(--main); cursor:pointer;">
+            <input type="checkbox" checked onchange="document.querySelectorAll('.bulk-link-sub-chk').forEach(c => c.checked = this.checked);"> সব বিষয়
+          </label>
+        </div>
+        <div style="max-height:190px; overflow-y:auto; background:#f8fafc; padding:8px; border-radius:10px; border:1px solid #cbd5e1;">
+          ${subChecksHtml}
+        </div>
+      </div>
+    `,
+    showCancelButton: true,
+    confirmButtonText: '<i class="fas fa-link"></i> নির্বাচিত বিষয়ে পরীক্ষা যুক্ত করুন',
+    cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let exIdx = parseInt(document.getElementById('bulkLinkExIdx').value, 10);
+      let chosenEx = globalExams[exIdx];
+      let cq = parseFloat(document.getElementById('add-cq-999').value) || 0;
+      let mcq = parseFloat(document.getElementById('add-mcq-999').value) || 0;
+      let prac = parseFloat(document.getElementById('add-prac-999').value) || 0;
+      if (cq === 0 && mcq === 0 && prac === 0) cq = chosenEx.type === "Main" ? 100 : 50;
+
+      let chosenSubs = [];
+      document.querySelectorAll('.bulk-link-sub-chk:checked').forEach(chk => chosenSubs.push(chk.value));
+      if (chosenSubs.length === 0) {
+        Swal.showValidationMessage('অন্তত একটি বিষয় নির্বাচন করুন!');
+        return false;
+      }
+
+      return {
+        examName: chosenEx.name,
+        examType: chosenEx.type,
+        marks: `${cq}+${mcq}+${prac}`,
+        subjects: chosenSubs
+      };
+    }
+  });
+
+  if (linkPayload) {
+    showLoader(true, "নির্বাচিত বিষয়সমূহে পরীক্ষা যুক্ত করা হচ্ছে...");
+    try {
+      let res = await apiCall('linkExamToClassSubjects', { className: cls, examData: linkPayload });
+      showLoader(false);
+      await swalPro.fire('সফল!', res.msg, 'success');
+      loadData();
+    } catch (e) {
+      showLoader(false);
+      swalPro.fire('ত্রুটি', e.message, 'error');
+    }
+  }
+}
+
+function setupSheetHeader() {
+  var cls = document.getElementById("classSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন!', 'warning');
+
+  swalPro.fire({
+    title: 'ফরম্যাট রিসেট করবেন?',
+    text: `${cls}-এর বর্তমান বিষয় ও নম্বরের কাঠামো রিসেট হয়ে নতুনভাবে শুরু হবে।`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'হ্যাঁ, রিসেট করুন',
+    cancelButtonText: 'বাতিল'
+  }).then(async r => {
+    if (r.isConfirmed) {
+      showLoader(true, "ফরম্যাট রিসেট হচ্ছে...");
+      try {
+        let res = await apiCall('setupStandardHeaders', { className: cls });
+        showLoader(false);
+        if (res.status === "success") {
+          swalPro.fire('সফল!', res.msg, 'success');
+          loadData();
+        }
+      } catch (err) {
+        showLoader(false);
+        swalPro.fire('ত্রুটি', err.message, 'error');
+      }
+    }
+  });
+}
+
+async function calculateAllResults() {
+  if (appData.length === 0) {
+    swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
+    return;
+  }
+  var cls = document.getElementById("classSelector").value;
+  var yr = document.getElementById("yearSelector").value;
+  var testW = document.getElementById('testWeight').value;
+  var mainW = document.getElementById('mainWeight').value;
+  var passPercentage = document.getElementById('genPass').value;
+
+  swalPro.fire({
+    title: 'সকল ফলাফল ও মেধাক্রম হিসাব করবেন?',
+    text: `${cls}-এর সকল শিক্ষার্থীর GPA, গ্রেড এবং মেধাক্রম (Merit Position) স্বয়ংক্রিয়ভাবে হিসাব করা হবে।`,
+    icon: 'question',
+    showCancelButton: true,
+    cancelButtonText: 'বাতিল',
+    confirmButtonText: 'হ্যাঁ, হিসাব করুন'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      showLoader(true, "ফলাফল ও মেধাক্রম হিসাব করা হচ্ছে...");
+      try {
+        let res = await apiCall('calculateAllClassResults', {
+          className: cls,
+          selectedYear: yr,
+          testWeightStr: testW,
+          mainWeightStr: mainW,
+          passPercentage: passPercentage
+        });
+        showLoader(false);
+        if (res.status === "success") {
+          swalPro.fire('আলহামদুলিল্লাহ!', res.msg, 'success');
+          loadData();
+        } else {
+          swalPro.fire('ত্রুটি', res.message, 'error');
+        }
+      } catch (err) {
+        showLoader(false);
+        swalPro.fire('ত্রুটি', err.message, 'error');
+      }
+    }
+  });
+}
+
+function evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWeight, mainWeight) {
+  let tMarks = [];
+  let cqs = [], mcqs = [], pracs = [];
+  let tCalc = 0, mCalc = 0;
+  let hasTest = false, hasMain = false, isSubFail = false;
+  let totalTFull = 0, totalMFull = 0;
+
+  sub.tests.forEach(t => {
+    if (examFilter === "All" || examFilter === t.name || t.name === "Test") {
+      let vStr = String(row[t.col] || "").trim();
+      totalTFull += t.fm.total;
+      if (vStr !== "") {
+        hasTest = true;
+        let sumT = 0;
+        if (vStr.includes("+")) {
+          let obtParts = vStr.split('+').map(p => parseFloat(p) || 0);
+          sumT = obtParts.reduce((a, b) => a + b, 0);
+        } else {
+          sumT = parseFloat(vStr) || 0;
+        }
+        if (sumT > t.fm.total) sumT = t.fm.total;
+        tCalc += sumT;
+        tMarks.push(sumT);
+      }
+    }
+  });
+
+  sub.mains.forEach(m => {
+    if (examFilter === "All" || examFilter === m.name || m.name === "Main") {
+      let vStr = String(row[m.col] || "").trim();
+      totalMFull += m.fm.total;
+      if (vStr !== "") {
+        hasMain = true;
+        let fullParts = m.fm.parts; // [cqMax, mcqMax, pracMax]
+        let hasMultiParts = (fullParts[1] > 0 || fullParts[2] > 0 || vStr.includes("+"));
+
+        if (hasMultiParts) {
+          let obtParts = vStr.split('+').map(p => parseFloat(p) || 0);
+          let cqObt = obtParts[0] || 0;
+          let mcqObt = obtParts[1] || 0;
+          let pracObt = obtParts[2] || 0;
+
+          if (fullParts[0] > 0 && cqObt > fullParts[0]) cqObt = fullParts[0];
+          if (fullParts[1] > 0 && mcqObt > fullParts[1]) mcqObt = fullParts[1];
+          if (fullParts[2] > 0 && pracObt > fullParts[2]) pracObt = fullParts[2];
+
+          let sumM = cqObt + mcqObt + pracObt;
+          if (sumM > m.fm.total) sumM = m.fm.total;
+          mCalc += sumM;
+
+          cqs.push(fullParts[0] > 0 ? cqObt : "-");
+          mcqs.push(fullParts[1] > 0 ? mcqObt : "-");
+          pracs.push(fullParts[2] > 0 ? pracObt : "-");
+
+          if (fullParts[0] > 0 && cqObt < Math.ceil(fullParts[0] * passRatio)) isSubFail = true;
+          else if (fullParts[1] > 0 && mcqObt < Math.ceil(fullParts[1] * passRatio)) isSubFail = true;
+          else if (fullParts[2] > 0 && pracObt < Math.ceil(fullParts[2] * passRatio)) isSubFail = true;
+        } else {
+          let singleM = parseFloat(vStr) || 0;
+          if (singleM > m.fm.total) singleM = m.fm.total;
+          mCalc += singleM;
+          cqs.push(singleM);
+          mcqs.push("-");
+          pracs.push("-");
+          if (singleM < Math.ceil(m.fm.total * passRatio)) isSubFail = true;
+        }
+      }
+    }
+  });
+
+  let finalMark = 0;
+  if (hasTest || hasMain) {
+    if (hasTest && hasMain && totalTFull > 0 && totalMFull > 0) {
+      finalMark = Math.round(((tCalc / totalTFull) * testWeight) + ((mCalc / totalMFull) * mainWeight));
+    } else if (!hasTest && hasMain && totalMFull > 0) {
+      finalMark = Math.round((mCalc / totalMFull) * 100);
+    } else if (hasTest && !hasMain && totalTFull > 0) {
+      finalMark = Math.round((tCalc / totalTFull) * 100);
+    }
+    if (finalMark > 100) finalMark = 100;
+    if (!isSubFail && finalMark < Math.ceil(100 * passRatio)) isSubFail = true;
+  }
+
+  let subGP = getGP_JS(finalMark);
+  let subGrade = getGrade_JS(subGP);
+  if (isSubFail || subGP === 0) {
+    subGP = 0.00;
+    subGrade = "F";
+  }
+
+  return {
+    attended: hasTest || hasMain,
+    hasTest,
+    hasMain,
+    tMarks,
+    cqs,
+    mcqs,
+    pracs,
+    tCalc,
+    mCalc,
+    finalMark,
+    subGP,
+    subGrade,
+    isSubFail
   };
+}
+
+function viewSingleResult(rowIndex) {
+  let row = appData[rowIndex];
+  let parsed = parseSubjectHeaders(cachedHeaders);
+  var firstEmpty = parsed.firstEmpty;
+  var passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
+  let testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
+  let mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+
+  var html = `<div style="text-align:left; background:#fff; padding:12px; border-radius:10px;">
+    <div style="background:#f8fafc; padding:10px 14px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:10px;">
+      <b style="color:var(--main); font-size:15px;">${row[1]}</b><br>
+      <span style="font-size:12px; color:#475569;">ID: <b>${row[0]}</b> | রোল: <b>${row[2]}</b></span>
+    </div>`;
+
+  if (firstEmpty !== -1 && row[firstEmpty + 2]) {
+    let failReason = row[firstEmpty + 5];
+    let failHtml = (failReason && failReason !== "None") ? `<div style="color:#dc2626; font-weight:800; font-size:12px; margin-bottom:6px;">অকৃতকার্য বিষয়: ${failReason}</div>` : ``;
+    html += `
+      <div style="display:flex; justify-content:space-between; background:#ecfdf5; padding:8px 12px; border-radius:8px; border:1px solid #a7f3d0; font-size:13px; font-weight:800; margin-bottom:8px;">
+        <span>GPA: ${row[firstEmpty + 2]}</span>
+        <span>Grade: <b style="color:${row[firstEmpty + 3] === 'F' ? '#dc2626' : '#059669'};">${row[firstEmpty + 3]}</b></span>
+        <span>Merit: ${row[firstEmpty + 4]}</span>
+      </div>
+      ${failHtml}
+      <table style="width:100%; border-collapse:collapse; font-size:11.5px; text-align:center;">
+        <tr style="background:#e2e8f0; font-weight:800;">
+          <th style="border:1px solid #cbd5e1; padding:6px; text-align:left;">বিষয়</th>
+          <th style="border:1px solid #cbd5e1; padding:6px;">Test</th>
+          <th style="border:1px solid #cbd5e1; padding:6px;">CQ</th>
+          <th style="border:1px solid #cbd5e1; padding:6px;">MCQ</th>
+          <th style="border:1px solid #cbd5e1; padding:6px;">Prac</th>
+          <th style="border:1px solid #cbd5e1; padding:6px;">মোট (100%)</th>
+          <th style="border:1px solid #cbd5e1; padding:6px;">Grade</th>
+        </tr>`;
+
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let actualSubName = sub.isOpt ? (row[sub.nameCol] || subName) + " (Opt)" : subName;
+      let ev = evaluateStudentSubjectForFilter(row, sub, "All", passRatio, testWeight, mainWeight);
+      if (ev.attended) {
+        html += `<tr>
+          <td style="border:1px solid #cbd5e1; padding:5px; text-align:left; font-weight:700;">${actualSubName}</td>
+          <td style="border:1px solid #cbd5e1; padding:5px;">${ev.tMarks.join("/") || "-"}</td>
+          <td style="border:1px solid #cbd5e1; padding:5px;">${ev.cqs.join("/") || "-"}</td>
+          <td style="border:1px solid #cbd5e1; padding:5px;">${ev.mcqs.join("/") || "-"}</td>
+          <td style="border:1px solid #cbd5e1; padding:5px;">${ev.pracs.join("/") || "-"}</td>
+          <td style="border:1px solid #cbd5e1; padding:5px; font-weight:800;">${ev.finalMark}</td>
+          <td style="border:1px solid #cbd5e1; padding:5px; font-weight:800; color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</td>
+        </tr>`;
+      }
+    });
+    html += '</table></div>';
+  } else {
+    html += `<p style="color:#dc2626; font-weight:bold; text-align:center; padding:15px;">এখনো ফলাফল হিসাব করা হয়নি। "ফলাফল ও মেধাক্রম হিসাব" বাটনে ক্লিক করুন।</p></div>`;
+  }
+  swalPro.fire({ title: 'একাডেমিক ফলাফল বিবরণী', width: '650px', html: html, confirmButtonText: 'বন্ধ করুন' });
+}
+
+var currentPrintMode = "marksheet"; 
+
+function setPrintPageOrientation(orientation) {
+  let styleEl = document.getElementById('dynamicPrintPageStyle');
+  let contentEl = document.getElementById('print-content');
+  if (orientation === 'portrait') {
+    styleEl.innerHTML = `@media print { @page { size: A4 portrait; margin: 5mm; } }`;
+    contentEl.classList.add('portrait-preview');
+  } else {
+    styleEl.innerHTML = `@media print { @page { size: A4 landscape; margin: 5mm; } }`;
+    contentEl.classList.remove('portrait-preview');
+  }
+}
+
+function triggerPrintWithOrientation(orientation) {
+  if (currentPrintMode === "tabulation") {
+    buildTabulationPagesForOrientation(orientation);
+  } else {
+    setPrintPageOrientation('landscape');
+  }
+  setTimeout(() => { window.print(); }, 250);
+}
+
+function executePrint(htmlContent, mode = "marksheet", defaultOrientation = "landscape") {
+  currentPrintMode = mode;
+  setPrintPageOrientation(defaultOrientation);
+  document.getElementById('btnPrintPortrait').style.display = (mode === "tabulation") ? "inline-flex" : "none";
+
+  document.getElementById('appContainer').style.display = 'none';
+  let printArea = document.getElementById('print-area');
+  document.getElementById('print-content').innerHTML = htmlContent;
+  printArea.style.display = 'block';
+  window.scrollTo(0, 0);
+  setTimeout(() => { window.print(); }, 350);
+}
+
+function closePrintView() {
+  document.getElementById('print-area').style.display = 'none';
+  document.getElementById('print-content').innerHTML = '';
+  document.getElementById('appContainer').style.display = 'block';
+}
+
+async function openPrintMarksheetPopup() {
+  if (appData.length === 0) {
+    swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
+    return;
+  }
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  if (parsed.firstEmpty === -1) {
+    swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
+    return;
+  }
+
+  var examOptions = { "All": "সম্মিলিত চূড়ান্ত ফলাফল (সকল পরীক্ষা একত্রে)" };
+  parsed.mainSeq.forEach(m => { examOptions[m] = m + " (শুধুমাত্র এই সাময়িক পরীক্ষা)"; });
+
+  const { value: selectedExam } = await swalPro.fire({
+    title: 'মার্কশিট প্রিন্ট নির্বাচন করুন',
+    input: 'select',
+    inputOptions: examOptions,
+    showCancelButton: true,
+    cancelButtonText: 'বাতিল',
+    confirmButtonText: '<i class="fa-solid fa-print"></i> মার্কশিট তৈরি করুন'
+  });
+
+  if (selectedExam) { generateMarkSheets(selectedExam); }
+}
+
+function generateVerifyHash(id, cls, yr, gpa, grade, totalMarks) {
+  let raw = `SRMS|${id}|${cls}|${yr}|${gpa}|${grade}|${totalMarks}|2012`;
+  let h1 = 0x811c9dc5;
+  for (let i = 0; i < raw.length; i++) {
+    h1 ^= raw.charCodeAt(i);
+    h1 = Math.imul(h1, 0x01000193);
+  }
+  return ("00000000" + (h1 >>> 0).toString(16)).slice(-8).toUpperCase();
+}
+
+function createVerificationQrSvg(verifyUrl) {
+  try {
+    if (typeof qrcode === "function") {
+      let qr = qrcode(0, 'M');
+      qr.addData(verifyUrl);
+      qr.make();
+      return qr.createSvgTag({ cellSize: 2, margin: 0, scalable: true });
+    }
+  } catch (e) {}
+  return `<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(verifyUrl)}" style="width:100%;height:100%;" alt="QR">`;
+}
+
+function generateMarkSheets(examFilter) {
+  recalculateClassStatsInMemory();
+  var data = appData;
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  var firstEmpty = parsed.firstEmpty;
+  var rawClassName = document.getElementById("classSelector").value;
+  var year = document.getElementById("yearSelector").value;
+  var passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
+  var testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
+  var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+
+  var groupName = "General";
+  var baseClassName = rawClassName;
+  if (rawClassName.includes("Science")) { groupName = "Science"; baseClassName = rawClassName.replace(" Science", ""); }
+  else if (rawClassName.includes("Arts")) { groupName = "Arts"; baseClassName = rawClassName.replace(" Arts", ""); }
+  else if (rawClassName.includes("Commerce")) { groupName = "Commerce"; baseClassName = rawClassName.replace(" Commerce", ""); }
+
+  // 1. Pre-compute Class Overview Statistics across all evaluated students
+  let classStats = {
+    totalStudents: 0,
+    evaluatedStudents: 0,
+    passed: 0,
+    failed: 0,
+    highestMarks: 0,
+    gpaSum: 0,
+    grades: { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0 }
+  };
+
+  let studentEvaluations = [];
+
+  data.forEach(row => {
+    if (!row[0] && !row[1]) return;
+    classStats.totalStudents++;
+
+    let subRows = [];
+    let filterTotalMarks = 0;
+    let filterTotalRegularGP = 0;
+    let filterOptExtraGP = 0;
+    let filterRegularSubCount = 0;
+    let filterTotalSubCount = 0;
+    let filterIsFail = false;
+    let failedSubNames = [];
+
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let actualSubName = sub.isOpt
+        ? (row[sub.nameCol] || subName) + " <span style='font-size:8.5px; font-weight:700; color:#b45309;'>(4th)</span>"
+        : subName;
+
+      let ev = evaluateStudentSubjectForFilter(row, sub, examFilter, passRatio, testWeight, mainWeight);
+      if (ev.attended) {
+        if (ev.isSubFail && !sub.isOpt) {
+          filterIsFail = true;
+          failedSubNames.push(subName);
+        }
+        if (sub.isOpt && !ev.isSubFail && ev.subGP > 2.00) {
+          filterOptExtraGP += (ev.subGP - 2.00);
+        } else if (!sub.isOpt) {
+          filterTotalRegularGP += ev.isSubFail ? 0 : ev.subGP;
+          filterRegularSubCount++;
+        }
+        filterTotalMarks += ev.finalMark;
+        filterTotalSubCount++;
+        subRows.push({ actualSubName, ev });
+      }
+    });
+
+    if (filterTotalSubCount === 0) return;
+    let savedGrade = row[firstEmpty + 3];
+    if (savedGrade === "Incomplete") return;
+
+    let liveGPA = "0.00";
+    let liveGrade = "F";
+    if (filterRegularSubCount > 0) {
+      if (filterIsFail) {
+        liveGPA = "0.00";
+        liveGrade = "F";
+      } else {
+        let combinedGP = filterTotalRegularGP + filterOptExtraGP;
+        let rawGPA = combinedGP / filterRegularSubCount;
+        if (rawGPA > 5.00) rawGPA = 5.00;
+        liveGPA = rawGPA.toFixed(2);
+        liveGrade = getGrade_JS(parseFloat(liveGPA));
+      }
+    }
+
+    let liveAvg = (filterTotalMarks / filterTotalSubCount).toFixed(2);
+    let savedPos = row[firstEmpty + 4] || "N/A";
+    let dispPos = (examFilter === "All" && !filterIsFail) ? savedPos : "N/A";
+
+    classStats.evaluatedStudents++;
+    if (liveGrade === "F") {
+      classStats.failed++;
+      classStats.grades['F']++;
+    } else {
+      classStats.passed++;
+      if (classStats.grades[liveGrade] !== undefined) classStats.grades[liveGrade]++;
+    }
+    if (filterTotalMarks > classStats.highestMarks) classStats.highestMarks = filterTotalMarks;
+    classStats.gpaSum += parseFloat(liveGPA) || 0;
+
+    studentEvaluations.push({
+      row,
+      subRows,
+      filterTotalMarks,
+      filterTotalSubCount,
+      liveAvg,
+      liveGPA,
+      liveGrade,
+      dispPos,
+      failedSubNames
+    });
+  });
+
+  if (studentEvaluations.length === 0) {
+    swalPro.fire('লক্ষ্য করুন', 'প্রিন্ট করার মতো কোনো সম্পূর্ণ ফলাফল পাওয়া যায়নি।', 'warning');
+    return;
+  }
+
+  let classPassRate = classStats.evaluatedStudents > 0
+    ? ((classStats.passed / classStats.evaluatedStudents) * 100).toFixed(1)
+    : "0.0";
+  let classAvgGPA = classStats.evaluatedStudents > 0
+    ? (classStats.gpaSum / classStats.evaluatedStudents).toFixed(2)
+    : "0.00";
+
+  var theadHtml = `
+    <thead>
+      <tr>
+        <th rowspan="2" style="width:20%;">Subject</th>
+        <th rowspan="2" class="divider-col" style="width:13%;">Test<br>Marks</th>
+        <th colspan="3" class="divider-col" style="width:41%;">Main Exam Breakdown</th>
+        <th rowspan="2" style="width:9%;">Final<br>(100%)</th>
+        <th rowspan="2" style="width:8.5%;">Grade</th>
+        <th rowspan="2" style="width:8.5%;">GP</th>
+      </tr>
+      <tr>
+        <th style="width:14%;">CQ</th>
+        <th style="width:13.5%;">MCQ</th>
+        <th class="divider-col" style="width:13.5%;">Prac</th>
+      </tr>
+    </thead>`;
+
+  let activeTests = [];
+  let activeMains = [];
+  parsed.testSeq.forEach(t => { if (examFilter === "All" || t === examFilter) activeTests.push(t); });
+  parsed.mainSeq.forEach(m => { if (examFilter === "All" || m === examFilter) activeMains.push(m); });
+
+  let legendHtml = `
+    <div class="legend-box">
+      <span><b>Tests Included (${testWeight}%):</b> ${activeTests.join(" / ") || "N/A"}</span>
+      <span><b>Main Exams (${mainWeight}%):</b> ${activeMains.join(" / ") || "N/A"}</span>
+      <span><b>Pass Rule:</b> ${Math.round(passRatio * 100)}% (Separate CQ, MCQ &amp; Practical)</span>
+    </div>`;
+
+  let issueDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  let cardsArr = [];
+
+  studentEvaluations.forEach(item => {
+    var row = item.row;
+    var id = row[0];
+    var name = row[1];
+    var roll = row[2];
+    var dispGPA = item.liveGPA;
+    var dispGrade = item.liveGrade;
+    var dispAvg = item.liveAvg;
+    var dispPos = item.dispPos;
+    var filterTotalMarks = item.filterTotalMarks;
+
+    var rowsHtmlArray = item.subRows.map(sr => {
+      let ev = sr.ev;
+      let testStr = ev.tMarks.length > 0 ? ev.tMarks.join("/") : "-";
+      let cqDisp = ev.cqs.length > 0 ? ev.cqs.join("/") : "-";
+      let mcqDisp = ev.mcqs.length > 0 ? ev.mcqs.join("/") : "-";
+      let pracDisp = ev.pracs.length > 0 ? ev.pracs.join("/") : "-";
+
+      return `<tr>
+        <td class="sub-name">${sr.actualSubName}</td>
+        <td class="divider-col"><b>${testStr}</b></td>
+        <td>${cqDisp}</td>
+        <td>${mcqDisp}</td>
+        <td class="divider-col">${pracDisp}</td>
+        <td><b>${ev.finalMark}</b></td>
+        <td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td>
+        <td><strong>${ev.subGP.toFixed(2)}</strong></td>
+      </tr>`;
+    });
+
+    var teacherRemark = "";
+    if (dispGrade === "F") {
+      let failStr = item.failedSubNames.length > 0 ? item.failedSubNames.join(", ") : "Subject(s)";
+      teacherRemark = `Failed in: ${failStr} — Needs Special Care`;
+    } else if (dispGrade === "A+") teacherRemark = "Outstanding Performance! Keep it up.";
+    else if (dispGrade === "A") teacherRemark = "Very Good Result! Strive for A+.";
+    else if (dispGrade === "A-") teacherRemark = "Good Academic Performance.";
+    else if (dispGrade === "B") teacherRemark = "Satisfactory Result.";
+    else teacherRemark = "Needs More Effort & Regular Study.";
+
+    // Dynamic 3-Tier Layout Selection based on Subject Count
+    let subCount = rowsHtmlArray.length;
+    let tierClass = "standard-card";
+    var finalTableHtml = "";
+
+    if (subCount <= 6) {
+      tierClass = "spacious-card";
+      finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;">${theadHtml}<tbody>${rowsHtmlArray.join("")}</tbody></table></div>`;
+    } else if (subCount <= 12) {
+      tierClass = "standard-card";
+      var half = Math.ceil(subCount / 2);
+      finalTableHtml = `
+        <div class="marks-wrapper">
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half).join("")}</tbody></table>
+        </div>`;
+    } else {
+      tierClass = "dense-card";
+      var half2 = Math.ceil(subCount / 2);
+      finalTableHtml = `
+        <div class="marks-wrapper">
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half2).join("")}</tbody></table>
+          <table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half2).join("")}</tbody></table>
+        </div>`;
+    }
+
+    // Build Security Verification Hash & QR Code URL
+    let vHash = generateVerifyHash(id, rawClassName, year, dispGPA, dispGrade, filterTotalMarks);
+    
+    // NEW: Build the Compressed Subject String for URL (Format: Bangla_85_A+,English_76_A)
+    let subStr = item.subRows.map(sr => {
+      let cleanName = sr.actualSubName.replace(/<[^>]*>?/gm, '').trim(); // Remove HTML tags like (4th)
+      return `${cleanName}_${sr.ev.finalMark}_${sr.ev.subGrade}`;
+    }).join(',');
+
+    let verifyCode = `SRMS-${year}-${vHash}`;
+    let verifyUrl = `https://srms2012.edu.bd/verify-result?id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&cls=${encodeURIComponent(rawClassName)}&roll=${encodeURIComponent(roll)}&yr=${encodeURIComponent(year)}&exam=${encodeURIComponent(examFilter === "All" ? "Final" : examFilter)}&marks=${filterTotalMarks}&gpa=${dispGPA}&grade=${encodeURIComponent(dispGrade)}&merit=${encodeURIComponent(dispPos)}&v=${vHash}&sub=${encodeURIComponent(subStr)}`;
+    let qrSvgHtml = createVerificationQrSvg(verifyUrl);
+
+    cardsArr.push(`
+      <div class="report-card ${tierClass}">
+        <div class="rc-watermark">SRMS OFFICIAL</div>
+
+        <div class="rc-top-section">
+          <div class="school-header">
+            <img src="${SCHOOL_LOGO}" class="school-logo" alt="Logo">
+            <div class="header-center">
+              <h1>SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+              <p class="school-address">Sultan Nagar, Saidpur, Nilphamari | School Code: 481931 | EMIS Code: 00704061312 | Web: www.srms2012.edu.bd</p>
+            </div>
+            <div class="transcript-badge-wrap">
+              <div class="transcript-title">Academic Transcript — ${examFilter === "All" ? "Final Result" : examFilter} (${year})</div>
+              <div class="grade-scale-mini">80-100:A+(5.0) | 70-79:A(4.0) | 60-69:A-(3.5) | 50-59:B(3.0) | 40-49:C(2.0) | 33-39:D(1.0)</div>
+            </div>
+          </div>
+
+          <table class="student-info">
+            <tr>
+              <td width="30%">Student Name: <b style="color:#005f40; font-size:11px; text-transform:uppercase;">${name}</b></td>
+              <td width="18%">Student ID: <b>${id}</b></td>
+              <td width="22%">Class: <b>${baseClassName}</b> (${groupName})</td>
+              <td width="15%">Roll No: <b>${roll}</b></td>
+              <td width="15%">Issued: <b>${issueDateStr}</b></td>
+            </tr>
+          </table>
+          ${legendHtml}
+        </div>
+
+        <div class="rc-middle-section">
+          ${finalTableHtml}
+
+          <!-- Class Performance Overview & QR Security Verification Strip -->
+          <div class="rc-overview-qr-strip">
+            <div class="rc-ov-card">
+              <div class="rc-ov-title">
+                <span><i class="fas fa-chart-pie"></i> Class Performance Overview (${rawClassName})</span>
+                <span>Session: ${year}</span>
+              </div>
+              <div class="rc-ov-grid">
+                <span>Examinees: <b>${classStats.evaluatedStudents}</b></span>
+                <span>Passed: <b style="color:#059669;">${classStats.passed}</b></span>
+                <span>Failed: <b style="color:#dc2626;">${classStats.failed}</b></span>
+                <span>Pass Rate: <b>${classPassRate}%</b></span>
+                <span>Class Highest: <b>${classStats.highestMarks}</b></span>
+                <span>Class Avg GPA: <b>${classAvgGPA}</b></span>
+              </div>
+            </div>
+
+            <div class="rc-ov-card">
+              <div class="rc-ov-title">
+                <span><i class="fas fa-award"></i> Class Grade Distribution Summary</span>
+                <span style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">Status: ${dispGrade === 'F' ? 'FAILED' : 'PASSED'}</span>
+              </div>
+              <div class="rc-grade-pills">
+                <div class="rc-grade-pill"><span style="color:#005f40;">A+</span><br><b>${classStats.grades['A+']}</b></div>
+                <div class="rc-grade-pill"><span style="color:#005f40;">A</span><br><b>${classStats.grades['A']}</b></div>
+                <div class="rc-grade-pill"><span style="color:#005f40;">A-</span><br><b>${classStats.grades['A-']}</b></div>
+                <div class="rc-grade-pill"><span>B</span><br><b>${classStats.grades['B']}</b></div>
+                <div class="rc-grade-pill"><span>C</span><br><b>${classStats.grades['C']}</b></div>
+                <div class="rc-grade-pill"><span>D</span><br><b>${classStats.grades['D']}</b></div>
+                <div class="rc-grade-pill"><span style="color:#dc2626;">F</span><br><b style="color:#dc2626;">${classStats.grades['F']}</b></div>
+              </div>
+            </div>
+
+            <div class="rc-qr-card">
+              <div class="rc-qr-box">${qrSvgHtml}</div>
+              <div class="rc-qr-meta">
+                <span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br>
+                <b>ID: ${verifyCode}</b><br>
+                <span style="color:#475569; font-size:7.4px;">Scan QR code to verify student transcript authenticity at <b>srms2012.edu.bd</b></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rc-bottom-section">
+          <div class="summary-box">
+            <div class="summary-metrics">
+              <span>Total Marks: <b>${filterTotalMarks}</b></span>
+              <span>Average: <b>${dispAvg}</b></span>
+              <span>GPA: <b style="font-size:14.5px;">${dispGPA}</b></span>
+              <span>Letter Grade: <b style="font-size:14.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</b></span>
+              <span>Merit Position: <b>${dispPos}</b></span>
+            </div>
+            <p class="remark-text">${teacherRemark}</p>
+          </div>
+
+          <div class="footer">
+            <div class="signature">Class Teacher</div>
+            <div class="signature">Guardian's Signature</div>
+            <div class="signature">Principal / Headmaster</div>
+          </div>
+        </div>
+      </div>
+    `);
+  });
+
+  executePrint(cardsArr.join(''), "marksheet", "landscape");
+}
+
+async function printTabulation() {
+  if (appData.length === 0) {
+    swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
+    return;
+  }
+  const { value: chosenOrient } = await swalPro.fire({
+    title: 'ট্যাবুলেশন শিট প্রিন্ট মোড নির্বাচন করুন',
+    input: 'select',
+    inputOptions: {
+      'landscape': 'A4 Landscape (আড়াআড়ি — অধিক বিষয়ের জন্য উত্তম)',
+      'portrait': 'A4 Portrait (লম্বালম্বি — পেজের নিচে ফিক্সড সিগনেচারসহ)'
+    },
+    inputValue: 'landscape',
+    showCancelButton: true,
+    cancelButtonText: 'বাতিল',
+    confirmButtonText: '<i class="fa-solid fa-print"></i> প্রিভিউ ও প্রিন্ট করুন'
+  });
+
+  if (!chosenOrient) return;
+  recalculateClassStatsInMemory();
+  buildTabulationPagesForOrientation(chosenOrient);
+  executePrint(document.getElementById('print-content').innerHTML, "tabulation", chosenOrient);
+}
+
+function buildTabulationPagesForOrientation(orientation) {
+  setPrintPageOrientation(orientation);
+
+  var cls = document.getElementById("classSelector").value;
+  var year = document.getElementById("yearSelector").value;
+  var testWeight = parseFloat(document.getElementById('testWeight').value) || 25;
+  var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
+  var passRatio = (parseFloat(document.getElementById('genPass').value) || 33) / 100;
+
+  var parsed = parseSubjectHeaders(cachedHeaders);
+  var firstEmpty = parsed.firstEmpty;
+  if (firstEmpty === -1) return;
+
+  var stats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0 };
+  var validRows = [];
+
+  appData.forEach(row => {
+    if (!row[0] && !row[1]) return;
+    stats['Total']++;
+    validRows.push(row);
+    var g = row[firstEmpty + 3];
+    if (g === 'Incomplete') return;
+    if (stats[g] !== undefined) stats[g]++;
+    else stats['F']++;
+  });
+
+  var passed = stats['Total'] - stats['F'];
+  var passRate = stats['Total'] > 0 ? ((passed / stats['Total']) * 100).toFixed(2) : "0.00";
+  var subKeys = Object.keys(parsed.subjects);
+
+  // Build table header HTML
+  var theadHtml = `
+    <thead>
+      <tr>
+        <th style="width:3.2%;">Roll</th>
+        <th style="width:11%; text-align:left; padding-left:3px;">Student Name &amp; ID</th>`;
+  subKeys.forEach(subName => {
+    let sub = parsed.subjects[subName];
+    let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:6.5px; color:#b45309;">(4th)</span>` : subName;
+    theadHtml += `<th>${htmlLabel}</th>`;
+  });
+  theadHtml += `
+        <th style="width:4%;">Avg</th>
+        <th style="width:4%;">GPA</th>
+        <th style="width:4%;">Grade</th>
+        <th style="width:4%;">Merit</th>
+      </tr>
+    </thead>`;
+
+  // Build each student row HTML with non-wrapping "Test:", "Main:", "Total:" labels
+  var bodyRowsHtml = validRows.map(row => {
+    let dispGrade = row[firstEmpty + 3] || '-';
+    let dispPos = (dispGrade === 'F' || !row[firstEmpty + 2]) ? 'N/A' : (row[firstEmpty + 4] || '-');
+
+    let tr = `<tr>
+      <td><b>${row[2] || '-'}</b></td>
+      <td style="text-align:left; padding-left:3px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:7px;">ID: ${row[0] || '-'}</span></td>`;
+
+    subKeys.forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let ev = evaluateStudentSubjectForFilter(row, sub, "All", passRatio, testWeight, mainWeight);
+      let tDisp = ev.hasTest ? ev.tCalc : "-";
+      let mDisp = ev.hasMain ? ev.mCalc : "-";
+      let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
+
+      tr += `<td>
+        <div class="tab-cell-lines">
+          <span style="color:#334155;">Test: <b>${tDisp}</b></span><br>
+          <span style="color:#334155;">Main: <b>${mDisp}</b></span><br>
+          <strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">Total: ${totDisp}</strong>
+        </div>
+      </td>`;
+    });
+
+    tr += `
+      <td><b>${row[firstEmpty + 1] || '-'}</b></td>
+      <td><strong style="font-size:8.5px;">${row[firstEmpty + 2] || '-'}</strong></td>
+      <td><strong style="font-size:8.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</strong></td>
+      <td><b>${dispPos}</b></td>
+    </tr>`;
+    return tr;
+  });
+  // Portrait mode fits 11 rows per page comfortably; Landscape mode fits 7 rows per page so summary + signatures never clip
+  var rowsPerPage = (orientation === 'portrait') ? 11 : 7;
+  var pagesArr = [];
+  for (let i = 0; i < bodyRowsHtml.length; i += rowsPerPage) {
+    pagesArr.push(bodyRowsHtml.slice(i, i + rowsPerPage));
+  }
+  if (pagesArr.length === 0) pagesArr.push([]);
+
+  var summaryTableHtml = `
+    <div style="margin-top:6px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:96%; margin-left:auto; margin-right:auto; page-break-inside:avoid;">
+      <table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;">
+        <tr style="font-weight:800; background:#e2e8f0; color:#005f40;">
+          <td style="border:1px solid #000; padding:2.5px;">Total Students</td>
+          <td style="border:1px solid #000; padding:2.5px;">Passed</td>
+          <td style="border:1px solid #000; padding:2.5px;">Failed</td>
+          <td style="border:1px solid #000; padding:2.5px;">Pass Rate</td>
+          <td style="border:1px solid #000; padding:2.5px;">A+</td>
+          <td style="border:1px solid #000; padding:2.5px;">A</td>
+          <td style="border:1px solid #000; padding:2.5px;">A-</td>
+          <td style="border:1px solid #000; padding:2.5px;">B</td>
+          <td style="border:1px solid #000; padding:2.5px;">C</td>
+          <td style="border:1px solid #000; padding:2.5px;">D</td>
+        </tr>
+        <tr style="font-weight:800; background:#fff;">
+          <td style="border:1px solid #000; padding:3px;">${stats['Total']}</td>
+          <td style="border:1px solid #000; padding:3px; color:#059669;">${passed}</td>
+          <td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td>
+          <td style="border:1px solid #000; padding:3px;">${passRate}%</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['A+']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['A']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['A-']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['B']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['C']}</td>
+          <td style="border:1px solid #000; padding:3px;">${stats['D']}</td>
+        </tr>
+      </table>
+    </div>`;
+
+  var totalPages = pagesArr.length;
+  var pageOrientClass = (orientation === 'portrait') ? 'portrait-page' : 'landscape-page';
+  var finalPagesHtml = pagesArr.map((pageRows, pageIdx) => {
+    var isLastPage = (pageIdx === totalPages - 1);
+    return `
+      <div class="tab-page ${pageOrientClass}">
+        <div class="tab-top-wrap">
+          <div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;">
+            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:40px; width:40px; border-radius:50%; border:1.5px solid #005f40; padding:1.5px;">
+            <div>
+              <h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+              <p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">
+                Total: ${stats['Total']} | Pass: ${passed} (${passRate}%)
+              </div>
+              <div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div>
+            </div>
+          </div>
+
+          <div class="legend-box" style="margin-bottom:3px; font-size:8px; padding:2px 6px;">
+            <span><b>Abbreviations:</b> Test = Test Exam Marks (${testWeight}% Weight) | Main = Main Exam Marks (${mainWeight}% Weight) | Total = Final Score (100%) &amp; Letter Grade</span>
+            <span><b>Pass Rule:</b> ${Math.round(passRatio * 100)}% (Separate CQ, MCQ &amp; Practical)</span>
+          </div>
+
+          <table class="tab-table">
+            ${theadHtml}
+            <tbody>
+              ${pageRows.join('')}
+            </tbody>
+          </table>
+
+          ${isLastPage ? summaryTableHtml : ''}
+        </div>
+
+        <div class="tab-fixed-signatures">
+          <div class="tab-sig-box">Prepared &amp; Tabulated By</div>
+          <div class="tab-sig-box">Exam Controller</div>
+          <div class="tab-sig-box">Principal / Headmaster</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('print-content').innerHTML = finalPagesHtml;
+}
+
+function publishResults() {
+  var cls = document.getElementById("classSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন!', 'warning');
+  var yr = document.getElementById("yearSelector").value;
+  var sendSms = document.getElementById('smsPublishChk').checked;
+
+  swalPro.fire({
+    title: 'ফলাফল প্রকাশ করবেন?',
+    html: `আপনি <b>${cls}</b>-এর চূড়ান্ত ফলাফল প্রকাশ করতে যাচ্ছেন।<br>${sendSms ? '<b style="color:#059669;">সকল শিক্ষার্থীর অভিভাবকের মোবাইলে SMS ও Email পাঠানো হবে!</b>' : ''}`,
+    icon: 'question',
+    showCancelButton: true,
+    cancelButtonText: 'বাতিল',
+    confirmButtonText: 'হ্যাঁ, প্রকাশ করুন'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      const { value: examTerm } = await swalPro.fire({
+        title: 'পরীক্ষার নাম লিখুন',
+        input: 'text',
+        inputLabel: 'এই নামটি SMS ও ট্রান্সক্রিপ্টে প্রদর্শিত হবে (যেমন: 1st Term / Annual Exam)',
+        inputValue: 'Annual Examination',
+        showCancelButton: true,
+        inputValidator: (value) => { if (!value) return 'পরীক্ষার নাম লিখতে হবে!'; }
+      });
+
+      if (examTerm) {
+        showLoader(true, "ফলাফল প্রকাশিত হচ্ছে এবং নোটিফিকেশন পাঠানো হচ্ছে...");
+        try {
+          let res = await apiCall('publishAndSendSMS', {
+            className: cls,
+            examTerm: examTerm,
+            year: yr,
+            sendSmsCheck: sendSms
+          });
+          showLoader(false);
+          swalPro.fire('আলহামদুলিল্লাহ!', res.msg, 'success');
+        } catch (err) {
+          showLoader(false);
+          swalPro.fire('ত্রুটি', err.message, 'error');
+        }
+      }
+    }
+  });
+}
 </script>
 </body>
 </html>
