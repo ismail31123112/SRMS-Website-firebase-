@@ -1056,35 +1056,44 @@ async function apiCall(actionName, payloadData = {}) {
   return data;
 }
 
-auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(() => {
-  auth.onAuthStateChanged(async (user) => {
-    let hasTokenInUrl = SERVER_TOKEN && SERVER_TOKEN.trim() !== "" && SERVER_TOKEN.indexOf("serverToken") === -1;
+function initYearDropdown() {
+  var yrSelect = document.getElementById("yearSelector");
+  var currentYear = new Date().getFullYear();
+  if (yrSelect && yrSelect.options.length === 0) {
+    for (var i = 2024; i <= 2050; i++) {
+      var opt = document.createElement("option");
+      opt.value = i;
+      opt.text = "শিক্ষাবর্ষ: " + i;
+      if (i === currentYear) opt.selected = true;
+      yrSelect.appendChild(opt);
+    }
+  }
+}
 
-    if (user || hasTokenInUrl) {
-      let email = user ? (user.email || "").toLowerCase() : "";
-      let isAdmin = email === "admin@srms.edu.bd" || email === "srms2012.edu@gmail.com";
-      let isTeacher = email.endsWith("@srms.edu.bd");
+try {
+  auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
+} catch (e) {}
 
-      if (isAdmin || isTeacher || hasTokenInUrl) {
-        isAuthReady = true;
-        showLoader(false);
-        document.getElementById('appContainer').style.display = 'block';
+auth.onAuthStateChanged(async (user) => {
+  let hasTokenInUrl = SERVER_TOKEN && SERVER_TOKEN.trim() !== "" && SERVER_TOKEN.indexOf("serverToken") === -1;
 
-        var yrSelect = document.getElementById("yearSelector");
-        var currentYear = new Date().getFullYear();
-        if (yrSelect.options.length === 0) {
-          for (var i = 2024; i <= 2050; i++) {
-            var opt = document.createElement("option");
-            opt.value = i;
-            opt.text = "শিক্ষাবর্ষ: " + i;
-            if (i === currentYear) opt.selected = true;
-            yrSelect.appendChild(opt);
-          }
-        }
-      } else { kickOut(); }
-    } else { kickOut(); }
-  });
-}).catch(() => { kickOut(); });
+  if (user || hasTokenInUrl) {
+    let email = user ? (user.email || "").toLowerCase() : "";
+    let isAdmin = email === "admin@srms.edu.bd" || email === "srms2012.edu@gmail.com";
+    let isTeacher = email.endsWith("@srms.edu.bd");
+
+    if (isAdmin || isTeacher || hasTokenInUrl) {
+      isAuthReady = true;
+      initYearDropdown();
+      showLoader(false);
+      document.getElementById('appContainer').style.display = 'block';
+    } else {
+      kickOut();
+    }
+  } else {
+    kickOut();
+  }
+});
 
 function kickOut() {
   showLoader(true, "অনুমোদনহীন অ্যাক্সেস!<br><span style='font-size:11px; color:#ef4444;'>লগইন পেজে নিয়ে যাওয়া হচ্ছে...</span>");
@@ -2554,16 +2563,6 @@ function triggerPrintWithOrientation(orientation) {
     setPrintPageOrientation('landscape');
   }
   setTimeout(() => { window.print(); }, 250);
-}
-}
-
-function triggerPrintWithOrientation(orientation) {
-  if (currentPrintMode === "tabulation") {
-    buildTabulationPagesForOrientation(orientation);
-  } else {
-    setPrintPageOrientation('landscape');
-  }
-  setTimeout(() => { window.print(); }, 200);
 }
 
 function executePrint(htmlContent, mode = "marksheet", defaultOrientation = "landscape") {
