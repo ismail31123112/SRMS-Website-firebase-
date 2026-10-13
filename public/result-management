@@ -2871,8 +2871,15 @@ function generateMarkSheets(examFilter) {
 
     // Build Security Verification Hash & QR Code URL
     let vHash = generateVerifyHash(id, rawClassName, year, dispGPA, dispGrade, filterTotalMarks);
+    
+    // NEW: Build the Compressed Subject String for URL (Format: Bangla_85_A+,English_76_A)
+    let subStr = item.subRows.map(sr => {
+      let cleanName = sr.actualSubName.replace(/<[^>]*>?/gm, '').trim(); // Remove HTML tags like (4th)
+      return `${cleanName}_${sr.ev.finalMark}_${sr.ev.subGrade}`;
+    }).join(',');
+
     let verifyCode = `SRMS-${year}-${vHash}`;
-    let verifyUrl = `https://srms2012.edu.bd/verify-result?id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&cls=${encodeURIComponent(rawClassName)}&roll=${encodeURIComponent(roll)}&yr=${encodeURIComponent(year)}&exam=${encodeURIComponent(examFilter === "All" ? "Final" : examFilter)}&marks=${filterTotalMarks}&gpa=${dispGPA}&grade=${encodeURIComponent(dispGrade)}&merit=${encodeURIComponent(dispPos)}&v=${vHash}`;
+    let verifyUrl = `https://srms2012.edu.bd/verify-result?id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&cls=${encodeURIComponent(rawClassName)}&roll=${encodeURIComponent(roll)}&yr=${encodeURIComponent(year)}&exam=${encodeURIComponent(examFilter === "All" ? "Final" : examFilter)}&marks=${filterTotalMarks}&gpa=${dispGPA}&grade=${encodeURIComponent(dispGrade)}&merit=${encodeURIComponent(dispPos)}&v=${vHash}&sub=${encodeURIComponent(subStr)}`;
     let qrSvgHtml = createVerificationQrSvg(verifyUrl);
 
     cardsArr.push(`
