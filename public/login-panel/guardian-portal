@@ -119,7 +119,7 @@
   .close-btn { position: absolute; top: 20px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; line-height: 1; transition: 0.3s; }
   .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
 
-  /* === Digital Marksheet (Top Summary + Sequences + Separated Test & Main Exam) === */
+  /* === Digital Marksheet (Dynamic Categories Supported) === */
   .digital-transcript { background: #0f172a; color: #f8fafc; border-radius: 24px; padding: 30px 25px; position: relative; }
   .scroll-indicator { text-align: center; color: #cbd5e1; font-size: 12px; font-weight: 600; margin-bottom: 18px; animation: bounce 2s infinite; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; display: inline-block; width: 100%; box-sizing: border-box; }
   .dt-header { border-bottom: 1px solid #334155; padding-bottom: 16px; margin-bottom: 16px; text-align: center; }
@@ -141,7 +141,7 @@
   .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
   .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
-  .dt-main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
+  .dt-main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 8px; width: 100%; }
 
   .mark-group { background: rgba(30, 41, 59, 0.7); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.04); }
   .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
@@ -149,7 +149,7 @@
   .dt-warning-text { font-size: 10px; color: #64748b; text-align: center; margin-top: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
   @media (max-width: 768px) {
-    .custom-banner { flex-direction: column; text-align: center; }
+    .custom-banner { flex-direction: column; text-align: center; padding: 30px 20px; }
     .header-card { flex-direction: column; text-align: center; gap: 15px; }
     .grid { grid-template-columns: 1fr; }
     .link-grid { grid-template-columns: repeat(2, 1fr); }
@@ -464,8 +464,6 @@
                             email: sanitizeHTML(f.email?.stringValue || ""),
                             schoolFeeDue: sanitizeHTML(f.schoolFeeDue?.stringValue || "0"),
                             schoolFeeStatus: sanitizeHTML(f.schoolFeeStatus?.stringValue || ""),
-                            hostelFeeDue: sanitizeHTML(f.hostelFeeDue?.stringValue || "0"),
-                            hostelFeeStatus: sanitizeHTML(f.hostelFeeStatus?.stringValue || ""),
                             customFees: safeJSONParse(f.customFees?.stringValue, []),
                             resultMarks: safeJSONParse(f.resultMarks?.stringValue, null),
                             resultStatus: sanitizeHTML(f.resultStatus?.stringValue || "")
@@ -740,10 +738,28 @@
       } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
-  // 💡 Helper to Extract Subject, Exam Name & Exam Type from Header
+  // 💡 Advanced Dynamic Parsing functions
+  function parseHeaderFullMarksInfo(headerStr, defaultTotal) {
+      let match = String(headerStr || "").match(/\(([^)]+)\)/);
+      if (!match || !match[1]) return { parts: [{name: "Total", max: defaultTotal}], total: defaultTotal };
+      let raw = match[1].trim();
+      if (!raw.includes(":")) {
+         let val = parseFloat(raw);
+         if(isNaN(val)) val = defaultTotal;
+         return { parts: [{name: "Total", max: val}], total: val };
+      }
+      let rawParts = raw.split('+');
+      let parts = rawParts.map(p => {
+         let sp = p.split(':');
+         return { name: sp[0].trim(), max: parseFloat(sp[1]) || 0 };
+      });
+      let total = parts.reduce((sum, p) => sum + p.max, 0) || defaultTotal;
+      return { parts: parts, total: total };
+  }
+
   function extractPortalSubAndExam(headerText) {
       if(!headerText) return { sub: "Unknown", exam: "Exam", type: "Test" };
-      let clean = String(headerText).replace(/\[.*\]/g, '').replace(/\(\d+\+?(\d+)?\+?(\d+)?\)/g, '').trim();
+      let clean = String(headerText).replace(/\[.*\]/g, '').replace(/\([^)]+\)/g, '').trim();
       let parts = clean.split(" - ");
       if(parts.length >= 3) {
           return { sub: parts[0].trim(), exam: parts[1].trim(), type: parts[2].includes("Main") ? "Main" : "Test" };
@@ -751,7 +767,6 @@
       return { sub: clean, exam: "Exam", type: "Test" };
   }
 
-  // 💡 Smart Subject, Test Sequence & Main Exam Sequence Parser
   function parsePortalHeaders(headers) {
       let firstEmpty = headers.indexOf("");
       if(firstEmpty === -1) firstEmpty = headers.length;
@@ -762,17 +777,19 @@
       while(c < firstEmpty && c < headers.length) {
           let startC = c;
           let hStr = String(headers[c] || "");
-          if (hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name")) {
+          let isOptFlag = hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name");
+          if (isOptFlag) {
               let optSubName = hStr.replace(/Opt Name/i, "").trim();
               if(!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
               let j = c + 1;
               while(j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
+                  let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
                   if(String(headers[j]).includes(" - Main")) {
-                      subjects[optSubName].mains.push(j);
+                      subjects[optSubName].mains.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
                   } else {
-                      subjects[optSubName].tests.push(j);
+                      subjects[optSubName].tests.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
                   }
                   j++;
@@ -784,11 +801,12 @@
               let j = c;
               while(j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
+                  let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
                   if(String(headers[j]).includes(" - Main")) {
-                      subjects[subName].mains.push(j);
+                      subjects[subName].mains.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
                   } else {
-                      subjects[subName].tests.push(j);
+                      subjects[subName].tests.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
                   }
                   j++;
@@ -800,7 +818,6 @@
       return { subjects, testSeq, mainSeq, firstEmpty };
   }
 
-  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam CQ/MCQ/Prac)
   function renderResults(h, d) {
       let parsed = parsePortalHeaders(h);
       let firstEmpty = parsed.firstEmpty;
@@ -817,7 +834,6 @@
           document.getElementById('appMeta').innerText = `Grade: ${grade} | Rank: ${pos}`;
           document.getElementById('appSession').innerText = "Session: " + year;
 
-          let isNineTen = String(std.class).includes("9") || String(std.class).includes("10");
           let subHtml = "";
 
           Object.keys(parsed.subjects).forEach(subName => {
@@ -825,71 +841,65 @@
               let displaySubName = sub.isOpt ? sanitizeHTML(d[sub.nameCol] || subName) + ` <span style="font-size:11px; color:#94a3b8; font-weight:normal;">(Optional)</span>` : sanitizeHTML(subName);
               
               let tVals = [];
-              sub.tests.forEach(col => {
-                  let v = String(d[col] || "").trim();
-                  if(v !== "") tVals.push(sanitizeHTML(v));
+              sub.tests.forEach(t => {
+                  let v = String(d[t.col] || "").trim();
+                  tVals.push(v !== "" ? sanitizeHTML(v) : "-");
               });
               
-              let mVals = [];
-              let cqs = [], mcqs = [], pracs = [];
-              let hasPlusInMain = false;
+              let mPartsMap = {};
+              let hasMainData = false;
 
-              sub.mains.forEach(col => {
-                  let v = String(d[col] || "").trim();
-                  if(v !== "") {
-                      mVals.push(sanitizeHTML(v));
-                      if (v.includes("+")) {
-                          hasPlusInMain = true;
-                          let parts = v.split("+").map(p => sanitizeHTML(p.trim()));
-                          if (parts[0]) cqs.push(parts[0]);
-                          if (parts[1]) mcqs.push(parts[1]);
-                          if (parts[2]) pracs.push(parts[2]);
-                      } else {
-                          cqs.push(sanitizeHTML(v));
-                      }
-                  }
+              sub.mains.forEach(m => {
+                  let vStr = String(d[m.col] || "").trim();
+                  if(vStr !== "") hasMainData = true;
+                  
+                  let oParts = vStr !== "" ? vStr.split('+').map(s=>sanitizeHTML(s.trim())) : [];
+                  m.fm.parts.forEach((p, idx) => {
+                      if(!mPartsMap[p.name]) mPartsMap[p.name] = [];
+                      mPartsMap[p.name].push(oParts[idx] !== undefined && oParts[idx] !== "" ? oParts[idx] : "-");
+                  });
               });
 
-              if(tVals.length > 0 || mVals.length > 0) {
-                  if (isNineTen || hasPlusInMain) {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                    </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
-                                            <div class="dt-main-grid">
-                                                <div class="mark-group"><div class="mark-label">CQ</div><div class="mark-val" style="color:#38bdf8;">${cqs.join(", ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">MCQ</div><div class="mark-val" style="color:#fbbf24;">${mcqs.join(", ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">Prac</div><div class="mark-val" style="color:#34d399;">${pracs.join(", ") || "-"}</div></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                  </div>`;
+              if(tVals.length > 0 || hasMainData || sub.mains.length > 0) {
+                  let mainGridHtml = "";
+                  let hasMultiParts = Object.keys(mPartsMap).length > 1;
+
+                  Object.keys(mPartsMap).forEach(pName => {
+                      let obts = mPartsMap[pName];
+                      let joinStr = obts.join(" / ");
+                      mainGridHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(pName)}</div><div class="mark-val" style="color:#38bdf8;">${joinStr}</div></div>`;
+                  });
+
+                  let mainBreakdownFinalHtml = "";
+                  let sectionTitle = "🏆 Main Exam(s)";
+                  if (hasMultiParts) {
+                      mainBreakdownFinalHtml = `<div class="dt-main-grid">${mainGridHtml}</div>`;
+                      sectionTitle = "🏆 Main Exam(s) Breakdown";
                   } else {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                    </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s)</div>
-                                            <div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mVals.join(", ") || "-"}</div>
-                                        </div>
-                                    </div>
-                                  </div>`;
+                      let pName = Object.keys(mPartsMap)[0];
+                      if(pName) {
+                          mainBreakdownFinalHtml = `<div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mPartsMap[pName].join(" / ")}</div>`;
+                      } else {
+                          mainBreakdownFinalHtml = `<div class="mark-val" style="color:#64748b; margin-top:2px;">-</div>`;
+                      }
                   }
+
+                  subHtml += `<div class="dt-row">
+                                <div class="dt-row-top">
+                                    <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                </div>
+                                <div class="dt-exam-split">
+                                    <div class="dt-test-section">
+                                        <div class="dt-section-title">📝 Test Exam(s)</div>
+                                        <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(" / ") || "-"}</div>
+                                    </div>
+                                    <div class="dt-divider"></div>
+                                    <div class="dt-main-section">
+                                        <div class="dt-section-title">${sectionTitle}</div>
+                                        ${mainBreakdownFinalHtml}
+                                    </div>
+                                </div>
+                              </div>`;
               }
           });
 
@@ -897,48 +907,42 @@
 
           let seqBanner = `
             <div class="dt-seq-box">
-                <div>📌 <b>Tests Sequence:</b> [ ${sanitizeHTML(parsed.testSeq.join(", ") || "None")} ]</div>
-                <div style="margin-top:4px;">🏆 <b>Main Exams Sequence:</b> [ ${sanitizeHTML(parsed.mainSeq.join(", ") || "None")} ]</div>
+                <div>📌 <b>Tests Sequence:</b> [ ${sanitizeHTML(parsed.testSeq.join(" / ") || "None")} ]</div>
+                <div style="margin-top:4px;">🏆 <b>Main Exams Sequence:</b> [ ${sanitizeHTML(parsed.mainSeq.join(" / ") || "None")} ]</div>
             </div>`;
 
           markSheetHTML = `
             <div class="digital-transcript">
-                <div class="scroll-indicator">⬇️ Scroll down for subject-wise marks ⬇️</div>
-                <div class="dt-header">
-                    <h2 style="margin:0; color:#38bdf8; font-size:20px; font-weight:800; letter-spacing:1px;">YOUR CHILD'S MARKSHEET</h2>
-                    <p style="margin:5px 0 0 0; color:#94a3b8; font-size:12px;">Real-time Secure Academic Record • Session: ${year}</p>
-                </div>
-                
-                <div style="padding:12px 15px; background:rgba(255,255,255,0.04); border-radius:12px; margin-bottom:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:13px; border:1px solid #334155;">
-                    <span><span style="color:#94a3b8;">Student ID:</span> <b style="color:#fff;">${std.id}</b></span>
-                    <span><span style="color:#94a3b8;">Class:</span> <b style="color:#fff;">${std.class}${std.group ? ' ('+std.group+')' : ''}</b></span>
-                    <span><span style="color:#94a3b8;">Roll:</span> <b style="color:#fff;">${std.roll}</b></span>
-                </div>
+              <div class="scroll-indicator">⬇️ Scroll down for subject-wise marks ⬇️</div>
+              <div class="dt-header">
+                  <h2 style="margin:0; color:#38bdf8; font-size:20px; font-weight:800; letter-spacing:1px;">DIGITAL TRANSCRIPT HUB</h2>
+                  <p style="margin:5px 0 0 0; color:#94a3b8; font-size:12px;">Real-time Secure Academic Record • Session: ${year}</p>
+              </div>
+              
+              <div style="padding:12px 15px; background:rgba(255,255,255,0.04); border-radius:12px; margin-bottom:16px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:13px; border:1px solid #334155;">
+                  <span><span style="color:#94a3b8;">ID:</span> <b style="color:#fff;">${std.id}</b></span>
+                  <span><span style="color:#94a3b8;">Class:</span> <b style="color:#fff;">${std.class}${std.group ? ' ('+std.group+')' : ''}</b></span>
+                  <span><span style="color:#94a3b8;">Roll:</span> <b style="color:#fff;">${std.roll}</b></span>
+              </div>
 
-                <!-- 🌟 FINAL RESULT SUMMARY AT THE TOP 🌟 -->
-                <div class="dt-summary-box">
-                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">GPA</p><h2 style="margin:0; font-size:24px; color:#fff; font-weight:900;">${gpa}</h2></div>
-                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Grade</p><h2 style="margin:0; font-size:24px; color:${grade==='F'?'#fda4af':'#4ade80'}; font-weight:900;">${grade}</h2></div>
-                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Rank</p><h2 style="margin:0; font-size:24px; color:#fbbf24; font-weight:900;">${pos}</h2></div>
-                    <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Total Avg</p><h2 style="margin:0; font-size:22px; color:#38bdf8; font-weight:900;">${totalAvg}</h2></div>
-                </div>
-                ${failBanner}
-                ${seqBanner}
+              <!-- 🌟 FINAL RESULT SUMMARY AT THE TOP 🌟 -->
+              <div class="dt-summary-box">
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">GPA</p><h2 style="margin:0; font-size:24px; color:#fff; font-weight:900;">${gpa}</h2></div>
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Grade</p><h2 style="margin:0; font-size:24px; color:${grade==='F'?'#fda4af':'#4ade80'}; font-weight:900;">${grade}</h2></div>
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Rank</p><h2 style="margin:0; font-size:24px; color:#fbbf24; font-weight:900;">${pos}</h2></div>
+                  <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Total Avg</p><h2 style="margin:0; font-size:22px; color:#38bdf8; font-weight:900;">${totalAvg}</h2></div>
+              </div>
+              ${failBanner}
+              ${seqBanner}
 
-                <div style="margin-bottom:25px;">${subHtml}</div>
-                <div class="dt-warning-text">⚠️ THIS IS A DIGITAL PREVIEW • FOR GUARDIAN REFERENCE</div>
+              <div style="margin-bottom:20px;">${subHtml}</div>
+              <div class="dt-warning-text">⚠️ THIS IS A DIGITAL PREVIEW • NOT FOR OFFICIAL USE</div>
             </div>`;
       }
   }
 
-  function viewResultModal() {
-    if(!markSheetHTML) return alert("Result data is not available or not calculated yet.");
-    document.getElementById('resultModal').style.display = 'flex';
-    document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
-  }
-
   // =====================================================================
-  // DETAILED ATTENDANCE LOGIC
+  // DETAILED ATTENDANCE LOGIC (HOLIDAYS + ABSENT TRACKING)
   // =====================================================================
   function openAttendanceModal() { 
       document.getElementById('attendanceModal').style.display = 'flex'; 
@@ -1131,9 +1135,9 @@
 
     let directSuccess = false;
 
-    try { 
+    try {
         if (auth.currentUser) {
-            // 1. Direct Firebase Auth password change (with silent re-auth if needed)
+            // 1. Try direct Firebase Auth update (with silent re-auth if needed)
             try {
                 await auth.currentUser.updatePassword(p);
                 directSuccess = true;
@@ -1152,24 +1156,21 @@
                 }
             }
 
-            // 2. Direct Firestore Database update for all linked children of this guardian
+            // 2. Direct Firestore Database update (pass field)
             const token = await auth.currentUser.getIdToken(true);
-            const targetDocs = (allChildrenData && allChildrenData.length > 0) ? allChildrenData.map(c => c.docId) : [docId];
-            for (let dId of targetDocs) {
-                if (!dId) continue;
-                const patchRes = await fetch(`${FIREBASE_DB_BASE}/Students/${dId}?updateMask.fieldPaths=pass`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-                    body: JSON.stringify({ fields: { pass: { stringValue: p } } })
-                });
-                if (patchRes.ok) directSuccess = true;
-            }
+            const patchRes = await fetch(`${FIREBASE_DB_BASE}/Students/${docId}?updateMask.fieldPaths=pass`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
+                body: JSON.stringify({ fields: { pass: { stringValue: p } } })
+            });
+            if (patchRes.ok) directSuccess = true;
         }
 
-        // 3. Also call Apps Script Backend to keep linked accounts synced
+        // 3. Also call Apps Script Backend to keep linked Guardian/Student Auth accounts synced
         try {
             const res = await fetch(SCRIPT_URL, {
-                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "updatePassword", docId: docId, id: std ? std.id : "", newPass: p })
             });
             const data = await res.json();
@@ -1178,7 +1179,7 @@
             console.log("Background script sync notice:", scriptErr);
         }
 
-        if(directSuccess) {
+        if (directSuccess) {
             sessionStorage.setItem('srms_active_pass', p);
             msgBox.style.color = "#059669"; 
             msgBox.innerText = "✅ Password Changed Successfully!"; 
@@ -1190,55 +1191,52 @@
     } catch(e) { 
         console.error("Password Update Error:", e);
         msgBox.style.color = "var(--danger)"; 
-        msgBox.innerText = "Error! Please check your network and try again."; 
+        msgBox.innerText = "Error updating password! Please try again."; 
     }
     btn.disabled = false;
     btn.innerHTML = "SAVE NEW PASSWORD";
   }
 
-  async function checkGuardianMeetStatus(headers) {
+  async function checkLiveClassForButton(headers) {
+    let sClass = std.class;
+    if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
     try {
-        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/Guardian`, { headers });
+        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/${sClass}`, { headers });
         if(response.ok) {
             const data = await response.json();
             if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
-                const btn = document.getElementById('guardianLiveBtn');
-                btn.classList.add('live-active-btn');
-                btn.innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE MEETING</span>";
+                document.getElementById('liveClassMainBtn').classList.add('live-active-btn');
+                document.getElementById('liveClassMainBtn').innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE NOW</span>";
             }
         }
     } catch (e) {}
   }
 
-  async function openGuardianMeetModal() {
+  async function openLiveClassModal() {
     document.getElementById('liveClassModal').style.display = 'flex';
     const body = document.getElementById('liveClassModalBody');
-    body.innerHTML = `<div style="text-align:center; font-weight:bold; color:var(--primary);">⏳ Synchronizing...</div>`;
+    body.innerHTML = `<div style="text-align:center; font-weight:bold; color:var(--primary);">⏳ Checking Live Session...</div>`;
+    let sClass = std.class;
+    if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
     
     try {
         const token = await auth.currentUser.getIdToken();
-        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/Guardian`, { headers: { "Authorization": "Bearer " + token } });
+        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/${sClass}`, { headers: { "Authorization": "Bearer " + token } });
         if(response.ok) {
             const data = await response.json();
             if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
-                let title = sanitizeHTML(data.fields.title ? data.fields.title.stringValue : 'Guardian Meet');
-                body.innerHTML = `
-                    <div style="text-align:center;">
-                        <div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;">🔴 LIVE BROADCAST</div>
-                        <h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3>
-                        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Joining as: <b>Guardian of ${std.name}</b></p>
-                        <button class="login-btn" onclick="joinMeet()">JOIN NOW</button>
-                    </div>`;
+                let title = sanitizeHTML(data.fields.title ? data.fields.title.stringValue : "Class Running");
+                body.innerHTML = `<div style="text-align:center;"><div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;">🔴 LIVE BROADCAST</div><h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Secure ID: ${std.id}</p><button class="login-btn" onclick="joinLiveClass('${sClass}', '${std.name}', '${std.roll}')">JOIN SESSION NOW</button></div>`;
                 return;
             }
         }
-        body.innerHTML = `<div style="text-align:center; padding:20px;"><p style="color:var(--text-muted); font-weight:600; font-size:15px;">No active meetings currently.</p></div>`; 
-    } catch (e) { body.innerHTML = `<p style="color:red; text-align:center;">Connection error.</p>`; }
+        body.innerHTML = `<div style="text-align:center; padding:20px;"><p style="color:var(--text-muted); font-weight:600; font-size:15px;">No active live sessions for your class.</p></div>`;
+    } catch (e) { body.innerHTML = `<p style="color:red; text-align:center;">API Sync Failed.</p>`; }
   }
 
-  function joinMeet() {
-    const config = `#config.startWithAudioMuted=true&config.prejoinPageEnabled=false&userInfo.displayName="Guardian of ${std.name}"`;
-    window.open(`https://meet.jit.si/SRMS-Live-Guardian${config}`, '_blank');
+  function joinLiveClass(room, name, roll) {
+    const config = `#config.startWithAudioMuted=true&config.startWithVideoMuted=true&config.prejoinPageEnabled=false&userInfo.displayName="${name} (${roll})"`;
+    window.open(`https://meet.jit.si/SRMS-Live-${room}${config}`, '_blank');
     closeModal('liveClassModal');
   }
 
@@ -1248,21 +1246,15 @@
     
     let genAmt = parseFloat(std.schoolFeeDue) || 0; let genSts = (std.schoolFeeStatus || "").toLowerCase();
     if(genAmt > 0 && genSts !== "paid") { 
-        if(genSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:#ea580c;">Pending Review ⏳</b></div>`; }
+        if(genSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
         else { total += genAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:var(--primary);">${genAmt} Tk</b></div>`; }
-    }
-
-    let hosAmt = parseFloat(std.hostelFeeDue) || 0; let hosSts = (std.hostelFeeStatus || "").toLowerCase();
-    if(hosAmt > 0 && hosSts !== "paid") { 
-        if(hosSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:#ea580c;">Pending Review ⏳</b></div>`; }
-        else { total += hosAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:var(--primary);">${hosAmt} Tk</b></div>`; }
     }
 
     if(std.customFees && std.customFees.length > 0) {
         std.customFees.forEach(cf => { 
             let cAmt = parseFloat(cf.amount) || 0; let cSts = (cf.status || "").toLowerCase();
             if(cAmt > 0 && cSts !== "paid") { 
-                if(cSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:#ea580c;">Pending Review ⏳</b></div>`; }
+                if(cSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
                 else { total += cAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:var(--primary);">${cAmt} Tk</b></div>`; }
             }
         });
@@ -1272,7 +1264,7 @@
     if(total > 0) {
         html += `<div style="margin-top:25px; text-align:center; background:#fff1f2; padding:20px; border-radius:16px;"><p style="margin:0 0 5px 0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Payable Amount</p><h2 style="margin:0; color:var(--danger); font-size:32px;">${total} Tk</h2></div><div style="margin-top:20px;"><label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mobile Number (For Payment)</label><input type="text" id="feesPhone" value="${sanitizeHTML(std.phone) || ''}" placeholder="Enter Bkash/Nagad Number"></div><p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center; margin-top:12px; line-height:1.4;">⚠️ Note: If your transaction shows "Pending" in gateway, please do NOT pay again. We will verify manually.</p><button id="btnPayNow" class="login-btn" style="background:var(--danger); font-size:15px;" onclick="generatePaymentLink()">PROCEED TO SECURE PAYMENT</button><a id="feesPayLink" href="#" target="_blank" class="login-btn" style="display:none; background:#059669; font-size:15px; text-align:center;">✅ CLICK HERE TO PAY</a><div id="feesMsg" style="margin-top:15px; font-size:13px; font-weight:bold; text-align:center;"></div>`;
     } else if (pendingCount > 0) {
-        html += `<div style="text-align:center; color:#ea580c; font-weight:700; padding:30px; background:#ffedd5; border-radius:16px; margin-top:20px; border:1px solid #fdba74;">⏳ Your child's payment is currently under Pending Review. We will update it soon.</div>`;
+        html += `<div style="text-align:center; color:#d97706; font-weight:700; padding:30px; background:#fef3c7; border-radius:16px; margin-top:20px; border:1px solid #fde68a;">⏳ Your payment is currently under Pending Review. We will update it soon.</div>`;
     } else { 
         html += `<div style="text-align:center; color:#059669; font-weight:700; padding:30px; background:#f0fdf4; border-radius:16px; margin-top:20px; border:1px solid #a7f3d0;">✅ All Fees Already Paid. Thank You!</div>`; 
     }
@@ -1293,6 +1285,5 @@
     }).catch(e => { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; });
   }
 </script>
-
 </body>
 </html>
