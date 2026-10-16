@@ -106,7 +106,7 @@
   .l-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,95,64,0.15); }
   .l-btn:hover span:last-child { color: white; }
 
-  /* === Digital Marksheet (Modal Style with Clear Separation) === */
+  /* === Digital Marksheet (Dynamic Categories Supported) === */
   .digital-transcript { background: #0f172a; color: #f8fafc; border-radius: 24px; padding: 25px 20px; position: relative; }
   .scroll-indicator { text-align: center; color: #cbd5e1; font-size: 12px; font-weight: 600; margin-bottom: 18px; animation: bounce 2s infinite; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; display: inline-block; width: 100%; box-sizing: border-box; }
   .dt-header { border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 16px; text-align: center; }
@@ -129,7 +129,7 @@
   .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
   .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
-  .dt-main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
+  .dt-main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 8px; width: 100%; }
 
   .mark-group { background: rgba(30, 41, 59, 0.7); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.04); }
   .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
@@ -437,8 +437,6 @@
                 email: sanitizeHTML(studentFields.email?.stringValue || ""),
                 schoolFeeDue: sanitizeHTML(studentFields.schoolFeeDue?.stringValue || "0"),
                 schoolFeeStatus: sanitizeHTML(studentFields.schoolFeeStatus?.stringValue || ""),
-                hostelFeeDue: sanitizeHTML(studentFields.hostelFeeDue?.stringValue || "0"),
-                hostelFeeStatus: sanitizeHTML(studentFields.hostelFeeStatus?.stringValue || ""),
                 customFees: safeJSONParse(studentFields.customFees?.stringValue, []),
                 resultMarks: safeJSONParse(studentFields.resultMarks?.stringValue, null),
                 resultStatus: sanitizeHTML(studentFields.resultStatus?.stringValue || "")
@@ -645,10 +643,28 @@
       } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
-  // 💡 Helper to Extract Subject, Exam Name & Exam Type from Header
+  // 💡 Advanced Dynamic Parsing functions
+  function parseHeaderFullMarksInfo(headerStr, defaultTotal) {
+      let match = String(headerStr || "").match(/\(([^)]+)\)/);
+      if (!match || !match[1]) return { parts: [{name: "Total", max: defaultTotal}], total: defaultTotal };
+      let raw = match[1].trim();
+      if (!raw.includes(":")) {
+         let val = parseFloat(raw);
+         if(isNaN(val)) val = defaultTotal;
+         return { parts: [{name: "Total", max: val}], total: val };
+      }
+      let rawParts = raw.split('+');
+      let parts = rawParts.map(p => {
+         let sp = p.split(':');
+         return { name: sp[0].trim(), max: parseFloat(sp[1]) || 0 };
+      });
+      let total = parts.reduce((sum, p) => sum + p.max, 0) || defaultTotal;
+      return { parts: parts, total: total };
+  }
+
   function extractPortalSubAndExam(headerText) {
       if(!headerText) return { sub: "Unknown", exam: "Exam", type: "Test" };
-      let clean = String(headerText).replace(/\[.*\]/g, '').replace(/\(\d+\+?(\d+)?\+?(\d+)?\)/g, '').trim();
+      let clean = String(headerText).replace(/\[.*\]/g, '').replace(/\([^)]+\)/g, '').trim();
       let parts = clean.split(" - ");
       if(parts.length >= 3) {
           return { sub: parts[0].trim(), exam: parts[1].trim(), type: parts[2].includes("Main") ? "Main" : "Test" };
@@ -656,7 +672,6 @@
       return { sub: clean, exam: "Exam", type: "Test" };
   }
 
-  // 💡 Smart Subject, Test Sequence & Main Exam Sequence Parser
   function parsePortalHeaders(headers) {
       let firstEmpty = headers.indexOf("");
       if(firstEmpty === -1) firstEmpty = headers.length;
@@ -667,17 +682,19 @@
       while(c < firstEmpty && c < headers.length) {
           let startC = c;
           let hStr = String(headers[c] || "");
-          if (hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name")) {
+          let isOptFlag = hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name");
+          if (isOptFlag) {
               let optSubName = hStr.replace(/Opt Name/i, "").trim();
               if(!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
               let j = c + 1;
               while(j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
+                  let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
                   if(String(headers[j]).includes(" - Main")) {
-                      subjects[optSubName].mains.push(j);
+                      subjects[optSubName].mains.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
                   } else {
-                      subjects[optSubName].tests.push(j);
+                      subjects[optSubName].tests.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
                   }
                   j++;
@@ -689,11 +706,12 @@
               let j = c;
               while(j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
+                  let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
                   if(String(headers[j]).includes(" - Main")) {
-                      subjects[subName].mains.push(j);
+                      subjects[subName].mains.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
                   } else {
-                      subjects[subName].tests.push(j);
+                      subjects[subName].tests.push({col: j, fm: fm, name: info.exam});
                       if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
                   }
                   j++;
@@ -705,7 +723,6 @@
       return { subjects, testSeq, mainSeq, firstEmpty };
   }
 
-  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam CQ/MCQ/Prac)
   function renderResults(h, d) {
       let parsed = parsePortalHeaders(h);
       let firstEmpty = parsed.firstEmpty;
@@ -718,7 +735,10 @@
           let year = sanitizeHTML(d[firstEmpty+6] || d[firstEmpty+5] || new Date().getFullYear().toString());
           if (year === failReason) year = new Date().getFullYear().toString();
 
-          let isNineTen = String(std.class).includes("9") || String(std.class).includes("10");
+          document.getElementById('appGPA').innerText = "GPA: " + gpa;
+          document.getElementById('appMeta').innerText = `Grade: ${grade} | Rank: ${pos}`;
+          document.getElementById('appSession').innerText = "Session: " + year;
+
           let subHtml = "";
 
           Object.keys(parsed.subjects).forEach(subName => {
@@ -726,71 +746,65 @@
               let displaySubName = sub.isOpt ? sanitizeHTML(d[sub.nameCol] || subName) + ` <span style="font-size:11px; color:#94a3b8; font-weight:normal;">(Optional)</span>` : sanitizeHTML(subName);
               
               let tVals = [];
-              sub.tests.forEach(col => {
-                  let v = String(d[col] || "").trim();
-                  if(v !== "") tVals.push(sanitizeHTML(v));
+              sub.tests.forEach(t => {
+                  let v = String(d[t.col] || "").trim();
+                  tVals.push(v !== "" ? sanitizeHTML(v) : "-");
               });
               
-              let mVals = [];
-              let cqs = [], mcqs = [], pracs = [];
-              let hasPlusInMain = false;
+              let mPartsMap = {};
+              let hasMainData = false;
 
-              sub.mains.forEach(col => {
-                  let v = String(d[col] || "").trim();
-                  if(v !== "") {
-                      mVals.push(sanitizeHTML(v));
-                      if (v.includes("+")) {
-                          hasPlusInMain = true;
-                          let parts = v.split("+").map(p => sanitizeHTML(p.trim()));
-                          if (parts[0]) cqs.push(parts[0]);
-                          if (parts[1]) mcqs.push(parts[1]);
-                          if (parts[2]) pracs.push(parts[2]);
-                      } else {
-                          cqs.push(sanitizeHTML(v));
-                      }
-                  }
+              sub.mains.forEach(m => {
+                  let vStr = String(d[m.col] || "").trim();
+                  if(vStr !== "") hasMainData = true;
+                  
+                  let oParts = vStr !== "" ? vStr.split('+').map(s=>sanitizeHTML(s.trim())) : [];
+                  m.fm.parts.forEach((p, idx) => {
+                      if(!mPartsMap[p.name]) mPartsMap[p.name] = [];
+                      mPartsMap[p.name].push(oParts[idx] !== undefined && oParts[idx] !== "" ? oParts[idx] : "-");
+                  });
               });
 
-              if(tVals.length > 0 || mVals.length > 0) {
-                  if (isNineTen || hasPlusInMain) {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                    </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
-                                            <div class="dt-main-grid">
-                                                <div class="mark-group"><div class="mark-label">CQ</div><div class="mark-val" style="color:#38bdf8;">${cqs.join(", ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">MCQ</div><div class="mark-val" style="color:#fbbf24;">${mcqs.join(", ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">Prac</div><div class="mark-val" style="color:#34d399;">${pracs.join(", ") || "-"}</div></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                  </div>`;
+              if(tVals.length > 0 || hasMainData || sub.mains.length > 0) {
+                  let mainGridHtml = "";
+                  let hasMultiParts = Object.keys(mPartsMap).length > 1;
+
+                  Object.keys(mPartsMap).forEach(pName => {
+                      let obts = mPartsMap[pName];
+                      let joinStr = obts.join(" / ");
+                      mainGridHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(pName)}</div><div class="mark-val" style="color:#38bdf8;">${joinStr}</div></div>`;
+                  });
+
+                  let mainBreakdownFinalHtml = "";
+                  let sectionTitle = "🏆 Main Exam(s)";
+                  if (hasMultiParts) {
+                      mainBreakdownFinalHtml = `<div class="dt-main-grid">${mainGridHtml}</div>`;
+                      sectionTitle = "🏆 Main Exam(s) Breakdown";
                   } else {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                    </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s)</div>
-                                            <div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mVals.join(", ") || "-"}</div>
-                                        </div>
-                                    </div>
-                                  </div>`;
+                      let pName = Object.keys(mPartsMap)[0];
+                      if(pName) {
+                          mainBreakdownFinalHtml = `<div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mPartsMap[pName].join(" / ")}</div>`;
+                      } else {
+                          mainBreakdownFinalHtml = `<div class="mark-val" style="color:#64748b; margin-top:2px;">-</div>`;
+                      }
                   }
+
+                  subHtml += `<div class="dt-row">
+                                <div class="dt-row-top">
+                                    <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                </div>
+                                <div class="dt-exam-split">
+                                    <div class="dt-test-section">
+                                        <div class="dt-section-title">📝 Test Exam(s)</div>
+                                        <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(" / ") || "-"}</div>
+                                    </div>
+                                    <div class="dt-divider"></div>
+                                    <div class="dt-main-section">
+                                        <div class="dt-section-title">${sectionTitle}</div>
+                                        ${mainBreakdownFinalHtml}
+                                    </div>
+                                </div>
+                              </div>`;
               }
           });
 
@@ -798,8 +812,8 @@
 
           let seqBanner = `
             <div class="dt-seq-box">
-                <div>📌 <b>Tests Sequence:</b> [ ${sanitizeHTML(parsed.testSeq.join(", ") || "None")} ]</div>
-                <div style="margin-top:4px;">🏆 <b>Main Exams Sequence:</b> [ ${sanitizeHTML(parsed.mainSeq.join(", ") || "None")} ]</div>
+                <div>📌 <b>Tests Included:</b> [ ${sanitizeHTML(parsed.testSeq.join(" / ") || "None")} ]</div>
+                <div style="margin-top:4px;">🏆 <b>Main Exams:</b> [ ${sanitizeHTML(parsed.mainSeq.join(" / ") || "None")} ]</div>
             </div>`;
 
           markSheetHTML = `
@@ -926,6 +940,7 @@
       if(!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
       let tbody = document.getElementById('modalAttTableBody');
       let summaryBox = document.getElementById('modalAttSummary');
+      let yearlySummaryBox = document.getElementById('modalYearlySummary');
       
       const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
       const today = new Date(bdTime);
@@ -939,36 +954,43 @@
       
       if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
-           summaryBox.style.display = 'none';
-           return;
+           summaryBox.style.display = 'none'; yearlySummaryBox.style.display = 'none'; return;
       }
-      
-      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) {
-           daysToLoop = today.getDate();
+      if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) { daysToLoop = today.getDate(); }
+
+      let isYearFinished = (sYear < today.getFullYear());
+      if (!isYearFinished) { yearlySummaryBox.style.display = 'none'; yearlySummaryBox.innerHTML = ''; } 
+      else {
+          let yearlyPresentCount = 0; let yearlyAbsentCount = 0;
+          for(let m = 1; m <= 12; m++) {
+              let mStr = sYear + "-" + String(m).padStart(2, '0');
+              let mPresent = 0; let mHoliday = 0; let daysInM = new Date(sYear, m, 0).getDate();
+              for(let d=1; d<=daysInM; d++) {
+                  let dStr = String(d).padStart(2, '0'); let fDate = `${mStr}-${dStr}`;
+                  if(allStudentAttendance[fDate]) mPresent++; else if(allHolidays[fDate]) mHoliday++;
+              }
+              yearlyPresentCount += mPresent;
+              let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4); 
+              let mAbsent = Math.max(0, workingDaysInM - mPresent);
+              yearlyAbsentCount += mAbsent;
+          }
+          yearlySummaryBox.style.display = 'block';
+          yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${sYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
       }
 
-      let presentCount = 0; let absentCount = 0; let holidayCount = 0;
-      let html = "";
-      
+      let presentCount = 0; let absentCount = 0; let holidayCount = 0; let html = "";
       for(let d = daysToLoop; d >= 1; d--) {
            let dStr = String(d).padStart(2, '0');
            let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
-           
            let statusHtml = ""; let inTime = "-"; let outTime = "-"; let bgRow = "";
            
            if(allHolidays[fullDate]) {
-               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`;
-               holidayCount++;
-               bgRow = "background: #fffbeb;";
+               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`; holidayCount++; bgRow = "background: #fffbeb;";
            } else if (allStudentAttendance[fullDate]) {
-               let rec = allStudentAttendance[fullDate];
-               inTime = rec.in; outTime = rec.out;
-               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`;
-               presentCount++;
+               let rec = allStudentAttendance[fullDate]; inTime = rec.in; outTime = rec.out;
+               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`; presentCount++;
            } else {
-               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`;
-               absentCount++;
-               bgRow = "background: #fff1f2;";
+               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`; absentCount++; bgRow = "background: #fff1f2;";
            }
            
            html += `
@@ -981,35 +1003,17 @@
       }
       
       if(html === "") {
-           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>';
-           summaryBox.style.display = 'none';
+           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>'; summaryBox.style.display = 'none';
       } else {
-           tbody.innerHTML = html;
-           summaryBox.style.display = 'flex';
+           tbody.innerHTML = html; summaryBox.style.display = 'flex';
            summaryBox.innerHTML = `
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small>
-                <span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span>
-            </span>
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small>
-                <span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span>
-            </span>
-            <span style="display:flex; flex-direction:column; align-items:center;">
-                <small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small>
-                <span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span>
-            </span>
-        `;
+            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small><span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small><span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span></span>
+            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small><span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span></span>`;
       }
   }
 
   function openSecurityModal() { document.getElementById('newPass').value = ""; document.getElementById('passMsg').innerText = ""; document.getElementById('securityModal').style.display = 'flex'; }
-  
-  function viewResultModal() {
-    if(!markSheetHTML) return alert("Result data is not available or not calculated yet.");
-    document.getElementById('resultModal').style.display = 'flex';
-    document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
-  }
 
   // 🚀 DIRECT & INSTANT PASSWORD CHANGE (Firebase Auth + Firestore + Backend Sync)
   async function updatePassword() {
@@ -1151,12 +1155,6 @@
         else { total += genAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:var(--primary);">${genAmt} Tk</b></div>`; }
     }
 
-    let hosAmt = parseFloat(std.hostelFeeDue) || 0; let hosSts = (std.hostelFeeStatus || "").toLowerCase();
-    if(hosAmt > 0 && hosSts !== "paid") { 
-        if(hosSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
-        else { total += hosAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>Hostel Fee</span><b style="color:var(--primary);">${hosAmt} Tk</b></div>`; }
-    }
-
     if(std.customFees && std.customFees.length > 0) {
         std.customFees.forEach(cf => { 
             let cAmt = parseFloat(cf.amount) || 0; let cSts = (cf.status || "").toLowerCase();
@@ -1182,7 +1180,7 @@
     const phone = sanitizeHTML(document.getElementById("feesPhone").value.trim());
     if (phone.length < 11) { document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>⚠️ সঠিক মোবাইল নম্বর দিন।</span>"; return; }
     
-    const btn = document.getElementById("btnPayNow"); btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> Connecting Server..."; btn.disabled = true;
+    const btn = document.getElementById("btnPayNow"); btn.innerHTML = "<span class='loader-spinner'></span> Connecting Server..."; btn.disabled = true;
     const url = FEE_PAY_SCRIPT + "?action=create_payment&student_id=" + encodeURIComponent(std.id) + "&phone=" + encodeURIComponent(phone) + "&email=" + encodeURIComponent(std.email || '');
     
     fetch(url).then(r => r.json()).then(data => {
