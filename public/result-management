@@ -350,7 +350,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .divider-col { border-right: 1.8px solid #000 !important; border-left: 1.8px solid #000 !important; }
 
 /* Dynamic Content Formatting for Badges inside Marksheet */
-.badge-part { font-size:8.4px; background:#f1f5f9 !important; border:1px solid #cbd5e1; padding:2px 4px; border-radius:4px; font-weight:700; color:#0f172a; display:inline-block; }
+.badge-part { font-size:9.2px; background:#f8fafc !important; border:1px solid #cbd5e1; padding:2px 5px; border-radius:5px; font-weight:800; color:#0f172a; display:inline-block; margin: 1px 2px; }
 
 .report-card.spacious-card .marks-table th, .report-card.spacious-card .marks-table td { padding: 5.5px 7px; font-size: 10.8px; }
 .report-card.standard-card .marks-table th, .report-card.standard-card .marks-table td { padding: 4px 3px; font-size: 9.3px; }
@@ -974,7 +974,10 @@ async function openDataEntryForm(rowIndex) {
 
 // 👑 Universal Intelligent Student Evaluation Engine
 function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainWeight) {
-  let tMarks = []; let mBreakdownHtmls = [];
+  let tMarks = []; 
+  let mPartsMap = {}; 
+  let mTotals = [];   
+  let mBreakdownHtmls = [];
   let tCalc = 0, mCalc = 0;
   let hasTest = false, hasMain = false, isSubFail = false;
   let totalTFull = 0, totalMFull = 0;
@@ -994,6 +997,8 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
            sumT += obt;
         });
         tCalc += sumT; tMarks.push(sumT);
+      } else {
+        tMarks.push("-");
       }
     }
   });
@@ -1002,7 +1007,6 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
     if (examFilter === "All" || examFilter === m.name || m.name === "Main") {
       let vStr = String(row[m.col] || "").trim();
       totalMFull += m.fm.total;
-      let breakdownParts = [];
 
       if (vStr !== "") {
         hasMain = true;
@@ -1013,7 +1017,9 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
             let obt = oParts[idx] || 0;
             if (obt > p.max) obt = p.max;
             sumM += obt;
-            breakdownParts.push({ name: p.name, obt: obt, max: p.max });
+            
+            if(!mPartsMap[p.name]) mPartsMap[p.name] = [];
+            mPartsMap[p.name].push(obt);
 
             // 👑 Dynamic Individual Pass Logic Checking
             if (window.passConfig.reqIndividualPass && p.max > 0) {
@@ -1023,19 +1029,31 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
                 }
             }
         });
+        
         mCalc += sumM;
+        mTotals.push(sumM);
 
         // Overall Subject Total Pass Check
         if (sumM < Math.ceil(m.fm.total * (window.passConfig.passPercentage / 100))) {
             isSubFail = true;
             specificFailReason = "Total Marks";
         }
-
-        // Generate Beautiful Badges for Marksheet Print
-        let badges = breakdownParts.map(bp => `<span class="badge-part">${bp.name}: <b>${bp.obt}</b>/${bp.max}</span>`).join(" ");
-        mBreakdownHtmls.push(`<div style="display:flex; flex-wrap:wrap; gap:3px; justify-content:center;">${badges}</div>`);
+      } else {
+        // Handle Absent or Empty
+        m.fm.parts.forEach((p, idx) => {
+            if(!mPartsMap[p.name]) mPartsMap[p.name] = [];
+            mPartsMap[p.name].push("-");
+        });
+        mTotals.push("-");
       }
     }
+  });
+
+  // Generate Beautiful Badges with Sequence Slashes (e.g. Written: 70 / 65 / 70)
+  Object.keys(mPartsMap).forEach(pName => {
+      let obts = mPartsMap[pName];
+      let joinStr = obts.join(" / ");
+      mBreakdownHtmls.push(`<span class="badge-part">${pName}: <b style="color:#0f172a;">${joinStr}</b></span>`);
   });
 
   // Calculate Final Combination
@@ -1056,7 +1074,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
   let subGrade = getGrade_JS(subGP);
   if (isSubFail || subGP === 0) { subGP = 0.00; subGrade = "F"; }
 
-  return { attended: hasTest || hasMain, hasTest, hasMain, tMarks, mBreakdownHtmls, tCalc, mCalc, finalMark, subGP, subGrade, isSubFail, specificFailReason };
+  return { attended: hasTest || hasMain, hasTest, hasMain, tMarks, mTotals, mBreakdownHtmls, tCalc, mCalc, finalMark, subGP, subGrade, isSubFail, specificFailReason };
 }
 
 function recalculateClassStatsInMemory() {
@@ -1705,8 +1723,8 @@ function viewSingleResult(rowIndex) {
       <table style="width:100%; border-collapse:collapse; font-size:12px; text-align:center;">
         <tr style="background:#e2e8f0; font-weight:900; color:#0f172a;">
           <th style="border:1px solid #cbd5e1; padding:8px; text-align:left;">বিষয়</th>
-          <th style="border:1px solid #cbd5e1; padding:8px;">Test</th>
-          <th style="border:1px solid #cbd5e1; padding:8px;">Components Breakdown</th>
+          <th style="border:1px solid #cbd5e1; padding:8px;">Test Exams</th>
+          <th style="border:1px solid #cbd5e1; padding:8px;">Main Exam Breakdown</th>
           <th style="border:1px solid #cbd5e1; padding:8px;">Total</th>
           <th style="border:1px solid #cbd5e1; padding:8px;">Grade</th>
         </tr>`;
@@ -1716,8 +1734,8 @@ function viewSingleResult(rowIndex) {
       if (ev.attended) {
         html += `<tr>
           <td style="border:1px solid #cbd5e1; padding:6px; text-align:left; font-weight:800;">${actualSubName}</td>
-          <td style="border:1px solid #cbd5e1; padding:6px; font-weight:700;">${ev.tMarks.length>0 ? ev.tMarks.join("/") : "-"}</td>
-          <td style="border:1px solid #cbd5e1; padding:6px;">${ev.mBreakdownHtmls.length>0 ? ev.mBreakdownHtmls.join("") : "-"}</td>
+          <td style="border:1px solid #cbd5e1; padding:6px; font-weight:700;">${ev.tMarks.length>0 ? ev.tMarks.join(" / ") : "-"}</td>
+          <td style="border:1px solid #cbd5e1; padding:6px;">${ev.mBreakdownHtmls.length>0 ? ev.mBreakdownHtmls.join(" ") : "-"}</td>
           <td style="border:1px solid #cbd5e1; padding:6px; font-weight:900;">${ev.finalMark}</td>
           <td style="border:1px solid #cbd5e1; padding:6px; font-weight:900; color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</td>
         </tr>`;
@@ -1814,9 +1832,9 @@ function generateMarkSheets(examFilter) {
     <thead>
       <tr>
         <th style="width:22%;">Subject</th>
-        <th class="divider-col" style="width:8%;">Test</th>
-        <th class="divider-col" style="width:45%;">Main Exam Breakdown (Obt/Max)</th>
-        <th style="width:9%;">Final<br>(100%)</th>
+        <th class="divider-col" style="width:12%;">Test Exams</th>
+        <th class="divider-col" style="width:40%;">Main Exam Breakdown</th>
+        <th style="width:10%;">Final<br>(100%)</th>
         <th style="width:8%;">Grade</th>
         <th style="width:8%;">GP</th>
       </tr>
@@ -1824,15 +1842,16 @@ function generateMarkSheets(examFilter) {
     
   let activeTests = []; let activeMains = []; parsed.testSeq.forEach(t => { if (examFilter === "All" || t === examFilter) activeTests.push(t); }); parsed.mainSeq.forEach(m => { if (examFilter === "All" || m === examFilter) activeMains.push(m); });
   
-  let legendHtml = `<div class="legend-box"><span><b>Tests Included (${testWeight}%):</b> ${activeTests.join(" / ") || "N/A"}</span><span><b>Main Exams (${mainWeight}%):</b> ${activeMains.join(" / ") || "N/A"}</span><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Required" : "Overall Subject Pass"} (${window.passConfig.passPercentage}%)</span></div>`;
+  let legendFormat = examFilter === "All" ? "Exam 1 / Exam 2 / ..." : "Obtained Marks";
+  let legendHtml = `<div class="legend-box"><span><b>Tests Included (${testWeight}%):</b> ${activeTests.join(" / ") || "N/A"}</span><span><b>Main Exams (${mainWeight}%):</b> ${activeMains.join(" / ") || "N/A"}</span><span><b>Marks Format:</b> ${legendFormat}</span><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Required" : "Overall Subject Pass"} (${window.passConfig.passPercentage}%)</span></div>`;
   let issueDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   let cardsArr = [];
 
   studentEvaluations.forEach(item => {
     var row = item.row; var id = row[0]; var name = row[1]; var roll = row[2]; var dispGPA = item.liveGPA; var dispGrade = item.liveGrade; var dispAvg = item.liveAvg; var dispPos = item.dispPos; var filterTotalMarks = item.filterTotalMarks;
     var rowsHtmlArray = item.subRows.map(sr => {
-      let ev = sr.ev; let testStr = ev.tMarks.length > 0 ? ev.tMarks.join("/") : "-"; 
-      let mainBreakdown = ev.mBreakdownHtmls.length > 0 ? ev.mBreakdownHtmls.join("") : "-";
+      let ev = sr.ev; let testStr = ev.tMarks.length > 0 ? ev.tMarks.join(" / ") : "-"; 
+      let mainBreakdown = ev.mBreakdownHtmls.length > 0 ? ev.mBreakdownHtmls.join(" ") : "-";
       return `<tr><td class="sub-name">${sr.actualSubName}</td><td class="divider-col"><b>${testStr}</b></td><td class="divider-col" style="padding:4px;">${mainBreakdown}</td><td><b>${ev.finalMark}</b></td><td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td><td><strong>${ev.subGP.toFixed(2)}</strong></td></tr>`;
     });
 
@@ -1918,7 +1937,9 @@ function buildTabulationPagesForOrientation(orientation) {
     let tr = `<tr><td><b>${row[2] || '-'}</b></td><td style="text-align:left; padding-left:3px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:7px;">ID: ${row[0] || '-'}</span></td>`;
     subKeys.forEach(subName => {
       let sub = parsed.subjects[subName]; let ev = evaluateStudentSubjectForFilter(row, sub, "All", testWeight, mainWeight);
-      let tDisp = ev.hasTest ? ev.tCalc : "-"; let mDisp = ev.hasMain ? ev.mCalc : "-"; let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
+      let tDisp = ev.hasTest ? ev.tMarks.join("/") : "-"; 
+      let mDisp = ev.hasMain ? ev.mTotals.join("/") : "-"; 
+      let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
       tr += `<td><div class="tab-cell-lines"><span style="color:#334155;">Test: <b>${tDisp}</b></span><br><span style="color:#334155;">Main: <b>${mDisp}</b></span><br><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">Total: ${totDisp}</strong></div></td>`;
     });
     tr += `<td><b>${row[firstEmpty + 1] || '-'}</b></td><td><strong style="font-size:8.5px;">${row[firstEmpty + 2] || '-'}</strong></td><td><strong style="font-size:8.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</strong></td><td><b>${dispPos}</b></td></tr>`; return tr;
