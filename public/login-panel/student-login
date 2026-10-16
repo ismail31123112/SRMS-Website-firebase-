@@ -106,7 +106,7 @@
   .l-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,95,64,0.15); }
   .l-btn:hover span:last-child { color: white; }
 
-  /* === Digital Marksheet (Dynamic Categories Supported) === */
+  /* === Digital Marksheet (Modal Style with Clear Separation) === */
   .digital-transcript { background: #0f172a; color: #f8fafc; border-radius: 24px; padding: 25px 20px; position: relative; }
   .scroll-indicator { text-align: center; color: #cbd5e1; font-size: 12px; font-weight: 600; margin-bottom: 18px; animation: bounce 2s infinite; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; display: inline-block; width: 100%; box-sizing: border-box; }
   .dt-header { border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 16px; text-align: center; }
@@ -129,7 +129,7 @@
   .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
   .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
-  .dt-main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(65px, 1fr)); gap: 8px; width: 100%; }
+  .dt-main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
 
   .mark-group { background: rgba(30, 41, 59, 0.7); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.04); }
   .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
@@ -331,8 +331,10 @@
     </div>
 </div>
 
+<!-- Firebase JS SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
   // =====================================================================
@@ -341,19 +343,13 @@
   const firebaseConfig = {
     apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
     authDomain: "srms-website-management.firebaseapp.com",
-    projectId: "srms-website-management",
-    storageBucket: "srms-website-management.firebasestorage.app",
-    messagingSenderId: "960037316778",
-    appId: "1:960037316778:web:d6f9b1f434572d9374c8d3",
-    measurementId: "G-4KB8S6YCV0"
+    projectId: "srms-website-management"
   };
 
   if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
   const auth = firebase.auth();
+  const db = firebase.firestore();
 
-  const FIREBASE_PROJECT_ID = firebaseConfig.projectId;
-  const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
-  
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXWc-JW1TpzHHgRp7viUvHW4pUm_lw600wOaHBIIT-_Hwn0K36bxbXjHcQLgtRfWvP/exec"; 
   const FEE_PAY_SCRIPT = "https://script.google.com/macros/s/AKfycbzUkDxT8bO6HrMMkBOGr_ewCDaMQg7bZxvPr_8Omh3kDEqeX1T_JmL1v9JXMW2jwo88hw/exec";
   
@@ -371,13 +367,12 @@
       return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
   }
 
-  // 🛡️ Crash-Proof JSON Parser
   function safeJSONParse(str, fallback = null) {
       if (!str || typeof str !== 'string' || str.trim() === "") return fallback;
       try { return JSON.parse(str); } catch (e) { return fallback; }
   }
 
-  // 🛡️ Non-stop Session & Auth Restoration on Page Reload
+  // 🛡️ Auth Restoration on Page Reload
   window.onload = function() {
     const savedUser = sessionStorage.getItem('srms_student_session');
     if (savedUser) {
@@ -394,7 +389,7 @@
   function loader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 🚀 Non-Stop Crash-Proof Login Flow
+  // 🚀 Non-Stop Crash-Proof Login Flow with JS SDK
   async function handleLogin() {
     const id = sanitizeHTML(document.getElementById('stuID').value.trim());
     let pass = document.getElementById('stuPass').value.trim();
@@ -407,39 +402,31 @@
     btn.innerHTML = "<span class='loader-spinner'></span> Authenticating..."; btn.disabled = true;
     try {
         const email = `${id}@srms.edu.bd`;
-        
         await auth.signInWithEmailAndPassword(email, pass);
-        const token = await auth.currentUser.getIdToken(true);
-
-        const queryUrl = `${FIREBASE_DB_BASE}:runQuery`;
-        const reqBody = { structuredQuery: { from: [{ collectionId: "Students" }], where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: id } } }, limit: 1 } };
         
-        const res = await fetch(queryUrl, { 
-            method: "POST", 
-            headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token }, 
-            body: JSON.stringify(reqBody) 
-        });
-        const data = await res.json();
+        const querySnap = await db.collection("Students").where("studentID", "==", id).limit(1).get();
         
-        if (data && data[0] && data[0].document) {
-            const doc = data[0].document;
-            const studentFields = doc.fields || {};
-            const stdDocId = doc.name.split('/').pop();
+        if (!querySnap.empty) {
+            const doc = querySnap.docs[0];
+            const studentFields = doc.data();
+            const stdDocId = doc.id;
 
             std = { 
                 docId: stdDocId,
-                id: sanitizeHTML(studentFields.studentID?.stringValue || ""),
-                name: sanitizeHTML(studentFields.name?.stringValue || "Student"),
-                class: sanitizeHTML(studentFields.class?.stringValue || ""),
-                roll: sanitizeHTML(studentFields.roll?.stringValue || ""),
-                group: sanitizeHTML(studentFields.group?.stringValue || ""),
-                phone: sanitizeHTML(studentFields.phone?.stringValue || ""),
-                email: sanitizeHTML(studentFields.email?.stringValue || ""),
-                schoolFeeDue: sanitizeHTML(studentFields.schoolFeeDue?.stringValue || "0"),
-                schoolFeeStatus: sanitizeHTML(studentFields.schoolFeeStatus?.stringValue || ""),
-                customFees: safeJSONParse(studentFields.customFees?.stringValue, []),
-                resultMarks: safeJSONParse(studentFields.resultMarks?.stringValue, null),
-                resultStatus: sanitizeHTML(studentFields.resultStatus?.stringValue || "")
+                id: sanitizeHTML(studentFields.studentID || ""),
+                name: sanitizeHTML(studentFields.name || "Student"),
+                class: sanitizeHTML(studentFields.class || ""),
+                roll: sanitizeHTML(studentFields.roll || ""),
+                group: sanitizeHTML(studentFields.group || ""),
+                phone: sanitizeHTML(studentFields.phone || ""),
+                email: sanitizeHTML(studentFields.email || ""),
+                schoolFeeDue: sanitizeHTML(studentFields.schoolFeeDue || "0"),
+                schoolFeeStatus: sanitizeHTML(studentFields.schoolFeeStatus || ""),
+                hostelFeeDue: sanitizeHTML(studentFields.hostelFeeDue || "0"),
+                hostelFeeStatus: sanitizeHTML(studentFields.hostelFeeStatus || ""),
+                customFees: safeJSONParse(studentFields.customFees, []),
+                resultMarks: safeJSONParse(studentFields.resultMarks, null),
+                resultStatus: sanitizeHTML(studentFields.resultStatus || "")
             };
             sessionStorage.setItem('srms_student_session', JSON.stringify(std));
             sessionStorage.setItem('srms_student_docId', stdDocId);
@@ -571,100 +558,73 @@
     document.getElementById('uMeta').innerText = `ID: ${std.id} | Class: ${std.class}${std.group ? ` (${std.group})` : ''} | Roll: ${std.roll}`;
     
     try {
-        if (!auth.currentUser) return;
-        const token = await auth.currentUser.getIdToken();
-        const headers = { "Authorization": "Bearer " + token };
+        // Fetch Warnings using JS SDK
+        const warnSnap = await db.collection("Warnings").where("studentID", "==", std.id).get();
+        if (!warnSnap.empty) {
+            let warn = warnSnap.docs[0].data();
+            document.getElementById('noticeBox').style.display="block";
+            document.getElementById('noticeText').innerText = sanitizeHTML(warn.message);
+        }
 
-        fetch(`${FIREBASE_DB_BASE}/Warnings?pageSize=1000`, { headers }).then(r=>r.json()).then(data=>{
-            if(data.documents) {
-                let warn = data.documents.find(d => d.fields && d.fields.studentID && d.fields.studentID.stringValue === std.id);
-                if(warn) {
-                    document.getElementById('noticeBox').style.display="block";
-                    document.getElementById('noticeText').innerText = warn.fields.message.stringValue;
-                }
-            }
-        }).catch(e=>{});
-
-        if(std.resultMarks && Array.isArray(std.resultMarks) && std.resultMarks.length > 0) {
+        // Result Logic
+        if(std.resultStatus === "Published" && std.resultMarks && Array.isArray(std.resultMarks) && std.resultMarks.length > 0) {
             let rawCls = String(std.class).trim();
             let headerClsName = (rawCls === "Play" || rawCls === "Nursery" || rawCls === "KG" || rawCls.toLowerCase().startsWith("class")) ? rawCls : "Class " + rawCls;
             if(std.group && std.group !== "None" && std.group !== "N/A") headerClsName += " " + std.group;
             let hDocName = headerClsName.replace(/\s+/g, '_');
 
-            fetch(`${FIREBASE_DB_BASE}/ClassHeaders/${hDocName}`, { headers }).then(r=>r.json()).then(data=>{
-                if(data.fields && data.fields.headers) {
-                    let parsedHeaders = safeJSONParse(data.fields.headers.stringValue, []);
-                    if (parsedHeaders.length > 0) renderResults(parsedHeaders, std.resultMarks);
-                }
-            }).catch(e=>{});
+            const headerDoc = await db.collection("ClassHeaders").doc(hDocName).get();
+            if(headerDoc.exists && headerDoc.data().headers) {
+                let parsedHeaders = safeJSONParse(headerDoc.data().headers, []);
+                if (parsedHeaders.length > 0) renderResults(parsedHeaders, std.resultMarks);
+            }
+        } else if (std.resultStatus === "Calculated") {
+            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;">Result Pending</h2><p style="color:#64748b;">Your result has been processed but is not published yet. Please wait for the official announcement.</p></div>`;
+        } else {
+            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;">No Result Found</h2><p style="color:#64748b;">There are no academic results available for the current term.</p></div>`;
         }
 
-        fetchMat(headers);
-        checkLiveClassForButton(headers);
-    } catch(err) { console.log("Token Sync Error on Dashboard:", err); }
+        fetchMat();
+        checkLiveClassForButton();
+    } catch(err) { console.log("Dashboard Sync Error:", err); }
   }
 
-  async function fetchMat(headers) {
+  async function fetchMat() {
       const box = document.getElementById('matList');
       box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading resources...</div>";
       
       try {
-          const res = await fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=1000`, { headers });
-          const data = await res.json();
+          const snap = await db.collection("WebsitePosts").where("targetPage", "==", "Class" + std.class).get();
           box.innerHTML = ""; let count = 0;
-          
-          if(data.documents) {
-              let posts = data.documents.map(d => d.fields).sort((a,b) => {
-                  let tA = a.timestamp ? parseInt(a.timestamp.integerValue) : 0;
-                  let tB = b.timestamp ? parseInt(b.timestamp.integerValue) : 0;
-                  return tB - tA;
-              });
+          let posts = [];
+          snap.forEach(doc => posts.push(doc.data()));
 
-              posts.forEach(f => {
-                  let target = f.targetPage ? f.targetPage.stringValue : "";
-                  if(target === "Class" + std.class) {
-                      count++;
-                      let title = sanitizeHTML(f.title ? f.title.stringValue : 'Document');
-                      let date = sanitizeHTML(f.date ? f.date.stringValue : '');
-                      let link = f.fileUrl ? f.fileUrl.stringValue : '#';
-                      if(!link || link === "None") link = "#";
-                      
-                      box.innerHTML += `<div style="background:white; padding:15px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
-                                          <div>
-                                            <div style="font-weight:700; color:#1e293b; font-size:14px;">${title}</div>
-                                            <div style="font-size:11px; color:#64748b; margin-top:3px;">📅 ${date}</div>
-                                          </div>
-                                          <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--primary); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap;">VIEW</a>
-                                        </div>`;
-                  }
-              });
-          }
+          posts.sort((a,b) => (parseInt(b.timestamp) || 0) - (parseInt(a.timestamp) || 0));
+
+          posts.forEach(f => {
+              count++;
+              let title = sanitizeHTML(f.title || 'Document');
+              let date = sanitizeHTML(f.date || '');
+              let link = f.fileUrl || '#';
+              if(!link || link === "None") link = "#";
+              
+              box.innerHTML += `<div style="background:white; padding:15px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
+                                  <div>
+                                    <div style="font-weight:700; color:#1e293b; font-size:14px;">${title}</div>
+                                    <div style="font-size:11px; color:#64748b; margin-top:3px;">📅 ${date}</div>
+                                  </div>
+                                  <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--primary); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap;">VIEW</a>
+                                </div>`;
+          });
+          
           if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'>No class materials available.</div>";
       } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
-  // 💡 Advanced Dynamic Parsing functions
-  function parseHeaderFullMarksInfo(headerStr, defaultTotal) {
-      let match = String(headerStr || "").match(/\(([^)]+)\)/);
-      if (!match || !match[1]) return { parts: [{name: "Total", max: defaultTotal}], total: defaultTotal };
-      let raw = match[1].trim();
-      if (!raw.includes(":")) {
-         let val = parseFloat(raw);
-         if(isNaN(val)) val = defaultTotal;
-         return { parts: [{name: "Total", max: val}], total: val };
-      }
-      let rawParts = raw.split('+');
-      let parts = rawParts.map(p => {
-         let sp = p.split(':');
-         return { name: sp[0].trim(), max: parseFloat(sp[1]) || 0 };
-      });
-      let total = parts.reduce((sum, p) => sum + p.max, 0) || defaultTotal;
-      return { parts: parts, total: total };
-  }
-
+  // 💡 Helper to Extract Subject, Exam Name & Exam Type from Header
   function extractPortalSubAndExam(headerText) {
       if(!headerText) return { sub: "Unknown", exam: "Exam", type: "Test" };
-      let clean = String(headerText).replace(/\[.*\]/g, '').replace(/\([^)]+\)/g, '').trim();
+      let clean = String(headerText).replace(/\[.*?\]/g, '').replace(/\([^)]+\)/g, '').trim();
       let parts = clean.split(" - ");
       if(parts.length >= 3) {
           return { sub: parts[0].trim(), exam: parts[1].trim(), type: parts[2].includes("Main") ? "Main" : "Test" };
@@ -672,6 +632,7 @@
       return { sub: clean, exam: "Exam", type: "Test" };
   }
 
+  // 💡 Smart Subject, Test Sequence & Main Exam Sequence Parser
   function parsePortalHeaders(headers) {
       let firstEmpty = headers.indexOf("");
       if(firstEmpty === -1) firstEmpty = headers.length;
@@ -682,19 +643,17 @@
       while(c < firstEmpty && c < headers.length) {
           let startC = c;
           let hStr = String(headers[c] || "");
-          let isOptFlag = hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name");
-          if (isOptFlag) {
+          if (hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name")) {
               let optSubName = hStr.replace(/Opt Name/i, "").trim();
               if(!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
               let j = c + 1;
               while(j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
-                  let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
                   if(String(headers[j]).includes(" - Main")) {
-                      subjects[optSubName].mains.push({col: j, fm: fm, name: info.exam});
+                      subjects[optSubName].mains.push(j);
                       if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
                   } else {
-                      subjects[optSubName].tests.push({col: j, fm: fm, name: info.exam});
+                      subjects[optSubName].tests.push(j);
                       if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
                   }
                   j++;
@@ -706,12 +665,11 @@
               let j = c;
               while(j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
-                  let fm = parseHeaderFullMarksInfo(headers[j], info.type === "Main" ? 100 : 50);
                   if(String(headers[j]).includes(" - Main")) {
-                      subjects[subName].mains.push({col: j, fm: fm, name: info.exam});
+                      subjects[subName].mains.push(j);
                       if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
                   } else {
-                      subjects[subName].tests.push({col: j, fm: fm, name: info.exam});
+                      subjects[subName].tests.push(j);
                       if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
                   }
                   j++;
@@ -723,6 +681,7 @@
       return { subjects, testSeq, mainSeq, firstEmpty };
   }
 
+  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam CQ/MCQ/Prac)
   function renderResults(h, d) {
       let parsed = parsePortalHeaders(h);
       let firstEmpty = parsed.firstEmpty;
@@ -735,10 +694,7 @@
           let year = sanitizeHTML(d[firstEmpty+6] || d[firstEmpty+5] || new Date().getFullYear().toString());
           if (year === failReason) year = new Date().getFullYear().toString();
 
-          document.getElementById('appGPA').innerText = "GPA: " + gpa;
-          document.getElementById('appMeta').innerText = `Grade: ${grade} | Rank: ${pos}`;
-          document.getElementById('appSession').innerText = "Session: " + year;
-
+          let isNineTen = String(std.class).includes("9") || String(std.class).includes("10");
           let subHtml = "";
 
           Object.keys(parsed.subjects).forEach(subName => {
@@ -746,65 +702,71 @@
               let displaySubName = sub.isOpt ? sanitizeHTML(d[sub.nameCol] || subName) + ` <span style="font-size:11px; color:#94a3b8; font-weight:normal;">(Optional)</span>` : sanitizeHTML(subName);
               
               let tVals = [];
-              sub.tests.forEach(t => {
-                  let v = String(d[t.col] || "").trim();
-                  tVals.push(v !== "" ? sanitizeHTML(v) : "-");
+              sub.tests.forEach(col => {
+                  let v = String(d[col] || "").trim();
+                  if(v !== "") tVals.push(sanitizeHTML(v));
               });
               
-              let mPartsMap = {};
-              let hasMainData = false;
+              let mVals = [];
+              let cqs = [], mcqs = [], pracs = [];
+              let hasPlusInMain = false;
 
-              sub.mains.forEach(m => {
-                  let vStr = String(d[m.col] || "").trim();
-                  if(vStr !== "") hasMainData = true;
-                  
-                  let oParts = vStr !== "" ? vStr.split('+').map(s=>sanitizeHTML(s.trim())) : [];
-                  m.fm.parts.forEach((p, idx) => {
-                      if(!mPartsMap[p.name]) mPartsMap[p.name] = [];
-                      mPartsMap[p.name].push(oParts[idx] !== undefined && oParts[idx] !== "" ? oParts[idx] : "-");
-                  });
-              });
-
-              if(tVals.length > 0 || hasMainData || sub.mains.length > 0) {
-                  let mainGridHtml = "";
-                  let hasMultiParts = Object.keys(mPartsMap).length > 1;
-
-                  Object.keys(mPartsMap).forEach(pName => {
-                      let obts = mPartsMap[pName];
-                      let joinStr = obts.join(" / ");
-                      mainGridHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(pName)}</div><div class="mark-val" style="color:#38bdf8;">${joinStr}</div></div>`;
-                  });
-
-                  let mainBreakdownFinalHtml = "";
-                  let sectionTitle = "🏆 Main Exam(s)";
-                  if (hasMultiParts) {
-                      mainBreakdownFinalHtml = `<div class="dt-main-grid">${mainGridHtml}</div>`;
-                      sectionTitle = "🏆 Main Exam(s) Breakdown";
-                  } else {
-                      let pName = Object.keys(mPartsMap)[0];
-                      if(pName) {
-                          mainBreakdownFinalHtml = `<div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mPartsMap[pName].join(" / ")}</div>`;
+              sub.mains.forEach(col => {
+                  let v = String(d[col] || "").trim();
+                  if(v !== "") {
+                      mVals.push(sanitizeHTML(v));
+                      if (v.includes("+")) {
+                          hasPlusInMain = true;
+                          let parts = v.split("+").map(p => sanitizeHTML(p.trim()));
+                          if (parts[0]) cqs.push(parts[0]);
+                          if (parts[1]) mcqs.push(parts[1]);
+                          if (parts[2]) pracs.push(parts[2]);
                       } else {
-                          mainBreakdownFinalHtml = `<div class="mark-val" style="color:#64748b; margin-top:2px;">-</div>`;
+                          cqs.push(sanitizeHTML(v));
                       }
                   }
+              });
 
-                  subHtml += `<div class="dt-row">
-                                <div class="dt-row-top">
-                                    <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                </div>
-                                <div class="dt-exam-split">
-                                    <div class="dt-test-section">
-                                        <div class="dt-section-title">📝 Test Exam(s)</div>
-                                        <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(" / ") || "-"}</div>
+              if(tVals.length > 0 || mVals.length > 0) {
+                  if (isNineTen || hasPlusInMain) {
+                      subHtml += `<div class="dt-row">
+                                    <div class="dt-row-top">
+                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
                                     </div>
-                                    <div class="dt-divider"></div>
-                                    <div class="dt-main-section">
-                                        <div class="dt-section-title">${sectionTitle}</div>
-                                        ${mainBreakdownFinalHtml}
+                                    <div class="dt-exam-split">
+                                        <div class="dt-test-section">
+                                            <div class="dt-section-title">📝 Test Exam(s)</div>
+                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
+                                        </div>
+                                        <div class="dt-divider"></div>
+                                        <div class="dt-main-section">
+                                            <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
+                                            <div class="dt-main-grid">
+                                                <div class="mark-group"><div class="mark-label">CQ</div><div class="mark-val" style="color:#38bdf8;">${cqs.join(", ") || "-"}</div></div>
+                                                <div class="mark-group"><div class="mark-label">MCQ</div><div class="mark-val" style="color:#fbbf24;">${mcqs.join(", ") || "-"}</div></div>
+                                                <div class="mark-group"><div class="mark-label">Prac</div><div class="mark-val" style="color:#34d399;">${pracs.join(", ") || "-"}</div></div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                              </div>`;
+                                  </div>`;
+                  } else {
+                      subHtml += `<div class="dt-row">
+                                    <div class="dt-row-top">
+                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                    </div>
+                                    <div class="dt-exam-split">
+                                        <div class="dt-test-section">
+                                            <div class="dt-section-title">📝 Test Exam(s)</div>
+                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
+                                        </div>
+                                        <div class="dt-divider"></div>
+                                        <div class="dt-main-section">
+                                            <div class="dt-section-title">🏆 Main Exam(s)</div>
+                                            <div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mVals.join(", ") || "-"}</div>
+                                        </div>
+                                    </div>
+                                  </div>`;
+                  }
               }
           });
 
@@ -812,8 +774,8 @@
 
           let seqBanner = `
             <div class="dt-seq-box">
-                <div>📌 <b>Tests Included:</b> [ ${sanitizeHTML(parsed.testSeq.join(" / ") || "None")} ]</div>
-                <div style="margin-top:4px;">🏆 <b>Main Exams:</b> [ ${sanitizeHTML(parsed.mainSeq.join(" / ") || "None")} ]</div>
+                <div>📌 <b>Tests Sequence:</b> [ ${sanitizeHTML(parsed.testSeq.join(", ") || "None")} ]</div>
+                <div style="margin-top:4px;">🏆 <b>Main Exams Sequence:</b> [ ${sanitizeHTML(parsed.mainSeq.join(", ") || "None")} ]</div>
             </div>`;
 
           markSheetHTML = `
@@ -846,8 +808,14 @@
       }
   }
 
+  function viewResultModal() {
+    if(!markSheetHTML) return alert("Result data is not available or not calculated yet.");
+    document.getElementById('resultModal').style.display = 'flex';
+    document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
+  }
+
   // =====================================================================
-  // DETAILED ATTENDANCE LOGIC (HOLIDAYS + ABSENT TRACKING)
+  // DETAILED ATTENDANCE LOGIC (FIRESTORE JS SDK)
   // =====================================================================
   function openAttendanceModal() { 
       document.getElementById('attendanceModal').style.display = 'flex'; 
@@ -859,55 +827,36 @@
       document.getElementById('modalAttTableBody').innerHTML = '';
       
       try {
-          const token = await auth.currentUser.getIdToken();
-          const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
-          
-          const attReq = { 
-              structuredQuery: { 
-                  from: [{ collectionId: "AttendanceHistory" }], 
-                  where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: std.id } } },
-                  limit: 2000
-              } 
-          };
-          
-          const [attRes, holRes] = await Promise.all([
-              fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(attReq) }),
-              fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`, { headers })
+          const [attSnap, holSnap] = await Promise.all([
+              db.collection("AttendanceHistory").where("studentID", "==", std.id).get(),
+              db.collection("Holidays").get()
           ]);
           
-          const attData = await attRes.json();
-          const holData = await holRes.json();
-          
           allStudentAttendance = {}; 
-          if (attData && attData.length > 0 && attData[0].document) {
-              attData.forEach(item => {
-                  if(item.document && item.document.fields) {
-                      let f = item.document.fields;
-                      let pDate = sanitizeHTML(f.pureDate?.stringValue || ""); 
-                      let timeStr = sanitizeHTML(f.time?.stringValue || "");
-                      let type = sanitizeHTML(f.type?.stringValue || ""); 
-                      
-                      if(pDate) {
-                          if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; }
-                          if(type === "IN") allStudentAttendance[pDate].in = timeStr;
-                          if(type === "OUT") allStudentAttendance[pDate].out = timeStr;
-                      }
-                  }
-              });
-          }
+          attSnap.forEach(doc => {
+              let f = doc.data();
+              let pDate = sanitizeHTML(f.pureDate || ""); 
+              let timeStr = sanitizeHTML(f.time || "");
+              let type = sanitizeHTML(f.type || ""); 
+              
+              if(pDate) {
+                  if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; }
+                  if(type === "IN") allStudentAttendance[pDate].in = timeStr;
+                  if(type === "OUT") allStudentAttendance[pDate].out = timeStr;
+              }
+          });
 
           allHolidays = {};
-          if(holData && holData.documents) {
-              holData.documents.forEach(doc => {
-                  let f = doc.fields;
-                  let pDate = f.date?.stringValue;
-                  let reason = f.reason?.stringValue || "Holiday";
-                  if(pDate) allHolidays[pDate] = reason;
-              });
-          }
+          holSnap.forEach(doc => {
+              let f = doc.data();
+              let pDate = f.date;
+              let reason = f.reason || "Holiday";
+              if(pDate) allHolidays[pDate] = reason;
+          });
 
           populateAttendanceMonths();
       } catch(e) {
+          console.error(e);
           document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
       }
       document.getElementById('attLoader').style.display = 'none';
@@ -940,7 +889,6 @@
       if(!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
       let tbody = document.getElementById('modalAttTableBody');
       let summaryBox = document.getElementById('modalAttSummary');
-      let yearlySummaryBox = document.getElementById('modalYearlySummary');
       
       const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
       const today = new Date(bdTime);
@@ -954,29 +902,9 @@
       
       if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
-           summaryBox.style.display = 'none'; yearlySummaryBox.style.display = 'none'; return;
+           summaryBox.style.display = 'none'; return;
       }
       if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) { daysToLoop = today.getDate(); }
-
-      let isYearFinished = (sYear < today.getFullYear());
-      if (!isYearFinished) { yearlySummaryBox.style.display = 'none'; yearlySummaryBox.innerHTML = ''; } 
-      else {
-          let yearlyPresentCount = 0; let yearlyAbsentCount = 0;
-          for(let m = 1; m <= 12; m++) {
-              let mStr = sYear + "-" + String(m).padStart(2, '0');
-              let mPresent = 0; let mHoliday = 0; let daysInM = new Date(sYear, m, 0).getDate();
-              for(let d=1; d<=daysInM; d++) {
-                  let dStr = String(d).padStart(2, '0'); let fDate = `${mStr}-${dStr}`;
-                  if(allStudentAttendance[fDate]) mPresent++; else if(allHolidays[fDate]) mHoliday++;
-              }
-              yearlyPresentCount += mPresent;
-              let workingDaysInM = Math.max(mPresent, daysInM - mHoliday - 4); 
-              let mAbsent = Math.max(0, workingDaysInM - mPresent);
-              yearlyAbsentCount += mAbsent;
-          }
-          yearlySummaryBox.style.display = 'block';
-          yearlySummaryBox.innerHTML = `Yearly Total (<span style="color:var(--accent);">${sYear}</span>): <span style="font-size: 18px;">${yearlyPresentCount} Days Present</span> <span style="opacity:0.5; margin:0 10px;">|</span> <span style="color:#fecdd3; font-size:18px;">~${yearlyAbsentCount} Days Absent</span>`;
-      }
 
       let presentCount = 0; let absentCount = 0; let holidayCount = 0; let html = "";
       for(let d = daysToLoop; d >= 1; d--) {
@@ -1015,7 +943,7 @@
 
   function openSecurityModal() { document.getElementById('newPass').value = ""; document.getElementById('passMsg').innerText = ""; document.getElementById('securityModal').style.display = 'flex'; }
 
-  // 🚀 DIRECT & INSTANT PASSWORD CHANGE (Firebase Auth + Firestore + Backend Sync)
+  // 🚀 DIRECT & INSTANT PASSWORD CHANGE (Firebase Auth + Firestore)
   async function updatePassword() {
     const p = document.getElementById('newPass').value.trim(); 
     const msgBox = document.getElementById('passMsg');
@@ -1042,7 +970,6 @@
 
     try {
         if (auth.currentUser) {
-            // 1. Try direct Firebase Auth update (with silent re-auth if needed)
             try {
                 await auth.currentUser.updatePassword(p);
                 directSuccess = true;
@@ -1050,9 +977,8 @@
                 if (authErr.code === 'auth/requires-recent-login') {
                     let oldPass = sessionStorage.getItem('srms_active_pass');
                     if (!oldPass) {
-                        const tkn = await auth.currentUser.getIdToken();
-                        const sDoc = await fetch(`${FIREBASE_DB_BASE}/Students/${docId}`, { headers: { "Authorization": "Bearer " + tkn } }).then(r => r.json());
-                        oldPass = sDoc.fields?.pass?.stringValue || "123456";
+                        const sDoc = await db.collection("Students").doc(docId).get();
+                        oldPass = sDoc.data()?.pass || "123456";
                     }
                     const cred = firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, oldPass);
                     await auth.currentUser.reauthenticateWithCredential(cred);
@@ -1061,25 +987,17 @@
                 }
             }
 
-            // 2. Direct Firestore Database update (pass field)
-            const token = await auth.currentUser.getIdToken(true);
-            const patchRes = await fetch(`${FIREBASE_DB_BASE}/Students/${docId}?updateMask.fieldPaths=pass`, {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-                body: JSON.stringify({ fields: { pass: { stringValue: p } } })
-            });
-            if (patchRes.ok) directSuccess = true;
+            // Direct Firestore Database update
+            await db.collection("Students").doc(docId).update({ pass: p });
+            directSuccess = true;
         }
 
-        // 3. Also call Apps Script Backend to keep linked Guardian/Student Auth accounts synced
         try {
-            const res = await fetch(SCRIPT_URL, {
+            await fetch(SCRIPT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "updatePassword", docId: docId, id: std ? std.id : "", newPass: p })
             });
-            const data = await res.json();
-            if (data && data.status === "success") directSuccess = true;
         } catch (scriptErr) {
             console.log("Background script sync notice:", scriptErr);
         }
@@ -1102,14 +1020,14 @@
     btn.innerHTML = "SAVE NEW PASSWORD";
   }
 
-  async function checkLiveClassForButton(headers) {
+  async function checkLiveClassForButton() {
     let sClass = std.class;
     if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
     try {
-        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/${sClass}`, { headers });
-        if(response.ok) {
-            const data = await response.json();
-            if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
+        let doc = await db.collection("LiveSessions").doc(sClass).get();
+        if(doc.exists) {
+            let data = doc.data();
+            if(data.status === "TRUE") {
                 document.getElementById('liveClassMainBtn').classList.add('live-active-btn');
                 document.getElementById('liveClassMainBtn').innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE NOW</span>";
             }
@@ -1125,12 +1043,11 @@
     if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
     
     try {
-        const token = await auth.currentUser.getIdToken();
-        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/${sClass}`, { headers: { "Authorization": "Bearer " + token } });
-        if(response.ok) {
-            const data = await response.json();
-            if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
-                let title = sanitizeHTML(data.fields.title ? data.fields.title.stringValue : "Class Running");
+        let doc = await db.collection("LiveSessions").doc(sClass).get();
+        if(doc.exists) {
+            let data = doc.data();
+            if(data.status === "TRUE") {
+                let title = sanitizeHTML(data.title || "Class Running");
                 body.innerHTML = `<div style="text-align:center;"><div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;">🔴 LIVE BROADCAST</div><h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Secure ID: ${std.id}</p><button class="login-btn" onclick="joinLiveClass('${sClass}', '${std.name}', '${std.roll}')">JOIN SESSION NOW</button></div>`;
                 return;
             }
