@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saidpur Residential Model School — Enterprise Result Portal</title>
+<title>Saidpur Residential Model School — Ultimate Result & Transcript Portal</title>
 <link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" type="image/jpeg">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
@@ -41,7 +41,6 @@ body {
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* Loader */
 .loader-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -308,21 +307,39 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   #student-list-container { grid-template-columns: 1fr; }
 }
 
-/* ============================================================================
-   🖨️ ENTERPRISE PRINT PREVIEW & A4 ENGINE (Dynamic Layouts)
-============================================================================ */
 #print-area { display: none; background: #475569; min-height: 100vh; padding: 25px 0; }
 .print-toolbar {
   position: sticky; top: 0; background: #0f172a; padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 5px 25px rgba(0,0,0,0.3); z-index: 1000; margin-bottom: 25px;
 }
 .print-toolbar button { font-size: 14px; padding: 12px 24px; border-radius: 12px; }
-#print-content { width: 285mm; margin: 0 auto; background: transparent; box-sizing: border-box; }
-#print-content.portrait-preview { width: 198mm; }
 
-/* Marksheet Screen Preview Card */
+/* Dynamic Print Container sizing based on orientation choice */
+#print-content { margin: 0 auto; background: transparent; box-sizing: border-box; transition: 0.3s ease; }
+
+/* Marksheet uses purely A4 Landscape dimensions */
 .report-card {
   width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; margin: 0 auto 15mm auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 3px double #005f40; padding: 5mm 6.5mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
+
+/* Tabulation Base styling */
+.tab-page {
+  box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 2.5px solid #005f40; padding: 4.5mm 5.5mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25); margin: 0 auto 15mm auto;
+}
+
+/* Screen Preview Sizing for A4/A3 options */
+#print-content.a4-landscape-preview { width: 285mm; }
+#print-content.a4-landscape-preview .tab-page { width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; }
+
+#print-content.a4-portrait-preview { width: 198mm; }
+#print-content.a4-portrait-preview .tab-page { width: 198mm; height: 283mm; min-height: 283mm; max-height: 283mm; padding: 5mm 4mm; }
+
+#print-content.a3-landscape-preview { width: 400mm; }
+#print-content.a3-landscape-preview .tab-page { width: 400mm; height: 283mm; min-height: 283mm; max-height: 283mm; }
+
+#print-content.a3-portrait-preview { width: 285mm; }
+#print-content.a3-portrait-preview .tab-page { width: 285mm; height: 400mm; min-height: 400mm; max-height: 400mm; }
+
+
 .rc-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-24deg); font-size: 74px; font-weight: 900; color: rgba(0, 95, 64, 0.038); pointer-events: none; white-space: nowrap; z-index: 0; letter-spacing: 6px; }
 .rc-top-section, .rc-middle-section, .rc-bottom-section { position: relative; z-index: 1; }
 .rc-middle-section { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; margin: 5px 0; min-height: 0; }
@@ -356,12 +373,10 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .report-card.standard-card .marks-table th, .report-card.standard-card .marks-table td { padding: 4px 3px; font-size: 9.3px; }
 .report-card.dense-card .marks-table th, .report-card.dense-card .marks-table td { padding: 2.5px 2px; font-size: 8.4px; }
 
-.rc-overview-qr-strip { display: grid; grid-template-columns: 1.35fr 1.65fr 1.05fr; gap: 8px; align-items: stretch; margin-top: 16px; margin-bottom: 8px; }
+.rc-overview-qr-strip { display: grid; grid-template-columns: 1.6fr 1fr 1.05fr; gap: 8px; align-items: stretch; margin-top: 16px; margin-bottom: 8px; }
 .rc-ov-card { border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc !important; padding: 5px 9px; display: flex; flex-direction: column; justify-content: center; }
 .rc-ov-title { font-size: 8.6px; font-weight: 900; color: #005f40; text-transform: uppercase; border-bottom: 1px solid #cbd5e1; padding-bottom: 2.5px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
-.rc-ov-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3.5px 6px; font-size: 8.8px; font-weight: 700; color: #1e293b; }
-.rc-grade-pills { display: grid; grid-template-columns: repeat(7, 1fr); gap: 3.5px; text-align: center; font-size: 8.2px; font-weight: 800; }
-.rc-grade-pill { background: #ffffff !important; border: 1px solid #cbd5e1; border-radius: 4px; padding: 2px 2px; }
+
 .rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 4px 8px; display: flex; align-items: center; gap: 8px; }
 .rc-qr-box { width: 52px; height: 52px; background: #fff !important; border: 1px solid #005f40; border-radius: 4px; padding: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
@@ -375,43 +390,40 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .footer { display: flex; justify-content: space-between; align-items: flex-end; padding: 15px 16px 0 16px; margin-top: auto; }
 .signature { border-top: 1.5px solid #000; width: 175px; text-align: center; padding-top: 3.5px; font-weight: 800; font-size: 10px; color: #000; text-transform: uppercase; }
 
-/* Tabulation Sheet Page Frame */
-.tab-page { width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; margin: 0 auto 15mm auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 2.5px solid #005f40; padding: 4.5mm 5.5mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25); }
-#print-content.portrait-preview .tab-page, .tab-page.portrait-page { width: 198mm; height: 283mm; min-height: 283mm; max-height: 283mm; padding: 5mm 4mm; }
 .tab-top-wrap { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .tab-table { width: 100%; border-collapse: collapse; font-size: 8.2px; text-align: center; table-layout: fixed; }
 .tab-table th { background: #e2e8f0 !important; padding: 3.5px 1.5px; border: 1px solid #000; font-weight: 800; color: #000; font-size: 7.8px; word-wrap: break-word; line-height: 1.15; }
 .tab-table td { padding: 2.8px 1.5px; border: 1px solid #000; vertical-align: middle; font-size: 7.8px; font-weight: 600; line-height: 1.18; color: #000; overflow: hidden; }
-#print-content.portrait-preview .tab-table th, .tab-page.portrait-page .tab-table th { font-size: 6.5px; padding: 3px 1px; }
-#print-content.portrait-preview .tab-table td, .tab-page.portrait-page .tab-table td { font-size: 6.4px; padding: 3.5px 1px; }
+
+/* Responsive adjustments inside Print Preview for Tabulations */
+#print-content.a4-portrait-preview .tab-table th, #print-content.a3-portrait-preview .tab-table th, #print-content.a3-landscape-preview .tab-table th { font-size: 6.5px; padding: 3px 1px; }
+#print-content.a4-portrait-preview .tab-table td, #print-content.a3-portrait-preview .tab-table td, #print-content.a3-landscape-preview .tab-table td { font-size: 6.4px; padding: 3.5px 1px; }
 
 .tab-cell-lines { font-size: 7.2px; line-height: 1.18; text-align: left; padding: 0 1px; white-space: nowrap; }
-#print-content.portrait-preview .tab-cell-lines, .tab-page.portrait-page .tab-cell-lines { font-size: 5.9px; line-height: 1.16; padding: 0; }
+#print-content.a4-portrait-preview .tab-cell-lines, #print-content.a3-portrait-preview .tab-cell-lines, #print-content.a3-landscape-preview .tab-cell-lines { font-size: 5.9px; line-height: 1.16; padding: 0; }
 
 .tab-fixed-signatures { display: flex; justify-content: space-between; align-items: flex-end; padding: 12px 14px 2px 14px; margin-top: auto; flex-shrink: 0; page-break-inside: avoid; break-inside: avoid; }
 .tab-sig-box { border-top: 1.5px solid #000; width: 160px; text-align: center; padding-top: 3.5px; font-weight: 800; font-size: 9.2px; color: #000; text-transform: uppercase; }
-#print-content.portrait-preview .tab-sig-box, .tab-page.portrait-page .tab-sig-box { width: 135px; font-size: 8.5px; }
+
+#print-content.a4-portrait-preview .tab-sig-box, #print-content.a3-portrait-preview .tab-sig-box { width: 135px; font-size: 8.5px; }
 
 @media print {
   .app-header, #student-list-container, .loader-overlay, .swal2-container, .print-toolbar, .quick-search-bar { display: none !important; }
   html, body { background: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   #appContainer { display: none !important; }
   #print-area { display: block !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
-  #print-content, #print-content.portrait-preview { width: 100% !important; margin: 0 !important; padding: 0 !important; }
-  .report-card { width: 100% !important; height: 196mm !important; min-height: 196mm !important; max-height: 196mm !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-after: page !important; page-break-inside: avoid !important; break-inside: avoid !important; }
-  .tab-page { width: 100% !important; height: 196mm !important; min-height: 196mm !important; max-height: 196mm !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-after: page !important; page-break-inside: avoid !important; break-inside: avoid !important; }
-  #print-content.portrait-preview .tab-page, .tab-page.portrait-page { width: 100% !important; height: 284mm !important; min-height: 284mm !important; max-height: 284mm !important; padding: 5mm 4mm !important; }
-  .report-card:last-child, .tab-page:last-child, #print-content.portrait-preview .tab-page:last-child, .tab-page.portrait-page:last-child { page-break-after: auto !important; break-after: auto !important; }
-}
-
-@media print and (orientation: portrait) {
-  .tab-page { width: 100% !important; height: 284mm !important; min-height: 284mm !important; max-height: 284mm !important; padding: 5mm 4mm !important; }
-  .tab-table th { font-size: 6.5px !important; padding: 3px 1px !important; }
-  .tab-table td { font-size: 6.4px !important; padding: 3.5px 1px !important; }
-  .tab-cell-lines { font-size: 5.9px !important; line-height: 1.16 !important; padding: 0 !important; }
-  .tab-sig-box { width: 135px !important; font-size: 8.5px !important; }
+  #print-content { width: 100% !important; margin: 0 !important; padding: 0 !important; }
+  
+  /* Marksheet is strictly A4 Landscape */
+  .report-card { width: 100% !important; height: 196mm !important; min-height: 196mm !important; max-height: 196mm !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
+  
+  /* Tabulation takes height from dynamic inline print styles */
+  .tab-page { width: 100% !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
+  
+  .report-card:last-child, .tab-page:last-child { page-break-after: auto !important; }
 }
 </style>
+<!-- Style element for Dynamic Print Page sizing (@page) injected via JS -->
 <style id="dynamicPrintPageStyle">
   @media print { @page { size: A4 landscape; margin: 5mm; } }
 </style>
@@ -429,10 +441,9 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 <div id="print-area">
   <div class="print-toolbar no-print">
     <button onclick="closePrintView()" style="background:#ef4444;"><i class="fas fa-arrow-left"></i> ড্যাশবোর্ডে ফিরে যান</button>
-    <button onclick="triggerPrintWithOrientation('landscape')" style="background:#2563eb;"><i class="fas fa-print"></i> প্রিন্ট করুন (A4 Landscape)</button>
-    <button id="btnPrintPortrait" onclick="triggerPrintWithOrientation('portrait')" style="background:#059669; display:none;"><i class="fas fa-file-alt"></i> প্রিন্ট করুন (A4 Portrait)</button>
+    <button onclick="window.print()" style="background:#2563eb;"><i class="fas fa-print"></i> সরাসরি প্রিন্ট করুন</button>
   </div>
-  <div id="print-content"></div>
+  <div id="print-content" class="a4-landscape-preview"></div>
 </div>
 
 <div id="appContainer">
@@ -545,10 +556,9 @@ window.cachedGlobalExams = [];
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
 var isAuthReady = false;
 
-// 🔥 Universal Dynamic Pass Configuration Global Object 🔥
 window.passConfig = {
   passPercentage: 33,
-  reqIndividualPass: true // Ensures passing in EACH individual component dynamically
+  reqIndividualPass: true 
 };
 
 const swalPro = Swal.mixin({
@@ -618,7 +628,6 @@ auth.onAuthStateChanged(async (user) => {
 function isOptHeader(h) { return h ? String(h).toLowerCase().includes("opt") && String(h).toLowerCase().includes("name") : false; }
 function isPendingExamHeader(h) { return h ? String(h).indexOf("[Pending Exam]") !== -1 : false; }
 
-// Core Universal Parser for Any Custom Categories (e.g. Written:50+Assignment:20)
 function parseHeaderFullMarksInfo(headerStr, defaultTotal) {
   let match = String(headerStr || "").match(/\(([^)]+)\)/);
   if (!match || !match[1]) return { parts: [{name: "Total", max: defaultTotal}], total: defaultTotal, hasBreakdown: false, raw: String(defaultTotal) };
@@ -951,7 +960,6 @@ async function openDataEntryForm(rowIndex) {
              }
              vals.push(v !== "" ? v : "0");
           }
-          
           newData[col] = hasAny ? vals.join('+') : "";
         }
       }
@@ -972,7 +980,6 @@ async function openDataEntryForm(rowIndex) {
   }
 }
 
-// 👑 Universal Intelligent Student Evaluation Engine
 function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainWeight) {
   let tMarks = []; 
   let mPartsMap = {}; 
@@ -1021,7 +1028,6 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
             if(!mPartsMap[p.name]) mPartsMap[p.name] = [];
             mPartsMap[p.name].push(obt);
 
-            // 👑 Dynamic Individual Pass Logic Checking
             if (window.passConfig.reqIndividualPass && p.max > 0) {
                 if (obt < Math.ceil(p.max * (window.passConfig.passPercentage / 100))) {
                     isSubFail = true;
@@ -1033,13 +1039,11 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
         mCalc += sumM;
         mTotals.push(sumM);
 
-        // Overall Subject Total Pass Check
         if (sumM < Math.ceil(m.fm.total * (window.passConfig.passPercentage / 100))) {
             isSubFail = true;
             specificFailReason = "Total Marks";
         }
       } else {
-        // Handle Absent or Empty
         m.fm.parts.forEach((p, idx) => {
             if(!mPartsMap[p.name]) mPartsMap[p.name] = [];
             mPartsMap[p.name].push("-");
@@ -1049,14 +1053,12 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
     }
   });
 
-  // Generate Beautiful Badges with Sequence Slashes (e.g. Written: 70 / 65 / 70)
   Object.keys(mPartsMap).forEach(pName => {
       let obts = mPartsMap[pName];
       let joinStr = obts.join(" / ");
       mBreakdownHtmls.push(`<span class="badge-part">${pName}: <b style="color:#0f172a;">${joinStr}</b></span>`);
   });
 
-  // Calculate Final Combination
   let finalMark = 0;
   if (hasTest || hasMain) {
     if (hasTest && hasMain && totalTFull > 0 && totalMFull > 0) finalMark = Math.round(((tCalc / totalTFull) * testWeight) + ((mCalc / totalMFull) * mainWeight));
@@ -1279,7 +1281,6 @@ window.confirmDeleteGlobalExam = async function(idx) {
   }
 };
 
-// 👑 Dynamic Custom Categories Grid Rebuilder
 window.rebuildExamGrid = function() {
   let partsStr = document.getElementById('subPartsDef').value.trim();
   let partsArr = partsStr ? partsStr.split(',').map(s=>s.trim()).filter(s=>s!=="") : ["Total"];
@@ -1384,7 +1385,6 @@ async function addNewSubjectPopup() {
              let mk = parseFloat(document.getElementById(`dyn-${i}-${pIdx}`)?.value) || 0;
              if(mk > 0) builtMarksArr.push(`${p}:${mk}`); 
           });
-          // Fallback if user set all to 0
           if(builtMarksArr.length === 0) builtMarksArr.push(`Total:${ex.type === "Main" ? 100 : 50}`);
           selected.push({ name: ex.name, type: ex.type, marks: builtMarksArr.join('+') });
         }
@@ -1441,7 +1441,6 @@ window.editSubjectPopup = async function(subName) {
 
   let existingExamMap = {}; sub.tests.forEach(t => { existingExamMap[t.name] = { type: "Test", fm: t.fm }; }); sub.mains.forEach(m => { existingExamMap[m.name] = { type: "Main", fm: m.fm }; });
   
-  // Try to extract existing parts names from the first available exam
   let existingPartsArr = [];
   if (sub.mains.length > 0) existingPartsArr = sub.mains[0].fm.parts.map(p=>p.name);
   else if (sub.tests.length > 0) existingPartsArr = sub.tests[0].fm.parts.map(p=>p.name);
@@ -1467,12 +1466,11 @@ window.editSubjectPopup = async function(subName) {
           let defTotal = ex.type === "Main" ? 100 : 50;
           
           let boxes = pArr.map((pName, pIdx) => {
-              // Try to find if this part existed in the old schema
               let val = 0;
               if (linked) {
                   let foundPart = linked.fm.parts.find(oldP => oldP.name.toLowerCase() === pName.toLowerCase());
                   if (foundPart) val = foundPart.max;
-                  else if (pArr.length === 1) val = linked.fm.total; // fallback for Single Part
+                  else if (pArr.length === 1) val = linked.fm.total;
               } else {
                   val = (pIdx === pArr.length-1) ? (defTotal - (Math.floor(defTotal/pArr.length) * pIdx)) : Math.floor(defTotal/pArr.length);
               }
@@ -1483,9 +1481,7 @@ window.editSubjectPopup = async function(subName) {
                 </div>`;
           }).join('');
           
-          let curTotal = 0;
-          if (linked) curTotal = linked.fm.total;
-          else { curTotal = defTotal; } // simple fallback
+          let curTotal = linked ? linked.fm.total : defTotal;
           
           html += `
           <div style="background:#fff; padding:12px 14px; border-radius:12px; border:1px solid #cbd5e1; margin-bottom:12px; box-shadow:0 2px 4px rgba(0,0,0,0.02);">
@@ -1500,7 +1496,6 @@ window.editSubjectPopup = async function(subName) {
       });
       html += `</div>`;
       gridContainer.innerHTML = html;
-      // Recalculate visually on load
       combinedExams.forEach((ex, i) => updateEditDynTotal(i));
   };
   
@@ -1572,11 +1567,6 @@ window.confirmDeleteSubjectByCol = async function(colIndex, subName) {
     try { let res = await apiCall('deleteSubjectColumn', { className: cls, colIndex: parseInt(colIndex, 10) }); showLoader(false); swalPro.fire('সম্পন্ন!', res.msg, 'success'); loadData(); } 
     catch (err) { showLoader(false); swalPro.fire('ত্রুটি', err.message, 'error'); }
   }
-};
-
-window.onBulkLinkExamChange = function(selEl) {
-  let opt = selEl.options[selEl.selectedIndex]; if (!opt) return;
-  // This could trigger a re-render of dynamic parts if needed, but since it's a generic link, we'll let user define custom parts for the linked exam manually.
 };
 
 async function linkExamToSubjectsPopup() {
@@ -1748,17 +1738,33 @@ function viewSingleResult(rowIndex) {
 
 var currentPrintMode = "marksheet"; 
 function setPrintPageOrientation(orientation) {
-  let styleEl = document.getElementById('dynamicPrintPageStyle'); let contentEl = document.getElementById('print-content');
-  if (orientation === 'portrait') { styleEl.innerHTML = `@media print { @page { size: A4 portrait; margin: 5mm; } }`; contentEl.classList.add('portrait-preview'); } 
-  else { styleEl.innerHTML = `@media print { @page { size: A4 landscape; margin: 5mm; } }`; contentEl.classList.remove('portrait-preview'); }
+  let styleEl = document.getElementById('dynamicPrintPageStyle'); 
+  let contentEl = document.getElementById('print-content');
+  let css = '';
+  
+  if (orientation === 'a4-portrait') {
+    css = `@media print { @page { size: A4 portrait; margin: 5mm; } .tab-page { height: 284mm !important; min-height: 284mm !important; max-height: 284mm !important; } }`;
+    contentEl.className = 'a4-portrait-preview';
+  } else if (orientation === 'a3-landscape') {
+    css = `@media print { @page { size: A3 landscape; margin: 5mm; } .tab-page { height: 284mm !important; min-height: 284mm !important; max-height: 284mm !important; } }`;
+    contentEl.className = 'a3-landscape-preview';
+  } else if (orientation === 'a3-portrait') {
+    css = `@media print { @page { size: A3 portrait; margin: 5mm; } .tab-page { height: 406mm !important; min-height: 406mm !important; max-height: 406mm !important; } }`;
+    contentEl.className = 'a3-portrait-preview';
+  } else { // default a4-landscape
+    css = `@media print { @page { size: A4 landscape; margin: 5mm; } .tab-page { height: 196mm !important; min-height: 196mm !important; max-height: 196mm !important; } }`;
+    contentEl.className = 'a4-landscape-preview';
+  }
+  styleEl.innerHTML = css;
 }
+
 function triggerPrintWithOrientation(orientation) {
-  if (currentPrintMode === "tabulation") buildTabulationPagesForOrientation(orientation); else setPrintPageOrientation('landscape');
-  setTimeout(() => { window.print(); }, 250);
+  if (currentPrintMode === "tabulation") buildTabulationPagesForOrientation(orientation); 
+  else setPrintPageOrientation('a4-landscape');
 }
-function executePrint(htmlContent, mode = "marksheet", defaultOrientation = "landscape") {
+
+function executePrint(htmlContent, mode = "marksheet", defaultOrientation = "a4-landscape") {
   currentPrintMode = mode; setPrintPageOrientation(defaultOrientation);
-  document.getElementById('btnPrintPortrait').style.display = (mode === "tabulation") ? "inline-flex" : "none";
   document.getElementById('appContainer').style.display = 'none';
   let printArea = document.getElementById('print-area'); document.getElementById('print-content').innerHTML = htmlContent;
   printArea.style.display = 'block'; window.scrollTo(0, 0); setTimeout(() => { window.print(); }, 350);
@@ -1827,7 +1833,6 @@ function generateMarkSheets(examFilter) {
   let classPassRate = classStats.evaluatedStudents > 0 ? ((classStats.passed / classStats.evaluatedStudents) * 100).toFixed(1) : "0.0";
   let classAvgGPA = classStats.evaluatedStudents > 0 ? (classStats.gpaSum / classStats.evaluatedStudents).toFixed(2) : "0.00";
   
-  // Dynamic Thead specifically designed for infinite custom categories
   var theadHtml = `
     <thead>
       <tr>
@@ -1843,7 +1848,7 @@ function generateMarkSheets(examFilter) {
   let activeTests = []; let activeMains = []; parsed.testSeq.forEach(t => { if (examFilter === "All" || t === examFilter) activeTests.push(t); }); parsed.mainSeq.forEach(m => { if (examFilter === "All" || m === examFilter) activeMains.push(m); });
   
   let legendFormat = examFilter === "All" ? "Exam 1 / Exam 2 / ..." : "Obtained Marks";
-  let legendHtml = `<div class="legend-box"><span><b>Tests Included (${testWeight}%):</b> ${activeTests.join(" / ") || "N/A"}</span><span><b>Main Exams (${mainWeight}%):</b> ${activeMains.join(" / ") || "N/A"}</span><span><b>Marks Format:</b> ${legendFormat}</span><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Required" : "Overall Subject Pass"} (${window.passConfig.passPercentage}%)</span></div>`;
+  let legendHtml = `<div class="legend-box"><span><b>Tests Included (${testWeight}%):</b> ${activeTests.join(" / ") || "N/A"}</span><span><b>Main Exams (${mainWeight}%):</b> ${activeMains.join(" / ") || "N/A"}</span><span><b>Marks Format:</b> ${legendFormat}</span><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Req." : "Overall Subject Pass"} (${window.passConfig.passPercentage}%)</span></div>`;
   let issueDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   let cardsArr = [];
 
@@ -1883,14 +1888,39 @@ function generateMarkSheets(examFilter) {
           ${finalTableHtml}
           <div class="rc-overview-qr-strip">
             <div class="rc-ov-card">
-              <div class="rc-ov-title"><span><i class="fas fa-chart-pie"></i> Class Performance</span><span>Session: ${year}</span></div>
-              <div class="rc-ov-grid"><span>Examinees: <b>${classStats.evaluatedStudents}</b></span><span>Passed: <b style="color:#059669;">${classStats.passed}</b></span><span>Failed: <b style="color:#dc2626;">${classStats.failed}</b></span><span>Pass Rate: <b>${classPassRate}%</b></span><span>Class Highest: <b>${classStats.highestMarks}</b></span><span>Class Avg GPA: <b>${classAvgGPA}</b></span></div>
+              <div class="rc-ov-title"><span><i class="fas fa-chart-pie"></i> Class Performance & Grade Summary</span><span style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">Status: ${dispGrade === 'F' ? 'FAILED' : 'PASSED'}</span></div>
+              <div style="display:grid; grid-template-columns: 1fr 1fr; gap:6px;">
+                <div style="display:flex; flex-direction:column; gap:2.5px; font-size:8.2px; font-weight:700;">
+                  <span style="display:flex; justify-content:space-between;">Examinees: <b>${classStats.evaluatedStudents}</b></span>
+                  <span style="display:flex; justify-content:space-between;">Passed: <b style="color:#059669;">${classStats.passed}</b></span>
+                  <span style="display:flex; justify-content:space-between;">Failed: <b style="color:#dc2626;">${classStats.failed}</b></span>
+                  <span style="display:flex; justify-content:space-between;">Pass Rate: <b>${classPassRate}%</b></span>
+                  <span style="display:flex; justify-content:space-between;">Highest: <b>${classStats.highestMarks}</b></span>
+                  <span style="display:flex; justify-content:space-between;">Class GPA: <b>${classAvgGPA}</b></span>
+                </div>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2px; font-size:8px; font-weight:700; background:#f1f5f9; padding:4px; border-radius:4px; border:1px solid #cbd5e1;">
+                  <span>A+: <b>${classStats.grades['A+']}</b></span>
+                  <span>A: <b>${classStats.grades['A']}</b></span>
+                  <span>A-: <b>${classStats.grades['A-']}</b></span>
+                  <span>B: <b>${classStats.grades['B']}</b></span>
+                  <span>C: <b>${classStats.grades['C']}</b></span>
+                  <span>D: <b>${classStats.grades['D']}</b></span>
+                  <span style="color:#dc2626;">F: <b>${classStats.grades['F']}</b></span>
+                </div>
+              </div>
             </div>
             <div class="rc-ov-card">
-              <div class="rc-ov-title"><span><i class="fas fa-award"></i> Grade Distribution Summary</span><span style="color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">Status: ${dispGrade === 'F' ? 'FAILED' : 'PASSED'}</span></div>
-              <div class="rc-grade-pills">
-                <div class="rc-grade-pill"><span style="color:#005f40;">A+</span><br><b>${classStats.grades['A+']}</b></div><div class="rc-grade-pill"><span style="color:#005f40;">A</span><br><b>${classStats.grades['A']}</b></div><div class="rc-grade-pill"><span style="color:#005f40;">A-</span><br><b>${classStats.grades['A-']}</b></div><div class="rc-grade-pill"><span>B</span><br><b>${classStats.grades['B']}</b></div><div class="rc-grade-pill"><span>C</span><br><b>${classStats.grades['C']}</b></div><div class="rc-grade-pill"><span>D</span><br><b>${classStats.grades['D']}</b></div><div class="rc-grade-pill"><span style="color:#dc2626;">F</span><br><b style="color:#dc2626;">${classStats.grades['F']}</b></div>
-              </div>
+              <div class="rc-ov-title"><span><i class="fas fa-list-ol"></i> Grading Scale</span></div>
+              <table style="width:100%; border-collapse:collapse; font-size:7.5px; text-align:center; border:1px solid #cbd5e1; margin-top:2px;">
+                 <tr style="background:#e2e8f0; font-weight:800; color:#0f172a;"><td>Marks</td><td>Grade</td><td>GP</td></tr>
+                 <tr style="border-bottom:1px solid #e2e8f0;"><td>80-100</td><td style="color:#005f40; font-weight:800;">A+</td><td>5.0</td></tr>
+                 <tr style="border-bottom:1px solid #e2e8f0;"><td>70-79</td><td style="color:#005f40; font-weight:800;">A</td><td>4.0</td></tr>
+                 <tr style="border-bottom:1px solid #e2e8f0;"><td>60-69</td><td style="color:#005f40; font-weight:800;">A-</td><td>3.5</td></tr>
+                 <tr style="border-bottom:1px solid #e2e8f0;"><td>50-59</td><td style="font-weight:800;">B</td><td>3.0</td></tr>
+                 <tr style="border-bottom:1px solid #e2e8f0;"><td>40-49</td><td style="font-weight:800;">C</td><td>2.0</td></tr>
+                 <tr style="border-bottom:1px solid #e2e8f0;"><td>33-39</td><td style="font-weight:800;">D</td><td>1.0</td></tr>
+                 <tr><td>0-32</td><td style="color:#dc2626; font-weight:800;">F</td><td>0.0</td></tr>
+              </table>
             </div>
             <div class="rc-qr-card">
               <div class="rc-qr-box">${qrSvgHtml}</div>
@@ -1907,12 +1937,23 @@ function generateMarkSheets(examFilter) {
         </div>
       </div>`);
   });
-  executePrint(cardsArr.join(''), "marksheet", "landscape");
+  executePrint(cardsArr.join(''), "marksheet", "a4-landscape");
 }
 
 async function printTabulation() {
   if (appData.length === 0) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
-  const { value: chosenOrient } = await swalPro.fire({ title: 'ট্যাবুলেশন শিট প্রিন্ট মোড', input: 'select', inputOptions: { 'landscape': 'A4 Landscape (আড়াআড়ি)', 'portrait': 'A4 Portrait (লম্বালম্বি)' }, inputValue: 'landscape', showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-print"></i> প্রিভিউ ও প্রিন্ট করুন', cancelButtonText: 'বাতিল' });
+  const { value: chosenOrient } = await swalPro.fire({ 
+    title: 'ট্যাবুলেশন শিট প্রিন্ট মোড', 
+    input: 'select', 
+    inputOptions: { 
+      'a4-landscape': 'A4 Landscape (আড়াআড়ি)', 
+      'a4-portrait': 'A4 Portrait (লম্বালম্বি)',
+      'a3-landscape': 'A3 Landscape (বড় পেপার - আড়াআড়ি)', 
+      'a3-portrait': 'A3 Portrait (বড় পেপার - লম্বালম্বি)'
+    }, 
+    inputValue: 'a4-landscape', 
+    showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-print"></i> প্রিভিউ ও প্রিন্ট করুন', cancelButtonText: 'বাতিল' 
+  });
   if (!chosenOrient) return; recalculateClassStatsInMemory(); buildTabulationPagesForOrientation(chosenOrient); executePrint(document.getElementById('print-content').innerHTML, "tabulation", chosenOrient);
 }
 
@@ -1937,20 +1978,26 @@ function buildTabulationPagesForOrientation(orientation) {
     let tr = `<tr><td><b>${row[2] || '-'}</b></td><td style="text-align:left; padding-left:3px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:7px;">ID: ${row[0] || '-'}</span></td>`;
     subKeys.forEach(subName => {
       let sub = parsed.subjects[subName]; let ev = evaluateStudentSubjectForFilter(row, sub, "All", testWeight, mainWeight);
-      let tDisp = ev.hasTest ? ev.tMarks.join("/") : "-"; 
-      let mDisp = ev.hasMain ? ev.mTotals.join("/") : "-"; 
+      let tDisp = ev.hasTest ? ev.tMarks.join(" / ") : "-"; 
+      let mDisp = ev.hasMain ? ev.mTotals.join(" / ") : "-"; 
       let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
       tr += `<td><div class="tab-cell-lines"><span style="color:#334155;">Test: <b>${tDisp}</b></span><br><span style="color:#334155;">Main: <b>${mDisp}</b></span><br><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">Total: ${totDisp}</strong></div></td>`;
     });
     tr += `<td><b>${row[firstEmpty + 1] || '-'}</b></td><td><strong style="font-size:8.5px;">${row[firstEmpty + 2] || '-'}</strong></td><td><strong style="font-size:8.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</strong></td><td><b>${dispPos}</b></td></tr>`; return tr;
   });
 
-  var rowsPerPage = (orientation === 'portrait') ? 11 : 7; var pagesArr = [];
+  // Optimize rows per page depending on paper format chosen
+  var rowsPerPage = 7;
+  if (orientation === 'a4-portrait') rowsPerPage = 11;
+  else if (orientation === 'a3-landscape') rowsPerPage = 11;
+  else if (orientation === 'a3-portrait') rowsPerPage = 18;
+
+  var pagesArr = [];
   for (let i = 0; i < bodyRowsHtml.length; i += rowsPerPage) pagesArr.push(bodyRowsHtml.slice(i, i + rowsPerPage)); if (pagesArr.length === 0) pagesArr.push([]);
 
   var summaryTableHtml = `<div style="margin-top:6px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:96%; margin-left:auto; margin-right:auto; page-break-inside:avoid;"><table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;"><tr style="font-weight:800; background:#e2e8f0; color:#005f40;"><td style="border:1px solid #000; padding:2.5px;">Total Students</td><td style="border:1px solid #000; padding:2.5px;">Passed</td><td style="border:1px solid #000; padding:2.5px;">Failed</td><td style="border:1px solid #000; padding:2.5px;">Pass Rate</td><td style="border:1px solid #000; padding:2.5px;">A+</td><td style="border:1px solid #000; padding:2.5px;">A</td><td style="border:1px solid #000; padding:2.5px;">A-</td><td style="border:1px solid #000; padding:2.5px;">B</td><td style="border:1px solid #000; padding:2.5px;">C</td><td style="border:1px solid #000; padding:2.5px;">D</td></tr><tr style="font-weight:800; background:#fff;"><td style="border:1px solid #000; padding:3px;">${stats['Total']}</td><td style="border:1px solid #000; padding:3px; color:#059669;">${passed}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td><td style="border:1px solid #000; padding:3px;">${passRate}%</td><td style="border:1px solid #000; padding:3px;">${stats['A+']}</td><td style="border:1px solid #000; padding:3px;">${stats['A']}</td><td style="border:1px solid #000; padding:3px;">${stats['A-']}</td><td style="border:1px solid #000; padding:3px;">${stats['B']}</td><td style="border:1px solid #000; padding:3px;">${stats['C']}</td><td style="border:1px solid #000; padding:3px;">${stats['D']}</td></tr></table></div>`;
 
-  var totalPages = pagesArr.length; var pageOrientClass = (orientation === 'portrait') ? 'portrait-page' : 'landscape-page';
+  var totalPages = pagesArr.length; var pageOrientClass = orientation + "-page";
   var finalPagesHtml = pagesArr.map((pageRows, pageIdx) => {
     var isLastPage = (pageIdx === totalPages - 1);
     return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap"><div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;"><img src="${SCHOOL_LOGO}" alt="Logo" style="height:40px; width:40px; border-radius:50%; border:1.5px solid #005f40; padding:1.5px;"><div><h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p></div><div style="text-align:right;"><div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">Total: ${stats['Total']} | Pass: ${passed} (${passRate}%)</div><div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div></div></div><div class="legend-box" style="margin-bottom:3px; font-size:8px; padding:2px 6px;"><span><b>Abbreviations:</b> Test = Test Exam (${testWeight}%) | Main = Main Exam (${mainWeight}%) | Total = Final Score &amp; Letter Grade</span><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Req." : "Subject Pass"} (${window.passConfig.passPercentage}%)</span></div><table class="tab-table">${theadHtml}<tbody>${pageRows.join('')}</tbody></table>${isLastPage ? summaryTableHtml : ''}</div><div class="tab-fixed-signatures"><div class="tab-sig-box">Prepared &amp; Tabulated By</div><div class="tab-sig-box">Exam Controller</div><div class="tab-sig-box">Principal / Headmaster</div></div></div>`;
