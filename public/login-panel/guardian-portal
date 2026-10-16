@@ -141,10 +141,10 @@
   .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
   .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
-  .dt-main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
+  .dt-main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); gap: 8px; width: 100%; }
 
   .mark-group { background: rgba(30, 41, 59, 0.7); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.04); }
-  .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
+  .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; text-align:center; }
   .mark-val { font-size: 14px; font-weight: 800; color: #f8fafc; text-align: center; word-break: break-word; }
   .dt-warning-text { font-size: 10px; color: #64748b; text-align: center; margin-top: 25px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
@@ -347,6 +347,7 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
@@ -365,6 +366,7 @@
 
   if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
   const auth = firebase.auth();
+  const db = firebase.firestore();
 
   const FIREBASE_PROJECT_ID = firebaseConfig.projectId;
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
@@ -646,39 +648,15 @@
     
     try {
         if (!auth.currentUser) return;
-        const token = await auth.currentUser.getIdToken();
-        const headers = { "Authorization": "Bearer " + token };
+        
+        const warnSnap = await db.collection("Warnings").where("studentID", "==", std.id).get();
+        if (!warnSnap.empty) {
+            let warn = warnSnap.docs[0].data();
+            document.getElementById('noticeBox').style.display="block";
+            document.getElementById('noticeText').innerText = sanitizeHTML(warn.message);
+        }
 
-        fetch(`${FIREBASE_DB_BASE}/Warnings?pageSize=1000`, { headers }).then(r=>r.json()).then(data=>{
-            if(data.documents) {
-                let warn = data.documents.find(d => d.fields && d.fields.studentID && d.fields.studentID.stringValue === std.id);
-                if(warn) {
-                    document.getElementById('noticeBox').style.display="block";
-                    document.getElementById('noticeText').innerText = sanitizeHTML(warn.fields.message.stringValue);
-                }
-            }
-        }).catch(e=>{});
-
-        fetch(`${FIREBASE_DB_BASE}/Attendance?pageSize=1000`, { headers }).then(r=>r.json()).then(data=>{
-            let attMap = {}; let t = 0;
-            if(data.documents) {
-                data.documents.forEach(d => {
-                    let f = d.fields;
-                    if(f && f.studentID && f.studentID.stringValue === std.id) {
-                        attMap[f.month.stringValue] = parseInt(f.presentDays.stringValue) || 0;
-                    }
-                });
-            }
-            const ms = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            let h = "<tr style='color:#94a3b8; font-size:12px; text-transform:uppercase;'><th style='text-align:left; padding:8px 12px;'>Month</th><th style='text-align:right; padding:8px 12px;'>Presence</th></tr>";
-            ms.forEach(m => { 
-                let p = attMap[m] || 0; t += p; 
-                h += `<tr><td style='border-bottom:1px solid #f1f5f9;padding:12px;font-weight:600;'>${m.substring(0,3)}</td><td style='border-bottom:1px solid #f1f5f9;padding:12px;text-align:right;color:var(--primary);font-weight:800;'>${p} Days</td></tr>`; 
-            });
-            
-            document.getElementById('attTable').innerHTML = h;
-            document.getElementById('attSummary').innerText = `Total Presence: ${t} Days`;
-        }).catch(e=>{});
+        loadCurrentMonthAttendanceSummary();
 
         if(std.resultStatus === "Published" && std.resultMarks && Array.isArray(std.resultMarks) && std.resultMarks.length > 0) {
             let rawCls = String(std.class).trim();
@@ -686,58 +664,74 @@
             if(std.group && std.group !== "None" && std.group !== "N/A") headerClsName += " " + std.group;
             let hDocName = headerClsName.replace(/\s+/g, '_');
 
-            fetch(`${FIREBASE_DB_BASE}/ClassHeaders/${hDocName}`, { headers }).then(r=>r.json()).then(data=>{
-                if(data.fields && data.fields.headers) {
-                    let parsedHeaders = safeJSONParse(data.fields.headers.stringValue, []);
-                    if (parsedHeaders.length > 0) renderResults(parsedHeaders, std.resultMarks);
-                }
-            }).catch(e=>{});
+            const headerDoc = await db.collection("ClassHeaders").doc(hDocName).get();
+            if(headerDoc.exists && headerDoc.data().headers) {
+                let parsedHeaders = safeJSONParse(headerDoc.data().headers, []);
+                if (parsedHeaders.length > 0) renderResults(parsedHeaders, std.resultMarks);
+            }
         } else if (std.resultStatus === "Calculated") {
-            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;">Result Pending</h2><p style="color:#64748b;">Your child's result has been processed but is not published yet. Please wait for the official announcement.</p></div>`;
+            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;">Result Pending</h2><p style="color:#64748b;">Your result has been processed but is not published yet. Please wait for the official announcement.</p></div>`;
         } else {
             markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;">No Result Found</h2><p style="color:#64748b;">There are no academic results available for the current term.</p></div>`;
         }
 
-        fetchMat(headers);
-        checkGuardianMeetStatus(headers);
-    } catch(err) { console.log("Token Sync Error:", err); }
+        fetchMat();
+        checkGuardianMeetStatus();
+    } catch(err) { console.log("Dashboard Sync Error:", err); }
   }
 
-  async function fetchMat(headers) {
+  async function loadCurrentMonthAttendanceSummary() {
+      let bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
+      let now = new Date(bdTime);
+      let mStr = now.getFullYear() + "-" + String(now.getMonth()+1).padStart(2, '0');
+      let monthName = now.toLocaleString('default', { month: 'long', year: 'numeric' });
+      
+      try {
+          const snap = await db.collection("AttendanceHistory")
+              .where("studentID", "==", std.id)
+              .where("pureDate", ">=", mStr + "-01")
+              .where("pureDate", "<=", mStr + "-31")
+              .get();
+              
+          let p = 0;
+          snap.forEach(doc => { if (doc.data().type === "IN") p++; });
+          
+          document.getElementById('attTable').innerHTML = `
+            <tr><td style="padding:10px; border-bottom:1px solid #e2e8f0; font-weight:700;">Current Month (${monthName})</td>
+            <td style="padding:10px; text-align:right; border-bottom:1px solid #e2e8f0;"><b style="color:var(--success); font-size:15px;">${p} Days Present</b></td></tr>
+          `;
+          document.getElementById('attSummary').innerText = `Click 'VIEW DETAILED LOGS' to see daily punches and holidays.`;
+      } catch(e) {}
+  }
+
+  async function fetchMat() {
       const box = document.getElementById('matList');
       box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading resources...</div>";
       
       try {
-          const res = await fetch(`${FIREBASE_DB_BASE}/WebsitePosts?pageSize=1000`, { headers });
-          const data = await res.json();
+          const snap = await db.collection("WebsitePosts").where("targetPage", "==", "Class" + std.class).get();
           box.innerHTML = ""; let count = 0;
-          
-          if(data.documents) {
-              let posts = data.documents.map(d => d.fields).sort((a,b) => {
-                  let tA = a.timestamp ? parseInt(a.timestamp.integerValue) : 0;
-                  let tB = b.timestamp ? parseInt(b.timestamp.integerValue) : 0;
-                  return tB - tA;
-              });
+          let posts = [];
+          snap.forEach(doc => posts.push(doc.data()));
 
-              posts.forEach(f => {
-                  let target = f.targetPage ? f.targetPage.stringValue : "";
-                  if(target === "Class" + std.class) {
-                      count++;
-                      let title = sanitizeHTML(f.title ? f.title.stringValue : 'Document');
-                      let date = sanitizeHTML(f.date ? f.date.stringValue : '');
-                      let link = f.fileUrl ? f.fileUrl.stringValue : '#';
-                      if(!link || link === "None") link = "#";
-                      
-                      box.innerHTML += `<div style="background:white; padding:15px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
-                                          <div>
-                                            <div style="font-weight:700; color:#1e293b; font-size:14px;">${title}</div>
-                                            <div style="font-size:11px; color:#64748b; margin-top:3px;">📅 ${date}</div>
-                                          </div>
-                                          <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--accent); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap; text-decoration:none;">VIEW</a>
-                                        </div>`;
-                  }
-              });
-          }
+          posts.sort((a,b) => (parseInt(b.timestamp) || 0) - (parseInt(a.timestamp) || 0));
+
+          posts.forEach(f => {
+              count++;
+              let title = sanitizeHTML(f.title || 'Document');
+              let date = sanitizeHTML(f.date || '');
+              let link = f.fileUrl || '#';
+              if(!link || link === "None") link = "#";
+              
+              box.innerHTML += `<div style="background:white; padding:15px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
+                                  <div>
+                                    <div style="font-weight:700; color:#1e293b; font-size:14px;">${title}</div>
+                                    <div style="font-size:11px; color:#64748b; margin-top:3px;">📅 ${date}</div>
+                                  </div>
+                                  <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--accent); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap; text-decoration:none;">VIEW</a>
+                                </div>`;
+          });
+          
           if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'>No class materials available.</div>";
       } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
@@ -802,7 +796,7 @@
       return { subjects, testSeq, mainSeq, firstEmpty };
   }
 
-  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam CQ/MCQ/Prac)
+  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam Breakdown)
   function renderResults(h, d) {
       let parsed = parsePortalHeaders(h);
       let firstEmpty = parsed.firstEmpty;
@@ -832,66 +826,53 @@
                   if(v !== "") tVals.push(sanitizeHTML(v));
               });
               
-              let mVals = [];
-              let cqs = [], mcqs = [], pracs = [];
-              let hasPlusInMain = false;
-
+              let mainBreakdownHtml = "";
               sub.mains.forEach(col => {
-                  let v = String(d[col] || "").trim();
-                  if(v !== "") {
-                      mVals.push(sanitizeHTML(v));
-                      if (v.includes("+")) {
-                          hasPlusInMain = true;
-                          let parts = v.split("+").map(p => sanitizeHTML(p.trim()));
-                          if (parts[0]) cqs.push(parts[0]);
-                          if (parts[1]) mcqs.push(parts[1]);
-                          if (parts[2]) pracs.push(parts[2]);
-                      } else {
-                          cqs.push(sanitizeHTML(v));
+                  let headerText = h[col] || "";
+                  let vStr = String(d[col] || "").trim();
+                  
+                  if(vStr !== "") {
+                      let match = headerText.match(/\(([^)]+)\)/);
+                      let labels = ["Marks"];
+                      if (match && match[1].includes(":")) {
+                          labels = match[1].split('+').map(p => p.split(':')[0].trim());
+                      } else if (match && !match[1].includes(":")) {
+                          labels = ["Total"];
                       }
+                      
+                      let vals = vStr.includes("+") ? vStr.split('+').map(p => p.trim()) : [vStr];
+                      
+                      labels.forEach((lbl, i) => {
+                          let val = vals[i] || "-";
+                          let color = i===0 ? "#38bdf8" : (i===1 ? "#fbbf24" : (i===2 ? "#34d399" : "#f472b6"));
+                          mainBreakdownHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(lbl)}</div><div class="mark-val" style="color:${color};">${sanitizeHTML(val)}</div></div>`;
+                      });
                   }
               });
+              
+              if(mainBreakdownHtml === "" && sub.mains.length > 0) {
+                 mainBreakdownHtml = `<div class="mark-group"><div class="mark-label">Total</div><div class="mark-val" style="color:#38bdf8;">-</div></div>`;
+              }
 
-              if(tVals.length > 0 || mVals.length > 0) {
-                  if (isNineTen || hasPlusInMain) {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+              if(tVals.length > 0 || mainBreakdownHtml !== "") {
+                  subHtml += `<div class="dt-row">
+                                <div class="dt-row-top">
+                                    <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                </div>
+                                <div class="dt-exam-split">
+                                    <div class="dt-test-section">
+                                        <div class="dt-section-title">📝 Test Exam(s)</div>
+                                        <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(" / ") || "-"}</div>
                                     </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(" / ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
-                                            <div class="dt-main-grid">
-                                                <div class="mark-group"><div class="mark-label">CQ</div><div class="mark-val" style="color:#38bdf8;">${cqs.join(" / ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">MCQ</div><div class="mark-val" style="color:#fbbf24;">${mcqs.join(" / ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">Prac</div><div class="mark-val" style="color:#34d399;">${pracs.join(" / ") || "-"}</div></div>
-                                            </div>
+                                    <div class="dt-divider"></div>
+                                    <div class="dt-main-section">
+                                        <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
+                                        <div class="dt-main-grid">
+                                            ${mainBreakdownHtml}
                                         </div>
                                     </div>
-                                  </div>`;
-                  } else {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                    </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(" / ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s)</div>
-                                            <div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mVals.join(" / ") || "-"}</div>
-                                        </div>
-                                    </div>
-                                  </div>`;
-                  }
+                                </div>
+                              </div>`;
               }
           });
 
@@ -952,52 +933,32 @@
       document.getElementById('modalAttTableBody').innerHTML = '';
       
       try {
-          const token = await auth.currentUser.getIdToken();
-          const headers = { "Content-Type": "application/json", "Authorization": "Bearer " + token };
-          
-          const attReq = { 
-              structuredQuery: { 
-                  from: [{ collectionId: "AttendanceHistory" }], 
-                  where: { fieldFilter: { field: { fieldPath: "studentID" }, op: "EQUAL", value: { stringValue: std.id } } },
-                  limit: 2000
-              } 
-          };
-          
-          const [attRes, holRes] = await Promise.all([
-              fetch(`${FIREBASE_DB_BASE}:runQuery`, { method: "POST", headers, body: JSON.stringify(attReq) }),
-              fetch(`${FIREBASE_DB_BASE}/Holidays?pageSize=1000`, { headers })
+          const [attSnap, holSnap] = await Promise.all([
+              db.collection("AttendanceHistory").where("studentID", "==", std.id).limit(2000).get(),
+              db.collection("Holidays").get()
           ]);
           
-          const attData = await attRes.json();
-          const holData = await holRes.json();
-          
           allStudentAttendance = {}; 
-          if (attData && attData.length > 0 && attData[0].document) {
-              attData.forEach(item => {
-                  if(item.document && item.document.fields) {
-                      let f = item.document.fields;
-                      let pDate = sanitizeHTML(f.pureDate?.stringValue || ""); 
-                      let timeStr = sanitizeHTML(f.time?.stringValue || "");
-                      let type = sanitizeHTML(f.type?.stringValue || ""); 
-                      
-                      if(pDate) {
-                          if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; }
-                          if(type === "IN") allStudentAttendance[pDate].in = timeStr;
-                          if(type === "OUT") allStudentAttendance[pDate].out = timeStr;
-                      }
-                  }
-              });
-          }
+          attSnap.forEach(doc => {
+              let f = doc.data();
+              let pDate = sanitizeHTML(f.pureDate || ""); 
+              let timeStr = sanitizeHTML(f.time || "");
+              let type = sanitizeHTML(f.type || ""); 
+              
+              if(pDate) {
+                  if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; }
+                  if(type === "IN") allStudentAttendance[pDate].in = timeStr;
+                  if(type === "OUT") allStudentAttendance[pDate].out = timeStr;
+              }
+          });
 
           allHolidays = {};
-          if(holData && holData.documents) {
-              holData.documents.forEach(doc => {
-                  let f = doc.fields;
-                  let pDate = f.date?.stringValue;
-                  let reason = f.reason?.stringValue || "Holiday";
-                  if(pDate) allHolidays[pDate] = reason;
-              });
-          }
+          holSnap.forEach(doc => {
+              let f = doc.data();
+              let pDate = f.date || doc.id;
+              let reason = f.reason || "Holiday";
+              if(pDate) allHolidays[pDate] = reason;
+          });
 
           populateAttendanceMonths();
       } catch(e) {
@@ -1108,7 +1069,7 @@
 
   function openSecurityModal() { document.getElementById('newPass').value = ""; document.getElementById('passMsg').innerText = ""; document.getElementById('securityModal').style.display = 'flex'; }
 
-  // 🚀 DIRECT & INSTANT PASSWORD CHANGE (Firebase Auth + Firestore + Backend Sync)
+  // 🚀 DIRECT & INSTANT PASSWORD CHANGE (Firebase Auth + Firestore)
   async function updatePassword() {
     const p = document.getElementById('newPass').value.trim(); 
     const msgBox = document.getElementById('passMsg');
@@ -1135,7 +1096,7 @@
 
     try { 
         if (auth.currentUser) {
-            // 1. Try direct Firebase Auth update (with silent re-auth if needed)
+            // 1. Direct Firebase Auth password change (with silent re-auth if needed)
             try {
                 await auth.currentUser.updatePassword(p);
                 directSuccess = true;
@@ -1143,9 +1104,8 @@
                 if (authErr.code === 'auth/requires-recent-login') {
                     let oldPass = sessionStorage.getItem('srms_active_pass');
                     if (!oldPass) {
-                        const tkn = await auth.currentUser.getIdToken();
-                        const sDoc = await fetch(`${FIREBASE_DB_BASE}/Students/${docId}`, { headers: { "Authorization": "Bearer " + tkn } }).then(r => r.json());
-                        oldPass = sDoc.fields?.pass?.stringValue || "123456";
+                        const sDoc = await db.collection("Students").doc(docId).get();
+                        oldPass = sDoc.data()?.pass || "123456";
                     }
                     const cred = firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, oldPass);
                     await auth.currentUser.reauthenticateWithCredential(cred);
@@ -1159,12 +1119,8 @@
             const targetDocs = (allChildrenData && allChildrenData.length > 0) ? allChildrenData.map(c => c.docId) : [docId];
             for (let dId of targetDocs) {
                 if (!dId) continue;
-                const patchRes = await fetch(`${FIREBASE_DB_BASE}/Students/${dId}?updateMask.fieldPaths=pass`, {
-                    method: "PATCH",
-                    headers: { "Content-Type": "application/json", "Authorization": "Bearer " + token },
-                    body: JSON.stringify({ fields: { pass: { stringValue: p } } })
-                });
-                if (patchRes.ok) directSuccess = true;
+                await db.collection("Students").doc(dId).update({ pass: p });
+                directSuccess = true;
             }
         }
 
@@ -1198,16 +1154,13 @@
     btn.innerHTML = "SAVE NEW PASSWORD";
   }
 
-  async function checkGuardianMeetStatus(headers) {
+  async function checkGuardianMeetStatus() {
     try {
-        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/Guardian`, { headers });
-        if(response.ok) {
-            const data = await response.json();
-            if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
-                const btn = document.getElementById('guardianLiveBtn');
-                btn.classList.add('live-active-btn');
-                btn.innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE MEETING</span>";
-            }
+        let doc = await db.collection("LiveSessions").doc("Guardian").get();
+        if(doc.exists && doc.data().status === "TRUE") {
+            const btn = document.getElementById('guardianLiveBtn');
+            btn.classList.add('live-active-btn');
+            btn.innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE MEETING</span>";
         }
     } catch (e) {}
   }
@@ -1218,21 +1171,17 @@
     body.innerHTML = `<div style="text-align:center; font-weight:bold; color:var(--primary);">⏳ Synchronizing...</div>`;
     
     try {
-        const token = await auth.currentUser.getIdToken();
-        const response = await fetch(`${FIREBASE_DB_BASE}/LiveSessions/Guardian`, { headers: { "Authorization": "Bearer " + token } });
-        if(response.ok) {
-            const data = await response.json();
-            if(data.fields && data.fields.status && data.fields.status.stringValue === "TRUE") {
-                let title = sanitizeHTML(data.fields.title ? data.fields.title.stringValue : 'Guardian Meet');
-                body.innerHTML = `
-                    <div style="text-align:center;">
-                        <div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;">🔴 LIVE BROADCAST</div>
-                        <h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3>
-                        <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Joining as: <b>Guardian of ${std.name}</b></p>
-                        <button class="login-btn" onclick="joinMeet()">JOIN NOW</button>
-                    </div>`;
-                return;
-            }
+        let doc = await db.collection("LiveSessions").doc("Guardian").get();
+        if(doc.exists && doc.data().status === "TRUE") {
+            let title = sanitizeHTML(doc.data().title || 'Guardian Meet');
+            body.innerHTML = `
+                <div style="text-align:center;">
+                    <div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;">🔴 LIVE BROADCAST</div>
+                    <h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3>
+                    <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Joining as: <b>Guardian of ${std.name}</b></p>
+                    <button class="login-btn" onclick="joinMeet()">JOIN NOW</button>
+                </div>`;
+            return;
         }
         body.innerHTML = `<div style="text-align:center; padding:20px;"><p style="color:var(--text-muted); font-weight:600; font-size:15px;">No active meetings currently.</p></div>`; 
     } catch (e) { body.innerHTML = `<p style="color:red; text-align:center;">Connection error.</p>`; }
