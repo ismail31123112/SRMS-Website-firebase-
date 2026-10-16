@@ -129,10 +129,10 @@
   .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
   .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
-  .dt-main-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; }
+  .dt-main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); gap: 8px; width: 100%; }
 
   .mark-group { background: rgba(30, 41, 59, 0.7); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.04); }
-  .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
+  .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; text-align:center; }
   .mark-val { font-size: 14px; font-weight: 800; color: #f8fafc; text-align: center; word-break: break-word; }
   
   .dt-warning-text { font-size: 10px; color: #64748b; text-align: center; margin-top: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
@@ -279,7 +279,7 @@
 <div id="liveClassModal" class="modal-overlay"><div class="modal-content"><span class="close-btn" onclick="closeModal('liveClassModal')">×</span><div id="liveClassModalBody"></div></div></div>
 
 <div id="resultModal" class="modal-overlay">
-    <div class="modal-content" style="max-width:700px; background: #0f172a; padding: 0;">
+    <div class="modal-content" style="max-width:750px; background: #0f172a; padding: 0;">
         <span class="close-btn" onclick="closeModal('resultModal')" style="color:#fff; top:15px; right:20px; z-index:100;">×</span>
         <div id="resultModalBody" style="padding:0;"></div>
     </div>
@@ -331,7 +331,6 @@
     </div>
 </div>
 
-<!-- Firebase JS SDKs -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
@@ -422,8 +421,6 @@
                 email: sanitizeHTML(studentFields.email || ""),
                 schoolFeeDue: sanitizeHTML(studentFields.schoolFeeDue || "0"),
                 schoolFeeStatus: sanitizeHTML(studentFields.schoolFeeStatus || ""),
-                hostelFeeDue: sanitizeHTML(studentFields.hostelFeeDue || "0"),
-                hostelFeeStatus: sanitizeHTML(studentFields.hostelFeeStatus || ""),
                 customFees: safeJSONParse(studentFields.customFees, []),
                 resultMarks: safeJSONParse(studentFields.resultMarks, null),
                 resultStatus: sanitizeHTML(studentFields.resultStatus || "")
@@ -681,7 +678,7 @@
       return { subjects, testSeq, mainSeq, firstEmpty };
   }
 
-  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam CQ/MCQ/Prac)
+  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam Breakdown)
   function renderResults(h, d) {
       let parsed = parsePortalHeaders(h);
       let firstEmpty = parsed.firstEmpty;
@@ -707,66 +704,53 @@
                   if(v !== "") tVals.push(sanitizeHTML(v));
               });
               
-              let mVals = [];
-              let cqs = [], mcqs = [], pracs = [];
-              let hasPlusInMain = false;
-
+              let mainBreakdownHtml = "";
               sub.mains.forEach(col => {
-                  let v = String(d[col] || "").trim();
-                  if(v !== "") {
-                      mVals.push(sanitizeHTML(v));
-                      if (v.includes("+")) {
-                          hasPlusInMain = true;
-                          let parts = v.split("+").map(p => sanitizeHTML(p.trim()));
-                          if (parts[0]) cqs.push(parts[0]);
-                          if (parts[1]) mcqs.push(parts[1]);
-                          if (parts[2]) pracs.push(parts[2]);
-                      } else {
-                          cqs.push(sanitizeHTML(v));
+                  let headerText = h[col] || "";
+                  let vStr = String(d[col] || "").trim();
+                  
+                  if(vStr !== "") {
+                      let match = headerText.match(/\(([^)]+)\)/);
+                      let labels = ["Marks"];
+                      if (match && match[1].includes(":")) {
+                          labels = match[1].split('+').map(p => p.split(':')[0].trim());
+                      } else if (match && !match[1].includes(":")) {
+                          labels = ["Total"];
                       }
+                      
+                      let vals = vStr.includes("+") ? vStr.split('+').map(p => p.trim()) : [vStr];
+                      
+                      labels.forEach((lbl, i) => {
+                          let val = vals[i] || "-";
+                          let color = i===0 ? "#38bdf8" : (i===1 ? "#fbbf24" : (i===2 ? "#34d399" : "#f472b6"));
+                          mainBreakdownHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(lbl)}</div><div class="mark-val" style="color:${color};">${sanitizeHTML(val)}</div></div>`;
+                      });
                   }
               });
+              
+              if(mainBreakdownHtml === "" && sub.mains.length > 0) {
+                 mainBreakdownHtml = `<div class="mark-group"><div class="mark-label">Total</div><div class="mark-val" style="color:#38bdf8;">-</div></div>`;
+              }
 
-              if(tVals.length > 0 || mVals.length > 0) {
-                  if (isNineTen || hasPlusInMain) {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+              if(tVals.length > 0 || mainBreakdownHtml !== "") {
+                  subHtml += `<div class="dt-row">
+                                <div class="dt-row-top">
+                                    <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
+                                </div>
+                                <div class="dt-exam-split">
+                                    <div class="dt-test-section">
+                                        <div class="dt-section-title">📝 Test Exam(s)</div>
+                                        <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
                                     </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
-                                            <div class="dt-main-grid">
-                                                <div class="mark-group"><div class="mark-label">CQ</div><div class="mark-val" style="color:#38bdf8;">${cqs.join(", ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">MCQ</div><div class="mark-val" style="color:#fbbf24;">${mcqs.join(", ") || "-"}</div></div>
-                                                <div class="mark-group"><div class="mark-label">Prac</div><div class="mark-val" style="color:#34d399;">${pracs.join(", ") || "-"}</div></div>
-                                            </div>
+                                    <div class="dt-divider"></div>
+                                    <div class="dt-main-section">
+                                        <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
+                                        <div class="dt-main-grid">
+                                            ${mainBreakdownHtml}
                                         </div>
                                     </div>
-                                  </div>`;
-                  } else {
-                      subHtml += `<div class="dt-row">
-                                    <div class="dt-row-top">
-                                        <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                    </div>
-                                    <div class="dt-exam-split">
-                                        <div class="dt-test-section">
-                                            <div class="dt-section-title">📝 Test Exam(s)</div>
-                                            <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(", ") || "-"}</div>
-                                        </div>
-                                        <div class="dt-divider"></div>
-                                        <div class="dt-main-section">
-                                            <div class="dt-section-title">🏆 Main Exam(s)</div>
-                                            <div class="mark-val" style="color:${sub.isOpt ? '#34d399' : '#38bdf8'}; margin-top:2px;">${mVals.join(", ") || "-"}</div>
-                                        </div>
-                                    </div>
-                                  </div>`;
-                  }
+                                </div>
+                              </div>`;
               }
           });
 
@@ -828,7 +812,7 @@
       
       try {
           const [attSnap, holSnap] = await Promise.all([
-              db.collection("AttendanceHistory").where("studentID", "==", std.id).get(),
+              db.collection("AttendanceHistory").where("studentID", "==", std.id).limit(2000).get(),
               db.collection("Holidays").get()
           ]);
           
@@ -849,7 +833,7 @@
           allHolidays = {};
           holSnap.forEach(doc => {
               let f = doc.data();
-              let pDate = f.date;
+              let pDate = f.date || doc.id;
               let reason = f.reason || "Holiday";
               if(pDate) allHolidays[pDate] = reason;
           });
