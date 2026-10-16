@@ -33,7 +33,7 @@
   .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
 
   /* Custom Scrollbar */
-  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
@@ -129,7 +129,9 @@
   .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
   .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
-  .dt-main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); gap: 8px; width: 100%; }
+  
+  /* Horizontal scrolling for multiple main exams */
+  .dt-main-flex { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 4px; padding-bottom: 4px; align-items: stretch; justify-content: center; }
 
   .mark-group { background: rgba(30, 41, 59, 0.7); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.04); }
   .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; text-align:center; }
@@ -279,7 +281,7 @@
 <div id="liveClassModal" class="modal-overlay"><div class="modal-content"><span class="close-btn" onclick="closeModal('liveClassModal')">×</span><div id="liveClassModalBody"></div></div></div>
 
 <div id="resultModal" class="modal-overlay">
-    <div class="modal-content" style="max-width:750px; background: #0f172a; padding: 0;">
+    <div class="modal-content" style="max-width:780px; background: #0f172a; padding: 0;">
         <span class="close-btn" onclick="closeModal('resultModal')" style="color:#fff; top:15px; right:20px; z-index:100;">×</span>
         <div id="resultModalBody" style="padding:0;"></div>
     </div>
@@ -691,7 +693,6 @@
           let year = sanitizeHTML(d[firstEmpty+6] || d[firstEmpty+5] || new Date().getFullYear().toString());
           if (year === failReason) year = new Date().getFullYear().toString();
 
-          let isNineTen = String(std.class).includes("9") || String(std.class).includes("10");
           let subHtml = "";
 
           Object.keys(parsed.subjects).forEach(subName => {
@@ -705,11 +706,14 @@
               });
               
               let mainBreakdownHtml = "";
-              sub.mains.forEach(col => {
+              sub.mains.forEach((col, index) => {
                   let headerText = h[col] || "";
                   let vStr = String(d[col] || "").trim();
                   
                   if(vStr !== "") {
+                      let info = extractPortalSubAndExam(headerText);
+                      let examNameStr = info.exam !== "Exam" ? info.exam : `Exam ${index+1}`;
+
                       let match = headerText.match(/\(([^)]+)\)/);
                       let labels = ["Marks"];
                       if (match && match[1].includes(":")) {
@@ -720,11 +724,23 @@
                       
                       let vals = vStr.includes("+") ? vStr.split('+').map(p => p.trim()) : [vStr];
                       
+                      let boxesHtml = "";
                       labels.forEach((lbl, i) => {
                           let val = vals[i] || "-";
                           let color = i===0 ? "#38bdf8" : (i===1 ? "#fbbf24" : (i===2 ? "#34d399" : "#f472b6"));
-                          mainBreakdownHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(lbl)}</div><div class="mark-val" style="color:${color};">${sanitizeHTML(val)}</div></div>`;
+                          boxesHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(lbl)}</div><div class="mark-val" style="color:${color};">${sanitizeHTML(val)}</div></div>`;
                       });
+
+                      let examBlock = `
+                        <div style="display:flex; flex-direction:column; align-items:center; gap:5px;">
+                          <span style="font-size:9px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed #334155; padding-bottom:2px;">${sanitizeHTML(examNameStr)}</span>
+                          <div style="display:flex; gap:6px;">${boxesHtml}</div>
+                        </div>`;
+
+                      if(mainBreakdownHtml !== "") {
+                          mainBreakdownHtml += `<div style="display:flex; align-items:center; color:#475569; font-size:24px; font-weight:300; margin: 0 8px;">/</div>`;
+                      }
+                      mainBreakdownHtml += examBlock;
                   }
               });
               
@@ -745,7 +761,7 @@
                                     <div class="dt-divider"></div>
                                     <div class="dt-main-section">
                                         <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
-                                        <div class="dt-main-grid">
+                                        <div class="dt-main-flex">
                                             ${mainBreakdownHtml}
                                         </div>
                                     </div>
