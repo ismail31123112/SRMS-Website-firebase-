@@ -360,7 +360,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .student-info td { padding: 4px 9px; border-right: 1px dashed #cbd5e1; }
 .student-info td:last-child { border-right: none; }
 
-.legend-box { font-size: 8.8px; color: #005f40; background: #ecfdf5 !important; border: 1px dashed #005f40; padding: 3px 9px; border-radius: 4px; margin-bottom: 2px; display: flex; justify-content: space-between; font-weight: 700; }
+.legend-box { font-size: 8.8px; color: #005f40; background: #ecfdf5 !important; border: 1px dashed #005f40; padding: 3px 9px; border-radius: 4px; margin-bottom: 2px; display: flex; align-items:center; justify-content: center; font-weight: 700; gap: 15px; }
 
 .marks-wrapper { flex: 1; display: flex; justify-content: space-between; gap: 10px; width: 100%; align-items: flex-start; min-height: 0; margin-bottom: 12px; }
 .marks-table { width: 100%; height: 100%; border-collapse: collapse; font-size: 9.5px; background: rgba(255, 255, 255, 0.92); table-layout: auto; }
@@ -380,11 +380,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .rc-ov-card { border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc !important; padding: 5px 9px; display: flex; flex-direction: column; justify-content: center; }
 .rc-ov-title { font-size: 8.6px; font-weight: 900; color: #005f40; text-transform: uppercase; border-bottom: 1px solid #cbd5e1; padding-bottom: 2.5px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
 
-.rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 4px 8px; display: flex; align-items: center; gap: 10px; }
-.rc-qr-box { width: 68px; height: 68px; background: #fff !important; border: 1.5px solid #005f40; border-radius: 4px; padding: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 6px; display: flex; align-items: center; gap: 12px; }
+.rc-qr-box { width: 85px; height: 85px; background: #fff !important; border: 1.5px solid #005f40; border-radius: 4px; padding: 2px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
 .rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
-.rc-qr-meta { font-size: 8.5px; line-height: 1.35; color: #0f172a; font-weight: 700; }
-.rc-qr-badge { display: inline-block; background: #005f40 !important; color: #fff !important; font-size: 8px; font-weight: 800; padding: 2px 7px; border-radius: 3px; margin-bottom: 3px; text-transform: uppercase; }
+.rc-qr-meta { font-size: 8.5px; line-height: 1.4; color: #0f172a; font-weight: 700; }
+.rc-qr-badge { display: inline-block; background: #005f40 !important; color: #fff !important; font-size: 8px; font-weight: 800; padding: 2px 7px; border-radius: 3px; margin-bottom: 4px; text-transform: uppercase; }
 
 .summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; margin-top: 10px; margin-bottom: 10px; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .summary-metrics { display: flex; gap: 16px; font-size: 11.5px; font-weight: 800; color: #005f40; align-items: center; }
@@ -1003,6 +1003,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
     if (examFilter === "All" || examFilter === t.name) {
       let vStr = String(row[t.col] || "").trim();
       let sum = 0; let hasMark = false;
+      let badgeParts = [];
       if (vStr !== "") {
         hasTest = true; hasMark = true;
         let oParts = vStr.includes("+") ? vStr.split('+').map(Number) : [parseFloat(vStr)||0];
@@ -1010,10 +1011,13 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
            let obt = oParts[idx] || 0;
            if (obt > p.max) obt = p.max;
            sum += obt;
+           if (t.fm.parts.length > 1) badgeParts.push(`<span class="badge-part">${p.name}: <b>${obt}</b></span>`);
         });
         tCalc += sum; totalTFull += t.fm.total;
       }
-      examDetails[t.name] = { hasMark, sum, type: "Test", fullMark: t.fm.total };
+      let partsStr = badgeParts.length > 0 ? badgeParts.join(" ") : "";
+      let partsStrTab = badgeParts.length > 0 ? badgeParts.map(x => x.replace(/<[^>]*>?/gm, '')).join(", ") : "";
+      examDetails[t.name] = { hasMark, sum, type: "Test", fullMark: t.fm.total, partsStr, partsStrTab };
     }
   });
 
@@ -1021,6 +1025,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
     if (examFilter === "All" || examFilter === m.name) {
       let vStr = String(row[m.col] || "").trim();
       let sum = 0; let hasMark = false;
+      let badgeParts = [];
       if (vStr !== "") {
         hasMain = true; hasMark = true;
         let oParts = vStr.includes("+") ? vStr.split('+').map(Number) : [parseFloat(vStr)||0];
@@ -1028,6 +1033,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
             let obt = oParts[idx] || 0;
             if (obt > p.max) obt = p.max;
             sum += obt;
+            if (m.fm.parts.length > 1) badgeParts.push(`<span class="badge-part">${p.name}: <b>${obt}</b></span>`);
             if (window.passConfig.reqIndividualPass && p.max > 0) {
                 if (obt < Math.ceil(p.max * (window.passConfig.passPercentage / 100))) {
                     isSubFail = true; specificFailReason = p.name;
@@ -1039,7 +1045,9 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
             isSubFail = true; specificFailReason = "Total Marks";
         }
       }
-      examDetails[m.name] = { hasMark, sum, type: "Main", fullMark: m.fm.total };
+      let partsStr = badgeParts.length > 0 ? badgeParts.join(" ") : "";
+      let partsStrTab = badgeParts.length > 0 ? badgeParts.map(x => x.replace(/<[^>]*>?/gm, '')).join(", ") : "";
+      examDetails[m.name] = { hasMark, sum, type: "Main", fullMark: m.fm.total, partsStr, partsStrTab };
     }
   });
 
@@ -1239,7 +1247,7 @@ window.openEditGlobalExamModal = async function(idx) {
     showCancelButton: true, confirmButtonText: '<i class="fas fa-save"></i> আপডেট করুন', cancelButtonText: 'বাতিল',
     preConfirm: () => {
       let newName = document.getElementById('editExN').value.trim();
-      if (!newName) { Swal.showValidationMessage('পরীক্ষার নাম খালি রাখা যাবে না!'); return false; }
+      if (!newName) { Swal.showValidationMessage('পরীক্ষার নাম খালি রাখা যাবে কাশী!'); return false; }
       return { newName, newType: document.getElementById('editExT').value };
     }
   });
@@ -1760,7 +1768,7 @@ async function openPrintMarksheetPopup() {
   if (appData.length === 0) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
   var parsed = parseSubjectHeaders(cachedHeaders); if (parsed.firstEmpty === -1) return swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
   
-  let optionsHtml = `<option value="All">সম্মিলিত চূড়ান্ত ফলাফল (সকল পরীক্ষা একত্রে)</option>`;
+  let optionsHtml = `<option value="All">সম্মিলিত চূড়ান্ত ফলাফল (Final Result)</option>`;
   parsed.examSeq.forEach(ex => { optionsHtml += `<option value="${ex}">${ex} (শুধুমাত্র এই পরীক্ষা)</option>`; });
   
   const { value: formValues } = await swalPro.fire({ 
@@ -1808,6 +1816,7 @@ function generateMarkSheets(examFilter, customTitle) {
 
   let activeExams = [];
   parsed.examSeq.forEach(ex => { if (examFilter === "All" || ex === examFilter) activeExams.push(ex); });
+  let lastExamName = activeExams.length > 0 ? activeExams[activeExams.length - 1] : "";
 
   data.forEach(row => {
     if (!row[0] && !row[1]) return; classStats.totalStudents++;
@@ -1853,24 +1862,24 @@ function generateMarkSheets(examFilter, customTitle) {
       </tr>
     </thead>`;
     
-  let activeTests = []; let activeMains = []; parsed.testSeq.forEach(t => { if (examFilter === "All" || t === examFilter) activeTests.push(t); }); parsed.mainSeq.forEach(m => { if (examFilter === "All" || m === examFilter) activeMains.push(m); });
-  
-  let legendParts = [];
-  if(activeTests.length > 0) legendParts.push(`<b>Tests (${testWeight}%):</b> ${activeTests.join(" / ")}`);
-  if(activeMains.length > 0) legendParts.push(`<b>Mains (${mainWeight}%):</b> ${activeMains.join(" / ")}`);
-  legendParts.push(`<b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Req." : "Subject Pass"} (${window.passConfig.passPercentage}%)`);
-  
-  let legendHtml = `<div class="legend-box">` + legendParts.map(p => `<span>${p}</span>`).join("") + `</div>`;
+  let legendHtml = `<div class="legend-box" style="justify-content:center;"><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Required" : "Subject Total Pass"} (${window.passConfig.passPercentage}%)</span></div>`;
   let issueDateStr = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
   let cardsArr = [];
 
   studentEvaluations.forEach(item => {
     var row = item.row; var id = row[0]; var name = row[1]; var roll = row[2]; var dispGPA = item.liveGPA; var dispGrade = item.liveGrade; var dispAvg = item.liveAvg; var dispPos = item.dispPos; var filterTotalMarks = item.filterTotalMarks;
+    
     var rowsHtmlArray = item.subRows.map(sr => {
       let ev = sr.ev; 
       let tdExamsHtml = activeExams.map(exName => {
          let d = ev.examDetails[exName];
-         if(d && d.hasMark) return `<td class="divider-col"><b>${d.sum}</b></td>`;
+         if(d && d.hasMark) {
+             if (exName === lastExamName && d.partsStr) {
+                 return `<td class="divider-col"><div style="display:flex; flex-wrap:wrap; justify-content:center; gap:2px; margin-bottom:2px;">${d.partsStr}</div><b>Total: ${d.sum}</b></td>`;
+             } else {
+                 return `<td class="divider-col"><b>${d.sum}</b></td>`;
+             }
+         }
          return `<td class="divider-col">-</td>`;
       }).join("");
 
@@ -1947,7 +1956,7 @@ function generateMarkSheets(examFilter, customTitle) {
         <div class="rc-bottom-section">
           <div class="summary-box">
             <div class="summary-metrics"><span>Total Marks: <b>${filterTotalMarks}</b></span><span>Average: <b>${dispAvg}</b></span><span>GPA: <b style="font-size:14.5px;">${dispGPA}</b></span><span>Letter Grade: <b style="font-size:14.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</b></span><span>Merit Position: <b>${dispPos}</b></span></div>
-            <p class="remark-text"><span style="color:#0f172a;">Remarks:</span> ${teacherRemark}</p>
+            <p class="remark-text"><span style="color:#0f172a;"><b>Remarks:</b></span> ${teacherRemark}</p>
           </div>
           <div class="footer"><div class="signature">Class Teacher</div><div class="signature">Guardian's Signature</div><div class="signature">Principal / Headmaster</div></div>
         </div>
@@ -1960,19 +1969,19 @@ async function printTabulation() {
   if (appData.length === 0) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
   var parsed = parseSubjectHeaders(cachedHeaders); if (parsed.firstEmpty === -1) return swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
   
-  let optionsHtml = `<option value="All">সম্মিলিত চূড়ান্ত ফলাফল (সকল পরীক্ষা একত্রে)</option>`;
-  parsed.examSeq.forEach(ex => { optionsHtml += `<option value="${ex}">${ex} (শুধুমাত্র এই পরীক্ষা)</option>`; });
+  let optionsHtml = `<option value="All">সম্মিলিত চূড়ান্ত ফলাফল (Final Result)</option>`;
+  parsed.examSeq.forEach(ex => { optionsHtml += `<option value="${ex}">${ex}</option>`; });
 
   const { value: formValues } = await swalPro.fire({ 
     title: 'ট্যাবুলেশন শিট প্রিন্ট সেটিং', 
     html: `
       <div style="text-align:left;">
          <label style="font-size:13px; font-weight:800; color:#334155;">পরীক্ষা নির্বাচন করুন:</label>
-         <select id="tabExamFilter" class="swal2-input" onchange="document.getElementById('tabTitle').value = this.value === 'All' ? 'Master Tabulation Sheet - Final Result' : 'Master Tabulation Sheet - ' + this.value;" style="width:100%; height:45px; font-size:14px; margin-top:8px; margin-bottom:12px;">
+         <select id="tabExamFilter" class="swal2-input" onchange="document.getElementById('tabTitle').value = this.value === 'All' ? 'Master Tabulation Sheet - Final Result' : 'Tabulation Sheet - ' + this.value;" style="width:100%; height:45px; font-size:14px; margin-top:8px; margin-bottom:12px;">
             ${optionsHtml}
          </select>
          <label style="font-size:13px; font-weight:800; color:#334155; display:block;">ট্যাবুলেশন টাইটেল (Custom Title):</label>
-         <input id="tabTitle" class="swal2-input" value="Master Tabulation Sheet - Final Result" placeholder="যেমন: Master Tabulation Sheet - Annual" style="width:100%; height:45px; font-size:14px; margin-top:8px; margin-bottom:12px;">
+         <input id="tabTitle" class="swal2-input" value="Master Tabulation Sheet - Final Result" placeholder="যেমন: Tabulation Sheet - Annual" style="width:100%; height:45px; font-size:14px; margin-top:8px; margin-bottom:12px;">
          <label style="font-size:13px; font-weight:800; color:#334155; display:block;">প্রিন্ট পেপার ও ওরিয়েন্টেশন:</label>
          <select id="tabOrient" class="swal2-input" style="width:100%; height:45px; font-size:14px; margin-top:8px;">
             <option value="a4-landscape">A4 Landscape (আড়াআড়ি)</option>
@@ -2060,7 +2069,13 @@ function buildTabulationPagesForOrientation(orientation, examFilter, customTitle
          let ev = match.ev;
          let cellContentHtml = activeExams.map(exName => {
            let d = ev.examDetails[exName];
-           if(d && d.hasMark) return `<span style="color:#334155;">${exName}: <b>${d.sum}</b></span>`;
+           if(d && d.hasMark) {
+              if (activeExams.length === 1 && d.partsStrTab) {
+                  return `<span style="color:#334155;">${d.partsStrTab}</span>`;
+              } else {
+                  return `<span style="color:#334155;">${exName}: <b>${d.sum}</b></span>`;
+              }
+           }
            return "";
          }).filter(Boolean).join("<br>");
          
@@ -2072,7 +2087,6 @@ function buildTabulationPagesForOrientation(orientation, examFilter, customTitle
     tr += `<td><b>${item.liveAvg}</b></td><td><strong style="font-size:8.5px;">${item.liveGPA}</strong></td><td><strong style="font-size:8.5px; color:${item.liveGrade === 'F' ? '#dc2626' : '#059669'};">${item.liveGrade}</strong></td><td><b>${item.dispPos}</b></td></tr>`; return tr;
   });
 
-  // Optimize rows per page depending on paper format chosen
   var rowsPerPage = 7;
   if (orientation === 'a4-portrait') rowsPerPage = 11;
   else if (orientation === 'a3-landscape') rowsPerPage = 11;
@@ -2089,18 +2103,25 @@ function buildTabulationPagesForOrientation(orientation, examFilter, customTitle
 
   var totalPages = pagesArr.length; var pageOrientClass = orientation + "-page";
   
-  let activeTests = []; let activeMains = []; parsed.testSeq.forEach(t => { if(examFilter === "All" || t === examFilter) activeTests.push(t); }); parsed.mainSeq.forEach(m => { if(examFilter === "All" || m === examFilter) activeMains.push(m); });
-  
-  let legendParts = [];
-  if(activeTests.length > 0) legendParts.push(`<b>Tests (${testWeight}%):</b> ${activeTests.join(" / ")}`);
-  if(activeMains.length > 0) legendParts.push(`<b>Mains (${mainWeight}%):</b> ${activeMains.join(" / ")}`);
-  legendParts.push(`<b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Req." : "Subject Pass"} (${window.passConfig.passPercentage}%)`);
-  
-  let legendHtml = `<div class="legend-box" style="margin-bottom:3px; font-size:8px; padding:2px 6px; display:flex; flex-wrap:wrap; gap:5px;">` + legendParts.map(p => `<span>${p}</span>`).join("") + `</div>`;
+  let legendHtml = `<div class="legend-box" style="justify-content:center; margin-bottom:3px; font-size:8px; padding:2px 6px;"><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Required" : "Subject Total Pass"} (${window.passConfig.passPercentage}%)</span></div>`;
   
   var finalPagesHtml = pagesArr.map((pageRows, pageIdx) => {
     var isLastPage = (pageIdx === totalPages - 1);
-    return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap"><div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;"><img src="${SCHOOL_LOGO}" alt="Logo" style="height:48px; width:48px; border-radius:50%; border:2px solid #005f40; padding:2px;"><div><h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">${customTitle.toUpperCase()} — ${cls.toUpperCase()} (SESSION: ${year})</p></div><div style="text-align:right;"><div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">Examinees: ${filterStats['Evaluated']} | Pass: ${passed} (${passRate}%)</div><div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div></div></div>${legendHtml}<table class="tab-table${densityClass}">${theadHtml}<tbody>${pageRows.join('')}</tbody></table>${isLastPage ? summaryTableHtml : ''}</div><div class="tab-fixed-signatures"><div class="tab-sig-box">Prepared &amp; Tabulated By</div><div class="tab-sig-box">Exam Controller</div><div class="tab-sig-box">Principal / Headmaster</div></div></div>`;
+    return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #005f40; padding-bottom:6px; margin-bottom:6px;">
+        <div style="width:80px; text-align:left;">
+            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:55px; width:55px; border-radius:50%; border:2px solid #005f40; padding:2px;">
+        </div>
+        <div style="flex:1; text-align:center;">
+            <h1 style="margin:0; font-size:18px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif; letter-spacing:0.5px;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+            <p style="margin:3px 0 0 0; color:#334155; font-size:10px; font-weight:800; text-transform:uppercase;">${customTitle} — CLASS ${cls.toUpperCase()} (SESSION: ${year})</p>
+        </div>
+        <div style="width:80px; text-align:right; display:flex; flex-direction:column; justify-content:flex-end; height:55px;">
+            <div style="font-size:8px; font-weight:800; color:#475569;">Page ${pageIdx + 1} of ${totalPages}</div>
+        </div>
+      </div>
+      ${legendHtml}
+      <table class="tab-table${densityClass}">${theadHtml}<tbody>${pageRows.join('')}</tbody></table>${isLastPage ? summaryTableHtml : ''}</div><div class="tab-fixed-signatures"><div class="tab-sig-box">Prepared &amp; Tabulated By</div><div class="tab-sig-box">Exam Controller</div><div class="tab-sig-box">Principal / Headmaster</div></div></div>`;
   }).join('');
   document.getElementById('print-content').innerHTML = finalPagesHtml;
 }
