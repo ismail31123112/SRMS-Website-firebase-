@@ -349,12 +349,12 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .rc-middle-section { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; margin: 5px 0; min-height: 0; }
 
 .school-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #005f40; padding-bottom: 5px; margin-bottom: 5px; gap: 10px; }
-.school-logo { width: 52px; height: 52px; border-radius: 50%; object-fit: contain; border: 1.5px solid #005f40; padding: 2px; background: #fff; }
+.school-logo { width: 62px; height: 62px; border-radius: 50%; object-fit: contain; border: 2px solid #005f40; padding: 2px; background: #fff; }
 .header-center { text-align: center; flex: 1; }
 .header-center h1 { margin: 0; font-size: 19px; text-transform: uppercase; color: #005f40; font-weight: 900; letter-spacing: 0.6px; font-family: 'Times New Roman', Times, serif; }
 .school-address { font-size: 9.8px; font-weight: 700; color: #334155; margin: 2px 0 0 0; }
 .transcript-badge-wrap { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
-.transcript-title { background: #005f40 !important; color: white !important; padding: 4px 12px; border-radius: 15px; font-size: 9.8px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; }
+.transcript-title { background: #005f40 !important; color: white !important; padding: 5px 14px; border-radius: 15px; font-size: 10.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
 
 .student-info { width: 100%; margin-bottom: 4px; font-size: 10.5px; font-weight: 700; border: 1px solid #94a3b8; border-radius: 5px; background: #f8fafc !important; border-collapse: collapse; }
 .student-info td { padding: 4px 9px; border-right: 1px dashed #cbd5e1; }
@@ -376,19 +376,19 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .report-card.standard-card .marks-table th, .report-card.standard-card .marks-table td { padding: 4px 3px; font-size: 9.3px; }
 .report-card.dense-card .marks-table th, .report-card.dense-card .marks-table td { padding: 2.5px 2px; font-size: 8.4px; }
 
-.rc-overview-qr-strip { display: grid; grid-template-columns: 1.6fr 1fr 1.05fr; gap: 8px; align-items: stretch; margin-top: 16px; margin-bottom: 8px; }
+.rc-overview-qr-strip { display: grid; grid-template-columns: 1.6fr 1fr 1.25fr; gap: 8px; align-items: stretch; margin-top: 16px; margin-bottom: 8px; }
 .rc-ov-card { border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc !important; padding: 5px 9px; display: flex; flex-direction: column; justify-content: center; }
 .rc-ov-title { font-size: 8.6px; font-weight: 900; color: #005f40; text-transform: uppercase; border-bottom: 1px solid #cbd5e1; padding-bottom: 2.5px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
 
-.rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 4px 8px; display: flex; align-items: center; gap: 8px; }
-.rc-qr-box { width: 52px; height: 52px; background: #fff !important; border: 1px solid #005f40; border-radius: 4px; padding: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 4px 8px; display: flex; align-items: center; gap: 10px; }
+.rc-qr-box { width: 68px; height: 68px; background: #fff !important; border: 1.5px solid #005f40; border-radius: 4px; padding: 2px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
-.rc-qr-meta { font-size: 8px; line-height: 1.3; color: #0f172a; font-weight: 700; }
-.rc-qr-badge { display: inline-block; background: #005f40 !important; color: #fff !important; font-size: 7.5px; font-weight: 800; padding: 1.5px 6px; border-radius: 3px; margin-bottom: 2px; text-transform: uppercase; }
+.rc-qr-meta { font-size: 8.5px; line-height: 1.35; color: #0f172a; font-weight: 700; }
+.rc-qr-badge { display: inline-block; background: #005f40 !important; color: #fff !important; font-size: 8px; font-weight: 800; padding: 2px 7px; border-radius: 3px; margin-bottom: 3px; text-transform: uppercase; }
 
 .summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; margin-top: 10px; margin-bottom: 10px; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .summary-metrics { display: flex; gap: 16px; font-size: 11.5px; font-weight: 800; color: #005f40; align-items: center; }
-.remark-text { font-size: 10px; font-weight: 800; color: #b91c1c; margin: 0; text-transform: uppercase; }
+.remark-text { font-size: 10px; font-weight: 800; color: #0f172a; margin: 0; }
 
 .footer { display: flex; justify-content: space-between; align-items: flex-end; padding: 15px 16px 0 16px; margin-top: auto; }
 .signature { border-top: 1.5px solid #000; width: 175px; text-align: center; padding-top: 3.5px; font-weight: 800; font-size: 10px; color: #000; text-transform: uppercase; }
@@ -668,7 +668,7 @@ function parseSubjectHeaders(headers) {
   if (firstEmpty === -1) firstEmpty = headers.length;
   let subjects = {};
   let testSeq = []; let mainSeq = [];
-  let examSeq = []; // Dynamic combined list of exams
+  let examSeq = []; 
   let c = 3;
 
   while (c < firstEmpty && c < headers.length) {
@@ -1397,8 +1397,7 @@ async function manageClassSubjectsPopup() {
       <div class="mgr-list-item">
         <div>
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
-            <b style="font-size:16px; color:var(--main);"><i class="fas fa-book"></i> ${sName}</b>
-            ${sub.isOpt ? `<span class="mgr-badge" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a;">৪র্থ বিষয়</span>` : `<span class="mgr-badge" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;">আবশ্যিক</span>`}
+            <b style="font-size:16px; color:var(--main);"><i class="fas fa-book"></i> ${sName}</b>${sub.isOpt ? `<span class="mgr-badge" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a;">৪র্থ বিষয়</span>` : `<span class="mgr-badge" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;">আবশ্যিক</span>`}
           </div>
           <div>${exSummary}</div>
         </div>
@@ -1760,11 +1759,31 @@ function closePrintView() { document.getElementById('print-area').style.display 
 async function openPrintMarksheetPopup() {
   if (appData.length === 0) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
   var parsed = parseSubjectHeaders(cachedHeaders); if (parsed.firstEmpty === -1) return swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
-  var examOptions = { "All": "সম্মিলিত চূড়ান্ত ফলাফল (সকল পরীক্ষা একত্রে)" };
-  parsed.examSeq.forEach(ex => { examOptions[ex] = ex + " (শুধুমাত্র এই পরীক্ষা)"; });
   
-  const { value: selectedExam } = await swalPro.fire({ title: 'মার্কশিট প্রিন্ট নির্বাচন', input: 'select', inputOptions: examOptions, showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-print"></i> তৈরি করুন', cancelButtonText: 'বাতিল' });
-  if (selectedExam) generateMarkSheets(selectedExam);
+  let optionsHtml = `<option value="All">সম্মিলিত চূড়ান্ত ফলাফল (সকল পরীক্ষা একত্রে)</option>`;
+  parsed.examSeq.forEach(ex => { optionsHtml += `<option value="${ex}">${ex} (শুধুমাত্র এই পরীক্ষা)</option>`; });
+  
+  const { value: formValues } = await swalPro.fire({ 
+    title: 'মার্কশিট প্রিন্ট সেটিং', 
+    html: `
+      <div style="text-align:left;">
+         <label style="font-size:13px; font-weight:800; color:#334155;">পরীক্ষা নির্বাচন করুন:</label>
+         <select id="msExamFilter" class="swal2-input" onchange="document.getElementById('msTitle').value = this.value === 'All' ? 'Final Result' : this.value;" style="width:100%; height:45px; font-size:14px; margin-top:8px;">
+            ${optionsHtml}
+         </select>
+         <label style="font-size:13px; font-weight:800; color:#334155; margin-top:15px; display:block;">মার্কশিট টাইটেল (Custom Title):</label>
+         <input id="msTitle" class="swal2-input" value="Final Result" placeholder="যেমন: Annual Examination" style="width:100%; height:45px; font-size:14px; margin-top:8px;">
+      </div>
+    `,
+    showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-print"></i> তৈরি করুন', cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let f = document.getElementById('msExamFilter').value;
+      let t = document.getElementById('msTitle').value.trim() || 'Academic Result';
+      return { examFilter: f, customTitle: t };
+    }
+  });
+  
+  if (formValues) generateMarkSheets(formValues.examFilter, formValues.customTitle);
 }
 
 function generateVerifyHash(id, cls, yr, gpa, grade, totalMarks) {
@@ -1777,7 +1796,7 @@ function createVerificationQrSvg(verifyUrl) {
   return `<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(verifyUrl)}" style="width:100%;height:100%;" alt="QR">`;
 }
 
-function generateMarkSheets(examFilter) {
+function generateMarkSheets(examFilter, customTitle) {
   recalculateClassStatsInMemory(); var data = appData; var parsed = parseSubjectHeaders(cachedHeaders); var firstEmpty = parsed.firstEmpty;
   var rawClassName = document.getElementById("classSelector").value; var year = document.getElementById("yearSelector").value;
   var testWeight = parseFloat(document.getElementById('testWeight').value) || 25; var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
@@ -1866,7 +1885,6 @@ function generateMarkSheets(examFilter) {
 
     let vHash = generateVerifyHash(id, rawClassName, year, dispGPA, dispGrade, filterTotalMarks);
     let subStr = item.subRows.map(sr => `${sr.actualSubName.replace(/<[^>]*>?/gm, '').trim()}_${sr.ev.finalMark}_${sr.ev.subGrade}`).join(',');
-    let verifyCode = `SRMS-${year}-${vHash}`;
     let verifyUrl = `https://srms2012.edu.bd/verify-result?id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&cls=${encodeURIComponent(rawClassName)}&roll=${encodeURIComponent(roll)}&yr=${encodeURIComponent(year)}&exam=${encodeURIComponent(examFilter === "All" ? "Final" : examFilter)}&marks=${filterTotalMarks}&gpa=${dispGPA}&grade=${encodeURIComponent(dispGrade)}&merit=${encodeURIComponent(dispPos)}&v=${vHash}&sub=${encodeURIComponent(subStr)}`;
     let qrSvgHtml = createVerificationQrSvg(verifyUrl);
 
@@ -1877,7 +1895,7 @@ function generateMarkSheets(examFilter) {
           <div class="school-header">
             <img src="${SCHOOL_LOGO}" class="school-logo" alt="Logo">
             <div class="header-center"><h1>SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p class="school-address">Sultan Nagar, Saidpur, Nilphamari | School Code: 481931 | EMIS Code: 00704061312</p></div>
-            <div class="transcript-badge-wrap"><div class="transcript-title">Academic Transcript — ${examFilter === "All" ? "Final Result" : examFilter} (${year})</div></div>
+            <div class="transcript-badge-wrap"><div class="transcript-title">Academic Transcript — ${customTitle} (${year})</div></div>
           </div>
           <table class="student-info"><tr><td width="30%">Student Name: <b style="color:#005f40; font-size:11px; text-transform:uppercase;">${name}</b></td><td width="18%">Student ID: <b>${id}</b></td><td width="22%">Class: <b>${baseClassName}</b> (${groupName})</td><td width="15%">Roll No: <b>${roll}</b></td><td width="15%">Issued: <b>${issueDateStr}</b></td></tr></table>
           ${legendHtml}
@@ -1922,14 +1940,14 @@ function generateMarkSheets(examFilter) {
             </div>
             <div class="rc-qr-card">
               <div class="rc-qr-box">${qrSvgHtml}</div>
-              <div class="rc-qr-meta"><span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br><b>ID: ${verifyCode}</b><br><span style="color:#475569; font-size:7.4px;">Scan QR code to verify student transcript authenticity at <b>srms2012.edu.bd</b></span></div>
+              <div class="rc-qr-meta"><span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br><span style="color:#475569; font-size:8px;">Scan QR code to verify transcript authenticity at <b>srms2012.edu.bd</b></span></div>
             </div>
           </div>
         </div>
         <div class="rc-bottom-section">
           <div class="summary-box">
             <div class="summary-metrics"><span>Total Marks: <b>${filterTotalMarks}</b></span><span>Average: <b>${dispAvg}</b></span><span>GPA: <b style="font-size:14.5px;">${dispGPA}</b></span><span>Letter Grade: <b style="font-size:14.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</b></span><span>Merit Position: <b>${dispPos}</b></span></div>
-            <p class="remark-text">${teacherRemark}</p>
+            <p class="remark-text"><span style="color:#0f172a;">Remarks:</span> ${teacherRemark}</p>
           </div>
           <div class="footer"><div class="signature">Class Teacher</div><div class="signature">Guardian's Signature</div><div class="signature">Principal / Headmaster</div></div>
         </div>
@@ -1940,68 +1958,118 @@ function generateMarkSheets(examFilter) {
 
 async function printTabulation() {
   if (appData.length === 0) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
-  const { value: chosenOrient } = await swalPro.fire({ 
-    title: 'ট্যাবুলেশন শিট প্রিন্ট মোড', 
-    input: 'select', 
-    inputOptions: { 
-      'a4-landscape': 'A4 Landscape (আড়াআড়ি)', 
-      'a4-portrait': 'A4 Portrait (লম্বালম্বি)',
-      'a3-landscape': 'A3 Landscape (বড় পেপার - আড়াআড়ি)', 
-      'a3-portrait': 'A3 Portrait (বড় পেপার - লম্বালম্বি)'
-    }, 
-    inputValue: 'a4-landscape', 
-    showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-print"></i> প্রিভিউ ও প্রিন্ট করুন', cancelButtonText: 'বাতিল' 
+  var parsed = parseSubjectHeaders(cachedHeaders); if (parsed.firstEmpty === -1) return swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
+  
+  let optionsHtml = `<option value="All">সম্মিলিত চূড়ান্ত ফলাফল (সকল পরীক্ষা একত্রে)</option>`;
+  parsed.examSeq.forEach(ex => { optionsHtml += `<option value="${ex}">${ex} (শুধুমাত্র এই পরীক্ষা)</option>`; });
+
+  const { value: formValues } = await swalPro.fire({ 
+    title: 'ট্যাবুলেশন শিট প্রিন্ট সেটিং', 
+    html: `
+      <div style="text-align:left;">
+         <label style="font-size:13px; font-weight:800; color:#334155;">পরীক্ষা নির্বাচন করুন:</label>
+         <select id="tabExamFilter" class="swal2-input" onchange="document.getElementById('tabTitle').value = this.value === 'All' ? 'Master Tabulation Sheet - Final Result' : 'Master Tabulation Sheet - ' + this.value;" style="width:100%; height:45px; font-size:14px; margin-top:8px; margin-bottom:12px;">
+            ${optionsHtml}
+         </select>
+         <label style="font-size:13px; font-weight:800; color:#334155; display:block;">ট্যাবুলেশন টাইটেল (Custom Title):</label>
+         <input id="tabTitle" class="swal2-input" value="Master Tabulation Sheet - Final Result" placeholder="যেমন: Master Tabulation Sheet - Annual" style="width:100%; height:45px; font-size:14px; margin-top:8px; margin-bottom:12px;">
+         <label style="font-size:13px; font-weight:800; color:#334155; display:block;">প্রিন্ট পেপার ও ওরিয়েন্টেশন:</label>
+         <select id="tabOrient" class="swal2-input" style="width:100%; height:45px; font-size:14px; margin-top:8px;">
+            <option value="a4-landscape">A4 Landscape (আড়াআড়ি)</option>
+            <option value="a4-portrait">A4 Portrait (লম্বালম্বি)</option>
+            <option value="a3-landscape">A3 Landscape (বড় পেপার - আড়াআড়ি)</option>
+            <option value="a3-portrait">A3 Portrait (বড় পেপার - লম্বালম্বি)</option>
+         </select>
+      </div>
+    `,
+    showCancelButton: true, confirmButtonText: '<i class="fa-solid fa-print"></i> প্রিভিউ ও প্রিন্ট', cancelButtonText: 'বাতিল',
+    preConfirm: () => {
+      let f = document.getElementById('tabExamFilter').value;
+      let t = document.getElementById('tabTitle').value.trim() || 'Master Tabulation Sheet';
+      let o = document.getElementById('tabOrient').value;
+      return { examFilter: f, customTitle: t, orientation: o };
+    }
   });
-  if (!chosenOrient) return; recalculateClassStatsInMemory(); buildTabulationPagesForOrientation(chosenOrient); executePrint(document.getElementById('print-content').innerHTML, "tabulation", chosenOrient);
+  if (!formValues) return;
+  
+  recalculateClassStatsInMemory(); 
+  buildTabulationPagesForOrientation(formValues.orientation, formValues.examFilter, formValues.customTitle); 
+  executePrint(document.getElementById('print-content').innerHTML, "tabulation", formValues.orientation);
 }
 
-function buildTabulationPagesForOrientation(orientation) {
+function buildTabulationPagesForOrientation(orientation, examFilter, customTitle) {
   setPrintPageOrientation(orientation); var cls = document.getElementById("classSelector").value; var year = document.getElementById("yearSelector").value;
   var testWeight = parseFloat(document.getElementById('testWeight').value) || 25; var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
   var parsed = parseSubjectHeaders(cachedHeaders); var firstEmpty = parsed.firstEmpty; if (firstEmpty === -1) return;
-  var stats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0, 'Evaluated': 0 }; var validRows = [];
-
+  
   let activeExams = [];
-  parsed.examSeq.forEach(ex => { activeExams.push(ex); });
+  parsed.examSeq.forEach(ex => { if(examFilter === "All" || ex === examFilter) activeExams.push(ex); });
+
+  // Custom filter stats calculation just for Tabulation View
+  let filterStats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0, 'Evaluated': 0 }; 
+  var validRowsHtmlData = [];
 
   appData.forEach(row => {
     if (!row[0] && !row[1]) return;
-    stats['Total']++;
-    validRows.push(row);
-    var g = row[firstEmpty + 3];
-    if (!g || g === '' || g === '-') return; 
-    if (g === 'Incomplete') return;
     
-    stats['Evaluated']++;
-    if (stats[g] !== undefined) stats[g]++;
-    else if (g === 'F') stats['F']++;
+    let subRows = []; let filterTotalMarks = 0; let filterTotalRegularGP = 0; let filterOptExtraGP = 0; let filterRegularSubCount = 0; let filterTotalSubCount = 0; let filterIsFail = false; 
+    
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let ev = evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainWeight);
+      if (ev.attended) {
+        if (ev.isSubFail && !sub.isOpt) { filterIsFail = true; }
+        if (sub.isOpt && !ev.isSubFail && ev.subGP > 2.00) filterOptExtraGP += (ev.subGP - 2.00); else if (!sub.isOpt) { filterTotalRegularGP += ev.isSubFail ? 0 : ev.subGP; filterRegularSubCount++; }
+        filterTotalMarks += ev.finalMark; filterTotalSubCount++; subRows.push({ subName, ev });
+      }
+    });
+    
+    filterStats['Total']++;
+    if (filterTotalSubCount === 0) return;
+    
+    let liveGPA = "0.00"; let liveGrade = "F";
+    if (filterRegularSubCount > 0) {
+      if (filterIsFail) { liveGPA = "0.00"; liveGrade = "F"; } 
+      else { let combinedGP = filterTotalRegularGP + filterOptExtraGP; let rawGPA = combinedGP / filterRegularSubCount; if (rawGPA > 5.00) rawGPA = 5.00; liveGPA = rawGPA.toFixed(2); liveGrade = getGrade_JS(parseFloat(liveGPA)); }
+    }
+    let liveAvg = (filterTotalMarks / filterTotalSubCount).toFixed(2);
+    let savedPos = row[firstEmpty + 4] || "N/A"; let dispPos = (examFilter === "All" && !filterIsFail) ? savedPos : "N/A";
+
+    filterStats['Evaluated']++;
+    if (filterStats[liveGrade] !== undefined) filterStats[liveGrade]++; else if(liveGrade === 'F') filterStats['F']++;
+
+    validRowsHtmlData.push({ row, subRows, liveAvg, liveGPA, liveGrade, dispPos });
   });
-  var passed = stats['Evaluated'] - stats['F']; 
-  var passRate = stats['Evaluated'] > 0 ? ((passed / stats['Evaluated']) * 100).toFixed(2) : "0.00"; 
+
+  var passed = filterStats['Evaluated'] - filterStats['F']; 
+  var passRate = filterStats['Evaluated'] > 0 ? ((passed / filterStats['Evaluated']) * 100).toFixed(2) : "0.00"; 
   var subKeys = Object.keys(parsed.subjects);
 
   var theadHtml = `<thead><tr><th style="width:3.2%;">Roll</th><th style="width:11%; text-align:left; padding-left:3px;">Student Name &amp; ID</th>`;
   subKeys.forEach(subName => { let sub = parsed.subjects[subName]; let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:6.5px; color:#b45309;">(4th)</span>` : subName; theadHtml += `<th>${htmlLabel}</th>`; });
   theadHtml += `<th style="width:4%;">Avg</th><th style="width:4%;">GPA</th><th style="width:4%;">Grade</th><th style="width:4%;">Merit</th></tr></thead>`;
 
-  var bodyRowsHtml = validRows.map(row => {
-    let dispGrade = row[firstEmpty + 3] || '-'; let dispPos = (dispGrade === 'F' || !row[firstEmpty + 2]) ? 'N/A' : (row[firstEmpty + 4] || '-');
-    let tr = `<tr><td><b>${row[2] || '-'}</b></td><td style="text-align:left; padding-left:3px;"><b>${row[1] || '-'}</b><br><span style="color:#475569; font-size:7px;">ID: ${row[0] || '-'}</span></td>`;
+  var bodyRowsHtml = validRowsHtmlData.map(item => {
+    let tr = `<tr><td><b>${item.row[2] || '-'}</b></td><td style="text-align:left; padding-left:3px;"><b>${item.row[1] || '-'}</b><br><span style="color:#475569; font-size:7px;">ID: ${item.row[0] || '-'}</span></td>`;
     
     subKeys.forEach(subName => {
-      let sub = parsed.subjects[subName]; let ev = evaluateStudentSubjectForFilter(row, sub, "All", testWeight, mainWeight);
-      
-      let cellContentHtml = activeExams.map(exName => {
-        let d = ev.examDetails[exName];
-        if(d && d.hasMark) return `<span style="color:#334155;">${exName}: <b>${d.sum}</b></span>`;
-        return "";
-      }).filter(Boolean).join("<br>");
-      
-      let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
-      tr += `<td><div class="tab-cell-lines">${cellContentHtml}${cellContentHtml ? '<br>' : ''}<strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">Total: ${totDisp}</strong></div></td>`;
+      let match = item.subRows.find(s => s.subName === subName);
+      if(!match) {
+         tr += `<td>-</td>`;
+      } else {
+         let ev = match.ev;
+         let cellContentHtml = activeExams.map(exName => {
+           let d = ev.examDetails[exName];
+           if(d && d.hasMark) return `<span style="color:#334155;">${exName}: <b>${d.sum}</b></span>`;
+           return "";
+         }).filter(Boolean).join("<br>");
+         
+         let totDisp = ev.attended ? `${ev.finalMark} (${ev.subGrade})` : "-";
+         tr += `<td><div class="tab-cell-lines">${cellContentHtml}${cellContentHtml ? '<br>' : ''}<strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">Total: ${totDisp}</strong></div></td>`;
+      }
     });
     
-    tr += `<td><b>${row[firstEmpty + 1] || '-'}</b></td><td><strong style="font-size:8.5px;">${row[firstEmpty + 2] || '-'}</strong></td><td><strong style="font-size:8.5px; color:${dispGrade === 'F' ? '#dc2626' : '#059669'};">${dispGrade}</strong></td><td><b>${dispPos}</b></td></tr>`; return tr;
+    tr += `<td><b>${item.liveAvg}</b></td><td><strong style="font-size:8.5px;">${item.liveGPA}</strong></td><td><strong style="font-size:8.5px; color:${item.liveGrade === 'F' ? '#dc2626' : '#059669'};">${item.liveGrade}</strong></td><td><b>${item.dispPos}</b></td></tr>`; return tr;
   });
 
   // Optimize rows per page depending on paper format chosen
@@ -2010,7 +2078,6 @@ function buildTabulationPagesForOrientation(orientation) {
   else if (orientation === 'a3-landscape') rowsPerPage = 11;
   else if (orientation === 'a3-portrait') rowsPerPage = 18;
 
-  // Generate dynamic density classes based on subject count to ensure no overlaps
   var densityClass = "";
   if (subKeys.length > 12) densityClass = " extremely-dense";
   else if (subKeys.length > 8) densityClass = " very-dense";
@@ -2018,11 +2085,11 @@ function buildTabulationPagesForOrientation(orientation) {
   var pagesArr = [];
   for (let i = 0; i < bodyRowsHtml.length; i += rowsPerPage) pagesArr.push(bodyRowsHtml.slice(i, i + rowsPerPage)); if (pagesArr.length === 0) pagesArr.push([]);
 
-  var summaryTableHtml = `<div style="margin-top:6px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:96%; margin-left:auto; margin-right:auto; page-break-inside:avoid;"><table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;"><tr style="font-weight:800; background:#e2e8f0; color:#005f40;"><td style="border:1px solid #000; padding:2.5px;">Examinees</td><td style="border:1px solid #000; padding:2.5px;">Passed</td><td style="border:1px solid #000; padding:2.5px;">Failed</td><td style="border:1px solid #000; padding:2.5px;">Pass Rate</td><td style="border:1px solid #000; padding:2.5px;">A+</td><td style="border:1px solid #000; padding:2.5px;">A</td><td style="border:1px solid #000; padding:2.5px;">A-</td><td style="border:1px solid #000; padding:2.5px;">B</td><td style="border:1px solid #000; padding:2.5px;">C</td><td style="border:1px solid #000; padding:2.5px;">D</td><td style="border:1px solid #000; padding:2.5px;">F</td></tr><tr style="font-weight:800; background:#fff;"><td style="border:1px solid #000; padding:3px;">${stats['Evaluated']}</td><td style="border:1px solid #000; padding:3px; color:#059669;">${passed}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td><td style="border:1px solid #000; padding:3px;">${passRate}%</td><td style="border:1px solid #000; padding:3px;">${stats['A+']}</td><td style="border:1px solid #000; padding:3px;">${stats['A']}</td><td style="border:1px solid #000; padding:3px;">${stats['A-']}</td><td style="border:1px solid #000; padding:3px;">${stats['B']}</td><td style="border:1px solid #000; padding:3px;">${stats['C']}</td><td style="border:1px solid #000; padding:3px;">${stats['D']}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td></tr></table></div>`;
+  var summaryTableHtml = `<div style="margin-top:6px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:96%; margin-left:auto; margin-right:auto; page-break-inside:avoid;"><table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;"><tr style="font-weight:800; background:#e2e8f0; color:#005f40;"><td style="border:1px solid #000; padding:2.5px;">Examinees</td><td style="border:1px solid #000; padding:2.5px;">Passed</td><td style="border:1px solid #000; padding:2.5px;">Failed</td><td style="border:1px solid #000; padding:2.5px;">Pass Rate</td><td style="border:1px solid #000; padding:2.5px;">A+</td><td style="border:1px solid #000; padding:2.5px;">A</td><td style="border:1px solid #000; padding:2.5px;">A-</td><td style="border:1px solid #000; padding:2.5px;">B</td><td style="border:1px solid #000; padding:2.5px;">C</td><td style="border:1px solid #000; padding:2.5px;">D</td><td style="border:1px solid #000; padding:2.5px;">F</td></tr><tr style="font-weight:800; background:#fff;"><td style="border:1px solid #000; padding:3px;">${filterStats['Evaluated']}</td><td style="border:1px solid #000; padding:3px; color:#059669;">${passed}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${filterStats['F']}</td><td style="border:1px solid #000; padding:3px;">${passRate}%</td><td style="border:1px solid #000; padding:3px;">${filterStats['A+']}</td><td style="border:1px solid #000; padding:3px;">${filterStats['A']}</td><td style="border:1px solid #000; padding:3px;">${filterStats['A-']}</td><td style="border:1px solid #000; padding:3px;">${filterStats['B']}</td><td style="border:1px solid #000; padding:3px;">${filterStats['C']}</td><td style="border:1px solid #000; padding:3px;">${filterStats['D']}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${filterStats['F']}</td></tr></table></div>`;
 
   var totalPages = pagesArr.length; var pageOrientClass = orientation + "-page";
   
-  let activeTests = []; let activeMains = []; parsed.testSeq.forEach(t => activeTests.push(t)); parsed.mainSeq.forEach(m => activeMains.push(m));
+  let activeTests = []; let activeMains = []; parsed.testSeq.forEach(t => { if(examFilter === "All" || t === examFilter) activeTests.push(t); }); parsed.mainSeq.forEach(m => { if(examFilter === "All" || m === examFilter) activeMains.push(m); });
   
   let legendParts = [];
   if(activeTests.length > 0) legendParts.push(`<b>Tests (${testWeight}%):</b> ${activeTests.join(" / ")}`);
@@ -2033,7 +2100,7 @@ function buildTabulationPagesForOrientation(orientation) {
   
   var finalPagesHtml = pagesArr.map((pageRows, pageIdx) => {
     var isLastPage = (pageIdx === totalPages - 1);
-    return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap"><div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;"><img src="${SCHOOL_LOGO}" alt="Logo" style="height:40px; width:40px; border-radius:50%; border:1.5px solid #005f40; padding:1.5px;"><div><h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p></div><div style="text-align:right;"><div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">Examinees: ${stats['Evaluated']} | Pass: ${passed} (${passRate}%)</div><div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div></div></div>${legendHtml}<table class="tab-table${densityClass}">${theadHtml}<tbody>${pageRows.join('')}</tbody></table>${isLastPage ? summaryTableHtml : ''}</div><div class="tab-fixed-signatures"><div class="tab-sig-box">Prepared &amp; Tabulated By</div><div class="tab-sig-box">Exam Controller</div><div class="tab-sig-box">Principal / Headmaster</div></div></div>`;
+    return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap"><div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;"><img src="${SCHOOL_LOGO}" alt="Logo" style="height:48px; width:48px; border-radius:50%; border:2px solid #005f40; padding:2px;"><div><h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">${customTitle.toUpperCase()} — ${cls.toUpperCase()} (SESSION: ${year})</p></div><div style="text-align:right;"><div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">Examinees: ${filterStats['Evaluated']} | Pass: ${passed} (${passRate}%)</div><div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div></div></div>${legendHtml}<table class="tab-table${densityClass}">${theadHtml}<tbody>${pageRows.join('')}</tbody></table>${isLastPage ? summaryTableHtml : ''}</div><div class="tab-fixed-signatures"><div class="tab-sig-box">Prepared &amp; Tabulated By</div><div class="tab-sig-box">Exam Controller</div><div class="tab-sig-box">Principal / Headmaster</div></div></div>`;
   }).join('');
   document.getElementById('print-content').innerHTML = finalPagesHtml;
 }
