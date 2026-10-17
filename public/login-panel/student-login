@@ -3,10 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Official Student Premium Portal of Saidpur Residential Model School. Securely access academic results, live classes, attendance logs, and fee payments.">
+<meta name="keywords" content="SRMS, Saidpur Residential Model School, Student Portal, Result Portal, Bangladesh, Education, SAM Digital Hub">
+<meta name="author" content="SAM Digital Hub">
+<meta property="og:title" content="Student Premium Portal - SRMS">
+<meta property="og:description" content="Smart Student Dashboard for Saidpur Residential Model School.">
+<meta property="og:image" content="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg">
 <title>Student Premium Portal - SRMS</title>
+
+<!-- Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
-  /* === Global Premium Styles === */
   :root {
     --primary: #005f40;
     --primary-dark: #003d29;
@@ -24,31 +33,28 @@
   a { text-decoration: none; color: inherit; transition: 0.3s; }
   ul { list-style: none; margin: 0; padding: 0; }
   
-  /* Animations */
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes pulseLoader { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 95, 64, 0.7); } 70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(0, 95, 64, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 95, 64, 0); } }
   @keyframes bounce { 0%, 20%, 50%, 80%, 100% { transform: translateY(0); } 40% { transform: translateY(-10px); } 60% { transform: translateY(-5px); } }
   @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  
   .animate-up { animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
   .delay-1 { animation-delay: 0.1s; } .delay-2 { animation-delay: 0.2s; } .delay-3 { animation-delay: 0.3s; }
 
-  /* Custom Scrollbar */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-  /* === Premium Navbar === */
   #main-navbar { display: none; }
   .navbar { background: var(--card-bg); box-shadow: 0 10px 30px rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--accent); }
   .nav-top-container { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; box-sizing: border-box; max-width: 1400px; margin: 0 auto; gap: 15px; }
   .nav-brand { font-weight: 800; color: var(--primary); font-size: 18px; letter-spacing: 0.5px; text-transform: uppercase; flex: 1; }
   .nav-menu { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
   .nav-link { font-weight: 600; font-size: 13px; color: var(--text-main); padding: 10px 20px; border-radius: 8px; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-  .nav-link.logout-btn { color: var(--danger); background: #fff1f2; }
+  .nav-link.logout-btn { color: var(--danger); background: #fff1f2; border: 1px solid #fecdd3; }
   .nav-link.logout-btn:hover { color: #fff; background: var(--danger); }
 
-  /* === Premium Banner === */
   #main-banner { display: none; }
   .custom-banner { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; padding: 40px 5%; display: flex; align-items: center; justify-content: center; gap: 25px; text-align: left; position: relative; overflow: hidden; }
   .custom-banner::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 60%); z-index: 0; }
@@ -57,7 +63,6 @@
   .banner-text h1 { margin: 0; font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: -0.5px; }
   .school-codes { background: rgba(255, 255, 255, 0.1); display: inline-block; padding: 6px 15px; border-radius: 20px; margin-top: 10px; font-size: 13px; font-weight: 500; color: #e2e8f0; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); }
 
-  /* === Login Section === */
   #login-container { display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; position: relative; overflow: hidden; }
   #login-container::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at top right, rgba(0,95,64,0.05) 0%, transparent 50%); z-index: -1; }
   .login-card { background: var(--card-bg); padding: 45px 35px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; border: 1px solid rgba(0,0,0,0.05); box-sizing: border-box; }
@@ -73,23 +78,18 @@
   .login-btn:active { transform: translateY(-1px); }
   .login-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none; }
   
-  /* Forgot Password Link */
   .forgot-pass-btn { display: inline-block; margin-top: 20px; color: var(--accent); font-weight: 600; font-size: 14px; cursor: pointer; transition: 0.3s; border-bottom: 2px solid transparent; }
   .forgot-pass-btn:hover { border-color: var(--accent); color: var(--primary); }
 
-  /* === Premium Loader === */
   #loader { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(255,255,255,0.95); z-index: 10000; justify-content:center; align-items:center; flex-direction:column; backdrop-filter: blur(10px); }
   .loader-img { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 20px; animation: pulseLoader 2s infinite; border: 3px solid var(--primary); padding: 5px; background: #fff; }
   .loader-text { font-size: 16px; font-weight: 700; color: var(--primary); letter-spacing: 1px; text-transform: uppercase; }
   .loader-spinner { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid #005f40; border-radius: 50%; width: 18px; height: 18px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
 
-  /* === Dashboard Layout === */
   #dashboard-section { display: none; padding: 30px 5%; max-width: 1200px; margin: 0 auto; }
   
-  /* Compact Header Card */
   .header-card { background: var(--card-bg); padding: 18px 25px; border-radius: 16px; box-shadow: 0 5px 15px rgba(0,0,0,0.03); display: flex; justify-content: space-between; align-items: center; border-left: 5px solid var(--primary); margin-bottom: 20px; }
   
-  /* Scroll Cue Wrapper & Animation */
   .scroll-cue-container { width: 100%; margin-bottom: 20px; text-align: center; }
   .scroll-cue { display: inline-block; color: var(--danger); font-size: 14px; font-weight: 700; padding: 8px 20px; background: #fff1f2; border-radius: 20px; border: 1px solid #fecdd3; animation: bounce 2s infinite; box-shadow: 0 5px 15px rgba(225, 29, 72, 0.1); }
 
@@ -97,16 +97,15 @@
   
   .card { background: var(--card-bg); padding: 30px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); border: 1px solid rgba(0,0,0,0.02); }
 
-  /* === Academic Resources / Buttons === */
   .resource-section { background: var(--card-bg); padding: 35px; border-radius: 24px; box-shadow: 0 15px 35px rgba(0,0,0,0.04); margin-bottom: 40px; }
   .link-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; margin-top: 25px; }
-  .l-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px 10px; border-radius: 16px; text-align: center; transition: all 0.3s ease; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 12px; }
-  .l-btn span:first-child { font-size: 26px; }
-  .l-btn span:last-child { font-size: 12px; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; }
-  .l-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,95,64,0.15); }
-  .l-btn:hover span:last-child { color: white; }
+  .l-btn { background: #f8fafc; border: 1px solid #e2e8f0; padding: 20px 10px; border-radius: 16px; text-align: center; transition: all 0.3s ease; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 12px; color: var(--primary); }
+  .l-btn i { font-size: 26px; }
+  .l-btn span { font-size: 12px; font-weight: 700; color: var(--text-main); text-transform: uppercase; letter-spacing: 0.5px; }
+  .l-btn:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-5px); box-shadow: 0 15px 25px rgba(0,95,64,0.15); color: white; }
+  .l-btn:hover span { color: white; }
 
-  /* === Digital Marksheet (Modal Style with Clear Separation) === */
+  /* Digital Marksheet Premium UI */
   .digital-transcript { background: #0f172a; color: #f8fafc; border-radius: 24px; padding: 25px 20px; position: relative; }
   .scroll-indicator { text-align: center; color: #cbd5e1; font-size: 12px; font-weight: 600; margin-bottom: 18px; animation: bounce 2s infinite; background: rgba(255,255,255,0.05); padding: 8px; border-radius: 20px; display: inline-block; width: 100%; box-sizing: border-box; }
   .dt-header { border-bottom: 1px solid #334155; padding-bottom: 15px; margin-bottom: 16px; text-align: center; }
@@ -122,55 +121,49 @@
   .dt-row-top { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 8px; }
   .sub-name { font-weight: 700; font-size: 15px; color: #38bdf8; }
 
-  /* Split Wrapper for Test vs Main Exam */
-  .dt-exam-split { display: flex; align-items: stretch; gap: 12px; width: 100%; }
-  .dt-test-section { flex: 1; background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 100px; }
+  /* Flex Layout for Exams (No Scroll) */
+  .dt-exam-split { display: flex; align-items: stretch; gap: 12px; width: 100%; flex-wrap: wrap; }
+  .dt-test-section { flex: 1; background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center; min-width: 250px; }
   .dt-divider { width: 2px; background: linear-gradient(to bottom, transparent, #475569, transparent); flex-shrink: 0; }
-  .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; justify-content: center; }
-  .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
+  .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center; min-width: 250px; }
+  
+  .dt-section-title { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 6px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
   
-  /* Flexible wrapping for multiple main exams to prevent scrolling */
-  .dt-main-flex { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 4px; justify-content: center; align-items: stretch; }
-  .dt-exam-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1 1 120px; }
+  /* Flex wrap containers */
+  .dt-main-flex, .dt-test-flex { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; align-items: stretch; width: 100%; }
+  .dt-exam-card { background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); padding: 10px; border-radius: 12px; display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1 1 120px; }
 
-  .mark-group { background: rgba(30, 41, 59, 0.8); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05); flex: 1; min-width: 40px; }
-  .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; text-align:center; }
-  .mark-val { font-size: 14px; font-weight: 800; color: #f8fafc; text-align: center; word-break: break-word; }
+  .mark-group { background: rgba(30, 41, 59, 0.8); padding: 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05); flex: 1; min-width: 45px; }
+  .mark-label { font-size: 9px; color: #94a3b8; text-transform: uppercase; font-weight: 800; margin-bottom: 3px; letter-spacing: 0.5px; text-align:center; }
+  .mark-val { font-size: 15px; font-weight: 800; color: #f8fafc; text-align: center; word-break: break-word; }
   
   .dt-warning-text { font-size: 10px; color: #64748b; text-align: center; margin-top: 20px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
-  /* === Live Class Animation === */
   @keyframes livePulseBtn { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.4); } 50% { transform: scale(1.03); box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); } }
   .live-active-btn { animation: livePulseBtn 2s infinite !important; background: var(--danger) !important; border-color: var(--danger-dark) !important; color: white !important; }
-  .live-active-btn span { color: white !important; }
+  .live-active-btn span, .live-active-btn i { color: white !important; }
 
-  /* === Modals === */
   .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(8px); padding: 20px; box-sizing: border-box; }
   .modal-content { background: var(--card-bg); width: 100%; max-width: 550px; border-radius: 28px; padding: 40px; position: relative; animation: fadeInUp 0.4s ease; overflow-y: auto; max-height: 85vh; box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
   .close-btn { position: absolute; top: 20px; right: 25px; font-size: 32px; cursor: pointer; color: #94a3b8; line-height: 1; transition: 0.3s; }
   .close-btn:hover { color: var(--danger); transform: rotate(90deg); }
 
-  /* === Mobile Specific Styles === */
   @media (max-width: 768px) {
     .nav-brand { font-size: 13px; line-height: 1.4; word-wrap: break-word; }
     .nav-link.logout-btn { padding: 8px 12px; font-size: 11px; white-space: nowrap; }
-
     .custom-banner { flex-direction: column; text-align: center; padding: 30px 20px; }
     .banner-text h1 { font-size: 22px; }
     .login-card { padding: 40px 25px; width: 95%; }
     .header-card { flex-direction: column; text-align: center; gap: 10px; padding: 15px; }
-    
     .dt-summary-box { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; }
     .dt-row { padding: 12px; }
-    .dt-exam-split { flex-direction: column; gap: 8px; }
-    .dt-divider { width: 100%; height: 1px; background: linear-gradient(to right, transparent, #475569, transparent); }
-
+    .dt-divider { display: none; }
     .resource-section { padding: 25px 15px; }
     .link-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
     .l-btn { padding: 15px 5px; gap: 8px; }
-    .l-btn span:first-child { font-size: 22px; }
-    .l-btn span:last-child { font-size: 10px; }
+    .l-btn i { font-size: 22px; }
+    .l-btn span { font-size: 10px; }
   }
 </style>
 </head>
@@ -186,21 +179,21 @@
         <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" alt="Logo" class="login-logo">
         <h2 class="login-title">Student Portal</h2>
         <div class="login-subtitle">Enter credentials to access your dashboard</div>
-        <div class="default-pass-note">Default Password is: 123456</div>
+        <div class="default-pass-note"><i class="fas fa-key"></i> Default Password is: 123456</div>
         
         <input type="text" id="stuID" placeholder="Enter Student ID" autocomplete="off">
         <input type="password" id="stuPass" placeholder="Enter Password">
-        <button id="lBtn" class="login-btn" onclick="handleLogin()">SECURE LOGIN</button>
-        <div class="forgot-pass-btn" onclick="openForgotPassModal()">Forgot Password?</div>
+        <button id="lBtn" class="login-btn" onclick="handleLogin()"><i class="fas fa-sign-in-alt"></i> SECURE LOGIN</button>
+        <div class="forgot-pass-btn" onclick="openForgotPassModal()"><i class="fas fa-unlock-alt"></i> Forgot Password?</div>
         <p id="err" style="color:var(--danger); font-size:13px; margin-top:15px; font-weight:700;"></p>
     </div>
 </div>
 
 <nav class="navbar" id="main-navbar">
   <div class="nav-top-container">
-    <div class="nav-brand">Saidpur Residential Model School</div>
+    <div class="nav-brand"><i class="fas fa-graduation-cap"></i> Saidpur Residential Model School</div>
     <ul class="nav-menu">
-      <li><a class="nav-link logout-btn" onclick="logout()">LOGOUT 🔒</a></li>
+      <li><a class="nav-link logout-btn" onclick="logout()"><i class="fas fa-power-off"></i> LOGOUT</a></li>
     </ul>
   </div>
 </nav>
@@ -209,13 +202,13 @@
   <img src="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" class="banner-logo" alt="Logo">
   <div class="banner-text">
     <h1>Saidpur Residential Model School</h1>
-    <div class="school-codes">Smart Student Dashboard</div>
+    <div class="school-codes"><i class="fas fa-laptop-code"></i> Smart Student Dashboard</div>
   </div>
 </div>
 
 <div id="dashboard-section">
     <div class="scroll-cue-container animate-up delay-1">
-        <div class="scroll-cue">⬇️ Scroll down for more options ⬇️</div>
+        <div class="scroll-cue"><i class="fas fa-arrow-down"></i> Scroll down for more options <i class="fas fa-arrow-down"></i></div>
     </div>
 
     <div class="header-card animate-up delay-1">
@@ -226,30 +219,30 @@
     </div>
 
     <div id="noticeBox" class="animate-up delay-1">
-        <h4 style="margin:0; font-size:16px; display:flex; align-items:center; gap:8px;"><span>⚠️</span> IMPORTANT NOTICE</h4>
+        <h4 style="margin:0; font-size:16px; display:flex; align-items:center; gap:8px;"><i class="fas fa-exclamation-triangle"></i> IMPORTANT NOTICE</h4>
         <p id="noticeText" style="margin:8px 0 0 0; font-size:14.5px; font-weight:600; line-height:1.5;"></p>
     </div>
 
     <div class="card animate-up delay-2" style="margin-bottom: 30px; border-left: 6px solid var(--accent);">
-        <h3 style="margin:0 0 15px 0; color:var(--primary); font-size:18px;">📚 Class Materials &amp; Content</h3>
+        <h3 style="margin:0 0 15px 0; color:var(--primary); font-size:18px;"><i class="fas fa-book-reader"></i> Class Materials & Content</h3>
         <div id="matList" style="font-size:14.5px; color:#475569; max-height: 350px; overflow-y: auto; padding-right: 5px;"></div>
     </div>
 
     <div class="resource-section animate-up delay-3">
-        <h3 style="margin:0; color:var(--text-main); font-size:22px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">🏛️ Quick Resources</h3>
+        <h3 style="margin:0; color:var(--text-main); font-size:22px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;"><i class="fas fa-th-large"></i> Quick Resources</h3>
         
         <div class="link-grid">
-            <a onclick="viewResultModal();" class="l-btn"><span>🎓</span><span>Results</span></a>
-            <a onclick="openAttendanceModal();" class="l-btn"><span>📅</span><span>Attendance</span></a>
-            <a id="liveClassMainBtn" onclick="openLiveClassModal();" class="l-btn"><span>🎥</span><span>Live Class</span></a>
-            <a onclick="openFeesModal();" class="l-btn"><span>💳</span><span>Pay Fees</span></a>
-            <a href="/menu/academic/syllabus" target="_blank" class="l-btn"><span>📖</span><span>Syllabus</span></a>
-            <a href="/menu/academic/class-routine" target="_blank" class="l-btn"><span>🎯</span><span>Routine</span></a>
-            <a href="/menu/academic/exam-routine" target="_blank" class="l-btn"><span>📅</span><span>Exams</span></a>
-            <a href="/notice-board" target="_blank" class="l-btn"><span>📢</span><span>Notice</span></a>
-            <a href="/menu/gallery" target="_blank" class="l-btn"><span>🖼️</span><span>Gallery</span></a>
-            <a onclick="openSecurityModal();" class="l-btn"><span>🔐</span><span>Security</span></a>
-            <a href="/menu/contact-us" target="_blank" class="l-btn"><span>📞</span><span>Support</span></a>
+            <a onclick="viewResultModal();" class="l-btn"><i class="fas fa-award"></i><span>Results</span></a>
+            <a onclick="openAttendanceModal();" class="l-btn"><i class="fas fa-calendar-check"></i><span>Attendance</span></a>
+            <a id="liveClassMainBtn" onclick="openLiveClassModal();" class="l-btn"><i class="fas fa-video"></i><span>Live Class</span></a>
+            <a onclick="openFeesModal();" class="l-btn"><i class="fas fa-wallet"></i><span>Pay Fees</span></a>
+            <a href="/menu/academic/syllabus" target="_blank" class="l-btn"><i class="fas fa-book-open"></i><span>Syllabus</span></a>
+            <a href="/menu/academic/class-routine" target="_blank" class="l-btn"><i class="fas fa-clock"></i><span>Routine</span></a>
+            <a href="/menu/academic/exam-routine" target="_blank" class="l-btn"><i class="fas fa-calendar-alt"></i><span>Exams</span></a>
+            <a href="/notice-board" target="_blank" class="l-btn"><i class="fas fa-bullhorn"></i><span>Notice</span></a>
+            <a href="/menu/gallery" target="_blank" class="l-btn"><i class="fas fa-images"></i><span>Gallery</span></a>
+            <a onclick="openSecurityModal();" class="l-btn"><i class="fas fa-user-shield"></i><span>Security</span></a>
+            <a href="/menu/contact-us" target="_blank" class="l-btn"><i class="fas fa-headset"></i><span>Support</span></a>
         </div>
     </div>
 </div>
@@ -257,19 +250,17 @@
 <div id="forgotPassModal" class="modal-overlay">
     <div class="modal-content" style="text-align: center;">
         <span class="close-btn" onclick="closeModal('forgotPassModal')">×</span>
-        <h3 style="color:var(--primary); margin:0 0 5px 0; font-size:22px;">Reset Password</h3>
+        <h3 style="color:var(--primary); margin:0 0 5px 0; font-size:22px;"><i class="fas fa-key"></i> Reset Password</h3>
         <p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Verify your email to reset security key</p>
         
         <div id="fpStep1">
             <input type="text" id="fpID" placeholder="Enter your Student ID">
             <button id="btnRequestOTP" class="login-btn" onclick="requestOTP()">SEND OTP TO EMAIL</button>
         </div>
-        
         <div id="fpStep2" style="display:none;">
             <input type="text" id="fpOTP" placeholder="Enter 6-digit OTP">
             <button class="login-btn" onclick="verifyOTP()">VERIFY OTP</button>
         </div>
-        
         <div id="fpStep3" style="display:none;">
             <input type="password" id="fpNewPass" placeholder="Enter New Password (Min. 6 chars)">
             <button id="btnSaveReset" class="login-btn" onclick="saveResetPassword()">SAVE NEW PASSWORD</button>
@@ -291,7 +282,7 @@
 <div id="attendanceModal" class="modal-overlay">
     <div class="modal-content" style="max-width: 650px;">
         <span class="close-btn" onclick="closeModal('attendanceModal')">×</span>
-        <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">📅 My Attendance Record</h3>
+        <h3 style="margin:0 0 20px 0; color:var(--text-main); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;"><i class="fas fa-calendar-check"></i> My Attendance Record</h3>
         
         <div style="margin-bottom: 15px;">
             <select id="attMonthFilter" onchange="renderAttendanceTable()" style="width:100%; padding: 12px; border-radius: 8px; border: 2px solid #e2e8f0; outline:none; font-family:inherit; font-weight:600; color:var(--text-main); cursor:pointer;">
@@ -313,20 +304,17 @@
                         <th style="padding: 12px 15px; color:#475569; border-bottom: 2px solid #cbd5e1;">OUT Time</th>
                     </tr>
                 </thead>
-                <tbody id="modalAttTableBody" style="background: white;">
-                </tbody>
+                <tbody id="modalAttTableBody" style="background: white;"></tbody>
             </table>
         </div>
-        
-        <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;">
-        </div>
+        <div id="modalAttSummary" style="margin-top:20px; font-weight:800; color:var(--primary); padding:15px; background:#f0fdf4; border-radius:12px; display: none; justify-content: space-around; border: 1px solid #bbf7d0;"></div>
     </div>
 </div>
 
 <div id="securityModal" class="modal-overlay">
     <div class="modal-content">
         <span class="close-btn" onclick="closeModal('securityModal')">×</span>
-        <h3 style="margin:0 0 15px 0; font-size:20px; color:var(--text-main); border-bottom:2px solid #f1f5f9; padding-bottom:15px;">🔐 Update Security Key</h3>
+        <h3 style="margin:0 0 15px 0; font-size:20px; color:var(--text-main); border-bottom:2px solid #f1f5f9; padding-bottom:15px;"><i class="fas fa-shield-alt"></i> Update Security Key</h3>
         <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">Protect your account by changing your password regularly.</p>
         <input type="password" id="newPass" placeholder="Enter New Password (Min. 6 chars)">
         <button id="btnUpdatePass" class="login-btn" style="padding:14px; font-size:14px;" onclick="updatePassword()">SAVE NEW PASSWORD</button>
@@ -339,51 +327,22 @@
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-  // =====================================================================
-  // FIREBASE CONFIGURATION & INITIALIZATION
-  // =====================================================================
-  const firebaseConfig = {
-    apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
-    authDomain: "srms-website-management.firebaseapp.com",
-    projectId: "srms-website-management"
-  };
-
+  const firebaseConfig = { apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU", authDomain: "srms-website-management.firebaseapp.com", projectId: "srms-website-management" };
   if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+  const auth = firebase.auth(); const db = firebase.firestore();
 
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXWc-JW1TpzHHgRp7viUvHW4pUm_lw600wOaHBIIT-_Hwn0K36bxbXjHcQLgtRfWvP/exec"; 
   const FEE_PAY_SCRIPT = "https://script.google.com/macros/s/AKfycbzUkDxT8bO6HrMMkBOGr_ewCDaMQg7bZxvPr_8Omh3kDEqeX1T_JmL1v9JXMW2jwo88hw/exec";
   
-  let std = null;
-  let markSheetHTML = "";
-  
-  let resettingDocId = null; 
-  let resettingStudentID = null;
-  let allStudentAttendance = {}; 
-  let allHolidays = {};
+  let std = null; let markSheetHTML = ""; let resettingDocId = null; let resettingStudentID = null; let allStudentAttendance = {}; let allHolidays = {};
 
-  function sanitizeHTML(str) {
-      if (typeof str !== 'string') return str;
-      return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag]));
-  }
-
-  function safeJSONParse(str, fallback = null) {
-      if (!str || typeof str !== 'string' || str.trim() === "") return fallback;
-      try { return JSON.parse(str); } catch (e) { return fallback; }
-  }
+  function sanitizeHTML(str) { return typeof str !== 'string' ? str : str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag])); }
+  function safeJSONParse(str, fallback = null) { if (!str || typeof str !== 'string' || str.trim() === "") return fallback; try { return JSON.parse(str); } catch (e) { return fallback; } }
 
   window.onload = function() {
     const savedUser = sessionStorage.getItem('srms_student_session');
-    if (savedUser) {
-        std = safeJSONParse(savedUser, null);
-        if (std) showDashboardUI();
-    }
-    auth.onAuthStateChanged(function(user) {
-        if (user && std) {
-            initDash();
-        }
-    });
+    if (savedUser) { std = safeJSONParse(savedUser, null); if (std) showDashboardUI(); }
+    auth.onAuthStateChanged(function(user) { if (user && std) { initDash(); } });
   };
 
   function loader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
@@ -402,71 +361,27 @@
     try {
         const email = `${id}@srms.edu.bd`;
         await auth.signInWithEmailAndPassword(email, pass);
-        
         const querySnap = await db.collection("Students").where("studentID", "==", id).limit(1).get();
-        
         if (!querySnap.empty) {
-            const doc = querySnap.docs[0];
-            const studentFields = doc.data();
-            const stdDocId = doc.id;
-
-            std = { 
-                docId: stdDocId,
-                id: sanitizeHTML(studentFields.studentID || ""),
-                name: sanitizeHTML(studentFields.name || "Student"),
-                class: sanitizeHTML(studentFields.class || ""),
-                roll: sanitizeHTML(studentFields.roll || ""),
-                group: sanitizeHTML(studentFields.group || ""),
-                phone: sanitizeHTML(studentFields.phone || ""),
-                email: sanitizeHTML(studentFields.email || ""),
-                schoolFeeDue: sanitizeHTML(studentFields.schoolFeeDue || "0"),
-                schoolFeeStatus: sanitizeHTML(studentFields.schoolFeeStatus || ""),
-                customFees: safeJSONParse(studentFields.customFees, []),
-                resultMarks: safeJSONParse(studentFields.resultMarks, null),
-                resultStatus: sanitizeHTML(studentFields.resultStatus || "")
-            };
-            sessionStorage.setItem('srms_student_session', JSON.stringify(std));
-            sessionStorage.setItem('srms_student_docId', stdDocId);
-            sessionStorage.setItem('srms_active_pass', pass);
-            
-            document.getElementById('stuPass').value = '';
-            showDashboardUI();
-            initDash();
-        } else { 
-            document.getElementById('err').innerText = "Student record not found in Database!"; 
-        }
-    } catch (e) { 
-        console.error("Login Error:", e);
-        document.getElementById('err').innerText = "Invalid ID or Password!";
-    }
-    btn.innerHTML = "SECURE LOGIN"; btn.disabled = false;
+            const doc = querySnap.docs[0]; const f = doc.data(); const stdDocId = doc.id;
+            std = { docId: stdDocId, id: sanitizeHTML(f.studentID || ""), name: sanitizeHTML(f.name || "Student"), class: sanitizeHTML(f.class || ""), roll: sanitizeHTML(f.roll || ""), group: sanitizeHTML(f.group || ""), phone: sanitizeHTML(f.phone || ""), email: sanitizeHTML(f.email || ""), schoolFeeDue: sanitizeHTML(f.schoolFeeDue || "0"), schoolFeeStatus: sanitizeHTML(f.schoolFeeStatus || ""), customFees: safeJSONParse(f.customFees, []), resultMarks: safeJSONParse(f.resultMarks, null), resultStatus: sanitizeHTML(f.resultStatus || "") };
+            sessionStorage.setItem('srms_student_session', JSON.stringify(std)); sessionStorage.setItem('srms_student_docId', stdDocId); sessionStorage.setItem('srms_active_pass', pass);
+            document.getElementById('stuPass').value = ''; showDashboardUI(); initDash();
+        } else { document.getElementById('err').innerText = "Student record not found in Database!"; }
+    } catch (e) { document.getElementById('err').innerText = "Invalid ID or Password!"; }
+    btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> SECURE LOGIN'; btn.disabled = false;
   }
 
   function showDashboardUI() {
-    document.getElementById('login-container').style.display = "none";
-    document.getElementById('main-navbar').style.display = "flex";
-    document.getElementById('main-banner').style.display = "flex";
-    document.getElementById('dashboard-section').style.display = "block";
+    document.getElementById('login-container').style.display = "none"; document.getElementById('main-navbar').style.display = "flex"; document.getElementById('main-banner').style.display = "flex"; document.getElementById('dashboard-section').style.display = "block";
   }
 
   function logout() {
     if(auth) auth.signOut();
-    sessionStorage.removeItem('srms_student_session');
-    sessionStorage.removeItem('srms_student_docId');
-    sessionStorage.removeItem('srms_active_pass');
-    std = null;
-    markSheetHTML = "";
-    allStudentAttendance = {}; 
-    allHolidays = {};
-    document.getElementById('stuID').value = '';
-    document.getElementById('stuPass').value = '';
-    document.getElementById('err').innerText = '';
-    
-    document.getElementById('main-navbar').style.display = "none";
-    document.getElementById('main-banner').style.display = "none";
-    document.getElementById('dashboard-section').style.display = "none";
-    document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
-    
+    sessionStorage.removeItem('srms_student_session'); sessionStorage.removeItem('srms_student_docId'); sessionStorage.removeItem('srms_active_pass');
+    std = null; markSheetHTML = ""; allStudentAttendance = {}; allHolidays = {};
+    document.getElementById('stuID').value = ''; document.getElementById('stuPass').value = ''; document.getElementById('err').innerText = '';
+    document.getElementById('main-navbar').style.display = "none"; document.getElementById('main-banner').style.display = "none"; document.getElementById('dashboard-section').style.display = "none"; document.querySelectorAll('.modal-overlay').forEach(el => el.style.display = 'none');
     document.getElementById('login-container').style.display = "flex";
   }
 
@@ -479,22 +394,15 @@
   async function requestOTP() {
     const id = sanitizeHTML(document.getElementById('fpID').value.trim());
     if(!id) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Please enter Student ID.</span>`; return; }
-    const btn = document.getElementById('btnRequestOTP');
-    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SENDING..."; btn.disabled = true;
-    
+    const btn = document.getElementById('btnRequestOTP'); btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SENDING..."; btn.disabled = true;
     try {
         const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "sendOTP", id: id }) });
         const data = await res.json();
-        
         if(data.status === "success") {
             resettingStudentID = id; resettingDocId = data.docId; 
             document.getElementById('fpStep1').style.display = 'none'; document.getElementById('fpStep2').style.display = 'block';
-            let msg = data.email ? `OTP sent to ${sanitizeHTML(data.email)}` : "OTP Sent Successfully!";
-            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;"><b>${msg}</b></span>`;
-        } else {
-            let eMsg = data.message || "Error finding student.";
-            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(eMsg)}</span>`;
-        }
+            document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;"><b>OTP sent to ${sanitizeHTML(data.email || 'Email')}</b></span>`;
+        } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`; }
     } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; }
     btn.innerHTML = "SEND OTP TO EMAIL"; btn.disabled = false;
   }
@@ -502,14 +410,11 @@
   async function verifyOTP() {
     const entered = sanitizeHTML(document.getElementById('fpOTP').value.trim());
     if(!entered) return;
-    const btns = document.getElementById('fpStep2').getElementsByTagName('button');
-    const verifyBtn = btns[0];
+    const btns = document.getElementById('fpStep2').getElementsByTagName('button'); const verifyBtn = btns[0];
     verifyBtn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> VERIFYING..."; verifyBtn.disabled = true;
-
     try {
         const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "verifyOTP", id: resettingStudentID, otp: entered }) });
         const data = await res.json();
-        
         if(data.status === "success") {
             document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'block';
             document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ OTP Verified! You can now set a new password.</span>`;
@@ -522,22 +427,14 @@
     const newPass = document.getElementById('fpNewPass').value.trim();
     if(newPass.length < 6) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Password must be at least 6 characters.</span>`; return; }
     const btn = document.getElementById('btnSaveReset'); btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SAVING..."; btn.disabled = true;
-
     try {
         const res = await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "updatePassword", docId: resettingDocId, newPass: newPass }) });
         const data = await res.json();
-        
         if(data.status === "success") {
             document.getElementById('fpStep3').innerHTML = `<div style="text-align:center; color:#059669; font-weight:bold; font-size:18px; margin-bottom:15px;">✅ Password Reset Successful!</div><button class="login-btn" onclick="closeModal('forgotPassModal')">CLOSE</button>`;
             document.getElementById('fpMsg').innerText = '';
-        } else {
-            document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`;
-            btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false;
-        }
-    } catch(e) { 
-        document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; 
-        btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; 
-    }
+        } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`; btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; }
+    } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Network Error! Try again.</span>`; btn.innerHTML = "SAVE NEW PASSWORD"; btn.disabled = false; }
   }
 
   async function initDash() { 
@@ -565,45 +462,34 @@
                 if (parsedHeaders.length > 0) renderResults(parsedHeaders, std.resultMarks);
             }
         } else if (std.resultStatus === "Calculated") {
-            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;">Result Pending</h2><p style="color:#64748b;">Your result has been processed but is not published yet. Please wait for the official announcement.</p></div>`;
+            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;"><i class="fas fa-hourglass-half"></i> Result Pending</h2><p style="color:#64748b;">Your result has been processed but is not published yet. Please wait for the official announcement.</p></div>`;
         } else {
-            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;">No Result Found</h2><p style="color:#64748b;">There are no academic results available for the current term.</p></div>`;
+            markSheetHTML = `<div style="text-align:center; padding:40px;"><h2 style="color:#d97706;"><i class="fas fa-search"></i> No Result Found</h2><p style="color:#64748b;">There are no academic results available for the current term.</p></div>`;
         }
 
-        fetchMat();
-        checkLiveClassForButton();
+        fetchMat(); checkLiveClassForButton();
     } catch(err) { console.log("Dashboard Sync Error:", err); }
   }
 
   async function fetchMat() {
       const box = document.getElementById('matList');
       box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center;'><span class='loader-spinner' style='border-top-color:var(--primary);'></span> Loading resources...</div>";
-      
       try {
           const snap = await db.collection("WebsitePosts").where("targetPage", "==", "Class" + std.class).get();
-          box.innerHTML = ""; let count = 0;
-          let posts = [];
+          box.innerHTML = ""; let count = 0; let posts = [];
           snap.forEach(doc => posts.push(doc.data()));
-
           posts.sort((a,b) => (parseInt(b.timestamp) || 0) - (parseInt(a.timestamp) || 0));
 
           posts.forEach(f => {
               count++;
-              let title = sanitizeHTML(f.title || 'Document');
-              let date = sanitizeHTML(f.date || '');
-              let link = f.fileUrl || '#';
+              let title = sanitizeHTML(f.title || 'Document'); let date = sanitizeHTML(f.date || ''); let link = f.fileUrl || '#';
               if(!link || link === "None") link = "#";
-              
               box.innerHTML += `<div style="background:white; padding:15px; border-radius:12px; margin-bottom:12px; display:flex; justify-content:space-between; align-items:center; border:1px solid #e2e8f0; box-shadow:0 4px 6px rgba(0,0,0,0.02);">
-                                  <div>
-                                    <div style="font-weight:700; color:#1e293b; font-size:14px;">${title}</div>
-                                    <div style="font-size:11px; color:#64748b; margin-top:3px;">📅 ${date}</div>
-                                  </div>
-                                  <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--primary); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap;">VIEW</a>
+                                  <div><div style="font-weight:700; color:#1e293b; font-size:14px;"><i class="fas fa-file-alt" style="color:var(--accent);"></i> ${title}</div><div style="font-size:11px; color:#64748b; margin-top:3px;"><i class="fas fa-calendar-day"></i> ${date}</div></div>
+                                  <a href="${sanitizeHTML(link)}" target="_blank" style="background:var(--primary); color:white; padding:8px 16px; border-radius:8px; font-size:12px; font-weight:700; transition:0.3s; white-space:nowrap;"><i class="fas fa-download"></i> VIEW</a>
                                 </div>`;
           });
-          
-          if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'>No class materials available.</div>";
+          if(count === 0) box.innerHTML = "<div style='padding:15px; color:var(--text-muted); text-align:center; font-weight:500;'><i class="fas fa-folder-open"></i> No class materials available.</div>";
       } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
@@ -611,36 +497,23 @@
       if(!headerText) return { sub: "Unknown", exam: "Exam", type: "Test" };
       let clean = String(headerText).replace(/\[.*?\]/g, '').replace(/\([^)]+\)/g, '').trim();
       let parts = clean.split(" - ");
-      if(parts.length >= 3) {
-          return { sub: parts[0].trim(), exam: parts[1].trim(), type: parts[2].includes("Main") ? "Main" : "Test" };
-      }
+      if(parts.length >= 3) { return { sub: parts[0].trim(), exam: parts[1].trim(), type: parts[2].includes("Main") ? "Main" : "Test" }; }
       return { sub: clean, exam: "Exam", type: "Test" };
   }
 
   function parsePortalHeaders(headers) {
-      let firstEmpty = headers.indexOf("");
-      if(firstEmpty === -1) firstEmpty = headers.length;
-      let subjects = {};
-      let testSeq = [];
-      let mainSeq = [];
-      let c = 3;
+      let firstEmpty = headers.indexOf(""); if(firstEmpty === -1) firstEmpty = headers.length;
+      let subjects = {}; let testSeq = []; let mainSeq = []; let c = 3;
       while(c < firstEmpty && c < headers.length) {
-          let startC = c;
-          let hStr = String(headers[c] || "");
+          let startC = c; let hStr = String(headers[c] || "");
           if (hStr.toLowerCase().includes("opt") && hStr.toLowerCase().includes("name")) {
               let optSubName = hStr.replace(/Opt Name/i, "").trim();
               if(!subjects[optSubName]) subjects[optSubName] = { isOpt: true, nameCol: c, tests: [], mains: [] };
               let j = c + 1;
               while(j < firstEmpty && String(headers[j] || "").startsWith(optSubName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
-                  if(String(headers[j]).includes(" - Main")) {
-                      subjects[optSubName].mains.push(j);
-                      if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
-                  } else {
-                      subjects[optSubName].tests.push(j);
-                      if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
-                  }
-                  j++;
+                  if(String(headers[j]).includes(" - Main")) { subjects[optSubName].mains.push(j); if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam); } 
+                  else { subjects[optSubName].tests.push(j); if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam); } j++;
               }
               c = j;
           } else {
@@ -649,14 +522,8 @@
               let j = c;
               while(j < firstEmpty && String(headers[j] || "").startsWith(subName + " - ")) {
                   let info = extractPortalSubAndExam(headers[j]);
-                  if(String(headers[j]).includes(" - Main")) {
-                      subjects[subName].mains.push(j);
-                      if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam);
-                  } else {
-                      subjects[subName].tests.push(j);
-                      if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam);
-                  }
-                  j++;
+                  if(String(headers[j]).includes(" - Main")) { subjects[subName].mains.push(j); if(info.exam && !mainSeq.includes(info.exam)) mainSeq.push(info.exam); } 
+                  else { subjects[subName].tests.push(j); if(info.exam && !testSeq.includes(info.exam)) testSeq.push(info.exam); } j++;
               }
               c = j;
           }
@@ -666,15 +533,11 @@
   }
 
   function renderResults(h, d) {
-      let parsed = parsePortalHeaders(h);
-      let firstEmpty = parsed.firstEmpty;
+      let parsed = parsePortalHeaders(h); let firstEmpty = parsed.firstEmpty;
       if (firstEmpty !== -1 && d[firstEmpty + 2]) {
-          let totalAvg = sanitizeHTML(d[firstEmpty+1] || "0.00");
-          let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00");
-          let grade = sanitizeHTML(d[firstEmpty+3] || "F");
-          let pos = sanitizeHTML(d[firstEmpty+4] || "-");
-          let failReason = sanitizeHTML(d[firstEmpty+5] || "None");
-          let year = sanitizeHTML(d[firstEmpty+6] || d[firstEmpty+5] || new Date().getFullYear().toString());
+          let totalAvg = sanitizeHTML(d[firstEmpty+1] || "0.00"); let gpa = sanitizeHTML(d[firstEmpty+2] || "0.00");
+          let grade = sanitizeHTML(d[firstEmpty+3] || "F"); let pos = sanitizeHTML(d[firstEmpty+4] || "-");
+          let failReason = sanitizeHTML(d[firstEmpty+5] || "None"); let year = sanitizeHTML(d[firstEmpty+6] || d[firstEmpty+5] || new Date().getFullYear().toString());
           if (year === failReason) year = new Date().getFullYear().toString();
 
           let subHtml = "";
@@ -683,91 +546,81 @@
               let sub = parsed.subjects[subName];
               let displaySubName = sub.isOpt ? sanitizeHTML(d[sub.nameCol] || subName) + ` <span style="font-size:11px; color:#94a3b8; font-weight:normal;">(Optional)</span>` : sanitizeHTML(subName);
               
-              let tVals = [];
-              sub.tests.forEach(col => {
-                  let v = String(d[col] || "").trim();
-                  if(v !== "") tVals.push(sanitizeHTML(v));
-              });
-              
-              let mainBreakdownHtml = "";
-              sub.mains.forEach((col, index) => {
-                  let headerText = h[col] || "";
-                  let vStr = String(d[col] || "").trim();
-                  
+              let testBreakdownHtml = "";
+              sub.tests.forEach((col, index) => {
+                  let headerText = h[col] || ""; let vStr = String(d[col] || "").trim();
                   if(vStr !== "") {
-                      let info = extractPortalSubAndExam(headerText);
-                      let examNameStr = info.exam !== "Exam" ? info.exam : `Exam ${index+1}`;
-
-                      let match = headerText.match(/\(([^)]+)\)/);
-                      let labels = ["Marks"];
-                      if (match && match[1].includes(":")) {
-                          labels = match[1].split('+').map(p => p.split(':')[0].trim());
-                      } else if (match && !match[1].includes(":")) {
-                          labels = ["Total"];
-                      }
-                      
+                      let info = extractPortalSubAndExam(headerText); let examNameStr = info.exam !== "Exam" ? info.exam : `Test ${index+1}`;
+                      let match = headerText.match(/\(([^)]+)\)/); let labels = ["Marks"];
+                      if (match && match[1].includes(":")) labels = match[1].split('+').map(p => p.split(':')[0].trim());
+                      else if (match && !match[1].includes(":")) labels = ["Total"];
                       let vals = vStr.includes("+") ? vStr.split('+').map(p => p.trim()) : [vStr];
                       
                       let boxesHtml = "";
                       labels.forEach((lbl, i) => {
-                          let val = vals[i] || "-";
-                          let color = i===0 ? "#38bdf8" : (i===1 ? "#fbbf24" : (i===2 ? "#34d399" : "#f472b6"));
+                          let val = vals[i] || "-"; let color = i===0 ? "#e2e8f0" : (i===1 ? "#cbd5e1" : "#94a3b8");
+                          boxesHtml += `<div class="mark-group" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1);"><div class="mark-label">${sanitizeHTML(lbl)}</div><div class="mark-val" style="color:${color};">${sanitizeHTML(val)}</div></div>`;
+                      });
+
+                      testBreakdownHtml += `
+                        <div class="dt-exam-card" style="background:rgba(255,255,255,0.05);">
+                          <span style="font-size:9px; color:#cbd5e1; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed #475569; padding-bottom:2px; width: 100%; text-align: center;"><i class="fas fa-file-signature"></i> ${sanitizeHTML(examNameStr)}</span>
+                          <div style="display:flex; gap:6px; flex-wrap: wrap; justify-content: center;">${boxesHtml}</div>
+                        </div>`;
+                  }
+              });
+              if(testBreakdownHtml === "" && sub.tests.length > 0) {
+                 testBreakdownHtml = `<div class="dt-exam-card" style="background:rgba(255,255,255,0.05);"><span style="font-size:9.5px; color:#cbd5e1; font-weight:700; text-transform:uppercase; border-bottom:1px dashed #475569; padding-bottom:2px; width:100%; text-align:center;">Pending</span><div class="mark-group" style="background:rgba(255,255,255,0.05); border-color:rgba(255,255,255,0.1);"><div class="mark-label">Total</div><div class="mark-val" style="color:#94a3b8;">-</div></div></div>`;
+              } else if (testBreakdownHtml === "") { testBreakdownHtml = `<div class="mark-val" style="color:#e2e8f0; margin-top:2px;">-</div>`; }
+
+              let mainBreakdownHtml = "";
+              sub.mains.forEach((col, index) => {
+                  let headerText = h[col] || ""; let vStr = String(d[col] || "").trim();
+                  if(vStr !== "") {
+                      let info = extractPortalSubAndExam(headerText); let examNameStr = info.exam !== "Exam" ? info.exam : `Exam ${index+1}`;
+                      let match = headerText.match(/\(([^)]+)\)/); let labels = ["Marks"];
+                      if (match && match[1].includes(":")) labels = match[1].split('+').map(p => p.split(':')[0].trim());
+                      else if (match && !match[1].includes(":")) labels = ["Total"];
+                      let vals = vStr.includes("+") ? vStr.split('+').map(p => p.trim()) : [vStr];
+                      
+                      let boxesHtml = "";
+                      labels.forEach((lbl, i) => {
+                          let val = vals[i] || "-"; let color = i===0 ? "#38bdf8" : (i===1 ? "#fbbf24" : (i===2 ? "#34d399" : "#f472b6"));
                           boxesHtml += `<div class="mark-group"><div class="mark-label">${sanitizeHTML(lbl)}</div><div class="mark-val" style="color:${color};">${sanitizeHTML(val)}</div></div>`;
                       });
 
-                      let examBlock = `
+                      mainBreakdownHtml += `
                         <div class="dt-exam-card">
-                          <span style="font-size:9.5px; color:#cbd5e1; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed #475569; padding-bottom:2px; width: 100%; text-align: center;">${sanitizeHTML(examNameStr)}</span>
+                          <span style="font-size:9.5px; color:#cbd5e1; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed #475569; padding-bottom:2px; width: 100%; text-align: center;"><i class="fas fa-trophy" style="color:#fbbf24;"></i> ${sanitizeHTML(examNameStr)}</span>
                           <div style="display:flex; gap:6px; flex-wrap: wrap; justify-content: center;">${boxesHtml}</div>
                         </div>`;
-                      
-                      mainBreakdownHtml += examBlock;
                   }
               });
               
               if(mainBreakdownHtml === "" && sub.mains.length > 0) {
-                 mainBreakdownHtml = `
-                    <div class="dt-exam-card">
-                        <span style="font-size:9.5px; color:#cbd5e1; font-weight:700; text-transform:uppercase; border-bottom:1px dashed #475569; padding-bottom:2px; width:100%; text-align:center;">Result</span>
-                        <div class="mark-group"><div class="mark-label">Total</div><div class="mark-val" style="color:#38bdf8;">-</div></div>
-                    </div>`;
+                 mainBreakdownHtml = `<div class="dt-exam-card"><span style="font-size:9.5px; color:#cbd5e1; font-weight:700; text-transform:uppercase; border-bottom:1px dashed #475569; padding-bottom:2px; width:100%; text-align:center;">Result</span><div class="mark-group"><div class="mark-label">Total</div><div class="mark-val" style="color:#38bdf8;">-</div></div></div>`;
               }
 
-              if(tVals.length > 0 || mainBreakdownHtml !== "") {
+              if(testBreakdownHtml !== `<div class="mark-val" style="color:#e2e8f0; margin-top:2px;">-</div>` || mainBreakdownHtml !== "") {
                   subHtml += `<div class="dt-row">
-                                <div class="dt-row-top">
-                                    <div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div>
-                                </div>
+                                <div class="dt-row-top"><div class="sub-name" style="color:${sub.isOpt ? '#38bdf8' : '#f8fafc'};">${displaySubName}</div></div>
                                 <div class="dt-exam-split">
-                                    <div class="dt-test-section">
-                                        <div class="dt-section-title">📝 Test Exam(s)</div>
-                                        <div class="mark-val" style="color:#e2e8f0; margin-top:2px;">${tVals.join(" / ") || "-"}</div>
-                                    </div>
+                                    <div class="dt-test-section"><div class="dt-section-title"><i class="fas fa-pen-nib"></i> Test Exam(s) Breakdown</div><div class="dt-test-flex">${testBreakdownHtml}</div></div>
                                     <div class="dt-divider"></div>
-                                    <div class="dt-main-section">
-                                        <div class="dt-section-title">🏆 Main Exam(s) Breakdown</div>
-                                        <div class="dt-main-flex">
-                                            ${mainBreakdownHtml}
-                                        </div>
-                                    </div>
+                                    <div class="dt-main-section"><div class="dt-section-title"><i class="fas fa-award"></i> Main Exam(s) Breakdown</div><div class="dt-main-flex">${mainBreakdownHtml}</div></div>
                                 </div>
                               </div>`;
               }
           });
 
           let failBanner = (failReason && failReason !== "None") ? `<div style="text-align:center; color:#fecdd3; background:rgba(225,29,72,0.2); border:1px solid rgba(225,29,72,0.4); padding:10px; border-radius:12px; font-size:12px; font-weight:700; margin-bottom:16px;">⚠️ Remarks: Failed in ${failReason}</div>` : "";
-
-          let seqBanner = `
-            <div class="dt-seq-box">
-                <div>📌 <b>Tests Sequence:</b> [ ${sanitizeHTML(parsed.testSeq.join(" / ") || "None")} ]</div>
-                <div style="margin-top:4px;">🏆 <b>Main Exams Sequence:</b> [ ${sanitizeHTML(parsed.mainSeq.join(" / ") || "None")} ]</div>
-            </div>`;
+          let seqBanner = `<div class="dt-seq-box"><div>📌 <b>Tests Included:</b> [ ${sanitizeHTML(parsed.testSeq.join(" / ") || "None")} ]</div><div style="margin-top:4px;">🏆 <b>Main Exams Included:</b> [ ${sanitizeHTML(parsed.mainSeq.join(" / ") || "None")} ]</div></div>`;
 
           markSheetHTML = `
             <div class="digital-transcript">
-              <div class="scroll-indicator">⬇️ Scroll down for subject-wise marks ⬇️</div>
+              <div class="scroll-indicator"><i class="fas fa-chevron-down"></i> Scroll down for subject-wise marks <i class="fas fa-chevron-down"></i></div>
               <div class="dt-header">
-                  <h2 style="margin:0; color:#38bdf8; font-size:20px; font-weight:800; letter-spacing:1px;">DIGITAL TRANSCRIPT HUB</h2>
+                  <h2 style="margin:0; color:#38bdf8; font-size:20px; font-weight:800; letter-spacing:1px;"><i class="fas fa-certificate"></i> DIGITAL TRANSCRIPT HUB</h2>
                   <p style="margin:5px 0 0 0; color:#94a3b8; font-size:12px;">Real-time Secure Academic Record • Session: ${year}</p>
               </div>
               
@@ -777,7 +630,6 @@
                   <span><span style="color:#94a3b8;">Roll:</span> <b style="color:#fff;">${std.roll}</b></span>
               </div>
 
-              <!-- 🌟 FINAL RESULT SUMMARY AT THE TOP 🌟 -->
               <div class="dt-summary-box">
                   <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">GPA</p><h2 style="margin:0; font-size:24px; color:#fff; font-weight:900;">${gpa}</h2></div>
                   <div style="text-align:center;"><p style="margin:0 0 4px 0; font-size:10px; color:#cbd5e1; font-weight:700; text-transform:uppercase;">Grade</p><h2 style="margin:0; font-size:24px; color:${grade==='F'?'#fda4af':'#4ade80'}; font-weight:900;">${grade}</h2></div>
@@ -786,9 +638,8 @@
               </div>
               ${failBanner}
               ${seqBanner}
-
               <div style="margin-bottom:20px;">${subHtml}</div>
-              <div class="dt-warning-text">⚠️ THIS IS A DIGITAL PREVIEW • NOT FOR OFFICIAL USE</div>
+              <div class="dt-warning-text"><i class="fas fa-info-circle"></i> THIS IS A DIGITAL PREVIEW • NOT FOR OFFICIAL USE</div>
             </div>`;
       }
   }
@@ -799,291 +650,126 @@
     document.getElementById('resultModalBody').innerHTML = markSheetHTML; 
   }
 
-  // =====================================================================
-  // DETAILED ATTENDANCE LOGIC (FIRESTORE JS SDK)
-  // =====================================================================
-  function openAttendanceModal() { 
-      document.getElementById('attendanceModal').style.display = 'flex'; 
-      fetchDetailedAttendance();
-  }
+  function openAttendanceModal() { document.getElementById('attendanceModal').style.display = 'flex'; fetchDetailedAttendance(); }
 
   async function fetchDetailedAttendance() {
-      document.getElementById('attLoader').style.display = 'block';
-      document.getElementById('modalAttTableBody').innerHTML = '';
-      
+      document.getElementById('attLoader').style.display = 'block'; document.getElementById('modalAttTableBody').innerHTML = '';
       try {
-          const [attSnap, holSnap] = await Promise.all([
-              db.collection("AttendanceHistory").where("studentID", "==", std.id).limit(2000).get(),
-              db.collection("Holidays").get()
-          ]);
-          
+          const [attSnap, holSnap] = await Promise.all([ db.collection("AttendanceHistory").where("studentID", "==", std.id).limit(2000).get(), db.collection("Holidays").get() ]);
           allStudentAttendance = {}; 
-          attSnap.forEach(doc => {
-              let f = doc.data();
-              let pDate = sanitizeHTML(f.pureDate || ""); 
-              let timeStr = sanitizeHTML(f.time || "");
-              let type = sanitizeHTML(f.type || ""); 
-              
-              if(pDate) {
-                  if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; }
-                  if(type === "IN") allStudentAttendance[pDate].in = timeStr;
-                  if(type === "OUT") allStudentAttendance[pDate].out = timeStr;
-              }
-          });
-
+          attSnap.forEach(doc => { let f = doc.data(); let pDate = sanitizeHTML(f.pureDate || ""); let timeStr = sanitizeHTML(f.time || ""); let type = sanitizeHTML(f.type || ""); if(pDate) { if(!allStudentAttendance[pDate]) { allStudentAttendance[pDate] = { in: "-", out: "-" }; } if(type === "IN") allStudentAttendance[pDate].in = timeStr; if(type === "OUT") allStudentAttendance[pDate].out = timeStr; } });
           allHolidays = {};
-          holSnap.forEach(doc => {
-              let f = doc.data();
-              let pDate = f.date || doc.id;
-              let reason = f.reason || "Holiday";
-              if(pDate) allHolidays[pDate] = reason;
-          });
-
+          holSnap.forEach(doc => { let f = doc.data(); let pDate = f.date || doc.id; let reason = f.reason || "Holiday"; if(pDate) allHolidays[pDate] = reason; });
           populateAttendanceMonths();
-      } catch(e) {
-          console.error(e);
-          document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>';
-      }
+      } catch(e) { document.getElementById('modalAttTableBody').innerHTML = '<tr><td colspan="4" style="text-align:center; padding:15px; color:var(--danger); font-weight:bold;">Failed to synchronize attendance data.</td></tr>'; }
       document.getElementById('attLoader').style.display = 'none';
   }
 
   function populateAttendanceMonths() {
-      let select = document.getElementById('attMonthFilter');
-      select.innerHTML = "";
-      
-      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-      const now = new Date(bdTime);
-      
-      let months = [];
-      for(let i=0; i<12; i++) {
-          let d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-          let mStr = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0');
-          months.push(mStr);
-      }
-      
-      months.forEach(m => {
-          let dateObj = new Date(m + "-01");
-          let monthName = dateObj.toLocaleString('default', { month: 'long', year: 'numeric' });
-          select.innerHTML += `<option value='${m}'>${monthName}</option>`;
-      });
-      
+      let select = document.getElementById('attMonthFilter'); select.innerHTML = "";
+      const now = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
+      let months = []; for(let i=0; i<12; i++) { let d = new Date(now.getFullYear(), now.getMonth() - i, 1); months.push(d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, '0')); }
+      months.forEach(m => { let monthName = new Date(m + "-01").toLocaleString('default', { month: 'long', year: 'numeric' }); select.innerHTML += `<option value='${m}'>${monthName}</option>`; });
       renderAttendanceTable(months[0]);
   }
 
   function renderAttendanceTable(selectedMonth = null) {
       if(!selectedMonth) selectedMonth = document.getElementById('attMonthFilter').value;
-      let tbody = document.getElementById('modalAttTableBody');
-      let summaryBox = document.getElementById('modalAttSummary');
-      
-      const bdTime = new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"});
-      const today = new Date(bdTime);
-      
-      let dateParts = selectedMonth.split('-');
-      let sYear = parseInt(dateParts[0]);
-      let sMonth = parseInt(dateParts[1]);
-      
-      let daysInMonth = new Date(sYear, sMonth, 0).getDate();
-      let daysToLoop = daysInMonth;
-      
-      if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) {
-           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>';
-           summaryBox.style.display = 'none'; return;
-      }
+      let tbody = document.getElementById('modalAttTableBody'); let summaryBox = document.getElementById('modalAttSummary');
+      const today = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Dhaka"}));
+      let dateParts = selectedMonth.split('-'); let sYear = parseInt(dateParts[0]); let sMonth = parseInt(dateParts[1]);
+      let daysInMonth = new Date(sYear, sMonth, 0).getDate(); let daysToLoop = daysInMonth;
+      if(sYear > today.getFullYear() || (sYear === today.getFullYear() && sMonth > today.getMonth() + 1)) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records for future months.</td></tr>'; summaryBox.style.display = 'none'; return; }
       if(sYear === today.getFullYear() && sMonth === today.getMonth() + 1) { daysToLoop = today.getDate(); }
 
       let presentCount = 0; let absentCount = 0; let holidayCount = 0; let html = "";
       for(let d = daysToLoop; d >= 1; d--) {
-           let dStr = String(d).padStart(2, '0');
-           let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${dStr}`;
+           let fullDate = `${sYear}-${String(sMonth).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
            let statusHtml = ""; let inTime = "-"; let outTime = "-"; let bgRow = "";
-           
-           if(allHolidays[fullDate]) {
-               statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;">⛱️ ${sanitizeHTML(allHolidays[fullDate])}</span>`; holidayCount++; bgRow = "background: #fffbeb;";
-           } else if (allStudentAttendance[fullDate]) {
-               let rec = allStudentAttendance[fullDate]; inTime = rec.in; outTime = rec.out;
-               statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;">✅ PRESENT</span>`; presentCount++;
-           } else {
-               statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;">❌ ABSENT</span>`; absentCount++; bgRow = "background: #fff1f2;";
-           }
-           
-           html += `
-            <tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s; ${bgRow}">
-                <td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td>
-                <td style="padding: 12px 15px;">${statusHtml}</td>
-                <td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td>
-                <td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td>
-            </tr>`;
+           if(allHolidays[fullDate]) { statusHtml = `<span style="color:var(--warning); font-weight:800; font-size:12px;"><i class="fas fa-umbrella-beach"></i> ${sanitizeHTML(allHolidays[fullDate])}</span>`; holidayCount++; bgRow = "background: #fffbeb;"; } 
+           else if (allStudentAttendance[fullDate]) { let rec = allStudentAttendance[fullDate]; inTime = rec.in; outTime = rec.out; statusHtml = `<span style="color:var(--success); font-weight:800; font-size:12px;"><i class="fas fa-check-circle"></i> PRESENT</span>`; presentCount++; } 
+           else { statusHtml = `<span style="color:var(--danger); font-weight:800; font-size:12px;"><i class="fas fa-times-circle"></i> ABSENT</span>`; absentCount++; bgRow = "background: #fff1f2;"; }
+           html += `<tr style="border-bottom: 1px solid #f1f5f9; transition: 0.2s; ${bgRow}"><td style="padding: 12px 15px; font-weight:700; color:var(--text-main); font-size:13px;">${fullDate}</td><td style="padding: 12px 15px;">${statusHtml}</td><td style="padding: 12px 15px; color:#059669; font-weight:700; font-size:12px;">${inTime}</td><td style="padding: 12px 15px; color:#e11d48; font-weight:700; font-size:12px;">${outTime}</td></tr>`;
       }
-      
-      if(html === "") {
-           tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>'; summaryBox.style.display = 'none';
-      } else {
-           tbody.innerHTML = html; summaryBox.style.display = 'flex';
-           summaryBox.innerHTML = `
-            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small><span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span></span>
-            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small><span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span></span>
-            <span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small><span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span></span>`;
-      }
+      if(html === "") { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px; color:#64748b; font-weight:600;">No attendance records available.</td></tr>'; summaryBox.style.display = 'none'; } 
+      else { tbody.innerHTML = html; summaryBox.style.display = 'flex'; summaryBox.innerHTML = `<span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Present</small><span style="font-size:18px; color:var(--success); font-weight:900;">${presentCount}</span></span><span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Absent</small><span style="font-size:18px; color:var(--danger); font-weight:900;">${absentCount}</span></span><span style="display:flex; flex-direction:column; align-items:center;"><small style="color:#64748b; font-size:11px; text-transform:uppercase;">Holidays</small><span style="font-size:18px; color:var(--warning); font-weight:900;">${holidayCount}</span></span>`; }
   }
 
   function openSecurityModal() { document.getElementById('newPass').value = ""; document.getElementById('passMsg').innerText = ""; document.getElementById('securityModal').style.display = 'flex'; }
 
   async function updatePassword() {
-    const p = document.getElementById('newPass').value.trim(); 
-    const msgBox = document.getElementById('passMsg');
-    const btn = document.getElementById('btnUpdatePass');
-    
-    if(!p || p.length < 6) { 
-        msgBox.style.color = "var(--danger)"; 
-        msgBox.innerText = "Password must be at least 6 characters."; 
-        return; 
-    }
-    let docId = sessionStorage.getItem('srms_student_docId') || (std ? std.docId : null);
-    if(!docId) {
-        msgBox.style.color = "var(--danger)";
-        msgBox.innerText = "Session error! Please logout and login again.";
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> UPDATING...";
-    msgBox.style.color = "var(--primary)"; 
-    msgBox.innerText = "Updating password directly...";
-
+    const p = document.getElementById('newPass').value.trim(); const msgBox = document.getElementById('passMsg'); const btn = document.getElementById('btnUpdatePass');
+    if(!p || p.length < 6) { msgBox.style.color = "var(--danger)"; msgBox.innerText = "Password must be at least 6 characters."; return; }
+    let docId = sessionStorage.getItem('srms_student_docId'); if(!docId) { msgBox.style.color = "var(--danger)"; msgBox.innerText = "Session error! Please logout and login again."; return; }
+    btn.disabled = true; btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> UPDATING..."; msgBox.style.color = "var(--primary)"; msgBox.innerText = "Updating password directly...";
     let directSuccess = false;
-
     try {
         if (auth.currentUser) {
-            try {
-                await auth.currentUser.updatePassword(p);
-                directSuccess = true;
-            } catch (authErr) {
+            try { await auth.currentUser.updatePassword(p); directSuccess = true; } 
+            catch (authErr) {
                 if (authErr.code === 'auth/requires-recent-login') {
                     let oldPass = sessionStorage.getItem('srms_active_pass');
-                    if (!oldPass) {
-                        const sDoc = await db.collection("Students").doc(docId).get();
-                        oldPass = sDoc.data()?.pass || "123456";
-                    }
-                    const cred = firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, oldPass);
-                    await auth.currentUser.reauthenticateWithCredential(cred);
-                    await auth.currentUser.updatePassword(p);
-                    directSuccess = true;
+                    if (!oldPass) { const sDoc = await db.collection("Students").doc(docId).get(); oldPass = sDoc.data()?.pass || "123456"; }
+                    await auth.currentUser.reauthenticateWithCredential(firebase.auth.EmailAuthProvider.credential(auth.currentUser.email, oldPass));
+                    await auth.currentUser.updatePassword(p); directSuccess = true;
                 }
             }
-            await db.collection("Students").doc(docId).update({ pass: p });
-            directSuccess = true;
+            await db.collection("Students").doc(docId).update({ pass: p }); directSuccess = true;
         }
-
-        try {
-            await fetch(SCRIPT_URL, {
-                method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "updatePassword", docId: docId, id: std ? std.id : "", newPass: p })
-            });
-        } catch (scriptErr) { console.log("Background script sync notice:", scriptErr); }
-
-        if (directSuccess) {
-            sessionStorage.setItem('srms_active_pass', p);
-            msgBox.style.color = "#059669"; 
-            msgBox.innerText = "✅ Password Changed Successfully!"; 
-            document.getElementById('newPass').value = "";
-        } else {
-            msgBox.style.color = "var(--danger)"; 
-            msgBox.innerText = "Could not update password. Please logout and login again.";
-        }
-    } catch(e) { 
-        console.error("Password Update Error:", e);
-        msgBox.style.color = "var(--danger)"; 
-        msgBox.innerText = "Error updating password! Please try again."; 
-    }
-    btn.disabled = false;
-    btn.innerHTML = "SAVE NEW PASSWORD";
+        try { await fetch(SCRIPT_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "updatePassword", docId: docId, id: std ? std.id : "", newPass: p }) }); } catch (scriptErr) {}
+        if (directSuccess) { sessionStorage.setItem('srms_active_pass', p); msgBox.style.color = "#059669"; msgBox.innerText = "✅ Password Changed Successfully!"; document.getElementById('newPass').value = ""; } 
+        else { msgBox.style.color = "var(--danger)"; msgBox.innerText = "Could not update password. Please logout and login again."; }
+    } catch(e) { msgBox.style.color = "var(--danger)"; msgBox.innerText = "Error updating password! Please try again."; }
+    btn.disabled = false; btn.innerHTML = "SAVE NEW PASSWORD";
   }
 
   async function checkLiveClassForButton() {
-    let sClass = std.class;
-    if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
-    try {
-        let doc = await db.collection("LiveSessions").doc(sClass).get();
-        if(doc.exists) {
-            let data = doc.data();
-            if(data.status === "TRUE") {
-                document.getElementById('liveClassMainBtn').classList.add('live-active-btn');
-                document.getElementById('liveClassMainBtn').innerHTML = "<span style='font-size:24px;'>🔴</span><span style='color:white;'>LIVE NOW</span>";
-            }
-        }
-    } catch (e) {}
+    let sClass = std.class; if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
+    try { let doc = await db.collection("LiveSessions").doc(sClass).get(); if(doc.exists && doc.data().status === "TRUE") { document.getElementById('liveClassMainBtn').classList.add('live-active-btn'); document.getElementById('liveClassMainBtn').innerHTML = "<i class='fas fa-video'></i><span>LIVE NOW</span>"; } } catch (e) {}
   }
 
   async function openLiveClassModal() {
-    document.getElementById('liveClassModal').style.display = 'flex';
-    const body = document.getElementById('liveClassModalBody');
-    body.innerHTML = `<div style="text-align:center; font-weight:bold; color:var(--primary);">⏳ Checking Live Session...</div>`;
-    let sClass = std.class;
-    if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
-    
+    document.getElementById('liveClassModal').style.display = 'flex'; const body = document.getElementById('liveClassModalBody'); body.innerHTML = `<div style="text-align:center; font-weight:bold; color:var(--primary);">⏳ Checking Live Session...</div>`;
+    let sClass = std.class; if (sClass == "9" || sClass == "10") { if(std.group) sClass = sClass + "-" + std.group; }
     try {
         let doc = await db.collection("LiveSessions").doc(sClass).get();
-        if(doc.exists) {
-            let data = doc.data();
-            if(data.status === "TRUE") {
-                let title = sanitizeHTML(data.title || "Class Running");
-                body.innerHTML = `<div style="text-align:center;"><div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;">🔴 LIVE BROADCAST</div><h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Secure ID: ${std.id}</p><button class="login-btn" onclick="joinLiveClass('${sClass}', '${std.name}', '${std.roll}')">JOIN SESSION NOW</button></div>`;
-                return;
-            }
+        if(doc.exists && doc.data().status === "TRUE") {
+            let title = sanitizeHTML(doc.data().title || "Class Running");
+            body.innerHTML = `<div style="text-align:center;"><div style="color:var(--danger); font-weight:800; font-size:12px; margin-bottom:15px; background:#fff1f2; display:inline-block; padding:5px 15px; border-radius:20px;"><i class="fas fa-broadcast-tower"></i> LIVE BROADCAST</div><h3 style="margin:0 0 15px 0; color:var(--text-main); font-size:20px;">${title}</h3><p style="color:var(--text-muted); font-size:13px; margin-bottom:20px;">Secure ID: ${std.id}</p><button class="login-btn" onclick="joinLiveClass('${sClass}', '${std.name}', '${std.roll}')"><i class="fas fa-sign-in-alt"></i> JOIN SESSION NOW</button></div>`;
+            return;
         }
-        body.innerHTML = `<div style="text-align:center; padding:20px;"><p style="color:var(--text-muted); font-weight:600; font-size:15px;">No active live sessions for your class.</p></div>`;
+        body.innerHTML = `<div style="text-align:center; padding:20px;"><p style="color:var(--text-muted); font-weight:600; font-size:15px;"><i class="fas fa-bed"></i> No active live sessions for your class.</p></div>`;
     } catch (e) { body.innerHTML = `<p style="color:red; text-align:center;">API Sync Failed.</p>`; }
   }
 
-  function joinLiveClass(room, name, roll) {
-    const config = `#config.startWithAudioMuted=true&config.startWithVideoMuted=true&config.prejoinPageEnabled=false&userInfo.displayName="${name} (${roll})"`;
-    window.open(`https://meet.jit.si/SRMS-Live-${room}${config}`, '_blank');
-    closeModal('liveClassModal');
-  }
+  function joinLiveClass(room, name, roll) { window.open(`https://meet.jit.si/SRMS-Live-${room}#config.startWithAudioMuted=true&config.startWithVideoMuted=true&config.prejoinPageEnabled=false&userInfo.displayName="${name} (${roll})"`, '_blank'); closeModal('liveClassModal'); }
 
   function openFeesModal() {
     document.getElementById('feesModal').style.display = 'flex';
-    let total = 0; let pendingCount = 0; let html = `<h3 style="margin:0 0 20px 0; color:var(--primary); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;">Billing Hub</h3><div style="background:#f8fafc; padding:20px; border-radius:16px; border:1px solid #e2e8f0;">`;
+    let total = 0; let pendingCount = 0; let html = `<h3 style="margin:0 0 20px 0; color:var(--primary); font-size:20px; border-bottom:2px solid #f1f5f9; padding-bottom:15px;"><i class="fas fa-file-invoice-dollar"></i> Billing Hub</h3><div style="background:#f8fafc; padding:20px; border-radius:16px; border:1px solid #e2e8f0;">`;
     
     let genAmt = parseFloat(std.schoolFeeDue) || 0; let genSts = (std.schoolFeeStatus || "").toLowerCase();
-    if(genAmt > 0 && genSts !== "paid") { 
-        if(genSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
-        else { total += genAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:var(--primary);">${genAmt} Tk</b></div>`; }
-    }
-
+    if(genAmt > 0 && genSts !== "paid") { if(genSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:#d97706;"><i class="fas fa-clock"></i> Pending Review</b></div>`; } else { total += genAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>School Fee</span><b style="color:var(--primary);">${genAmt} Tk</b></div>`; } }
     if(std.customFees && std.customFees.length > 0) {
         std.customFees.forEach(cf => { 
             let cAmt = parseFloat(cf.amount) || 0; let cSts = (cf.status || "").toLowerCase();
-            if(cAmt > 0 && cSts !== "paid") { 
-                if(cSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:#d97706;">Pending Review ⏳</b></div>`; }
-                else { total += cAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:var(--primary);">${cAmt} Tk</b></div>`; }
-            }
+            if(cAmt > 0 && cSts !== "paid") { if(cSts === "pending") { pendingCount++; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:#d97706;"><i class="fas fa-clock"></i> Pending Review</b></div>`; } else { total += cAmt; html += `<div style="display:flex; justify-content:space-between; margin-bottom:12px; font-size:15px; color:var(--text-main);"><span>${sanitizeHTML(cf.name)}</span><b style="color:var(--primary);">${cAmt} Tk</b></div>`; } }
         });
     }
     html += `</div>`;
     
-    if(total > 0) {
-        html += `<div style="margin-top:25px; text-align:center; background:#fff1f2; padding:20px; border-radius:16px;"><p style="margin:0 0 5px 0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Payable Amount</p><h2 style="margin:0; color:var(--danger); font-size:32px;">${total} Tk</h2></div><div style="margin-top:20px;"><label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mobile Number (For Payment)</label><input type="text" id="feesPhone" value="${sanitizeHTML(std.phone) || ''}" placeholder="Enter Bkash/Nagad Number"></div><p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center; margin-top:12px; line-height:1.4;">⚠️ Note: If your transaction shows "Pending" in gateway, please do NOT pay again. We will verify manually.</p><button id="btnPayNow" class="login-btn" style="background:var(--danger); font-size:15px;" onclick="generatePaymentLink()">PROCEED TO SECURE PAYMENT</button><a id="feesPayLink" href="#" target="_blank" class="login-btn" style="display:none; background:#059669; font-size:15px; text-align:center;">✅ CLICK HERE TO PAY</a><div id="feesMsg" style="margin-top:15px; font-size:13px; font-weight:bold; text-align:center;"></div>`;
-    } else if (pendingCount > 0) {
-        html += `<div style="text-align:center; color:#d97706; font-weight:700; padding:30px; background:#fef3c7; border-radius:16px; margin-top:20px; border:1px solid #fde68a;">⏳ Your payment is currently under Pending Review. We will update it soon.</div>`;
-    } else { 
-        html += `<div style="text-align:center; color:#059669; font-weight:700; padding:30px; background:#f0fdf4; border-radius:16px; margin-top:20px; border:1px solid #a7f3d0;">✅ All Fees Already Paid. Thank You!</div>`; 
-    }
+    if(total > 0) { html += `<div style="margin-top:25px; text-align:center; background:#fff1f2; padding:20px; border-radius:16px;"><p style="margin:0 0 5px 0; color:var(--text-muted); font-size:13px; font-weight:600;">Total Payable Amount</p><h2 style="margin:0; color:var(--danger); font-size:32px;">${total} Tk</h2></div><div style="margin-top:20px;"><label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mobile Number (For Payment)</label><input type="text" id="feesPhone" value="${sanitizeHTML(std.phone) || ''}" placeholder="Enter Bkash/Nagad Number"></div><p style="font-size:12px; color:var(--danger); font-weight:700; text-align:center; margin-top:12px; line-height:1.4;"><i class="fas fa-exclamation-triangle"></i> Note: If your transaction shows "Pending" in gateway, please do NOT pay again. We will verify manually.</p><button id="btnPayNow" class="login-btn" style="background:var(--danger); font-size:15px;" onclick="generatePaymentLink()"><i class="fas fa-lock"></i> PROCEED TO SECURE PAYMENT</button><a id="feesPayLink" href="#" target="_blank" class="login-btn" style="display:none; background:#059669; font-size:15px; text-align:center;"><i class="fas fa-check-circle"></i> CLICK HERE TO PAY</a><div id="feesMsg" style="margin-top:15px; font-size:13px; font-weight:bold; text-align:center;"></div>`; } 
+    else if (pendingCount > 0) { html += `<div style="text-align:center; color:#d97706; font-weight:700; padding:30px; background:#fef3c7; border-radius:16px; margin-top:20px; border:1px solid #fde68a;"><i class="fas fa-hourglass-half fa-2x"></i><br><br>Your payment is currently under Pending Review. We will update it soon.</div>`; } 
+    else { html += `<div style="text-align:center; color:#059669; font-weight:700; padding:30px; background:#f0fdf4; border-radius:16px; margin-top:20px; border:1px solid #a7f3d0;"><i class="fas fa-check-double fa-2x"></i><br><br>All Fees Already Paid. Thank You!</div>`; }
     document.getElementById('feesModalBody').innerHTML = html; 
   }
 
   function generatePaymentLink() {
-    const phone = sanitizeHTML(document.getElementById("feesPhone").value.trim());
-    if (phone.length < 11) { document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>⚠️ সঠিক মোবাইল নম্বর দিন।</span>"; return; }
-    
+    const phone = sanitizeHTML(document.getElementById("feesPhone").value.trim()); if (phone.length < 11) { document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>⚠️ সঠিক মোবাইল নম্বর দিন।</span>"; return; }
     const btn = document.getElementById("btnPayNow"); btn.innerHTML = "<span class='loader-spinner'></span> Connecting Server..."; btn.disabled = true;
-    const url = FEE_PAY_SCRIPT + "?action=create_payment&student_id=" + encodeURIComponent(std.id) + "&phone=" + encodeURIComponent(phone) + "&email=" + encodeURIComponent(std.email || '');
-    
-    fetch(url).then(r => r.json()).then(data => {
-        if (data.payment_url) { 
-            btn.style.display = "none"; const linkBtn = document.getElementById("feesPayLink"); linkBtn.style.display = "block"; linkBtn.href = sanitizeHTML(data.payment_url); document.getElementById("feesMsg").innerHTML = "";
-        } else { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Payment generation failed.</span>"; }
+    fetch(FEE_PAY_SCRIPT + "?action=create_payment&student_id=" + encodeURIComponent(std.id) + "&phone=" + encodeURIComponent(phone) + "&email=" + encodeURIComponent(std.email || '')).then(r => r.json()).then(data => {
+        if (data.payment_url) { btn.style.display = "none"; const linkBtn = document.getElementById("feesPayLink"); linkBtn.style.display = "block"; linkBtn.href = sanitizeHTML(data.payment_url); document.getElementById("feesMsg").innerHTML = ""; } 
+        else { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Payment generation failed.</span>"; }
     }).catch(e => { btn.innerHTML = "Retry Payment"; btn.disabled = false; document.getElementById("feesMsg").innerHTML = "<span style='color:var(--danger);'>Network Error.</span>"; });
   }
 </script>
