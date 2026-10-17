@@ -18,6 +18,7 @@ if (window.history.replaceState) {
 </script>
 
 <style>
+/* STREAMING_CHUNK: Base Variables and General Styling */
 :root {
   --main: #005f40;
   --main-dark: #003d29;
@@ -41,7 +42,7 @@ body {
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes spin { 100% { transform: rotate(360deg); } }
 
-/* Loader */
+/* STREAMING_CHUNK: Loader & App Header UI */
 .loader-overlay {
   position: fixed;
   top: 0; left: 0; width: 100%; height: 100%;
@@ -120,6 +121,7 @@ body {
   font-weight: 600;
 }
 
+/* STREAMING_CHUNK: Controls & Buttons */
 .control-group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .weight-controls {
   display: flex;
@@ -183,6 +185,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-back { background: #f1f5f9; color: var(--text-dark); border: 1.5px solid #cbd5e1; }
 .btn-back:hover { background: var(--main); color: #fff; border-color: var(--main); }
 
+/* STREAMING_CHUNK: Utility & Feature Panel Classes */
 .mgr-list-item {
   display: flex;
   justify-content: space-between;
@@ -236,6 +239,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 .quick-search-bar input:focus { border-color: var(--main); box-shadow: 0 0 0 3px rgba(0, 95, 64, 0.1); }
 
+/* STREAMING_CHUNK: Student Card View Components */
 #student-list-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -308,9 +312,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   #student-list-container { grid-template-columns: 1fr; }
 }
 
-/* ============================================================================
-   🖨️ ENTERPRISE PRINT PREVIEW & A3/A4 LAYOUT ENGINE
-============================================================================ */
+/* STREAMING_CHUNK: Print Specific Formatting & Typography */
 #print-area { display: none; background: #475569; min-height: 100vh; padding: 25px 0; }
 .print-toolbar {
   position: sticky; top: 0; background: #0f172a; padding: 15px 30px; display: flex; justify-content: center; align-items: center; gap: 15px; flex-wrap: wrap; box-shadow: 0 5px 25px rgba(0,0,0,0.3); z-index: 1000; margin-bottom: 25px;
@@ -322,7 +324,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* Marksheet uses purely A4 Landscape dimensions */
 .report-card {
-  width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; margin: 0 auto 15mm auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 3px double #005f40; padding: 5mm 6.5mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; margin: 0 auto 15mm auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 3px double #005f40; padding: 5.5mm 7mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
 /* Tabulation Base styling */
@@ -330,7 +332,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 2.5px solid #005f40; padding: 4.5mm 5.5mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25); margin: 0 auto 15mm auto;
 }
 
-/* Screen Preview Sizing for A4/A3 options */
 #print-content.a4-landscape-preview { width: 285mm; }
 #print-content.a4-landscape-preview .tab-page { width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; }
 
@@ -343,10 +344,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 #print-content.a3-portrait-preview { width: 285mm; }
 #print-content.a3-portrait-preview .tab-page { width: 285mm; height: 400mm; min-height: 400mm; max-height: 400mm; }
 
-
-.rc-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-24deg); font-size: 74px; font-weight: 900; color: rgba(0, 95, 64, 0.038); pointer-events: none; white-space: nowrap; z-index: 0; letter-spacing: 6px; }
+/* STREAMING_CHUNK: Report Card Specific Inner Elements */
+.rc-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-24deg); font-size: 74px; font-weight: 900; color: rgba(0, 95, 64, 0.035); pointer-events: none; white-space: nowrap; z-index: 0; letter-spacing: 6px; }
 .rc-top-section, .rc-middle-section, .rc-bottom-section { position: relative; z-index: 1; }
-.rc-middle-section { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; margin: 5px 0; min-height: 0; }
+.rc-middle-section { flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 10px; margin: 5px 0; min-height: 0; }
+.rc-bottom-section { margin-top: auto; padding-top: 8px; flex-shrink: 0; }
 
 .school-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #005f40; padding-bottom: 5px; margin-bottom: 5px; gap: 10px; }
 .school-logo { width: 62px; height: 62px; border-radius: 50%; object-fit: contain; border: 2px solid #005f40; padding: 2px; background: #fff; }
@@ -362,7 +364,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .legend-box { font-size: 8.8px; color: #005f40; background: #ecfdf5 !important; border: 1px dashed #005f40; padding: 3px 9px; border-radius: 4px; margin-bottom: 2px; display: flex; align-items:center; justify-content: center; font-weight: 700; gap: 15px; }
 
-.marks-wrapper { flex: 1; display: flex; justify-content: space-between; gap: 10px; width: 100%; align-items: flex-start; min-height: 0; margin-bottom: 12px; }
+/* STREAMING_CHUNK: Marksheet Tables and Density Optimization */
+.marks-wrapper { flex: 1; display: flex; justify-content: space-between; gap: 8px; width: 100%; align-items: flex-start; min-height: 0; margin-bottom: 8px; }
 .marks-table { width: 100%; height: 100%; border-collapse: collapse; font-size: 9.5px; background: rgba(255, 255, 255, 0.92); table-layout: auto; }
 .marks-table th, .marks-table td { border: 1px solid #1e293b; padding: 3.5px 3px; text-align: center; vertical-align: middle; line-height: 1.18; white-space: nowrap; }
 .marks-table th { background-color: #e2e8f0 !important; font-weight: 800; color: #0f172a; font-size: 8.4px; text-transform: uppercase; height: auto; }
@@ -370,29 +373,31 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .divider-col { border-right: 1.8px solid #000 !important; border-left: 1.8px solid #000 !important; }
 
 /* Dynamic Content Formatting for Badges inside Marksheet */
-.badge-part { font-size:9.2px; background:#f8fafc !important; border:1px solid #cbd5e1; padding:2px 5px; border-radius:5px; font-weight:800; color:#0f172a; display:inline-block; margin: 1px 2px; }
+.badge-part { font-size:8.4px; background:#f8fafc !important; border:1px solid #cbd5e1; padding:1px 4px; border-radius:4px; font-weight:800; color:#0f172a; display:inline-block; margin: 1px; }
 
-.report-card.spacious-card .marks-table th, .report-card.spacious-card .marks-table td { padding: 5.5px 7px; font-size: 10.8px; }
+.report-card.spacious-card .marks-table th, .report-card.spacious-card .marks-table td { padding: 6px 7px; font-size: 10.8px; }
 .report-card.standard-card .marks-table th, .report-card.standard-card .marks-table td { padding: 4px 3px; font-size: 9.3px; }
-.report-card.dense-card .marks-table th, .report-card.dense-card .marks-table td { padding: 2.5px 2px; font-size: 8.4px; }
+.report-card.dense-card .marks-table th, .report-card.dense-card .marks-table td { padding: 2px 1.5px; font-size: 8px; }
 
-.rc-overview-qr-strip { display: grid; grid-template-columns: 1.6fr 1fr 1.25fr; gap: 8px; align-items: stretch; margin-top: 16px; margin-bottom: 8px; }
+.rc-overview-qr-strip { display: grid; grid-template-columns: 1.6fr 1fr 1.25fr; gap: 8px; align-items: stretch; margin-top: 10px; margin-bottom: 0px; }
 .rc-ov-card { border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc !important; padding: 5px 9px; display: flex; flex-direction: column; justify-content: center; }
 .rc-ov-title { font-size: 8.6px; font-weight: 900; color: #005f40; text-transform: uppercase; border-bottom: 1px solid #cbd5e1; padding-bottom: 2.5px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
 
+/* STREAMING_CHUNK: QR Code and Result Metrics */
 .rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 6px; display: flex; align-items: center; gap: 12px; }
-.rc-qr-box { width: 85px; height: 85px; background: #fff !important; border: 1.5px solid #005f40; border-radius: 4px; padding: 2px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
+.rc-qr-box { width: 90px; height: 90px; background: #fff !important; border: 1.5px solid #005f40; border-radius: 4px; padding: 2px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
 .rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
 .rc-qr-meta { font-size: 8.5px; line-height: 1.4; color: #0f172a; font-weight: 700; }
 .rc-qr-badge { display: inline-block; background: #005f40 !important; color: #fff !important; font-size: 8px; font-weight: 800; padding: 2px 7px; border-radius: 3px; margin-bottom: 4px; text-transform: uppercase; }
 
-.summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; margin-top: 10px; margin-bottom: 10px; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+.summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; margin-bottom: 10px; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
 .summary-metrics { display: flex; gap: 16px; font-size: 11.5px; font-weight: 800; color: #005f40; align-items: center; }
 .remark-text { font-size: 10px; font-weight: 800; color: #0f172a; margin: 0; }
 
-.footer { display: flex; justify-content: space-between; align-items: flex-end; padding: 15px 16px 0 16px; margin-top: auto; }
+.footer { display: flex; justify-content: space-between; align-items: flex-end; padding: 10px 16px 0 16px; margin-top: 10px; }
 .signature { border-top: 1.5px solid #000; width: 175px; text-align: center; padding-top: 3.5px; font-weight: 800; font-size: 10px; color: #000; text-transform: uppercase; }
 
+/* STREAMING_CHUNK: Tabulation Specific Layout Details */
 .tab-top-wrap { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .tab-table { width: 100%; border-collapse: collapse; font-size: 8.2px; text-align: center; table-layout: fixed; }
 .tab-table th { background: #e2e8f0 !important; padding: 3.5px 1.5px; border: 1px solid #000; font-weight: 800; color: #000; font-size: 7.8px; word-wrap: break-word; line-height: 1.15; }
@@ -405,7 +410,6 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .tab-cell-lines { font-size: 7.2px; line-height: 1.18; text-align: left; padding: 0 1px; white-space: nowrap; }
 #print-content.a4-portrait-preview .tab-cell-lines, #print-content.a3-portrait-preview .tab-cell-lines, #print-content.a3-landscape-preview .tab-cell-lines { font-size: 5.9px; line-height: 1.16; padding: 0; }
 
-/* Dynamic Density classes for scaling Tabulation when subjects are high */
 .tab-table.very-dense th, .tab-table.very-dense td { font-size: 6.5px !important; padding: 2px 1px !important; line-height: 1.1; }
 .tab-table.very-dense .tab-cell-lines { font-size: 6px !important; }
 .tab-table.extremely-dense th, .tab-table.extremely-dense td { font-size: 5.5px !important; padding: 1.5px 0.5px !important; line-height: 1.05; }
@@ -423,22 +427,19 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   #print-area { display: block !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
   #print-content { width: 100% !important; margin: 0 !important; padding: 0 !important; }
   
-  /* Marksheet is strictly A4 Landscape */
   .report-card { width: 100% !important; height: 196mm !important; min-height: 196mm !important; max-height: 196mm !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
-  
-  /* Tabulation takes height from dynamic inline print styles */
   .tab-page { width: 100% !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
   
   .report-card:last-child, .tab-page:last-child { page-break-after: auto !important; }
 }
 </style>
-<!-- Style element for Dynamic Print Page sizing (@page) injected via JS -->
 <style id="dynamicPrintPageStyle">
   @media print { @page { size: A4 landscape; margin: 5mm; } }
 </style>
 </head>
 <body class="main-padding" id="mainBody">
 
+<!-- STREAMING_CHUNK: Body UI Structure -->
 <div class="loader-overlay" id="loader">
   <div class="spinner"></div>
   <div class="loader-text" id="loaderText">
@@ -542,6 +543,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   <div id="student-list-container"></div>
 </div>
 
+<!-- STREAMING_CHUNK: Firebase Integration & Initial Config -->
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
@@ -605,6 +607,7 @@ async function apiCall(actionName, payloadData = {}) {
   return data;
 }
 
+/* STREAMING_CHUNK: App Initialization Logic */
 function initYearDropdown() {
   var yrSelect = document.getElementById("yearSelector");
   var currentYear = new Date().getFullYear();
@@ -663,6 +666,7 @@ function extractSubAndExam(headerText) {
   return { sub: parts[0].trim(), exam: "Exam", type: "Test" };
 }
 
+/* STREAMING_CHUNK: Core Parsing and Subject Discovery */
 function parseSubjectHeaders(headers) {
   let firstEmpty = headers.indexOf("");
   if (firstEmpty === -1) firstEmpty = headers.length;
@@ -754,6 +758,7 @@ async function configPassRules() {
   }
 }
 
+/* STREAMING_CHUNK: Main Data Loading and Display */
 async function loadData() {
   if (!isAuthReady) return;
   var className = document.getElementById("classSelector").value;
@@ -850,6 +855,7 @@ function filterStudentCards() {
   cards.forEach(c => { let s = c.getAttribute('data-search') || ""; c.style.display = (!q || s.includes(q)) ? "flex" : "none"; });
 }
 
+/* STREAMING_CHUNK: Evaluation Helpers and Formulas */
 function getGP_JS(p) { if (p >= 80) return 5.00; if (p >= 70) return 4.00; if (p >= 60) return 3.50; if (p >= 50) return 3.00; if (p >= 40) return 2.00; if (p >= 33) return 1.00; return 0.00; }
 function getGrade_JS(g) { if (g >= 5.00) return "A+"; if (g >= 4.00) return "A"; if (g >= 3.50) return "A-"; if (g >= 3.00) return "B"; if (g >= 2.00) return "C"; if (g >= 1.00) return "D"; return "F"; }
 
@@ -924,7 +930,7 @@ async function openDataEntryForm(rowIndex) {
           html += `
           <div style="flex:1 1 290px; background:${typeBg}; border:1.5px solid #cbd5e1; border-radius:12px; padding:12px;" data-split-col="${ex.col}">
              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
-               <span style="font-size:13.5px; font-weight:800; color:${typeColor};"><i class="fas fa-edit"></i> ${ex.name} (${ex.type})</span>
+               <span style="font-size:13.5px; font-weight:800; color:${typeColor};"><i class="fas fa-edit"></i> ${ex.name}</span>
                <span style="font-size:10.5px; font-weight:800; background:#fff; padding:3px 10px; border-radius:12px; border:1px solid #cbd5e1;">
                  পূর্ণমান: ${fmInfo.total} • মোট: <b id="live-sum-${ex.col}" style="color:var(--main); font-size:12px;">${hasVal ? initSum : '-'}</b>
                </span>
@@ -992,6 +998,7 @@ async function openDataEntryForm(rowIndex) {
   }
 }
 
+/* STREAMING_CHUNK: Advanced Dynamic Exam Result Processing */
 function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainWeight) {
   let examDetails = {}; 
   let tCalc = 0, mCalc = 0;
@@ -1169,6 +1176,7 @@ async function calculateAllResults() {
   });
 }
 
+/* STREAMING_CHUNK: Exam and Subject Settings Modals */
 async function fetchGlobalExamsFromDB() {
   let setDoc = await db.collection('Admin').doc('Settings').get();
   if (setDoc.exists && setDoc.data().globalExams) { try { return JSON.parse(setDoc.data().globalExams) || []; } catch (e) { return []; } }
@@ -1247,7 +1255,7 @@ window.openEditGlobalExamModal = async function(idx) {
     showCancelButton: true, confirmButtonText: '<i class="fas fa-save"></i> আপডেট করুন', cancelButtonText: 'বাতিল',
     preConfirm: () => {
       let newName = document.getElementById('editExN').value.trim();
-      if (!newName) { Swal.showValidationMessage('পরীক্ষার নাম খালি রাখা যাবে কাশী!'); return false; }
+      if (!newName) { Swal.showValidationMessage('পরীক্ষার নাম খালি রাখা যাবে না!'); return false; }
       return { newName, newType: document.getElementById('editExT').value };
     }
   });
@@ -1556,128 +1564,7 @@ window.confirmDeleteSubjectByCol = async function(colIndex, subName) {
   }
 };
 
-async function linkExamToSubjectsPopup() {
-  var cls = document.getElementById("classSelector").value;
-  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন!', 'warning');
-  var parsed = parseSubjectHeaders(cachedHeaders); var subNames = Object.keys(parsed.subjects);
-  if (subNames.length === 0) return swalPro.fire('কোনো বিষয় নেই', 'প্রথমে বিষয় যুক্ত করুন।', 'info');
-
-  showLoader(true, "পরীক্ষার তালিকা লোড হচ্ছে...");
-  try { window.cachedGlobalExams = await fetchGlobalExamsFromDB(); showLoader(false); } catch (e) { showLoader(false); return swalPro.fire('ত্রুটি', e.message, 'error'); }
-  if (window.cachedGlobalExams.length === 0) return swalPro.fire('কোনো পরীক্ষা নেই', 'প্রথমে "পরীক্ষা ব্যবস্থাপনা" বাটনে ক্লিক করে পরীক্ষা তৈরি করুন।', 'warning');
-
-  let examOptionsHtml = window.cachedGlobalExams.map((ex, i) => `<option value="${i}" data-type="${ex.type}">${ex.name} (${ex.type})</option>`).join('');
-  let subChecksHtml = subNames.map((sName) => {
-    let sub = parsed.subjects[sName]; let hasPending = sub.tests.length === 0 && sub.mains.length === 0;
-    return `
-      <label style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:8px; cursor:pointer; font-size:13.5px; font-weight:800;">
-        <span><input type="checkbox" class="bulk-link-sub-chk" value="${sName}" checked style="width:18px; height:18px; accent-color:var(--main); margin-right:8px;"> ${sName}${sub.isOpt ? '<small style="color:#b45309;">(4th)</small>' : ''}</span>
-        ${hasPending ? '<span style="font-size:11px; background:#fff7ed; color:#c2410c; padding:3px 10px; border-radius:10px; border:1px solid #fdba74;">Pending</span>' : ''}
-      </label>`;
-  }).join('');
-  
-  window.rebuildLinkExamGrid = function() {
-      let pStr = document.getElementById('linkSubPartsDef').value.trim();
-      let pArr = pStr ? pStr.split(',').map(s=>s.trim()).filter(s=>s!=="") : ["Total"];
-      if(pArr.length === 0) pArr = ["Total"];
-      
-      let selEl = document.getElementById('bulkLinkExIdx');
-      let opt = selEl.options[selEl.selectedIndex];
-      let exType = opt ? opt.getAttribute('data-type') : "Main";
-      let defTotal = exType === "Main" ? 100 : 50;
-      
-      let gridContainer = document.getElementById('dynamicLinkExamGrid');
-      if(!gridContainer) return;
-      
-      let initSplit = Math.floor(defTotal / pArr.length);
-      let boxes = pArr.map((p, pIdx) => {
-          let mark = (pIdx === pArr.length-1) ? (defTotal - (initSplit * pIdx)) : initSplit;
-          return `
-            <div class="part-box">
-               <label>${p}</label>
-               <input type="number" id="link-dyn-${pIdx}" class="link-dyn-inp" value="${mark}" oninput="updateLinkDynTotal()">
-            </div>`;
-      }).join('');
-      
-      gridContainer.innerHTML = `
-        <div style="background:#f8fafc; padding:15px; border-radius:12px; border:2px solid #cbd5e1; margin-bottom:15px;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-            <span style="font-size:13px; font-weight:900; color:#0f172a;">২. পূর্ণমান নির্ধারণ করুন:</span>
-            <span style="font-size:12px; font-weight:800; color:var(--main); background:#ecfdf5; padding:4px 12px; border-radius:12px; border:1px solid #a7f3d0;">মোট: <b id="link-dyn-tot">${defTotal}</b></span>
-          </div>
-          <div class="part-grid-row">${boxes}</div>
-        </div>
-      `;
-  };
-  
-  window.updateLinkDynTotal = function() {
-      let inps = document.querySelectorAll(`.link-dyn-inp`);
-      let total = 0; inps.forEach(inp => total += parseFloat(inp.value)||0);
-      let tEl = document.getElementById(`link-dyn-tot`); if(tEl) tEl.innerText = total;
-  };
-
-  const { value: linkPayload } = await swalPro.fire({
-    title: 'ক্লাসের বিষয়ে পরীক্ষা লিংক করুন',
-    width: '700px',
-    html: `
-      <div style="text-align:left;">
-        <label style="font-size:13px; font-weight:900; color:#334155;">১. পরীক্ষা নির্বাচন করুন:</label>
-        <select id="bulkLinkExIdx" onchange="rebuildLinkExamGrid()" class="swal2-input" style="width:100%; height:46px; margin:8px 0 15px 0; font-weight:800; color:var(--main); font-size:14px;">${examOptionsHtml}</select>
-
-        <label style="font-size:13px; font-weight:900; color:#334155;">কম্পোনেন্টস (কমা দিয়ে লিখুন):</label>
-        <input id="linkSubPartsDef" class="swal2-input" value="Written, MCQ, Practical" oninput="rebuildLinkExamGrid()" style="width:100%; height:46px; margin:8px 0 15px 0; font-weight:800;">
-        
-        <div id="dynamicLinkExamGrid"></div>
-
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-          <span style="font-size:13px; font-weight:900; color:#334155;">৩. কোন কোন বিষয়ে যুক্ত করবেন:</span>
-          <label style="font-size:12.5px; font-weight:800; color:var(--main); cursor:pointer;"><input type="checkbox" checked onchange="document.querySelectorAll('.bulk-link-sub-chk').forEach(c => c.checked = this.checked);"> সব বিষয়</label>
-        </div>
-        <div style="max-height:180px; overflow-y:auto; background:#f8fafc; padding:10px; border-radius:12px; border:1px solid #cbd5e1;">${subChecksHtml}</div>
-      </div>
-    `,
-    didOpen: () => { rebuildLinkExamGrid(); },
-    showCancelButton: true, confirmButtonText: '<i class="fas fa-link"></i> লিংক করুন', cancelButtonText: 'বাতিল',
-    preConfirm: () => {
-      let exIdx = parseInt(document.getElementById('bulkLinkExIdx').value, 10); let chosenEx = window.cachedGlobalExams[exIdx];
-      let pStr = document.getElementById('linkSubPartsDef').value.trim();
-      let pArr = pStr ? pStr.split(',').map(s=>s.trim()).filter(s=>s!=="") : ["Total"];
-      if(pArr.length === 0) pArr = ["Total"];
-      
-      let builtMarksArr = [];
-      pArr.forEach((p, pIdx) => {
-         let mk = parseFloat(document.getElementById(`link-dyn-${pIdx}`)?.value) || 0;
-         if(mk > 0) builtMarksArr.push(`${p}:${mk}`); 
-      });
-      if(builtMarksArr.length === 0) builtMarksArr.push(`Total:${chosenEx.type === "Main" ? 100 : 50}`);
-
-      let chosenSubs = []; document.querySelectorAll('.bulk-link-sub-chk:checked').forEach(chk => chosenSubs.push(chk.value));
-      if (chosenSubs.length === 0) { Swal.showValidationMessage('অন্তত একটি বিষয় নির্বাচন করুন!'); return false; }
-      
-      return { examName: chosenEx.name, examType: chosenEx.type, marks: builtMarksArr.join('+'), subjects: chosenSubs };
-    }
-  });
-
-  if (linkPayload) {
-    showLoader(true, "পরীক্ষা লিংক করা হচ্ছে...");
-    try { let res = await apiCall('linkExamToClassSubjects', { className: cls, examData: linkPayload }); showLoader(false); await swalPro.fire('সফল!', res.msg, 'success'); loadData(); } 
-    catch (e) { showLoader(false); swalPro.fire('ত্রুটি', e.message, 'error'); }
-  }
-}
-
-function setupSheetHeader() {
-  var cls = document.getElementById("classSelector").value;
-  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন!', 'warning');
-  swalPro.fire({ title: 'ফরম্যাট রিসেট করবেন?', text: `${cls}-এর বর্তমান কাঠামো রিসেট হয়ে যাবে।`, icon: 'warning', showCancelButton: true, confirmButtonText: 'হ্যাঁ', cancelButtonText: 'বাতিল' })
-  .then(async r => {
-    if (r.isConfirmed) {
-      showLoader(true, "ফরম্যাট রিসেট হচ্ছে...");
-      try { let res = await apiCall('setupStandardHeaders', { className: cls }); showLoader(false); if (res.status === "success") { swalPro.fire('সফল!', res.msg, 'success'); loadData(); } } 
-      catch (err) { showLoader(false); swalPro.fire('ত্রুটি', err.message, 'error'); }
-    }
-  });
-}
-
+/* STREAMING_CHUNK: View Result Details Model */
 function viewSingleResult(rowIndex) {
   let row = appData[rowIndex]; let parsed = parseSubjectHeaders(cachedHeaders); var firstEmpty = parsed.firstEmpty;
   let testWeight = parseFloat(document.getElementById('testWeight').value) || 25; let mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
@@ -1729,41 +1616,7 @@ function viewSingleResult(rowIndex) {
   swalPro.fire({ title: 'ফলাফল বিবরণী', width: '700px', html: html, confirmButtonText: 'বন্ধ করুন' });
 }
 
-var currentPrintMode = "marksheet"; 
-function setPrintPageOrientation(orientation) {
-  let styleEl = document.getElementById('dynamicPrintPageStyle'); 
-  let contentEl = document.getElementById('print-content');
-  let css = '';
-  
-  if (orientation === 'a4-portrait') {
-    css = `@media print { @page { size: A4 portrait; margin: 5mm; } .tab-page { height: 284mm !important; min-height: 284mm !important; max-height: 284mm !important; } }`;
-    contentEl.className = 'a4-portrait-preview';
-  } else if (orientation === 'a3-landscape') {
-    css = `@media print { @page { size: A3 landscape; margin: 5mm; } .tab-page { height: 284mm !important; min-height: 284mm !important; max-height: 284mm !important; } }`;
-    contentEl.className = 'a3-landscape-preview';
-  } else if (orientation === 'a3-portrait') {
-    css = `@media print { @page { size: A3 portrait; margin: 5mm; } .tab-page { height: 406mm !important; min-height: 406mm !important; max-height: 406mm !important; } }`;
-    contentEl.className = 'a3-portrait-preview';
-  } else { // default a4-landscape
-    css = `@media print { @page { size: A4 landscape; margin: 5mm; } .tab-page { height: 196mm !important; min-height: 196mm !important; max-height: 196mm !important; } }`;
-    contentEl.className = 'a4-landscape-preview';
-  }
-  styleEl.innerHTML = css;
-}
-
-function triggerPrintWithOrientation(orientation) {
-  if (currentPrintMode === "tabulation") buildTabulationPagesForOrientation(orientation); 
-  else setPrintPageOrientation('a4-landscape');
-}
-
-function executePrint(htmlContent, mode = "marksheet", defaultOrientation = "a4-landscape") {
-  currentPrintMode = mode; setPrintPageOrientation(defaultOrientation);
-  document.getElementById('appContainer').style.display = 'none';
-  let printArea = document.getElementById('print-area'); document.getElementById('print-content').innerHTML = htmlContent;
-  printArea.style.display = 'block'; window.scrollTo(0, 0); setTimeout(() => { window.print(); }, 350);
-}
-function closePrintView() { document.getElementById('print-area').style.display = 'none'; document.getElementById('print-content').innerHTML = ''; document.getElementById('appContainer').style.display = 'block'; }
-
+/* STREAMING_CHUNK: Marksheet Final Printing Setup */
 async function openPrintMarksheetPopup() {
   if (appData.length === 0) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
   var parsed = parseSubjectHeaders(cachedHeaders); if (parsed.firstEmpty === -1) return swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
@@ -1799,6 +1652,7 @@ function generateVerifyHash(id, cls, yr, gpa, grade, totalMarks) {
   let h1 = 0x811c9dc5; for (let i = 0; i < raw.length; i++) { h1 ^= raw.charCodeAt(i); h1 = Math.imul(h1, 0x01000193); }
   return ("00000000" + (h1 >>> 0).toString(16)).slice(-8).toUpperCase();
 }
+
 function createVerificationQrSvg(verifyUrl) {
   try { if (typeof qrcode === "function") { let qr = qrcode(0, 'M'); qr.addData(verifyUrl); qr.make(); return qr.createSvgTag({ cellSize: 2, margin: 0, scalable: true }); } } catch (e) {}
   return `<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(verifyUrl)}" style="width:100%;height:100%;" alt="QR">`;
@@ -1811,24 +1665,41 @@ function generateMarkSheets(examFilter, customTitle) {
   var groupName = "General"; var baseClassName = rawClassName;
   if (rawClassName.includes("Science")) { groupName = "Science"; baseClassName = rawClassName.replace(" Science", ""); } else if (rawClassName.includes("Arts")) { groupName = "Arts"; baseClassName = rawClassName.replace(" Arts", ""); } else if (rawClassName.includes("Commerce")) { groupName = "Commerce"; baseClassName = rawClassName.replace(" Commerce", ""); }
 
+  // 1. Calculate the Highest Marks for Each Subject in the class
+  let subjectHighest = {};
+  data.forEach(row => {
+    if (!row[0] && !row[1]) return;
+    Object.keys(parsed.subjects).forEach(subName => {
+      let sub = parsed.subjects[subName];
+      let ev = evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainWeight);
+      if (ev.attended) {
+         let key = sub.isOpt ? (row[sub.nameCol] || subName).trim() : subName;
+         if (!subjectHighest[key] || ev.finalMark > subjectHighest[key]) {
+             subjectHighest[key] = ev.finalMark;
+         }
+      }
+    });
+  });
+
   let classStats = { totalStudents: 0, evaluatedStudents: 0, passed: 0, failed: 0, highestMarks: 0, gpaSum: 0, grades: { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0 } };
   let studentEvaluations = [];
-
   let activeExams = [];
   parsed.examSeq.forEach(ex => { if (examFilter === "All" || ex === examFilter) activeExams.push(ex); });
-  let lastExamName = activeExams.length > 0 ? activeExams[activeExams.length - 1] : "";
 
   data.forEach(row => {
     if (!row[0] && !row[1]) return; classStats.totalStudents++;
     let subRows = []; let filterTotalMarks = 0; let filterTotalRegularGP = 0; let filterOptExtraGP = 0; let filterRegularSubCount = 0; let filterTotalSubCount = 0; let filterIsFail = false; let failedSubNames = [];
 
     Object.keys(parsed.subjects).forEach(subName => {
-      let sub = parsed.subjects[subName]; let actualSubName = sub.isOpt ? (row[sub.nameCol] || subName) + " <span style='font-size:8.5px; font-weight:700; color:#b45309;'>(4th)</span>" : subName;
+      let sub = parsed.subjects[subName]; 
+      let baseKey = sub.isOpt ? (row[sub.nameCol] || subName).trim() : subName;
+      let actualSubName = sub.isOpt ? baseKey + " <span style='font-size:8.5px; font-weight:700; color:#b45309;'>(4th)</span>" : subName;
+      
       let ev = evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainWeight);
       if (ev.attended) {
         if (ev.isSubFail && !sub.isOpt) { filterIsFail = true; failedSubNames.push(subName); }
         if (sub.isOpt && !ev.isSubFail && ev.subGP > 2.00) filterOptExtraGP += (ev.subGP - 2.00); else if (!sub.isOpt) { filterTotalRegularGP += ev.isSubFail ? 0 : ev.subGP; filterRegularSubCount++; }
-        filterTotalMarks += ev.finalMark; filterTotalSubCount++; subRows.push({ actualSubName, ev });
+        filterTotalMarks += ev.finalMark; filterTotalSubCount++; subRows.push({ actualSubName, baseKey, ev });
       }
     });
 
@@ -1856,7 +1727,8 @@ function generateMarkSheets(examFilter, customTitle) {
       <tr>
         <th style="width:25%; text-align:left; padding-left:5px;">Subject</th>
         ${activeExams.map(ex => `<th class="divider-col">${ex}</th>`).join('')}
-        <th style="width:10%;">Final<br>(100%)</th>
+        <th style="width:10%;">Total<br>(100%)</th>
+        <th style="width:9%;">Highest</th>
         <th style="width:8%;">Grade</th>
         <th style="width:8%;">GP</th>
       </tr>
@@ -1874,8 +1746,8 @@ function generateMarkSheets(examFilter, customTitle) {
       let tdExamsHtml = activeExams.map(exName => {
          let d = ev.examDetails[exName];
          if(d && d.hasMark) {
-             if (exName === lastExamName && d.partsStr) {
-                 return `<td class="divider-col"><div style="display:flex; flex-wrap:wrap; justify-content:center; gap:2px; margin-bottom:2px;">${d.partsStr}</div><b>Total: ${d.sum}</b></td>`;
+             if (d.partsStr) {
+                 return `<td class="divider-col" style="padding:4px 2px;"><div style="display:flex; flex-wrap:wrap; justify-content:center; gap:3px; margin-bottom:3px;">${d.partsStr}</div><b>Total: ${d.sum}</b></td>`;
              } else {
                  return `<td class="divider-col"><b>${d.sum}</b></td>`;
              }
@@ -1883,17 +1755,21 @@ function generateMarkSheets(examFilter, customTitle) {
          return `<td class="divider-col">-</td>`;
       }).join("");
 
-      return `<tr><td class="sub-name">${sr.actualSubName}</td>${tdExamsHtml}<td><b>${ev.finalMark}</b></td><td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td><td><strong>${ev.subGP.toFixed(2)}</strong></td></tr>`;
+      let highestInSub = subjectHighest[sr.baseKey] || "-";
+
+      return `<tr><td class="sub-name">${sr.actualSubName}</td>${tdExamsHtml}<td><b>${ev.finalMark}</b></td><td><b>${highestInSub}</b></td><td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td><td><strong>${ev.subGP.toFixed(2)}</strong></td></tr>`;
     });
 
     var teacherRemark = dispGrade === "F" ? `Failed in: ${item.failedSubNames.length > 0 ? item.failedSubNames.join(", ") : "Subject(s)"} — Needs Special Care` : (dispGrade === "A+" ? "Outstanding Performance!" : (dispGrade === "A" ? "Very Good Result! Strive for A+." : (dispGrade === "A-" ? "Good Academic Performance." : (dispGrade === "B" ? "Satisfactory Result." : "Needs More Effort & Regular Study."))));
     let subCount = rowsHtmlArray.length; let tierClass = "standard-card"; var finalTableHtml = "";
-    if (subCount <= 6) { tierClass = "spacious-card"; finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;">${theadHtml}<tbody>${rowsHtmlArray.join("")}</tbody></table></div>`; } 
-    else if (subCount <= 12) { tierClass = "standard-card"; var half = Math.ceil(subCount / 2); finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half).join("")}</tbody></table><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half).join("")}</tbody></table></div>`; } 
+    
+    // Dynamic Columns Based on Number of Subjects ensuring no Cut-off
+    if (subCount <= 5) { tierClass = "spacious-card"; finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;">${theadHtml}<tbody>${rowsHtmlArray.join("")}</tbody></table></div>`; } 
+    else if (subCount <= 9) { tierClass = "standard-card"; var half = Math.ceil(subCount / 2); finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half).join("")}</tbody></table><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half).join("")}</tbody></table></div>`; } 
     else { tierClass = "dense-card"; var half2 = Math.ceil(subCount / 2); finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half2).join("")}</tbody></table><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half2).join("")}</tbody></table></div>`; }
 
     let vHash = generateVerifyHash(id, rawClassName, year, dispGPA, dispGrade, filterTotalMarks);
-    let subStr = item.subRows.map(sr => `${sr.actualSubName.replace(/<[^>]*>?/gm, '').trim()}_${sr.ev.finalMark}_${sr.ev.subGrade}`).join(',');
+    let subStr = item.subRows.map(sr => `${sr.baseKey}_${sr.ev.finalMark}_${sr.ev.subGrade}`).join(',');
     let verifyUrl = `https://srms2012.edu.bd/verify-result?id=${encodeURIComponent(id)}&name=${encodeURIComponent(name)}&cls=${encodeURIComponent(rawClassName)}&roll=${encodeURIComponent(roll)}&yr=${encodeURIComponent(year)}&exam=${encodeURIComponent(examFilter === "All" ? "Final" : examFilter)}&marks=${filterTotalMarks}&gpa=${dispGPA}&grade=${encodeURIComponent(dispGrade)}&merit=${encodeURIComponent(dispPos)}&v=${vHash}&sub=${encodeURIComponent(subStr)}`;
     let qrSvgHtml = createVerificationQrSvg(verifyUrl);
 
@@ -1949,7 +1825,7 @@ function generateMarkSheets(examFilter, customTitle) {
             </div>
             <div class="rc-qr-card">
               <div class="rc-qr-box">${qrSvgHtml}</div>
-              <div class="rc-qr-meta"><span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br><span style="color:#475569; font-size:8px;">Scan QR code to verify transcript authenticity at <b>srms2012.edu.bd</b></span></div>
+              <div class="rc-qr-meta"><span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br><span style="color:#475569; font-size:8.5px;">Scan QR code to verify transcript authenticity at <b>srms2012.edu.bd</b></span></div>
             </div>
           </div>
         </div>
@@ -1965,6 +1841,7 @@ function generateMarkSheets(examFilter, customTitle) {
   executePrint(cardsArr.join(''), "marksheet", "a4-landscape");
 }
 
+/* STREAMING_CHUNK: Tabulation Printing Setup */
 async function printTabulation() {
   if (appData.length === 0) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শিক্ষার্থীদের তথ্য লোড করুন।', 'warning');
   var parsed = parseSubjectHeaders(cachedHeaders); if (parsed.firstEmpty === -1) return swalPro.fire('ত্রুটি', 'ফরম্যাট সঠিক নয়।', 'error');
@@ -2014,7 +1891,6 @@ function buildTabulationPagesForOrientation(orientation, examFilter, customTitle
   let activeExams = [];
   parsed.examSeq.forEach(ex => { if(examFilter === "All" || ex === examFilter) activeExams.push(ex); });
 
-  // Custom filter stats calculation just for Tabulation View
   let filterStats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0, 'Evaluated': 0 }; 
   var validRowsHtmlData = [];
 
@@ -2109,15 +1985,15 @@ function buildTabulationPagesForOrientation(orientation, examFilter, customTitle
     var isLastPage = (pageIdx === totalPages - 1);
     return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #005f40; padding-bottom:6px; margin-bottom:6px;">
-        <div style="width:80px; text-align:left;">
-            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:55px; width:55px; border-radius:50%; border:2px solid #005f40; padding:2px;">
+        <div style="width:100px; text-align:left;">
+            <img src="${SCHOOL_LOGO}" alt="Logo" style="height:65px; width:65px; border-radius:50%; border:2px solid #005f40; padding:2px;">
         </div>
         <div style="flex:1; text-align:center;">
-            <h1 style="margin:0; font-size:18px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif; letter-spacing:0.5px;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
-            <p style="margin:3px 0 0 0; color:#334155; font-size:10px; font-weight:800; text-transform:uppercase;">${customTitle} — CLASS ${cls.toUpperCase()} (SESSION: ${year})</p>
+            <h1 style="margin:0; font-size:19px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif; letter-spacing:0.5px;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1>
+            <p style="margin:3px 0 0 0; color:#334155; font-size:11px; font-weight:800; text-transform:uppercase;">${customTitle} — CLASS ${cls.toUpperCase()} (SESSION: ${year})</p>
         </div>
-        <div style="width:80px; text-align:right; display:flex; flex-direction:column; justify-content:flex-end; height:55px;">
-            <div style="font-size:8px; font-weight:800; color:#475569;">Page ${pageIdx + 1} of ${totalPages}</div>
+        <div style="width:100px; text-align:right; display:flex; flex-direction:column; justify-content:flex-start; height:65px;">
+            <div style="font-size:9px; font-weight:800; color:#475569;">Page ${pageIdx + 1} of ${totalPages}</div>
         </div>
       </div>
       ${legendHtml}
