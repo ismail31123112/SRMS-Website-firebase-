@@ -357,7 +357,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .legend-box { font-size: 8.8px; color: #005f40; background: #ecfdf5 !important; border: 1px dashed #005f40; padding: 3px 9px; border-radius: 4px; margin-bottom: 2px; display: flex; align-items:center; justify-content: center; font-weight: 700; gap: 15px; }
 
-.marks-wrapper { flex: 1; display: flex; justify-content: space-between; gap: 12px; width: 100%; align-items: stretch; min-height: 0; margin-bottom: 15px; }
+/* Fixed Box Sizing for Right Alginment Spacing */
+.marks-wrapper { flex: 1; display: flex; justify-content: space-between; gap: 12px; width: 100%; align-items: stretch; min-height: 0; margin-bottom: 15px; box-sizing: border-box; max-width: 100%; }
 .marks-table { width: 100%; height: auto; border-collapse: collapse; font-size: 9.5px; background: rgba(255, 255, 255, 0.92); table-layout: fixed; }
 .marks-table th, .marks-table td { border: 1px solid #1e293b; padding: 3.5px 3px; text-align: center; vertical-align: middle; line-height: 1.2; word-wrap: break-word; }
 .marks-table th { background-color: #e2e8f0 !important; font-weight: 800; color: #0f172a; font-size: 8.5px; text-transform: uppercase; }
@@ -371,18 +372,21 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .report-card.standard-card .marks-table th, .report-card.standard-card .marks-table td { padding: 4px 3px; font-size: 9.5px; }
 .report-card.dense-card .marks-table th, .report-card.dense-card .marks-table td { padding: 2px 1.5px; font-size: 8.4px; line-height: 1.1; }
 
-.rc-overview-qr-strip { display: grid; grid-template-columns: 1.6fr 1fr 1.25fr; gap: 8px; align-items: stretch; margin-top: auto; margin-bottom: 0px; }
-.rc-ov-card { border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc !important; padding: 5px 9px; display: flex; flex-direction: column; justify-content: center; }
+/* Box Sizing & Centering for QR Overlap Fixes */
+.rc-overview-qr-strip { display: grid; grid-template-columns: 1.5fr 1fr 1.25fr; gap: 8px; align-items: center; margin-top: auto; margin-bottom: 0px; width: 100%; max-width: 100%; box-sizing: border-box; }
+.rc-ov-card { align-self: stretch; min-width: 0; overflow: hidden; border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc !important; padding: 5px 9px; display: flex; flex-direction: column; justify-content: center; box-sizing: border-box; }
 .rc-ov-title { font-size: 8.6px; font-weight: 900; color: #005f40; text-transform: uppercase; border-bottom: 1px solid #cbd5e1; padding-bottom: 2.5px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
 
-.rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 6px; display: flex; align-items: center; gap: 12px; }
-.rc-qr-box { width: 80px; height: 80px; background: #fff !important; border: 1.5px solid #005f40; border-radius: 4px; padding: 2px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
+/* Resized and Cropped QR Card */
+.rc-qr-card { align-self: center; min-width: 0; overflow: hidden; border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 5px 6px; display: flex; align-items: center; gap: 8px; box-sizing: border-box; }
+.rc-qr-box { width: 55px; height: 55px; background: #fff !important; border: 1.5px solid #005f40; border-radius: 4px; padding: 2px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
 .rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
-.rc-qr-meta { font-size: 8.5px; line-height: 1.4; color: #0f172a; font-weight: 700; }
+.rc-qr-meta { font-size: 8px; line-height: 1.4; color: #0f172a; font-weight: 700; }
 .rc-qr-badge { display: inline-block; background: #005f40 !important; color: #fff !important; font-size: 8px; font-weight: 800; padding: 2px 7px; border-radius: 3px; margin-bottom: 4px; text-transform: uppercase; }
 
-.rc-bottom-section { display: flex; flex-direction: column; justify-content: flex-end; margin-top: 10px; }
-.summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+/* Width fixes for proper wrapping on the right */
+.rc-bottom-section { display: flex; flex-direction: column; justify-content: flex-end; margin-top: 10px; width: 100%; box-sizing: border-box; }
+.summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; max-width: 100%; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; box-sizing: border-box; }
 .summary-metrics { display: flex; gap: 16px; font-size: 11.5px; font-weight: 800; color: #005f40; align-items: center; }
 .remark-text { font-size: 10px; font-weight: 800; color: #0f172a; margin: 0; }
 
@@ -1854,12 +1858,12 @@ function generateMarkSheets(examFilter, customTitle) {
   var theadHtml = `
     <thead>
       <tr>
-        <th style="width:22%; text-align:left; padding-left:5px;">Subject</th>
-        ${activeExams.map(ex => `<th class="divider-col">${ex}</th>`).join('')}
-        <th style="width:7%; color:#059669;">Highest</th>
-        <th style="width:8%;">Final<br>(100%)</th>
-        <th style="width:7%;">Grade</th>
-        <th style="width:6%;">GP</th>
+        <th style="width:19%; text-align:left; padding-left:4px;">Subject</th>
+        ${activeExams.map(ex => `<th class="divider-col" style="font-size:7.5px; letter-spacing:-0.2px; padding:2px;">${ex}</th>`).join('')}
+        <th style="width:7%; color:#059669; font-size:7.5px; padding:2px; white-space:nowrap; letter-spacing:-0.2px;">Highest</th>
+        <th style="width:8%; font-size:7.5px; padding:2px; white-space:nowrap; letter-spacing:-0.2px;">Final<br>(100%)</th>
+        <th style="width:7%; font-size:7.5px; padding:2px; white-space:nowrap; letter-spacing:-0.2px;">Grade</th>
+        <th style="width:6%; font-size:7.5px; padding:2px; white-space:nowrap; letter-spacing:-0.2px;">GP</th>
       </tr>
     </thead>`;
     
@@ -1953,7 +1957,7 @@ function generateMarkSheets(examFilter, customTitle) {
             </div>
             <div class="rc-qr-card">
               <div class="rc-qr-box">${qrSvgHtml}</div>
-              <div class="rc-qr-meta"><span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br><span style="color:#475569; font-size:8px;">Scan QR code to verify transcript authenticity at <b>srms2012.edu.bd</b></span></div>
+              <div class="rc-qr-meta"><span class="rc-qr-badge"><i class="fas fa-shield-alt"></i> Scan to Verify</span><br><span style="color:#475569; font-size:7.5px; line-height:1.2; display:block; margin-top:2px;">Verify transcript authenticity instantly at <br><b>srms2012.edu.bd</b></span></div>
             </div>
           </div>
         </div>
