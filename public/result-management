@@ -319,18 +319,17 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 #print-content { margin: 0 auto; background: transparent; box-sizing: border-box; transition: 0.3s ease; }
 
-/* Marksheet Base - Fixed 190mm to completely avoid hardware margin clipping */
+/* Marksheet Base - Strict 100% Single Table Width Layout */
 .report-card {
-  width: 285mm; height: 190mm; min-height: 190mm; max-height: 190mm; margin: 0 auto 15mm auto; box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 3px double #005f40; padding: 4.5mm 6mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; margin: 0 auto 15mm auto; box-sizing: border-box; display: flex; flex-direction: column; border: 3px double #005f40; padding: 5mm 6.5mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
-/* Tabulation Base */
 .tab-page {
   box-sizing: border-box; display: flex; flex-direction: column; justify-content: space-between; border: 2.5px solid #005f40; padding: 4.5mm 5.5mm; border-radius: 6px; background: #ffffff; position: relative; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.25); margin: 0 auto 15mm auto;
 }
 
 #print-content.a4-landscape-preview { width: 285mm; }
-#print-content.a4-landscape-preview .tab-page { width: 285mm; height: 190mm; min-height: 190mm; max-height: 190mm; }
+#print-content.a4-landscape-preview .tab-page { width: 285mm; height: 192mm; min-height: 192mm; max-height: 192mm; }
 
 #print-content.a4-portrait-preview { width: 198mm; }
 #print-content.a4-portrait-preview .tab-page { width: 198mm; height: 283mm; min-height: 283mm; max-height: 283mm; padding: 5mm 4mm; }
@@ -343,10 +342,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .rc-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-24deg); font-size: 74px; font-weight: 900; color: rgba(0, 95, 64, 0.038); pointer-events: none; white-space: nowrap; z-index: 0; letter-spacing: 6px; }
 
-/* Structural Setup to enforce gaps */
 .rc-top-section { position: relative; z-index: 1; flex-shrink: 0; }
-.rc-middle-section { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; margin-top: 5px; min-height: 0; }
-.rc-bottom-section { position: relative; z-index: 1; flex-shrink: 0; margin-top: 15px; /* CRITICAL GAP ENFORCEMENT */ }
+/* Middle section uses flex:1 to take remaining space, forcing footer down */
+.rc-middle-section { position: relative; z-index: 1; flex: 1; display: flex; flex-direction: column; min-height: 0; margin-top: 5px; }
+/* Bottom section with explicit top margin to guarantee GAP */
+.rc-bottom-section { position: relative; z-index: 1; flex-shrink: 0; margin-top: 15px; }
 
 .school-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2.5px solid #005f40; padding-bottom: 5px; margin-bottom: 5px; gap: 10px; }
 .school-logo { width: 62px; height: 62px; border-radius: 50%; object-fit: contain; border: 2px solid #005f40; padding: 2px; background: #fff; }
@@ -362,40 +362,40 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 
 .legend-box { font-size: 8.8px; color: #005f40; background: #ecfdf5 !important; border: 1px dashed #005f40; padding: 3px 9px; border-radius: 4px; margin-bottom: 2px; display: flex; align-items:center; justify-content: center; font-weight: 700; gap: 15px; }
 
-.marks-wrapper { flex: 1; display: flex; justify-content: space-between; gap: 10px; width: 100%; align-items: flex-start; min-height: 0; }
-.marks-table { width: 100%; border-collapse: collapse; font-size: 9.5px; background: rgba(255, 255, 255, 0.92); table-layout: auto; margin-bottom: auto; }
+/* Fixed single table wrapper */
+.marks-wrapper { flex: 1; display: block; width: 100%; min-height: 0; }
+.marks-table { width: 100%; border-collapse: collapse; font-size: 9.5px; background: rgba(255, 255, 255, 0.92); table-layout: auto; }
 .marks-table th, .marks-table td { border: 1px solid #1e293b; padding: 3.5px 3px; text-align: center; vertical-align: middle; line-height: 1.18; white-space: nowrap; }
 .marks-table th { background-color: #e2e8f0 !important; font-weight: 800; color: #0f172a; font-size: 8.4px; text-transform: uppercase; }
 .marks-table td.sub-name { text-align: left; padding-left: 5px; padding-right: 4px; font-weight: 800; color: #0f172a; white-space: nowrap; }
 .marks-table td.highest-mark { background-color: #f1f5f9 !important; font-weight: 900; color: #0f172a; }
 .divider-col { border-right: 1.8px solid #000 !important; border-left: 1.8px solid #000 !important; }
 
-/* Dynamic Table Densities */
-.report-card.spacious-card .marks-table th, .report-card.spacious-card .marks-table td { padding: 5.5px 7px; font-size: 10.8px; }
-.report-card.standard-card .marks-table th, .report-card.standard-card .marks-table td { padding: 4.5px 4px; font-size: 9.6px; }
-.report-card.dense-card .marks-table th, .report-card.dense-card .marks-table td { padding: 3.5px 3px; font-size: 8.8px; }
-.report-card.ultra-dense-card .marks-table th, .report-card.ultra-dense-card .marks-table td { padding: 2.2px 2px; font-size: 8.2px; }
+/* Smart Density Classes to fit rows dynamically WITHOUT splitting the table */
+.report-card.spacious-card .marks-table th, .report-card.spacious-card .marks-table td { padding: 5px 6px; font-size: 10.5px; }
+.report-card.standard-card .marks-table th, .report-card.standard-card .marks-table td { padding: 3.5px 4px; font-size: 9.2px; }
+.report-card.dense-card .marks-table th, .report-card.dense-card .marks-table td { padding: 2px 2px; font-size: 8.4px; }
+.report-card.ultra-dense-card .marks-table th, .report-card.ultra-dense-card .marks-table td { padding: 1.5px 1px; font-size: 7.8px; line-height: 1.1; }
 
-/* Optimized QR and Strip Setup */
-.rc-overview-qr-strip { display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 8px; margin-top: auto; flex-shrink: 0; padding-top: 8px; }
+/* QR Strip adjusted to be more compact */
+.rc-overview-qr-strip { display: grid; grid-template-columns: 1.6fr 1fr 1fr; gap: 8px; align-items: stretch; margin-top: auto; padding-top: 8px; flex-shrink: 0; }
 .rc-ov-card { border: 1px solid #94a3b8; border-radius: 6px; background: #f8fafc !important; padding: 5px 9px; display: flex; flex-direction: column; justify-content: center; }
 .rc-ov-title { font-size: 8.6px; font-weight: 900; color: #005f40; text-transform: uppercase; border-bottom: 1px solid #cbd5e1; padding-bottom: 2.5px; margin-bottom: 4px; display: flex; justify-content: space-between; align-items: center; }
 
 .rc-qr-card { border: 1.5px solid #005f40; border-radius: 6px; background: #ecfdf5 !important; padding: 4px 6px; display: flex; align-items: center; gap: 8px; }
-.rc-qr-box { width: 52px; height: 52px; background: #fff !important; border: 1px solid #005f40; border-radius: 4px; padding: 2px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
+/* Reduced QR size significantly to save space */
+.rc-qr-box { width: 55px; height: 55px; background: #fff !important; border: 1px solid #005f40; border-radius: 4px; padding: 2px; flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
 .rc-qr-box svg { width: 100% !important; height: 100% !important; display: block; }
 .rc-qr-meta { font-size: 8px; line-height: 1.35; color: #0f172a; font-weight: 700; }
 .rc-qr-badge { display: inline-block; background: #005f40 !important; color: #fff !important; font-size: 7.5px; font-weight: 800; padding: 2px 6px; border-radius: 3px; margin-bottom: 3px; text-transform: uppercase; }
 
-/* Summary & Footer Space optimization */
-.summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.summary-box { border: 1.5px solid #005f40; padding: 6px 14px; width: 100%; border-radius: 6px; background: #f0fdf4 !important; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
 .summary-metrics { display: flex; gap: 16px; font-size: 11.5px; font-weight: 800; color: #005f40; align-items: center; }
 .remark-text { font-size: 10.5px; font-weight: 800; color: #0f172a; margin: 0; }
 
-.footer { display: flex; justify-content: space-between; align-items: flex-end; padding: 8px 16px 0 16px; }
+.footer { display: flex; justify-content: space-between; align-items: flex-end; padding: 0 16px; }
 .signature { border-top: 1.5px solid #000; width: 175px; text-align: center; padding-top: 3.5px; font-weight: 800; font-size: 10px; color: #000; text-transform: uppercase; }
 
-/* Tabulation Table */
 .tab-top-wrap { flex: 1; display: flex; flex-direction: column; min-height: 0; }
 .tab-table { width: 100%; border-collapse: collapse; font-size: 8.2px; text-align: center; table-layout: fixed; }
 .tab-table th { background: #e2e8f0 !important; padding: 3.5px 1.5px; border: 1px solid #000; font-weight: 800; color: #000; font-size: 7.8px; word-wrap: break-word; line-height: 1.15; }
@@ -424,8 +424,10 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   #print-area { display: block !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
   #print-content { width: 100% !important; margin: 0 !important; padding: 0 !important; }
   
-  .report-card { width: 100% !important; height: 190mm !important; min-height: 190mm !important; max-height: 190mm !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
+  .report-card { width: 100% !important; height: 192mm !important; min-height: 192mm !important; max-height: 192mm !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
+  
   .tab-page { width: 100% !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
+  
   .report-card:last-child, .tab-page:last-child { page-break-after: auto !important; }
 }
 </style>
@@ -988,13 +990,6 @@ async function openDataEntryForm(rowIndex) {
   }
 }
 
-// Helper to intelligently shorten part names to save horizontal space (e.g. "Written" -> "Wri.")
-function getShortPartName(name) {
-    if(name.toUpperCase() === 'MCQ') return 'MCQ';
-    if(name.length > 5) return name.substring(0, 3) + '.';
-    return name;
-}
-
 function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainWeight) {
   let examDetails = {}; 
   let tCalc = 0, mCalc = 0;
@@ -1014,15 +1009,13 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
            let obt = oParts[idx] || 0;
            if (obt > p.max) obt = p.max;
            sum += obt;
-           if (t.fm.parts.length > 1) {
-               let sName = getShortPartName(p.name);
-               badgeParts.push(`<span style="color:#334155;">${sName}:<b style="color:#0f172a;">${obt}</b></span>`);
-           }
+           if (t.fm.parts.length > 1) badgeParts.push(`<div style="color:#334155; margin-bottom:1px;">${p.name}: <b style="color:#0f172a;">${obt}</b></div>`);
         });
         tCalc += sum; totalTFull += t.fm.total;
       }
-      let partsStr = badgeParts.length > 0 ? badgeParts.join(" <span style='color:#cbd5e1; padding:0 1px;'>|</span> ") : "";
-      examDetails[t.name] = { hasMark, sum, type: "Test", fullMark: t.fm.total, partsStr };
+      let partsStr = badgeParts.length > 0 ? badgeParts.join("") : "";
+      let partsStrTab = badgeParts.length > 0 ? badgeParts.map(x => x.replace(/<[^>]*>?/gm, '')).join(", ") : "";
+      examDetails[t.name] = { hasMark, sum, type: "Test", fullMark: t.fm.total, partsStr, partsStrTab };
     }
   });
 
@@ -1038,10 +1031,7 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
             let obt = oParts[idx] || 0;
             if (obt > p.max) obt = p.max;
             sum += obt;
-            if (m.fm.parts.length > 1) {
-                let sName = getShortPartName(p.name);
-                badgeParts.push(`<span style="color:#334155;">${sName}:<b style="color:#0f172a;">${obt}</b></span>`);
-            }
+            if (m.fm.parts.length > 1) badgeParts.push(`<div style="color:#334155; margin-bottom:1px;">${p.name}: <b style="color:#0f172a;">${obt}</b></div>`);
             if (window.passConfig.reqIndividualPass && p.max > 0) {
                 if (obt < Math.ceil(p.max * (window.passConfig.passPercentage / 100))) {
                     isSubFail = true; specificFailReason = p.name;
@@ -1053,8 +1043,9 @@ function evaluateStudentSubjectForFilter(row, sub, examFilter, testWeight, mainW
             isSubFail = true; specificFailReason = "Total Marks";
         }
       }
-      let partsStr = badgeParts.length > 0 ? badgeParts.join(" <span style='color:#cbd5e1; padding:0 1px;'>|</span> ") : "";
-      examDetails[m.name] = { hasMark, sum, type: "Main", fullMark: m.fm.total, partsStr };
+      let partsStr = badgeParts.length > 0 ? badgeParts.join("") : "";
+      let partsStrTab = badgeParts.length > 0 ? badgeParts.map(x => x.replace(/<[^>]*>?/gm, '')).join(", ") : "";
+      examDetails[m.name] = { hasMark, sum, type: "Main", fullMark: m.fm.total, partsStr, partsStrTab };
     }
   });
 
@@ -1752,7 +1743,7 @@ function setPrintPageOrientation(orientation) {
     css = `@media print { @page { size: A3 portrait; margin: 5mm; } .tab-page { height: 406mm !important; min-height: 406mm !important; max-height: 406mm !important; } }`;
     contentEl.className = 'a3-portrait-preview';
   } else { // default a4-landscape
-    css = `@media print { @page { size: A4 landscape; margin: 5mm; } .tab-page { height: 190mm !important; min-height: 190mm !important; max-height: 190mm !important; } }`;
+    css = `@media print { @page { size: A4 landscape; margin: 5mm; } .tab-page { height: 192mm !important; min-height: 192mm !important; max-height: 192mm !important; } }`;
     contentEl.className = 'a4-landscape-preview';
   }
   styleEl.innerHTML = css;
@@ -1820,14 +1811,11 @@ function generateMarkSheets(examFilter, customTitle) {
 
   let classStats = { totalStudents: 0, evaluatedStudents: 0, passed: 0, failed: 0, highestMarks: 0, gpaSum: 0, grades: { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0 } };
   let studentEvaluations = [];
+  let subjectHighestMap = {};
 
   let activeExams = [];
   parsed.examSeq.forEach(ex => { if (examFilter === "All" || ex === examFilter) activeExams.push(ex); });
-  // Determine which exam gets the detailed parts breakdown (only the last one for multiple exams to save space)
   let lastExamName = activeExams.length > 0 ? activeExams[activeExams.length - 1] : "";
-
-  // Pre-calculate class highest mark for each subject
-  let subjectHighestMap = {};
 
   data.forEach(row => {
     if (!row[0] && !row[1]) return; classStats.totalStudents++;
@@ -1890,11 +1878,10 @@ function generateMarkSheets(examFilter, customTitle) {
       let tdExamsHtml = activeExams.map(exName => {
          let d = ev.examDetails[exName];
          if(d && d.hasMark) {
-             // Smart logic: Only show detailed compact breakdown for the last selected exam to save row height
              if (exName === lastExamName && d.partsStr) {
-                 return `<td class="divider-col"><div style="font-size:7.5px; line-height:1.2; margin-bottom:2px; white-space:nowrap;">${d.partsStr}</div><b style="color:#005f40; font-size:9.5px;">${d.sum}</b></td>`;
+                 return `<td class="divider-col"><div style="display:flex; flex-direction:column; gap:1px; margin-bottom:2px; font-size:8.5px; text-align:center;">${d.partsStr}</div><div style="border-top:1px dashed #cbd5e1; padding-top:2px; font-weight:900; font-size:9.5px; color:#005f40;">Total: ${d.sum}</div></td>`;
              } else {
-                 return `<td class="divider-col"><b style="font-size:9.5px;">${d.sum}</b></td>`;
+                 return `<td class="divider-col"><b>${d.sum}</b></td>`;
              }
          }
          return `<td class="divider-col">-</td>`;
@@ -1904,18 +1891,24 @@ function generateMarkSheets(examFilter, customTitle) {
           <td class="sub-name">${sr.actualSubName}</td>
           ${tdExamsHtml}
           <td class="highest-mark"><b style="color:#0f172a; font-size:9.5px;">${subjectHighestMap[sr.rawSubName] || '-'}</b></td>
-          <td><b style="font-size:9.5px;">${ev.finalMark}</b></td>
-          <td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'}; font-size:9.5px;">${ev.subGrade}</strong></td>
-          <td><strong style="font-size:9.5px;">${ev.subGP.toFixed(2)}</strong></td>
+          <td><b>${ev.finalMark}</b></td>
+          <td><strong style="color:${ev.subGrade === 'F' ? '#dc2626' : '#005f40'};">${ev.subGrade}</strong></td>
+          <td><strong>${ev.subGP.toFixed(2)}</strong></td>
         </tr>`;
     });
 
-    var teacherRemark = dispGrade === "F" ? `Failed in: ${item.failedSubNames.length > 0 ? item.failedSubNames.join(", ") : "Subject(s)"} — Needs Special Care` : (dispGrade === "A+" ? "Outstanding Performance!" : (dispGrade === "A" ? "Very Good Result! Strive for A+." : (dispGrade === "A-" ? "Good Academic Performance." : (dispGrade === "B" ? "Satisfactory Result." : "Needs More Effort & Regular Study."))));
+    var teacherRemark = dispGrade === "F" ? `Failed in: ${item.failedSubNames.length > 0 ? item.failedSubNames.join(", ") : "Subject(s)"} — Needs Special Care` : (dispGrade === "A+" ? "Outstanding Performance! Keep it up." : (dispGrade === "A" ? "Very Good Result! Strive for A+." : (dispGrade === "A-" ? "Good Academic Performance." : (dispGrade === "B" ? "Satisfactory Result." : "Needs More Effort & Regular Study."))));
     
-    let subCount = rowsHtmlArray.length; let tierClass = "standard-card"; var finalTableHtml = "";
-    if (subCount <= 6) { tierClass = "spacious-card"; finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;">${theadHtml}<tbody>${rowsHtmlArray.join("")}</tbody></table></div>`; } 
-    else if (subCount <= 12) { tierClass = "standard-card"; var half = Math.ceil(subCount / 2); finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half).join("")}</tbody></table><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half).join("")}</tbody></table></div>`; } 
-    else { tierClass = "dense-card"; var half2 = Math.ceil(subCount / 2); finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(0, half2).join("")}</tbody></table><table class="marks-table" style="width: 49.4%;">${theadHtml}<tbody>${rowsHtmlArray.slice(half2).join("")}</tbody></table></div>`; }
+    let subCount = rowsHtmlArray.length; 
+    let tierClass = "standard-card";
+    
+    // FULL WIDTH SINGLE TABLE LOGIC ALWAYS
+    if (subCount <= 6) tierClass = "spacious-card";
+    else if (subCount <= 9) tierClass = "standard-card";
+    else if (subCount <= 12) tierClass = "dense-card";
+    else tierClass = "ultra-dense-card";
+    
+    var finalTableHtml = `<div class="marks-wrapper"><table class="marks-table" style="width: 100%;">${theadHtml}<tbody>${rowsHtmlArray.join("")}</tbody></table></div>`;
 
     let vHash = generateVerifyHash(id, rawClassName, year, dispGPA, dispGrade, filterTotalMarks);
     let subStr = item.subRows.map(sr => `${sr.actualSubName.replace(/<[^>]*>?/gm, '').trim()}_${sr.ev.finalMark}_${sr.ev.subGrade}`).join(',');
@@ -2092,13 +2085,11 @@ function buildTabulationPagesForOrientation(orientation, examFilter, customTitle
          tr += `<td>-</td>`;
       } else {
          let ev = match.ev;
-         // Compact tabulation formatting
          let cellContentHtml = activeExams.map(exName => {
            let d = ev.examDetails[exName];
            if(d && d.hasMark) {
-              if (activeExams.length === 1 && d.partsStr) {
-                  let cleanedTabStr = d.partsStr.replace(/<[^>]*>?/gm, '').replace(/\|/g, ',');
-                  return `<span style="color:#334155;">${cleanedTabStr}</span>`;
+              if (activeExams.length === 1 && d.partsStrTab) {
+                  return `<span style="color:#334155;">${d.partsStrTab}</span>`;
               } else {
                   return `<span style="color:#334155;">${exName}: <b>${d.sum}</b></span>`;
               }
