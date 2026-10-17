@@ -124,16 +124,17 @@
 
   /* Split Wrapper for Test vs Main Exam */
   .dt-exam-split { display: flex; align-items: stretch; gap: 12px; width: 100%; }
-  .dt-test-section { flex: 1; background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 90px; }
+  .dt-test-section { flex: 1; background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(148, 163, 184, 0.2); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 100px; }
   .dt-divider { width: 2px; background: linear-gradient(to bottom, transparent, #475569, transparent); flex-shrink: 0; }
-  .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 8px 10px; display: flex; flex-direction: column; justify-content: center; }
-  .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 6px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
+  .dt-main-section { flex: 2.6; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(56, 189, 248, 0.25); border-radius: 12px; padding: 10px; display: flex; flex-direction: column; justify-content: center; }
+  .dt-section-title { font-size: 9.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.8px; color: #94a3b8; text-align: center; margin-bottom: 8px; border-bottom: 1px dashed rgba(255,255,255,0.08); padding-bottom: 4px; width: 100%; }
   .dt-main-section .dt-section-title { color: #38bdf8; }
   
-  /* Horizontal scrolling for multiple main exams */
-  .dt-main-flex { display: flex; flex-wrap: nowrap; overflow-x: auto; gap: 4px; padding-bottom: 4px; align-items: stretch; justify-content: center; }
+  /* Flexible wrapping for multiple main exams to prevent scrolling */
+  .dt-main-flex { display: flex; flex-wrap: wrap; gap: 8px; padding-bottom: 4px; justify-content: center; align-items: stretch; }
+  .dt-exam-card { background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.05); padding: 8px; border-radius: 10px; display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1 1 120px; }
 
-  .mark-group { background: rgba(30, 41, 59, 0.7); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.04); }
+  .mark-group { background: rgba(30, 41, 59, 0.8); padding: 6px 8px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.05); flex: 1; min-width: 40px; }
   .mark-label { font-size: 9.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; text-align:center; }
   .mark-val { font-size: 14px; font-weight: 800; color: #f8fafc; text-align: center; word-break: break-word; }
   
@@ -281,7 +282,7 @@
 <div id="liveClassModal" class="modal-overlay"><div class="modal-content"><span class="close-btn" onclick="closeModal('liveClassModal')">×</span><div id="liveClassModalBody"></div></div></div>
 
 <div id="resultModal" class="modal-overlay">
-    <div class="modal-content" style="max-width:780px; background: #0f172a; padding: 0;">
+    <div class="modal-content" style="max-width:850px; width:95%; background: #0f172a; padding: 0;">
         <span class="close-btn" onclick="closeModal('resultModal')" style="color:#fff; top:15px; right:20px; z-index:100;">×</span>
         <div id="resultModalBody" style="padding:0;"></div>
     </div>
@@ -357,7 +358,6 @@
   let std = null;
   let markSheetHTML = "";
   
-  // Variables for Security and Attendance
   let resettingDocId = null; 
   let resettingStudentID = null;
   let allStudentAttendance = {}; 
@@ -373,7 +373,6 @@
       try { return JSON.parse(str); } catch (e) { return fallback; }
   }
 
-  // 🛡️ Auth Restoration on Page Reload
   window.onload = function() {
     const savedUser = sessionStorage.getItem('srms_student_session');
     if (savedUser) {
@@ -390,7 +389,6 @@
   function loader(s) { document.getElementById('loader').style.display = s ? 'flex' : 'none'; }
   function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 
-  // 🚀 Non-Stop Crash-Proof Login Flow with JS SDK
   async function handleLogin() {
     const id = sanitizeHTML(document.getElementById('stuID').value.trim());
     let pass = document.getElementById('stuPass').value.trim();
@@ -472,9 +470,6 @@
     document.getElementById('login-container').style.display = "flex";
   }
 
-  // ==========================================
-  // FORGOT PASSWORD LOGIC 
-  // ==========================================
   function openForgotPassModal() {
     document.getElementById('fpStep1').style.display = 'block'; document.getElementById('fpStep2').style.display = 'none'; document.getElementById('fpStep3').style.display = 'none';
     document.getElementById('fpID').value = ''; document.getElementById('fpOTP').value = ''; document.getElementById('fpNewPass').value = ''; document.getElementById('fpMsg').innerText = '';
@@ -507,7 +502,6 @@
   async function verifyOTP() {
     const entered = sanitizeHTML(document.getElementById('fpOTP').value.trim());
     if(!entered) return;
-
     const btns = document.getElementById('fpStep2').getElementsByTagName('button');
     const verifyBtn = btns[0];
     verifyBtn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> VERIFYING..."; verifyBtn.disabled = true;
@@ -521,14 +515,12 @@
             document.getElementById('fpMsg').innerHTML = `<span style="color:#059669;">✅ OTP Verified! You can now set a new password.</span>`;
         } else { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">${sanitizeHTML(data.message)}</span>`; }
     } catch(e) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Verification Failed. Network Error!</span>`; }
-    
     verifyBtn.innerHTML = "VERIFY OTP"; verifyBtn.disabled = false;
   }
 
   async function saveResetPassword() {
     const newPass = document.getElementById('fpNewPass').value.trim();
     if(newPass.length < 6) { document.getElementById('fpMsg').innerHTML = `<span style="color:var(--danger);">Password must be at least 6 characters.</span>`; return; }
-    
     const btn = document.getElementById('btnSaveReset'); btn.innerHTML = "<span class='loader-spinner' style='border-top-color:#fff;'></span> SAVING..."; btn.disabled = true;
 
     try {
@@ -548,16 +540,12 @@
     }
   }
 
-  // =====================================================================
-  // DASHBOARD INITIALIZATION & ADVANCED RESULT PARSER
-  // =====================================================================
   async function initDash() { 
     if (!std) return;
     document.getElementById('uName').innerText = "Hello, " + std.name;
     document.getElementById('uMeta').innerText = `ID: ${std.id} | Class: ${std.class}${std.group ? ` (${std.group})` : ''} | Roll: ${std.roll}`;
     
     try {
-        // Fetch Warnings using JS SDK
         const warnSnap = await db.collection("Warnings").where("studentID", "==", std.id).get();
         if (!warnSnap.empty) {
             let warn = warnSnap.docs[0].data();
@@ -565,7 +553,6 @@
             document.getElementById('noticeText').innerText = sanitizeHTML(warn.message);
         }
 
-        // Result Logic
         if(std.resultStatus === "Published" && std.resultMarks && Array.isArray(std.resultMarks) && std.resultMarks.length > 0) {
             let rawCls = String(std.class).trim();
             let headerClsName = (rawCls === "Play" || rawCls === "Nursery" || rawCls === "KG" || rawCls.toLowerCase().startsWith("class")) ? rawCls : "Class " + rawCls;
@@ -620,7 +607,6 @@
       } catch(e) { box.innerHTML = "<div style='padding:15px; color:var(--danger); text-align:center; font-weight:600;'>Materials sync error.</div>"; }
   }
 
-  // 💡 Helper to Extract Subject, Exam Name & Exam Type from Header
   function extractPortalSubAndExam(headerText) {
       if(!headerText) return { sub: "Unknown", exam: "Exam", type: "Test" };
       let clean = String(headerText).replace(/\[.*?\]/g, '').replace(/\([^)]+\)/g, '').trim();
@@ -631,7 +617,6 @@
       return { sub: clean, exam: "Exam", type: "Test" };
   }
 
-  // 💡 Smart Subject, Test Sequence & Main Exam Sequence Parser
   function parsePortalHeaders(headers) {
       let firstEmpty = headers.indexOf("");
       if(firstEmpty === -1) firstEmpty = headers.length;
@@ -680,7 +665,6 @@
       return { subjects, testSeq, mainSeq, firstEmpty };
   }
 
-  // 💡 Digital Marksheet Renderer (Top Summary + Sequences + Separated Test & Main Exam Breakdown)
   function renderResults(h, d) {
       let parsed = parsePortalHeaders(h);
       let firstEmpty = parsed.firstEmpty;
@@ -732,20 +716,21 @@
                       });
 
                       let examBlock = `
-                        <div style="display:flex; flex-direction:column; align-items:center; gap:5px;">
-                          <span style="font-size:9px; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed #334155; padding-bottom:2px;">${sanitizeHTML(examNameStr)}</span>
-                          <div style="display:flex; gap:6px;">${boxesHtml}</div>
+                        <div class="dt-exam-card">
+                          <span style="font-size:9.5px; color:#cbd5e1; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px dashed #475569; padding-bottom:2px; width: 100%; text-align: center;">${sanitizeHTML(examNameStr)}</span>
+                          <div style="display:flex; gap:6px; flex-wrap: wrap; justify-content: center;">${boxesHtml}</div>
                         </div>`;
-
-                      if(mainBreakdownHtml !== "") {
-                          mainBreakdownHtml += `<div style="display:flex; align-items:center; color:#475569; font-size:24px; font-weight:300; margin: 0 8px;">/</div>`;
-                      }
+                      
                       mainBreakdownHtml += examBlock;
                   }
               });
               
               if(mainBreakdownHtml === "" && sub.mains.length > 0) {
-                 mainBreakdownHtml = `<div class="mark-group"><div class="mark-label">Total</div><div class="mark-val" style="color:#38bdf8;">-</div></div>`;
+                 mainBreakdownHtml = `
+                    <div class="dt-exam-card">
+                        <span style="font-size:9.5px; color:#cbd5e1; font-weight:700; text-transform:uppercase; border-bottom:1px dashed #475569; padding-bottom:2px; width:100%; text-align:center;">Result</span>
+                        <div class="mark-group"><div class="mark-label">Total</div><div class="mark-val" style="color:#38bdf8;">-</div></div>
+                    </div>`;
               }
 
               if(tVals.length > 0 || mainBreakdownHtml !== "") {
@@ -943,7 +928,6 @@
 
   function openSecurityModal() { document.getElementById('newPass').value = ""; document.getElementById('passMsg').innerText = ""; document.getElementById('securityModal').style.display = 'flex'; }
 
-  // 🚀 DIRECT & INSTANT PASSWORD CHANGE (Firebase Auth + Firestore)
   async function updatePassword() {
     const p = document.getElementById('newPass').value.trim(); 
     const msgBox = document.getElementById('passMsg');
@@ -986,8 +970,6 @@
                     directSuccess = true;
                 }
             }
-
-            // Direct Firestore Database update
             await db.collection("Students").doc(docId).update({ pass: p });
             directSuccess = true;
         }
@@ -998,9 +980,7 @@
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "updatePassword", docId: docId, id: std ? std.id : "", newPass: p })
             });
-        } catch (scriptErr) {
-            console.log("Background script sync notice:", scriptErr);
-        }
+        } catch (scriptErr) { console.log("Background script sync notice:", scriptErr); }
 
         if (directSuccess) {
             sessionStorage.setItem('srms_active_pass', p);
