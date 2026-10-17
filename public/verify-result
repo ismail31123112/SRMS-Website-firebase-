@@ -179,7 +179,7 @@
     <div id="initLoader">
         <div class="spinner-core"></div>
         <h3 style="color:var(--main); margin:0; font-weight:900; letter-spacing: 0.5px;">Authenticating Document...</h3>
-        <p style="color:#64748b; font-size:14px; font-weight:600; margin:8px 0 0 0;">Connecting to srms2012.edu.bd secure server</p>
+        <p style="color:#64748b; font-size:14px; font-weight:600; margin:8px 0 0 0;" id="loadingText">Verifying cryptographic security hash...</p>
     </div>
 
     <!-- SUCCESS VERIFIED CARD -->
@@ -200,7 +200,7 @@
             <div class="v-details">
                 <table class="v-table-info">
                     <tr><td>Student Name</td><td id="vName">...</td></tr>
-                    <tr><td>Student ID / Roll</td><td id="vId">...</td></tr>
+                    <tr><td>Student ID</td><td id="vId">...</td></tr>
                     <tr><td>Class / Group</td><td id="vClass">...</td></tr>
                     <tr><td>Roll No</td><td id="vRoll">...</td></tr>
                     <tr><td>Session</td><td id="vYear">...</td></tr>
@@ -261,7 +261,7 @@
     <div class="v-card" id="errorCard">
         <i class="fas fa-shield-xmark"></i>
         <h2>INVALID OR TAMPERED DOCUMENT</h2>
-        <p>The security hash does not match the provided data or the record was not found in the live database. This transcript has been altered or generated from an unauthorized source.</p>
+        <p>The security hash does not match the provided data, or the record was not found. This transcript has been altered or generated from an unauthorized source.</p>
         <a href="https://srms2012.edu.bd/" class="btn-home"><i class="fas fa-home"></i> Return to Official Homepage</a>
     </div>
 
@@ -313,7 +313,7 @@
         }
     }
 
-    // Cryptographic Integrity Check (For Offline QR Mode)
+    // Cryptographic Integrity Check (MUST match exactly with ERP Generator)
     function verifyHash(id, cls, yr, gpa, grade, totalMarks, providedHash) {
         let raw = `SRMS|${id}|${cls}|${yr}|${gpa}|${grade}|${totalMarks}|2012`;
         let h1 = 0x811c9dc5;
@@ -346,15 +346,16 @@
         const pHash = params.get('v');
         const pSubStr = params.get('sub');
 
-        // 1. Smart Redirect (If no ID provided)
+        // 1. Smart Redirect (If no ID provided, go to home page immediately)
         if (!pId) {
             window.location.replace("https://srms2012.edu.bd/");
             return;
         }
 
-        // 2. Check Verification Mode
-        // If the URL has 'marks' and 'hash', use the quick offline local check
-        if (pHash && pMarks) {
+        // 2. Check Verification Mode (Offline URL Hash vs Online DB Fetch)
+        if (pHash && pMarks && pCls) {
+            // MODE 1: OFFLINE VERIFICATION VIA URL HASH
+            document.getElementById('loadingText').innerText = "Verifying cryptographic security hash via URL...";
             setTimeout(() => {
                 const isValid = verifyHash(pId, pCls, pYr, pGpa, pGrade, pMarks, pHash);
                 if (isValid) {
@@ -363,13 +364,13 @@
                     showErrorUI();
                 }
             }, 900);
-        } 
-        // 3. LIVE DATABASE FETCH (If only ID is provided)
-        else {
+        } else {
+            // MODE 2: ONLINE VERIFICATION VIA DATABASE (APPS SCRIPT)
+            document.getElementById('loadingText').innerText = "Connecting to SRMS live secure database...";
+            
             fetch(`${WEB_APP_URL}?action=verify&id=${pId}`)
                 .then(response => response.json())
                 .then(data => {
-                    // Assuming your Apps Script returns a JSON object on success
                     if (data && data.success) {
                         renderResultUI(data.id, data.name, data.cls, data.roll, data.yr, data.exam, data.marks, data.gpa, data.grade, data.merit, data.hash, data.sub);
                     } else {
@@ -377,13 +378,13 @@
                     }
                 })
                 .catch(error => {
-                    console.error("Error fetching data from Google Sheets:", error);
+                    console.error("Database connection error:", error);
                     showErrorUI();
                 });
         }
     };
 
-    // UI Rendering Logic
+    // UI Rendering Logic (Works for both Offline and Online modes)
     function renderResultUI(id, name, cls, roll, yr, exam, marks, gpa, grade, merit, hash, subStr) {
         document.getElementById('initLoader').style.display = 'none';
         document.getElementById('topNav').style.display = 'flex';
@@ -391,7 +392,7 @@
         document.getElementById('footerArea').style.display = 'block';
         document.getElementById('successCard').style.display = 'block';
 
-        // *** CLEAN URL FEATURE (Hide parameters) ***
+        // *** CLEAN URL FEATURE (Hide parameters for security & clean look) ***
         window.history.replaceState({}, document.title, window.location.pathname);
 
         // Auto-generate avatar based on name
@@ -409,7 +410,7 @@
         document.getElementById('vGPA').innerText = gpa || 'N/A';
         document.getElementById('vGrade').innerText = grade || 'N/A';
         document.getElementById('vMerit').innerText = merit || 'N/A';
-        document.getElementById('vHashCode').innerText = hash || 'VERIFIED-BY-DB';
+        document.getElementById('vHashCode').innerText = hash || 'VERIFIED-DB';
 
         // If Failed
         if (grade === "F") {
@@ -443,7 +444,7 @@
         }
     }
 
-    // Error Handling
+    // Error UI
     function showErrorUI() {
         document.getElementById('initLoader').style.display = 'none';
         document.getElementById('topNav').style.display = 'flex';
