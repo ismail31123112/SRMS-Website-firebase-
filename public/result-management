@@ -500,7 +500,10 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
     </div>
 
     <div id="feature-panel">
-      <select id="yearSelector" title="শিক্ষাবর্ষ (আনলিমিটেড)"></select>
+      <div style="display: flex; gap: 8px;">
+         <select id="yearSelector" title="শিক্ষাবর্ষ (আনলিমিটেড)" onchange="loadData()"></select>
+         <button class="btn-reset" onclick="deleteYearDataPopup()" title="নির্বাচিত সালের সম্পূর্ণ ডেটা মুছুন" style="padding: 10px 14px;"><i class="fas fa-trash-alt"></i></button>
+      </div>
 
       <div class="weight-controls">
         <strong style="font-size:12.5px; color:var(--main);">নম্বর বণ্টন:</strong>
@@ -559,7 +562,8 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 var SERVER_TOKEN = "<?= serverToken ?>";
-var appData = [];
+var appData = []; // UI display format for the selected year
+var appMarksMaps = []; // Holds the full JSON map of years for each student
 var cachedHeaders = [];
 window.cachedGlobalExams = []; 
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
@@ -754,6 +758,34 @@ async function configPassRules() {
   }
 }
 
+async function deleteYearDataPopup() {
+  var cls = document.getElementById("classSelector").value;
+  var yr = document.getElementById("yearSelector").value;
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন।', 'warning');
+  
+  const { isConfirmed } = await swalPro.fire({
+      title: 'ডেটা রিসেট/ডিলিট করবেন?',
+      html: `আপনি কি নিশ্চিত যে <b>${cls}</b> শ্রেণির <b>${yr}</b> সালের সমস্ত ফলাফল ডেটা মুছে ফেলতে চান?<br><br><span style="color:#ef4444; font-size:12px; font-weight:700;">(অন্যান্য সালের ডেটা সম্পূর্ণ সুরক্ষিত থাকবে)</span>`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'হ্যাঁ, মুছে ফেলুন',
+      cancelButtonText: 'বাতিল'
+  });
+
+  if (isConfirmed) {
+      showLoader(true, "ডেটা মুছে ফেলা হচ্ছে...");
+      try {
+          let res = await apiCall('deleteYearData', { className: cls, year: yr });
+          showLoader(false);
+          swalPro.fire('সফল!', res.msg, 'success');
+          loadData();
+      } catch (err) {
+          showLoader(false);
+          swalPro.fire('ত্রুটি', err.message, 'error');
+      }
+  }
+}
+
 async function loadData() {
   if (!isAuthReady) return;
   var className = document.getElementById("classSelector").value;
@@ -771,6 +803,7 @@ async function loadData() {
     else if (rawCls.toLowerCase().includes("arts")) { searchGroup = "Arts"; rawCls = rawCls.replace(/Arts/i, "").trim(); }
     else if (rawCls.toLowerCase().includes("commerce")) { searchGroup = "Commerce"; rawCls = rawCls.replace(/Commerce/i, "").trim(); }
     let searchClass = rawCls.replace(/Class/i, "").trim();
+    let selectedYear = document.getElementById("yearSelector").value;
 
     const [headerDoc, snap] = await Promise.all([
       db.collection('ClassHeaders').doc(docName).get(),
@@ -782,15 +815,34 @@ async function loadData() {
       : ["ID", "Name", "Roll", "", "Total Avg", "GPA", "Grade", "Position", "Fail_Reason", "Year", "Pass_Marks_Rules"];
 
     appData = [];
+    appMarksMaps = [];
+    
     snap.forEach(doc => {
       let f = doc.data();
       let dbGroup = f.group ? String(f.group).trim() : "";
       if (searchGroup === "" || dbGroup.toLowerCase() === searchGroup.toLowerCase()) {
-        let row = new Array(cachedHeaders.length + 2).fill("");
+        
+        // Year-wise Map Resolution
+        let marksMap = {};
+        if (f.resultMarks) { 
+           try { 
+               let parsed = JSON.parse(f.resultMarks); 
+               if(Array.isArray(parsed)) {
+                   marksMap[selectedYear] = parsed; 
+               } else {
+                   marksMap = parsed;
+               }
+           } catch (e) {} 
+        }
+
+        let row = marksMap[selectedYear] ? [...marksMap[selectedYear]] : new Array(cachedHeaders.length + 2).fill("");
         row[0] = f.studentID || ""; row[1] = f.name || ""; row[2] = f.roll || "";
-        if (f.resultMarks) { try { let marks = JSON.parse(f.resultMarks); for (let i = 3; i < cachedHeaders.length; i++) { if (marks[i] !== undefined) row[i] = marks[i]; } } catch (e) {} }
-        row[cachedHeaders.length] = f.phone || ""; row[cachedHeaders.length + 1] = doc.id;
+        
+        row[cachedHeaders.length] = f.phone || ""; 
+        row[cachedHeaders.length + 1] = doc.id;
+        
         appData.push(row);
+        appMarksMaps.push(marksMap);
       }
     });
 
@@ -987,7 +1039,13 @@ async function openDataEntryForm(rowIndex) {
     try {
       let rowDocId = appData[rowIndex][cachedHeaders.length + 1];
       let cleanMarksToSave = appData[rowIndex].slice(0, cachedHeaders.length);
-      await db.collection('Students').doc(rowDocId).update({ resultMarks: JSON.stringify(cleanMarksToSave), resultStatus: "Calculated" });
+      let activeYear = document.getElementById("yearSelector").value;
+      
+      // Update specific year in the map
+      if(!appMarksMaps[rowIndex]) appMarksMaps[rowIndex] = {};
+      appMarksMaps[rowIndex][activeYear] = cleanMarksToSave;
+      
+      await db.collection('Students').doc(rowDocId).update({ resultMarks: JSON.stringify(appMarksMaps[rowIndex]), resultStatus: "Calculated" });
     } catch (err) { swalPro.fire('ত্রুটি', err.message, 'error'); }
   }
 }
@@ -1818,7 +1876,6 @@ function generateMarkSheets(examFilter, customTitle) {
   let activeExams = [];
   parsed.examSeq.forEach(ex => { if (examFilter === "All" || ex === examFilter) activeExams.push(ex); });
 
-  // First Pass: Evaluate everything and collect highest class marks dynamically
   data.forEach(row => {
     if (!row[0] && !row[1]) return; classStats.totalStudents++;
     let subRows = []; let filterTotalMarks = 0; let filterTotalRegularGP = 0; let filterOptExtraGP = 0; let filterRegularSubCount = 0; let filterTotalSubCount = 0; let filterIsFail = false; let failedSubNames = [];
