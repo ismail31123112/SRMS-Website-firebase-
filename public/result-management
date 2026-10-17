@@ -1258,7 +1258,7 @@ window.openEditGlobalExamModal = async function(idx) {
     title: 'পরীক্ষার নাম পরিবর্তন',
     html: `
       <div style="text-align:left; font-size:12px; color:#047857; background:#ecfdf5; padding:12px; border-radius:10px; border:1px solid #a7f3d0; margin-bottom:12px;">
-        <i class="fas fa-info-circle"></i> এখানে নাম পরিবর্তন করলে সকল ক্লাসে স্বয়ংক্রিয়ভাবে আপডেট হবে।
+        <i class="fas fa-info-circle"></i> এখানে নাম পরিবর্তন করলে সকল ক্লাসে স্বয়ংক্রিয়ভাবে আপডেট হবে.
       </div>
       <input id="editExN" class="swal2-input" value="${exam.name.replace(/"/g, '&quot;')}" style="width:94%; margin:6px auto;">
       <select id="editExT" class="swal2-input" style="width:94%; height:46px; margin:10px auto; font-weight:800; color:var(--main);">
@@ -1427,8 +1427,7 @@ async function manageClassSubjectsPopup() {
       <div class="mgr-list-item">
         <div>
           <div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-bottom:6px;">
-            <b style="font-size:16px; color:var(--main);"><i class="fas fa-book"></i> ${sName}</b>
-            ${sub.isOpt ? `<span class="mgr-badge" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a;">৪র্থ বিষয়</span>` : `<span class="mgr-badge" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;">আবশ্যিক</span>`}
+            <b style="font-size:16px; color:var(--main);"><i class="fas fa-book"></i> ${sName}</b>${sub.isOpt ? `<span class="mgr-badge" style="background:#fffbeb; color:#b45309; border:1px solid #fde68a;">৪র্থ বিষয়</span>` : `<span class="mgr-badge" style="background:#ecfdf5; color:#047857; border:1px solid #a7f3d0;">আবশ্যিক</span>`}
           </div>
           <div>${exSummary}</div>
         </div>
@@ -1594,7 +1593,7 @@ async function linkExamToSubjectsPopup() {
     let sub = parsed.subjects[sName]; let hasPending = sub.tests.length === 0 && sub.mains.length === 0;
     return `
       <label style="display:flex; align-items:center; justify-content:space-between; background:#fff; padding:10px 14px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:8px; cursor:pointer; font-size:13.5px; font-weight:800;">
-        <span><input type="checkbox" class="bulk-link-sub-chk" value="${sName}" checked style="width:18px; height:18px; accent-color:var(--main); margin-right:8px;"> ${sName} ${sub.isOpt ? '<small style="color:#b45309;">(4th)</small>' : ''}</span>
+        <span><input type="checkbox" class="bulk-link-sub-chk" value="${sName}" checked style="width:18px; height:18px; accent-color:var(--main); margin-right:8px;"> ${sName}${sub.isOpt ? '<small style="color:#b45309;">(4th)</small>' : ''}</span>
         ${hasPending ? '<span style="font-size:11px; background:#fff7ed; color:#c2410c; padding:3px 10px; border-radius:10px; border:1px solid #fdba74;">Pending</span>' : ''}
       </label>`;
   }).join('');
@@ -1708,7 +1707,7 @@ function viewSingleResult(rowIndex) {
   var html = `<div style="text-align:left; background:#fff; padding:15px; border-radius:12px;">
     <div style="background:#f8fafc; padding:12px 16px; border-radius:10px; border:1px solid #cbd5e1; margin-bottom:12px;">
       <b style="color:var(--main); font-size:16px;">${row[1]}</b><br>
-      <span style="font-size:13px; color:#475569;">ID: <b>${row[0]}</b> | রোল: <b>${row[2]}</b></span>
+      <span style="font-size:13px; color:#475569;">ID: <b>${row[0]}</b> \vert{} রোল: <b>${row[2]}</b></span>
     </div>`;
 
   if (firstEmpty !== -1 && row[firstEmpty + 2]) {
@@ -1888,7 +1887,7 @@ function generateMarkSheets(examFilter) {
           <div class="school-header">
             <img src="${SCHOOL_LOGO}" class="school-logo" alt="Logo">
             <div class="header-center"><h1>SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p class="school-address">Sultan Nagar, Saidpur, Nilphamari | School Code: 481931 | EMIS Code: 00704061312</p></div>
-            <div class="transcript-badge-wrap"><div class="transcript-title">Academic Transcript — ${examFilter === "All" ? "Final Result" : examFilter} (${year})</div><div class="grade-scale-mini">80-100:A+(5.0) | 70-79:A(4.0) | 60-69:A-(3.5) | 50-59:B(3.0) | 40-49:C(2.0) | 33-39:D(1.0)</div></div>
+            <div class="transcript-badge-wrap"><div class="transcript-title">Academic Transcript — ${examFilter === "All" ? "Final Result" : examFilter} (${year})</div></div>
           </div>
           <table class="student-info"><tr><td width="30%">Student Name: <b style="color:#005f40; font-size:11px; text-transform:uppercase;">${name}</b></td><td width="18%">Student ID: <b>${id}</b></td><td width="22%">Class: <b>${baseClassName}</b> (${groupName})</td><td width="15%">Roll No: <b>${roll}</b></td><td width="15%">Issued: <b>${issueDateStr}</b></td></tr></table>
           ${legendHtml}
@@ -1970,13 +1969,23 @@ function buildTabulationPagesForOrientation(orientation) {
   setPrintPageOrientation(orientation); var cls = document.getElementById("classSelector").value; var year = document.getElementById("yearSelector").value;
   var testWeight = parseFloat(document.getElementById('testWeight').value) || 25; var mainWeight = parseFloat(document.getElementById('mainWeight').value) || 75;
   var parsed = parseSubjectHeaders(cachedHeaders); var firstEmpty = parsed.firstEmpty; if (firstEmpty === -1) return;
-  var stats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0 }; var validRows = [];
+  var stats = { 'A+': 0, 'A': 0, 'A-': 0, 'B': 0, 'C': 0, 'D': 0, 'F': 0, 'Total': 0, 'Evaluated': 0 }; var validRows = [];
 
   appData.forEach(row => {
-    if (!row[0] && !row[1]) return; stats['Total']++; validRows.push(row); var g = row[firstEmpty + 3];
-    if (g === 'Incomplete') return; if (stats[g] !== undefined) stats[g]++; else stats['F']++;
+    if (!row[0] && !row[1]) return;
+    stats['Total']++;
+    validRows.push(row);
+    var g = row[firstEmpty + 3];
+    if (!g || g === '' || g === '-') return; 
+    if (g === 'Incomplete') return;
+    
+    stats['Evaluated']++;
+    if (stats[g] !== undefined) stats[g]++;
+    else if (g === 'F') stats['F']++;
   });
-  var passed = stats['Total'] - stats['F']; var passRate = stats['Total'] > 0 ? ((passed / stats['Total']) * 100).toFixed(2) : "0.00"; var subKeys = Object.keys(parsed.subjects);
+  var passed = stats['Evaluated'] - stats['F']; 
+  var passRate = stats['Evaluated'] > 0 ? ((passed / stats['Evaluated']) * 100).toFixed(2) : "0.00"; 
+  var subKeys = Object.keys(parsed.subjects);
 
   var theadHtml = `<thead><tr><th style="width:3.2%;">Roll</th><th style="width:11%; text-align:left; padding-left:3px;">Student Name &amp; ID</th>`;
   subKeys.forEach(subName => { let sub = parsed.subjects[subName]; let htmlLabel = sub.isOpt ? `${subName}<br><span style="font-size:6.5px; color:#b45309;">(4th)</span>` : subName; theadHtml += `<th>${htmlLabel}</th>`; });
@@ -2009,7 +2018,7 @@ function buildTabulationPagesForOrientation(orientation) {
   var pagesArr = [];
   for (let i = 0; i < bodyRowsHtml.length; i += rowsPerPage) pagesArr.push(bodyRowsHtml.slice(i, i + rowsPerPage)); if (pagesArr.length === 0) pagesArr.push([]);
 
-  var summaryTableHtml = `<div style="margin-top:6px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:96%; margin-left:auto; margin-right:auto; page-break-inside:avoid;"><table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;"><tr style="font-weight:800; background:#e2e8f0; color:#005f40;"><td style="border:1px solid #000; padding:2.5px;">Total Students</td><td style="border:1px solid #000; padding:2.5px;">Passed</td><td style="border:1px solid #000; padding:2.5px;">Failed</td><td style="border:1px solid #000; padding:2.5px;">Pass Rate</td><td style="border:1px solid #000; padding:2.5px;">A+</td><td style="border:1px solid #000; padding:2.5px;">A</td><td style="border:1px solid #000; padding:2.5px;">A-</td><td style="border:1px solid #000; padding:2.5px;">B</td><td style="border:1px solid #000; padding:2.5px;">C</td><td style="border:1px solid #000; padding:2.5px;">D</td></tr><tr style="font-weight:800; background:#fff;"><td style="border:1px solid #000; padding:3px;">${stats['Total']}</td><td style="border:1px solid #000; padding:3px; color:#059669;">${passed}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td><td style="border:1px solid #000; padding:3px;">${passRate}%</td><td style="border:1px solid #000; padding:3px;">${stats['A+']}</td><td style="border:1px solid #000; padding:3px;">${stats['A']}</td><td style="border:1px solid #000; padding:3px;">${stats['A-']}</td><td style="border:1px solid #000; padding:3px;">${stats['B']}</td><td style="border:1px solid #000; padding:3px;">${stats['C']}</td><td style="border:1px solid #000; padding:3px;">${stats['D']}</td></tr></table></div>`;
+  var summaryTableHtml = `<div style="margin-top:6px; border:1.5px solid #005f40; border-radius:5px; overflow:hidden; width:96%; margin-left:auto; margin-right:auto; page-break-inside:avoid;"><table style="width:100%; border-collapse:collapse; font-size:8px; text-align:center;"><tr style="font-weight:800; background:#e2e8f0; color:#005f40;"><td style="border:1px solid #000; padding:2.5px;">Examinees</td><td style="border:1px solid #000; padding:2.5px;">Passed</td><td style="border:1px solid #000; padding:2.5px;">Failed</td><td style="border:1px solid #000; padding:2.5px;">Pass Rate</td><td style="border:1px solid #000; padding:2.5px;">A+</td><td style="border:1px solid #000; padding:2.5px;">A</td><td style="border:1px solid #000; padding:2.5px;">A-</td><td style="border:1px solid #000; padding:2.5px;">B</td><td style="border:1px solid #000; padding:2.5px;">C</td><td style="border:1px solid #000; padding:2.5px;">D</td><td style="border:1px solid #000; padding:2.5px;">F</td></tr><tr style="font-weight:800; background:#fff;"><td style="border:1px solid #000; padding:3px;">${stats['Evaluated']}</td><td style="border:1px solid #000; padding:3px; color:#059669;">${passed}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td><td style="border:1px solid #000; padding:3px;">${passRate}%</td><td style="border:1px solid #000; padding:3px;">${stats['A+']}</td><td style="border:1px solid #000; padding:3px;">${stats['A']}</td><td style="border:1px solid #000; padding:3px;">${stats['A-']}</td><td style="border:1px solid #000; padding:3px;">${stats['B']}</td><td style="border:1px solid #000; padding:3px;">${stats['C']}</td><td style="border:1px solid #000; padding:3px;">${stats['D']}</td><td style="border:1px solid #000; padding:3px; color:#dc2626;">${stats['F']}</td></tr></table></div>`;
 
   var totalPages = pagesArr.length; var pageOrientClass = orientation + "-page";
   
@@ -2019,7 +2028,7 @@ function buildTabulationPagesForOrientation(orientation) {
   
   var finalPagesHtml = pagesArr.map((pageRows, pageIdx) => {
     var isLastPage = (pageIdx === totalPages - 1);
-    return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap"><div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;"><img src="${SCHOOL_LOGO}" alt="Logo" style="height:40px; width:40px; border-radius:50%; border:1.5px solid #005f40; padding:1.5px;"><div><h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p></div><div style="text-align:right;"><div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">Total: ${stats['Total']} | Pass: ${passed} (${passRate}%)</div><div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div></div></div><div class="legend-box" style="margin-bottom:3px; font-size:8px; padding:2px 6px; display:flex; flex-wrap:wrap; gap:5px;"><span><b>Tests Included (${testWeight}%):</b> ${activeTests}</span><span><b>Main Exams (${mainWeight}%):</b> ${activeMains}</span><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Req." : "Subject Pass"} (${window.passConfig.passPercentage}%)</span></div><table class="tab-table${densityClass}">${theadHtml}<tbody>${pageRows.join('')}</tbody></table>${isLastPage ? summaryTableHtml : ''}</div><div class="tab-fixed-signatures"><div class="tab-sig-box">Prepared &amp; Tabulated By</div><div class="tab-sig-box">Exam Controller</div><div class="tab-sig-box">Principal / Headmaster</div></div></div>`;
+    return `<div class="tab-page ${pageOrientClass}"><div class="tab-top-wrap"><div style="text-align:center; margin-bottom:4px; border-bottom:2px solid #005f40; padding-bottom:3px; display:flex; align-items:center; justify-content:space-between;"><img src="${SCHOOL_LOGO}" alt="Logo" style="height:40px; width:40px; border-radius:50%; border:1.5px solid #005f40; padding:1.5px;"><div><h1 style="margin:0; font-size:16.5px; color:#005f40; text-transform:uppercase; font-weight:900; font-family:'Times New Roman', serif;">SAIDPUR RESIDENTIAL MODEL SCHOOL</h1><p style="margin:1px 0 0 0; color:#334155; font-size:9.5px; font-weight:800;">OFFICIAL MASTER TABULATION SHEET — ${cls.toUpperCase()} (SESSION: ${year})</p></div><div style="text-align:right;"><div style="font-size:9px; font-weight:800; background:#ecfdf5; border:1px solid #005f40; padding:2px 7px; border-radius:8px; color:#005f40;">Examinees: ${stats['Evaluated']} | Pass: ${passed} (${passRate}%)</div><div style="font-size:7.5px; font-weight:700; color:#475569; margin-top:2px;">Page ${pageIdx + 1} of ${totalPages}</div></div></div><div class="legend-box" style="margin-bottom:3px; font-size:8px; padding:2px 6px; display:flex; flex-wrap:wrap; gap:5px;"><span><b>Tests Included (${testWeight}%):</b> ${activeTests}</span><span><b>Main Exams (${mainWeight}%):</b> ${activeMains}</span><span><b>Pass Rule:</b> ${window.passConfig.reqIndividualPass ? "Individual Pass Req." : "Subject Pass"} (${window.passConfig.passPercentage}%)</span></div><table class="tab-table${densityClass}">${theadHtml}<tbody>${pageRows.join('')}</tbody></table>${isLastPage ? summaryTableHtml : ''}</div><div class="tab-fixed-signatures"><div class="tab-sig-box">Prepared &amp; Tabulated By</div><div class="tab-sig-box">Exam Controller</div><div class="tab-sig-box">Principal / Headmaster</div></div></div>`;
   }).join('');
   document.getElementById('print-content').innerHTML = finalPagesHtml;
 }
