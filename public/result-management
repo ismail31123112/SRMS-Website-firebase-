@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Saidpur Residential Model School — Ultimate Result & Transcript Portal</title>
+<title>Saidpur Residential Model School — Ultimate Result & Archive Portal</title>
 <link rel="icon" href="https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg" type="image/jpeg">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
@@ -76,7 +76,7 @@ body {
   padding: 24px 30px;
   border-radius: 20px;
   box-shadow: 0 12px 35px rgba(0, 95, 64, 0.08);
-  margin-bottom: 25px;
+  margin-bottom: 15px;
   border-top: 6px solid var(--main);
   border-bottom: 1px solid #e2e8f0;
   animation: fadeInUp 0.4s ease-out forwards;
@@ -118,6 +118,20 @@ body {
   font-size: 13px;
   color: var(--text-muted);
   font-weight: 600;
+}
+
+#archiveBanner {
+  display: none;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.3);
+  animation: fadeInUp 0.4s ease;
 }
 
 .control-group { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
@@ -180,6 +194,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-report { background: linear-gradient(135deg, #d97706, #b45309); }
 .btn-publish { background: linear-gradient(135deg, #059669, #047857); font-weight: 800; }
 .btn-config { background: linear-gradient(135deg, #be185d, #9d174d); }
+.btn-archive { background: linear-gradient(135deg, #8b5cf6, #6d28d9); font-weight: 800; }
+.btn-del-archive { background: linear-gradient(135deg, #dc2626, #991b1b); font-weight: 800; }
 .btn-back { background: #f1f5f9; color: var(--text-dark); border: 1.5px solid #cbd5e1; }
 .btn-back:hover { background: var(--main); color: #fff; border-color: var(--main); }
 
@@ -398,14 +414,12 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 .tab-table th { background: #e2e8f0 !important; padding: 3.5px 1.5px; border: 1px solid #000; font-weight: 800; color: #000; font-size: 7.8px; word-wrap: break-word; line-height: 1.15; }
 .tab-table td { padding: 2.8px 1.5px; border: 1px solid #000; vertical-align: middle; font-size: 7.8px; font-weight: 600; line-height: 1.18; color: #000; overflow: hidden; }
 
-/* Responsive adjustments inside Print Preview for Tabulations */
 #print-content.a4-portrait-preview .tab-table th, #print-content.a3-portrait-preview .tab-table th, #print-content.a3-landscape-preview .tab-table th { font-size: 6.5px; padding: 3px 1px; }
 #print-content.a4-portrait-preview .tab-table td, #print-content.a3-portrait-preview .tab-table td, #print-content.a3-landscape-preview .tab-table td { font-size: 6.4px; padding: 3.5px 1px; }
 
 .tab-cell-lines { font-size: 7.2px; line-height: 1.18; text-align: left; padding: 0 1px; white-space: nowrap; }
 #print-content.a4-portrait-preview .tab-cell-lines, #print-content.a3-portrait-preview .tab-cell-lines, #print-content.a3-landscape-preview .tab-cell-lines { font-size: 5.9px; line-height: 1.16; padding: 0; }
 
-/* Dynamic Density classes for scaling Tabulation when subjects are high */
 .tab-table.very-dense th, .tab-table.very-dense td { font-size: 6.5px !important; padding: 2px 1px !important; line-height: 1.1; }
 .tab-table.very-dense .tab-cell-lines { font-size: 6px !important; }
 .tab-table.extremely-dense th, .tab-table.extremely-dense td { font-size: 5.5px !important; padding: 1.5px 0.5px !important; line-height: 1.05; }
@@ -422,17 +436,11 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
   #appContainer { display: none !important; }
   #print-area { display: block !important; background: transparent !important; padding: 0 !important; margin: 0 !important; }
   #print-content { width: 100% !important; margin: 0 !important; padding: 0 !important; }
-  
-  /* Marksheet is strictly A4 Landscape */
   .report-card { width: 100% !important; height: auto !important; min-height: 196mm !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
-  
-  /* Tabulation takes height from dynamic inline print styles */
   .tab-page { width: 100% !important; margin: 0 !important; box-shadow: none !important; page-break-after: always !important; break-inside: avoid !important; }
-  
   .report-card:last-child, .tab-page:last-child { page-break-after: auto !important; }
 }
 </style>
-<!-- Style element for Dynamic Print Page sizing (@page) injected via JS -->
 <style id="dynamicPrintPageStyle">
   @media print { @page { size: A4 landscape; margin: 5mm; } }
 </style>
@@ -467,6 +475,8 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
       </div>
       <button class="btn-back" onclick="window.close();" title="ড্যাশবোর্ডে ফিরে যান"><i class="fas fa-sign-out-alt"></i> প্রস্থান</button>
     </div>
+    
+    <div id="archiveBanner"><i class="fas fa-history"></i> আপনি একটি আর্কাইভ ডেটা দেখছেন। এই ডেটা শুধুমাত্র দেখা এবং প্রিন্ট করা যাবে।</div>
 
     <div class="control-group">
       <select id="classSelector" style="min-width:210px; font-weight:800; color:var(--main);">
@@ -495,16 +505,14 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
           <option value="Class 10 Commerce">Class 10 Commerce</option>
         </optgroup>
       </select>
+      
+      <select id="yearSelector" title="শিক্ষাবর্ষ (আনলিমিটেড)"></select>
+
       <button class="btn-open" onclick="loadData()"><i class="fa-solid fa-folder-open"></i> শিক্ষার্থীর তথ্য লোড করুন</button>
-      <button class="btn-reset" onclick="setupSheetHeader()"><i class="fa-solid fa-rotate"></i> ফরম্যাট রিসেট</button>
+      <button class="btn-reset live-only" onclick="setupSheetHeader()"><i class="fa-solid fa-rotate"></i> ফরম্যাট রিসেট</button>
     </div>
 
     <div id="feature-panel">
-      <div style="display: flex; gap: 8px;">
-         <select id="yearSelector" title="শিক্ষাবর্ষ (আনলিমিটেড)" onchange="loadData()"></select>
-         <button class="btn-reset" onclick="deleteYearDataPopup()" title="নির্বাচিত সালের সম্পূর্ণ ডেটা মুছুন" style="padding: 10px 14px;"><i class="fas fa-trash-alt"></i></button>
-      </div>
-
       <div class="weight-controls">
         <strong style="font-size:12.5px; color:var(--main);">নম্বর বণ্টন:</strong>
         <label style="font-size:12.5px;">Test <input type="number" id="testWeight" value="25">%</label>
@@ -512,19 +520,22 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
         <label style="font-size:12.5px;">Main <input type="number" id="mainWeight" value="75">%</label>
       </div>
 
-      <button class="btn-config" onclick="configPassRules()"><i class="fa-solid fa-gears"></i> পাসের নিয়মাবলি (Global Config)</button>
+      <button class="btn-config live-only" onclick="configPassRules()"><i class="fa-solid fa-gears"></i> পাসের নিয়মাবলি</button>
+      
+      <button class="btn-archive live-only" onclick="archiveCurrentData()"><i class="fas fa-archive"></i> ডেটা আর্কাইভ করুন</button>
+      <button class="btn-del-archive archive-only" onclick="deleteArchiveData()"><i class="fas fa-trash-alt"></i> আর্কাইভ ডিলিট করুন</button>
 
-      <button class="btn-tool" onclick="manageGlobalExamsPopup()"><i class="fa-solid fa-calendar-check"></i> পরীক্ষা ব্যবস্থাপনা</button>
-      <button class="btn-add-sub" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> + বিষয় যুক্ত করুন</button>
-      <button class="btn-edit-sub" onclick="manageClassSubjectsPopup()"><i class="fa-solid fa-sliders"></i> বিষয় এডিট / মুছুন</button>
-      <button class="btn-link-ex" onclick="linkExamToSubjectsPopup()"><i class="fa-solid fa-link"></i> বর্তমান ক্লাসে পরীক্ষা যুক্ত</button>
+      <button class="btn-tool live-only" onclick="manageGlobalExamsPopup()"><i class="fa-solid fa-calendar-check"></i> পরীক্ষা ব্যবস্থাপনা</button>
+      <button class="btn-add-sub live-only" onclick="addNewSubjectPopup()"><i class="fa-solid fa-book-medical"></i> + বিষয় যুক্ত করুন</button>
+      <button class="btn-edit-sub live-only" onclick="manageClassSubjectsPopup()"><i class="fa-solid fa-sliders"></i> বিষয় এডিট / মুছুন</button>
+      <button class="btn-link-ex live-only" onclick="linkExamToSubjectsPopup()"><i class="fa-solid fa-link"></i> পরীক্ষা যুক্ত</button>
 
-      <button class="btn-calc" onclick="calculateAllResults()"><i class="fa-solid fa-calculator"></i> ফলাফল ও মেধাক্রম হিসাব</button>
+      <button class="btn-calc live-only" onclick="calculateAllResults()"><i class="fa-solid fa-calculator"></i> ফলাফল হিসাব</button>
 
       <button class="btn-print" onclick="printTabulation()"><i class="fa-solid fa-table"></i> ট্যাবুলেশন শিট</button>
       <button class="btn-report" onclick="openPrintMarksheetPopup()"><i class="fa-solid fa-award"></i> মার্কশিট প্রিন্ট</button>
 
-      <div style="display:flex; align-items:center; gap:8px; background:#ecfdf5; padding:6px 14px; border-radius:12px; border:1.5px solid #10b981;">
+      <div class="live-only" style="display:flex; align-items:center; gap:8px; background:#ecfdf5; padding:6px 14px; border-radius:12px; border:1.5px solid #10b981;">
         <input type="checkbox" id="smsPublishChk" checked style="width:20px; height:20px; accent-color:#047857; cursor:pointer;">
         <label for="smsPublishChk" style="font-weight:800; font-size:13px; color:#047857; cursor:pointer;">SMS প্রেরণ</label>
         <button class="btn-publish" onclick="publishResults()"><i class="fa-solid fa-paper-plane"></i> ফলাফল প্রকাশ</button>
@@ -562,12 +573,12 @@ const db = firebase.firestore();
 const auth = firebase.auth();
 
 var SERVER_TOKEN = "<?= serverToken ?>";
-var appData = []; // UI display format for the selected year
-var appMarksMaps = []; // Holds the full JSON map of years for each student
+var appData = [];
 var cachedHeaders = [];
 window.cachedGlobalExams = []; 
 var SCHOOL_LOGO = "https://i.postimg.cc/9FxBsqsj/IMG-20251220-WA0006.jpg";
 var isAuthReady = false;
+var isArchiveMode = false; // Flag to identify if we are viewing archived data
 
 window.passConfig = {
   passPercentage: 33,
@@ -758,96 +769,139 @@ async function configPassRules() {
   }
 }
 
-async function deleteYearDataPopup() {
+function updateUIMode() {
+    if(isArchiveMode) {
+        document.getElementById('archiveBanner').innerHTML = `<i class="fas fa-history"></i> আপনি <b>${document.getElementById("yearSelector").value}</b> সালের আর্কাইভ ডেটা দেখছেন। এটি শুধুমাত্র রিড-অন্লি (Read-Only)।`;
+        document.getElementById('archiveBanner').style.display = 'block';
+        document.querySelectorAll('.live-only').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.archive-only').forEach(el => el.style.display = 'inline-flex');
+    } else {
+        document.getElementById('archiveBanner').style.display = 'none';
+        document.querySelectorAll('.live-only').forEach(el => el.style.display = 'inline-flex');
+        document.querySelectorAll('.archive-only').forEach(el => el.style.display = 'none');
+    }
+}
+
+async function archiveCurrentData() {
   var cls = document.getElementById("classSelector").value;
   var yr = document.getElementById("yearSelector").value;
-  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন।', 'warning');
-  
-  const { isConfirmed } = await swalPro.fire({
-      title: 'ডেটা রিসেট/ডিলিট করবেন?',
-      html: `আপনি কি নিশ্চিত যে <b>${cls}</b> শ্রেণির <b>${yr}</b> সালের সমস্ত ফলাফল ডেটা মুছে ফেলতে চান?<br><br><span style="color:#ef4444; font-size:12px; font-weight:700;">(অন্যান্য সালের ডেটা সম্পূর্ণ সুরক্ষিত থাকবে)</span>`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'হ্যাঁ, মুছে ফেলুন',
-      cancelButtonText: 'বাতিল'
-  });
+  if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন!', 'warning');
 
-  if (isConfirmed) {
-      showLoader(true, "ডেটা মুছে ফেলা হচ্ছে...");
+  swalPro.fire({
+    title: 'ডেটা আর্কাইভ করবেন?',
+    html: `আপনি <b>${cls}</b> এর বর্তমান লাইভ ডেটা <b>${yr}</b> সালে আর্কাইভ করতে যাচ্ছেন।<br><br><span style="color:#dc2626; font-weight:800;">সতর্কতা: আর্কাইভ হওয়ার পর বর্তমান ডেটাবেসের সকল মার্কস মুছে গিয়ে নতুন বছরের জন্য একদম ফাঁকা (Blank) হয়ে যাবে!</span>`,
+    icon: 'warning', showCancelButton: true, confirmButtonText: 'হ্যাঁ, আর্কাইভ করুন', cancelButtonText: 'বাতিল'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      showLoader(true, "ডেটা আর্কাইভ করা হচ্ছে এবং নতুন বছরের জন্য সিস্টেম রিসেট করা হচ্ছে...");
       try {
-          let res = await apiCall('deleteYearData', { className: cls, year: yr });
-          showLoader(false);
-          swalPro.fire('সফল!', res.msg, 'success');
-          loadData();
-      } catch (err) {
-          showLoader(false);
-          swalPro.fire('ত্রুটি', err.message, 'error');
-      }
-  }
+        let res = await apiCall('archiveData', { className: cls, year: yr });
+        showLoader(false);
+        if (res.status === "success") { 
+            await swalPro.fire('আলহামদুলিল্লাহ!', res.msg, 'success'); 
+            loadData(); 
+        }
+      } catch (err) { showLoader(false); swalPro.fire('ত্রুটি', err.message, 'error'); }
+    }
+  });
+}
+
+async function deleteArchiveData() {
+  var cls = document.getElementById("classSelector").value;
+  var yr = document.getElementById("yearSelector").value;
+
+  swalPro.fire({
+    title: 'আর্কাইভ চিরতরে ডিলিট করবেন?',
+    html: `আপনি <b>${cls}</b> এর <b>${yr}</b> সালের আর্কাইভ ডিলিট করতে যাচ্ছেন। এটি আর ফিরে পাওয়া যাবে না!`,
+    icon: 'error', showCancelButton: true, confirmButtonText: 'হ্যাঁ, ডিলিট করুন', cancelButtonText: 'বাতিল'
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      showLoader(true, "আর্কাইভ ডিলিট করা হচ্ছে...");
+      try {
+        let res = await apiCall('deleteArchive', { className: cls, year: yr });
+        showLoader(false);
+        if (res.status === "success") { 
+            await swalPro.fire('সম্পন্ন!', res.msg, 'success'); 
+            loadData(); 
+        }
+      } catch (err) { showLoader(false); swalPro.fire('ত্রুটি', err.message, 'error'); }
+    }
+  });
 }
 
 async function loadData() {
   if (!isAuthReady) return;
   var className = document.getElementById("classSelector").value;
+  var selectedYear = document.getElementById("yearSelector").value;
   if (!className) return swalPro.fire('লক্ষ্য করুন', 'অনুগ্রহ করে প্রথমে একটি শ্রেণি নির্বাচন করুন।', 'warning');
 
   showLoader(true, "তথ্য লোড হচ্ছে...<br><span style='font-size:11px; color:#64748b;'>শিক্ষার্থী ও বিষয়ের তালিকা প্রস্তুত করা হচ্ছে</span>");
   document.getElementById("feature-panel").style.display = "none";
   document.getElementById("quickSearchBar").style.display = "none";
   document.getElementById("student-list-container").innerHTML = "";
+  document.getElementById("archiveBanner").style.display = "none";
 
   try {
     let docName = className.replace(/\s+/g, '_');
-    let rawCls = className.trim(); let searchGroup = "";
-    if (rawCls.toLowerCase().includes("science")) { searchGroup = "Science"; rawCls = rawCls.replace(/Science/i, "").trim(); }
-    else if (rawCls.toLowerCase().includes("arts")) { searchGroup = "Arts"; rawCls = rawCls.replace(/Arts/i, "").trim(); }
-    else if (rawCls.toLowerCase().includes("commerce")) { searchGroup = "Commerce"; rawCls = rawCls.replace(/Commerce/i, "").trim(); }
-    let searchClass = rawCls.replace(/Class/i, "").trim();
-    let selectedYear = document.getElementById("yearSelector").value;
-
-    const [headerDoc, snap] = await Promise.all([
-      db.collection('ClassHeaders').doc(docName).get(),
-      db.collection('Students').where('class', '==', searchClass).get()
-    ]);
-
-    cachedHeaders = (headerDoc.exists && headerDoc.data().headers)
-      ? JSON.parse(headerDoc.data().headers)
-      : ["ID", "Name", "Roll", "", "Total Avg", "GPA", "Grade", "Position", "Fail_Reason", "Year", "Pass_Marks_Rules"];
-
-    appData = [];
-    appMarksMaps = [];
     
-    snap.forEach(doc => {
-      let f = doc.data();
-      let dbGroup = f.group ? String(f.group).trim() : "";
-      if (searchGroup === "" || dbGroup.toLowerCase() === searchGroup.toLowerCase()) {
+    // Check for Archive FIRST
+    let archiveDoc = await db.collection('Archives').doc(docName + '_' + selectedYear).get();
+    
+    appData = [];
+    
+    if (archiveDoc.exists) {
+        isArchiveMode = true;
+        let aData = archiveDoc.data();
+        cachedHeaders = JSON.parse(aData.headers);
+        let snapshot = JSON.parse(aData.students);
         
-        // Year-wise Map Resolution
-        let marksMap = {};
-        if (f.resultMarks) { 
-           try { 
-               let parsed = JSON.parse(f.resultMarks); 
-               if(Array.isArray(parsed)) {
-                   marksMap[selectedYear] = parsed; 
-               } else {
-                   marksMap = parsed;
-               }
-           } catch (e) {} 
-        }
+        snapshot.forEach(f => {
+            let row = new Array(cachedHeaders.length + 2).fill("");
+            row[0] = f.studentID || ""; row[1] = f.name || ""; row[2] = f.roll || "";
+            if (f.resultMarks) { 
+                try { 
+                    let marks = JSON.parse(f.resultMarks); 
+                    for (let i = 3; i < cachedHeaders.length; i++) { 
+                        if (marks[i] !== undefined) row[i] = marks[i]; 
+                    } 
+                } catch (e) {} 
+            }
+            row[cachedHeaders.length] = f.phone || ""; row[cachedHeaders.length + 1] = f.id;
+            appData.push(row);
+        });
+    } else {
+        isArchiveMode = false;
+        let rawCls = className.trim(); let searchGroup = "";
+        if (rawCls.toLowerCase().includes("science")) { searchGroup = "Science"; rawCls = rawCls.replace(/Science/i, "").trim(); }
+        else if (rawCls.toLowerCase().includes("arts")) { searchGroup = "Arts"; rawCls = rawCls.replace(/Arts/i, "").trim(); }
+        else if (rawCls.toLowerCase().includes("commerce")) { searchGroup = "Commerce"; rawCls = rawCls.replace(/Commerce/i, "").trim(); }
+        let searchClass = rawCls.replace(/Class/i, "").trim();
 
-        let row = marksMap[selectedYear] ? [...marksMap[selectedYear]] : new Array(cachedHeaders.length + 2).fill("");
-        row[0] = f.studentID || ""; row[1] = f.name || ""; row[2] = f.roll || "";
-        
-        row[cachedHeaders.length] = f.phone || ""; 
-        row[cachedHeaders.length + 1] = doc.id;
-        
-        appData.push(row);
-        appMarksMaps.push(marksMap);
-      }
-    });
+        const [headerDoc, snap] = await Promise.all([
+          db.collection('ClassHeaders').doc(docName).get(),
+          db.collection('Students').where('class', '==', searchClass).get()
+        ]);
+
+        cachedHeaders = (headerDoc.exists && headerDoc.data().headers)
+          ? JSON.parse(headerDoc.data().headers)
+          : ["ID", "Name", "Roll", "", "Total Avg", "GPA", "Grade", "Position", "Fail_Reason", "Year", "Pass_Marks_Rules"];
+
+        snap.forEach(doc => {
+          let f = doc.data();
+          let dbGroup = f.group ? String(f.group).trim() : "";
+          if (searchGroup === "" || dbGroup.toLowerCase() === searchGroup.toLowerCase()) {
+            let row = new Array(cachedHeaders.length + 2).fill("");
+            row[0] = f.studentID || ""; row[1] = f.name || ""; row[2] = f.roll || "";
+            if (f.resultMarks) { try { let marks = JSON.parse(f.resultMarks); for (let i = 3; i < cachedHeaders.length; i++) { if (marks[i] !== undefined) row[i] = marks[i]; } } catch (e) {} }
+            row[cachedHeaders.length] = f.phone || ""; row[cachedHeaders.length + 1] = doc.id;
+            appData.push(row);
+          }
+        });
+    }
 
     appData.sort((a, b) => (parseInt(a[2]) || 9999) - (parseInt(b[2]) || 9999));
     showLoader(false);
+    updateUIMode();
     renderStudentCards();
     document.getElementById("feature-panel").style.display = "flex";
     document.getElementById("quickSearchBar").style.display = "flex";
@@ -862,7 +916,7 @@ function renderStudentCards() {
   var container = document.getElementById("student-list-container");
   var firstEmpty = cachedHeaders.indexOf("");
   if (appData.length === 0) {
-    container.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding: 45px; color:#94a3b8; background:#fff; border-radius:16px; border:2px dashed #cbd5e1;"><i class="fa-solid fa-users-slash fa-3x"></i><br><h3 style="margin:12px 0 0 0;">এই শ্রেণিতে কোনো শিক্ষার্থী পাওয়া যায়নি</h3></div>';
+    container.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; padding: 45px; color:#94a3b8; background:#fff; border-radius:16px; border:2px dashed #cbd5e1;"><i class="fa-solid fa-users-slash fa-3x"></i><br><h3 style="margin:12px 0 0 0;">${isArchiveMode ? 'এই সালের কোনো আর্কাইভ ডেটা নেই' : 'এই শ্রেণিতে কোনো শিক্ষার্থী পাওয়া যায়নি'}</h3></div>`;
     return;
   }
   let cardsHtml = [];
@@ -875,6 +929,8 @@ function renderStudentCards() {
     var resClass = 'result-mini';
     if (grade === 'F') resClass += ' failed'; if (grade === 'Incomplete') resClass += ' incomp';
 
+    let editButtonHtml = isArchiveMode ? '' : `<button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> নম্বর ইনপুট</button>`;
+
     cardsHtml.push(`
       <div class="student-card" data-search="${String(name + ' ' + id + ' ' + roll).toLowerCase()}">
         <div class="card-header">
@@ -886,7 +942,7 @@ function renderStudentCards() {
           <div class="${resClass}"><span>GPA: ${gpa}</span><span>Grade: ${grade}</span></div>
         </div>
         <div class="card-footer">
-          <button class="btn-edit-marks" onclick="openDataEntryForm(${index})"><i class="fa-solid fa-pen-to-square"></i> নম্বর ইনপুট</button>
+          ${editButtonHtml}
           <button class="btn-view-result" onclick="viewSingleResult(${index})"><i class="fa-solid fa-eye"></i> ফলাফল দেখুন</button>
         </div>
       </div>
@@ -918,6 +974,8 @@ window.updateDynamicSplitSum = function(colIdx) {
 };
 
 async function openDataEntryForm(rowIndex) {
+  if (isArchiveMode) return swalPro.fire('সতর্কতা', 'আর্কাইভ ডেটা এডিট করা সম্ভব নয়।', 'error');
+
   var rowData = appData[rowIndex];
   var parsed = parseSubjectHeaders(cachedHeaders);
 
@@ -1039,13 +1097,7 @@ async function openDataEntryForm(rowIndex) {
     try {
       let rowDocId = appData[rowIndex][cachedHeaders.length + 1];
       let cleanMarksToSave = appData[rowIndex].slice(0, cachedHeaders.length);
-      let activeYear = document.getElementById("yearSelector").value;
-      
-      // Update specific year in the map
-      if(!appMarksMaps[rowIndex]) appMarksMaps[rowIndex] = {};
-      appMarksMaps[rowIndex][activeYear] = cleanMarksToSave;
-      
-      await db.collection('Students').doc(rowDocId).update({ resultMarks: JSON.stringify(appMarksMaps[rowIndex]), resultStatus: "Calculated" });
+      await db.collection('Students').doc(rowDocId).update({ resultMarks: JSON.stringify(cleanMarksToSave), resultStatus: "Calculated" });
     } catch (err) { swalPro.fire('ত্রুটি', err.message, 'error'); }
   }
 }
@@ -1876,6 +1928,7 @@ function generateMarkSheets(examFilter, customTitle) {
   let activeExams = [];
   parsed.examSeq.forEach(ex => { if (examFilter === "All" || ex === examFilter) activeExams.push(ex); });
 
+  // First Pass: Evaluate everything and collect highest class marks dynamically
   data.forEach(row => {
     if (!row[0] && !row[1]) return; classStats.totalStudents++;
     let subRows = []; let filterTotalMarks = 0; let filterTotalRegularGP = 0; let filterOptExtraGP = 0; let filterRegularSubCount = 0; let filterTotalSubCount = 0; let filterIsFail = false; let failedSubNames = [];
@@ -2191,6 +2244,7 @@ function buildTabulationPagesForOrientation(orientation, examFilter, customTitle
 }
 
 function publishResults() {
+  if (isArchiveMode) return swalPro.fire('সতর্কতা', 'আর্কাইভ থেকে রেজাল্ট পাবলিশ করা যাবে না।', 'error');
   var cls = document.getElementById("classSelector").value; if (!cls) return swalPro.fire('লক্ষ্য করুন', 'প্রথমে শ্রেণি নির্বাচন করুন!', 'warning');
   var yr = document.getElementById("yearSelector").value; var sendSms = document.getElementById('smsPublishChk').checked;
   swalPro.fire({ title: 'ফলাফল প্রকাশ করবেন?', html: `আপনি <b>${cls}</b>-এর চূড়ান্ত ফলাফল প্রকাশ করতে যাচ্ছেন।<br>${sendSms ? '<b style="color:#059669;">সকল শিক্ষার্থীর অভিভাবকের মোবাইলে SMS ও Email পাঠানো হবে!</b>' : ''}`, icon: 'question', showCancelButton: true, cancelButtonText: 'বাতিল', confirmButtonText: 'হ্যাঁ, প্রকাশ করুন' })
