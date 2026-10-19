@@ -562,7 +562,7 @@ button:disabled { opacity: 0.6; cursor: not-allowed; }
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"></script>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxo0od8ZzHy7WaNDUJybjjqcISZf5fJLIN2CG2KiTN3r5f5uyWLclcw-nj4ugrK7_t/exec";
+const SCRIPT_URL = "https://api.srms2012.edu.bd/api/result-management";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBhzidG1s5CsOaiY0RsBG6GJcrE12LLEuU",
