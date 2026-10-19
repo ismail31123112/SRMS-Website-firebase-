@@ -543,7 +543,7 @@
     const successBox = document.getElementById('adm-success');
     const headerDiv = document.getElementById('adm-form-header');
     const btn = document.getElementById('adm-submit-btn');
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyuDpo-fAqjuGDc3dPSsiK5oln26RYLq_GPumxVpAUg4A8MuHYETbkvWAJEvaR6uINp/exec';
+    const scriptURL = 'https://api.srms2012.edu.bd/api/email';
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
