@@ -352,7 +352,7 @@
           btn.innerHTML = "⏳ Sending..."; 
           btn.disabled = true;
 
-          const scriptURL = 'https://script.google.com/macros/s/AKfycbyuDpo-fAqjuGDc3dPSsiK5oln26RYLq_GPumxVpAUg4A8MuHYETbkvWAJEvaR6uINp/exec';
+          const scriptURL = 'https://api.srms2012.edu.bd/api/email';
 
           fetch(scriptURL, { 
               method: "POST", 
