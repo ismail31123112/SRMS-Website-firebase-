@@ -818,7 +818,7 @@ input:disabled {
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwB6vTpulMxhtMXgdhtTt7cXCHeu0Ndg23qo5cG5R0nbqbqxm7zjaevMhAR7YDHiTAq/exec";
+const SCRIPT_URL = "https://api.srms2012.edu.bd/api/website-management";
 const SRMS_ADMIN_PASSKEY = "SRMS_SUPER_ADMIN_OVERRIDE";
 
 const MEDIA_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
