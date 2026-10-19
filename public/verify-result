@@ -328,7 +328,7 @@
     // ==========================================
     // 🔗 API ENDPOINT (GOOGLE APPS SCRIPT WEB APP)
     // ==========================================
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzn4QO3pRDjv6wxNnVFcdzaLrZVqZxEOSbafafPQFWgDYbGVVbxPk5riyZLkx45D_YW/exec";
+    const WEB_APP_URL = "https://api.srms2012.edu.bd/api/result-verification";
 
     window.onload = function() {
         const params = new URLSearchParams(window.location.search);
