@@ -341,8 +341,8 @@
         });
 
         // 🌐 Backend URLs
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbz2myz1KeLNpfe6_IMeUZzVa9EH1TLgU5CTLLF6dLzCelvMnRW8twJs4aLwyu0HdxWnVg/exec'; 
-        const LIVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxaayPCwfdZvXSXJPdzPspPmAeH72-NAvqGJIbuhwid3T28imRxNRypPI9m1bJQrfqLhg/exec';
+        const scriptURL = 'https://api.srms2012.edu.bd/api/admin'; 
+        const LIVE_SCRIPT_URL = 'https://api.srms2012.edu.bd/api/live';
         const IMGBB_API_KEY = ''; // Optional: এখানে আপনার ImgBB API Key দিতে পারেন
 
         let cachedTeachers = [];
