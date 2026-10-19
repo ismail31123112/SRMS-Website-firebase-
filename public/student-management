@@ -1038,7 +1038,7 @@ input:focus, select:focus, textarea:focus {
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby4mCNGwS3UHSadoNF2exXw3D-aZtspe4kEew9BliSkCR2HbBQtaifmzoWZoFKdDL8g/exec";
+const SCRIPT_URL = "https://api.srms2012.edu.bd/api/student-management";
 const SRMS_ADMIN_PASSKEY = "SRMS_SUPER_ADMIN_OVERRIDE";
 const MEDIA_STORAGE_KEY = "ee3d71da73595af8da3d2814cf28f173";
 const MEDIA_UPLOAD_URL = "https://api.imgbb.com/1/upload";
