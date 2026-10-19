@@ -373,8 +373,8 @@
   const FIREBASE_PROJECT_ID = firebaseConfig.projectId;
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents`;
   
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyXWc-JW1TpzHHgRp7viUvHW4pUm_lw600wOaHBIIT-_Hwn0K36bxbXjHcQLgtRfWvP/exec";
-  const FEE_PAY_SCRIPT = "https://script.google.com/macros/s/AKfycbzUkDxT8bO6HrMMkBOGr_ewCDaMQg7bZxvPr_8Omh3kDEqeX1T_JmL1v9JXMW2jwo88hw/exec";
+  const SCRIPT_URL = "https://api.srms2012.edu.bd/api/student-login";
+  const FEE_PAY_SCRIPT = "https://api.srms2012.edu.bd/api/payment";
 
   let allChildrenData = [];
   let std = null;
