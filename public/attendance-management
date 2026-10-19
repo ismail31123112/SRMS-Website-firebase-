@@ -1459,7 +1459,7 @@ tbody tr:hover { background-color: #f8fafc; }
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzwH9DwN_CXp8WzYhFPzCHRcX5O7lnpbNPFde9gASN70xoUVMEZVGrRc1u4dGjFg-Mh/exec";
+const SCRIPT_URL = "https://api.srms2012.edu.bd/api/attendance";
 const SRMS_ADMIN_PASSKEY = "SRMS_SUPER_ADMIN_OVERRIDE";
 const MEDIA_STORAGE_KEY = "ee3d71da73595af8da3d2814cf28f173";
 const DEFAULT_LOGO = "https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png";
