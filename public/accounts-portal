@@ -1135,7 +1135,7 @@ th {
 <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore-compat.js"></script>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyrks9gqqZ2t9gxjEx-EFaN5hO2IsO6P61bKrv7puf85mNXm6xuLOcro3xBu8StobIA/exec";
+const SCRIPT_URL = "https://api.srms2012.edu.bd/api/accounts";
 const SRMS_ADMIN_PASSKEY = "SRMS_SUPER_ADMIN_OVERRIDE";
 const DEFAULT_AVATAR = "https://i.postimg.cc/Y9bdXZPQ/dtg96fyddcib2okq9820.png";
 
