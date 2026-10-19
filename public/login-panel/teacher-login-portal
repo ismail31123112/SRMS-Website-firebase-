@@ -970,8 +970,8 @@
   auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(() => {});
 
   const FIREBASE_DB_BASE = `https://firestore.googleapis.com/v1/projects/${firebaseConfig.projectId}/databases/(default)/documents`;
-  const TEACHER_BACKEND_URL = "https://script.google.com/macros/s/AKfycbwwKLqGbAySUBEUrIyeqJhDw483XSecbxhg43PlJWQDw8hRiXZVD5G3luQDTKOjpWNlpw/exec";
-  const LIVE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxaayPCwfdZvXSXJPdzPspPmAeH72-NAvqGJIbuhwid3T28imRxNRypPI9m1bJQrfqLhg/exec";
+  const TEACHER_BACKEND_URL = "https://api.srms2012.edu.bd/api/teacher-login";
+  const LIVE_SCRIPT_URL = "https://api.srms2012.edu.bd/api/live";
 
   const MEDIA_API_KEY = "ee3d71da73595af8da3d2814cf28f173";
   const MEDIA_UPLOAD_URL = "https://api.imgbb.com/1/upload";
