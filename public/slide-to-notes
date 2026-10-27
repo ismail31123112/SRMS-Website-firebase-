@@ -1,50 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head>  
-  
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8190220371855729"
-     crossorigin="anonymous"></script>
-     
-     
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <!-- SEO Meta Tags -->
   <title>Digital to Printable - JSRTools Convert Digital Notes to PDF Converter</title>
   
-      <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-BJ37MCC3BE"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-BJ37MCC3BE');
-</script>
-
-
   <meta name="description" content="Convert digital coaching notes, study materials, and PDFs into printer-friendly black and white format online. Save ink, improve readability, and create printable notes instantly for free.">
+  <meta name="keywords" content="printable notes converter, digital notes to printable notes, coaching notes converter, print friendly pdf, black and white notes converter, grayscale pdf converter, study notes printing tool, printable study material, save ink pdf, convert color notes to black and white, student notes converter, print optimized pdf, coaching pdf printing, notes for printing, printer friendly notes">
 
-<meta name="keywords" content="printable notes converter, digital notes to printable notes, coaching notes converter, print friendly pdf, black and white notes converter, grayscale pdf converter, study notes printing tool, printable study material, save ink pdf, convert color notes to black and white, student notes converter, print optimized pdf, coaching pdf printing, notes for printing, printer friendly notes">
+  <meta property="og:title" content="Printable Notes Converter Online Free">
+  <meta property="og:description" content="Convert digital notes and coaching PDFs into printer-friendly black and white format. Save ink and print clearer study materials.">
+  <meta property="og:type" content="website">
 
-<meta property="og:title" content="Printable Notes Converter Online Free">
-<meta property="og:description" content="Convert digital notes and coaching PDFs into printer-friendly black and white format. Save ink and print clearer study materials.">
-<meta property="og:type" content="website">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Printable Notes Converter Online Free">
-<meta name="twitter:description" content="Convert digital notes to printer-friendly black and white PDFs. Fast, free, and easy to use.">
-
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Printable Notes Converter Online Free">
+  <meta name="twitter:description" content="Convert digital notes to printer-friendly black and white PDFs. Fast, free, and easy to use.">
 
   <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS Play CDN (Matches standard utility layout classes dynamically) -->
+  <!-- Tailwind CSS Play CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Lucide Icons (Dynamically loaded and initialized via JS) -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <!-- jsPDF & PDF.js Libraries via CDN -->
@@ -82,14 +64,11 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
-    /* CSS variable setups */
     :root {
       font-family: 'Inter', system-ui, sans-serif;
     }
 
-    /* Print styling rules */
     @media print {
-      /* Hide all UI elements */
       body * {
         visibility: hidden;
         background: transparent !important;
@@ -98,7 +77,6 @@
         text-shadow: none !important;
       }
       
-      /* Only show print container */
       #print-container, #print-container * {
         visibility: visible;
       }
@@ -114,7 +92,6 @@
         background: white !important;
       }
 
-      /* Multi-page grid handling for sheet layouts */
       .print-sheet {
         page-break-after: always;
         break-after: page;
@@ -124,63 +101,21 @@
         margin: 0 !important;
       }
 
-      /* Page sizes */
-      .print-size-a4.print-orientation-portrait {
-        width: 210mm !important;
-        height: 297mm !important;
-      }
-      .print-size-a4.print-orientation-landscape {
-        width: 297mm !important;
-        height: 210mm !important;
-      }
-      .print-size-letter.print-orientation-portrait {
-        width: 216mm !important;
-        height: 279mm !important;
-      }
-      .print-size-letter.print-orientation-landscape {
-        width: 279mm !important;
-        height: 216mm !important;
-      }
+      .print-size-a4.print-orientation-portrait { width: 210mm !important; height: 297mm !important; }
+      .print-size-a4.print-orientation-landscape { width: 297mm !important; height: 210mm !important; }
+      .print-size-letter.print-orientation-portrait { width: 216mm !important; height: 279mm !important; }
+      .print-size-letter.print-orientation-landscape { width: 279mm !important; height: 216mm !important; }
 
-      /* Margins */
-      .print-sheet-margin-none {
-        padding: 0 !important;
-      }
-      .print-sheet-margin-thin {
-        padding: 5mm !important;
-      }
-      .print-sheet-margin-standard {
-        padding: 12mm !important;
-      }
+      .print-sheet-margin-none { padding: 0 !important; }
+      .print-sheet-margin-thin { padding: 5mm !important; }
+      .print-sheet-margin-standard { padding: 12mm !important; }
 
-      /* N-Up layout grids */
-      .print-grid-1 {
-        grid-template-columns: 1fr !important;
-        grid-template-rows: 1fr !important;
-        gap: 0 !important;
-      }
-      .print-grid-2-portrait {
-        grid-template-columns: 1fr !important;
-        grid-template-rows: 1fr 1fr !important;
-        gap: 8mm !important;
-      }
-      .print-grid-2-landscape {
-        grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: 1fr !important;
-        gap: 8mm !important;
-      }
-      .print-grid-3 {
-        grid-template-columns: 1fr !important;
-        grid-template-rows: 1fr 1fr 1fr !important;
-        gap: 6mm !important;
-      }
-      .print-grid-4 {
-        grid-template-columns: 1fr 1fr !important;
-        grid-template-rows: 1fr 1fr !important;
-        gap: 6mm !important;
-      }
+      .print-grid-1 { grid-template-columns: 1fr !important; grid-template-rows: 1fr !important; gap: 0 !important; }
+      .print-grid-2-portrait { grid-template-columns: 1fr !important; grid-template-rows: 1fr 1fr !important; gap: 8mm !important; }
+      .print-grid-2-landscape { grid-template-columns: 1fr 1fr !important; grid-template-rows: 1fr !important; gap: 8mm !important; }
+      .print-grid-3 { grid-template-columns: 1fr !important; grid-template-rows: 1fr 1fr 1fr !important; gap: 6mm !important; }
+      .print-grid-4 { grid-template-columns: 1fr 1fr !important; grid-template-rows: 1fr 1fr !important; gap: 6mm !important; }
 
-      /* Frame & Image rendering */
       .print-img-frame {
         display: flex !important;
         align-items: center;
@@ -210,17 +145,7 @@
 </head>
 <body class="bg-[#04060b] text-gray-300 font-sans min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
 
-  <!-- ========================================== -->
-  <!-- AD NETWORK CODE SLOT (TOP HEADER BANNER)  -->
-  <!-- Feel free to paste your Google AdSense or  -->
-  <!-- alternative ad scripts inside this block.  -->
-  <!-- ========================================== -->
-  <div id="ad-slot-header" class="w-full text-center py-2 bg-gray-950/40 border-b border-gray-900 text-gray-600 text-[10px] font-mono tracking-widest uppercase">
-    <!-- Paste Header Ad Script Here -->
-    Advertisement Slot (Header Banner)
-  </div>
-
-  <!-- 1. HEADER / NAVIGATION BAR -->
+  <!-- HEADER / NAVIGATION BAR -->
   <header class="sticky top-0 z-50 backdrop-blur-md bg-[#04060b]/80 border-b border-gray-900 shadow-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       
@@ -241,14 +166,11 @@
 
       <!-- Action items & Language selector -->
       <div class="flex items-center gap-3">
-        
-        <!-- Navigation Links -->
         <a href="#how-it-works" class="hidden sm:inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors py-1.5 px-3 rounded-lg hover:bg-gray-900/50" data-text="nav-works">
           <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
           How it Works
         </a>
 
-        <!-- Bilingual Selector Dropdown -->
         <div class="relative inline-flex items-center gap-1.5 bg-gray-900/80 border border-gray-800 rounded-lg px-2.5 py-1.5 text-xs text-gray-300">
           <i data-lucide="languages" class="w-3.5 h-3.5 text-amber-500"></i>
           <select id="lang-select" onchange="switchLanguage(this.value)" class="bg-transparent border-none text-white focus:outline-none cursor-pointer font-medium text-xs">
@@ -256,16 +178,14 @@
             <option value="hi" class="bg-[#070b15] text-white">हिंदी (HI)</option>
           </select>
         </div>
-
       </div>
     </div>
   </header>
 
-  <!-- 2. HERO BANNER SECTION -->
+  <!-- HERO BANNER SECTION -->
   <section class="relative overflow-hidden py-10 md:py-14 border-b border-gray-900 bg-gradient-to-b from-[#070b15]/60 to-transparent">
     <div class="absolute inset-0 bg-grid-white/[0.02] pointer-events-none"></div>
     <div class="max-w-4xl mx-auto px-4 text-center space-y-6">
-      
       <div class="inline-flex items-center gap-2 px-3 py-1 bg-amber-500/10 border border-amber-500/25 rounded-full text-amber-500 text-[11px] font-semibold tracking-wider uppercase font-mono shadow-inner">
         <i data-lucide="zap" class="w-3.5 h-3.5 animate-pulse text-amber-500"></i>
         <span data-text="hero-badge">Zero Setup • Client-Side Processing • 100% Free</span>
@@ -278,24 +198,21 @@
       <p class="text-gray-400 text-sm md:text-base max-w-2xl mx-auto leading-relaxed" data-text="hero-desc">
         Save up to 90% of printer ink and toner cartridges! Upload dark-background iPad drawings, scanned chalkboards, or coaching slides, and instantly optimize them for direct physical printing or clean exports.
       </p>
-
     </div>
   </section>
 
-  <!-- 3. CORE WORKSPACE DASHBOARD -->
+  <!-- CORE WORKSPACE DASHBOARD -->
   <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-8 space-y-10">
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
       
       <!-- Left Column: Upload Area & Preview Grid -->
       <div class="lg:col-span-2 space-y-8">
         
-        <!-- Drag & Drop Upload Block -->
         <div class="w-full space-y-4">
           <div
             id="drop-zone"
             class="relative group cursor-pointer rounded-2xl border-2 border-dashed border-gray-800 bg-[#070b15]/75 hover:border-amber-500/50 hover:bg-[#0a1020]/90 p-10 text-center transition-all duration-300 shadow-lg"
           >
-            <!-- Real input supporting multiple images -->
             <input
               id="file-input"
               type="file"
@@ -373,7 +290,7 @@
           </div>
         </div>
 
-        <!-- Previews Page Grid Frame (Visible only when file/demo is loaded) -->
+        <!-- Previews Page Grid Frame -->
         <div id="preview-section" class="hidden space-y-4">
           <div class="flex items-center justify-between border-b border-gray-900 pb-3">
             <div class="space-y-0.5">
@@ -390,7 +307,6 @@
             </div>
           </div>
 
-          <!-- Active Preview Grid -->
           <div id="preview-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
             <!-- Dynamically populated page cards -->
           </div>
@@ -401,7 +317,6 @@
       <!-- Right Column: Settings, Adjustments & Export Controls -->
       <div class="space-y-8">
         
-        <!-- Control Dashboard Card -->
         <div class="bg-gradient-to-b from-[#070b15]/90 to-[#05070e]/90 p-6 rounded-2xl border border-gray-800/80 shadow-2xl space-y-6">
           
           <div class="border-b border-gray-900 pb-4">
@@ -419,41 +334,25 @@
               Inversion Preset Mode
             </span>
             <div class="grid grid-cols-2 gap-2">
-              <button
-                onclick="setConversionMode('ink-saver')"
-                id="mode-tab-ink-saver"
-                class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all bg-amber-500/10 border-amber-500/50 text-white cursor-pointer hover:bg-amber-500/5"
-              >
+              <button onclick="setConversionMode('ink-saver')" id="mode-tab-ink-saver" class="flex flex-col items-center justify-center p-3 rounded-xl border text-center transition-all bg-amber-500/10 border-amber-500/50 text-white cursor-pointer hover:bg-amber-500/5">
                 <i data-lucide="droplet" class="w-4 h-4 mb-1 text-amber-500"></i>
                 <span class="text-xs font-bold font-sans block" data-text="mode-ink-title">Ink Saver</span>
                 <span class="text-[9px] text-gray-400 font-sans" data-text="mode-ink-desc">Clean Monochrome</span>
               </button>
 
-              <button
-                onclick="setConversionMode('color-preserve')"
-                id="mode-tab-color-preserve"
-                class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-800 bg-[#04060b]/50 text-gray-400 text-center transition-all cursor-pointer hover:bg-gray-800"
-              >
+              <button onclick="setConversionMode('color-preserve')" id="mode-tab-color-preserve" class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-800 bg-[#04060b]/50 text-gray-400 text-center transition-all cursor-pointer hover:bg-gray-800">
                 <i data-lucide="palette" class="w-4 h-4 mb-1 text-sky-400"></i>
                 <span class="text-xs font-bold font-sans block" data-text="mode-color-title">Color Preserve</span>
                 <span class="text-[9px] text-gray-400 font-sans" data-text="mode-color-desc">Keep Pen Color</span>
               </button>
 
-              <button
-                onclick="setConversionMode('grayscale')"
-                id="mode-tab-grayscale"
-                class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-800 bg-[#04060b]/50 text-gray-400 text-center transition-all cursor-pointer hover:bg-gray-800"
-              >
+              <button onclick="setConversionMode('grayscale')" id="mode-tab-grayscale" class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-800 bg-[#04060b]/50 text-gray-400 text-center transition-all cursor-pointer hover:bg-gray-800">
                 <i data-lucide="eye" class="w-4 h-4 mb-1 text-gray-400"></i>
                 <span class="text-xs font-bold font-sans block" data-text="mode-gray-title">Pure Grayscale</span>
                 <span class="text-[9px] text-gray-400 font-sans" data-text="mode-gray-desc">Simple Gray</span>
               </button>
 
-              <button
-                onclick="setConversionMode('custom')"
-                id="mode-tab-custom"
-                class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-800 bg-[#04060b]/50 text-gray-400 text-center transition-all cursor-pointer hover:bg-gray-800"
-              >
+              <button onclick="setConversionMode('custom')" id="mode-tab-custom" class="flex flex-col items-center justify-center p-3 rounded-xl border border-gray-800 bg-[#04060b]/50 text-gray-400 text-center transition-all cursor-pointer hover:bg-gray-800">
                 <i data-lucide="sliders" class="w-4 h-4 mb-1 text-emerald-400"></i>
                 <span class="text-xs font-bold font-sans block" data-text="mode-custom-title">Custom Adjust</span>
                 <span class="text-[9px] text-gray-400 font-sans" data-text="mode-custom-desc">Manual Sliders</span>
@@ -461,22 +360,18 @@
             </div>
           </div>
 
-          <!-- Dynamic Manual Sliders (only visible in custom mode) -->
+          <!-- Dynamic Manual Sliders -->
           <div id="custom-sliders-panel" class="hidden bg-[#04060b]/80 border border-gray-800/80 p-4 rounded-xl space-y-4 animate-in slide-in-from-top-1 duration-200">
-            
-            <!-- Invert colors checkbox -->
             <div class="flex items-center justify-between border-b border-gray-900 pb-2">
               <span class="text-xs font-mono font-bold text-gray-400" data-text="slider-invert">Invert Image Colors</span>
               <input type="checkbox" id="slider-invert-toggle" checked onchange="updateCustomFilter('invert', this.checked)" class="w-4 h-4 accent-amber-500 rounded cursor-pointer" />
             </div>
 
-            <!-- Grayscale checkbox -->
             <div class="flex items-center justify-between border-b border-gray-900 pb-2">
               <span class="text-xs font-mono font-bold text-gray-400" data-text="slider-gray">Grayscale Conversion</span>
               <input type="checkbox" id="slider-gray-toggle" onchange="updateCustomFilter('grayscale', this.checked)" class="w-4 h-4 accent-amber-500 rounded cursor-pointer" />
             </div>
 
-            <!-- Brightness -->
             <div class="space-y-1">
               <div class="flex items-center justify-between text-xs text-gray-400 font-mono">
                 <span data-text="slider-brightness">Brightness Offset</span>
@@ -485,7 +380,6 @@
               <input type="range" id="input-brightness" min="-100" max="100" value="0" oninput="updateCustomFilter('brightness', parseInt(this.value))" class="w-full accent-amber-500 bg-gray-900 cursor-pointer" />
             </div>
 
-            <!-- Contrast -->
             <div class="space-y-1">
               <div class="flex items-center justify-between text-xs text-gray-400 font-mono">
                 <span data-text="slider-contrast">Contrast Boost</span>
@@ -494,7 +388,6 @@
               <input type="range" id="input-contrast" min="-100" max="100" value="0" oninput="updateCustomFilter('contrast', parseInt(this.value))" class="w-full accent-amber-500 bg-gray-900 cursor-pointer" />
             </div>
 
-            <!-- Sharp Threshold -->
             <div class="space-y-1">
               <div class="flex items-center justify-between text-xs text-gray-400 font-mono">
                 <span data-text="slider-threshold">Pure Black Threshold</span>
@@ -502,7 +395,6 @@
               </div>
               <input type="range" id="input-threshold" min="0" max="255" value="0" oninput="updateCustomFilter('threshold', parseInt(this.value))" class="w-full accent-amber-500 bg-gray-900 cursor-pointer" />
             </div>
-
           </div>
 
           <!-- Layout & Page Settings -->
@@ -512,7 +404,6 @@
             </span>
             <div class="grid grid-cols-2 gap-4">
               
-              <!-- Sheet Size -->
               <div class="space-y-1">
                 <span class="text-gray-500 text-[10px] font-mono font-medium block" data-text="sheet-size">Paper Sheet Size</span>
                 <select id="setting-pageSize" onchange="updateAppSetting('pageSize', this.value)" class="w-full bg-[#0d1224] border border-gray-800 rounded-lg p-2 text-gray-300 text-xs focus:border-amber-500 focus:outline-none cursor-pointer">
@@ -521,7 +412,6 @@
                 </select>
               </div>
 
-              <!-- Orientation -->
               <div class="space-y-1">
                 <span class="text-gray-500 text-[10px] font-mono font-medium block" data-text="sheet-orientation">Sheet Orientation</span>
                 <select id="setting-orientation" onchange="updateAppSetting('orientation', this.value)" class="w-full bg-[#0d1224] border border-gray-800 rounded-lg p-2 text-gray-300 text-xs focus:border-amber-500 focus:outline-none cursor-pointer">
@@ -530,7 +420,6 @@
                 </select>
               </div>
 
-              <!-- Margins -->
               <div class="space-y-1">
                 <span class="text-gray-500 text-[10px] font-mono font-medium block" data-text="sheet-margin">Print Margins</span>
                 <select id="setting-marginSize" onchange="updateAppSetting('marginSize', this.value)" class="w-full bg-[#0d1224] border border-gray-800 rounded-lg p-2 text-gray-300 text-xs focus:border-amber-500 focus:outline-none cursor-pointer">
@@ -540,7 +429,6 @@
                 </select>
               </div>
 
-              <!-- Multi-Image N-Up Grid Selector -->
               <div class="space-y-1">
                 <span class="text-gray-500 text-[10px] font-mono font-medium block" data-text="images-per-sheet">Images per Page Grid (N-Up)</span>
                 <select id="setting-imagesPerSheet" onchange="updateAppSetting('imagesPerSheet', parseInt(this.value))" class="w-full bg-[#0d1224] border border-gray-800 rounded-lg p-2 text-amber-400 text-xs font-semibold focus:border-amber-500 focus:outline-none cursor-pointer">
@@ -556,48 +444,21 @@
 
           <!-- Quick Action Buttons -->
           <div class="space-y-3 pt-4 border-t border-gray-900">
-            
-            <button
-              id="action-btn-pdf"
-              onclick="downloadOptimizedPDF()"
-              disabled
-              class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-amber-500 hover:bg-amber-400 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed text-[#090d16] font-extrabold rounded-xl text-xs transition-all shadow-[0_4px_12px_rgba(245,158,11,0.15)] cursor-pointer"
-            >
+            <button id="action-btn-pdf" onclick="downloadOptimizedPDF()" disabled class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-amber-500 hover:bg-amber-400 disabled:bg-gray-800 disabled:text-gray-500 disabled:cursor-not-allowed text-[#090d16] font-extrabold rounded-xl text-xs transition-all shadow-[0_4px_12px_rgba(245,158,11,0.15)] cursor-pointer">
               <i data-lucide="download" class="w-4 h-4"></i>
               <span data-text="btn-download-pdf">Compile & Download PDF</span>
             </button>
 
-            <button
-              id="action-btn-print"
-              onclick="triggerDirectPrint()"
-              disabled
-              class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-900/50 disabled:text-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs border border-gray-800 hover:border-gray-700 transition-all cursor-pointer"
-            >
+            <button id="action-btn-print" onclick="triggerDirectPrint()" disabled class="w-full flex items-center justify-center gap-2 py-3 px-4 bg-gray-900 hover:bg-gray-800 disabled:bg-gray-900/50 disabled:text-gray-600 disabled:cursor-not-allowed text-white font-bold rounded-xl text-xs border border-gray-800 hover:border-gray-700 transition-all cursor-pointer">
               <i data-lucide="printer" class="w-4 h-4 text-amber-500"></i>
               <span data-text="btn-direct-print">Direct Print Sheets</span>
             </button>
 
-            <button
-              id="action-btn-reset"
-              onclick="resetWorkspace()"
-              disabled
-              class="w-full flex items-center justify-center gap-2 py-2 px-4 bg-transparent hover:bg-red-500/10 disabled:text-gray-700 text-red-400 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-            >
+            <button id="action-btn-reset" onclick="resetWorkspace()" disabled class="w-full flex items-center justify-center gap-2 py-2 px-4 bg-transparent hover:bg-red-500/10 disabled:text-gray-700 text-red-400 text-xs font-semibold rounded-lg transition-colors cursor-pointer">
               <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
               <span data-text="btn-reset">Reset Dashboard</span>
             </button>
-
           </div>
-
-        </div>
-
-        <!-- ========================================== -->
-        <!-- AD NETWORK CODE SLOT (SIDEBAR WIDGET)      -->
-        <!-- Paste responsive banner code inside here.  -->
-        <!-- ========================================== -->
-        <div id="ad-slot-sidebar" class="w-full min-h-[250px] flex items-center justify-center rounded-2xl border border-gray-900 bg-gray-950/20 text-gray-700 text-xs font-mono tracking-widest uppercase p-4 text-center">
-          <!-- Paste Sidebar Ad Script Here -->
-          Sidebar Responsive Ad Slot
         </div>
 
       </div>
@@ -639,20 +500,15 @@
             </p>
           </div>
         </div>
-        <button
-          onclick="clearCacheAndStorage()"
-          class="w-full py-2 bg-transparent hover:bg-red-500/10 text-red-400 hover:text-red-300 font-bold rounded-xl text-[11px] border border-red-500/20 hover:border-red-500/40 transition-all cursor-pointer"
-          data-text="cache-btn"
-        >
+        <button onclick="clearCacheAndStorage()" class="w-full py-2 bg-transparent hover:bg-red-500/10 text-red-400 hover:text-red-300 font-bold rounded-xl text-[11px] border border-red-500/20 hover:border-red-500/40 transition-all cursor-pointer" data-text="cache-btn">
           Clear Device Storage
         </button>
       </div>
 
     </section>
-
   </main>
 
-  <!-- 4. HOW IT WORKS / FAQ ACCORDION SECTION -->
+  <!-- HOW IT WORKS / FAQ ACCORDION SECTION -->
   <section id="how-it-works" class="border-t border-gray-900 bg-[#070b15]/30 py-12 md:py-16">
     <div class="max-w-4xl mx-auto px-4 space-y-10">
       
@@ -666,8 +522,6 @@
       </div>
 
       <div class="space-y-4">
-        
-        <!-- FAQ Item 1 -->
         <div class="bg-[#070b15]/75 border border-gray-800 rounded-xl p-5 space-y-2">
           <h4 class="font-sans font-bold text-sm text-white flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
@@ -678,7 +532,6 @@
           </p>
         </div>
 
-        <!-- FAQ Item 2 -->
         <div class="bg-[#070b15]/75 border border-gray-800 rounded-xl p-5 space-y-2">
           <h4 class="font-sans font-bold text-sm text-white flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
@@ -689,7 +542,6 @@
           </p>
         </div>
 
-        <!-- FAQ Item 3 -->
         <div class="bg-[#070b15]/75 border border-gray-800 rounded-xl p-5 space-y-2">
           <h4 class="font-sans font-bold text-sm text-white flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
@@ -700,7 +552,6 @@
           </p>
         </div>
 
-        <!-- FAQ Item 4 -->
         <div class="bg-[#070b15]/75 border border-gray-800 rounded-xl p-5 space-y-2">
           <h4 class="font-sans font-bold text-sm text-white flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
@@ -710,21 +561,11 @@
             To save paper, you can group multiple pages onto a single printed sheet. Simply select the images-per-page grid layout. The layout automatically arranges the slides in 2-Up, 3-Up vertical, or 2x2 grid configurations. When compiling PDFs or printing, the layout respects paper orientations (portrait/landscape) and scales your slides proportionally without stretching!
           </p>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- ========================================== -->
-  <!-- AD NETWORK CODE SLOT (BOTTOM FOOTER)       -->
-  <!-- Place your legal/banner ad scripts here.  -->
-  <!-- ========================================== -->
-  <div id="ad-slot-footer" class="w-full text-center py-2.5 bg-gray-950/60 border-t border-gray-900 text-gray-600 text-[10px] font-mono tracking-widest uppercase">
-    <!-- Paste Footer Ad Script Here -->
-    Advertisement Slot (Footer Banner)
-  </div>
-
-  <!-- 5. FOOTER & CREDITS -->
+  <!-- FOOTER & CREDITS -->
   <footer class="border-t border-gray-900 bg-[#04060b] py-8 text-center text-xs text-gray-500 space-y-2">
     <p data-text="footer-line1">
       Digital to Printable Converter • Secure Client-Side Image Inverter
@@ -734,18 +575,14 @@
     </p>
   </footer>
 
-  <!-- 6. PRINT CONTAINER OVERLAY -->
-  <!-- Hidden on screen, active on media print -->
+  <!-- PRINT CONTAINER OVERLAY -->
   <div id="print-container" class="hidden"></div>
 
-  <!-- ================================================================= -->
-  <!-- ======================== CORE APPLICATION JS ==================== -->
-  <!-- ================================================================= -->
   <script>
     // Global State management
     let currentLanguage = 'en';
     let fileMeta = { name: '', size: 0, totalPages: 0 };
-    let pages = []; // Array of { pageNumber, originalUrl, processedUrl, width, height, selected: true }
+    let pages = []; 
     let activeMode = 'ink-saver';
     let isProcessing = false;
     let customFilters = {
@@ -894,10 +731,8 @@
 
     // Initialize application on DOM content load
     window.addEventListener('DOMContentLoaded', () => {
-      // Dynamic Lucide registration
       lucide.createIcons();
 
-      // Setup dropzone listeners
       const dropZone = document.getElementById('drop-zone');
       const fileInput = document.getElementById('file-input');
 
@@ -932,7 +767,6 @@
         }
       });
 
-      // Load history from local storage
       renderHistory();
       updateTranslations();
     });
@@ -943,7 +777,6 @@
       elements.forEach(el => {
         const key = el.getAttribute('data-text');
         if (translations[currentLanguage][key]) {
-          // If contains span tags or formatting, use innerHTML, else textContent
           if (translations[currentLanguage][key].includes('<span')) {
             el.innerHTML = translations[currentLanguage][key];
           } else {
@@ -952,7 +785,6 @@
         }
       });
 
-      // Special placeholders or select adjustments
       const settingPageSelect = document.getElementById('setting-pageSize');
       if (settingPageSelect) {
         settingPageSelect.options[0].text = currentLanguage === 'en' ? 'Standard A4 Sheet' : 'मानक A4 शीट';
@@ -983,13 +815,11 @@
       renderHistory();
     }
 
-    // Toggle language
     function switchLanguage(lang) {
       currentLanguage = lang;
       updateTranslations();
     }
 
-    // Update system processing state view
     function setProcessing(val, stateText = 'Processing file...', detailText = '') {
       isProcessing = val;
       const uploadIcon = document.getElementById('upload-icon-container');
@@ -1014,7 +844,6 @@
       }
     }
 
-    // Multi-file routing
     async function handleFiles(files) {
       document.getElementById('error-panel').classList.add('hidden');
       if (files.length === 0) return;
@@ -1036,7 +865,6 @@
       }
     }
 
-    // Print error details
     function showError(msg) {
       const errorPanel = document.getElementById('error-panel');
       const errorText = document.getElementById('error-message-text');
@@ -1044,7 +872,6 @@
       errorPanel.classList.remove('hidden');
     }
 
-    // Process single PDF
     async function processSinglePdf(file) {
       setProcessing(true, 
         currentLanguage === 'en' ? 'Reading PDF file...' : 'पीडीएफ फाइल पढ़ी जा रही है...',
@@ -1092,7 +919,7 @@
           pages.push({
             pageNumber: i,
             originalUrl: dataUrl,
-            processedUrl: dataUrl, // Initially raw, filtered dynamically later
+            processedUrl: dataUrl, 
             width: viewport.width,
             height: viewport.height,
             selected: true
@@ -1108,7 +935,6 @@
       }
     }
 
-    // Process multiple images
     async function processMultipleImages(files) {
       setProcessing(true, currentLanguage === 'en' ? 'Preparing images...' : 'इमेज तैयार की जा रही हैं...');
       
@@ -1144,7 +970,6 @@
               let width = img.naturalWidth || img.width;
               let height = img.naturalHeight || img.height;
 
-              // Scale down high resolutions to fit memory
               const maxRes = 2048;
               if (width > maxRes || height > maxRes) {
                 const ratio = Math.min(maxRes / width, maxRes / height);
@@ -1196,12 +1021,10 @@
       await runFiltersOnAllPages();
     }
 
-    // Preset options loaders
     async function loadDemoSample(index) {
       document.getElementById('error-panel').classList.add('hidden');
       setProcessing(true, currentLanguage === 'en' ? 'Generating mockups...' : 'मॉकअप नोट्स बनाए जा रहे हैं...');
 
-      // Dynamic demo notes generator matching our customized background styling
       setTimeout(async () => {
         try {
           const demoPages = generateDemoPagesData();
@@ -1242,7 +1065,6 @@
       }, 300);
     }
 
-    // Direct Image Filter shader engine
     function runFilterOnPage(originalUrl, mode, filters) {
       return new Promise((resolve) => {
         const img = new Image();
@@ -1270,15 +1092,13 @@
               let b = data[i+2];
 
               if (mode === 'ink-saver') {
-                // High contrast dark-to-light ink reduction
                 let v = (0.2126 * r + 0.7152 * g + 0.0722 * b);
                 let inv = 255 - v;
                 
-                // Crisp margins to guarantee printing clarity
                 if (inv > 200) {
-                  r = g = b = 255; // White background
+                  r = g = b = 255; 
                 } else if (inv < 100) {
-                  r = g = b = 0;   // Solid black text
+                  r = g = b = 0;   
                 } else {
                   let factor = (inv - 100) / 100;
                   let val = Math.floor(factor * 255);
@@ -1286,16 +1106,14 @@
                 }
               } 
               else if (mode === 'color-preserve') {
-                // Invert background, but preserve colorful highlight markers (red, green, blue)
                 let maxChannel = Math.max(r, g, b);
                 let minChannel = Math.min(r, g, b);
                 let diff = maxChannel - minChannel; 
                 let v = (0.2126 * r + 0.7152 * g + 0.0722 * b);
 
                 if (maxChannel < 80) {
-                  r = g = b = 255; // convert background to pure white
+                  r = g = b = 255; 
                 } else if (diff > 30) {
-                  // Keep colorful annotations, invert intensity scale safely
                   r = Math.min(255, Math.floor((255 - r) * 1.3));
                   g = Math.min(255, Math.floor((255 - g) * 1.3));
                   b = Math.min(255, Math.floor((255 - b) * 1.3));
@@ -1326,19 +1144,16 @@
                   r = g = b = v;
                 }
 
-                // Brightness
                 let bOffset = filters.brightness;
                 r = Math.max(0, Math.min(255, r + bOffset));
                 g = Math.max(0, Math.min(255, g + bOffset));
                 b = Math.max(0, Math.min(255, b + bOffset));
 
-                // Contrast
                 let contrastFactor = (259 * (filters.contrast + 255)) / (255 * (259 - filters.contrast));
                 r = Math.max(0, Math.min(255, contrastFactor * (r - 128) + 128));
                 g = Math.max(0, Math.min(255, contrastFactor * (g - 128) + 128));
                 b = Math.max(0, Math.min(255, contrastFactor * (b - 128) + 128));
 
-                // Threshold
                 if (filters.threshold > 0) {
                   let v = (0.2126 * r + 0.7152 * g + 0.0722 * b);
                   let val = v > filters.threshold ? 255 : 0;
@@ -1363,7 +1178,6 @@
       });
     }
 
-    // Run filters on all loaded items in state
     async function runFiltersOnAllPages() {
       if (pages.length === 0) return;
       setProcessing(true, currentLanguage === 'en' ? 'Optimizing layouts...' : 'इमेज ऑप्टिमाइज़ की जा रही है...', currentLanguage === 'en' ? 'Running pixel shaders...' : 'फिल्टर चलाए जा रहे हैं...');
@@ -1377,7 +1191,6 @@
       updateActionButtonsState();
     }
 
-    // Render workspace previews
     function renderPreviewGrid() {
       const section = document.getElementById('preview-section');
       const grid = document.getElementById('preview-grid');
@@ -1397,7 +1210,6 @@
         card.className = `bg-[#070b15]/95 rounded-2xl border ${page.selected ? 'border-amber-500/40 bg-amber-500/[0.01]' : 'border-gray-800'} p-4 flex flex-col space-y-4 shadow-lg transition-all relative overflow-hidden`;
 
         card.innerHTML = `
-          <!-- Header checkbox & status -->
           <div class="flex items-center justify-between">
             <label class="flex items-center gap-2 cursor-pointer select-none">
               <input type="checkbox" ${page.selected ? 'checked' : ''} onchange="toggleSelectPage(${page.pageNumber})" class="w-4.5 h-4.5 accent-amber-500 rounded cursor-pointer" />
@@ -1410,16 +1222,13 @@
             </button>
           </div>
 
-          <!-- Comparative View Container -->
           <div class="grid grid-cols-2 gap-2 border border-gray-900 p-1.5 rounded-xl bg-black/40">
-            <!-- Original thumb -->
             <div class="space-y-1">
               <span class="text-[9px] font-mono text-gray-500 block text-center uppercase tracking-wider">${currentLanguage === 'en' ? 'Original' : 'मूल रूप'}</span>
               <div class="aspect-[4/3] rounded bg-gray-950 overflow-hidden flex items-center justify-center">
                 <img src="${page.originalUrl}" class="max-w-full max-h-full object-contain" />
               </div>
             </div>
-            <!-- Filtered thumb -->
             <div class="space-y-1">
               <span class="text-[9px] font-mono text-amber-500/80 block text-center uppercase tracking-wider">${currentLanguage === 'en' ? 'Optimized' : 'संशोधित'}</span>
               <div class="aspect-[4/3] rounded bg-white overflow-hidden flex items-center justify-center">
@@ -1435,7 +1244,6 @@
       lucide.createIcons();
     }
 
-    // Check/Uncheck single items
     async function toggleSelectPage(num) {
       const idx = pages.findIndex(p => p.pageNumber === num);
       if (idx !== -1) {
@@ -1445,11 +1253,9 @@
       }
     }
 
-    // Toggle presets state
     async function setConversionMode(mode) {
       activeMode = mode;
       
-      // Update UI active tabs
       const tabs = ['ink-saver', 'color-preserve', 'grayscale', 'custom'];
       tabs.forEach(t => {
         const btn = document.getElementById(`mode-tab-${t}`);
@@ -1460,7 +1266,6 @@
         }
       });
 
-      // Show manual sliders panel only if Custom is active
       const slidersPanel = document.getElementById('custom-sliders-panel');
       if (mode === 'custom') {
         slidersPanel.classList.remove('hidden');
@@ -1471,11 +1276,9 @@
       await runFiltersOnAllPages();
     }
 
-    // Update Slider configurations
     async function updateCustomFilter(key, value) {
       customFilters[key] = value;
       
-      // Update sliding indicators in HTML text
       const label = document.getElementById(`label-${key}`);
       if (label) {
         if (key === 'threshold') {
@@ -1485,16 +1288,13 @@
         }
       }
 
-      // Re-run filter pipelines
       await runFiltersOnAllPages();
     }
 
-    // Adjust settings selector changes
     function updateAppSetting(key, value) {
       appSettings[key] = value;
     }
 
-    // Enables/Disables action exports
     function updateActionButtonsState() {
       const anySelected = pages.some(p => p.selected);
       const downloadBtn = document.getElementById('action-btn-pdf');
@@ -1512,7 +1312,6 @@
       }
     }
 
-    // Single item direct download helper
     function downloadSinglePageImage(pageNumber) {
       const page = pages.find(p => p.pageNumber === pageNumber);
       if (page) {
@@ -1525,7 +1324,6 @@
       }
     }
 
-    // PDF compilation with custom page sizes, margins, and grid configurations
     function downloadOptimizedPDF() {
       const selected = pages.filter(p => p.selected);
       if (selected.length === 0) {
@@ -1542,7 +1340,6 @@
           format: appSettings.pageSize
         });
 
-        // Dimensions in millimeters matching standards
         const paperW = appSettings.pageSize === 'a4' ? 210 : 216;
         const paperH = appSettings.pageSize === 'a4' ? 297 : 279;
 
@@ -1553,7 +1350,6 @@
         const printableW = paperW - (margin * 2);
         const printableH = paperH - (margin * 2);
 
-        // N-Up Page Grouping (1, 2, 3, or 4 images per sheet)
         const chunks = [];
         const chunkSize = appSettings.imagesPerSheet;
         for (let i = 0; i < selected.length; i += chunkSize) {
@@ -1600,7 +1396,6 @@
               y = margin + row * (itemH + gap);
             }
 
-            // Calculate precise non-stretching proportional scaling inside cell boundaries
             const pageRatio = page.width / page.height;
             let fitW = itemW;
             let fitH = itemH;
@@ -1627,11 +1422,9 @@
           });
         });
 
-        // Trigger native download dialogue
         const safeName = fileMeta.name.replace('.pdf', '');
         pdf.save(`optimized-${safeName}.pdf`);
 
-        // Log transaction to localStorage session history
         const savedHistory = JSON.parse(localStorage.getItem('standalone_ink_save_history') || '[]');
         const newItem = {
           id: Math.random().toString(36).substr(2, 9),
@@ -1650,7 +1443,6 @@
       }
     }
 
-    // Direct printable sheets generator
     function triggerDirectPrint() {
       const selected = pages.filter(p => p.selected);
       if (selected.length === 0) {
@@ -1661,7 +1453,6 @@
       const printContainer = document.getElementById('print-container');
       printContainer.innerHTML = '';
 
-      // Segment matching imagesPerSheet settings
       const chunks = [];
       const chunkSize = appSettings.imagesPerSheet;
       for (let i = 0; i < selected.length; i += chunkSize) {
@@ -1704,11 +1495,9 @@
         printContainer.appendChild(sheet);
       });
 
-      // Call standard system printing dialogue
       window.print();
     }
 
-    // Reset whole dashboard
     function resetWorkspace() {
       fileMeta = { name: '', size: 0, totalPages: 0 };
       pages = [];
@@ -1716,7 +1505,6 @@
       customFilters = { invert: true, grayscale: false, brightness: 0, contrast: 0, threshold: 0 };
       appSettings = { pageSize: 'a4', orientation: 'portrait', marginSize: 'none', imagesPerSheet: 1 };
 
-      // Update selectors to defaults
       document.getElementById('setting-pageSize').value = 'a4';
       document.getElementById('setting-orientation').value = 'portrait';
       document.getElementById('setting-marginSize').value = 'none';
@@ -1728,7 +1516,6 @@
       updateActionButtonsState();
     }
 
-    // History rendering helper
     function renderHistory() {
       const container = document.getElementById('history-container');
       const emptyMsg = document.getElementById('history-empty-message');
@@ -1771,13 +1558,11 @@
       lucide.createIcons();
     }
 
-    // Clear history cache
     function clearHistory() {
       localStorage.removeItem('standalone_ink_save_history');
       renderHistory();
     }
 
-    // Storage and cache cleanup
     function clearCacheAndStorage() {
       const text = currentLanguage === 'en' 
         ? 'Are you sure you want to clear all stored history logs and cache settings?' 
@@ -1791,7 +1576,6 @@
       }
     }
 
-    // Mock Demo page arrays
     function generateDemoPagesData() {
       const mockCanvas = (title, subtitle, extraFunc) => {
         const canvas = document.createElement('canvas');
@@ -1799,11 +1583,9 @@
         canvas.height = 800;
         const ctx = canvas.getContext('2d');
 
-        // Dark background matching slide styles
         ctx.fillStyle = '#0b1120';
         ctx.fillRect(0, 0, 1200, 800);
 
-        // Aesthetic Grid
         ctx.strokeStyle = '#1e293b';
         ctx.lineWidth = 1;
         for (let x = 0; x < 1200; x += 40) {
@@ -1813,12 +1595,10 @@
           ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(1200, y); ctx.stroke();
         }
 
-        // Title
         ctx.fillStyle = '#f59e0b';
         ctx.font = 'bold 36px "Inter", sans-serif';
         ctx.fillText(title, 80, 100);
 
-        // Subtitle
         ctx.fillStyle = '#94a3b8';
         ctx.font = '18px "JetBrains Mono", monospace';
         ctx.fillText(subtitle, 80, 140);
@@ -1842,7 +1622,7 @@
           ctx.fillText('F = k * ( |q₁ • q₂| ) / r²', 120, 260);
 
           ctx.lineWidth = 3;
-          ctx.strokeStyle = '#ec4899'; // Vibrant Pink pen stroke
+          ctx.strokeStyle = '#ec4899'; 
           ctx.beginPath(); ctx.moveTo(400, 500); ctx.bezierCurveTo(450, 400, 750, 400, 800, 500); ctx.stroke();
 
           ctx.fillStyle = '#ef4444'; ctx.beginPath(); ctx.arc(400, 500, 25, 0, Math.PI * 2); ctx.fill();
@@ -1872,6 +1652,5 @@
       ];
     }
   </script>
-
 </body>
 </html>
