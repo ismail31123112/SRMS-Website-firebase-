@@ -1,16 +1,22 @@
-name: Deploy to Firebase Hosting on merge
+name: Deploy to Firebase Hosting (Debug Mode)
+
 on:
   push:
     branches:
-      - main
+      - main # আপনার ব্রাঞ্চের নাম যদি master হয়, তবে main এর জায়গায় master লিখবেন
+
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_SRMS_WEBSITE_MANAGEMENT }}
-          channelId: live
-          projectId: srms-website-management
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Deploy to Firebase with Detailed Log
+        # এই --debug ফ্ল্যাগটি গিটহাবকে বাধ্য করবে কোথায় পারমিশন আটকে যাচ্ছে তার নাড়িভুঁড়ি বের করে দেখাতে
+        run: firebase deploy --only hosting --project srms-website-management --debug
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
