@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise For You!</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        #start-screen {
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #ff4757;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0px 4px 15px rgba(255, 71, 87, 0.5);
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #ff6b81;
+        }
+
+        #hack-screen {
+            display: none;
+            width: 90%;
+            height: 90%;
+            text-align: left;
+        }
+
+        #console-text {
+            font-size: 16px;
+            line-height: 1.5;
+            text-shadow: 0px 0px 5px #0f0;
+        }
+
+        #warning {
+            display: none;
+            color: red;
+            font-size: 35px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0px 0px 20px red;
+            margin-top: 20%;
+        }
+
+        #prank-reveal {
+            display: none;
+            color: #fff;
+            font-size: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Initial Fake Screen -->
+    <div id="start-screen">
+        <h2 style="color: white;">I have a surprise for you! 🎁</h2>
+        <button class="btn" onclick="startPrank()">Tap Here to Open</button>
+    </div>
+
+    <!-- Hacking Screen -->
+    <div id="hack-screen">
+        <div id="console-text"></div>
+        <div id="warning">DEVICE COMPROMISED!<br><br>Hacked by MD SAJID AL MOHAIMIN</div>
+        <div id="prank-reveal">Relax! It's just a prank by Sajid! 😆</div>
+    </div>
+
+    <script>
+        const hackLines = [
+            "INITIALIZING HACK SEQUENCE...",
+            "CONNECTING TO MD SAJID AL MOHAIMIN'S SERVER...",
+            "BYPASSING DEVICE FIREWALL...",
+            "DECRYPTING SECURITY PROTOCOLS...",
+            "GAINING ROOT ACCESS...",
+            "ACCESSING FRONT CAMERA...",
+            "ACCESSING GALLERY AND MESSAGES...",
+            "PREPARING DATA FOR UPLOAD...",
+            "[||        ] 20%",
+            "[||||      ] 45%",
+            "[|||||||   ] 72%",
+            "[||||||||||] 100%",
+            "DATA TRANSFER COMPLETE.",
+            "LOCKING DEVICE KERNEL..."
+        ];
+
+        let lineIndex = 0;
+        let beepInterval;
+        let vibrateInterval;
+
+        function startPrank() {
+            // 1. Enter Fullscreen (Hides Nav Bar & Status Bar)
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { /* Safari */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { /* IE11 */
+                elem.msRequestFullscreen();
+            }
+
+            // 2. Vibrate the phone continuously for 2 minutes (if supported)
+            if (navigator.vibrate) {
+                vibrateInterval = setInterval(() => {
+                    navigator.vibrate([1000, 500, 1000, 500]);
+                }, 3000);
+            }
+
+            // 3. Play annoying beep sound continuously
+            playContinuousBeep();
+
+            // 4. Switch Screens
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('hack-screen').style.display = 'block';
+
+            // 5. Start typing effect
+            typeConsole();
+        }
+
+        function typeConsole() {
+            if (lineIndex < hackLines.length) {
+                document.getElementById('console-text').innerHTML += hackLines[lineIndex] + "<br><br>";
+                lineIndex++;
+                
+                // Slower typing delay (800ms to 1500ms) to build suspense
+                setTimeout(typeConsole, Math.floor(Math.random() * 700) + 800); 
+            } else {
+                // When typing finishes, show the warning
+                setTimeout(showWarning, 1000);
+            }
+        }
+
+        function showWarning() {
+            document.getElementById('console-text').style.display = 'none';
+            document.getElementById('warning').style.display = 'block';
+
+            // Exit fullscreen and reveal prank after 2 MINUTES (120,000 milliseconds)
+            setTimeout(() => {
+                document.getElementById('prank-reveal').style.display = 'block';
+                
+                // Stop vibrations and sounds
+                clearInterval(vibrateInterval);
+                if (navigator.vibrate) navigator.vibrate(0);
+                if (beepInterval) clearInterval(beepInterval);
+
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }, 120000); // 120000 ms = 2 minutes
+        }
+
+        function playContinuousBeep() {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Function to generate a single beep
+            function beep() {
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); 
+                
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.5);
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.5);
+            }
+
+            // Loop the beep every 1 second
+            beepInterval = setInterval(beep, 1000);
+            
+            // Auto stop audio after 2 minutes and 15 seconds as a safety fallback
+            setTimeout(() => {
+                clearInterval(beepInterval);
+            }, 135000);
+        }
+    </script>
+</body>
+</html>
