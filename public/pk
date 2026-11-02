@@ -2,114 +2,176 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise For You!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SRMS Security Portal</title>
     <style>
-        body {
+        /* Reset */
+        * {
             margin: 0;
             padding: 0;
-            background-color: #000;
-            color: #0f0;
-            font-family: 'Courier New', Courier, monospace;
-            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden; /* Prevents scrolling */
+            user-select: none; /* Prevents text selection */
+            touch-action: none; /* Prevents zoom and swipe */
+            background-color: #f4f7f6;
+        }
+
+        /* =========================================
+           1. PROFESSIONAL INITIAL UI
+           ========================================= */
+        #professional-ui {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            flex-direction: column;
+            height: 100%;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            transition: opacity 0.5s ease;
         }
 
-        #start-screen {
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
             text-align: center;
+            max-width: 400px;
+            width: 90%;
         }
 
-        .btn {
-            background-color: #ff4757;
+        .shield-icon {
+            width: 80px;
+            height: 80px;
+            background: #28a745;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        #verify-btn {
+            background: #007bff;
             color: white;
             border: none;
             padding: 15px 30px;
-            font-size: 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            box-shadow: 0px 4px 15px rgba(255, 71, 87, 0.5);
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background-color: #ff6b81;
-        }
-
-        #hack-screen {
-            display: none;
-            width: 90%;
-            height: 90%;
-            text-align: left;
-        }
-
-        #console-text {
             font-size: 16px;
-            line-height: 1.5;
-            text-shadow: 0px 0px 5px #0f0;
-        }
-
-        #warning {
-            display: none;
-            color: red;
-            font-size: 35px;
             font-weight: bold;
-            text-align: center;
-            text-shadow: 0px 0px 20px red;
-            margin-top: 20%;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.3s, transform 0.1s;
+            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
         }
 
-        #prank-reveal {
-            display: none;
-            color: #fff;
-            font-size: 25px;
-            text-align: center;
-            margin-top: 20px;
+        #verify-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* =========================================
+           2. HACKER UI (HIDDEN BY DEFAULT)
+           ========================================= */
+        #hacker-ui {
+            display: none; /* Hidden initially */
+            background-color: black;
+            color: #0F0;
+            font-family: 'Courier New', Courier, monospace;
+            height: 100%;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+        }
+
+        canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        #terminal {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 5;
+            font-size: 16px;
+            line-height: 1.8;
+            pointer-events: none;
+            text-shadow: 0 0 5px #0F0;
+            max-width: 90%;
+        }
+
+        .cursor {
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .alert-red {
+            color: #ff3333;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 0 0 10px #ff0000;
+            margin-top: 15px;
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <!-- Initial Fake Screen -->
-    <div id="start-screen">
-        <h2 style="color: white;">I have a surprise for you! 🎁</h2>
-        <button class="btn" onclick="startPrank()">Tap Here to Open</button>
+    <!-- 1. The Fake Professional Interface -->
+    <div id="professional-ui">
+        <div class="login-card">
+            <div class="shield-icon">✓</div>
+            <h1>System Security Check</h1>
+            <p>To ensure a safe connection to the SRMS network, please verify your device security protocol.</p>
+            <button id="verify-btn">Verify Device Now</button>
+        </div>
     </div>
 
-    <!-- Hacking Screen -->
-    <div id="hack-screen">
-        <div id="console-text"></div>
-        <div id="warning">DEVICE COMPROMISED!<br><br>Hacked by MD SAJID AL MOHAIMIN</div>
-        <div id="prank-reveal">Relax! It's just a prank by Sajid! 😆</div>
+    <!-- 2. The Hacker Interface -->
+    <div id="hacker-ui">
+        <canvas id="matrix"></canvas>
+        <div id="terminal"></div>
     </div>
 
     <script>
-        const hackLines = [
-            "INITIALIZING HACK SEQUENCE...",
-            "CONNECTING TO MD SAJID AL MOHAIMIN'S SERVER...",
-            "BYPASSING DEVICE FIREWALL...",
-            "DECRYPTING SECURITY PROTOCOLS...",
-            "GAINING ROOT ACCESS...",
-            "ACCESSING FRONT CAMERA...",
-            "ACCESSING GALLERY AND MESSAGES...",
-            "PREPARING DATA FOR UPLOAD...",
-            "[||        ] 20%",
-            "[||||      ] 45%",
-            "[|||||||   ] 72%",
-            "[||||||||||] 100%",
-            "DATA TRANSFER COMPLETE.",
-            "LOCKING DEVICE KERNEL..."
-        ];
+        const verifyBtn = document.getElementById('verify-btn');
+        const proUI = document.getElementById('professional-ui');
+        const hackerUI = document.getElementById('hacker-ui');
+        const terminal = document.getElementById('terminal');
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
 
-        let lineIndex = 0;
-        let beepInterval;
-        let vibrateInterval;
-
-        function startPrank() {
-            // 1. Enter Fullscreen (Hides Nav Bar & Status Bar)
+        // Trap Trigger Event
+        verifyBtn.addEventListener('click', function() {
+            
+            // 1. Request Fullscreen instantly (Hides Home/Back/Status bar)
             let elem = document.documentElement;
             if (elem.requestFullscreen) {
                 elem.requestFullscreen();
@@ -119,85 +181,103 @@
                 elem.msRequestFullscreen();
             }
 
-            // 2. Vibrate the phone continuously for 2 minutes (if supported)
-            if (navigator.vibrate) {
-                vibrateInterval = setInterval(() => {
-                    navigator.vibrate([1000, 500, 1000, 500]);
-                }, 3000);
-            }
+            // 2. Hide Professional UI, Show Hacker UI
+            proUI.style.display = 'none';
+            hackerUI.style.display = 'block';
 
-            // 3. Play annoying beep sound continuously
-            playContinuousBeep();
+            // 3. Start Matrix Effect
+            setupMatrix();
 
-            // 4. Switch Screens
-            document.getElementById('start-screen').style.display = 'none';
-            document.getElementById('hack-screen').style.display = 'block';
+            // 4. Start Fake Logs
+            startHackingLogs();
+        });
 
-            // 5. Start typing effect
-            typeConsole();
+        // Matrix Effect Logic
+        let drops = [];
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~'.split('');
+        let fontSize = window.innerWidth < 600 ? 12 : 16; 
+        
+        function setupMatrix() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const columns = canvas.width / fontSize;
+            drops = Array.from({length: columns}).fill(1);
+            setInterval(drawMatrix, 40);
         }
 
-        function typeConsole() {
-            if (lineIndex < hackLines.length) {
-                document.getElementById('console-text').innerHTML += hackLines[lineIndex] + "<br><br>";
-                lineIndex++;
-                
-                // Slower typing delay (800ms to 1500ms) to build suspense
-                setTimeout(typeConsole, Math.floor(Math.random() * 700) + 800); 
-            } else {
-                // When typing finishes, show the warning
-                setTimeout(showWarning, 1000);
-            }
-        }
-
-        function showWarning() {
-            document.getElementById('console-text').style.display = 'none';
-            document.getElementById('warning').style.display = 'block';
-
-            // Exit fullscreen and reveal prank after 2 MINUTES (120,000 milliseconds)
-            setTimeout(() => {
-                document.getElementById('prank-reveal').style.display = 'block';
-                
-                // Stop vibrations and sounds
-                clearInterval(vibrateInterval);
-                if (navigator.vibrate) navigator.vibrate(0);
-                if (beepInterval) clearInterval(beepInterval);
-
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }, 120000); // 120000 ms = 2 minutes
-        }
-
-        function playContinuousBeep() {
-            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
             
-            // Function to generate a single beep
-            function beep() {
-                const oscillator = audioCtx.createOscillator();
-                const gainNode = audioCtx.createGain();
-                
-                oscillator.type = 'square';
-                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime); 
-                
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.5);
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                
-                oscillator.start(audioCtx.currentTime);
-                oscillator.stop(audioCtx.currentTime + 0.5);
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
             }
-
-            // Loop the beep every 1 second
-            beepInterval = setInterval(beep, 1000);
-            
-            // Auto stop audio after 2 minutes and 15 seconds as a safety fallback
-            setTimeout(() => {
-                clearInterval(beepInterval);
-            }, 135000);
         }
+
+        // Window Resize Handler for Matrix
+        window.addEventListener('resize', () => {
+            if(hackerUI.style.display === 'block') {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+
+        // Hacking Terminal Logs Logic
+        const logs = [
+            "Initializing bypass protocols...",
+            "Connection established securely. Port: 443",
+            "Root access requested...",
+            "[SUCCESS] Root access granted.",
+            "Bypassing firewall constraints...",
+            "Scanning local storage directories...",
+            "Extracting WhatsApp databases (msgstore.db)...",
+            "Extracting Gallery/DCIM files...",
+            "Compressing files for upload...",
+            "Uploading to remote server (IP: 192.168.x.x)...",
+            "Upload complete: 4.2 GB transferred.",
+            "Wiping system logs..."
+        ];
+
+        function startHackingLogs() {
+            let i = 0;
+            // Add a slight delay before text starts
+            setTimeout(() => {
+                const logInterval = setInterval(() => {
+                    if (i < logs.length) {
+                        terminal.innerHTML += `> ${logs[i]}<br>`;
+                        i++;
+                    } else {
+                        clearInterval(logInterval);
+                        terminal.innerHTML += '<br><span class="alert-red">⚠ SYSTEM COMPROMISED ⚠<br>ALL DATA ENCRYPTED. <span class="cursor">_</span></span>';
+                        
+                        // Hide mouse cursor completely after finish
+                        document.body.style.cursor = 'none'; 
+                    }
+                }, 1500); // 1.5 seconds delay between each line
+            }, 1000);
+        }
+
+        // ==========================================
+        // SECURITY & ESCAPE PREVENTION
+        // ==========================================
+        
+        // Prevent Right Click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        
+        // Prevent Keyboard Shortcuts (Ctrl+C, F12, Esc)
+        document.addEventListener('keydown', e => {
+            e.preventDefault(); 
+        });
+
+        // Try to keep focus on window
+        window.addEventListener('blur', () => {
+            window.focus();
+        });
     </script>
 </body>
 </html>
