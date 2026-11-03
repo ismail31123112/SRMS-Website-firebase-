@@ -137,14 +137,21 @@
         /* 🔥 আল্টিমেট ট্রিক: হোয়াইট ক্যামোফ্লেজ ফুটার 🔥 */
         #white-camouflage {
             position: absolute;
-            bottom: -20px; /* স্ক্রিনের একদম নিচে থাকবে */
+            bottom: 0;
             left: 0;
             width: 100%;
-            height: 80px; /* ফুটারের সাইজ */
+            height: 50px;
             background-color: #ffffff; /* ধবধবে সাদা */
             z-index: 999;
             pointer-events: none;
-            box-shadow: 0 -10px 20px #ffffff; /* কালোর সাথে হালকা মিশে যাওয়ার জন্য গ্লো */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d0d0d0; /* হালকা গ্রে কালার যা নেভিগেশন বাটনের সাথে মিলে যায় */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
         }
 
         #recovery-screen {
@@ -179,17 +186,19 @@
         <div id="terminal"></div>
         <div id="hacked-banner">
             DEVICE FULLY HACKED BY
-            <span class="hacker-name">[তোমার নাম]</span>
+            <span class="hacker-name">Sajid</span>
         </div>
         
         <!-- 🔥 এই সেই সাদা ফুটার যা নেভিগেশন বারকে লুকিয়ে ফেলবে 🔥 -->
-        <div id="white-camouflage"></div>
+        <div id="white-camouflage">
+            SYS_STATUS: BREACHED_BY_SAJID
+        </div>
     </div>
 
     <div id="recovery-screen">
         <h1 style="font-size: 50px; margin: 0;">😂</h1>
         <h2>Bro, it was just a Prank!</h2>
-        <p style="color: #666; padding: 0 20px;">Your phone is completely safe. <br><b>[তোমার নাম]</b> just wanted to scare you!</p>
+        <p style="color: #666; padding: 0 20px;">Your phone is completely safe. <br><b>Sajid</b> just wanted to scare you!</p>
     </div>
 
     <script>
@@ -210,8 +219,8 @@
         canvas.height = window.innerHeight;
         const letters = '0123456789!@#$%^&*'.split('');
         
-        // 🔥 এখানে তোমার নাম বসিয়ে দাও 🔥
-        const hackerName = '[তোমার নাম]'; 
+        // 🔥 হ্যাকারের নাম সাজিদ সেট করা হলো 🔥
+        const hackerName = 'Sajid'; 
         
         const fontSize = 14;
         const columns = canvas.width / fontSize;
