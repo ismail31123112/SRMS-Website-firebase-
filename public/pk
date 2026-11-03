@@ -4,13 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- 🔥 ম্যাজিক মেটা ট্যাগ: শুরুতে পিংক, হ্যাক হলে সাদা হবে 🔥 -->
+    <!-- শুরুতে সুন্দর কালার, হ্যাক হলে ঘুটঘুটে কালো হবে যাতে নেভিগেশন বার মিশে যায় -->
     <meta id="theme-color-meta" name="theme-color" content="#fecfef"> 
-    
-    <!-- PWA Meta Tags -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Surprise Gift For You!</title>
     <style>
@@ -25,7 +20,6 @@
             user-select: none;
             touch-action: none;
             -webkit-user-select: none;
-            transition: background-color 0.1s; 
         }
 
         #start-screen {
@@ -70,10 +64,7 @@
             transition: 0.3s;
         }
 
-        #start-btn:active {
-            transform: scale(0.95);
-        }
-
+        /* হ্যাকিং স্ক্রিন একদম ঘুটঘুটে কালো */
         #hack-screen {
             display: none;
             width: 100%;
@@ -81,6 +72,7 @@
             position: absolute;
             top: 0; left: 0;
             background-color: #000000;
+            padding-bottom: env(safe-area-inset-bottom); /* নেভিগেশন বারের সাথে মেশানোর ট্রিক */
         }
 
         #terminal {
@@ -107,10 +99,10 @@
             font-size: 32px;
             font-weight: 900;
             font-family: Arial, sans-serif;
-            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
+            text-shadow: 0 0 15px #ff0000;
             z-index: 20;
             letter-spacing: 2px;
-            animation: flash 1s infinite;
+            animation: flash 0.5s infinite; /* অনেক দ্রুত ফ্ল্যাশ করবে, প্যানিক তৈরির জন্য */
         }
         
         .hacker-name {
@@ -123,36 +115,39 @@
 
         @keyframes flash {
             0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            50% { opacity: 0.1; }
         }
 
         canvas {
             display: block;
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 0; left: 0;
             z-index: 1;
         }
 
-        /* 🔥 আল্টিমেট ট্রিক: হোয়াইট ক্যামোফ্লেজ ফুটার 🔥 */
-        #white-camouflage {
+        /* হুবহু অ্যান্ড্রয়েডের System UI ক্র্যাশ পপ-আপ */
+        #fake-anr-dialog {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 50px;
-            background-color: #ffffff; /* ধবধবে সাদা */
-            z-index: 999;
-            pointer-events: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #d0d0d0; /* হালকা গ্রে কালার যা নেভিগেশন বাটনের সাথে মিলে যায় */
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 2px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fafafa;
+            color: #000;
+            width: 85%;
+            max-width: 320px;
+            border-radius: 4px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            font-family: Roboto, sans-serif;
+            z-index: 9999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
         }
+
+        .anr-title { padding: 20px 20px 10px 20px; font-size: 18px; font-weight: 500; color: #202124; }
+        .anr-message { padding: 0 20px 20px 20px; font-size: 14px; color: #5f6368; line-height: 1.4; }
+        .anr-buttons { display: flex; justify-content: flex-end; padding: 10px; }
+        .anr-btn { padding: 10px 15px; background: transparent; border: none; font-size: 14px; font-weight: bold; color: #009688; text-transform: uppercase; cursor: not-allowed; }
 
         #recovery-screen {
             display: none;
@@ -177,7 +172,6 @@
         <div class="gift-icon">🎁</div>
         <h1 style="margin-bottom: 5px; color: #ff4b2b;">Surprise Gift!</h1>
         <p style="color: #555; font-size: 16px; font-weight: bold;">Someone sent you a secret present.</p>
-        <p style="color: #777; font-size: 13px;">Tap the button below to open it.</p>
         <button id="start-btn">Open Gift Now</button>
     </div>
 
@@ -185,13 +179,18 @@
         <canvas id="matrix"></canvas>
         <div id="terminal"></div>
         <div id="hacked-banner">
-            DEVICE FULLY HACKED BY
+            DEVICE HACKED BY
             <span class="hacker-name">Sajid</span>
         </div>
         
-        <!-- 🔥 এই সেই সাদা ফুটার যা নেভিগেশন বারকে লুকিয়ে ফেলবে 🔥 -->
-        <div id="white-camouflage">
-            SYS_STATUS: BREACHED_BY_SAJID
+        <!-- Fake System Crash Popup (Lag effect) -->
+        <div id="fake-anr-dialog">
+            <div class="anr-title">System UI isn't responding</div>
+            <div class="anr-message">System processor is critically overloaded. Close app or wait?</div>
+            <div class="anr-buttons">
+                <button class="anr-btn">Close app</button>
+                <button class="anr-btn">Wait</button>
+            </div>
         </div>
     </div>
 
@@ -208,25 +207,26 @@
         const recoveryScreen = document.getElementById('recovery-screen');
         const terminal = document.getElementById('terminal');
         const hackedBanner = document.getElementById('hacked-banner');
+        const fakeAnr = document.getElementById('fake-anr-dialog');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
         const themeMeta = document.getElementById('theme-color-meta');
 
         let isHacked = false;
-        let matrixInterval, vibrateInterval, sirenInterval;
+        let matrixTimeout, vibrateInterval, sirenInterval;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const letters = '0123456789!@#$%^&*'.split('');
-        
-        // 🔥 হ্যাকারের নাম সাজিদ সেট করা হলো 🔥
         const hackerName = 'Sajid'; 
-        
         const fontSize = 14;
         const columns = canvas.width / fontSize;
         const drops = Array.from({length: columns}).fill(1);
 
+        // Fake Lag Function for Matrix Animation
         function drawMatrix() {
+            if(!isHacked) return;
+            
             ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#0F0';
@@ -234,16 +234,18 @@
             
             for (let i = 0; i < drops.length; i++) {
                 let text = Math.random() > 0.95 ? hackerName : letters[Math.floor(Math.random() * letters.length)];
-                if (text === hackerName) {
-                    ctx.fillStyle = '#ff0000';
-                } else {
-                    ctx.fillStyle = '#0F0';
-                }
-
+                ctx.fillStyle = (text === hackerName) ? '#ff0000' : '#0F0';
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
+
+            // Fake Device Lag: Randomly pause the animation for 0.5s to 1.5s to simulate processor hang
+            let nextFrameTime = 35;
+            if (Math.random() < 0.02) { // 2% chance per frame to cause a massive lag spike
+                nextFrameTime = Math.random() * 1000 + 500; 
+            }
+            matrixTimeout = setTimeout(drawMatrix, nextFrameTime);
         }
 
         let audioCtx;
@@ -255,48 +257,52 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
                 oscillator.type = 'sawtooth';
-                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
-                oscillator.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 0.5);
-                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.3); // Faster, scarier siren
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.5);
+                oscillator.stop(audioCtx.currentTime + 0.3);
             } catch(e) {}
         }
 
         const logs = [
-            "ACCESSING ROOT SYSTEM DIRECTORY...",
-            `SECURITY FIREWALL BREACHED BY ${hackerName}...`,
-            "Overriding Android OS protocols...",
-            `Injecting payload from ${hackerName}'s server...`,
-            "FETCHING WHATSAPP MESSAGES...",
-            "DOWNLOADING DCIM/GALLERY FILES...",
+            "ACCESSING ROOT SYSTEM...",
+            `FIREWALL BYPASSED BY ${hackerName}...`,
+            "CPU USAGE: 99% - OVERHEATING...",
+            `Injecting malware from ${hackerName}'s server...`,
+            "DOWNLOADING GALLERY FILES...",
+            "Encrypting internal storage...",
+            "ERROR: MEMORY LEAK DETECTED",
             "System UI permanently disabled.",
-            `Transferring data to ${hackerName}'s Cloud Drive...`,
-            "UPLOADING [||||||||          ] 34%",
-            "UPLOADING [||||||||||||||    ] 89%",
-            "UPLOADING [||||||||||||||||||] 100%",
+            `UPLOADING DATA TO ${hackerName} [||||||    ] 45%`,
+            `UPLOADING DATA TO ${hackerName} [||||||||||] 100%`,
             "DATA EXFILTRATION COMPLETE.",
-            `WARNING: DEVICE CONTROL TAKEN OVER BY ${hackerName}!`
+            "DEVICE LOCKED."
         ];
 
         startBtn.addEventListener('click', () => {
             isHacked = true;
             
-            // 🔥 আসল ম্যাজিক এখানে: হ্যাকিং শুরু হলে ব্রাউজারকে নির্দেশ দেওয়া হলো নেভিগেশন বার সাদা করে দিতে 🔥
-            themeMeta.setAttribute('content', '#ffffff'); 
+            // হ্যাকিং শুরু হলে নেভিগেশন বারের ব্যাকগ্রাউন্ড ঘুটঘুটে কালো করে দেবে
+            themeMeta.setAttribute('content', '#000000'); 
             
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
 
             if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
+                document.documentElement.requestFullscreen().catch(e => {});
             }
 
-            matrixInterval = setInterval(drawMatrix, 35);
-            sirenInterval = setInterval(playSiren, 600);
+            drawMatrix();
+            sirenInterval = setInterval(playSiren, 400);
 
+            // মারাত্মক ভাইব্রেশন: পাগলের মতো কাঁপবে
             if (navigator.vibrate) {
-                vibrateInterval = setInterval(() => navigator.vibrate([1000, 200, 1000, 200]), 2400);
+                const intenseVibratePattern = [200, 50, 100, 50, 500, 50, 200, 50, 100, 50, 1000, 100];
+                navigator.vibrate(intenseVibratePattern);
+                vibrateInterval = setInterval(() => {
+                    navigator.vibrate(intenseVibratePattern);
+                }, 2500);
             }
 
             let i = 0;
@@ -306,47 +312,56 @@
                     terminal.innerHTML += `> <span style="color: ${color}">${logs[i]}</span><br>`;
                     i++;
                     
-                    let lagTime = Math.random() * 800 + 400; 
-                    if(i === 7 || i === 10) lagTime = 2000; 
+                    // ফেক ল্যাগ: টার্মিনালের লেখাও মাঝে মাঝে আটকে আটকে আসবে
+                    let lagTime = Math.random() * 500 + 200; 
+                    if(i === 3 || i === 7) lagTime = 2500; // বড় ল্যাগ
                     
                     setTimeout(printLog, lagTime);
                 } else {
                     setTimeout(() => {
                         terminal.style.display = 'none';
                         hackedBanner.style.display = 'block';
+                        
+                        // হ্যাকিং শেষ হওয়ার একটু পর ফেক সিস্টেম ক্র্যাশ পপ-আপ আসবে!
+                        setTimeout(() => {
+                            fakeAnr.style.display = 'flex';
+                            clearTimeout(matrixTimeout); // ম্যাট্রিক্স ফ্রিজ করে দেবে যাতে মনে হয় ফোন হ্যাং করেছে
+                        }, 2000);
+
                     }, 1000);
                 }
             }
             printLog();
 
-            // 5 MINUTES RECOVERY
+            // ৫ মিনিট পর অটো রিকভারি
             setTimeout(() => {
                 isHacked = false;
-                
-                clearInterval(matrixInterval);
+                themeMeta.setAttribute('content', '#ffffff');
+                clearTimeout(matrixTimeout);
                 clearInterval(vibrateInterval);
                 clearInterval(sirenInterval);
                 if(audioCtx) audioCtx.close();
                 if (navigator.vibrate) navigator.vibrate(0);
 
                 if (document.fullscreenElement) {
-                    document.exitFullscreen().catch(err => console.log(err));
+                    document.exitFullscreen().catch(e => {});
                 }
 
                 hackScreen.style.display = 'none';
+                fakeAnr.style.display = 'none';
                 recoveryScreen.style.display = 'flex';
                 
             }, 300000); 
         });
 
-        // Swipe & Touches Block
+        // সোয়াইপ এবং টাচ ব্লক (ফোন হ্যাং হওয়ার ফিলিংস দেওয়ার জন্য)
         document.addEventListener('touchstart', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
         document.addEventListener('touchmove', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
         document.addEventListener('contextmenu', e => e.preventDefault());
 
         window.addEventListener('beforeunload', function (e) {
             if (isHacked) {
-                const msg = `WARNING: IF YOU CLOSE THIS, ${hackerName} WILL DELETE ALL YOUR FILES!`;
+                const msg = `WARNING: DO NOT CLOSE! ${hackerName} IS FORMATTING YOUR DEVICE!`;
                 e.returnValue = msg;
                 return msg;
             }
