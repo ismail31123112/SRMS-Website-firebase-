@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- 🔥 GeekPrank's Secret: Default Pitch Black Theme Color 🔥 -->
-    <!-- এটি সাইটে ঢোকার সাথে সাথেই নেভিগেশন বারকে কালোর সাথে মিশিয়ে হাইড করে দেবে -->
-    <meta id="theme-color-meta" name="theme-color" content="#000000">
+    <!-- 🔥 The Ultimate Secret: Dynamic Theme Color 🔥 -->
+    <!-- सुरुতে সাদা, হ্যাকিং শুরু হলে জাভাস্ক্রিপ্ট দিয়ে কালো করে দেওয়া হবে -->
+    <meta id="theme-color-meta" name="theme-color" content="#ffffff">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Surprise Gift For You!</title>
@@ -15,8 +15,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #000000; /* GeekPrank's Default Black */
-            color: #0f0;
+            background-color: #ffffff; 
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             user-select: none;
@@ -24,15 +23,15 @@
             touch-action: none; 
         }
 
-        /* সারপ্রাইজ স্ক্রিন (ডার্ক থিম যাতে নেভিগেশন বার হাইড থাকে) */
+        /* 🎁 প্রথম স্ক্রিন (সাদা থিম) */
         #start-screen {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
-            background: #000000; 
-            color: #ffffff;
+            background: #ffffff; 
+            color: #333333;
             font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             text-align: center;
             padding: 20px;
@@ -63,13 +62,13 @@
             border-radius: 8px;
             cursor: pointer;
             margin-top: 25px;
-            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.5);
+            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);
             transition: 0.3s;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        /* হ্যাকিং স্ক্রিন */
+        /* 💀 হ্যাকিং স্ক্রিন (কালো ব্যাকগ্রাউন্ড) */
         #hack-screen {
             display: none;
             width: 100%;
@@ -77,6 +76,7 @@
             position: absolute;
             top: 0; left: 0;
             background-color: #000000;
+            color: #0f0;
         }
 
         #terminal {
@@ -88,7 +88,9 @@
             line-height: 1.6;
             text-shadow: 0 0 5px #0f0;
             width: 90%;
+            height: calc(100% - 20px);
             pointer-events: none;
+            overflow: hidden;
         }
 
         #hacked-banner {
@@ -129,7 +131,7 @@
             z-index: 1;
         }
 
-        /* অরিজিনাল সিস্টেম ক্র্যাশ পপ-আপ */
+        /* 📱 অরিজিনাল সিস্টেম ক্র্যাশ পপ-আপ */
         #fake-anr-dialog {
             position: absolute;
             top: 50%;
@@ -153,15 +155,15 @@
         .anr-buttons { display: flex; justify-content: flex-end; padding: 10px; }
         .anr-btn { padding: 10px 15px; background: transparent; border: none; font-size: 14px; font-weight: bold; color: #009688; text-transform: uppercase; cursor: not-allowed; }
 
-        /* রিকভারি স্ক্রিন */
+        /* 🛡️ রিকভারি স্ক্রিন */
         #recovery-screen {
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
-            background-color: #000000;
-            color: #ffffff;
+            background-color: #ffffff;
+            color: #333333;
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
@@ -169,27 +171,19 @@
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 200;
         }
-
-        /* ডেস্কটপ সাপোর্ট */
-        @media (min-width: 768px) {
-            #terminal { font-size: 18px; width: 60%; }
-            #hacked-banner { font-size: 50px; }
-            .hacker-name { font-size: 80px; }
-            #fake-anr-dialog { max-width: 400px; }
-        }
     </style>
 </head>
 <body>
 
-    <!-- ডার্ক স্টার্ট স্ক্রিন -->
+    <!-- 1️⃣ সাদা স্টার্ট স্ক্রিন -->
     <div id="start-screen">
         <div class="gift-icon">🎁</div>
         <h1 style="margin-bottom: 5px; color: #ff0055;">Surprise Gift!</h1>
-        <p style="color: #aaaaaa; font-size: 16px;">Someone sent you a secret present.</p>
+        <p style="color: #666666; font-size: 16px;">Someone sent you a secret present.</p>
         <button id="start-btn">Open Gift Now</button>
     </div>
 
-    <!-- হ্যাকিং স্ক্রিন -->
+    <!-- 2️⃣ হ্যাকিং স্ক্রিন -->
     <div id="hack-screen">
         <canvas id="matrix"></canvas>
         <div id="terminal"></div>
@@ -198,7 +192,7 @@
             <span class="hacker-name">SAJID</span>
         </div>
 
-        <!-- ফেক সিস্টেম ক্র্যাশ পপ-আপ -->
+        <!-- 📱 ফেক সিস্টেম ক্র্যাশ পপ-আপ -->
         <div id="fake-anr-dialog">
             <div class="anr-title">System UI isn't responding</div>
             <div class="anr-message">Processor overload detected. Device memory is critically full.</div>
@@ -209,11 +203,11 @@
         </div>
     </div>
 
-    <!-- ৫ মিনিট পর রিকভারি স্ক্রিন -->
+    <!-- 3️⃣ ৫ মিনিট পর রিকভারি স্ক্রিন -->
     <div id="recovery-screen">
         <h1 style="font-size: 60px; margin: 0;">😂</h1>
         <h2>Relax Bro, it was a Prank!</h2>
-        <p style="color: #888; padding: 0 20px; font-size: 16px;">Your device is completely safe. <br><br><b style="color: #0f0; font-size: 20px;">SAJID</b> just wanted to scare you!</p>
+        <p style="color: #666; padding: 0 20px; font-size: 16px;">Your device is completely safe. <br><br><b style="color: #ff0055; font-size: 20px;">SAJID</b> just wanted to scare you!</p>
     </div>
 
     <script>
@@ -224,6 +218,7 @@
         const terminal = document.getElementById('terminal');
         const hackedBanner = document.getElementById('hacked-banner');
         const fakeAnr = document.getElementById('fake-anr-dialog');
+        const themeMeta = document.getElementById('theme-color-meta');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -238,7 +233,6 @@
         const columns = canvas.width / fontSize;
         const drops = Array.from({length: columns}).fill(1);
 
-        // ফেক ল্যাগ সহ ম্যাট্রিক্স অ্যানিমেশন
         function drawMatrix() {
             if(!isHacked) return;
             
@@ -255,7 +249,7 @@
                 drops[i]++;
             }
 
-            // ⚠️ Fake Device Lag: মাঝে মাঝে আটকে যাবে!
+            // ⚠️ Fake Device Lag
             let nextFrameTime = 35;
             if (Math.random() < 0.04) { 
                 nextFrameTime = Math.random() * 1500 + 500; 
@@ -263,7 +257,6 @@
             matrixTimeout = setTimeout(drawMatrix, nextFrameTime);
         }
 
-        // সাইরেন সাউন্ড
         let audioCtx;
         function playSiren() {
             try {
@@ -299,18 +292,16 @@
         startBtn.addEventListener('click', () => {
             isHacked = true;
             
+            // 🔥 TRICK: ফুলস্ক্রিন বাদ দিয়ে শুধু থিম কালার কালো করে দেওয়া হলো!
+            themeMeta.setAttribute('content', '#000000');
+            document.body.style.backgroundColor = '#000000';
+            
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
-
-            // ফুলস্ক্রিন রিকোয়েস্ট (যাতে নেভিগেশন বার ফিজিক্যালি গায়েব হয়ে যায়)
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen().catch(e => {});
-            }
 
             drawMatrix();
             sirenInterval = setInterval(playSiren, 450);
 
-            // ⚠️ মারাত্মক ভাইব্রেশন 
             if (navigator.vibrate) {
                 const intenseVibratePattern = [300, 50, 100, 50, 600, 50, 200, 50, 100, 50, 1500, 100];
                 navigator.vibrate(intenseVibratePattern);
@@ -326,7 +317,6 @@
                     terminal.innerHTML += `> <span style="color: ${color}">${logs[i]}</span><br>`;
                     i++;
                     
-                    // ফেক টার্মিনাল ল্যাগ
                     let lagTime = Math.random() * 800 + 200; 
                     if(i === 3 || i === 6 || i === 8) lagTime = 3500; 
                     
@@ -346,7 +336,7 @@
             }
             printLog();
 
-            // ⏱️ ৫ মিনিট পর রিকভারি (৩০০,০০০ মিলি-সেকেন্ড)
+            // ⏱️ ৫ মিনিট পর রিকভারি
             setTimeout(() => {
                 isHacked = false;
                 clearTimeout(matrixTimeout);
@@ -355,9 +345,9 @@
                 if(audioCtx) audioCtx.close();
                 if (navigator.vibrate) navigator.vibrate(0);
 
-                if (document.fullscreenElement) {
-                    document.exitFullscreen().catch(e => {});
-                }
+                // রিকভারি স্ক্রিনে আবার সাদা থিম
+                themeMeta.setAttribute('content', '#ffffff');
+                document.body.style.backgroundColor = '#ffffff';
 
                 hackScreen.style.display = 'none';
                 fakeAnr.style.display = 'none';
@@ -366,7 +356,6 @@
             }, 300000); 
         });
 
-        // ডেস্কটপের জন্য কীবোর্ড এবং মাউস ব্লক
         document.addEventListener('contextmenu', e => { if(isHacked) e.preventDefault(); });
         document.onkeydown = function (e) {
             if (isHacked) {
