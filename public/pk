@@ -3,105 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SRMS Security Portal</title>
+    <title>System Update Required</title>
     <style>
-        /* Reset */
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-        }
-
-        body, html {
             height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* Prevents scrolling */
-            user-select: none; /* Prevents text selection */
-            touch-action: none; /* Prevents zoom and swipe */
-            background-color: #f4f7f6;
+            background-color: #000;
+            color: #0f0;
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            user-select: none;
+            touch-action: none;
         }
 
-        /* =========================================
-           1. PROFESSIONAL INITIAL UI
-           ========================================= */
-        #professional-ui {
+        #start-screen {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            transition: opacity 0.5s ease;
+            background-color: #f0f2f5; 
+            color: #1c1e21;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
         }
 
-        .login-card {
-            background: white;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-            max-width: 400px;
+        #start-btn {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            width: 80%;
+            max-width: 300px;
+        }
+
+        #hack-screen {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        #terminal {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            font-size: 13px;
+            line-height: 1.6;
+            text-shadow: 0 0 5px #0f0;
             width: 90%;
         }
 
-        .shield-icon {
-            width: 80px;
-            height: 80px;
-            background: #28a745;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
-            margin: 0 auto 20px;
-            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-        }
-
-        h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-
-        #verify-btn {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: background 0.3s, transform 0.1s;
-            box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
-        }
-
-        #verify-btn:active {
-            transform: scale(0.98);
-        }
-
-        /* =========================================
-           2. HACKER UI (HIDDEN BY DEFAULT)
-           ========================================= */
-        #hacker-ui {
-            display: none; /* Hidden initially */
-            background-color: black;
-            color: #0F0;
-            font-family: 'Courier New', Courier, monospace;
-            height: 100%;
-            width: 100%;
+        /* Fake Android System Unresponsive Dialog */
+        #fake-anr-dialog {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            color: #000;
+            width: 85%;
+            max-width: 320px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            font-family: Roboto, Arial, sans-serif;
             z-index: 9999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .anr-title {
+            padding: 20px 20px 10px 20px;
+            font-size: 18px;
+            font-weight: 500;
+            color: #202124;
+        }
+
+        .anr-message {
+            padding: 0 20px 20px 20px;
+            font-size: 14px;
+            color: #5f6368;
+            line-height: 1.4;
+        }
+
+        .anr-buttons {
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .anr-btn {
+            padding: 15px 20px;
+            background: transparent;
+            border: none;
+            text-align: left;
+            font-size: 14px;
+            font-weight: 500;
+            color: #000;
+            cursor: not-allowed; /* Makes it feel frozen */
+        }
+        
+        .anr-btn:first-child {
+            border-bottom: 1px solid #e0e0e0;
         }
 
         canvas {
@@ -111,106 +124,55 @@
             left: 0;
             z-index: 1;
         }
-
-        #terminal {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 5;
-            font-size: 16px;
-            line-height: 1.8;
-            pointer-events: none;
-            text-shadow: 0 0 5px #0F0;
-            max-width: 90%;
-        }
-
-        .cursor {
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
-        
-        .alert-red {
-            color: #ff3333;
-            font-size: 22px;
-            font-weight: bold;
-            text-shadow: 0 0 10px #ff0000;
-            margin-top: 15px;
-            display: block;
-        }
     </style>
 </head>
 <body>
 
-    <!-- 1. The Fake Professional Interface -->
-    <div id="professional-ui">
-        <div class="login-card">
-            <div class="shield-icon">✓</div>
-            <h1>System Security Check</h1>
-            <p>To ensure a safe connection to the SRMS network, please verify your device security protocol.</p>
-            <button id="verify-btn">Verify Device Now</button>
+    <!-- Innocent Start Screen -->
+    <div id="start-screen">
+        <h2 style="margin-bottom: 5px;">Connection Secure</h2>
+        <p style="color: #65676B; font-size: 14px;">Verify your browser to continue.</p>
+        <button id="start-btn">Verify Now</button>
+    </div>
+
+    <!-- Scary Hack Screen -->
+    <div id="hack-screen">
+        <canvas id="matrix"></canvas>
+        <div id="terminal"></div>
+        
+        <!-- Fake System Crash Popup -->
+        <div id="fake-anr-dialog">
+            <div class="anr-title">System UI isn't responding</div>
+            <div class="anr-message">System resources are critically low. Do you want to close it?</div>
+            <div class="anr-buttons">
+                <button class="anr-btn">Close app</button>
+                <button class="anr-btn">Wait</button>
+            </div>
         </div>
     </div>
 
-    <!-- 2. The Hacker Interface -->
-    <div id="hacker-ui">
-        <canvas id="matrix"></canvas>
-        <div id="terminal"></div>
-    </div>
-
     <script>
-        const verifyBtn = document.getElementById('verify-btn');
-        const proUI = document.getElementById('professional-ui');
-        const hackerUI = document.getElementById('hacker-ui');
+        const startBtn = document.getElementById('start-btn');
+        const startScreen = document.getElementById('start-screen');
+        const hackScreen = document.getElementById('hack-screen');
         const terminal = document.getElementById('terminal');
+        const fakeAnr = document.getElementById('fake-anr-dialog');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
-        // Trap Trigger Event
-        verifyBtn.addEventListener('click', function() {
-            
-            // 1. Request Fullscreen instantly (Hides Home/Back/Status bar)
-            let elem = document.documentElement;
-            if (elem.requestFullscreen) {
-                elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
-                elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE11 */
-                elem.msRequestFullscreen();
-            }
-
-            // 2. Hide Professional UI, Show Hacker UI
-            proUI.style.display = 'none';
-            hackerUI.style.display = 'block';
-
-            // 3. Start Matrix Effect
-            setupMatrix();
-
-            // 4. Start Fake Logs
-            startHackingLogs();
-        });
-
-        // Matrix Effect Logic
-        let drops = [];
-        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789$+-*/=%""\'#&_(),.;:?!\\|{}<>[]^~'.split('');
-        let fontSize = window.innerWidth < 600 ? 12 : 16; 
-        
-        function setupMatrix() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const columns = canvas.width / fontSize;
-            drops = Array.from({length: columns}).fill(1);
-            setInterval(drawMatrix, 40);
-        }
+        // Matrix Effect
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        const letters = '0123456789ABCDEF!@#$%^&*'.split('');
+        const fontSize = 14;
+        const columns = canvas.width / fontSize;
+        const drops = Array.from({length: columns}).fill(1);
 
         function drawMatrix() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#0F0';
             ctx.font = fontSize + 'px monospace';
-            
             for (let i = 0; i < drops.length; i++) {
                 const text = letters[Math.floor(Math.random() * letters.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -219,65 +181,93 @@
             }
         }
 
-        // Window Resize Handler for Matrix
-        window.addEventListener('resize', () => {
-            if(hackerUI.style.display === 'block') {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
+        // Web Audio API for Siren
+        let audioCtx;
+        function playSiren() {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } catch(e) {}
+        }
+
+        const logs = [
+            "INITIALIZING KERNEL EXPLOIT...",
+            "Bypassing security sandbox...",
+            "Mounting /system as read-write...",
+            "Extracting passwords database...",
+            "Packaging DCIM/Camera/WhatsApp...",
+            "Compressing 4.2GB data...",
+            "CONNECTING TO REMOTE SERVER [IP: 192.168.1.xxx]...",
+            "UPLOADING [||||||||          ] 34%",
+            "WARNING: CPU TEMPERATURE CRITICAL",
+            "UPLOADING [||||||||||||||    ] 68%",
+            "KERNEL PANIC: Memory Overflow"
+        ];
+
+        let isHacked = false;
+
+        startBtn.addEventListener('click', () => {
+            isHacked = true;
+            startScreen.style.display = 'none';
+            hackScreen.style.display = 'block';
+
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            }
+
+            setInterval(drawMatrix, 40);
+
+            if (navigator.vibrate) {
+                navigator.vibrate([1000, 500, 2000, 500, 3000]);
+                setInterval(() => navigator.vibrate([800, 200]), 1000);
+            }
+
+            setInterval(playSiren, 500);
+
+            // Fake Lagging Terminal Output
+            let i = 0;
+            function printLog() {
+                if (i < logs.length) {
+                    terminal.innerHTML += `> ${logs[i]}<br>`;
+                    i++;
+                    
+                    // Random delay to simulate phone lagging/stuttering
+                    let lagTime = Math.random() * 1500 + 500; 
+                    if(i === 6 || i === 8) lagTime = 3000; // Major fake freeze
+                    
+                    setTimeout(printLog, lagTime);
+                } else {
+                    // Show Fake Android System Crash after logs finish
+                    setTimeout(() => {
+                        fakeAnr.style.display = 'flex';
+                        // Stop matrix to make it look completely frozen
+                        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                        ctx.fillRect(0,0,canvas.width, canvas.height);
+                    }, 1000);
+                }
+            }
+            printLog();
+        });
+
+        // Warn user if they try to close
+        window.addEventListener('beforeunload', function (e) {
+            if (isHacked) {
+                const msg = "FATAL ERROR: Leaving will permanently lock device!";
+                e.returnValue = msg;
+                return msg;
             }
         });
 
-        // Hacking Terminal Logs Logic
-        const logs = [
-            "Initializing bypass protocols...",
-            "Connection established securely. Port: 443",
-            "Root access requested...",
-            "[SUCCESS] Root access granted.",
-            "Bypassing firewall constraints...",
-            "Scanning local storage directories...",
-            "Extracting WhatsApp databases (msgstore.db)...",
-            "Extracting Gallery/DCIM files...",
-            "Compressing files for upload...",
-            "Uploading to remote server (IP: 192.168.x.x)...",
-            "Upload complete: 4.2 GB transferred.",
-            "Wiping system logs..."
-        ];
-
-        function startHackingLogs() {
-            let i = 0;
-            // Add a slight delay before text starts
-            setTimeout(() => {
-                const logInterval = setInterval(() => {
-                    if (i < logs.length) {
-                        terminal.innerHTML += `> ${logs[i]}<br>`;
-                        i++;
-                    } else {
-                        clearInterval(logInterval);
-                        terminal.innerHTML += '<br><span class="alert-red">⚠ SYSTEM COMPROMISED ⚠<br>ALL DATA ENCRYPTED. <span class="cursor">_</span></span>';
-                        
-                        // Hide mouse cursor completely after finish
-                        document.body.style.cursor = 'none'; 
-                    }
-                }, 1500); // 1.5 seconds delay between each line
-            }, 1000);
-        }
-
-        // ==========================================
-        // SECURITY & ESCAPE PREVENTION
-        // ==========================================
-        
-        // Prevent Right Click
         document.addEventListener('contextmenu', e => e.preventDefault());
-        
-        // Prevent Keyboard Shortcuts (Ctrl+C, F12, Esc)
-        document.addEventListener('keydown', e => {
-            e.preventDefault(); 
-        });
-
-        // Try to keep focus on window
-        window.addEventListener('blur', () => {
-            window.focus();
-        });
     </script>
 </body>
 </html>
