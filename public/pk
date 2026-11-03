@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>System Update Required</title>
+    <!-- viewport-fit=cover and theme-color makes it stretch under the notch and nav bar -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <title>Surprise Gift For You!</title>
     <style>
         body, html {
             margin: 0;
@@ -14,107 +16,117 @@
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             user-select: none;
-            touch-action: none;
+            touch-action: none; /* Prevents all default browser swiping/scrolling */
         }
 
+        /* 1. Beautiful Surprise Start Screen */
         #start-screen {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
-            background-color: #f0f2f5; 
-            color: #1c1e21;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            color: #333;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             text-align: center;
             padding: 20px;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 50;
+        }
+
+        .gift-icon {
+            font-size: 80px;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
         }
 
         #start-btn {
-            background-color: #1877f2;
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
             color: white;
             border: none;
-            padding: 12px 24px;
-            font-size: 16px;
+            padding: 15px 35px;
+            font-size: 18px;
             font-weight: bold;
-            border-radius: 6px;
+            border-radius: 50px;
             cursor: pointer;
-            margin-top: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            width: 80%;
-            max-width: 300px;
+            margin-top: 25px;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+            transition: 0.3s;
         }
 
+        #start-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 2. Scary Hack Screen */
         #hack-screen {
             display: none;
             width: 100%;
             height: 100%;
-            position: relative;
+            position: absolute;
+            top: 0; left: 0;
+            background-color: #000;
         }
 
         #terminal {
             position: absolute;
-            top: 10px;
-            left: 10px;
+            top: 15px;
+            left: 15px;
             z-index: 10;
-            font-size: 13px;
+            font-size: 14px;
             line-height: 1.6;
             text-shadow: 0 0 5px #0f0;
             width: 90%;
+            pointer-events: none;
         }
 
-        /* Fake Android System Unresponsive Dialog */
-        #fake-anr-dialog {
+        /* Professional Hacker Banner */
+        #hacked-banner {
+            display: none;
             position: absolute;
-            top: 50%;
+            top: 40%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: #fff;
-            color: #000;
-            width: 85%;
-            max-width: 320px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            font-family: Roboto, Arial, sans-serif;
-            z-index: 9999;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .anr-title {
-            padding: 20px 20px 10px 20px;
-            font-size: 18px;
-            font-weight: 500;
-            color: #202124;
-        }
-
-        .anr-message {
-            padding: 0 20px 20px 20px;
-            font-size: 14px;
-            color: #5f6368;
-            line-height: 1.4;
-        }
-
-        .anr-buttons {
-            display: flex;
-            flex-direction: column;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .anr-btn {
-            padding: 15px 20px;
-            background: transparent;
-            border: none;
-            text-align: left;
-            font-size: 14px;
-            font-weight: 500;
-            color: #000;
-            cursor: not-allowed; /* Makes it feel frozen */
+            width: 100%;
+            text-align: center;
+            color: #ff0000;
+            font-size: 32px;
+            font-weight: 900;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
+            z-index: 20;
+            letter-spacing: 2px;
+            animation: flash 1s infinite;
         }
         
-        .anr-btn:first-child {
-            border-bottom: 1px solid #e0e0e0;
+        .hacker-name {
+            color: #fff;
+            font-size: 40px;
+            text-shadow: 0 0 10px #fff;
+            display: block;
+            margin-top: 10px;
+        }
+
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Screen Edge Darkener (Hides Nav/Status bar areas) */
+        .screen-edge-darkener {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            box-shadow: inset 0 0 40px #000000, inset 0 0 20px #000000;
+            pointer-events: none;
+            z-index: 100;
         }
 
         canvas {
@@ -124,46 +136,73 @@
             left: 0;
             z-index: 1;
         }
+
+        /* 3. Recovery Screen (After 5 mins) */
+        #recovery-screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            background-color: #ffffff;
+            color: #000;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 200;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Innocent Start Screen -->
+    <!-- Innocent Surprise Screen -->
     <div id="start-screen">
-        <h2 style="margin-bottom: 5px;">Connection Secure</h2>
-        <p style="color: #65676B; font-size: 14px;">Verify your browser to continue.</p>
-        <button id="start-btn">Verify Now</button>
+        <div class="gift-icon">🎁</div>
+        <h1 style="margin-bottom: 5px; color: #ff4b2b;">Surprise Gift!</h1>
+        <p style="color: #555; font-size: 16px; font-weight: bold;">Someone sent you a secret present.</p>
+        <p style="color: #777; font-size: 13px;">Tap the button below to open it.</p>
+        <button id="start-btn">Open Gift Now</button>
     </div>
 
-    <!-- Scary Hack Screen -->
+    <!-- Hacking Simulator Screen -->
     <div id="hack-screen">
+        <div class="screen-edge-darkener"></div>
         <canvas id="matrix"></canvas>
         <div id="terminal"></div>
         
-        <!-- Fake System Crash Popup -->
-        <div id="fake-anr-dialog">
-            <div class="anr-title">System UI isn't responding</div>
-            <div class="anr-message">System resources are critically low. Do you want to close it?</div>
-            <div class="anr-buttons">
-                <button class="anr-btn">Close app</button>
-                <button class="anr-btn">Wait</button>
-            </div>
+        <div id="hacked-banner">
+            DEVICE FULLY HACKED BY
+            <span class="hacker-name">[Sajid]</span>
         </div>
+    </div>
+
+    <!-- Auto Recovery Screen (Shows after 5 minutes) -->
+    <div id="recovery-screen">
+        <h1 style="font-size: 50px; margin: 0;">😂</h1>
+        <h2>Bro, it was just a Prank!</h2>
+        <p style="color: #666; padding: 0 20px;">Your phone is completely safe. <br><b>[Sajid]</b> just wanted to scare you!</p>
     </div>
 
     <script>
         const startBtn = document.getElementById('start-btn');
         const startScreen = document.getElementById('start-screen');
         const hackScreen = document.getElementById('hack-screen');
+        const recoveryScreen = document.getElementById('recovery-screen');
         const terminal = document.getElementById('terminal');
-        const fakeAnr = document.getElementById('fake-anr-dialog');
+        const hackedBanner = document.getElementById('hacked-banner');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
-        // Matrix Effect
+        let isHacked = false;
+        let matrixInterval, vibrateInterval, sirenInterval;
+
+        // Matrix Rain Effect (Customized with your name)
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const letters = '0123456789ABCDEF!@#$%^&*'.split('');
+        const letters = '0123456789!@#$%^&*'.split('');
+        const hackerName = '[তোমার নাম]'; // The name will sometimes appear in the matrix rain
         const fontSize = 14;
         const columns = canvas.width / fontSize;
         const drops = Array.from({length: columns}).fill(1);
@@ -173,15 +212,23 @@
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#0F0';
             ctx.font = fontSize + 'px monospace';
+            
             for (let i = 0; i < drops.length; i++) {
-                const text = letters[Math.floor(Math.random() * letters.length)];
+                // Randomly show hacker name instead of random characters
+                let text = Math.random() > 0.95 ? hackerName : letters[Math.floor(Math.random() * letters.length)];
+                if (text === hackerName) {
+                    ctx.fillStyle = '#ff0000'; // Name in red
+                } else {
+                    ctx.fillStyle = '#0F0'; // Normal in green
+                }
+
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
         }
 
-        // Web Audio API for Siren
+        // Scary Siren Audio
         let audioCtx;
         function playSiren() {
             try {
@@ -190,84 +237,122 @@
                 const gainNode = audioCtx.createGain();
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
-                oscillator.type = 'square';
-                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
-                oscillator.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.3);
-                gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(1000, audioCtx.currentTime + 0.5);
+                gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.3);
+                oscillator.stop(audioCtx.currentTime + 0.5);
             } catch(e) {}
         }
 
+        // Customized Logs with your name everywhere
         const logs = [
-            "INITIALIZING KERNEL EXPLOIT...",
-            "Bypassing security sandbox...",
-            "Mounting /system as read-write...",
-            "Extracting passwords database...",
-            "Packaging DCIM/Camera/WhatsApp...",
-            "Compressing 4.2GB data...",
-            "CONNECTING TO REMOTE SERVER [IP: 192.168.1.xxx]...",
+            "ACCESSING ROOT SYSTEM DIRECTORY...",
+            "SECURITY FIREWALL BREACHED BY [Sajid]...",
+            "Overriding Android OS protocols...",
+            "Injecting payload from [Sajid]'s server...",
+            "FETCHING WHATSAPP MESSAGES...",
+            "DOWNLOADING DCIM/GALLERY FILES...",
+            "System UI permanently disabled.",
+            "Transferring data to [Sajid]'s Cloud Drive...",
             "UPLOADING [||||||||          ] 34%",
-            "WARNING: CPU TEMPERATURE CRITICAL",
-            "UPLOADING [||||||||||||||    ] 68%",
-            "KERNEL PANIC: Memory Overflow"
+            "UPLOADING [||||||||||||||    ] 89%",
+            "UPLOADING [||||||||||||||||||] 100%",
+            "DATA EXFILTRATION COMPLETE.",
+            "WARNING: DEVICE CONTROL TAKEN OVER BY [Sajid]!"
         ];
-
-        let isHacked = false;
 
         startBtn.addEventListener('click', () => {
             isHacked = true;
+            
+            // UI Switch
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
 
+            // Fullscreen to hide OS UI
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
             }
 
-            setInterval(drawMatrix, 40);
+            // Start Effects
+            matrixInterval = setInterval(drawMatrix, 35);
+            sirenInterval = setInterval(playSiren, 600);
 
             if (navigator.vibrate) {
-                navigator.vibrate([1000, 500, 2000, 500, 3000]);
-                setInterval(() => navigator.vibrate([800, 200]), 1000);
+                // Crazy vibration pattern
+                vibrateInterval = setInterval(() => navigator.vibrate([1000, 200, 1000, 200]), 2400);
             }
 
-            setInterval(playSiren, 500);
-
-            // Fake Lagging Terminal Output
+            // Print Fake Logs
             let i = 0;
             function printLog() {
                 if (i < logs.length) {
-                    terminal.innerHTML += `> ${logs[i]}<br>`;
+                    terminal.innerHTML += `> <span style="color: ${logs[i].includes('[Sajid]') ? '#ff0000' : '#0f0'}">${logs[i]}</span><br>`;
                     i++;
                     
-                    // Random delay to simulate phone lagging/stuttering
-                    let lagTime = Math.random() * 1500 + 500; 
-                    if(i === 6 || i === 8) lagTime = 3000; // Major fake freeze
+                    let lagTime = Math.random() * 800 + 400; 
+                    if(i === 7 || i === 10) lagTime = 2000; // Fake stuttering
                     
                     setTimeout(printLog, lagTime);
                 } else {
-                    // Show Fake Android System Crash after logs finish
+                    // After logs finish, show the big HACKED BY text
                     setTimeout(() => {
-                        fakeAnr.style.display = 'flex';
-                        // Stop matrix to make it look completely frozen
-                        ctx.fillStyle = 'rgba(0,0,0,0.5)';
-                        ctx.fillRect(0,0,canvas.width, canvas.height);
+                        terminal.style.display = 'none';
+                        hackedBanner.style.display = 'block';
                     }, 1000);
                 }
             }
             printLog();
+
+            // ==========================================
+            // AUTO RECOVERY AFTER EXACTLY 5 MINUTES (300,000 ms)
+            // ==========================================
+            setTimeout(() => {
+                isHacked = false;
+                
+                // Stop all scary effects
+                clearInterval(matrixInterval);
+                clearInterval(vibrateInterval);
+                clearInterval(sirenInterval);
+                if(audioCtx) audioCtx.close();
+                if (navigator.vibrate) navigator.vibrate(0); // Stop vibration
+
+                // Exit Fullscreen
+                if (document.fullscreenElement) {
+                    document.exitFullscreen().catch(err => console.log(err));
+                }
+
+                // Show friendly recovery screen
+                hackScreen.style.display = 'none';
+                recoveryScreen.style.display = 'flex';
+                
+            }, 300000); // 300000 ms = 5 minutes
         });
 
-        // Warn user if they try to close
+        // ==========================================
+        // BLOCKING EDGE SWIPES & NAVIGATION GESTURES
+        // ==========================================
+        // This prevents the webpage from scrolling/bouncing if they try to swipe from edges,
+        // making the screen feel completely frozen and unresponsive to touch.
+        document.addEventListener('touchstart', function(e) {
+            if (isHacked) e.preventDefault();
+        }, {passive: false});
+
+        document.addEventListener('touchmove', function(e) {
+            if (isHacked) e.preventDefault();
+        }, {passive: false});
+        
+        document.addEventListener('contextmenu', e => e.preventDefault());
+
+        // Warning if they somehow manage to press back
         window.addEventListener('beforeunload', function (e) {
             if (isHacked) {
-                const msg = "FATAL ERROR: Leaving will permanently lock device!";
+                const msg = "WARNING: IF YOU CLOSE THIS, [Sajid] WILL DELETE ALL YOUR FILES!";
                 e.returnValue = msg;
                 return msg;
             }
         });
-
-        document.addEventListener('contextmenu', e => e.preventDefault());
     </script>
 </body>
 </html>
