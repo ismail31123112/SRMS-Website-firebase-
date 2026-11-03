@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- 🔥 The Ultimate Secret: Dynamic Theme Color 🔥 -->
-    <!-- सुरुতে সাদা, হ্যাকিং শুরু হলে জাভাস্ক্রিপ্ট দিয়ে কালো করে দেওয়া হবে -->
-    <meta id="theme-color-meta" name="theme-color" content="#ffffff">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- 🚀 THE ULTIMATE CAMOUFLAGE: সবসময় থিম কালার সাদা থাকবে -->
+    <meta name="theme-color" content="#ffffff">
     
     <title>Surprise Gift For You!</title>
     <style>
@@ -15,7 +13,7 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #ffffff; 
+            background-color: #ffffff; /* প্রথম স্ক্রিনের জন্য সাদা */
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             user-select: none;
@@ -23,7 +21,7 @@
             touch-action: none; 
         }
 
-        /* 🎁 প্রথম স্ক্রিন (সাদা থিম) */
+        /* 🎁 প্রথম স্ক্রিন (পুরো সাদা) */
         #start-screen {
             display: flex;
             flex-direction: column;
@@ -40,12 +38,7 @@
             z-index: 50;
         }
 
-        .gift-icon {
-            font-size: 80px;
-            margin-bottom: 10px;
-            animation: bounce 2s infinite;
-        }
-
+        .gift-icon { font-size: 80px; margin-bottom: 10px; animation: bounce 2s infinite; }
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
             40% { transform: translateY(-20px); }
@@ -53,143 +46,94 @@
         }
 
         #start-btn {
-            background: #ff0055;
-            color: white;
-            border: none;
-            padding: 16px 45px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 25px;
-            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);
-            transition: 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            background: #ff0055; color: white; border: none; padding: 16px 45px;
+            font-size: 18px; font-weight: bold; border-radius: 8px; cursor: pointer;
+            margin-top: 25px; box-shadow: 0 4px 15px rgba(255, 0, 85, 0.4);
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
-        /* 💀 হ্যাকিং স্ক্রিন (কালো ব্যাকগ্রাউন্ড) */
+        /* 💀 হ্যাকিং স্ক্রিন */
         #hack-screen {
-            display: none;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0; left: 0;
-            background-color: #000000;
-            color: #0f0;
+            display: none; width: 100%; height: 100%; position: absolute;
+            top: 0; left: 0; background-color: #000000; color: #0f0;
         }
 
         #terminal {
+            position: absolute; top: 15px; left: 15px; z-index: 10;
+            font-size: 14px; line-height: 1.6; text-shadow: 0 0 5px #0f0;
+            width: 90%; height: calc(100% - 100px); pointer-events: none; overflow: hidden;
+        }
+
+        /* 🕵️‍♂️ THE MASTER ILLUSION: White Washout + Green Distraction */
+        #camouflage-container {
             position: absolute;
-            top: 15px;
-            left: 15px;
-            z-index: 10;
-            font-size: 14px;
-            line-height: 1.6;
-            text-shadow: 0 0 5px #0f0;
-            width: 90%;
-            height: calc(100% - 20px);
-            pointer-events: none;
-            overflow: hidden;
+            bottom: 0; left: 0; right: 0;
+            z-index: 100;
+        }
+
+        /* ১. কড়া সবুজ লেয়ার - চোখের ফোকাস এখানে আটকে রাখার জন্য */
+        #green-distraction {
+            background: #0F0; color: #000;
+            height: 35px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: Arial, sans-serif; font-weight: bold; font-size: 14px;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        /* ২. ধবধবে সাদা ফুটার - নেভিগেশন বারের সাথে মিশে যাওয়ার জন্য */
+        #white-washout {
+            background: #ffffff;
+            height: 25px; /* ঠিক নেভিগেশন বারের ওপরে একটা সাদা লেয়ার */
+            width: 100%;
         }
 
         #hacked-banner {
-            display: none;
-            position: absolute;
-            top: 40%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            text-align: center;
-            color: #ff0000;
-            font-size: 32px;
-            font-weight: 900;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 15px #ff0000;
-            z-index: 20;
-            letter-spacing: 2px;
-            animation: flash 0.3s infinite; 
+            display: none; position: absolute; top: 40%; left: 50%;
+            transform: translate(-50%, -50%); width: 100%; text-align: center;
+            color: #ff0000; font-size: 32px; font-weight: 900; font-family: Arial, sans-serif;
+            text-shadow: 0 0 15px #ff0000; z-index: 20; animation: flash 0.3s infinite; 
         }
-        
-        .hacker-name {
-            color: #fff;
-            font-size: 50px;
-            text-shadow: 0 0 20px #fff;
-            display: block;
-            margin-top: 15px;
-        }
+        .hacker-name { color: #fff; font-size: 50px; text-shadow: 0 0 20px #fff; display: block; margin-top: 15px; }
+        @keyframes flash { 0%, 100% { opacity: 1; } 50% { opacity: 0.1; } }
 
-        @keyframes flash {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.1; }
-        }
-
-        canvas {
-            display: block;
-            position: absolute;
-            top: 0; left: 0;
-            z-index: 1;
-        }
+        canvas { display: block; position: absolute; top: 0; left: 0; z-index: 1; }
 
         /* 📱 অরিজিনাল সিস্টেম ক্র্যাশ পপ-আপ */
         #fake-anr-dialog {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fafafa;
-            color: #000;
-            width: 85%;
-            max-width: 320px;
-            border-radius: 4px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            font-family: Roboto, sans-serif;
-            z-index: 10000;
-            display: none;
-            flex-direction: column;
-            overflow: hidden;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #fafafa; color: #000; width: 85%; max-width: 320px;
+            border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            font-family: Roboto, sans-serif; z-index: 10000; display: none; flex-direction: column;
         }
-
         .anr-title { padding: 20px 20px 10px 20px; font-size: 18px; font-weight: 500; color: #202124; }
         .anr-message { padding: 0 20px 20px 20px; font-size: 14px; color: #5f6368; line-height: 1.4; }
         .anr-buttons { display: flex; justify-content: flex-end; padding: 10px; }
         .anr-btn { padding: 10px 15px; background: transparent; border: none; font-size: 14px; font-weight: bold; color: #009688; text-transform: uppercase; cursor: not-allowed; }
-
-        /* 🛡️ রিকভারি স্ক্রিন */
-        #recovery-screen {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            background-color: #ffffff;
-            color: #333333;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            z-index: 200;
-        }
     </style>
 </head>
 <body>
 
-    <!-- 1️⃣ সাদা স্টার্ট স্ক্রিন -->
+    <!-- 🎁 স্টার্ট স্ক্রিন -->
     <div id="start-screen">
         <div class="gift-icon">🎁</div>
         <h1 style="margin-bottom: 5px; color: #ff0055;">Surprise Gift!</h1>
-        <p style="color: #666666; font-size: 16px;">Someone sent you a secret present.</p>
+        <p style="font-size: 16px;">Someone sent you a secret present.</p>
         <button id="start-btn">Open Gift Now</button>
     </div>
 
-    <!-- 2️⃣ হ্যাকিং স্ক্রিন -->
+    <!-- 💀 হ্যাকিং স্ক্রিন -->
     <div id="hack-screen">
         <canvas id="matrix"></canvas>
         <div id="terminal"></div>
         <div id="hacked-banner">
             SYSTEM BREACHED BY
             <span class="hacker-name">SAJID</span>
+        </div>
+
+        <!-- 🕵️‍♂️ THE ILLUSION CONTAINER -->
+        <div id="camouflage-container">
+            <div id="green-distraction">Target Device Locked</div>
+            <div id="white-washout"></div>
         </div>
 
         <!-- 📱 ফেক সিস্টেম ক্র্যাশ পপ-আপ -->
@@ -203,22 +147,13 @@
         </div>
     </div>
 
-    <!-- 3️⃣ ৫ মিনিট পর রিকভারি স্ক্রিন -->
-    <div id="recovery-screen">
-        <h1 style="font-size: 60px; margin: 0;">😂</h1>
-        <h2>Relax Bro, it was a Prank!</h2>
-        <p style="color: #666; padding: 0 20px; font-size: 16px;">Your device is completely safe. <br><br><b style="color: #ff0055; font-size: 20px;">SAJID</b> just wanted to scare you!</p>
-    </div>
-
     <script>
         const startBtn = document.getElementById('start-btn');
         const startScreen = document.getElementById('start-screen');
         const hackScreen = document.getElementById('hack-screen');
-        const recoveryScreen = document.getElementById('recovery-screen');
         const terminal = document.getElementById('terminal');
         const hackedBanner = document.getElementById('hacked-banner');
         const fakeAnr = document.getElementById('fake-anr-dialog');
-        const themeMeta = document.getElementById('theme-color-meta');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -235,7 +170,6 @@
 
         function drawMatrix() {
             if(!isHacked) return;
-            
             ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#0F0';
@@ -249,11 +183,9 @@
                 drops[i]++;
             }
 
-            // ⚠️ Fake Device Lag
+            // ⚠️ Fake Device Lag - মাঝে মাঝে আটকে যাবে
             let nextFrameTime = 35;
-            if (Math.random() < 0.04) { 
-                nextFrameTime = Math.random() * 1500 + 500; 
-            }
+            if (Math.random() < 0.04) { nextFrameTime = Math.random() * 1500 + 500; }
             matrixTimeout = setTimeout(drawMatrix, nextFrameTime);
         }
 
@@ -291,23 +223,19 @@
 
         startBtn.addEventListener('click', () => {
             isHacked = true;
-            
-            // 🔥 TRICK: ফুলস্ক্রিন বাদ দিয়ে শুধু থিম কালার কালো করে দেওয়া হলো!
-            themeMeta.setAttribute('content', '#000000');
-            document.body.style.backgroundColor = '#000000';
-            
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
 
+            // শুরু থেকেই থিম কালার সাদা আছে, তাই নেভিগেশন বার সাদা থাকবে। 
+            
             drawMatrix();
             sirenInterval = setInterval(playSiren, 450);
 
+            // মারাত্মক ভাইব্রেশন
             if (navigator.vibrate) {
                 const intenseVibratePattern = [300, 50, 100, 50, 600, 50, 200, 50, 100, 50, 1500, 100];
                 navigator.vibrate(intenseVibratePattern);
-                vibrateInterval = setInterval(() => {
-                    navigator.vibrate(intenseVibratePattern);
-                }, 2500);
+                vibrateInterval = setInterval(() => { navigator.vibrate(intenseVibratePattern); }, 2500);
             }
 
             let i = 0;
@@ -316,10 +244,8 @@
                     let color = logs[i].includes(hackerName) ? '#ff0000' : '#0f0';
                     terminal.innerHTML += `> <span style="color: ${color}">${logs[i]}</span><br>`;
                     i++;
-                    
                     let lagTime = Math.random() * 800 + 200; 
-                    if(i === 3 || i === 6 || i === 8) lagTime = 3500; 
-                    
+                    if(i === 3 || i === 6 || i === 8) lagTime = 3500; // বড় ল্যাগ
                     setTimeout(printLog, lagTime);
                 } else {
                     setTimeout(() => {
@@ -328,43 +254,18 @@
                         
                         setTimeout(() => {
                             fakeAnr.style.display = 'flex';
-                            clearTimeout(matrixTimeout); 
+                            clearTimeout(matrixTimeout); // স্ক্রিন ফ্রিজ করে দিবে
                         }, 3000);
-
                     }, 1000);
                 }
             }
             printLog();
-
-            // ⏱️ ৫ মিনিট পর রিকভারি
-            setTimeout(() => {
-                isHacked = false;
-                clearTimeout(matrixTimeout);
-                clearInterval(vibrateInterval);
-                clearInterval(sirenInterval);
-                if(audioCtx) audioCtx.close();
-                if (navigator.vibrate) navigator.vibrate(0);
-
-                // রিকভারি স্ক্রিনে আবার সাদা থিম
-                themeMeta.setAttribute('content', '#ffffff');
-                document.body.style.backgroundColor = '#ffffff';
-
-                hackScreen.style.display = 'none';
-                fakeAnr.style.display = 'none';
-                recoveryScreen.style.display = 'flex';
-                
-            }, 300000); 
         });
 
         document.addEventListener('contextmenu', e => { if(isHacked) e.preventDefault(); });
         document.onkeydown = function (e) {
-            if (isHacked) {
-                if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) {
-                    e.preventDefault();
-                }
-            }
+            if (isHacked && (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73))) e.preventDefault();
         };
-
         window.addEventListener('beforeunload', function (e) {
             if (isHacked) {
                 const msg = `WARNING: DO NOT CLOSE! SAJID IS FORMATTING YOUR DEVICE!`;
