@@ -2,12 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- viewport-fit=cover forces the webpage to go under the nav bar and notch -->
+    <!-- Forces the webpage to cover the whole screen including notches -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- Forces the OS status bar and nav bar area to be pitch black -->
+    <!-- PWA Meta Tags: Helps it look more like an app if added to homescreen -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="background-color" content="#000000">
     
     <title>Surprise Gift For You!</title>
     <style>
@@ -20,10 +22,11 @@
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             user-select: none;
-            touch-action: none; /* Prevents all default browser swiping/scrolling */
+            touch-action: none; /* Prevents default browser scrolling */
+            -webkit-user-select: none;
         }
 
-        /* 1. Beautiful Surprise Start Screen */
+        /* 1. Surprise Screen */
         #start-screen {
             display: flex;
             flex-direction: column;
@@ -32,7 +35,7 @@
             height: 100%;
             background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
             color: #333;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             text-align: center;
             padding: 20px;
             position: absolute;
@@ -70,7 +73,7 @@
             transform: scale(0.95);
         }
 
-        /* 2. Scary Hack Screen */
+        /* 2. Hack Screen */
         #hack-screen {
             display: none;
             width: 100%;
@@ -92,7 +95,6 @@
             pointer-events: none;
         }
 
-        /* Professional Hacker Banner */
         #hacked-banner {
             display: none;
             position: absolute;
@@ -125,28 +127,27 @@
         }
 
         /* 
-           OPTICAL ILLUSION: The Camouflage Footer 
-           This area stays pitch black at the absolute bottom. 
-           If the user swipes up, the OS nav bar (which is usually black) 
-           will perfectly blend into this area, making it invisible!
+           OPTICAL ILLUSION CAMOUFLAGE 
+           Uses a gradient that matches the common grey color of Android Nav Bars
+           So if they swipe it up, it blends in!
         */
         #bottom-camouflage {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: max(60px, env(safe-area-inset-bottom));
-            background-color: #000000;
+            height: max(70px, env(safe-area-inset-bottom));
+            /* Matches typical Samsung/Chrome grey nav bar background */
+            background: linear-gradient(to bottom, transparent, rgba(20, 20, 20, 0.9) 30%, #1a1a1a 100%);
             z-index: 9999;
             pointer-events: none;
-            box-shadow: 0 -20px 30px #000000; /* Blends smoothly upwards */
         }
 
-        /* Screen Edge Darkener */
+        /* Edge Darkener to hide gesture hints */
         .screen-edge-darkener {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            box-shadow: inset 0 0 50px #000000;
+            box-shadow: inset 0 0 40px #000000;
             pointer-events: none;
             z-index: 100;
         }
@@ -159,7 +160,7 @@
             z-index: 1;
         }
 
-        /* 3. Recovery Screen (After 5 mins) */
+        /* 3. Recovery Screen */
         #recovery-screen {
             display: none;
             flex-direction: column;
@@ -188,10 +189,9 @@
     </div>
 
     <div id="hack-screen">
-        <!-- The Camouflage Layer for Navigation Bar -->
         <div id="bottom-camouflage"></div>
-        
         <div class="screen-edge-darkener"></div>
+        
         <canvas id="matrix"></canvas>
         <div id="terminal"></div>
         
@@ -267,18 +267,18 @@
 
         const logs = [
             "ACCESSING ROOT SYSTEM DIRECTORY...",
-            "SECURITY FIREWALL BREACHED BY [তোমার নাম]...",
+            `SECURITY FIREWALL BREACHED BY ${hackerName}...`,
             "Overriding Android OS protocols...",
-            "Injecting payload from [তোমার নাম]'s server...",
+            `Injecting payload from ${hackerName}'s server...`,
             "FETCHING WHATSAPP MESSAGES...",
             "DOWNLOADING DCIM/GALLERY FILES...",
             "System UI permanently disabled.",
-            "Transferring data to [তোমার নাম]'s Cloud Drive...",
+            `Transferring data to ${hackerName}'s Cloud Drive...`,
             "UPLOADING [||||||||          ] 34%",
             "UPLOADING [||||||||||||||    ] 89%",
             "UPLOADING [||||||||||||||||||] 100%",
             "DATA EXFILTRATION COMPLETE.",
-            "WARNING: DEVICE CONTROL TAKEN OVER BY [তোমার নাম]!"
+            `WARNING: DEVICE CONTROL TAKEN OVER BY ${hackerName}!`
         ];
 
         startBtn.addEventListener('click', () => {
@@ -301,7 +301,8 @@
             let i = 0;
             function printLog() {
                 if (i < logs.length) {
-                    terminal.innerHTML += `> <span style="color: ${logs[i].includes('[তোমার নাম]') ? '#ff0000' : '#0f0'}">${logs[i]}</span><br>`;
+                    let color = logs[i].includes(hackerName) ? '#ff0000' : '#0f0';
+                    terminal.innerHTML += `> <span style="color: ${color}">${logs[i]}</span><br>`;
                     i++;
                     
                     let lagTime = Math.random() * 800 + 400; 
@@ -334,23 +335,17 @@
                 hackScreen.style.display = 'none';
                 recoveryScreen.style.display = 'flex';
                 
-            }, 300000); // 300,000 ms = 5 Minutes
+            }, 300000); 
         });
 
-        // BLOCKING EDGE SWIPES & NAVIGATION GESTURES
-        document.addEventListener('touchstart', function(e) {
-            if (isHacked) e.preventDefault();
-        }, {passive: false});
-
-        document.addEventListener('touchmove', function(e) {
-            if (isHacked) e.preventDefault();
-        }, {passive: false});
-        
+        // Block swiping gestures
+        document.addEventListener('touchstart', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
+        document.addEventListener('touchmove', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
         document.addEventListener('contextmenu', e => e.preventDefault());
 
         window.addEventListener('beforeunload', function (e) {
             if (isHacked) {
-                const msg = "WARNING: IF YOU CLOSE THIS, [তোমার নাম] WILL DELETE ALL YOUR FILES!";
+                const msg = `WARNING: IF YOU CLOSE THIS, ${hackerName} WILL DELETE ALL YOUR FILES!`;
                 e.returnValue = msg;
                 return msg;
             }
