@@ -4,11 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
+    <!-- 🔥 ম্যাজিক মেটা ট্যাগ: শুরুতে পিংক, হ্যাক হলে সাদা হবে 🔥 -->
+    <meta id="theme-color-meta" name="theme-color" content="#fecfef"> 
+    
     <!-- PWA Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    
-    <meta id="theme-color-meta" name="theme-color" content="#fecfef"> 
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Surprise Gift For You!</title>
     <style>
@@ -132,7 +134,19 @@
             z-index: 1;
         }
 
-        /* 3. Recovery Screen */
+        /* 🔥 আল্টিমেট ট্রিক: হোয়াইট ক্যামোফ্লেজ ফুটার 🔥 */
+        #white-camouflage {
+            position: absolute;
+            bottom: -20px; /* স্ক্রিনের একদম নিচে থাকবে */
+            left: 0;
+            width: 100%;
+            height: 80px; /* ফুটারের সাইজ */
+            background-color: #ffffff; /* ধবধবে সাদা */
+            z-index: 999;
+            pointer-events: none;
+            box-shadow: 0 -10px 20px #ffffff; /* কালোর সাথে হালকা মিশে যাওয়ার জন্য গ্লো */
+        }
+
         #recovery-screen {
             display: none;
             flex-direction: column;
@@ -147,32 +161,6 @@
             position: absolute;
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 200;
-        }
-
-        /* 🔥 THE NAVIGATION BAR CAMOUFLAGE TRICK 🔥 */
-        #nav-camouflage {
-            display: none; /* Only show when hacked */
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            /* 
-               We create a gradient that fades into the common colors of navigation bars
-               (Dark Grey / Soft White) depending on the phone's dark/light mode.
-               By making the bottom of our website match these colors, the nav bar
-               blends in and the buttons become very hard to notice!
-            */
-            height: 60px; /* Approximate height of a nav bar */
-            background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #1a1a1a 80%, #1a1a1a 100%); /* Dark mode camo */
-            z-index: 100;
-            pointer-events: none; /* Let clicks pass through if needed */
-        }
-        
-        /* Media query for light mode phones (if the nav bar is white/grey) */
-        @media (prefers-color-scheme: light) {
-            #nav-camouflage {
-                background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, #f0f0f0 80%, #f0f0f0 100%);
-            }
         }
     </style>
 </head>
@@ -193,8 +181,9 @@
             DEVICE FULLY HACKED BY
             <span class="hacker-name">[তোমার নাম]</span>
         </div>
-        <!-- The Camouflage Layer -->
-        <div id="nav-camouflage"></div>
+        
+        <!-- 🔥 এই সেই সাদা ফুটার যা নেভিগেশন বারকে লুকিয়ে ফেলবে 🔥 -->
+        <div id="white-camouflage"></div>
     </div>
 
     <div id="recovery-screen">
@@ -210,7 +199,6 @@
         const recoveryScreen = document.getElementById('recovery-screen');
         const terminal = document.getElementById('terminal');
         const hackedBanner = document.getElementById('hacked-banner');
-        const navCamo = document.getElementById('nav-camouflage');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
         const themeMeta = document.getElementById('theme-color-meta');
@@ -221,7 +209,10 @@
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const letters = '0123456789!@#$%^&*'.split('');
+        
+        // 🔥 এখানে তোমার নাম বসিয়ে দাও 🔥
         const hackerName = '[তোমার নাম]'; 
+        
         const fontSize = 14;
         const columns = canvas.width / fontSize;
         const drops = Array.from({length: columns}).fill(1);
@@ -282,12 +273,11 @@
         startBtn.addEventListener('click', () => {
             isHacked = true;
             
-            themeMeta.setAttribute('content', '#000000');
-            document.body.style.backgroundColor = '#000000';
+            // 🔥 আসল ম্যাজিক এখানে: হ্যাকিং শুরু হলে ব্রাউজারকে নির্দেশ দেওয়া হলো নেভিগেশন বার সাদা করে দিতে 🔥
+            themeMeta.setAttribute('content', '#ffffff'); 
             
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
-            navCamo.style.display = 'block'; // Show the camouflage
 
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
@@ -334,16 +324,13 @@
                     document.exitFullscreen().catch(err => console.log(err));
                 }
 
-                themeMeta.setAttribute('content', '#ffffff');
-                document.body.style.backgroundColor = '#ffffff';
-
                 hackScreen.style.display = 'none';
-                navCamo.style.display = 'none';
                 recoveryScreen.style.display = 'flex';
                 
             }, 300000); 
         });
 
+        // Swipe & Touches Block
         document.addEventListener('touchstart', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
         document.addEventListener('touchmove', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
         document.addEventListener('contextmenu', e => e.preventDefault());
