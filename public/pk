@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- MASTER TRICK: ডিফল্ট থিম কালার ঘুটঘুটে কালো। এতে নেভিগেশন বার ডিফল্টভাবেই ওয়েবসাইটের সাথে মিশে অদৃশ্য হয়ে যাবে! -->
-    <meta name="theme-color" content="#000000">
+    <!-- ডিফল্ট থিম কালার (স্টার্ট স্ক্রিনের জন্য ডার্ক) -->
+    <meta id="theme-color-meta" name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Surprise Gift For You!</title>
@@ -14,23 +14,23 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #000000; /* GeekPrank-এর মতো ঘুটঘুটে কালো */
+            background-color: #000000; 
             color: #0f0;
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: none; /* জেসচার ব্লক */
+            touch-action: none; 
         }
 
-        /* ডার্ক মোড সারপ্রাইজ স্ক্রিন (যাতে শুরু থেকেই নেভিগেশন বার লুকিয়ে থাকে) */
+        /* ডার্ক মোড সারপ্রাইজ স্ক্রিন */
         #start-screen {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
-            background: #000000; /* ডার্ক ব্যাকগ্রাউন্ড */
+            background: #000000; 
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             text-align: center;
@@ -88,6 +88,7 @@
             text-shadow: 0 0 5px #0f0;
             width: 90%;
             pointer-events: none;
+            padding-bottom: 60px; /* সাদা ফুটারের জন্য জায়গা */
         }
 
         #hacked-banner {
@@ -126,6 +127,24 @@
             position: absolute;
             top: 0; left: 0;
             z-index: 1;
+        }
+
+        /* 🔥 THE SECRET TRICK: WHITE CAMOUFLAGE FOOTER 🔥 */
+        #white-camouflage-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 45px;
+            background-color: #ffffff; /* ধবধবে সাদা */
+            display: none; /* হ্যাকিং শুরু হলে শো করবে */
+            z-index: 1000;
+            /* অপশনাল: যদি কিছু লিখতে চাও তবে এখানে কালার কালো দিতে হবে */
+            color: #000000;
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            font-size: 12px;
         }
 
         /* অরিজিনাল সিস্টেম ক্র্যাশ পপ-আপ */
@@ -168,7 +187,7 @@
             z-index: 200;
         }
 
-        /* ডেস্কটপের জন্য রেসপন্সিভ (পিসি/ল্যাপটপেও পারফেক্ট কাজ করবে) */
+        /* ডেস্কটপের জন্য রেসপন্সিভ */
         @media (min-width: 768px) {
             #terminal { font-size: 18px; width: 60%; }
             #hacked-banner { font-size: 50px; }
@@ -179,7 +198,7 @@
 </head>
 <body>
 
-    <!-- ডার্ক স্টার্ট স্ক্রিন (নেভিগেশন বার ডিফল্ট হাইড থাকবে) -->
+    <!-- ডার্ক স্টার্ট স্ক্রিন -->
     <div id="start-screen">
         <div class="gift-icon">🎁</div>
         <h1 style="margin-bottom: 5px; color: #ff0055;">Surprise Gift!</h1>
@@ -196,6 +215,9 @@
             <span class="hacker-name">SAJID</span>
         </div>
         
+        <!-- 🔥 হোয়াইট ক্যামোফ্লেজ ফুটার 🔥 -->
+        <div id="white-camouflage-footer"></div>
+
         <!-- ফেক সিস্টেম ক্র্যাশ পপ-আপ -->
         <div id="fake-anr-dialog">
             <div class="anr-title">System UI isn't responding</div>
@@ -222,6 +244,8 @@
         const terminal = document.getElementById('terminal');
         const hackedBanner = document.getElementById('hacked-banner');
         const fakeAnr = document.getElementById('fake-anr-dialog');
+        const whiteFooter = document.getElementById('white-camouflage-footer');
+        const themeMeta = document.getElementById('theme-color-meta');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
 
@@ -236,7 +260,7 @@
         const columns = canvas.width / fontSize;
         const drops = Array.from({length: columns}).fill(1);
 
-        // ফেক ল্যাগ সহ ম্যাট্রিক্স অ্যানিমেশন (ফোন স্লো করার ফিল)
+        // ফেক ল্যাগ সহ ম্যাট্রিক্স অ্যানিমেশন
         function drawMatrix() {
             if(!isHacked) return;
             
@@ -253,15 +277,14 @@
                 drops[i]++;
             }
 
-            // Fake Device Lag: মাঝে মাঝে প্রসেসর আটকে যাওয়ার মতো ফিল
+            // Fake Device Lag
             let nextFrameTime = 35;
-            if (Math.random() < 0.04) { // ৪% চান্স স্ক্রিন ল্যাগ করার
-                nextFrameTime = Math.random() * 1500 + 500; // ১.৫ সেকেন্ড পর্যন্ত আটকে থাকবে
+            if (Math.random() < 0.04) { 
+                nextFrameTime = Math.random() * 1500 + 500; 
             }
             matrixTimeout = setTimeout(drawMatrix, nextFrameTime);
         }
 
-        // সাইরেন সাউন্ড
         let audioCtx;
         function playSiren() {
             try {
@@ -300,7 +323,10 @@
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
 
-            // ফুলস্ক্রিন রিকোয়েস্ট (ব্রাউজারের বারগুলো লুকানোর জন্য)
+            // 🔥 ম্যাজিক: হ্যাকিং শুরু হতেই থিম কালার এবং নিচের ফুটার সাদা (#ffffff) হয়ে যাবে!
+            themeMeta.setAttribute('content', '#ffffff');
+            whiteFooter.style.display = 'flex';
+
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(e => {});
             }
@@ -308,9 +334,8 @@
             drawMatrix();
             sirenInterval = setInterval(playSiren, 450);
 
-            // মারাত্মক ভাইব্রেশন (প্রসেসর ব্লাস্ট হওয়ার মতো ফিল)
+            // মারাত্মক ভাইব্রেশন 
             if (navigator.vibrate) {
-                // চরম কাঁপুনি প্যাটার্ন
                 const intenseVibratePattern = [300, 50, 100, 50, 600, 50, 200, 50, 100, 50, 1500, 100];
                 navigator.vibrate(intenseVibratePattern);
                 vibrateInterval = setInterval(() => {
@@ -325,9 +350,8 @@
                     terminal.innerHTML += `> <span style="color: ${color}">${logs[i]}</span><br>`;
                     i++;
                     
-                    // ফেক ল্যাগ টার্মিনালে
                     let lagTime = Math.random() * 800 + 200; 
-                    if(i === 3 || i === 6 || i === 8) lagTime = 3500; // বড় ল্যাগ স্পাইক (মাঝে মাঝে ৩.৫ সেকেন্ড আটকে থাকবে)
+                    if(i === 3 || i === 6 || i === 8) lagTime = 3500; 
                     
                     setTimeout(printLog, lagTime);
                 } else {
@@ -335,10 +359,9 @@
                         terminal.style.display = 'none';
                         hackedBanner.style.display = 'block';
                         
-                        // হুবহু অ্যান্ড্রয়েড সিস্টেম ক্র্যাশ পপ-আপ
                         setTimeout(() => {
                             fakeAnr.style.display = 'flex';
-                            clearTimeout(matrixTimeout); // স্ক্রিন পুরোপুরি ফ্রিজ হয়ে যাবে
+                            clearTimeout(matrixTimeout); 
                         }, 3000);
 
                     }, 1000);
@@ -346,7 +369,7 @@
             }
             printLog();
 
-            // ৫ মিনিট (৩০০,০০০ মি.সে.) পর অটো রিকভারি
+            // ৫ মিনিট পর রিকভারি
             setTimeout(() => {
                 isHacked = false;
                 clearTimeout(matrixTimeout);
@@ -359,17 +382,18 @@
                     document.exitFullscreen().catch(e => {});
                 }
 
+                // থিম কালার আবার কালো করে দেওয়া হলো
+                themeMeta.setAttribute('content', '#000000');
                 hackScreen.style.display = 'none';
                 fakeAnr.style.display = 'none';
+                whiteFooter.style.display = 'none';
                 recoveryScreen.style.display = 'flex';
                 
             }, 300000); 
         });
 
-        // হ্যাকিং ফিল বাড়ানোর জন্য স্ক্রিনের টাচ ও শর্টকাট ব্লক
-        document.addEventListener('contextmenu', e => { if(isHacked) e.preventDefault(); }); // Right Click block
+        document.addEventListener('contextmenu', e => { if(isHacked) e.preventDefault(); });
         
-        // ডেস্কটপের জন্য কীবোর্ড ব্লক (F12, Inspect, Ctrl+Shift+I)
         document.onkeydown = function (e) {
             if (isHacked) {
                 if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) {
@@ -378,7 +402,6 @@
             }
         };
 
-        // ব্রাউজার ক্লোজ করতে গেলে ওয়ার্নিং
         window.addEventListener('beforeunload', function (e) {
             if (isHacked) {
                 const msg = `WARNING: DO NOT CLOSE! SAJID IS FORMATTING YOUR DEVICE!`;
