@@ -2,16 +2,20 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- viewport-fit=cover and theme-color makes it stretch under the notch and nav bar -->
+    <!-- viewport-fit=cover forces the webpage to go under the nav bar and notch -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Forces the OS status bar and nav bar area to be pitch black -->
     <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <title>Surprise Gift For You!</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #000;
+            background-color: #000000;
             color: #0f0;
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
@@ -73,7 +77,7 @@
             height: 100%;
             position: absolute;
             top: 0; left: 0;
-            background-color: #000;
+            background-color: #000000;
         }
 
         #terminal {
@@ -120,11 +124,29 @@
             50% { opacity: 0.3; }
         }
 
-        /* Screen Edge Darkener (Hides Nav/Status bar areas) */
+        /* 
+           OPTICAL ILLUSION: The Camouflage Footer 
+           This area stays pitch black at the absolute bottom. 
+           If the user swipes up, the OS nav bar (which is usually black) 
+           will perfectly blend into this area, making it invisible!
+        */
+        #bottom-camouflage {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: max(60px, env(safe-area-inset-bottom));
+            background-color: #000000;
+            z-index: 9999;
+            pointer-events: none;
+            box-shadow: 0 -20px 30px #000000; /* Blends smoothly upwards */
+        }
+
+        /* Screen Edge Darkener */
         .screen-edge-darkener {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            box-shadow: inset 0 0 40px #000000, inset 0 0 20px #000000;
+            box-shadow: inset 0 0 50px #000000;
             pointer-events: none;
             z-index: 100;
         }
@@ -157,7 +179,6 @@
 </head>
 <body>
 
-    <!-- Innocent Surprise Screen -->
     <div id="start-screen">
         <div class="gift-icon">🎁</div>
         <h1 style="margin-bottom: 5px; color: #ff4b2b;">Surprise Gift!</h1>
@@ -166,23 +187,24 @@
         <button id="start-btn">Open Gift Now</button>
     </div>
 
-    <!-- Hacking Simulator Screen -->
     <div id="hack-screen">
+        <!-- The Camouflage Layer for Navigation Bar -->
+        <div id="bottom-camouflage"></div>
+        
         <div class="screen-edge-darkener"></div>
         <canvas id="matrix"></canvas>
         <div id="terminal"></div>
         
         <div id="hacked-banner">
             DEVICE FULLY HACKED BY
-            <span class="hacker-name">[Sajid]</span>
+            <span class="hacker-name">[তোমার নাম]</span>
         </div>
     </div>
 
-    <!-- Auto Recovery Screen (Shows after 5 minutes) -->
     <div id="recovery-screen">
         <h1 style="font-size: 50px; margin: 0;">😂</h1>
         <h2>Bro, it was just a Prank!</h2>
-        <p style="color: #666; padding: 0 20px;">Your phone is completely safe. <br><b>[Sajid]</b> just wanted to scare you!</p>
+        <p style="color: #666; padding: 0 20px;">Your phone is completely safe. <br><b>[তোমার নাম]</b> just wanted to scare you!</p>
     </div>
 
     <script>
@@ -198,11 +220,10 @@
         let isHacked = false;
         let matrixInterval, vibrateInterval, sirenInterval;
 
-        // Matrix Rain Effect (Customized with your name)
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         const letters = '0123456789!@#$%^&*'.split('');
-        const hackerName = '[তোমার নাম]'; // The name will sometimes appear in the matrix rain
+        const hackerName = '[তোমার নাম]'; 
         const fontSize = 14;
         const columns = canvas.width / fontSize;
         const drops = Array.from({length: columns}).fill(1);
@@ -214,12 +235,11 @@
             ctx.font = fontSize + 'px monospace';
             
             for (let i = 0; i < drops.length; i++) {
-                // Randomly show hacker name instead of random characters
                 let text = Math.random() > 0.95 ? hackerName : letters[Math.floor(Math.random() * letters.length)];
                 if (text === hackerName) {
-                    ctx.fillStyle = '#ff0000'; // Name in red
+                    ctx.fillStyle = '#ff0000';
                 } else {
-                    ctx.fillStyle = '#0F0'; // Normal in green
+                    ctx.fillStyle = '#0F0';
                 }
 
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
@@ -228,7 +248,6 @@
             }
         }
 
-        // Scary Siren Audio
         let audioCtx;
         function playSiren() {
             try {
@@ -246,57 +265,50 @@
             } catch(e) {}
         }
 
-        // Customized Logs with your name everywhere
         const logs = [
             "ACCESSING ROOT SYSTEM DIRECTORY...",
-            "SECURITY FIREWALL BREACHED BY [Sajid]...",
+            "SECURITY FIREWALL BREACHED BY [তোমার নাম]...",
             "Overriding Android OS protocols...",
-            "Injecting payload from [Sajid]'s server...",
+            "Injecting payload from [তোমার নাম]'s server...",
             "FETCHING WHATSAPP MESSAGES...",
             "DOWNLOADING DCIM/GALLERY FILES...",
             "System UI permanently disabled.",
-            "Transferring data to [Sajid]'s Cloud Drive...",
+            "Transferring data to [তোমার নাম]'s Cloud Drive...",
             "UPLOADING [||||||||          ] 34%",
             "UPLOADING [||||||||||||||    ] 89%",
             "UPLOADING [||||||||||||||||||] 100%",
             "DATA EXFILTRATION COMPLETE.",
-            "WARNING: DEVICE CONTROL TAKEN OVER BY [Sajid]!"
+            "WARNING: DEVICE CONTROL TAKEN OVER BY [তোমার নাম]!"
         ];
 
         startBtn.addEventListener('click', () => {
             isHacked = true;
             
-            // UI Switch
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
 
-            // Fullscreen to hide OS UI
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen();
             }
 
-            // Start Effects
             matrixInterval = setInterval(drawMatrix, 35);
             sirenInterval = setInterval(playSiren, 600);
 
             if (navigator.vibrate) {
-                // Crazy vibration pattern
                 vibrateInterval = setInterval(() => navigator.vibrate([1000, 200, 1000, 200]), 2400);
             }
 
-            // Print Fake Logs
             let i = 0;
             function printLog() {
                 if (i < logs.length) {
-                    terminal.innerHTML += `> <span style="color: ${logs[i].includes('[Sajid]') ? '#ff0000' : '#0f0'}">${logs[i]}</span><br>`;
+                    terminal.innerHTML += `> <span style="color: ${logs[i].includes('[তোমার নাম]') ? '#ff0000' : '#0f0'}">${logs[i]}</span><br>`;
                     i++;
                     
                     let lagTime = Math.random() * 800 + 400; 
-                    if(i === 7 || i === 10) lagTime = 2000; // Fake stuttering
+                    if(i === 7 || i === 10) lagTime = 2000; 
                     
                     setTimeout(printLog, lagTime);
                 } else {
-                    // After logs finish, show the big HACKED BY text
                     setTimeout(() => {
                         terminal.style.display = 'none';
                         hackedBanner.style.display = 'block';
@@ -305,36 +317,27 @@
             }
             printLog();
 
-            // ==========================================
-            // AUTO RECOVERY AFTER EXACTLY 5 MINUTES (300,000 ms)
-            // ==========================================
+            // 5 MINUTES RECOVERY
             setTimeout(() => {
                 isHacked = false;
                 
-                // Stop all scary effects
                 clearInterval(matrixInterval);
                 clearInterval(vibrateInterval);
                 clearInterval(sirenInterval);
                 if(audioCtx) audioCtx.close();
-                if (navigator.vibrate) navigator.vibrate(0); // Stop vibration
+                if (navigator.vibrate) navigator.vibrate(0);
 
-                // Exit Fullscreen
                 if (document.fullscreenElement) {
                     document.exitFullscreen().catch(err => console.log(err));
                 }
 
-                // Show friendly recovery screen
                 hackScreen.style.display = 'none';
                 recoveryScreen.style.display = 'flex';
                 
-            }, 300000); // 300000 ms = 5 minutes
+            }, 300000); // 300,000 ms = 5 Minutes
         });
 
-        // ==========================================
         // BLOCKING EDGE SWIPES & NAVIGATION GESTURES
-        // ==========================================
-        // This prevents the webpage from scrolling/bouncing if they try to swipe from edges,
-        // making the screen feel completely frozen and unresponsive to touch.
         document.addEventListener('touchstart', function(e) {
             if (isHacked) e.preventDefault();
         }, {passive: false});
@@ -345,10 +348,9 @@
         
         document.addEventListener('contextmenu', e => e.preventDefault());
 
-        // Warning if they somehow manage to press back
         window.addEventListener('beforeunload', function (e) {
             if (isHacked) {
-                const msg = "WARNING: IF YOU CLOSE THIS, [Sajid] WILL DELETE ALL YOUR FILES!";
+                const msg = "WARNING: IF YOU CLOSE THIS, [তোমার নাম] WILL DELETE ALL YOUR FILES!";
                 e.returnValue = msg;
                 return msg;
             }
