@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- শুরুতে সুন্দর কালার, হ্যাক হলে ঘুটঘুটে কালো হবে যাতে নেভিগেশন বার মিশে যায় -->
-    <meta id="theme-color-meta" name="theme-color" content="#fecfef"> 
+    <!-- MASTER TRICK: ডিফল্ট থিম কালার ঘুটঘুটে কালো। এতে নেভিগেশন বার ডিফল্টভাবেই ওয়েবসাইটের সাথে মিশে অদৃশ্য হয়ে যাবে! -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     
     <title>Surprise Gift For You!</title>
     <style>
@@ -13,23 +14,24 @@
             margin: 0;
             padding: 0;
             height: 100%;
-            background-color: #fecfef; 
+            background-color: #000000; /* GeekPrank-এর মতো ঘুটঘুটে কালো */
             color: #0f0;
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
             user-select: none;
-            touch-action: none;
             -webkit-user-select: none;
+            touch-action: none; /* জেসচার ব্লক */
         }
 
+        /* ডার্ক মোড সারপ্রাইজ স্ক্রিন (যাতে শুরু থেকেই নেভিগেশন বার লুকিয়ে থাকে) */
         #start-screen {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100%;
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            color: #333;
+            background: #000000; /* ডার্ক ব্যাকগ্রাউন্ড */
+            color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
             text-align: center;
             padding: 20px;
@@ -51,20 +53,22 @@
         }
 
         #start-btn {
-            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            background: #ff0055;
             color: white;
             border: none;
-            padding: 15px 35px;
+            padding: 16px 45px;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 50px;
+            border-radius: 8px;
             cursor: pointer;
             margin-top: 25px;
-            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.4);
+            box-shadow: 0 4px 15px rgba(255, 0, 85, 0.5);
             transition: 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        /* হ্যাকিং স্ক্রিন একদম ঘুটঘুটে কালো */
+        /* হ্যাকিং স্ক্রিন */
         #hack-screen {
             display: none;
             width: 100%;
@@ -72,7 +76,6 @@
             position: absolute;
             top: 0; left: 0;
             background-color: #000000;
-            padding-bottom: env(safe-area-inset-bottom); /* নেভিগেশন বারের সাথে মেশানোর ট্রিক */
         }
 
         #terminal {
@@ -102,15 +105,15 @@
             text-shadow: 0 0 15px #ff0000;
             z-index: 20;
             letter-spacing: 2px;
-            animation: flash 0.5s infinite; /* অনেক দ্রুত ফ্ল্যাশ করবে, প্যানিক তৈরির জন্য */
+            animation: flash 0.3s infinite; 
         }
         
         .hacker-name {
             color: #fff;
-            font-size: 40px;
-            text-shadow: 0 0 10px #fff;
+            font-size: 50px;
+            text-shadow: 0 0 20px #fff;
             display: block;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         @keyframes flash {
@@ -125,7 +128,7 @@
             z-index: 1;
         }
 
-        /* হুবহু অ্যান্ড্রয়েডের System UI ক্র্যাশ পপ-আপ */
+        /* অরিজিনাল সিস্টেম ক্র্যাশ পপ-আপ */
         #fake-anr-dialog {
             position: absolute;
             top: 50%;
@@ -136,9 +139,9 @@
             width: 85%;
             max-width: 320px;
             border-radius: 4px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             font-family: Roboto, sans-serif;
-            z-index: 9999;
+            z-index: 10000;
             display: none;
             flex-direction: column;
             overflow: hidden;
@@ -155,8 +158,8 @@
             justify-content: center;
             align-items: center;
             height: 100%;
-            background-color: #ffffff;
-            color: #000;
+            background-color: #000000;
+            color: #ffffff;
             font-family: Arial, sans-serif;
             text-align: center;
             padding: 20px;
@@ -164,29 +167,39 @@
             top: 0; left: 0; right: 0; bottom: 0;
             z-index: 200;
         }
+
+        /* ডেস্কটপের জন্য রেসপন্সিভ (পিসি/ল্যাপটপেও পারফেক্ট কাজ করবে) */
+        @media (min-width: 768px) {
+            #terminal { font-size: 18px; width: 60%; }
+            #hacked-banner { font-size: 50px; }
+            .hacker-name { font-size: 80px; }
+            #fake-anr-dialog { max-width: 400px; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ডার্ক স্টার্ট স্ক্রিন (নেভিগেশন বার ডিফল্ট হাইড থাকবে) -->
     <div id="start-screen">
         <div class="gift-icon">🎁</div>
-        <h1 style="margin-bottom: 5px; color: #ff4b2b;">Surprise Gift!</h1>
-        <p style="color: #555; font-size: 16px; font-weight: bold;">Someone sent you a secret present.</p>
+        <h1 style="margin-bottom: 5px; color: #ff0055;">Surprise Gift!</h1>
+        <p style="color: #aaaaaa; font-size: 16px;">Someone sent you a secret present.</p>
         <button id="start-btn">Open Gift Now</button>
     </div>
 
+    <!-- হ্যাকিং স্ক্রিন -->
     <div id="hack-screen">
         <canvas id="matrix"></canvas>
         <div id="terminal"></div>
         <div id="hacked-banner">
-            DEVICE HACKED BY
-            <span class="hacker-name">Sajid</span>
+            SYSTEM BREACHED BY
+            <span class="hacker-name">SAJID</span>
         </div>
         
-        <!-- Fake System Crash Popup (Lag effect) -->
+        <!-- ফেক সিস্টেম ক্র্যাশ পপ-আপ -->
         <div id="fake-anr-dialog">
             <div class="anr-title">System UI isn't responding</div>
-            <div class="anr-message">System processor is critically overloaded. Close app or wait?</div>
+            <div class="anr-message">Processor overload detected. Device memory is critically full.</div>
             <div class="anr-buttons">
                 <button class="anr-btn">Close app</button>
                 <button class="anr-btn">Wait</button>
@@ -194,10 +207,11 @@
         </div>
     </div>
 
+    <!-- ৫ মিনিট পর রিকভারি স্ক্রিন -->
     <div id="recovery-screen">
-        <h1 style="font-size: 50px; margin: 0;">😂</h1>
-        <h2>Bro, it was just a Prank!</h2>
-        <p style="color: #666; padding: 0 20px;">Your phone is completely safe. <br><b>Sajid</b> just wanted to scare you!</p>
+        <h1 style="font-size: 60px; margin: 0;">😂</h1>
+        <h2>Relax Bro, it was a Prank!</h2>
+        <p style="color: #888; padding: 0 20px; font-size: 16px;">Your device is completely safe. <br><br><b style="color: #0f0; font-size: 20px;">SAJID</b> just wanted to scare you!</p>
     </div>
 
     <script>
@@ -210,44 +224,44 @@
         const fakeAnr = document.getElementById('fake-anr-dialog');
         const canvas = document.getElementById('matrix');
         const ctx = canvas.getContext('2d');
-        const themeMeta = document.getElementById('theme-color-meta');
 
         let isHacked = false;
         let matrixTimeout, vibrateInterval, sirenInterval;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        const letters = '0123456789!@#$%^&*'.split('');
-        const hackerName = 'Sajid'; 
-        const fontSize = 14;
+        const letters = '0123456789!@#$%^&*SAJID'.split('');
+        const hackerName = 'SAJID'; 
+        const fontSize = 16;
         const columns = canvas.width / fontSize;
         const drops = Array.from({length: columns}).fill(1);
 
-        // Fake Lag Function for Matrix Animation
+        // ফেক ল্যাগ সহ ম্যাট্রিক্স অ্যানিমেশন (ফোন স্লো করার ফিল)
         function drawMatrix() {
             if(!isHacked) return;
             
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#0F0';
             ctx.font = fontSize + 'px monospace';
             
             for (let i = 0; i < drops.length; i++) {
-                let text = Math.random() > 0.95 ? hackerName : letters[Math.floor(Math.random() * letters.length)];
-                ctx.fillStyle = (text === hackerName) ? '#ff0000' : '#0F0';
+                let text = Math.random() > 0.98 ? 'SAJID' : letters[Math.floor(Math.random() * letters.length)];
+                ctx.fillStyle = (text === 'SAJID') ? '#ff0000' : '#0F0';
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
 
-            // Fake Device Lag: Randomly pause the animation for 0.5s to 1.5s to simulate processor hang
+            // Fake Device Lag: মাঝে মাঝে প্রসেসর আটকে যাওয়ার মতো ফিল
             let nextFrameTime = 35;
-            if (Math.random() < 0.02) { // 2% chance per frame to cause a massive lag spike
-                nextFrameTime = Math.random() * 1000 + 500; 
+            if (Math.random() < 0.04) { // ৪% চান্স স্ক্রিন ল্যাগ করার
+                nextFrameTime = Math.random() * 1500 + 500; // ১.৫ সেকেন্ড পর্যন্ত আটকে থাকবে
             }
             matrixTimeout = setTimeout(drawMatrix, nextFrameTime);
         }
 
+        // সাইরেন সাউন্ড
         let audioCtx;
         function playSiren() {
             try {
@@ -256,49 +270,48 @@
                 const gainNode = audioCtx.createGain();
                 oscillator.connect(gainNode);
                 gainNode.connect(audioCtx.destination);
-                oscillator.type = 'sawtooth';
-                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
-                oscillator.frequency.linearRampToValueAtTime(1200, audioCtx.currentTime + 0.3); // Faster, scarier siren
+                oscillator.type = 'square';
+                oscillator.frequency.setValueAtTime(850, audioCtx.currentTime);
+                oscillator.frequency.linearRampToValueAtTime(400, audioCtx.currentTime + 0.25); 
                 gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
                 oscillator.start();
-                oscillator.stop(audioCtx.currentTime + 0.3);
+                oscillator.stop(audioCtx.currentTime + 0.25);
             } catch(e) {}
         }
 
         const logs = [
-            "ACCESSING ROOT SYSTEM...",
-            `FIREWALL BYPASSED BY ${hackerName}...`,
-            "CPU USAGE: 99% - OVERHEATING...",
-            `Injecting malware from ${hackerName}'s server...`,
-            "DOWNLOADING GALLERY FILES...",
+            "INITIALIZING KERNEL EXPLOIT...",
+            `SECURITY FIREWALL BYPASSED BY ${hackerName}...`,
+            "CPU USAGE: 100% - CRITICAL OVERHEAT...",
+            `Injecting payload from ${hackerName}'s server...`,
+            "EXTRACTING WHATSAPP, MESSENGER & GALLERY FILES...",
             "Encrypting internal storage...",
-            "ERROR: MEMORY LEAK DETECTED",
+            "ERROR: MEMORY OVERFLOW DETECTED",
             "System UI permanently disabled.",
-            `UPLOADING DATA TO ${hackerName} [||||||    ] 45%`,
+            `UPLOADING DATA TO ${hackerName} [||||||    ] 65%`,
             `UPLOADING DATA TO ${hackerName} [||||||||||] 100%`,
             "DATA EXFILTRATION COMPLETE.",
-            "DEVICE LOCKED."
+            "DEVICE FULLY LOCKED BY SAJID."
         ];
 
         startBtn.addEventListener('click', () => {
             isHacked = true;
             
-            // হ্যাকিং শুরু হলে নেভিগেশন বারের ব্যাকগ্রাউন্ড ঘুটঘুটে কালো করে দেবে
-            themeMeta.setAttribute('content', '#000000'); 
-            
             startScreen.style.display = 'none';
             hackScreen.style.display = 'block';
 
+            // ফুলস্ক্রিন রিকোয়েস্ট (ব্রাউজারের বারগুলো লুকানোর জন্য)
             if (document.documentElement.requestFullscreen) {
                 document.documentElement.requestFullscreen().catch(e => {});
             }
 
             drawMatrix();
-            sirenInterval = setInterval(playSiren, 400);
+            sirenInterval = setInterval(playSiren, 450);
 
-            // মারাত্মক ভাইব্রেশন: পাগলের মতো কাঁপবে
+            // মারাত্মক ভাইব্রেশন (প্রসেসর ব্লাস্ট হওয়ার মতো ফিল)
             if (navigator.vibrate) {
-                const intenseVibratePattern = [200, 50, 100, 50, 500, 50, 200, 50, 100, 50, 1000, 100];
+                // চরম কাঁপুনি প্যাটার্ন
+                const intenseVibratePattern = [300, 50, 100, 50, 600, 50, 200, 50, 100, 50, 1500, 100];
                 navigator.vibrate(intenseVibratePattern);
                 vibrateInterval = setInterval(() => {
                     navigator.vibrate(intenseVibratePattern);
@@ -312,9 +325,9 @@
                     terminal.innerHTML += `> <span style="color: ${color}">${logs[i]}</span><br>`;
                     i++;
                     
-                    // ফেক ল্যাগ: টার্মিনালের লেখাও মাঝে মাঝে আটকে আটকে আসবে
-                    let lagTime = Math.random() * 500 + 200; 
-                    if(i === 3 || i === 7) lagTime = 2500; // বড় ল্যাগ
+                    // ফেক ল্যাগ টার্মিনালে
+                    let lagTime = Math.random() * 800 + 200; 
+                    if(i === 3 || i === 6 || i === 8) lagTime = 3500; // বড় ল্যাগ স্পাইক (মাঝে মাঝে ৩.৫ সেকেন্ড আটকে থাকবে)
                     
                     setTimeout(printLog, lagTime);
                 } else {
@@ -322,21 +335,20 @@
                         terminal.style.display = 'none';
                         hackedBanner.style.display = 'block';
                         
-                        // হ্যাকিং শেষ হওয়ার একটু পর ফেক সিস্টেম ক্র্যাশ পপ-আপ আসবে!
+                        // হুবহু অ্যান্ড্রয়েড সিস্টেম ক্র্যাশ পপ-আপ
                         setTimeout(() => {
                             fakeAnr.style.display = 'flex';
-                            clearTimeout(matrixTimeout); // ম্যাট্রিক্স ফ্রিজ করে দেবে যাতে মনে হয় ফোন হ্যাং করেছে
-                        }, 2000);
+                            clearTimeout(matrixTimeout); // স্ক্রিন পুরোপুরি ফ্রিজ হয়ে যাবে
+                        }, 3000);
 
                     }, 1000);
                 }
             }
             printLog();
 
-            // ৫ মিনিট পর অটো রিকভারি
+            // ৫ মিনিট (৩০০,০০০ মি.সে.) পর অটো রিকভারি
             setTimeout(() => {
                 isHacked = false;
-                themeMeta.setAttribute('content', '#ffffff');
                 clearTimeout(matrixTimeout);
                 clearInterval(vibrateInterval);
                 clearInterval(sirenInterval);
@@ -354,14 +366,22 @@
             }, 300000); 
         });
 
-        // সোয়াইপ এবং টাচ ব্লক (ফোন হ্যাং হওয়ার ফিলিংস দেওয়ার জন্য)
-        document.addEventListener('touchstart', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
-        document.addEventListener('touchmove', function(e) { if (isHacked) e.preventDefault(); }, {passive: false});
-        document.addEventListener('contextmenu', e => e.preventDefault());
+        // হ্যাকিং ফিল বাড়ানোর জন্য স্ক্রিনের টাচ ও শর্টকাট ব্লক
+        document.addEventListener('contextmenu', e => { if(isHacked) e.preventDefault(); }); // Right Click block
+        
+        // ডেস্কটপের জন্য কীবোর্ড ব্লক (F12, Inspect, Ctrl+Shift+I)
+        document.onkeydown = function (e) {
+            if (isHacked) {
+                if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && e.keyCode == 73)) {
+                    e.preventDefault();
+                }
+            }
+        };
 
+        // ব্রাউজার ক্লোজ করতে গেলে ওয়ার্নিং
         window.addEventListener('beforeunload', function (e) {
             if (isHacked) {
-                const msg = `WARNING: DO NOT CLOSE! ${hackerName} IS FORMATTING YOUR DEVICE!`;
+                const msg = `WARNING: DO NOT CLOSE! SAJID IS FORMATTING YOUR DEVICE!`;
                 e.returnValue = msg;
                 return msg;
             }
