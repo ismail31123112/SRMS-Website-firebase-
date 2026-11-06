@@ -831,6 +831,10 @@ input:focus, select:focus, textarea:focus {
           <div class="flex-col"><label>Mother's Name (মাতার নাম)</label><input type="text" id="sMotherName" placeholder="Mother's Name"></div>
         </div>
         <div class="flex-row">
+          <div class="flex-col"><label>Father's NID (পিতার এনআইডি নম্বর)</label><input type="text" id="sFatherNid" placeholder="Father's NID Number"></div>
+          <div class="flex-col"><label>Mother's NID (মাতার এনআইডি নম্বর)</label><input type="text" id="sMotherNid" placeholder="Mother's NID Number"></div>
+        </div>
+        <div class="flex-row">
           <div class="flex-col"><label>Primary Phone Number (অভিভাবকের মোবাইল) *</label><input type="tel" id="sPhone" placeholder="017XXXXXXXX (For SMS &amp; Portal)"></div>
           <div class="flex-col"><label>Guardian Email (ইমেইল - ঐচ্ছিক)</label><input type="email" id="sEmail" placeholder="guardian@email.com"></div>
         </div>
@@ -995,6 +999,10 @@ input:focus, select:focus, textarea:focus {
         <div class="flex-row">
           <div class="flex-col"><label>Father's Name</label><input type="text" id="eFatherName"></div>
           <div class="flex-col"><label>Mother's Name</label><input type="text" id="eMotherName"></div>
+        </div>
+        <div class="flex-row">
+          <div class="flex-col"><label>Father's NID (পিতার এনআইডি নম্বর)</label><input type="text" id="eFatherNid" placeholder="Father's NID Number"></div>
+          <div class="flex-col"><label>Mother's NID (মাতার এনআইডি নম্বর)</label><input type="text" id="eMotherNid" placeholder="Mother's NID Number"></div>
         </div>
         <div class="flex-row">
           <div class="flex-col"><label>Present Address</label><textarea id="eAddress" rows="2"></textarea></div>
@@ -1598,7 +1606,7 @@ function renderClassUpdateFeesForStudent() {
     let cName = cf.name;
     let cAmt = parseFloat(cf.amount) || 0;
     let safeName = cName.replace(/"/g, "&quot;");
-    let isSession = cName.toLowerCase().includes("session") || cName.toLowerCase().includes("promotion");
+    let isSession = cName.toLowerCase().includes("session") || cf.name.toLowerCase().includes("promotion");
     let borderClr = isSession ? "#3b82f6" : "#d8b4fe";
     let textClr = isSession ? "#1d4ed8" : "#7e22ce";
 
@@ -1677,6 +1685,8 @@ async function saveStudent() {
     previousSchool: document.getElementById('sPrevSchool').value.trim(),
     fatherName: document.getElementById('sFatherName').value.trim(),
     motherName: document.getElementById('sMotherName').value.trim(),
+    fatherNid: document.getElementById('sFatherNid').value.trim(),
+    motherNid: document.getElementById('sMotherNid').value.trim(),
     phone: document.getElementById('sPhone').value.trim(),
     email: document.getElementById('sEmail').value.trim(),
     guardianPhone: document.getElementById('sGuardianPhone').value.trim(),
@@ -1715,6 +1725,26 @@ async function saveStudent() {
 
     showLoaderText("ভর্তি তথ্য ও ফি সংরক্ষণ করা হচ্ছে...<br><span style='font-size:11px; color:#64748b;'>অনুগ্রহ করে অপেক্ষা করুন...</span>");
     let res = await apiCall('addNewStudentProfile', { data: d });
+
+    // Ensure Father's & Mother's NID are persisted directly in Firestore Students document as well
+    if (d.fatherNid || d.motherNid) {
+      try {
+        if (res.rowId) {
+          await db.collection('Students').doc(res.rowId).set({
+            fatherNid: d.fatherNid,
+            motherNid: d.motherNid
+          }, { merge: true });
+        } else if (res.id) {
+          let snap = await db.collection('Students').where('studentID', '==', String(res.id)).get();
+          snap.forEach(doc => {
+            doc.ref.set({ fatherNid: d.fatherNid, motherNid: d.motherNid }, { merge: true });
+          });
+        }
+      } catch (nidErr) {
+        console.warn("Firestore NID sync notice:", nidErr);
+      }
+    }
+
     document.getElementById('loader').style.display = 'none';
 
     // Optimistic memory update so Students tab is immediately up to date
@@ -1737,6 +1767,8 @@ async function saveStudent() {
       previousSchool: d.previousSchool,
       fatherName: d.fatherName,
       motherName: d.motherName,
+      fatherNid: d.fatherNid,
+      motherNid: d.motherNid,
       phone: d.phone,
       email: d.email,
       guardianPhone: d.guardianPhone,
@@ -1760,6 +1792,8 @@ async function saveStudent() {
     // Reset Form
     document.getElementById('sName').value = "";
     document.getElementById('sRoll').value = "";
+    document.getElementById('sFatherNid').value = "";
+    document.getElementById('sMotherNid').value = "";
     document.getElementById('sPhone').value = "";
     document.getElementById('sEmail').value = "";
     document.getElementById('sCardNumber').value = "";
@@ -1898,6 +1932,8 @@ function getFilteredStudentsList() {
       String(s.roll || "").includes(fTxt) ||
       stuCat.toLowerCase().includes(fTxt) ||
       (s.phone && String(s.phone).includes(fTxt)) ||
+      (s.fatherNid && String(s.fatherNid).toLowerCase().includes(fTxt)) ||
+      (s.motherNid && String(s.motherNid).toLowerCase().includes(fTxt)) ||
       (s.email && String(s.email).toLowerCase().includes(fTxt));
     return matchCls && matchSec && matchCat && matchTxt;
   });
@@ -1934,7 +1970,9 @@ function openViewByRow(rid) {
     <tr><td>Admission Date</td><td>${s.admissionDate || '-'}</td></tr>
     <tr><td>Student Category</td><td><b style="color:var(--purple);">${dispCat}</b></td></tr>
     <tr><td>Father's Name</td><td>${s.fatherName || '-'}</td></tr>
+    <tr><td>Father's NID</td><td>${s.fatherNid || '-'}</td></tr>
     <tr><td>Mother's Name</td><td>${s.motherName || '-'}</td></tr>
+    <tr><td>Mother's NID</td><td>${s.motherNid || '-'}</td></tr>
     <tr><td>Primary Phone</td><td>${s.phone || '-'}</td></tr>
     <tr><td>Email</td><td>${s.email || '-'}</td></tr>
     <tr><td>Guardian Phone</td><td>${s.guardianPhone || '-'}</td></tr>
@@ -1982,6 +2020,8 @@ function openEditByRow(rid) {
   document.getElementById('eEmail').value = s.email || "";
   document.getElementById('eFatherName').value = s.fatherName || "";
   document.getElementById('eMotherName').value = s.motherName || "";
+  document.getElementById('eFatherNid').value = s.fatherNid || "";
+  document.getElementById('eMotherNid').value = s.motherNid || "";
   document.getElementById('eAddress').value = s.address || "";
   document.getElementById('ePermanentAddress').value = s.permanentAddress || "";
 
@@ -2012,6 +2052,8 @@ async function updateStudent() {
     email: document.getElementById('eEmail').value.trim(),
     fatherName: document.getElementById('eFatherName').value.trim(),
     motherName: document.getElementById('eMotherName').value.trim(),
+    fatherNid: document.getElementById('eFatherNid').value.trim(),
+    motherNid: document.getElementById('eMotherNid').value.trim(),
     address: document.getElementById('eAddress').value.trim(),
     permanentAddress: document.getElementById('ePermanentAddress').value.trim(),
     fees: getFeeData('editFeeGrid')
@@ -2042,6 +2084,19 @@ async function updateStudent() {
 
     showLoaderText("তথ্য ও ফি হালনাগাদ করা হচ্ছে...");
     let res = await apiCall('updateStudentProfileDirect', { data: d });
+
+    // Ensure Father's & Mother's NID are updated directly in Firestore Students document as well
+    if (d.rowId) {
+      try {
+        await db.collection('Students').doc(d.rowId).set({
+          fatherNid: d.fatherNid,
+          motherNid: d.motherNid
+        }, { merge: true });
+      } catch (nidErr) {
+        console.warn("Firestore NID update notice:", nidErr);
+      }
+    }
+
     document.getElementById('loader').style.display = 'none';
 
     closeModal('editModal');
@@ -2065,6 +2120,8 @@ async function updateStudent() {
         email: d.email,
         fatherName: d.fatherName,
         motherName: d.motherName,
+        fatherNid: d.fatherNid,
+        motherNid: d.motherNid,
         address: d.address,
         permanentAddress: d.permanentAddress,
         photoUrl: res.photoUrl || d.photoUrl || allData[idx].photoUrl,
