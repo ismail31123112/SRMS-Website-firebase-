@@ -30,7 +30,7 @@
 
 <div style="display:none;" aria-hidden="true">
   <h1>Contact Saidpur Residential Model School (SRMS)</h1>
-  <p>Get in touch with Saidpur Residential Model School (SRMS). Official Address: Sultan Nagar, Parbatipur Road, Saidpur, Nilphamari, Bangladesh. Contact us for admission inquiries, school fees, and general information via phone: 01737867826 or email: srms2012.edu@gmail.com.</p>
+  <p>Get in touch with Saidpur Residential Model School (SRMS). Official Address: Sultan Nagar, Parbatipur Road, Saidpur, Nilphamari, Bangladesh. Contact us for admission inquiries, school fees, and general information via phone: 01770368042 or email: srms2012.edu@gmail.com.</p>
   <img src="https://i.postimg.cc/y63CF76m/20260130_120956.png" alt="SRMS Official Contact Logo">
 </div>
 
@@ -47,7 +47,7 @@
     "postalCode": "5310",
     "addressCountry": "BD"
   },
-  "telephone": "+8801737867826",
+  "telephone": "+8801770368042",
   "email": "srms2012.edu@gmail.com",
   "url": "https://www.saidpurresidentialmodelschool.com/menu/contact-us",
   "logo": "https://i.postimg.cc/y63CF76m/20260130_120956.png",
@@ -58,7 +58,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
 <style>
-  /* === CSS স্টাইল (অপরিবর্তিত) === */
+  /* === CSS স্টাইল === */
   body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: #f4f6f9; color: #333; overflow-x: hidden; }
   a { text-decoration: none; color: inherit; transition: 0.3s; }
   ul { list-style: none; margin: 0; padding: 0; }
@@ -242,7 +242,7 @@
   <div class="banner-text">
     <h1>Saidpur Residential Model School</h1>
     <div class="school-codes">
-      School Code: 481931   |   EMIS Code: 00704061312
+      School Code: 481931 &nbsp; | &nbsp; EMIS Code: 00704061312
     </div>
     <div class="school-name">Learning with Discipline, Growing with Values</div>
   </div>
@@ -257,7 +257,7 @@
     </div>
     <div class="contact-row">
       <div class="c-icon">📞</div>
-      <div class="c-text"><span class="c-label">PHONE</span><a href="tel:01737867826">01737867826</a> (Headmaster)<br><a href="tel:01580450052">01580450052</a> (Office)</div>
+      <div class="c-text"><span class="c-label">PHONE</span><a href="tel:01770368042">01770368042</a> (Headmaster)<br><a href="tel:01580450052">01580450052</a> (Office)</div>
     </div>
     <div class="contact-row">
       <div class="c-icon">✉️</div>
@@ -354,17 +354,31 @@
 
           const scriptURL = 'https://api.srms2012.edu.bd/api/email';
 
+          // FormData কে JSON Object-এ কনভার্ট করা হচ্ছে যেন ব্যাকএন্ড req.body দিয়ে পড়তে পারে
+          const formData = new FormData(form);
+          const dataObject = Object.fromEntries(formData.entries());
+
           fetch(scriptURL, { 
               method: "POST", 
-              body: new FormData(form) 
+              headers: {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json"
+              },
+              body: JSON.stringify(dataObject) 
           })
-          .then(r => {
-              alert("ধন্যবাদ! আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।");
-              form.style.display="none"; 
-              if(headerText) headerText.style.display="none";
-              msg.style.display="block"; 
+          .then(async r => {
+              const responseData = await r.json();
+              if(responseData.result === "success") {
+                  alert("ধন্যবাদ! আপনার মেসেজটি সফলভাবে পাঠানো হয়েছে।");
+                  form.style.display="none"; 
+                  if(headerText) headerText.style.display="none";
+                  msg.style.display="block"; 
+              } else {
+                  throw new Error(responseData.error || "Server response error");
+              }
           })
           .catch(err => {
+              console.error("Fetch Error:", err);
               alert("দুঃখিত, কোনো সমস্যা হয়েছে। আবার চেষ্টা করুন।");
               btn.innerHTML = "SEND MESSAGE";
               btn.disabled = false;
